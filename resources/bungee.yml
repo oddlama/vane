@@ -1,0 +1,7 @@
+name: ${name}
+version: ${version}
+
+author: oddlama
+website: ${url}
+
+main: lackeimer.proxy.Main

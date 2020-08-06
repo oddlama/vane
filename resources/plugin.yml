@@ -1,0 +1,15 @@
+name: ${name}
+version: ${version}
+description: Lore friendly additions to minecraft
+
+authors: [oddlama]
+website: ${url}
+
+depend: [ProtocolLib]
+softdepend: [dynmap]
+
+main: lackeimer.Main
+database: false
+
+api-version: 1.16
+load: STARTUP
