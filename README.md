@@ -3,15 +3,12 @@
 Imex is a plugin for [papermc](https://papermc.io). It provides many
 immersive and lore friendly extensions for vanilla minecraft.
 
-#### no-nonsense
-
-Imex follows a strict **no-nonsense** rule.
+Imex follows a **strict no-nonsense** rule.
 Every feature must have a real value to the players or the admins,
-and is designed to augment vanilla experience in a lore friendly way.
-Features can be disabled independently.
-
-So while there will be some administrative tools, a lot of the features will be
-little additions and quality of life changes, with
+and is designed to augment the classic vanilla experience in a lore friendly way.
+All features can be disabled independently.
+So while there will be some administrative tools, a lot of features will just be
+simple things and quality of life changes, with
 only very few greater (but generally appreciated) features like regions and portals.
 
 ### Features
