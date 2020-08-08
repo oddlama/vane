@@ -2,21 +2,22 @@
 
 Imex is a plugin for [papermc](https://papermc.io). It provides many
 immersive and lore friendly extensions for vanilla minecraft.
-All of the features follow a strict **no-nonsense** rule.
-Every feature has a real value to the players or the admins,
+
+#### no-nonsense
+
+Imex follows a strict **no-nonsense** rule.
+Every feature must have a real value to the players or the admins,
 and is designed to augment vanilla experience in a lore friendly way.
+Features can be disabled independently.
 
-Everything should *enhance* multiplayer vanilla minecraft experience
-without adding any unnecessary anti-features and without breaking players
-out of the good "vanilla" feeling.
-
-This means there will be a lot of little things and quality of life additions,
-some generally appreciated features (regions, portals), as well as a few server moderation utilities.
-
-Also, all features are modularized and can be disabled independently of each other.
-So if you don't want a certain feature, you can simply disable it.
+So while there will be some administrative tools, a lot of the features will be
+little additions and quality of life changes, with
+only very few greater (but generally appreciated) features like regions and portals.
 
 ### Features
+
+All features are modularized and can be disabled independently of each other.
+So if you don't want a certain feature, simply disable it.
 
 #### Little things & quality of life
 
@@ -43,7 +44,7 @@ Harvest additions:
 Elytra enhancements:
 - Speed boost on take-off
 - From occasional mid-air speed boost to full 
-- 
+- Rare permantent controllable boost enchant (haha elytra go brrrrrr)
 
 Spectator accounts:
 - Grant players additional spectator accounts (login to a different port)
