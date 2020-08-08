@@ -1,9 +1,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>lackeimer</groupId>
-	<artifactId>lackeimer</artifactId>
-	<name>lackeimer</name>
-	<url>https://github.com/oddlama/lackeimer</url>
+	<groupId>imex</groupId>
+	<artifactId>imex</artifactId>
+	<name>imex</name>
+	<url>https://github.com/oddlama/imex</url>
 	<version>1.0.0-SNAPSHOT</version>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -61,8 +61,8 @@
 				<configuration>
 					<archive>
 						<manifestEntries>
-							<Main-Class>lackeimer.Main</Main-Class>
-							<Implementation-Title>Lackeimer</Implementation-Title>
+							<Main-Class>imex.Main</Main-Class>
+							<Implementation-Title>imex</Implementation-Title>
 							<Implementation-Version>${project.fullVersion}</Implementation-Version>
 							<Implementation-Vendor>oddlama</Implementation-Vendor>
 						</manifestEntries>

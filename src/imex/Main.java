@@ -1,4 +1,4 @@
-package lackeimer;
+package imex;
 
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;

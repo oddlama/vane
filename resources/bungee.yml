@@ -4,4 +4,4 @@ version: ${version}
 author: oddlama
 website: ${url}
 
-main: lackeimer.proxy.Main
+main: imex.ProxyMain
