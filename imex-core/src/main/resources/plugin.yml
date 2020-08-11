@@ -3,12 +3,12 @@ version: ${version}
 description: Immersive and lore friendly extensions for vanilla minecraft
 
 authors: [oddlama]
-website: ${url}
+website: 'https://github.com/oddlama/imex'
 
 depend: [ProtocolLib]
 softdepend: [dynmap]
 
-main: org.oddlama.imex.Main
+main: org.oddlama.imex.core.Main
 database: false
 
 api-version: 1.16

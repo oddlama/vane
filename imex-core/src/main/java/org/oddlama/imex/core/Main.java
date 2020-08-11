@@ -1,11 +1,25 @@
-package org.oddlama.imex;
+package org.oddlama.imex.core;
 
-import org.bukkit.entity.Player;
+import java.util.ArrayList;
+import java.util.Set;
+
+import org.reflections.Reflections;
+
 import org.bukkit.plugin.java.JavaPlugin;
 
+import org.oddlama.imex.annotation.ImexModule;
+
 public class Main extends JavaPlugin {
+	private ArrayList<Module> modules = new ArrayList<>();
+
 	@Override
 	public void onLoad() {
+		Reflections reflections = new Reflections("org.oddlama.imex");
+		Set<Class<?>> annotated = reflections.getTypesAnnotatedWith(ImexModule.class);
+
+		for (Class<?> module : annotated) {
+			System.out.println("ja moin " + module.toString());
+		}
 	}
 
 	@Override
