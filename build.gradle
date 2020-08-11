@@ -18,3 +18,21 @@ subprojects {
 		options.compilerArgs << '-Xlint:all';
 	}
 }
+
+configure(subprojects.findAll {it.name != 'imex-annotations'}) {
+	dependencies {
+		implementation group: 'com.destroystokyo.paper', name: 'paper-api', version: '1.16.1-R0.1-SNAPSHOT';
+		implementation group: 'com.comphenix.protocol', name: 'ProtocolLib', version: '4.6.0-SNAPSHOT';
+		implementation group: 'us.dynmap', name: 'dynmap-api', version: '3.1-SNAPSHOT';
+		//implementation group: 'io.papermc', name: 'paperlib', version: '1.0.6-SNAPSHOT';
+
+		compileOnly project(':imex-annotations');
+		annotationProcessor project(':imex-annotations');
+	}
+}
+
+configure(subprojects.findAll {it.name != 'imex-annotations' && it.name != 'imex-core'}) {
+	dependencies {
+		implementation project(':imex-core');
+	}
+}
