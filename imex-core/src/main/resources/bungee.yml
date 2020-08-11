@@ -4,4 +4,4 @@ version: ${version}
 author: oddlama
 website: ${url}
 
-main: imex.ProxyMain
+main: org.oddlama.imex.ProxyMain

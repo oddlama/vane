@@ -1,4 +1,4 @@
-package imex;
+package org.oddlama.imex;
 
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;

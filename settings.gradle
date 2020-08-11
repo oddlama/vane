@@ -1,0 +1,4 @@
+rootProject.name = 'imex'
+
+include ':imex-core';
+include ':imex-annotations';

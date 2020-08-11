@@ -1,0 +1,20 @@
+subprojects {
+	apply plugin: 'java';
+
+	group 'org.oddlama.imex';
+	version '1.0.0';
+	sourceCompatibility = 11;
+
+	repositories() {
+		mavenCentral();
+		maven { url 'https://papermc.io/repo/repository/maven-public/' };
+		maven { url 'https://repo.dmulloy2.net/nexus/repository/public/' };
+		maven { url 'https://repo.mikeprimm.com/' };
+		maven { url 'https://papermc.io/repo/repository/maven-public/' };
+	}
+
+	compileJava {
+		options.encoding = 'UTF-8';
+		options.compilerArgs << '-Xlint:all';
+	}
+}

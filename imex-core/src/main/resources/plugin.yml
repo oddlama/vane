@@ -8,7 +8,7 @@ website: ${url}
 depend: [ProtocolLib]
 softdepend: [dynmap]
 
-main: imex.Main
+main: org.oddlama.imex.Main
 database: false
 
 api-version: 1.16
