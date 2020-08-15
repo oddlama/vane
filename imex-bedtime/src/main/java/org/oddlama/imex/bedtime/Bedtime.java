@@ -5,31 +5,37 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.UUID;
 
-import org.oddlama.imex.util.WorldUtil;
-import org.oddlama.imex.util.Nms;
-
-import org.oddlama.imex.annotation.ImexModule;
-import org.oddlama.imex.core.Module;
 import org.bukkit.GameMode;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerBedLeaveEvent;
 
+import org.oddlama.imex.annotation.ImexModule;
+import org.oddlama.imex.core.Module;
+import org.oddlama.imex.util.Nms;
+import org.oddlama.imex.util.WorldUtil;
+
 @ImexModule
 public class Bedtime extends Module implements Listener {
 	// One set of sleeping players per world, to keep track
 	private HashMap<UUID, HashSet<UUID>> world_sleepers = new HashMap<>();
 
-	private double sleep_threshold = 0.5;
-	private long morning_ticks = 1000;
+	@Config(name="sleep_threshold", def=0.5, min=0.0, max=1.0)
+	@GenerateConfig
+
+	@Config(min = 0.0, max = 1.0)   private double sleep_threshold = 0.5;
+	@Config(min = 0,   max = 24000) private long morning_ticks = 1000;
 	//@Config
 	private long interpolation_ticks = 100;
 
+	//@ConfigGroup
+	//private class {
+	//	@Config
+	//} group1;
 	private String message_bed_enter = "§6%player%§e schläft jetzt (§6%percent%%§e)";
 	private String message_bed_leave = "§6%player%§e fühlt sich ausgeschlafen (§6%percent%%§e)";
 	private String message_sleep_success = "§ePlopp. Sonne.";
