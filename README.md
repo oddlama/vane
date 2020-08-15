@@ -91,3 +91,4 @@ spawn with remnants of old world
 
 
 
+/ihaterecipes -> get recipes
