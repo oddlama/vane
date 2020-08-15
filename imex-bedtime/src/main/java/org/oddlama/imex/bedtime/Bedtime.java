@@ -4,7 +4,6 @@ import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.UUID;
-
 import org.bukkit.GameMode;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -13,35 +12,34 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerBedLeaveEvent;
-
 import org.oddlama.imex.annotation.ImexModule;
+import org.oddlama.imex.annotation.ConfigDouble;
+import org.oddlama.imex.annotation.ConfigLong;
+import org.oddlama.imex.annotation.LangString;
+import org.oddlama.imex.annotation.LangMessage;
 import org.oddlama.imex.core.Module;
 import org.oddlama.imex.util.Nms;
 import org.oddlama.imex.util.WorldUtil;
 
 @ImexModule
+
+// Configuration
+@ConfigDouble(name = "sleep_threshold", def = 0.5, min = 0.0, max = 1.0 desc = "The percentage of sleeping players required to advance time")
+@ConfigLong(name = "target_time", def = 1000, min = 0, max = 12000, desc = "The target time in ticks [0-12000] to advance to. 1000 is just after sunrise.")
+@ConfigLong(name = "interpolation_ticks", def = 100, min = 0, max = 1200, desc = "The interpolation time in ticks for a smooth change of time.")
+
+// Language
+@LangMessage(name = "player_bed_enter")
+@LangMessage(name = "player_bed_leave")
+@LangString(name = "sleep_success")
+
 public class Bedtime extends Module implements Listener {
 	// One set of sleeping players per world, to keep track
 	private HashMap<UUID, HashSet<UUID>> world_sleepers = new HashMap<>();
 
-	@Config(name="sleep_threshold", def=0.5, min=0.0, max=1.0)
-	@GenerateConfig
-
-	@Config(min = 0.0, max = 1.0)   private double sleep_threshold = 0.5;
-	@Config(min = 0,   max = 24000) private long morning_ticks = 1000;
-	//@Config
-	private long interpolation_ticks = 100;
-
-	//@ConfigGroup
-	//private class {
-	//	@Config
-	//} group1;
-	private String message_bed_enter = "§6%player%§e schläft jetzt (§6%percent%%§e)";
-	private String message_bed_leave = "§6%player%§e fühlt sich ausgeschlafen (§6%percent%%§e)";
-	private String message_sleep_success = "§ePlopp. Sonne.";
-
 	@Override
 	public void onEnable() {
+		super.onEnable();
 		register_listener(this);
 	}
 
@@ -62,7 +60,7 @@ public class Bedtime extends Module implements Listener {
 					}
 
 					// Let the sun rise, and set weather
-					WorldUtil.change_time_smoothly(world, this, morning_ticks, interpolation_ticks);
+					WorldUtil.change_time_smoothly(world, this, config_target_time, config_interpolation_ticks);
 					world.setStorm(false);
 					world.setThundering(false);
 
@@ -77,7 +75,10 @@ public class Bedtime extends Module implements Listener {
 						// flag0 false = set ticks sleeping to 100, flag1 true = recalculate world.everyoneSleeping
 						Nms.getPlayer(player).wakeup(false, false);
 					});
-				}, 100);
+
+				// Subtract two ticks so this runs one tick before minecraft would
+				// advance time (if all players are asleep), which would effectively cancel the task.
+				}, 100 - 2);
 			}
 		});
 	}
@@ -104,7 +105,7 @@ public class Bedtime extends Module implements Listener {
 	}
 
 	private boolean enough_players_sleeping(final World world) {
-		return get_percentage_sleeping(world) >= sleep_threshold;
+		return get_percentage_sleeping(world) >= config_sleep_threshold;
 	}
 
 	private void add_sleeping(final World world, final Player player) {

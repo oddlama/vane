@@ -2,14 +2,11 @@ package org.oddlama.imex.core;
 
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.oddlama.imex.annotation.ConfigString;
 
-public abstract class Module extends JavaPlugin {
-	private Config config = new Config();
-
-	public Config get_config() {
-		return config;
-	}
-
+@ConfigString(name = "version", def = "1", desc = "DO NOT CHANGE! The version of this config file. Used to determine if the config needs to be updated.")
+@ConfigString(name = "lang", def = "inherit", desc = "The language for this module. Specifying 'inherit' will use the value set for imex-core.")
+public abstract class Module extends ModuleBase {
 	public void register_listener(Listener listener) {
 		getServer().getPluginManager().registerEvents(listener, this);
 	}

@@ -95,3 +95,6 @@ check achievement on anvil
 
 
 /ihaterecipes -> get recipes
+
+
+/<module> reload to reload config for all!!!!! automatic.
