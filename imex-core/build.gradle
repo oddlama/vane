@@ -4,12 +4,10 @@ plugins {
 
 dependencies {
 	shadow group: 'io.papermc', name: 'paperlib', version: '1.0.6-SNAPSHOT';
-	shadow group: 'org.reflections', name: 'reflections', version: '0.9.12';
 	shadow project(':imex-annotations');
 }
 
 shadowJar {
 	configurations = [project.configurations.shadow]
 	relocate 'io.papermc.lib', 'org.oddlama.imex.external.paperlib'
-	relocate 'org.reflections', 'org.oddlama.imex.external.reflections'
 }

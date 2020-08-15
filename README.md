@@ -1,7 +1,8 @@
 ## About imex
 
-Imex is a plugin for [papermc](https://papermc.io). It provides many
+Imex is a plugin which provides many
 immersive and lore friendly extensions for vanilla minecraft.
+It runs on any [papermc](https://papermc.io) based server.
 
 Imex follows a **strict no-nonsense** rule.
 Every feature must have a real value to the players or the admins,
@@ -67,4 +68,26 @@ but that person will not be able to do anything except walking around.
 
 Grant privileges to players (or have other players invite new players
 by letting them vouch for the new player)
+
+
+
+
+
+#### IDEAS
+
+- full netherite armor for one enchantment 
+- dragon egg (catalyst?)
+- nether star
+- pillager books (recept of unbreakable)
+
+
+portal ancient debris block like
+
+
+invisible item frame visible if nothing in it
+
+
+spawn with remnants of old world
+
+
 

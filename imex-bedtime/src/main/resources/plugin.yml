@@ -7,7 +7,7 @@ website: 'https://github.com/oddlama/imex'
 
 depend: [imex-core]
 
-main: org.oddlama.imex.bedtime.Main
+main: org.oddlama.imex.bedtime.Bedtime
 database: false
 
 api-version: 1.16

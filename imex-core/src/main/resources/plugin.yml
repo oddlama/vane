@@ -8,7 +8,7 @@ website: 'https://github.com/oddlama/imex'
 depend: [ProtocolLib]
 softdepend: [dynmap]
 
-main: org.oddlama.imex.core.Main
+main: org.oddlama.imex.core.Core
 database: false
 
 api-version: 1.16

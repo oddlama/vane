@@ -2,6 +2,6 @@ name: ${name}
 version: ${version}
 
 author: oddlama
-website: ${url}
+website: 'https://github.com/oddlama/imex'
 
-main: org.oddlama.imex.ProxyMain
+main: org.oddlama.imex.ProxyCore

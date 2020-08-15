@@ -1,10 +1,9 @@
 package org.oddlama.imex.core;
 
-public class Module {
-	//private Config config = new Config();
+import org.bukkit.plugin.java.JavaPlugin;
 
-	public Module() {
-	}
+public abstract class Module extends JavaPlugin {
+	//private Config config = new Config();
 
 	//public Config getConfig() {
 	//	return config;
