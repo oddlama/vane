@@ -1,4 +1,4 @@
-package org.oddlama.imex.annotation;
+package org.oddlama.imex.annotation.processor;
 
 import java.util.Set;
 import javax.annotation.processing.AbstractProcessor;
@@ -16,20 +16,23 @@ import javax.tools.Diagnostic;
 public class ImexModuleProcessor extends AbstractProcessor {
 	@Override
 	public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment round_env) {
-		round_env.getElementsAnnotatedWith(ImexModule.class)
-			.forEach(this::verifyIsClass);
-		round_env.getElementsAnnotatedWith(ImexModule.class)
-			.forEach(this::verifyExtendsModule);
+		for (var annotation : annotations) {
+			round_env.getElementsAnnotatedWith(annotation)
+				.forEach(this::verify_is_class);
+			round_env.getElementsAnnotatedWith(annotation)
+				.forEach(this::verify_extends_module);
+		}
+
 		return true;
 	}
 
-	private void verifyIsClass(Element element) {
+	private void verify_is_class(Element element) {
 		if (element.getKind() != ElementKind.CLASS) {
 			processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, "@ImexModule must be applied to a class");
 		}
 	}
 
-	private void verifyExtendsModule(Element element) {
+	private void verify_extends_module(Element element) {
 		var t = (TypeElement)element;
 		if (!t.getSuperclass().toString().equals("org.oddlama.imex.core.Module")) {
 			processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, "@ImexModule must be applied to a class inheriting from org.oddlama.imex.core.Module");

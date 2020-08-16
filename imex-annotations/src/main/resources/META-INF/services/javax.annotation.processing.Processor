@@ -1,2 +1,2 @@
-org.oddlama.imex.annotation.ImexModuleProcessor
-org.oddlama.imex.annotation.ConfigAndLangProcessor
+org.oddlama.imex.annotation.processor.ImexModuleProcessor
+org.oddlama.imex.annotation.processor.ConfigAndLangProcessor

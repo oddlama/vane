@@ -3,6 +3,7 @@ package org.oddlama.imex.bedtime;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.text.MessageFormat;
 import java.util.UUID;
 import org.bukkit.GameMode;
 import org.bukkit.World;
@@ -24,7 +25,7 @@ import org.oddlama.imex.util.WorldUtil;
 @ImexModule
 
 // Configuration
-@ConfigDouble(name = "sleep_threshold", def = 0.5, min = 0.0, max = 1.0 desc = "The percentage of sleeping players required to advance time")
+@ConfigDouble(name = "sleep_threshold", def = 0.5, min = 0.0, max = 1.0, desc = "The percentage of sleeping players required to advance time")
 @ConfigLong(name = "target_time", def = 1000, min = 0, max = 12000, desc = "The target time in ticks [0-12000] to advance to. 1000 is just after sunrise.")
 @ConfigLong(name = "interpolation_ticks", def = 100, min = 0, max = 1200, desc = "The interpolation time in ticks for a smooth change of time.")
 
@@ -36,6 +37,13 @@ import org.oddlama.imex.util.WorldUtil;
 public class Bedtime extends Module implements Listener {
 	// One set of sleeping players per world, to keep track
 	private HashMap<UUID, HashSet<UUID>> world_sleepers = new HashMap<>();
+
+double config_sleep_threshold = 0.5;
+long config_target_time = 1000;
+long config_interpolation_ticks = 100;
+MessageFormat lang_player_bed_enter = new MessageFormat("A");
+MessageFormat lang_player_bed_leave = new MessageFormat("B");
+String lang_sleep_success = "C";
 
 	@Override
 	public void onEnable() {
@@ -65,7 +73,7 @@ public class Bedtime extends Module implements Listener {
 					world.setThundering(false);
 
 					// Send message
-					WorldUtil.broadcast(world, message_sleep_success);
+					WorldUtil.broadcast(world, lang_sleep_success);
 
 					// Clear sleepers
 					reset_sleepers(world);
@@ -121,9 +129,9 @@ public class Bedtime extends Module implements Listener {
 
 		// Broadcast sleeping message
 		var percent = get_percentage_sleeping(world);
-		WorldUtil.broadcast(world, message_bed_enter
-		                              .replace("%player%", player.getName())
-		                              .replace("%percent%", new DecimalFormat("#.##").format(100.0 * percent)));
+		WorldUtil.broadcast(world, lang_player_bed_enter.format(new Object[] {
+		                               player.getName(),
+		                               100.0 * percent}));
 	}
 
 	private void remove_sleeping(Player player) {
@@ -140,9 +148,9 @@ public class Bedtime extends Module implements Listener {
 		if (sleepers.remove(player.getUniqueId())) {
 			// Broadcast sleeping message
 			var percent = get_percentage_sleeping(world);
-			WorldUtil.broadcast(world, message_bed_leave
-										  .replace("%player%", player.getName())
-										  .replace("%percent%", new DecimalFormat("#.##").format(100.0 * percent)));
+			WorldUtil.broadcast(world, lang_player_bed_leave.format(new Object[] {
+			                               player.getName(),
+			                               100.0 * percent}));
 		}
 	}
 
