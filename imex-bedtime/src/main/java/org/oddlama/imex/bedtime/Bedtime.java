@@ -1,10 +1,10 @@
 package org.oddlama.imex.bedtime;
 
-import java.text.DecimalFormat;
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.text.MessageFormat;
 import java.util.UUID;
+
 import org.bukkit.GameMode;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -13,37 +13,57 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerBedLeaveEvent;
-import org.oddlama.imex.annotation.ImexModule;
+
 import org.oddlama.imex.annotation.ConfigDouble;
 import org.oddlama.imex.annotation.ConfigLong;
-import org.oddlama.imex.annotation.LangString;
+import org.oddlama.imex.annotation.ConfigString;
+import org.oddlama.imex.annotation.ImexModule;
 import org.oddlama.imex.annotation.LangMessage;
+import org.oddlama.imex.annotation.LangString;
 import org.oddlama.imex.core.Module;
 import org.oddlama.imex.util.Nms;
 import org.oddlama.imex.util.WorldUtil;
 
+//// Basic
+//@ConfigVersion(1)
+//@ConfigLong(name = "version", def = 1, desc = "DO NOT CHANGE! The version of this config file. Used to determine if the config needs to be updated.")
+//@ConfigString(name = "lang", def = "inherit", desc = "The language for this module. Specifying 'inherit' will use the value set for imex-core.")
+//
+//// Configuration
+//@ConfigDouble(name = "sleep_threshold", def = 0.5, min = 0.0, max = 1.0, desc = "The percentage of sleeping players required to advance time")
+//@ConfigLong(name = "target_time", def = 1000, min = 0, max = 12000, desc = "The target time in ticks [0-12000] to advance to. 1000 is just after sunrise.")
+//@ConfigLong(name = "interpolation_ticks", def = 100, min = 0, max = 1200, desc = "The interpolation time in ticks for a smooth change of time.")
+//
+//// Language
+//@LangVersion(1)
+//@LangMessage(name = "player_bed_enter")
+//@LangMessage(name = "player_bed_leave")
+//@LangString(name = "sleep_success")
+
 @ImexModule
-
-// Configuration
-@ConfigDouble(name = "sleep_threshold", def = 0.5, min = 0.0, max = 1.0, desc = "The percentage of sleeping players required to advance time")
-@ConfigLong(name = "target_time", def = 1000, min = 0, max = 12000, desc = "The target time in ticks [0-12000] to advance to. 1000 is just after sunrise.")
-@ConfigLong(name = "interpolation_ticks", def = 100, min = 0, max = 1200, desc = "The interpolation time in ticks for a smooth change of time.")
-
-// Language
-@LangMessage(name = "player_bed_enter")
-@LangMessage(name = "player_bed_leave")
-@LangString(name = "sleep_success")
-
 public class Bedtime extends Module implements Listener {
+	//public Config config;
+	//public Lang lang;
+
+	//@Override
+	//public org.oddlama.imex.core.Config get_config() {
+	//	return config;
+	//}
+
+	//@Override
+	//public org.oddlama.imex.core.Lang get_lang() {
+	//	return lang;
+	//}
+
 	// One set of sleeping players per world, to keep track
 	private HashMap<UUID, HashSet<UUID>> world_sleepers = new HashMap<>();
 
-double config_sleep_threshold = 0.5;
-long config_target_time = 1000;
-long config_interpolation_ticks = 100;
-MessageFormat lang_player_bed_enter = new MessageFormat("A");
-MessageFormat lang_player_bed_leave = new MessageFormat("B");
-String lang_sleep_success = "C";
+//double config.sleep_threshold = 0.5;
+//long config.target_time = 1000;
+//long config.interpolation_ticks = 100;
+//MessageFormat lang.player_bed_enter = new MessageFormat("A");
+//MessageFormat lang.player_bed_leave = new MessageFormat("B");
+//String lang.sleep_success = "C";
 
 	@Override
 	public void onEnable() {
@@ -68,12 +88,12 @@ String lang_sleep_success = "C";
 					}
 
 					// Let the sun rise, and set weather
-					WorldUtil.change_time_smoothly(world, this, config_target_time, config_interpolation_ticks);
+					WorldUtil.change_time_smoothly(world, this, config.target_time, config.interpolation_ticks);
 					world.setStorm(false);
 					world.setThundering(false);
 
 					// Send message
-					WorldUtil.broadcast(world, lang_sleep_success);
+					WorldUtil.broadcast(world, lang.sleep_success);
 
 					// Clear sleepers
 					reset_sleepers(world);
@@ -113,7 +133,7 @@ String lang_sleep_success = "C";
 	}
 
 	private boolean enough_players_sleeping(final World world) {
-		return get_percentage_sleeping(world) >= config_sleep_threshold;
+		return get_percentage_sleeping(world) >= config.sleep_threshold;
 	}
 
 	private void add_sleeping(final World world, final Player player) {
@@ -129,7 +149,7 @@ String lang_sleep_success = "C";
 
 		// Broadcast sleeping message
 		var percent = get_percentage_sleeping(world);
-		WorldUtil.broadcast(world, lang_player_bed_enter.format(new Object[] {
+		WorldUtil.broadcast(world, lang.player_bed_enter.format(new Object[] {
 		                               player.getName(),
 		                               100.0 * percent}));
 	}
@@ -148,7 +168,7 @@ String lang_sleep_success = "C";
 		if (sleepers.remove(player.getUniqueId())) {
 			// Broadcast sleeping message
 			var percent = get_percentage_sleeping(world);
-			WorldUtil.broadcast(world, lang_player_bed_leave.format(new Object[] {
+			WorldUtil.broadcast(world, lang.player_bed_leave.format(new Object[] {
 			                               player.getName(),
 			                               100.0 * percent}));
 		}

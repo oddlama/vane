@@ -4,6 +4,10 @@ import org.oddlama.imex.annotation.ImexModule;
 
 @ImexModule
 public class Core extends Module {
+	public Core() {
+		config_manager.expected_version(1);
+	}
+
 	@Override
 	public void onLoad() {
 	}
