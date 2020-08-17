@@ -2,6 +2,7 @@ package org.oddlama.imex.core;
 
 import java.lang.StringBuilder;
 import java.lang.reflect.Field;
+import java.lang.annotation.Annotation;
 import java.util.logging.Logger;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +11,13 @@ import java.util.stream.Collectors;
 import static org.reflections.ReflectionUtils.*;
 
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.apache.commons.lang.WordUtils;
+
+import org.oddlama.imex.core.config.ConfigDoubleField;
+import org.oddlama.imex.core.config.ConfigVersionField;
+import org.oddlama.imex.core.config.ConfigLongField;
+import org.oddlama.imex.core.config.ConfigStringField;
+import org.oddlama.imex.core.config.ConfigField;
 
 import org.oddlama.imex.annotation.ConfigDouble;
 import org.oddlama.imex.annotation.ConfigLong;
@@ -20,18 +28,20 @@ import org.oddlama.imex.annotation.LangString;
 import org.oddlama.imex.annotation.LangVersion;
 
 public class ConfigManager {
-	private class ConfigField {
-		public Field field;
-	}
+	private List<ConfigField<?>> config_fields = new ArrayList<>();
+	ConfigVersionField field_version;
+	Module module;
 
-	private List<ConfigField> config_fields = new ArrayList<>();
+	public ConfigManager(Module module) {
+		this.module = module;
+	}
 
 	public long expected_version() {
-		return 1;
+		return field_version.annotation.value();
 	}
 
-	private boolean has_config_annotation(Field f) {
-		for (var a : f.getAnnotations()) {
+	private boolean has_config_annotation(Field field) {
+		for (var a : field.getAnnotations()) {
 			if (a.annotationType().getName().startsWith("org.oddlama.imex.annotation.Config")) {
 				return true;
 			}
@@ -39,49 +49,55 @@ public class ConfigManager {
 		return false;
 	}
 
-	private void assert_field_prefix(Field f) {
-		if (!f.getName().startsWith("config_")) {
-			throw new IllegalArgumentException("Configuration fields must be named config_. This is a bug.");
+	private void assert_field_prefix(Field field) {
+		if (!field.getName().startsWith("config_")) {
+			throw new RuntimeException("Configuration fields must be named config_. This is a bug.");
 		}
 	}
 
-	private ConfigField compile_field(Field field) {
+	private ConfigField<?> compile_field(Field field) {
 		assert_field_prefix(field);
 
 		// Get the annotation
 		Annotation annotation = null;
-		for (var a : f.getAnnotations()) {
+		for (var a : field.getAnnotations()) {
 			if (a.annotationType().getName().startsWith("org.oddlama.imex.annotation.Config")) {
 				if (annotation == null) {
 					annotation = a;
 				} else {
-					throw new IllegalArgumentException("Configuration fields must have exactly one annotation.");
+					throw new RuntimeException("Configuration fields must have exactly one annotation.");
 				}
 			}
 		}
 		assert annotation != null;
-		var atype = annotation.annotationType();
+		final var atype = annotation.annotationType();
 
-		if (atype instanceof ConfigDouble) {
-		} else if (atype instanceof ConfigLong) {
-		} else if (atype instanceof ConfigString) {
-		} else if (atype instanceof ConfigVersion) {
-		} else if (atype instanceof LangMessage) {
-		} else if (atype instanceof LangString) {
-		} else if (atype instanceof LangVersion) {
+		if (atype.equals(ConfigDouble.class)) {
+			return new ConfigDoubleField(field, (ConfigDouble)annotation);
+		} else if (atype.equals(ConfigLong.class)) {
+			return new ConfigLongField(field, (ConfigLong)annotation);
+		} else if (atype.equals(ConfigString.class)) {
+			return new ConfigStringField(field, (ConfigString)annotation);
+		} else if (atype.equals(ConfigVersion.class)) {
+			return field_version = new ConfigVersionField(field, (ConfigVersion)annotation);
+		} else {
+			throw new RuntimeException("Missing ConfigField handler for @" + atype.getName() + ". This is a bug.");
 		}
-
-		return cf;
 	}
 
 	@SuppressWarnings("unchecked")
 	public void compile(Module module) {
-		var fields = getAllFields(module.getClass()).stream()
-			.filter(this::has_config_annotation);
-		config_fields = fields.map(this::compile_field).collect(Collectors.toList());
+		config_fields = getAllFields(module.getClass()).stream()
+			.filter(this::has_config_annotation)
+			.map(this::compile_field)
+			.collect(Collectors.toList());
 	}
 
 	public void generate_yaml(StringBuilder builder) {
+		config_fields.forEach(f -> {
+			f.generate_yaml(builder);
+			builder.append("\n");
+		});
 	}
 
 	public boolean reload(Logger log, YamlConfiguration yaml) {

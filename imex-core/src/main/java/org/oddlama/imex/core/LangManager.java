@@ -5,6 +5,12 @@ import java.util.logging.Logger;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public class LangManager {
+	Module module;
+
+	public LangManager(Module module) {
+		this.module = module;
+	}
+
 	public long expected_version() {
 		return 1;
 	}

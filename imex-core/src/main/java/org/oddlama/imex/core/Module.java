@@ -24,8 +24,8 @@ public abstract class Module extends JavaPlugin {
 	private Core core;
 	protected Logger log;
 
-	public ConfigManager config_manager = new ConfigManager();
-	public LangManager lang_manager = new LangManager();
+	public ConfigManager config_manager = new ConfigManager(this);
+	public LangManager lang_manager = new LangManager(this);
 
 	@ConfigString(def = "inherit", desc = "The language for this module. The corresponding language file must be named lang-{lang}.yml. Specifying 'inherit' will load the value set for imex-core.")
 	public String config_lang;

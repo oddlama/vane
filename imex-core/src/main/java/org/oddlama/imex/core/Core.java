@@ -6,7 +6,6 @@ import org.oddlama.imex.annotation.LangVersion;
 
 @ImexModule
 public class Core extends Module {
-	// "DO NOT CHANGE! The version of this config file. Used to determine if the config needs to be updated."
 	@ConfigVersion(1)
 	public long config_version;
 
