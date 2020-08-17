@@ -36,9 +36,9 @@ public class Bedtime extends Module implements Listener {
 	@ConfigVersion(1)
 	public long config_version;
 
-	@ConfigDouble(def = 0.5, min = 0.0, max = 1.0, desc = "The percentage of sleeping players required to advance time")
+	@ConfigDouble(def = 0.5, min = 0.0, max = 1.0, desc = "The percentage of sleeping players required to advance time.")
 	double config_sleep_threshold;
-	@ConfigLong(def = 1000, min = 0, max = 12000, desc = "The target time in ticks [0-12000] to advance to. 1000 is just after sunrise.")
+	@ConfigLong(def = 1000, min = 0, max = 12000, desc = "The target time in ticks to advance to. 1000 is just after sunrise.")
 	long config_target_time;
 	@ConfigLong(def = 100, min = 0, max = 1200, desc = "The interpolation time in ticks for a smooth change of time.")
 	long config_interpolation_ticks;

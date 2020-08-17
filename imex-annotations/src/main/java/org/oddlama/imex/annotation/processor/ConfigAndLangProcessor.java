@@ -31,7 +31,7 @@ public class ConfigAndLangProcessor extends AbstractProcessor {
 	public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment round_env) {
 		for (var annotation : annotations) {
 			round_env.getElementsAnnotatedWith(annotation)
-				.forEach(a -> { verify_type(annotation, a); });
+				.forEach(a -> verify_type(annotation, a));
 		}
 
 		return true;

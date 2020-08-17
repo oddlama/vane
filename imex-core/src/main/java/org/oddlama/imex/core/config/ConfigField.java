@@ -7,6 +7,8 @@ import java.util.logging.Logger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.text.MessageFormat;
+import org.apache.commons.lang.ClassUtils;
 
 import static org.reflections.ReflectionUtils.*;
 
@@ -23,12 +25,22 @@ import org.oddlama.imex.annotation.LangString;
 import org.oddlama.imex.annotation.LangVersion;
 
 public abstract class ConfigField<T> {
-	public Field field;
-	public String name;
+	protected Module module;
+	protected Field field;
+	protected String name;
+	protected Class<?> cls;
 
-	public ConfigField(Field field) {
+	public ConfigField(Module module, Field field, Class<?> cls) {
+		this.module = module;
 		this.field = field;
 		this.name = field.getName().substring("config_".length());
+		this.cls = cls;
+
+		field.setAccessible(true);
+	}
+
+	public String get_yaml_path() {
+		return name;
 	}
 
 	protected void append_description(StringBuilder builder, String description) {
@@ -39,22 +51,30 @@ public abstract class ConfigField<T> {
 
 	protected void append_value_range(StringBuilder builder, T min, T max, T invalid_min, T invalid_max) {
 		builder.append("# Valid values: ");
-		if (min != invalid_min) {
-			if (max != invalid_max) {
+		if (!min.equals(invalid_min)) {
+			if (!max.equals(invalid_max)) {
+				builder.append("[");
 				builder.append(min);
-				builder.append(" <= x <= ");
+				builder.append(",");
 				builder.append(max);
+				builder.append("]");
 			} else {
+				builder.append("[");
 				builder.append(min);
-				builder.append(" <= x");
+				builder.append(",)");
 			}
 		} else {
-			if (max != invalid_max) {
-				builder.append("x <= ");
+			if (!max.equals(invalid_max)) {
+				builder.append("(,");
 				builder.append(max);
-				builder.append("\n");
+				builder.append("]");
 			} else {
-				builder.append("any double");
+				var primitive_cls = ClassUtils.wrapperToPrimitive(cls);
+				if (primitive_cls != null) {
+					builder.append("Any " + primitive_cls.getName());
+				} else {
+					throw new RuntimeException("Unhandeled configuration type " + cls.getName() + " in append_value_range. This is a bug.");
+				}
 			}
 		}
 		builder.append("\n");
@@ -74,21 +94,12 @@ public abstract class ConfigField<T> {
 	}
 
 	public abstract void generate_yaml(StringBuilder builder);
-	public abstract T load(YamlConfiguration yaml);
+	public abstract void check_loadable(YamlConfiguration yaml) throws LoadException;
+	public abstract void load(YamlConfiguration yaml);
 
-	//@SuppressWarnings("unchecked")
-	//public T get(Module module) {
-	//	try {
-	//		return (T)field.get(module);
-	//	} catch (IllegalAccessException e) {
-	//		e.printStackTrace();
-	//		throw new RuntimeException("Invalid field access!");
-	//	}
-	//}
-
-	protected void check_yaml_path(YamlConfiguration yaml) {
+	protected void check_yaml_path(YamlConfiguration yaml) throws LoadException {
 		if (!yaml.contains(name, true)) {
-			throw new RuntimeException("yaml is missing configuration with path '" + name + "'");
+			throw new LoadException("yaml is missing configuration with path '" + name + "'");
 		}
 	}
 }

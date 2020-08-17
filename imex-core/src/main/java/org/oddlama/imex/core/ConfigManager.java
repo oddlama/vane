@@ -15,6 +15,7 @@ import org.apache.commons.lang.WordUtils;
 
 import org.oddlama.imex.core.config.ConfigDoubleField;
 import org.oddlama.imex.core.config.ConfigVersionField;
+import org.oddlama.imex.core.config.LoadException;
 import org.oddlama.imex.core.config.ConfigLongField;
 import org.oddlama.imex.core.config.ConfigStringField;
 import org.oddlama.imex.core.config.ConfigField;
@@ -73,13 +74,13 @@ public class ConfigManager {
 		final var atype = annotation.annotationType();
 
 		if (atype.equals(ConfigDouble.class)) {
-			return new ConfigDoubleField(field, (ConfigDouble)annotation);
+			return new ConfigDoubleField(module, field, (ConfigDouble)annotation);
 		} else if (atype.equals(ConfigLong.class)) {
-			return new ConfigLongField(field, (ConfigLong)annotation);
+			return new ConfigLongField(module, field, (ConfigLong)annotation);
 		} else if (atype.equals(ConfigString.class)) {
-			return new ConfigStringField(field, (ConfigString)annotation);
+			return new ConfigStringField(module, field, (ConfigString)annotation);
 		} else if (atype.equals(ConfigVersion.class)) {
-			return field_version = new ConfigVersionField(field, (ConfigVersion)annotation);
+			return field_version = new ConfigVersionField(module, field, (ConfigVersion)annotation);
 		} else {
 			throw new RuntimeException("Missing ConfigField handler for @" + atype.getName() + ". This is a bug.");
 		}
@@ -101,6 +102,17 @@ public class ConfigManager {
 	}
 
 	public boolean reload(Logger log, YamlConfiguration yaml) {
+		try {
+			// Check configuration for errors
+			for (var f : config_fields) {
+				f.check_loadable(yaml);
+			}
+
+			config_fields.stream().forEach(f -> f.load(yaml));
+		} catch (LoadException e) {
+			log.severe(e.getMessage());
+			return false;
+		}
 		return true;
 	}
 }

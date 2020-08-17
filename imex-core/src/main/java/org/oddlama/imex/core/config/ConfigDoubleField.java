@@ -1,6 +1,7 @@
 package org.oddlama.imex.core.config;
 
 import java.lang.StringBuilder;
+import org.oddlama.imex.core.Module;
 import java.lang.reflect.Field;
 import java.lang.annotation.Annotation;
 import java.util.logging.Logger;
@@ -24,8 +25,8 @@ import org.oddlama.imex.annotation.LangVersion;
 public class ConfigDoubleField extends ConfigField<Double> {
 	public ConfigDouble annotation;
 
-	public ConfigDoubleField(Field field, ConfigDouble annotation) {
-		super(field);
+	public ConfigDoubleField(Module module, Field field, ConfigDouble annotation) {
+		super(module, field, Double.class);
 		this.annotation = annotation;
 	}
 
@@ -45,13 +46,28 @@ public class ConfigDoubleField extends ConfigField<Double> {
 	}
 
 	@Override
-	public Double load(YamlConfiguration yaml) {
+	public void check_loadable(YamlConfiguration yaml) throws LoadException {
 		check_yaml_path(yaml);
 
-		if (!yaml.isDouble(name)) {
-			throw new RuntimeException("Invalid type for yaml path '" + name + "', expected double");
+		if (!yaml.isDouble(get_yaml_path())) {
+			throw new LoadException("Invalid type for yaml path '" + get_yaml_path() + "', expected double");
 		}
-		return yaml.getDouble(name);
+
+		var val = yaml.getDouble(get_yaml_path());
+		if (annotation.min() != Double.NaN && val < annotation.min()) {
+			throw new LoadException("Configuration '" + get_yaml_path() + "' has an invalid value: Value must be >= " + annotation.min());
+		}
+		if (annotation.max() != Double.NaN && val > annotation.max()) {
+			throw new LoadException("Configuration '" + get_yaml_path() + "' has an invalid value: Value must be <= " + annotation.max());
+		}
+	}
+
+	public void load(YamlConfiguration yaml) {
+		try {
+			field.setDouble(module, yaml.getDouble(get_yaml_path()));
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException("Invalid field access on '" + field.getName() + "'. This is a bug.");
+		}
 	}
 }
 
