@@ -19,10 +19,12 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.oddlama.imex.annotation.ConfigString;
+import org.oddlama.imex.core.config.ConfigManager;
+import org.oddlama.imex.core.lang.LangManager;
 
 public abstract class Module extends JavaPlugin {
 	private Core core;
-	protected Logger log;
+	public Logger log;
 
 	public ConfigManager config_manager = new ConfigManager(this);
 	public LangManager lang_manager = new LangManager(this);
@@ -75,17 +77,8 @@ public abstract class Module extends JavaPlugin {
 			}
 		}
 
-		// Load config file
-		final var yaml = YamlConfiguration.loadConfiguration(file);
-
-		// Check config file version
-		final var version = yaml.getLong("version", -1);
-		if (!verify_config_version(file, version)) {
-			return false;
-		}
-
 		// Reload automatic variables
-		if (!config_manager.reload(log, yaml)) {
+		if (!config_manager.reload(file)) {
 			return false;
 		}
 
@@ -142,64 +135,8 @@ public abstract class Module extends JavaPlugin {
 			return false;
 		}
 
-		// Load config file
-		final var yaml = YamlConfiguration.loadConfiguration(file);
-
-		// Check version
-		final var version = yaml.getLong("version", -1);
-		if (!verify_lang_version(file, version)) {
-			return false;
-		}
-
 		// Reload automatic variables
-		if (!lang_manager.reload(log, yaml)) {
-			return false;
-		}
-
-		return true;
-	}
-
-	private boolean verify_config_version(File file, long version) {
-		if (version != config_manager.expected_version()) {
-			log.severe(file.getName() + ": expected version " + config_manager.expected_version() + ", but got " + version);
-
-			if (version == 0) {
-				log.severe("Something went wrong while generating or loading the configuration.");
-				log.severe("If you are sure your configuration is correct and this isn't a file");
-				log.severe("system permission issue, please report this to https://github.com/oddlama/imex/issues");
-			} else if (version < config_manager.expected_version()) {
-				log.severe("This config is for an older version of " + getName() + ".");
-				log.severe("Please backup the file and delete it afterwards. It will");
-				log.severe("then be regenerated the next time the server is started.");
-			} else {
-				log.severe("This config is for a future version of " + getName() + ".");
-				log.severe("Please use the correct file for this version, or delete it and");
-				log.severe("it will be regenerated next time the server is started.");
-			}
-
-			return false;
-		}
-
-		return true;
-	}
-
-	private boolean verify_lang_version(File file, long version) {
-		if (version != lang_manager.expected_version()) {
-			log.severe(file.getName() + ": expected version " + lang_manager.expected_version() + ", but got " + version);
-
-			if (version == 0) {
-				log.severe("Something went wrong while generating or loading the configuration.");
-				log.severe("If you are sure your configuration is correct and this isn't a file");
-				log.severe("system permission issue, please report this to https://github.com/oddlama/imex/issues");
-			} else if (version < lang_manager.expected_version()) {
-				log.severe("This language file is for an older version of " + getName() + ".");
-				log.severe("Please update your file or use an officially supported language file.");
-			} else {
-				log.severe("This language file is for a future version of " + getName() + ".");
-				log.severe("Please use the correct file for this version, or use an officially");
-				log.severe("supported language file.");
-			}
-
+		if (!lang_manager.reload(file)) {
 			return false;
 		}
 

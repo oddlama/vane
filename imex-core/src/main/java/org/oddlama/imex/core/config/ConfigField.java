@@ -110,7 +110,7 @@ public abstract class ConfigField<T> {
 
 	protected void check_yaml_path(YamlConfiguration yaml) throws YamlLoadException {
 		if (!yaml.contains(name, true)) {
-			throw new YamlLoadException("yaml is missing configuration with path '" + name + "'");
+			throw new YamlLoadException("yaml is missing entry with path '" + name + "'");
 		}
 	}
 

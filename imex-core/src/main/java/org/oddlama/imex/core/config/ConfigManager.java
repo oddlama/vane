@@ -1,6 +1,7 @@
-package org.oddlama.imex.core;
+package org.oddlama.imex.core.config;
 
 import java.lang.StringBuilder;
+import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.annotation.Annotation;
 import java.util.logging.Logger;
@@ -13,6 +14,8 @@ import static org.reflections.ReflectionUtils.*;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.apache.commons.lang.WordUtils;
 
+import org.oddlama.imex.core.YamlLoadException;
+import org.oddlama.imex.core.Module;
 import org.oddlama.imex.core.config.ConfigDoubleField;
 import org.oddlama.imex.core.config.ConfigVersionField;
 import org.oddlama.imex.core.config.ConfigLongField;
@@ -121,7 +124,40 @@ public class ConfigManager {
 		});
 	}
 
-	public boolean reload(Logger log, YamlConfiguration yaml) {
+	private boolean verify_version(File file, long version) {
+		if (version != expected_version()) {
+			module.log.severe(file.getName() + ": expected version " + expected_version() + ", but got " + version);
+
+			if (version == 0) {
+				module.log.severe("Something went wrong while generating or loading the configuration.");
+				module.log.severe("If you are sure your configuration is correct and this isn't a file");
+				module.log.severe("system permission issue, please report this to https://github.com/oddlama/imex/issues");
+			} else if (version < expected_version()) {
+				module.log.severe("This config is for an older version of " + module.getName() + ".");
+				module.log.severe("Please backup the file and delete it afterwards. It will");
+				module.log.severe("then be regenerated the next time the server is started.");
+			} else {
+				module.log.severe("This config is for a future version of " + module.getName() + ".");
+				module.log.severe("Please use the correct file for this version, or delete it and");
+				module.log.severe("it will be regenerated next time the server is started.");
+			}
+
+			return false;
+		}
+
+		return true;
+	}
+
+	public boolean reload(File file) {
+		// Load file
+		final var yaml = YamlConfiguration.loadConfiguration(file);
+
+		// Check version
+		final var version = yaml.getLong("version", -1);
+		if (!verify_version(file, version)) {
+			return false;
+		}
+
 		try {
 			// Check configuration for errors
 			for (var f : config_fields) {
@@ -130,7 +166,8 @@ public class ConfigManager {
 
 			config_fields.stream().forEach(f -> f.load(yaml));
 		} catch (YamlLoadException e) {
-			log.severe(e.getMessage());
+			module.log.severe("error while loading '" + file.getName() + "':");
+			module.log.severe(e.getMessage());
 			return false;
 		}
 		return true;
