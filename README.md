@@ -19,16 +19,17 @@ So if you don't want a certain feature, simply disable it.
 
 #### Little things & quality of life
 
-- Advancements to guide you through most additions
-- Walk faster on grass paths
-- Harvest finished crops by right-clicking
-- Craft lights that automatically turn on when it's night
-- Sort chests with redstone
-- Modify individual connections of walls, fences, panes, etc.
-- Simpler, slightly colorized chat layout
-- Store XP in bottles (with slight loss)
-- Inaccessible commands will not be shown to players
-- Less required players for night-skipping (by default 50%), with gradual night-to-day transition
+- [ ] Advancements to guide you through most additions
+- [x] Walk faster on grass paths
+- [x] Skip night with 50% of players sleeping
+- [ ] Harvest finished crops by right-clicking
+- [ ] Craft lights that automatically turn on when it's night
+- [ ] Sort chests with redstone
+- [ ] Modify individual connections of walls, fences, panes, etc.
+- [ ] Simpler, slightly colorized chat layout
+- [ ] Store XP in bottles (with slight loss)
+- [ ] Inaccessible commands will not be shown to players
+- [ ] Less required players for night-skipping (by default 50%), with gradual night-to-day transition
 
 #### Unique features
 
