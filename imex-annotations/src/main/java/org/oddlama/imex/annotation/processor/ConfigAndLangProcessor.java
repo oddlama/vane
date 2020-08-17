@@ -15,8 +15,11 @@ import javax.lang.model.element.VariableElement;
 import javax.tools.Diagnostic;
 
 @SupportedAnnotationTypes({
+    "org.oddlama.imex.annotation.ConfigBoolean",
     "org.oddlama.imex.annotation.ConfigDouble",
+    "org.oddlama.imex.annotation.ConfigInt",
     "org.oddlama.imex.annotation.ConfigLong",
+    "org.oddlama.imex.annotation.ConfigMaterialSet",
     "org.oddlama.imex.annotation.ConfigString",
     "org.oddlama.imex.annotation.ConfigVersion",
     "org.oddlama.imex.annotation.LangMessage",
@@ -29,7 +32,7 @@ public class ConfigAndLangProcessor extends AbstractProcessor {
 	public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment round_env) {
 		for (var annotation : annotations) {
 			round_env.getElementsAnnotatedWith(annotation)
-				.forEach(a -> verify_type(annotation, a));
+			    .forEach(a -> verify_type(annotation, a));
 		}
 
 		return true;
@@ -38,15 +41,18 @@ public class ConfigAndLangProcessor extends AbstractProcessor {
 	private static final Map<String, String> field_type_mapping;
 	static {
 		Map<String, String> map = new HashMap<>();
+		map.put("org.oddlama.imex.annotation.ConfigBoolean", "boolean");
+		map.put("org.oddlama.imex.annotation.ConfigInt", "int");
+		map.put("org.oddlama.imex.annotation.ConfigMaterialSet", "java.util.Set<org.bukkit.Material>");
 		map.put("org.oddlama.imex.annotation.ConfigDouble", "double");
 		map.put("org.oddlama.imex.annotation.ConfigLong", "long");
 		map.put("org.oddlama.imex.annotation.ConfigString", "java.lang.String");
-    	map.put("org.oddlama.imex.annotation.ConfigLong", "long");
-    	map.put("org.oddlama.imex.annotation.ConfigString", "java.lang.String");
-    	map.put("org.oddlama.imex.annotation.ConfigVersion", "long");
-    	map.put("org.oddlama.imex.annotation.LangMessage", "java.text.MessageFormat");
-    	map.put("org.oddlama.imex.annotation.LangString", "java.lang.String");
-    	map.put("org.oddlama.imex.annotation.LangVersion", "long");
+		map.put("org.oddlama.imex.annotation.ConfigLong", "long");
+		map.put("org.oddlama.imex.annotation.ConfigString", "java.lang.String");
+		map.put("org.oddlama.imex.annotation.ConfigVersion", "long");
+		map.put("org.oddlama.imex.annotation.LangMessage", "java.text.MessageFormat");
+		map.put("org.oddlama.imex.annotation.LangString", "java.lang.String");
+		map.put("org.oddlama.imex.annotation.LangVersion", "long");
 		field_type_mapping = Collections.unmodifiableMap(map);
 	}
 
@@ -54,7 +60,7 @@ public class ConfigAndLangProcessor extends AbstractProcessor {
 		var type = ((VariableElement)element).asType().toString();
 		var required_type = field_type_mapping.get(annotation.asType().toString());
 		if (!required_type.equals(type)) {
-			processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, "@" + annotation.getSimpleName() + " requires a field of type " + required_type);
+			processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, "@" + annotation.getSimpleName() + " requires a field of type " + required_type + " but got " + type);
 		}
 	}
 }
