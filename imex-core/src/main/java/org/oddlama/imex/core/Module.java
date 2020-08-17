@@ -1,5 +1,7 @@
 package org.oddlama.imex.core;
 
+import static org.oddlama.imex.util.ResourceList.get_resources;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -12,14 +14,11 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
-
 import java.util.regex.Pattern;
-
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.oddlama.imex.annotation.ConfigString;
-import static org.oddlama.imex.util.ResourceList.get_resources;
 
 public abstract class Module extends JavaPlugin {
 	private Core core;
@@ -29,7 +28,7 @@ public abstract class Module extends JavaPlugin {
 	public LangManager lang_manager = new LangManager();
 
 	@ConfigString(def = "inherit", desc = "The language for this module. The corresponding language file must be named lang-{lang}.yml. Specifying 'inherit' will load the value set for imex-core.")
-	public String lang;
+	public String config_lang;
 
 	@Override
 	public void onLoad() {
@@ -101,13 +100,13 @@ public abstract class Module extends JavaPlugin {
 	private void update_lang_file(String lang_file) {
 		final var file = new File(getDataFolder(), lang_file);
 		final var file_version = YamlConfiguration.loadConfiguration(file)
-			.getLong("version", -1);
+		                             .getLong("version", -1);
 		long resource_version = -1;
 
 		final var res = getResource(lang_file);
 		try (final var reader = new InputStreamReader(res)) {
 			resource_version = YamlConfiguration.loadConfiguration(reader)
-				.getLong("version", -1);
+			                       .getLong("version", -1);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -123,13 +122,12 @@ public abstract class Module extends JavaPlugin {
 
 	public boolean reload_localization() {
 		// Copy all embedded lang files, if their version is newer.
-        get_resources(getClass(), Pattern.compile("lang-.*\\.yml")).stream()
-			.forEach(this::update_lang_file);
+		get_resources(getClass(), Pattern.compile("lang-.*\\.yml")).stream().forEach(this::update_lang_file);
 
 		// Get configured language code
-		var lang_code = lang;
+		var lang_code = config_lang;
 		if ("inherit".equals(lang_code)) {
-			lang_code = core.lang;
+			lang_code = core.config_lang;
 
 			// Fallback to en in case 'inherit' is used in imex-core.
 			if ("inherit".equals(lang_code)) {
