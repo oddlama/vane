@@ -1,24 +1,14 @@
 package org.oddlama.imex.core.lang;
 
-import org.oddlama.imex.core.YamlLoadException;
-import org.oddlama.imex.core.Module;
-
-import java.lang.StringBuilder;
-import java.lang.reflect.Field;
-import java.lang.annotation.Annotation;
-import java.util.logging.Logger;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import static org.reflections.ReflectionUtils.*;
 
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.apache.commons.lang.WordUtils;
+import java.lang.reflect.Field;
 
-import org.oddlama.imex.annotation.LangMessage;
+import org.bukkit.configuration.file.YamlConfiguration;
+
 import org.oddlama.imex.annotation.LangString;
-import org.oddlama.imex.annotation.LangVersion;
+import org.oddlama.imex.core.Module;
+import org.oddlama.imex.core.YamlLoadException;
 
 public class LangStringField extends LangField<String> {
 	public LangString annotation;

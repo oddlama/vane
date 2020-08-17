@@ -2,22 +2,20 @@ package org.oddlama.imex.core;
 
 import static org.oddlama.imex.util.ResourceList.get_resources;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.StringBuilder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
+
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
+
 import org.oddlama.imex.annotation.ConfigString;
 import org.oddlama.imex.core.config.ConfigManager;
 import org.oddlama.imex.core.lang.LangManager;

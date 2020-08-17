@@ -1,17 +1,15 @@
 package org.oddlama.imex.annotation.processor;
 
-import java.util.Set;
-import java.util.Map;
-import java.util.HashMap;
 import java.util.Collections;
-import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
-import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
 import javax.tools.Diagnostic;

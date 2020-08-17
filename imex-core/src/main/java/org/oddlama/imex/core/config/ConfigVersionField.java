@@ -1,28 +1,15 @@
 package org.oddlama.imex.core.config;
 
-import java.lang.StringBuilder;
-import org.oddlama.imex.core.YamlLoadException;
-import org.oddlama.imex.core.Module;
-import java.lang.reflect.Field;
-import java.lang.annotation.Annotation;
-import java.util.logging.Logger;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import static org.reflections.ReflectionUtils.*;
 
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.apache.commons.lang.WordUtils;
+import java.lang.StringBuilder;
+import java.lang.reflect.Field;
 
-import org.oddlama.imex.annotation.ConfigDouble;
-import org.oddlama.imex.annotation.ConfigLong;
-import org.oddlama.imex.annotation.ConfigString;
+import org.bukkit.configuration.file.YamlConfiguration;
+
 import org.oddlama.imex.annotation.ConfigVersion;
-import org.oddlama.imex.annotation.LangMessage;
-import org.oddlama.imex.annotation.LangString;
-import org.oddlama.imex.annotation.LangVersion;
 import org.oddlama.imex.core.Module;
+import org.oddlama.imex.core.YamlLoadException;
 
 public class ConfigVersionField extends ConfigField<Long> {
 	public ConfigVersion annotation;

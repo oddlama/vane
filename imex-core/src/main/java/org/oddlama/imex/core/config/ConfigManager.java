@@ -1,38 +1,32 @@
 package org.oddlama.imex.core.config;
 
-import java.lang.StringBuilder;
+import static org.reflections.ReflectionUtils.*;
+
 import java.io.File;
-import java.lang.reflect.Field;
+import java.lang.StringBuilder;
 import java.lang.annotation.Annotation;
-import java.util.logging.Logger;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.reflections.ReflectionUtils.*;
-
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.apache.commons.lang.WordUtils;
 
-import org.oddlama.imex.core.YamlLoadException;
-import org.oddlama.imex.core.Module;
-import org.oddlama.imex.core.config.ConfigDoubleField;
-import org.oddlama.imex.core.config.ConfigVersionField;
-import org.oddlama.imex.core.config.ConfigLongField;
-import org.oddlama.imex.core.config.ConfigIntField;
-import org.oddlama.imex.core.config.ConfigBooleanField;
-import org.oddlama.imex.core.config.ConfigStringField;
-import org.oddlama.imex.core.config.ConfigField;
-
-import org.oddlama.imex.annotation.ConfigDouble;
-import org.oddlama.imex.annotation.ConfigLong;
-import org.oddlama.imex.annotation.ConfigInt;
 import org.oddlama.imex.annotation.ConfigBoolean;
+import org.oddlama.imex.annotation.ConfigDouble;
+import org.oddlama.imex.annotation.ConfigInt;
+import org.oddlama.imex.annotation.ConfigLong;
 import org.oddlama.imex.annotation.ConfigString;
 import org.oddlama.imex.annotation.ConfigVersion;
-import org.oddlama.imex.annotation.LangMessage;
-import org.oddlama.imex.annotation.LangString;
-import org.oddlama.imex.annotation.LangVersion;
+import org.oddlama.imex.core.Module;
+import org.oddlama.imex.core.YamlLoadException;
+import org.oddlama.imex.core.config.ConfigBooleanField;
+import org.oddlama.imex.core.config.ConfigDoubleField;
+import org.oddlama.imex.core.config.ConfigField;
+import org.oddlama.imex.core.config.ConfigIntField;
+import org.oddlama.imex.core.config.ConfigLongField;
+import org.oddlama.imex.core.config.ConfigStringField;
+import org.oddlama.imex.core.config.ConfigVersionField;
 
 public class ConfigManager {
 	private List<ConfigField<?>> config_fields = new ArrayList<>();

@@ -1,5 +1,8 @@
 package org.oddlama.imex.bedtime;
 
+import static org.oddlama.imex.util.WorldUtil.broadcast;
+import static org.oddlama.imex.util.WorldUtil.change_time_smoothly;
+
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -17,15 +20,12 @@ import org.bukkit.event.player.PlayerBedLeaveEvent;
 import org.oddlama.imex.annotation.ConfigDouble;
 import org.oddlama.imex.annotation.ConfigLong;
 import org.oddlama.imex.annotation.ConfigVersion;
-import org.oddlama.imex.annotation.LangVersion;
-import org.oddlama.imex.annotation.ConfigString;
 import org.oddlama.imex.annotation.ImexModule;
 import org.oddlama.imex.annotation.LangMessage;
 import org.oddlama.imex.annotation.LangString;
+import org.oddlama.imex.annotation.LangVersion;
 import org.oddlama.imex.core.Module;
 import org.oddlama.imex.util.Nms;
-import static org.oddlama.imex.util.WorldUtil.broadcast;
-import static org.oddlama.imex.util.WorldUtil.change_time_smoothly;
 
 @ImexModule
 public class Bedtime extends Module implements Listener {
