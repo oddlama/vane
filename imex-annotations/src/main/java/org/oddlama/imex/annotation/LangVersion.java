@@ -7,5 +7,6 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface LangMessage {
+public @interface LangVersion {
+	long value();
 }

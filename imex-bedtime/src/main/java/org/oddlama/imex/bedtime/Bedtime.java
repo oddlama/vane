@@ -17,44 +17,42 @@ import org.bukkit.event.player.PlayerBedLeaveEvent;
 import org.oddlama.imex.annotation.ConfigDouble;
 import org.oddlama.imex.annotation.ConfigLong;
 import org.oddlama.imex.annotation.ConfigVersion;
+import org.oddlama.imex.annotation.LangVersion;
 import org.oddlama.imex.annotation.ConfigString;
 import org.oddlama.imex.annotation.ImexModule;
 import org.oddlama.imex.annotation.LangMessage;
 import org.oddlama.imex.annotation.LangString;
 import org.oddlama.imex.core.Module;
 import org.oddlama.imex.util.Nms;
-import org.oddlama.imex.util.WorldUtil;
-
-//// Basic
-//@ConfigVersion(1)
-//@ConfigLong(name = "version", def = 1, desc = "DO NOT CHANGE! The version of this config file. Used to determine if the config needs to be updated.")
-//@ConfigString(name = "lang", def = "inherit", desc = "The language for this module. Specifying 'inherit' will use the value set for imex-core.")
-//
-//// Configuration
-//@ConfigDouble(name = "sleep_threshold", def = 0.5, min = 0.0, max = 1.0, desc = "The percentage of sleeping players required to advance time")
-//@ConfigLong(name = "target_time", def = 1000, min = 0, max = 12000, desc = "The target time in ticks [0-12000] to advance to. 1000 is just after sunrise.")
-//@ConfigLong(name = "interpolation_ticks", def = 100, min = 0, max = 1200, desc = "The interpolation time in ticks for a smooth change of time.")
-//
-//// Language
-//@LangVersion(1)
-//@LangMessage(name = "player_bed_enter")
-//@LangMessage(name = "player_bed_leave")
-//@LangString(name = "sleep_success")
+import static org.oddlama.imex.util.WorldUtil.broadcast;
+import static org.oddlama.imex.util.WorldUtil.change_time_smoothly;
 
 @ImexModule
 public class Bedtime extends Module implements Listener {
 	// One set of sleeping players per world, to keep track
 	private HashMap<UUID, HashSet<UUID>> world_sleepers = new HashMap<>();
 
+	// Configuration
 	@ConfigVersion(1)
-	public long version;
+	public long config_version;
 
-//double config.sleep_threshold = 0.5;
-//long config.target_time = 1000;
-//long config.interpolation_ticks = 100;
-//MessageFormat lang.player_bed_enter = new MessageFormat("A");
-//MessageFormat lang.player_bed_leave = new MessageFormat("B");
-//String lang.sleep_success = "C";
+	@ConfigDouble(def = 0.5, min = 0.0, max = 1.0, desc = "The percentage of sleeping players required to advance time")
+	double config_sleep_threshold;
+	@ConfigLong(def = 1000, min = 0, max = 12000, desc = "The target time in ticks [0-12000] to advance to. 1000 is just after sunrise.")
+	long config_target_time;
+	@ConfigLong(def = 100, min = 0, max = 1200, desc = "The interpolation time in ticks for a smooth change of time.")
+	long config_interpolation_ticks;
+
+	// Language
+	@LangVersion(1)
+	public long lang_version;
+
+	@LangMessage()
+	MessageFormat lang_player_bed_enter;
+	@LangMessage()
+	MessageFormat lang_player_bed_leave;
+	@LangString()
+	String lang_sleep_success;
 
 	@Override
 	public void onEnable() {
@@ -79,12 +77,12 @@ public class Bedtime extends Module implements Listener {
 					}
 
 					// Let the sun rise, and set weather
-					WorldUtil.change_time_smoothly(world, this, config.target_time, config.interpolation_ticks);
+					change_time_smoothly(world, this, config_target_time, config_interpolation_ticks);
 					world.setStorm(false);
 					world.setThundering(false);
 
 					// Send message
-					WorldUtil.broadcast(world, lang.sleep_success);
+					broadcast(world, lang_sleep_success);
 
 					// Clear sleepers
 					reset_sleepers(world);
@@ -124,7 +122,7 @@ public class Bedtime extends Module implements Listener {
 	}
 
 	private boolean enough_players_sleeping(final World world) {
-		return get_percentage_sleeping(world) >= config.sleep_threshold;
+		return get_percentage_sleeping(world) >= config_sleep_threshold;
 	}
 
 	private void add_sleeping(final World world, final Player player) {
@@ -140,7 +138,7 @@ public class Bedtime extends Module implements Listener {
 
 		// Broadcast sleeping message
 		var percent = get_percentage_sleeping(world);
-		WorldUtil.broadcast(world, lang.player_bed_enter.format(new Object[] {
+		broadcast(world, lang_player_bed_enter.format(new Object[] {
 		                               player.getName(),
 		                               100.0 * percent}));
 	}
@@ -159,7 +157,7 @@ public class Bedtime extends Module implements Listener {
 		if (sleepers.remove(player.getUniqueId())) {
 			// Broadcast sleeping message
 			var percent = get_percentage_sleeping(world);
-			WorldUtil.broadcast(world, lang.player_bed_leave.format(new Object[] {
+			broadcast(world, lang_player_bed_leave.format(new Object[] {
 			                               player.getName(),
 			                               100.0 * percent}));
 		}
