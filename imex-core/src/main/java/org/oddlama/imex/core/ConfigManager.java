@@ -17,11 +17,15 @@ import org.oddlama.imex.core.config.ConfigDoubleField;
 import org.oddlama.imex.core.config.ConfigVersionField;
 import org.oddlama.imex.core.config.LoadException;
 import org.oddlama.imex.core.config.ConfigLongField;
+import org.oddlama.imex.core.config.ConfigIntField;
+import org.oddlama.imex.core.config.ConfigBooleanField;
 import org.oddlama.imex.core.config.ConfigStringField;
 import org.oddlama.imex.core.config.ConfigField;
 
 import org.oddlama.imex.annotation.ConfigDouble;
 import org.oddlama.imex.annotation.ConfigLong;
+import org.oddlama.imex.annotation.ConfigInt;
+import org.oddlama.imex.annotation.ConfigBoolean;
 import org.oddlama.imex.annotation.ConfigString;
 import org.oddlama.imex.annotation.ConfigVersion;
 import org.oddlama.imex.annotation.LangMessage;
@@ -73,13 +77,21 @@ public class ConfigManager {
 		assert annotation != null;
 		final var atype = annotation.annotationType();
 
-		if (atype.equals(ConfigDouble.class)) {
+		// Return correct wrapper object
+		if (atype.equals(ConfigBoolean.class)) {
+			return new ConfigBooleanField(module, field, (ConfigBoolean)annotation);
+		} else if (atype.equals(ConfigDouble.class)) {
 			return new ConfigDoubleField(module, field, (ConfigDouble)annotation);
+		} else if (atype.equals(ConfigInt.class)) {
+			return new ConfigIntField(module, field, (ConfigInt)annotation);
 		} else if (atype.equals(ConfigLong.class)) {
 			return new ConfigLongField(module, field, (ConfigLong)annotation);
 		} else if (atype.equals(ConfigString.class)) {
 			return new ConfigStringField(module, field, (ConfigString)annotation);
 		} else if (atype.equals(ConfigVersion.class)) {
+			if (field_version != null) {
+				throw new RuntimeException("There must be exactly one @ConfigVersion field! (found multiple)");
+			}
 			return field_version = new ConfigVersionField(module, field, (ConfigVersion)annotation);
 		} else {
 			throw new RuntimeException("Missing ConfigField handler for @" + atype.getName() + ". This is a bug.");
@@ -90,14 +102,23 @@ public class ConfigManager {
 	public void compile(Module module) {
 		config_fields = getAllFields(module.getClass()).stream()
 			.filter(this::has_config_annotation)
+		// Compile all annotated fields
 			.map(this::compile_field)
+		// Sort fields alphabetically, and put version and lang first
+			.sorted((a, b) -> a.compareTo(b))
 			.collect(Collectors.toList());
+
+		if (field_version == null) {
+			throw new RuntimeException("There must be exactly one @ConfigVersion field! (found none)");
+		}
 	}
 
 	public void generate_yaml(StringBuilder builder) {
+		builder.append("# vim: set tabstop=2 softtabstop=0 expandtab shiftwidth=2:\n");
+
 		config_fields.forEach(f -> {
-			f.generate_yaml(builder);
 			builder.append("\n");
+			f.generate_yaml(builder);
 		});
 	}
 

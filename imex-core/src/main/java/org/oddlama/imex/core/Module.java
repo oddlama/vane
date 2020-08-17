@@ -138,7 +138,7 @@ public abstract class Module extends JavaPlugin {
 		// Generate new file if not existing
 		final var file = new File(getDataFolder(), "lang-" + lang_code + ".yml");
 		if (!file.exists()) {
-			log.severe("");
+			log.severe("Missing language file '" + file.getName() + "'");
 			return false;
 		}
 

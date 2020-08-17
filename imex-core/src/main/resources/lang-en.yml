@@ -13,7 +13,3 @@
 # DO NOT CHANGE! The version of this language file. Used to determine
 # if the file needs to be updated.
 version: 1
-
-player_bed_enter: "§6{0}§e schläft jetzt (§6{1}%§e)"
-player_bed_leave: "§6{0}§e fühlt sich ausgeschlafen (§6{1}%§e)"
-sleep_success: "§ePlopp. Sonne."
