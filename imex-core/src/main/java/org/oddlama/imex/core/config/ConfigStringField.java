@@ -1,5 +1,6 @@
 package org.oddlama.imex.core.config;
 
+import org.oddlama.imex.core.YamlLoadException;
 import org.oddlama.imex.core.Module;
 
 import java.lang.StringBuilder;
@@ -40,11 +41,11 @@ public class ConfigStringField extends ConfigField<String> {
 	}
 
 	@Override
-	public void check_loadable(YamlConfiguration yaml) throws LoadException {
+	public void check_loadable(YamlConfiguration yaml) throws YamlLoadException {
 		check_yaml_path(yaml);
 
 		if (!yaml.isString(get_yaml_path())) {
-			throw new LoadException("Invalid type for yaml path '" + get_yaml_path() + "', expected string");
+			throw new YamlLoadException("Invalid type for yaml path '" + get_yaml_path() + "', expected string");
 		}
 	}
 

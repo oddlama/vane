@@ -1,5 +1,7 @@
 package org.oddlama.imex.core.config;
 
+import org.oddlama.imex.core.YamlLoadException;
+
 import java.lang.StringBuilder;
 import org.oddlama.imex.core.Module;
 import java.lang.reflect.Field;
@@ -39,19 +41,19 @@ public class ConfigDoubleField extends ConfigField<Double> {
 	}
 
 	@Override
-	public void check_loadable(YamlConfiguration yaml) throws LoadException {
+	public void check_loadable(YamlConfiguration yaml) throws YamlLoadException {
 		check_yaml_path(yaml);
 
 		if (!yaml.isDouble(get_yaml_path())) {
-			throw new LoadException("Invalid type for yaml path '" + get_yaml_path() + "', expected double");
+			throw new YamlLoadException("Invalid type for yaml path '" + get_yaml_path() + "', expected double");
 		}
 
 		var val = yaml.getDouble(get_yaml_path());
 		if (annotation.min() != Double.NaN && val < annotation.min()) {
-			throw new LoadException("Configuration '" + get_yaml_path() + "' has an invalid value: Value must be >= " + annotation.min());
+			throw new YamlLoadException("Configuration '" + get_yaml_path() + "' has an invalid value: Value must be >= " + annotation.min());
 		}
 		if (annotation.max() != Double.NaN && val > annotation.max()) {
-			throw new LoadException("Configuration '" + get_yaml_path() + "' has an invalid value: Value must be <= " + annotation.max());
+			throw new YamlLoadException("Configuration '" + get_yaml_path() + "' has an invalid value: Value must be <= " + annotation.max());
 		}
 	}
 

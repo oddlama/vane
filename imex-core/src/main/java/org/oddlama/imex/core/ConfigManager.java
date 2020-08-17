@@ -15,7 +15,6 @@ import org.apache.commons.lang.WordUtils;
 
 import org.oddlama.imex.core.config.ConfigDoubleField;
 import org.oddlama.imex.core.config.ConfigVersionField;
-import org.oddlama.imex.core.config.LoadException;
 import org.oddlama.imex.core.config.ConfigLongField;
 import org.oddlama.imex.core.config.ConfigIntField;
 import org.oddlama.imex.core.config.ConfigBooleanField;
@@ -130,7 +129,7 @@ public class ConfigManager {
 			}
 
 			config_fields.stream().forEach(f -> f.load(yaml));
-		} catch (LoadException e) {
+		} catch (YamlLoadException e) {
 			log.severe(e.getMessage());
 			return false;
 		}

@@ -1,5 +1,6 @@
 package org.oddlama.imex.core.config;
 
+import org.oddlama.imex.core.YamlLoadException;
 import java.lang.StringBuilder;
 import java.lang.reflect.Field;
 import java.lang.annotation.Annotation;
@@ -107,13 +108,13 @@ public abstract class ConfigField<T> {
 		builder.append("\n");
 	}
 
-	protected void check_yaml_path(YamlConfiguration yaml) throws LoadException {
+	protected void check_yaml_path(YamlConfiguration yaml) throws YamlLoadException {
 		if (!yaml.contains(name, true)) {
-			throw new LoadException("yaml is missing configuration with path '" + name + "'");
+			throw new YamlLoadException("yaml is missing configuration with path '" + name + "'");
 		}
 	}
 
 	public abstract void generate_yaml(StringBuilder builder);
-	public abstract void check_loadable(YamlConfiguration yaml) throws LoadException;
+	public abstract void check_loadable(YamlConfiguration yaml) throws YamlLoadException;
 	public abstract void load(YamlConfiguration yaml);
 }

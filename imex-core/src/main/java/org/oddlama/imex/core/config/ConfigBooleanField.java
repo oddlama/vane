@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 import static org.reflections.ReflectionUtils.*;
 
+import org.oddlama.imex.core.YamlLoadException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.apache.commons.lang.WordUtils;
 
@@ -40,11 +41,11 @@ public class ConfigBooleanField extends ConfigField<Boolean> {
 	}
 
 	@Override
-	public void check_loadable(YamlConfiguration yaml) throws LoadException {
+	public void check_loadable(YamlConfiguration yaml) throws YamlLoadException {
 		check_yaml_path(yaml);
 
 		if (!(yaml.get(get_yaml_path()) instanceof Number)) {
-			throw new LoadException("Invalid type for yaml path '" + get_yaml_path() + "', expected boolean");
+			throw new YamlLoadException("Invalid type for yaml path '" + get_yaml_path() + "', expected boolean");
 		}
 	}
 

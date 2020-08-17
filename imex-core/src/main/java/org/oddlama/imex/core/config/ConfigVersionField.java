@@ -1,6 +1,7 @@
 package org.oddlama.imex.core.config;
 
 import java.lang.StringBuilder;
+import org.oddlama.imex.core.YamlLoadException;
 import org.oddlama.imex.core.Module;
 import java.lang.reflect.Field;
 import java.lang.annotation.Annotation;
@@ -42,16 +43,16 @@ public class ConfigVersionField extends ConfigField<Long> {
 	}
 
 	@Override
-	public void check_loadable(YamlConfiguration yaml) throws LoadException {
+	public void check_loadable(YamlConfiguration yaml) throws YamlLoadException {
 		check_yaml_path(yaml);
 
 		if (!(yaml.get(get_yaml_path()) instanceof Number)) {
-			throw new LoadException("Invalid type for yaml path '" + get_yaml_path() + "', expected long");
+			throw new YamlLoadException("Invalid type for yaml path '" + get_yaml_path() + "', expected long");
 		}
 
 		var val = yaml.getLong(get_yaml_path());
 		if (val < 1) {
-			throw new LoadException("Configuration '" + get_yaml_path() + "' has an invalid value: Value must be >= 1");
+			throw new YamlLoadException("Configuration '" + get_yaml_path() + "' has an invalid value: Value must be >= 1");
 		}
 	}
 
