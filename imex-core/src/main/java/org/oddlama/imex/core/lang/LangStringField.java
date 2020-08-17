@@ -14,7 +14,7 @@ public class LangStringField extends LangField<String> {
 	public LangString annotation;
 
 	public LangStringField(Module module, Field field, LangString annotation) {
-		super(module, field, String.class);
+		super(module, field);
 		this.annotation = annotation;
 	}
 

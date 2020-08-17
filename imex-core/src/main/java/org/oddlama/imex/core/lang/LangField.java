@@ -13,13 +13,11 @@ public abstract class LangField<T> {
 	protected Module module;
 	protected Field field;
 	protected String name;
-	protected Class<?> cls;
 
-	public LangField(Module module, Field field, Class<?> cls) {
+	public LangField(Module module, Field field) {
 		this.module = module;
 		this.field = field;
 		this.name = field.getName().substring("lang_".length());
-		this.cls = cls;
 
 		field.setAccessible(true);
 	}

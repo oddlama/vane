@@ -1,0 +1,97 @@
+package org.oddlama.imex.core.config;
+
+import static org.reflections.ReflectionUtils.*;
+import static org.oddlama.imex.util.Util.namespaced_key;
+import static org.oddlama.imex.util.MaterialUtil.material_from;
+
+import java.lang.StringBuilder;
+import java.lang.reflect.Field;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.Arrays;
+
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+
+import org.oddlama.imex.annotation.ConfigMaterialSet;
+import org.oddlama.imex.core.Module;
+import org.oddlama.imex.core.YamlLoadException;
+
+public class ConfigMaterialSetField extends ConfigField<Set<Material>> {
+	public ConfigMaterialSet annotation;
+
+	public ConfigMaterialSetField(Module module, Field field, ConfigMaterialSet annotation) {
+		super(module, field, "set of materials");
+		this.annotation = annotation;
+	}
+
+	@Override
+	public void generate_yaml(StringBuilder builder) {
+		append_description(builder, annotation.desc());
+
+		// Default
+		builder.append("# Default:\n");
+		Arrays.stream(annotation.def())
+			.forEach(m -> {
+				builder.append("#  - \"");
+				builder.append(m.getKey().getNamespace());
+				builder.append(":");
+				builder.append(m.getKey().getKey());
+				builder.append("\"\n");
+			});
+
+		// Definition
+		builder.append(name);
+		builder.append(":\n");
+		Arrays.stream(annotation.def())
+			.forEach(m -> {
+				builder.append("  - \"");
+				builder.append(m.getKey().getNamespace());
+				builder.append(":");
+				builder.append(m.getKey().getKey());
+				builder.append("\"\n");
+			});
+	}
+
+	@Override
+	public void check_loadable(YamlConfiguration yaml) throws YamlLoadException {
+		check_yaml_path(yaml);
+
+		if (!yaml.isList(get_yaml_path())) {
+			throw new YamlLoadException("Invalid type for yaml path '" + get_yaml_path() + "', expected list");
+		}
+
+		for (var obj : yaml.getList(get_yaml_path())) {
+			if (!(obj instanceof String)) {
+				throw new YamlLoadException("Invalid type for yaml path '" + get_yaml_path() + "', expected list");
+			}
+
+			final var str = (String)obj;
+			final var split = str.split(":");
+			if (split.length != 2) {
+				throw new YamlLoadException("Invalid material entry in list '" + get_yaml_path() + "': '" + str + "' is not a valid namespaced key");
+			}
+
+			final var mat = material_from(namespaced_key(split[0], split[1]));
+			if (mat == null) {
+				throw new YamlLoadException("Invalid material entry in list '" + get_yaml_path() + "': '" + str + "' does not exist");
+			}
+		}
+	}
+
+	public void load(YamlConfiguration yaml) {
+		final var set = new HashSet<>();
+		for (var obj : yaml.getList(get_yaml_path())) {
+			final var split = ((String)obj).split(":");
+			set.add(material_from(namespaced_key(split[0], split[1])));
+		}
+
+		try {
+			field.set(module, set);
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException("Invalid field access on '" + field.getName() + "'. This is a bug.");
+		}
+	}
+}
+

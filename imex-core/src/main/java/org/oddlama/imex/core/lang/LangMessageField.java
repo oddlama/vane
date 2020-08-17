@@ -15,7 +15,7 @@ public class LangMessageField extends LangField<MessageFormat> {
 	public LangMessage annotation;
 
 	public LangMessageField(Module module, Field field, LangMessage annotation) {
-		super(module, field, MessageFormat.class);
+		super(module, field);
 		this.annotation = annotation;
 	}
 

@@ -1,0 +1,14 @@
+name: ${name}
+version: ${version}
+description: Enhancements module for imex
+
+authors: [oddlama]
+website: 'https://github.com/oddlama/imex'
+
+depend: [imex-core]
+
+main: org.oddlama.imex.enhancements.Enhancements
+database: false
+
+api-version: 1.16
+load: STARTUP

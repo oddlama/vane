@@ -17,14 +17,14 @@ public abstract class ConfigField<T> {
 	protected Module module;
 	protected Field field;
 	protected String name;
-	protected Class<?> cls;
+	protected String type_name;
 	protected int sort_priority = 0;
 
-	public ConfigField(Module module, Field field, Class<?> cls) {
+	public ConfigField(Module module, Field field, String type_name) {
 		this.module = module;
 		this.field = field;
 		this.name = field.getName().substring("config_".length());
-		this.cls = cls;
+		this.type_name = type_name;
 
 		// lang should be at the top
 		if (this.name.equals("lang")) {
@@ -72,12 +72,7 @@ public abstract class ConfigField<T> {
 				builder.append(max);
 				builder.append("]");
 			} else {
-				var primitive_cls = ClassUtils.wrapperToPrimitive(cls);
-				if (primitive_cls != null) {
-					builder.append("Any " + primitive_cls.getName());
-				} else {
-					throw new RuntimeException("Unhandeled configuration type " + cls.getName() + " in append_value_range. This is a bug.");
-				}
+				builder.append("Any " + type_name);
 			}
 		}
 		builder.append("\n");

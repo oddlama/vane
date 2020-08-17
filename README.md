@@ -98,3 +98,6 @@ check achievement on anvil
 
 
 /<module> reload to reload config for all!!!!! automatic.
+
+
+playerlist footer and header

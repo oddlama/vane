@@ -15,7 +15,7 @@ public class ConfigStringField extends ConfigField<String> {
 	public ConfigString annotation;
 
 	public ConfigStringField(Module module, Field field, ConfigString annotation) {
-		super(module, field, String.class);
+		super(module, field, "string");
 		this.annotation = annotation;
 	}
 

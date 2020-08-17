@@ -15,7 +15,7 @@ public class ConfigLongField extends ConfigField<Long> {
 	public ConfigLong annotation;
 
 	public ConfigLongField(Module module, Field field, ConfigLong annotation) {
-		super(module, field, Long.class);
+		super(module, field, "long");
 		this.annotation = annotation;
 	}
 

@@ -47,11 +47,11 @@ public class Bedtime extends Module implements Listener {
 	@LangVersion(1)
 	public long lang_version;
 
-	@LangMessage()
+	@LangMessage
 	MessageFormat lang_player_bed_enter;
-	@LangMessage()
+	@LangMessage
 	MessageFormat lang_player_bed_leave;
-	@LangString()
+	@LangString
 	String lang_sleep_success;
 
 	@Override

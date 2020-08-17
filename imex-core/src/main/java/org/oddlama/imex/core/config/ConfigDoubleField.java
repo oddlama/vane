@@ -15,7 +15,7 @@ public class ConfigDoubleField extends ConfigField<Double> {
 	public ConfigDouble annotation;
 
 	public ConfigDoubleField(Module module, Field field, ConfigDouble annotation) {
-		super(module, field, Double.class);
+		super(module, field, "double");
 		this.annotation = annotation;
 	}
 

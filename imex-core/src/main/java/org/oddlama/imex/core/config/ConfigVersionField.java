@@ -15,7 +15,7 @@ public class ConfigVersionField extends ConfigField<Long> {
 	public ConfigVersion annotation;
 
 	public ConfigVersionField(Module module, Field field, ConfigVersion annotation) {
-		super(module, field, Long.class);
+		super(module, field, "version id");
 		this.annotation = annotation;
 
 		// Version field should be at the bottom

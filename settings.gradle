@@ -3,3 +3,4 @@ rootProject.name = 'imex'
 include ':imex-annotations';
 include ':imex-core';
 include ':imex-bedtime';
+include ':imex-enhancements';

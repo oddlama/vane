@@ -15,7 +15,7 @@ public class ConfigBooleanField extends ConfigField<Boolean> {
 	public ConfigBoolean annotation;
 
 	public ConfigBooleanField(Module module, Field field, ConfigBoolean annotation) {
-		super(module, field, Boolean.class);
+		super(module, field, "boolean");
 		this.annotation = annotation;
 	}
 
@@ -30,7 +30,7 @@ public class ConfigBooleanField extends ConfigField<Boolean> {
 	public void check_loadable(YamlConfiguration yaml) throws YamlLoadException {
 		check_yaml_path(yaml);
 
-		if (!(yaml.get(get_yaml_path()) instanceof Number)) {
+		if (!yaml.isBoolean(get_yaml_path())) {
 			throw new YamlLoadException("Invalid type for yaml path '" + get_yaml_path() + "', expected boolean");
 		}
 	}

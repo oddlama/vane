@@ -14,7 +14,7 @@ public class LangVersionField extends LangField<Long> {
 	public LangVersion annotation;
 
 	public LangVersionField(Module module, Field field, LangVersion annotation) {
-		super(module, field, Long.class);
+		super(module, field);
 		this.annotation = annotation;
 	}
 

@@ -59,6 +59,10 @@ public abstract class Module extends JavaPlugin {
 		}
 	}
 
+	protected void on_config_change() {
+		// To be overridden if needed
+	}
+
 	public boolean reload_configuration() {
 		// Generate new file if not existing
 		final var file = new File(getDataFolder(), "config.yml");
@@ -85,6 +89,7 @@ public abstract class Module extends JavaPlugin {
 			return false;
 		}
 
+		on_config_change();
 		return true;
 	}
 

@@ -15,7 +15,7 @@ public class ConfigIntField extends ConfigField<Integer> {
 	public ConfigInt annotation;
 
 	public ConfigIntField(Module module, Field field, ConfigInt annotation) {
-		super(module, field, Integer.class);
+		super(module, field, "int");
 		this.annotation = annotation;
 	}
 

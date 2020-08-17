@@ -16,6 +16,7 @@ import org.oddlama.imex.annotation.ConfigBoolean;
 import org.oddlama.imex.annotation.ConfigDouble;
 import org.oddlama.imex.annotation.ConfigInt;
 import org.oddlama.imex.annotation.ConfigLong;
+import org.oddlama.imex.annotation.ConfigMaterialSet;
 import org.oddlama.imex.annotation.ConfigString;
 import org.oddlama.imex.annotation.ConfigVersion;
 import org.oddlama.imex.core.Module;
@@ -25,6 +26,7 @@ import org.oddlama.imex.core.config.ConfigDoubleField;
 import org.oddlama.imex.core.config.ConfigField;
 import org.oddlama.imex.core.config.ConfigIntField;
 import org.oddlama.imex.core.config.ConfigLongField;
+import org.oddlama.imex.core.config.ConfigMaterialSetField;
 import org.oddlama.imex.core.config.ConfigStringField;
 import org.oddlama.imex.core.config.ConfigVersionField;
 
@@ -82,6 +84,8 @@ public class ConfigManager {
 			return new ConfigIntField(module, field, (ConfigInt)annotation);
 		} else if (atype.equals(ConfigLong.class)) {
 			return new ConfigLongField(module, field, (ConfigLong)annotation);
+		} else if (atype.equals(ConfigMaterialSet.class)) {
+			return new ConfigMaterialSetField(module, field, (ConfigMaterialSet)annotation);
 		} else if (atype.equals(ConfigString.class)) {
 			return new ConfigStringField(module, field, (ConfigString)annotation);
 		} else if (atype.equals(ConfigVersion.class)) {
