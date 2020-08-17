@@ -15,8 +15,6 @@ import java.util.logging.Logger;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.oddlama.imex.annotation.ConfigVersion;
-import org.oddlama.imex.annotation.ConfigLong;
 import org.oddlama.imex.annotation.ConfigString;
 
 public abstract class Module extends JavaPlugin {
@@ -26,10 +24,7 @@ public abstract class Module extends JavaPlugin {
 	public ConfigManager config_manager = new ConfigManager();
 	public LangManager lang_manager = new LangManager();
 
-	@ConfigVersion(desc = "DO NOT CHANGE! The version of this config file. Used to determine if the config needs to be updated.")
-	public long version;
-
-	@ConfigString(def = "inherit", desc = "DO NOT CHANGE! The version of this config file. Used to determine if the config needs to be updated.")
+	@ConfigString(def = "inherit", desc = "The language for this module. The corresponding language file must be named lang-{lang}.yml. Specifying 'inherit' will load the value set for imex-core.")
 	public String lang;
 
 	@Override
@@ -40,6 +35,10 @@ public abstract class Module extends JavaPlugin {
 		} else {
 			core = (Core)getServer().getPluginManager().getPlugin("imex-core");
 		}
+
+		// Compile config and lang variables
+		config_manager.compile(this);
+		lang_manager.compile(this);
 
 		log = getLogger();
 		if (!reload_configuration()) {

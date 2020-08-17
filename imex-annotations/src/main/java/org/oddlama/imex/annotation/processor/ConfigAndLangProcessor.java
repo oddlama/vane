@@ -13,12 +13,12 @@ import javax.lang.model.element.TypeElement;
 import javax.tools.Diagnostic;
 
 @SupportedAnnotationTypes({
-    //"org.oddlama.imex.annotation.ConfigDouble",
+    "org.oddlama.imex.annotation.ConfigDouble",
     "org.oddlama.imex.annotation.ConfigLong",
     "org.oddlama.imex.annotation.ConfigVersion",
     "org.oddlama.imex.annotation.ConfigString",
-    //"org.oddlama.imex.annotation.LangMessage",
-    //"org.oddlama.imex.annotation.LangString",
+    "org.oddlama.imex.annotation.LangMessage",
+    "org.oddlama.imex.annotation.LangString",
 })
 @SupportedSourceVersion(SourceVersion.RELEASE_11)
 public class ConfigAndLangProcessor extends AbstractProcessor {

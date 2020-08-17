@@ -7,6 +7,9 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.FIELD)
-public @interface ConfigVersion {
-	long value();
+public @interface ConfigDouble {
+	double def();
+	double min() default Double.MIN_VALUE;
+	double max() default Double.MAX_VALUE;
+	String desc();
 }

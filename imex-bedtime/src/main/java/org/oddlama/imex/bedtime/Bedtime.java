@@ -16,6 +16,7 @@ import org.bukkit.event.player.PlayerBedLeaveEvent;
 
 import org.oddlama.imex.annotation.ConfigDouble;
 import org.oddlama.imex.annotation.ConfigLong;
+import org.oddlama.imex.annotation.ConfigVersion;
 import org.oddlama.imex.annotation.ConfigString;
 import org.oddlama.imex.annotation.ImexModule;
 import org.oddlama.imex.annotation.LangMessage;
@@ -42,21 +43,11 @@ import org.oddlama.imex.util.WorldUtil;
 
 @ImexModule
 public class Bedtime extends Module implements Listener {
-	//public Config config;
-	//public Lang lang;
-
-	//@Override
-	//public org.oddlama.imex.core.Config get_config() {
-	//	return config;
-	//}
-
-	//@Override
-	//public org.oddlama.imex.core.Lang get_lang() {
-	//	return lang;
-	//}
-
 	// One set of sleeping players per world, to keep track
 	private HashMap<UUID, HashSet<UUID>> world_sleepers = new HashMap<>();
+
+	@ConfigVersion(1)
+	public long version;
 
 //double config.sleep_threshold = 0.5;
 //long config.target_time = 1000;
