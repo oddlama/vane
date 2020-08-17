@@ -33,14 +33,9 @@ public class ConfigStringField extends ConfigField<String> {
 
 	@Override
 	public void generate_yaml(StringBuilder builder) {
-		// Description
 		append_description(builder, annotation.desc());
-
-		// Default
 		var def = "\"" + annotation.def().replace("\"", "\\\"") + "\"";
 		append_default_value(builder, def);
-
-		// Definition
 		append_field_definition(builder, def);
 	}
 

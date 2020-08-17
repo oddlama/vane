@@ -33,16 +33,9 @@ public class ConfigLongField extends ConfigField<Long> {
 
 	@Override
 	public void generate_yaml(StringBuilder builder) {
-		// Description
 		append_description(builder, annotation.desc());
-
-		// Valid values
 		append_value_range(builder, annotation.min(), annotation.max(), Long.MIN_VALUE, Long.MAX_VALUE);
-
-		// Default
 		append_default_value(builder, annotation.def());
-
-		// Definition
 		append_field_definition(builder, annotation.def());
 	}
 

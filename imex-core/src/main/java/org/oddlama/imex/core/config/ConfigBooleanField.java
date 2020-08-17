@@ -34,13 +34,8 @@ public class ConfigBooleanField extends ConfigField<Boolean> {
 
 	@Override
 	public void generate_yaml(StringBuilder builder) {
-		// Description
 		append_description(builder, annotation.desc());
-
-		// Default
 		append_default_value(builder, annotation.def());
-
-		// Definition
 		append_field_definition(builder, annotation.def());
 	}
 

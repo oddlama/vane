@@ -36,11 +36,8 @@ public class ConfigVersionField extends ConfigField<Long> {
 
 	@Override
 	public void generate_yaml(StringBuilder builder) {
-		// Description
 		final var description = "DO NOT CHANGE! The version of this config file. Used to determine if the config needs to be updated.";
 		append_description(builder, description);
-
-		// Definition
 		append_field_definition(builder, annotation.value());
 	}
 
