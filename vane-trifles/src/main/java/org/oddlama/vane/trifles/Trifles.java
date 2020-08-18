@@ -37,7 +37,7 @@ public class Trifles extends Module implements Listener {
 	@ConfigVersion(1)
 	public long config_version;
 
-	@ConfigBoolean(def = true, desc = "Enable faster walking on grass paths.")
+	@ConfigBoolean(def = true, desc = "Enable faster walking on certain materials.")
 	boolean config_enable_fast_walking;
 
 	@ConfigLong(def = 2000, min = 50, max = 5000, desc = "Speed effect duration in milliseconds.")
@@ -51,39 +51,26 @@ public class Trifles extends Module implements Listener {
 	public long lang_version;
 
 	// Variables
-	private PotionEffect effect;
+	private WalkSpeedListener walk_speed_listener = new WalkSpeedListener(this);
+	public PotionEffect walk_speed_effect;
 
 	@Override
 	public void on_enable() {
-		register_listener(this);
+		if (config_enable_fast_walking) {
+			register_listener(walk_speed_listener);
+		}
 	}
 
 	@Override
 	protected void on_disable() {
-		unregister_listener(this);
+		unregister_listener(walk_speed_listener);
 	}
 
 	@Override
 	protected void on_config_change() {
-		effect = new PotionEffect(PotionEffectType.SPEED, (int)ms_to_ticks(config_speed_duration), 1)
+		walk_speed_effect = new PotionEffect(PotionEffectType.SPEED, (int)ms_to_ticks(config_speed_duration), 1)
 			.withAmbient(false)
 			.withParticles(false)
 			.withIcon(false);
-
-		if (!config_enabled) {
-			return;
-		}
-	}
-
-	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void on_player_move(final PlayerMoveEvent event) {
-		// Inspect block type just a little below the player
-		var block = event.getTo().clone().subtract(0.0, 0.1, 0.0).getBlock();
-		if (!config_fast_walking_materials.contains(block.getType())) {
-			return;
-		}
-
-		// Apply potion effect
-		event.getPlayer().addPotionEffect(effect);
 	}
 }
