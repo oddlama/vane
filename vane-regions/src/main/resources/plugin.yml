@@ -1,0 +1,14 @@
+name: ${name}
+version: ${version}
+description: Regions module for vane
+
+authors: [oddlama]
+website: 'https://github.com/oddlama/vane'
+
+depend: [vane-core]
+
+main: org.oddlama.vane.regions.Regions
+database: false
+
+api-version: 1.16
+load: STARTUP
