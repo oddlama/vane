@@ -1,6 +1,10 @@
 rootProject.name = 'vane'
 
+include ':vane-admin';
 include ':vane-annotations';
-include ':vane-core';
 include ':vane-bedtime';
-include ':vane-enhancements';
+include ':vane-core';
+include ':vane-enchantments';
+include ':vane-portals';
+include ':vane-regions';
+include ':vane-trifles';

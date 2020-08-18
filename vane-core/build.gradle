@@ -3,13 +3,17 @@ plugins {
 }
 
 dependencies {
-	shadow group: 'io.papermc', name: 'paperlib', version: '1.0.6-SNAPSHOT';
-	shadow group: 'org.reflections', name: 'reflections', version: '0.9.11';
-	shadow project(':vane-annotations');
+	implementation group: 'io.papermc', name: 'paperlib', version: '1.0.6-SNAPSHOT';
+	implementation group: 'org.reflections', name: 'reflections', version: '0.9.12';
+	implementation project(':vane-annotations');
 }
 
 shadowJar {
-	configurations = [project.configurations.shadow]
+	dependencies {
+		include(dependency('io.papermc:paperlib'));
+		include(dependency('org.reflections:reflections'));
+		include(dependency(':vane-annotations'));
+	}
 	relocate 'io.papermc.lib', 'org.oddlama.vane.external.paperlib'
 	relocate 'org.reflections', 'org.oddlama.vane.external.reflections'
 }
