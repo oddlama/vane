@@ -1,4 +1,4 @@
-package org.oddlama.vane.enhancements;
+package org.oddlama.vane.trifles;
 
 import static org.oddlama.vane.util.WorldUtil.broadcast;
 import static org.oddlama.vane.util.WorldUtil.change_time_smoothly;
@@ -32,7 +32,7 @@ import org.oddlama.vane.core.Module;
 import org.oddlama.vane.util.Nms;
 
 @VaneModule
-public class Enhancements extends Module implements Listener {
+public class Trifles extends Module implements Listener {
 	// Configuration
 	@ConfigVersion(1)
 	public long config_version;
