@@ -1,6 +1,6 @@
-rootProject.name = 'imex'
+rootProject.name = 'vane'
 
-include ':imex-annotations';
-include ':imex-core';
-include ':imex-bedtime';
-include ':imex-enhancements';
+include ':vane-annotations';
+include ':vane-core';
+include ':vane-bedtime';
+include ':vane-enhancements';

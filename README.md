@@ -1,10 +1,10 @@
-## About imex
+## About vane
 
-Imex is a plugin which provides many
+Vane is a plugin which provides many
 immersive and lore friendly extensions for vanilla minecraft.
 It runs on any [papermc](https://papermc.io) based server.
 
-Imex follows a **strict no-nonsense** rule.
+Vane follows a **strict no-nonsense** rule.
 Every feature must have a real value to the players or the admins,
 and is designed to augment the classic vanilla experience in a lore friendly way.
 All features can be disabled independently.

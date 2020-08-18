@@ -1,0 +1,7 @@
+name: ${name}
+version: ${version}
+
+author: oddlama
+website: 'https://github.com/oddlama/vane'
+
+main: org.oddlama.vane.ProxyCore

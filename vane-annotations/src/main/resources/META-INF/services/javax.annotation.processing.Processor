@@ -1,0 +1,2 @@
+org.oddlama.vane.annotation.processor.VaneModuleProcessor
+org.oddlama.vane.annotation.processor.ConfigAndLangProcessor
