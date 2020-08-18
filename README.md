@@ -29,7 +29,6 @@ So if you don't want a certain feature, simply disable it.
 - [ ] Simpler, slightly colorized chat layout
 - [ ] Store XP in bottles (with slight loss)
 - [ ] Inaccessible commands will not be shown to players
-- [ ] Less required players for night-skipping (by default 50%), with gradual night-to-day transition
 
 #### Unique features
 
