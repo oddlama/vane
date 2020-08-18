@@ -20,14 +20,14 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 
-import org.oddlama.vane.annotation.ConfigBoolean;
-import org.oddlama.vane.annotation.ConfigLong;
-import org.oddlama.vane.annotation.ConfigMaterialSet;
-import org.oddlama.vane.annotation.ConfigVersion;
+import org.oddlama.vane.annotation.config.ConfigBoolean;
+import org.oddlama.vane.annotation.config.ConfigLong;
+import org.oddlama.vane.annotation.config.ConfigMaterialSet;
+import org.oddlama.vane.annotation.config.ConfigVersion;
 import org.oddlama.vane.annotation.VaneModule;
-import org.oddlama.vane.annotation.LangMessage;
-import org.oddlama.vane.annotation.LangString;
-import org.oddlama.vane.annotation.LangVersion;
+import org.oddlama.vane.annotation.lang.LangMessage;
+import org.oddlama.vane.annotation.lang.LangString;
+import org.oddlama.vane.annotation.lang.LangVersion;
 import org.oddlama.vane.core.Module;
 import org.oddlama.vane.util.Nms;
 

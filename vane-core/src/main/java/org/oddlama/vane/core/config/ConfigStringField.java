@@ -7,7 +7,7 @@ import java.lang.reflect.Field;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import org.oddlama.vane.annotation.ConfigString;
+import org.oddlama.vane.annotation.config.ConfigString;
 import org.oddlama.vane.core.Module;
 import org.oddlama.vane.core.YamlLoadException;
 

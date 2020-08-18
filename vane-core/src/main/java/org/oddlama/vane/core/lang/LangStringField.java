@@ -6,7 +6,7 @@ import java.lang.reflect.Field;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import org.oddlama.vane.annotation.LangString;
+import org.oddlama.vane.annotation.lang.LangString;
 import org.oddlama.vane.core.Module;
 import org.oddlama.vane.core.YamlLoadException;
 

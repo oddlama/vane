@@ -12,13 +12,13 @@ import java.util.stream.Collectors;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import org.oddlama.vane.annotation.ConfigBoolean;
-import org.oddlama.vane.annotation.ConfigDouble;
-import org.oddlama.vane.annotation.ConfigInt;
-import org.oddlama.vane.annotation.ConfigLong;
-import org.oddlama.vane.annotation.ConfigMaterialSet;
-import org.oddlama.vane.annotation.ConfigString;
-import org.oddlama.vane.annotation.ConfigVersion;
+import org.oddlama.vane.annotation.config.ConfigBoolean;
+import org.oddlama.vane.annotation.config.ConfigDouble;
+import org.oddlama.vane.annotation.config.ConfigInt;
+import org.oddlama.vane.annotation.config.ConfigLong;
+import org.oddlama.vane.annotation.config.ConfigMaterialSet;
+import org.oddlama.vane.annotation.config.ConfigString;
+import org.oddlama.vane.annotation.config.ConfigVersion;
 import org.oddlama.vane.core.Module;
 import org.oddlama.vane.core.YamlLoadException;
 import org.oddlama.vane.core.config.ConfigBooleanField;
@@ -45,7 +45,7 @@ public class ConfigManager {
 
 	private boolean has_config_annotation(Field field) {
 		for (var a : field.getAnnotations()) {
-			if (a.annotationType().getName().startsWith("org.oddlama.vane.annotation.Config")) {
+			if (a.annotationType().getName().startsWith("org.oddlama.vane.annotation.config.Config")) {
 				return true;
 			}
 		}
@@ -64,7 +64,7 @@ public class ConfigManager {
 		// Get the annotation
 		Annotation annotation = null;
 		for (var a : field.getAnnotations()) {
-			if (a.annotationType().getName().startsWith("org.oddlama.vane.annotation.Config")) {
+			if (a.annotationType().getName().startsWith("org.oddlama.vane.annotation.config.Config")) {
 				if (annotation == null) {
 					annotation = a;
 				} else {

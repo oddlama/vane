@@ -1,4 +1,4 @@
-package org.oddlama.vane.annotation;
+package org.oddlama.vane.annotation.lang;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,7 +7,6 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface ConfigString {
-	String def();
-	String desc();
+public @interface LangVersion {
+	long value();
 }

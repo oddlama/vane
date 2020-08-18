@@ -7,7 +7,7 @@ import java.text.MessageFormat;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import org.oddlama.vane.annotation.LangMessage;
+import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.core.Module;
 import org.oddlama.vane.core.YamlLoadException;
 

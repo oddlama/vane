@@ -1,4 +1,4 @@
-package org.oddlama.vane.annotation;
+package org.oddlama.vane.annotation.config;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

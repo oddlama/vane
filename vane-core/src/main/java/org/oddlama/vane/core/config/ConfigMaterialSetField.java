@@ -14,7 +14,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 
-import org.oddlama.vane.annotation.ConfigMaterialSet;
+import org.oddlama.vane.annotation.config.ConfigMaterialSet;
 import org.oddlama.vane.core.Module;
 import org.oddlama.vane.core.YamlLoadException;
 

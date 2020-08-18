@@ -15,16 +15,16 @@ import javax.lang.model.element.VariableElement;
 import javax.tools.Diagnostic;
 
 @SupportedAnnotationTypes({
-    "org.oddlama.vane.annotation.ConfigBoolean",
-    "org.oddlama.vane.annotation.ConfigDouble",
-    "org.oddlama.vane.annotation.ConfigInt",
-    "org.oddlama.vane.annotation.ConfigLong",
-    "org.oddlama.vane.annotation.ConfigMaterialSet",
-    "org.oddlama.vane.annotation.ConfigString",
-    "org.oddlama.vane.annotation.ConfigVersion",
-    "org.oddlama.vane.annotation.LangMessage",
-    "org.oddlama.vane.annotation.LangString",
-    "org.oddlama.vane.annotation.LangVersion",
+    "org.oddlama.vane.annotation.config.ConfigBoolean",
+    "org.oddlama.vane.annotation.config.ConfigDouble",
+    "org.oddlama.vane.annotation.config.ConfigInt",
+    "org.oddlama.vane.annotation.config.ConfigLong",
+    "org.oddlama.vane.annotation.config.ConfigMaterialSet",
+    "org.oddlama.vane.annotation.config.ConfigString",
+    "org.oddlama.vane.annotation.config.ConfigVersion",
+    "org.oddlama.vane.annotation.lang.LangMessage",
+    "org.oddlama.vane.annotation.lang.LangString",
+    "org.oddlama.vane.annotation.lang.LangVersion",
 })
 @SupportedSourceVersion(SourceVersion.RELEASE_11)
 public class ConfigAndLangProcessor extends AbstractProcessor {
@@ -41,18 +41,18 @@ public class ConfigAndLangProcessor extends AbstractProcessor {
 	private static final Map<String, String> field_type_mapping;
 	static {
 		Map<String, String> map = new HashMap<>();
-		map.put("org.oddlama.vane.annotation.ConfigBoolean", "boolean");
-		map.put("org.oddlama.vane.annotation.ConfigInt", "int");
-		map.put("org.oddlama.vane.annotation.ConfigMaterialSet", "java.util.Set<org.bukkit.Material>");
-		map.put("org.oddlama.vane.annotation.ConfigDouble", "double");
-		map.put("org.oddlama.vane.annotation.ConfigLong", "long");
-		map.put("org.oddlama.vane.annotation.ConfigString", "java.lang.String");
-		map.put("org.oddlama.vane.annotation.ConfigLong", "long");
-		map.put("org.oddlama.vane.annotation.ConfigString", "java.lang.String");
-		map.put("org.oddlama.vane.annotation.ConfigVersion", "long");
-		map.put("org.oddlama.vane.annotation.LangMessage", "java.text.MessageFormat");
-		map.put("org.oddlama.vane.annotation.LangString", "java.lang.String");
-		map.put("org.oddlama.vane.annotation.LangVersion", "long");
+		map.put("org.oddlama.vane.annotation.config.ConfigBoolean", "boolean");
+		map.put("org.oddlama.vane.annotation.config.ConfigInt", "int");
+		map.put("org.oddlama.vane.annotation.config.ConfigMaterialSet", "java.util.Set<org.bukkit.Material>");
+		map.put("org.oddlama.vane.annotation.config.ConfigDouble", "double");
+		map.put("org.oddlama.vane.annotation.config.ConfigLong", "long");
+		map.put("org.oddlama.vane.annotation.config.ConfigString", "java.lang.String");
+		map.put("org.oddlama.vane.annotation.config.ConfigLong", "long");
+		map.put("org.oddlama.vane.annotation.config.ConfigString", "java.lang.String");
+		map.put("org.oddlama.vane.annotation.config.ConfigVersion", "long");
+		map.put("org.oddlama.vane.annotation.lang.LangMessage", "java.text.MessageFormat");
+		map.put("org.oddlama.vane.annotation.lang.LangString", "java.lang.String");
+		map.put("org.oddlama.vane.annotation.lang.LangVersion", "long");
 		field_type_mapping = Collections.unmodifiableMap(map);
 	}
 

@@ -17,8 +17,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.event.HandlerList;
 
-import org.oddlama.vane.annotation.ConfigString;
-import org.oddlama.vane.annotation.ConfigBoolean;
+import org.oddlama.vane.annotation.config.ConfigString;
+import org.oddlama.vane.annotation.config.ConfigBoolean;
 import org.oddlama.vane.core.config.ConfigManager;
 import org.oddlama.vane.core.lang.LangManager;
 

@@ -11,9 +11,9 @@ import java.util.stream.Collectors;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import org.oddlama.vane.annotation.LangMessage;
-import org.oddlama.vane.annotation.LangString;
-import org.oddlama.vane.annotation.LangVersion;
+import org.oddlama.vane.annotation.lang.LangMessage;
+import org.oddlama.vane.annotation.lang.LangString;
+import org.oddlama.vane.annotation.lang.LangVersion;
 import org.oddlama.vane.core.Module;
 import org.oddlama.vane.core.YamlLoadException;
 import org.oddlama.vane.core.lang.LangField;
@@ -36,7 +36,7 @@ public class LangManager {
 
 	private boolean has_lang_annotation(Field field) {
 		for (var a : field.getAnnotations()) {
-			if (a.annotationType().getName().startsWith("org.oddlama.vane.annotation.Lang")) {
+			if (a.annotationType().getName().startsWith("org.oddlama.vane.annotation.lang.Lang")) {
 				return true;
 			}
 		}
@@ -55,7 +55,7 @@ public class LangManager {
 		// Get the annotation
 		Annotation annotation = null;
 		for (var a : field.getAnnotations()) {
-			if (a.annotationType().getName().startsWith("org.oddlama.vane.annotation.Lang")) {
+			if (a.annotationType().getName().startsWith("org.oddlama.vane.annotation.lang.Lang")) {
 				if (annotation == null) {
 					annotation = a;
 				} else {

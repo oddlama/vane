@@ -1,4 +1,4 @@
-package org.oddlama.vane.annotation;
+package org.oddlama.vane.annotation.config;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,5 +7,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface LangMessage {
+public @interface ConfigString {
+	String def();
+	String desc();
 }

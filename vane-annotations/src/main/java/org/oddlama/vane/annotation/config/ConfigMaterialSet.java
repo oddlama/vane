@@ -1,13 +1,15 @@
-package org.oddlama.vane.annotation;
+package org.oddlama.vane.annotation.config;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.bukkit.Material;
+
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface ConfigBoolean {
-	boolean def();
+public @interface ConfigMaterialSet {
+	Material[] def();
 	String desc();
 }
