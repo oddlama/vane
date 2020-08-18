@@ -1,5 +1,7 @@
 package org.oddlama.vane.trifles;
 
+import static org.oddlama.vane.util.Util.ms_to_ticks;
+
 import java.util.Set;
 
 import org.bukkit.Material;
@@ -15,7 +17,7 @@ import org.oddlama.vane.annotation.config.ConfigVersion;
 import org.oddlama.vane.annotation.lang.LangVersion;
 import org.oddlama.vane.core.Module;
 
-@VaneModule
+@VaneModule("trifles")
 public class Trifles extends Module implements Listener {
 	// Configuration
 	@ConfigVersion(1)

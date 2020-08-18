@@ -8,12 +8,36 @@ import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginIdentifiableCommand;
 
+import org.oddlama.vane.annotation.command.VaneCommand;
+import org.oddlama.vane.annotation.command.Name;
+import org.oddlama.vane.annotation.command.Aliases;
+import org.oddlama.vane.annotation.command.Description;
+
+@VaneCommand
 public abstract class Command extends org.bukkit.command.Command implements PluginIdentifiableCommand {
 	//public List<String> identifiers = new ArrayList<>();
 	//private TabCompletion root = null;
+	Module module;
 
-	public Command(String name, String[] aliases, String desciption) {
-		super(name);
+	public Command(Module module) {
+		super("");
+		this.module = module;
+
+		// Load annotation values
+		//if (!getClass().isAnnotationPresent(Name.class)) {
+		//	throw new RuntimeException("Command '" + getClass().getName() + "' is missing the @Name annotation");
+		//}
+		var name = getClass().getAnnotation(Name.class).value();
+		setLabel(name);
+		setName(name);
+
+		var desc = getClass().getAnnotation(Description.class).value();
+		setDescription(desc);
+
+		var aliases = getClass().getAnnotation(Aliases.class);
+		if (aliases != null) {
+			setAliases(List.of(aliases.value()));
+		}
 
 		//final List<String> list = Arrays.asList(aliases);
 		//setAliases(list);
@@ -26,59 +50,26 @@ public abstract class Command extends org.bukkit.command.Command implements Plug
 		//identifiers.addAll(list);
 	}
 
-	//public abstract Privilege getRequiredPrivilege();
-	public abstract boolean onExecute(CommandSender sender, String alias, String[] args);
+	public String get_name() {
+		return getName();
+	}
 
-	//public boolean canExecute(CommandSender sender) {
-	//	return Privileges.hasPrivilege(sender, getRequiredPrivilege());
-	//}
-
-	//public boolean matchesStart(String id) {
-	//	for (String i : identifiers) {
-	//		if (i.startsWith(id))
-	//			return true;
-	//	}
-
-	//	return false;
-	//}
-
-	//public boolean matches(String id) {
-	//	return identifiers.contains(id);
-	//}
+	public String get_prefix() {
+		return "vane:" + module.get_name();
+	}
 
 	@Override
 	public Plugin getPlugin() {
-		return null;
+		return module;
 	}
 
 	@Override
 	public boolean execute(CommandSender sender, String alias, String[] args) {
 		return true;
-		//if (sender == null || alias == null || args == null)
-		//	return true;
-
-		//if (!Global.main.isEnabled() || !canExecute(sender))
-		//	return true;
-
-		//return onExecute(sender, alias, args);
 	}
 
 	@Override
 	public List<String> tabComplete(CommandSender sender, String alias, String[] args) throws CommandException, IllegalArgumentException {
 		return null;
-		//if (sender == null || alias == null || args == null)
-		//	return null;
-
-		//if (root == null || !Global.main.isEnabled() || !canExecute(sender))
-		//	return null;
-
-		//TabCompletion completion = root;
-		//for (int index = 0; index < args.length - 1; index++) {
-		//	completion = completion.getCompletion(sender, args[index]);
-		//	if (completion == null)
-		//		return null; /* no completion up to this path */
-		//}
-
-		//return completion.complete(sender, args, args.length - 1);
 	}
 }

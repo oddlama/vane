@@ -17,6 +17,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import org.oddlama.vane.annotation.VaneModule;
 import org.oddlama.vane.annotation.config.ConfigBoolean;
 import org.oddlama.vane.annotation.config.ConfigString;
 import org.oddlama.vane.core.config.ConfigManager;
@@ -26,6 +27,7 @@ public abstract class Module extends JavaPlugin {
 	private Core core;
 	public Logger log;
 
+	private String name;
 	public ConfigManager config_manager = new ConfigManager(this);
 	public LangManager lang_manager = new LangManager(this);
 
@@ -42,6 +44,9 @@ public abstract class Module extends JavaPlugin {
 
 	@Override
 	public final void onLoad() {
+		// Load name
+		name = getClass().getAnnotation(VaneModule.class).value();
+
 		// Create data directory
 		if (!getDataFolder().exists()) {
 			getDataFolder().mkdirs();
@@ -169,6 +174,22 @@ public abstract class Module extends JavaPlugin {
 
 	public void unregister_listener(Listener listener) {
 		HandlerList.unregisterAll(listener);
+	}
+
+	public String get_name() {
+		return name;
+	}
+
+	public void register_command(Command command) {
+		if (!getServer().getCommandMap().register(command.get_name(), command.get_prefix(), command)) {
+			log.warning("Command " + command.getName() + " was registered using the fallback prefix!");
+			log.warning("Another command with the same name already exists!");
+		}
+	}
+
+	public void unregister_command(Command command) {
+		getServer().getCommandMap().getKnownCommands().values().remove(command);
+		command.unregister(getServer().getCommandMap());
 	}
 
 	public void schedule_task(Runnable task, long delay_ticks) {

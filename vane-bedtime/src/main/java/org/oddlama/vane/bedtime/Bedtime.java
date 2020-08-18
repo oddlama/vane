@@ -27,7 +27,7 @@ import org.oddlama.vane.annotation.lang.LangVersion;
 import org.oddlama.vane.core.Module;
 import org.oddlama.vane.util.Nms;
 
-@VaneModule
+@VaneModule("bedtime")
 public class Bedtime extends Module implements Listener {
 	// One set of sleeping players per world, to keep track
 	private HashMap<UUID, HashSet<UUID>> world_sleepers = new HashMap<>();

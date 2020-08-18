@@ -7,7 +7,7 @@ import org.oddlama.vane.annotation.config.ConfigVersion;
 import org.oddlama.vane.annotation.lang.LangVersion;
 import org.oddlama.vane.core.Module;
 
-@VaneModule
+@VaneModule("enchantments")
 public class Enchantments extends Module implements Listener {
 	// Configuration
 	@ConfigVersion(1)

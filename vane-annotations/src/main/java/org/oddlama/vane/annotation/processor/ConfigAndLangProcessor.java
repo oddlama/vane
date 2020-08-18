@@ -60,7 +60,7 @@ public class ConfigAndLangProcessor extends AbstractProcessor {
 		var type = ((VariableElement)element).asType().toString();
 		var required_type = field_type_mapping.get(annotation.asType().toString());
 		if (!required_type.equals(type)) {
-			processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, "@" + annotation.getSimpleName() + " requires a field of type " + required_type + " but got " + type);
+			processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, element.asType().toString() + ": @" + annotation.getSimpleName() + " requires a field of type " + required_type + " but got " + type);
 		}
 	}
 }
