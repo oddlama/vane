@@ -43,6 +43,8 @@ public class Admin extends Module implements Listener {
 
 	@Override
 	public void on_enable() {
+		// TODO autostop
+		// TODO /setspawn
 		register_listener(this);
 	}
 
