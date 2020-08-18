@@ -26,9 +26,12 @@ public abstract class ConfigField<T> {
 		this.name = field.getName().substring("config_".length());
 		this.type_name = type_name;
 
-		// lang should be at the top
 		if (this.name.equals("lang")) {
+			// lang should be at the top
 			this.sort_priority = -10;
+		} else if (this.name.equals("enabled")) {
+			// enabled should be just below lang
+			this.sort_priority = -9;
 		}
 
 		field.setAccessible(true);

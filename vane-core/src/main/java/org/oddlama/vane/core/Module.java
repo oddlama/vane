@@ -15,8 +15,10 @@ import java.util.regex.Pattern;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.event.HandlerList;
 
 import org.oddlama.vane.annotation.ConfigString;
+import org.oddlama.vane.annotation.ConfigBoolean;
 import org.oddlama.vane.core.config.ConfigManager;
 import org.oddlama.vane.core.lang.LangManager;
 
@@ -30,16 +32,26 @@ public abstract class Module extends JavaPlugin {
 	@ConfigString(def = "inherit", desc = "The language for this module. The corresponding language file must be named lang-{lang}.yml. Specifying 'inherit' will load the value set for vane-core.")
 	public String config_lang;
 
+	@ConfigBoolean(def = true, desc = "The module will only add functionality if this is set to true.")
+	public boolean config_enabled = false;
+
+	protected void on_load() {}
+	protected abstract void on_enable();
+	protected abstract void on_disable();
+	protected abstract void on_config_change();
+
 	@Override
-	public void onLoad() {
+	public final void onLoad() {
 		// Create data directory
 		if (!getDataFolder().exists()) {
 			getDataFolder().mkdirs();
 		}
+
+		on_load();
 	}
 
 	@Override
-	public void onEnable() {
+	public final void onEnable() {
 		// Get core plugin reference, important for inherited configuration
 		if (this.getName().equals("vane-core")) {
 			core = (Core)this;
@@ -59,11 +71,9 @@ public abstract class Module extends JavaPlugin {
 		}
 	}
 
-	protected void on_config_change() {
-		// To be overridden if needed
-	}
-
 	public boolean reload_configuration() {
+		boolean was_enabled = config_enabled;
+
 		// Generate new file if not existing
 		final var file = new File(getDataFolder(), "config.yml");
 		if (!file.exists()) {
@@ -87,6 +97,13 @@ public abstract class Module extends JavaPlugin {
 		// Reload localization
 		if (!reload_localization()) {
 			return false;
+		}
+
+		// Disable plugin if needed
+		if (was_enabled && !config_enabled) {
+			on_disable();
+		} else if (!was_enabled && config_enabled) {
+			on_enable();
 		}
 
 		on_config_change();
@@ -148,6 +165,10 @@ public abstract class Module extends JavaPlugin {
 
 	public void register_listener(Listener listener) {
 		getServer().getPluginManager().registerEvents(listener, this);
+	}
+
+	public void unregister_listener(Listener listener) {
+		HandlerList.unregisterAll(listener);
 	}
 
 	public void schedule_task(Runnable task, long delay_ticks) {

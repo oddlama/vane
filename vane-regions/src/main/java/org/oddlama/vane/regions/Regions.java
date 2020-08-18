@@ -42,8 +42,16 @@ public class Regions extends Module implements Listener {
 	public long lang_version;
 
 	@Override
-	public void onEnable() {
-		super.onEnable();
+	public void on_enable() {
 		register_listener(this);
+	}
+
+	@Override
+	protected void on_disable() {
+		unregister_listener(this);
+	}
+
+	@Override
+	protected void on_config_change() {
 	}
 }

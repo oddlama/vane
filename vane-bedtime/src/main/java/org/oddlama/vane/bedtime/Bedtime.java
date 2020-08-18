@@ -55,9 +55,17 @@ public class Bedtime extends Module implements Listener {
 	String lang_sleep_success;
 
 	@Override
-	public void onEnable() {
-		super.onEnable();
+	protected void on_enable() {
 		register_listener(this);
+	}
+
+	@Override
+	protected void on_disable() {
+		unregister_listener(this);
+	}
+
+	@Override
+	protected void on_config_change() {
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

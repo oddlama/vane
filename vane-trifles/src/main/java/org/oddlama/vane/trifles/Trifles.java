@@ -54,9 +54,13 @@ public class Trifles extends Module implements Listener {
 	private PotionEffect effect;
 
 	@Override
-	public void onEnable() {
-		super.onEnable();
+	public void on_enable() {
 		register_listener(this);
+	}
+
+	@Override
+	protected void on_disable() {
+		unregister_listener(this);
 	}
 
 	@Override
@@ -65,14 +69,14 @@ public class Trifles extends Module implements Listener {
 			.withAmbient(false)
 			.withParticles(false)
 			.withIcon(false);
+
+		if (!config_enabled) {
+			return;
+		}
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void on_player_move(final PlayerMoveEvent event) {
-		if (!config_enable_fast_walking) {
-			return;
-		}
-
 		// Inspect block type just a little below the player
 		var block = event.getTo().clone().subtract(0.0, 0.1, 0.0).getBlock();
 		if (!config_fast_walking_materials.contains(block.getType())) {

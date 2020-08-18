@@ -11,4 +11,16 @@ public class Core extends Module {
 
 	@LangVersion(1)
 	public long lang_version;
+
+	@Override
+	protected void on_enable() {
+	}
+
+	@Override
+	protected void on_disable() {
+	}
+
+	@Override
+	protected void on_config_change() {
+	}
 }
