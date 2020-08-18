@@ -20,11 +20,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.oddlama.vane.annotation.VaneModule;
 import org.oddlama.vane.annotation.config.ConfigBoolean;
 import org.oddlama.vane.annotation.config.ConfigString;
+import org.oddlama.vane.core.command.Command;
 import org.oddlama.vane.core.config.ConfigManager;
 import org.oddlama.vane.core.lang.LangManager;
 
 public abstract class Module extends JavaPlugin {
-	private Core core;
+	public Core core;
 	public Logger log;
 
 	private String name;
@@ -64,6 +65,9 @@ public abstract class Module extends JavaPlugin {
 			core = (Core)getServer().getPluginManager().getPlugin("vane-core");
 		}
 
+		// Register in core
+		core.register_module(this);
+
 		// Compile config and lang variables
 		config_manager.compile(this);
 		lang_manager.compile(this);
@@ -74,6 +78,12 @@ public abstract class Module extends JavaPlugin {
 			log.severe("Invalid plugin configuration. Shutting down.");
 			getServer().shutdown();
 		}
+	}
+
+	@Override
+	public void onDisable() {
+		// Unregister in core
+		core.unregister_module(this);
 	}
 
 	public boolean reload_configuration() {
@@ -181,7 +191,7 @@ public abstract class Module extends JavaPlugin {
 	}
 
 	public void register_command(Command command) {
-		if (!getServer().getCommandMap().register(command.get_name(), command.get_prefix(), command)) {
+		if (!getServer().getCommandMap().register(command.getName(), command.get_prefix(), command)) {
 			log.warning("Command " + command.getName() + " was registered using the fallback prefix!");
 			log.warning("Another command with the same name already exists!");
 		}

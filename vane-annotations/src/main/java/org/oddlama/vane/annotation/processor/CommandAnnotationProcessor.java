@@ -50,7 +50,7 @@ public class CommandAnnotationProcessor extends AbstractProcessor {
 
 	private void verify_has_annotations(Element element) {
 		// Only check subclasses
-		if (element.asType().toString().equals("org.oddlama.vane.core.Command")) {
+		if (element.asType().toString().equals("org.oddlama.vane.core.command.Command")) {
 			return;
 		}
 
@@ -69,8 +69,8 @@ public class CommandAnnotationProcessor extends AbstractProcessor {
 
 	private void verify_extends_command(TypeElement annotation, Element element) {
 		var t = (TypeElement)element;
-		if (!t.toString().equals("org.oddlama.vane.core.Command") && !t.getSuperclass().toString().equals("org.oddlama.vane.core.Command")) {
-			processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, "@" + annotation.getSimpleName() + " must be applied to a class inheriting from org.oddlama.vane.core.Command");
+		if (!t.toString().equals("org.oddlama.vane.core.command.Command") && !t.getSuperclass().toString().equals("org.oddlama.vane.core.command.Command")) {
+			processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, "@" + annotation.getSimpleName() + " must be applied to a class inheriting from org.oddlama.vane.core.command.Command");
 		}
 	}
 }
