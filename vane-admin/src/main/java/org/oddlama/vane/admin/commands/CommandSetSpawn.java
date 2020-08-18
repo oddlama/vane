@@ -3,10 +3,14 @@ package sublime.commands;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import sublime.Configuration;
+
 import sublime.Privileges.Privilege;
+
 import sublime.database.tables.TableGeneric;
+
 import sublime.util.Convert;
+
+import sublime.Configuration;
 
 public class CommandSetspawn extends SublimeCommand {
 	public CommandSetspawn() {

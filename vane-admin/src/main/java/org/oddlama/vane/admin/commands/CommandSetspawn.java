@@ -2,8 +2,8 @@ package org.oddlama.vane.admin.commands;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
 import org.oddlama.vane.core.Command;
-import org.oddlama.vane.annotation.command;
 
 // TODO
 @Name("setspawn")

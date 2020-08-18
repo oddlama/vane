@@ -1,18 +1,18 @@
 package org.oddlama.vane.core.config;
 
-import static org.reflections.ReflectionUtils.*;
-import static org.oddlama.vane.util.Util.namespaced_key;
 import static org.oddlama.vane.util.MaterialUtil.material_from;
+import static org.oddlama.vane.util.Util.namespaced_key;
+
+import static org.reflections.ReflectionUtils.*;
 
 import java.lang.StringBuilder;
 import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.Arrays;
 
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 import org.oddlama.vane.annotation.config.ConfigMaterialSet;
 import org.oddlama.vane.core.Module;

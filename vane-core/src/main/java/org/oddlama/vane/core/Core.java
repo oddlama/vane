@@ -1,7 +1,7 @@
 package org.oddlama.vane.core;
 
-import org.oddlama.vane.annotation.config.ConfigVersion;
 import org.oddlama.vane.annotation.VaneModule;
+import org.oddlama.vane.annotation.config.ConfigVersion;
 import org.oddlama.vane.annotation.lang.LangVersion;
 
 @VaneModule

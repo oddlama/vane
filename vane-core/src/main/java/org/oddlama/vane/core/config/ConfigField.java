@@ -5,7 +5,6 @@ import static org.reflections.ReflectionUtils.*;
 import java.lang.StringBuilder;
 import java.lang.reflect.Field;
 
-import org.apache.commons.lang.ClassUtils;
 import org.apache.commons.lang.WordUtils;
 
 import org.bukkit.configuration.file.YamlConfiguration;
