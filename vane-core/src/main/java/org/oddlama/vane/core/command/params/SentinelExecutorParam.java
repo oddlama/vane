@@ -1,5 +1,8 @@
 package org.oddlama.vane.core.command.params;
 
+import java.util.Collections;
+import java.util.List;
+
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
@@ -12,6 +15,7 @@ import org.oddlama.vane.core.command.Executor;
 import org.oddlama.vane.core.command.Param;
 import org.oddlama.vane.core.command.check.CheckResult;
 import org.oddlama.vane.core.command.check.ErrorCheckResult;
+import org.oddlama.vane.core.command.check.ParseCheckResult;
 import org.oddlama.vane.core.command.check.ExecutorCheckResult;
 import org.oddlama.vane.core.functional.ErasedFunctor;
 import org.oddlama.vane.core.functional.GenericsFinder;
@@ -73,7 +77,17 @@ public class SentinelExecutorParam<T> extends BaseParam implements Executor {
 
 	@Override
 	public void add_param(Param param) {
-		throw new RuntimeException("Cannot add element to sentinel executor!");
+		throw new RuntimeException("Cannot add element to sentinel executor! This is a bug.");
+	}
+
+	@Override
+	public CheckResult check_parse(String[] args, int offset) {
+		return null;
+	}
+
+	@Override
+	public List<String> completions_for(String arg) {
+		return Collections.emptyList();
 	}
 
 	@Override

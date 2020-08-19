@@ -1,8 +1,12 @@
 package org.oddlama.vane.core.command.params;
 
+import java.util.Collections;
+import java.util.List;
+
 import org.oddlama.vane.core.command.Command;
 import org.oddlama.vane.core.command.check.CheckResult;
 import org.oddlama.vane.core.command.check.ErrorCheckResult;
+import org.oddlama.vane.core.command.check.ParseCheckResult;
 import org.oddlama.vane.core.functional.Function1;
 
 public class FixedParam<T> extends BaseParam {
@@ -30,7 +34,7 @@ public class FixedParam<T> extends BaseParam {
 	}
 
 	@Override
-	public CheckResult check_accept(String[] args, int offset) {
+	public CheckResult check_parse(String[] args, int offset) {
 		if (args.length <= offset) {
 			return new ErrorCheckResult(offset, "§6missing argument: §3" + fixed_arg_str + "§r");
 		}
@@ -38,8 +42,12 @@ public class FixedParam<T> extends BaseParam {
 		if (parsed == null) {
 			return new ErrorCheckResult(offset, "§6invalid argument: expected §3" + fixed_arg_str + "§6 got §b" + args[offset] + "§r");
 		}
-		return super.check_accept(args, offset)
-			.prepend(fixed_arg_str, parsed, include_param);
+		return new ParseCheckResult(offset, fixed_arg_str, parsed, include_param);
+	}
+
+	@Override
+	public List<String> completions_for(String arg) {
+		return Collections.singletonList(fixed_arg_str);
 	}
 
 	private T parse(String arg) {
