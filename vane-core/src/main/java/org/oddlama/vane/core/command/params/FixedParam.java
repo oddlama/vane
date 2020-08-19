@@ -24,7 +24,7 @@ public class FixedParam<T> extends BaseParam {
 		}
 		var parsed = parse(args[offset]);
 		if (parsed == null) {
-			return new ErrorCheckResult(offset, "§6invalid argument: expected §3" + fixed_arg_str + "§6 got §3" + args[offset] + "§r");
+			return new ErrorCheckResult(offset, "§6invalid argument: expected §3" + fixed_arg_str + "§6 got §b" + args[offset] + "§r");
 		}
 		return super.check_accept(args, offset)
 			.prepend(fixed_arg_str, parsed);

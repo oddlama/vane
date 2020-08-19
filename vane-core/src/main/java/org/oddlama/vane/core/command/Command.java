@@ -40,7 +40,7 @@ public abstract class Command extends org.bukkit.command.Command implements Plug
 		}
 
 		// Initialize root parameter
-		root_param = new AnyParam<String>(this, getName(), str -> str);
+		root_param = new AnyParam<String>(this, "/" + getName(), str -> str);
 	}
 
 	public String get_prefix() {
@@ -58,6 +58,8 @@ public abstract class Command extends org.bukkit.command.Command implements Plug
 
 	@Override
 	public boolean execute(CommandSender sender, String alias, String[] args) {
+		// Ambigous matches will always execute the
+		// first chain based on definition order.
 		return root_param.check_accept(prepend(args, alias), 0).apply(sender);
 	}
 

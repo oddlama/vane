@@ -7,7 +7,7 @@ import org.bukkit.command.CommandSender;
 public class ErrorCheckResult implements CheckResult {
 	private int depth;
 	private String message;
-	private ArrayList<String> parsed_arg_types = new ArrayList<>();
+	private String arg_chain = "";
 
 	public ErrorCheckResult(int depth, String message) {
 		this.depth = depth;
@@ -26,26 +26,25 @@ public class ErrorCheckResult implements CheckResult {
 
 	@Override
 	public boolean apply(CommandSender sender) {
-		return apply(sender, 0, 0, "");
+		return apply(sender, "");
 	}
 
-	public boolean apply(CommandSender sender, int depth, int chain_begin, String indent) {
+	public boolean apply(CommandSender sender, String indent) {
 		var str = indent;
-		if (chain_begin == 0) {
+		if (indent == "") {
 			str += "§cerror: ";
 		}
 		str += "§6";
-		for (int i = 0; i < parsed_arg_types.size(); ++i) {
-			str += parsed_arg_types.get(i) + " →";
-		}
-		sender.sendMessage(str + " " + message);
+		str += arg_chain;
+		str += message;
+		sender.sendMessage(str);
 		return false;
 	}
 
 	@Override
 	public CheckResult prepend(String argument_type, Object parsed_arg) {
-		// Throw away parsed arguments, propagate error instead
-		parsed_arg_types.add(0, argument_type);
+		// Save parsed arguments in argument chain, and propagate error
+		arg_chain = "§3" + argument_type + "§6 → " + arg_chain;
 		return this;
 	}
 }

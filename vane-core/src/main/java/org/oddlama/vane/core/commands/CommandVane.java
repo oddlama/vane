@@ -23,15 +23,16 @@ public class CommandVane extends Command {
 			// TODO ignore case on some comparisons
 		reload.choose_module()
 			// TODO test no exec
-			// TODO test error in early branch reload/test <name> <player>
 			.exec(this::reload_module);
+		params().any_string()
+			.choose_module().exec(this::reload_module);
 	}
 
 	private boolean reload_module(CommandSender sender, Module module) {
 		if (module.reload_configuration()) {
-			sender.sendMessage("§cerror:§r could not reload §3vane-" + module.get_name() + "§r: Invalid configuration");
+			sender.sendMessage("§cerror:§6 could not reload §bvane-" + module.get_name() + "§6: Invalid configuration");
 		} else {
-			sender.sendMessage("§areloaded§r §3vane-" + module.get_name() + "§r");
+			sender.sendMessage("§areloaded§r §bvane-" + module.get_name());
 		}
 		return true;
 	}

@@ -32,7 +32,7 @@ public class DynamicChoiceParam<T> extends BaseParam {
 		}
 		var parsed = parse(args[offset]);
 		if (parsed == null) {
-			return new ErrorCheckResult(offset, "§6invalid §3" + argument_type + "§6: §3" + args[offset] + "§r");
+			return new ErrorCheckResult(offset, "§6invalid §3" + argument_type + "§6: §b" + args[offset] + "§r");
 		}
 		return super.check_accept(args, offset)
 			.prepend(argument_type, parsed);
