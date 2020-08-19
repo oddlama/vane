@@ -63,7 +63,9 @@ public class SentinelExecutorParam<T> extends BaseParam implements Executor {
 
 		// Execute functor
 		try {
-			return (boolean)((ErasedFunctor)function).invoke(parsed_args);
+			var result = ((ErasedFunctor)function).invoke(parsed_args);
+			// Map null to "true" for consuming functions
+			return result == null || (boolean)result;
 		} catch (Exception e) {
 			throw new RuntimeException("Error while invoking functor " + method.getDeclaringClass().getName() + "::" + method.getName() + "!", e);
 		}

@@ -16,6 +16,12 @@ import org.oddlama.vane.core.command.params.ChoiceParam;
 import org.oddlama.vane.core.command.params.DynamicChoiceParam;
 import org.oddlama.vane.core.command.params.FixedParam;
 import org.oddlama.vane.core.command.params.SentinelExecutorParam;
+import org.oddlama.vane.core.functional.Consumer1;
+import org.oddlama.vane.core.functional.Consumer2;
+import org.oddlama.vane.core.functional.Consumer3;
+import org.oddlama.vane.core.functional.Consumer4;
+import org.oddlama.vane.core.functional.Consumer5;
+import org.oddlama.vane.core.functional.Consumer6;
 import org.oddlama.vane.core.functional.Function1;
 import org.oddlama.vane.core.functional.Function2;
 import org.oddlama.vane.core.functional.Function3;
@@ -23,10 +29,35 @@ import org.oddlama.vane.core.functional.Function4;
 import org.oddlama.vane.core.functional.Function5;
 import org.oddlama.vane.core.functional.Function6;
 
+@SuppressWarnings("overloads")
 public interface Param {
 	public List<Param> get_params();
 	default public void add_param(Param param) {
 		get_params().add(param);
+	}
+
+	default public <T1> void exec(Consumer1<T1> f) {
+		add_param(new SentinelExecutorParam<>(get_command(), f));
+	}
+
+	default public <T1, T2> void exec(Consumer2<T1, T2> f) {
+		add_param(new SentinelExecutorParam<>(get_command(), f));
+	}
+
+	default public <T1, T2, T3> void exec(Consumer3<T1, T2, T3> f) {
+		add_param(new SentinelExecutorParam<>(get_command(), f));
+	}
+
+	default public <T1, T2, T3, T4> void exec(Consumer4<T1, T2, T3, T4> f) {
+		add_param(new SentinelExecutorParam<>(get_command(), f));
+	}
+
+	default public <T1, T2, T3, T4, T5> void exec(Consumer5<T1, T2, T3, T4, T5> f) {
+		add_param(new SentinelExecutorParam<>(get_command(), f));
+	}
+
+	default public <T1, T2, T3, T4, T5, T6> void exec(Consumer6<T1, T2, T3, T4, T5, T6> f) {
+		add_param(new SentinelExecutorParam<>(get_command(), f));
 	}
 
 	default public <T1> void exec(Function1<T1, Boolean> f) {

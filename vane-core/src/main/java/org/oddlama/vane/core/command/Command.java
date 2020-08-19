@@ -12,6 +12,7 @@ import org.bukkit.plugin.Plugin;
 import org.oddlama.vane.annotation.command.Aliases;
 import org.oddlama.vane.annotation.command.Description;
 import org.oddlama.vane.annotation.command.Name;
+import org.oddlama.vane.annotation.command.Usage;
 import org.oddlama.vane.annotation.command.VaneCommand;
 import org.oddlama.vane.core.Module;
 import org.oddlama.vane.core.command.params.AnyParam;
@@ -33,6 +34,9 @@ public abstract class Command extends org.bukkit.command.Command implements Plug
 		var desc = getClass().getAnnotation(Description.class).value();
 		setDescription(desc);
 
+		var usage = getClass().getAnnotation(Usage.class).value();
+		setUsage(usage);
+
 		var aliases = getClass().getAnnotation(Aliases.class);
 		if (aliases != null) {
 			setAliases(List.of(aliases.value()));
@@ -50,10 +54,9 @@ public abstract class Command extends org.bukkit.command.Command implements Plug
 		return root_param;
 	}
 
-	public boolean print_help(CommandSender sender) {
-		sender.sendMessage(getUsage());
+	public void print_help(CommandSender sender) {
+		sender.sendMessage("§7/§3" + getName() + " " + getUsage());
 		sender.sendMessage(getDescription());
-		return true;
 	}
 
 	@Override
