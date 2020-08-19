@@ -1,6 +1,7 @@
 package org.oddlama.vane.util;
 
 import org.bukkit.NamespacedKey;
+import java.util.Arrays;
 
 public class Util {
 	@SuppressWarnings("deprecation")
@@ -14,5 +15,22 @@ public class Util {
 
 	public static long ticks_to_ms(long ticks) {
 		return ticks * 50;
+	}
+
+	public static <T> T[] prepend(T[] arr, T element) {
+		final var n = arr.length;
+		arr = Arrays.copyOf(arr, n + 1);
+		for (int i = arr.length - 1; i > 0; --i) {
+			arr[i] = arr[i - 1];
+		}
+		arr[0] = element;
+		return arr;
+	}
+
+	public static <T> T[] append(T[] arr, T element) {
+		final var n = arr.length;
+		arr = Arrays.copyOf(arr, n + 1);
+		arr[n] = element;
+		return arr;
 	}
 }

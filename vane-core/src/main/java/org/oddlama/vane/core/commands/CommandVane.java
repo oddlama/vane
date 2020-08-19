@@ -18,9 +18,10 @@ public class CommandVane extends Command {
 	public CommandVane(Module module) {
 		super(module);
 
-		var reload = fixed_param("reload");
+		var reload = fixed("reload");
 		reload.exec(this::reload_all);
-		reload.choice_param(module.core.get_modules(), m -> m.get_name())
+			// TODO ignore case on some comparisons
+		reload.choose_module()
 			.exec(this::reload_module);
 	}
 

@@ -19,7 +19,7 @@ public class Core extends Module {
 
 	// Variables
 	private CommandVane command_vane = new CommandVane(this);
-	private SortedSet<Module> vane_modules = new TreeSet<>();
+	private SortedSet<Module> vane_modules = new TreeSet<>((a, b) -> a.get_name().compareTo(b.get_name()));
 
 	@Override
 	protected void on_enable() {

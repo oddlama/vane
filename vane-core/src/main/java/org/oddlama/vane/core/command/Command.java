@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.bukkit.plugin.Plugin;
-import java.util.function.Function;
+import static org.oddlama.vane.util.Util.prepend;
 import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginIdentifiableCommand;
@@ -19,7 +19,6 @@ import org.oddlama.vane.annotation.command.Description;
 @VaneCommand
 public abstract class Command extends org.bukkit.command.Command implements Param, PluginIdentifiableCommand {
 	protected Module module;
-	//private List<String> identifiers;
 
 	public Command(Module module) {
 		super("");
@@ -37,11 +36,6 @@ public abstract class Command extends org.bukkit.command.Command implements Para
 		if (aliases != null) {
 			setAliases(List.of(aliases.value()));
 		}
-
-		// Collect all identifiers
-		//identifiers = new ArrayList<>();
-		//identifiers.add(name);
-		//identifiers.addAll(aliases.value());
 	}
 
 	public String get_prefix() {
@@ -53,33 +47,14 @@ public abstract class Command extends org.bukkit.command.Command implements Para
 		return module;
 	}
 
-	//protected<T extends String> Param any_param() {
-	//	return root_param.<T>any_param();
-	//}
-
-	//protected<T> Param any_param(Function<T, String> to_string) {
-	//	return root_param.<T>any_param(to_string);
-	//}
-
-	//protected Param fixed_param(String arg) {
-	//	return root_param.fixed_param(arg);
-	//}
-
-	//protected<T> Param fixed_param(T arg, Function<T, String> to_string) {
-	//	return root_param.fixed_param(arg, to_string);
-	//}
-
-	//protected Param choice_param(Collection<String> choices) {
-	//	return root_param.choice_param(choices);
-	//}
-
-	//protected<T> Param choice_param(Collection<T> choices, Function<T, String> to_string) {
-	//	return root_param.choice_param(choices, to_string);
-	//}
+	@Override
+	public Command get_command() {
+		return this;
+	}
 
 	@Override
 	public boolean execute(CommandSender sender, String alias, String[] args) {
-		return true;
+		return check_accept(args, -1).apply(sender);
 	}
 
 	@Override
