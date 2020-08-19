@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.bukkit.command.CommandSender;
 
+import org.oddlama.vane.core.command.Command;
 import org.oddlama.vane.core.command.Executor;
 
 public class ExecutorCheckResult implements CheckResult {
@@ -26,8 +27,8 @@ public class ExecutorCheckResult implements CheckResult {
 		return true;
 	}
 
-	public boolean apply(CommandSender sender) {
-		return executor.execute(sender, parsed_args);
+	public boolean apply(Command command, CommandSender sender) {
+		return executor.execute(command, sender, parsed_args);
 	}
 
 	@Override

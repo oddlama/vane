@@ -14,15 +14,18 @@ import org.oddlama.vane.core.command.Param;
 import org.oddlama.vane.core.command.check.CheckResult;
 import org.oddlama.vane.core.command.check.ErrorCheckResult;
 import org.oddlama.vane.core.command.check.ExecutorCheckResult;
+import org.oddlama.vane.core.functional.Function1;
 import org.oddlama.vane.core.functional.ErasedFunctor;
 import org.oddlama.vane.core.functional.GenericsFinder;
 
 public class SentinelExecutorParam<T> extends BaseParam implements Executor {
 	private T function;
+	private Function1<CommandSender, Boolean> check_requirements;
 
-	public SentinelExecutorParam(Command command, T function) {
+	public SentinelExecutorParam(Command command, T function, Function1<CommandSender, Boolean> check_requirements) {
 		super(command);
 		this.function = function;
+		this.check_requirements = check_requirements;
 	}
 
 	private boolean check_signature(final Method method, final List<Object> args) {
@@ -51,7 +54,7 @@ public class SentinelExecutorParam<T> extends BaseParam implements Executor {
 	}
 
 	@Override
-	public boolean execute(CommandSender sender, List<Object> parsed_args) {
+	public boolean execute(Command command, CommandSender sender, List<Object> parsed_args) {
 		// Replace command name argument (unused) with sender
 		parsed_args.set(0, sender);
 
@@ -61,6 +64,18 @@ public class SentinelExecutorParam<T> extends BaseParam implements Executor {
 
 		// Check method signature against given argument types
 		check_signature(method, parsed_args);
+
+		// Check external requirements on the sender
+		if (!check_requirements.apply(sender)) {
+			return false;
+		}
+
+		// Check permission
+		if (!sender.hasPermission(command.getPermission())) {
+			// TODO localization
+			sender.sendMessage("§cerror:§6 permission denied!");
+			return false;
+		}
 
 		// Execute functor
 		try {

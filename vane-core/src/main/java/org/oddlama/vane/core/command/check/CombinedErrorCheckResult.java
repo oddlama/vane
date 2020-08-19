@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.bukkit.command.CommandSender;
 
+import org.oddlama.vane.core.command.Command;
+
 public class CombinedErrorCheckResult extends ErrorCheckResult {
 	private List<ErrorCheckResult> errors;
 
@@ -16,15 +18,11 @@ public class CombinedErrorCheckResult extends ErrorCheckResult {
 	}
 
 	@Override
-	public boolean apply(CommandSender sender, String indent) {
-		//if (errors.size() == 1) {
-		//	errors.get(0).apply(sender, depth);
-		//} else {
-			super.apply(sender, indent);
-			for (var err : errors) {
-				err.apply(sender, indent + "  ");
-			}
-		//}
+	public boolean apply(Command command, CommandSender sender, String indent) {
+		super.apply(command, sender, indent);
+		for (var err : errors) {
+			err.apply(command, sender, indent + "  ");
+		}
 		return false;
 	}
 }

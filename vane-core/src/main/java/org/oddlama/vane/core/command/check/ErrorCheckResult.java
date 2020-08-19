@@ -2,6 +2,8 @@ package org.oddlama.vane.core.command.check;
 
 import org.bukkit.command.CommandSender;
 
+import org.oddlama.vane.core.command.Command;
+
 public class ErrorCheckResult implements CheckResult {
 	private int depth;
 	private String message;
@@ -23,11 +25,11 @@ public class ErrorCheckResult implements CheckResult {
 	}
 
 	@Override
-	public boolean apply(CommandSender sender) {
-		return apply(sender, "");
+	public boolean apply(Command command ,CommandSender sender) {
+		return apply(command, sender, "");
 	}
 
-	public boolean apply(CommandSender sender, String indent) {
+	public boolean apply(Command command, CommandSender sender, String indent) {
 		var str = indent;
 		if (indent == "") {
 			str += "§cerror: ";

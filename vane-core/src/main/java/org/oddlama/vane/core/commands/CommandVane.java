@@ -8,6 +8,7 @@ import org.oddlama.vane.annotation.command.Usage;
 import org.oddlama.vane.core.Module;
 import org.oddlama.vane.core.command.Command;
 
+// TODO localized strings....
 @Name("vane")
 @Usage("§areload §8[§bmodule§8]")
 @Description("§areload§7:§r Reloads the given vane module, or all modules if no module is specified.")
@@ -18,7 +19,7 @@ public class CommandVane extends Command {
 		// Add help
 		params().fixed("help").ignore_case().exec(this::print_help);
 
-		// Add reload param
+		// Command parameters
 		var reload = params().fixed("reload").ignore_case();
 		reload.exec(this::reload_all);
 		reload.choose_module().exec(this::reload_module);

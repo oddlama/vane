@@ -2,6 +2,8 @@ package org.oddlama.vane.core.command.check;
 
 import org.bukkit.command.CommandSender;
 
+import org.oddlama.vane.core.command.Command;
+
 public class ParseCheckResult implements CheckResult {
 	private int depth;
 	private String argument_type;
@@ -30,7 +32,7 @@ public class ParseCheckResult implements CheckResult {
 	}
 
 	@Override
-	public boolean apply(CommandSender sender) {
+	public boolean apply(Command command, CommandSender sender) {
 		throw new RuntimeException("ParseCheckResult cannot be applied! This is a bug.");
 	}
 

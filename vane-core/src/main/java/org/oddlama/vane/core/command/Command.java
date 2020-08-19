@@ -3,6 +3,7 @@ package org.oddlama.vane.core.command;
 import static org.oddlama.vane.util.Util.prepend;
 
 import java.util.List;
+import java.util.Collections;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginIdentifiableCommand;
@@ -73,7 +74,7 @@ public abstract class Command extends org.bukkit.command.Command implements Plug
 		// Ambigous matches will always execute the
 		// first chain based on definition order.
 		try {
-			return root_param.check_accept(prepend(args, alias), 0).apply(sender);
+			return root_param.check_accept(prepend(args, alias), 0).apply(this, sender);
 		} catch (Exception e) {
 			sender.sendMessage("§cAn unexpected error occurred. Please examine the console log and/or notify a server administator.");
 			throw e;
@@ -82,6 +83,11 @@ public abstract class Command extends org.bukkit.command.Command implements Plug
 
 	@Override
 	public List<String> tabComplete(CommandSender sender, String alias, String[] args) throws IllegalArgumentException {
+		// Don't allow information exfiltration!
+		if (!sender.hasPermission(getPermission())) {
+			return Collections.emptyList();
+		}
+
 		try {
 			return root_param.build_completions(prepend(args, alias), 0);
 		} catch (Exception e) {
