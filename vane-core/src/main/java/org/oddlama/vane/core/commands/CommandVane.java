@@ -23,9 +23,10 @@ public class CommandVane extends Command {
 			// TODO ignore case on some comparisons
 		reload.choose_module()
 			// TODO test no exec
+			// TODO check wrong function syntax
 			.exec(this::reload_module);
 		params().any_string()
-			.choose_module().exec(this::reload_module);
+			.choose_module().exec((Boolean b, Object y) -> true);
 	}
 
 	private boolean reload_module(CommandSender sender, Module module) {

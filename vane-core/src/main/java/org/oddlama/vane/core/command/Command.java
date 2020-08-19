@@ -60,7 +60,12 @@ public abstract class Command extends org.bukkit.command.Command implements Plug
 	public boolean execute(CommandSender sender, String alias, String[] args) {
 		// Ambigous matches will always execute the
 		// first chain based on definition order.
-		return root_param.check_accept(prepend(args, alias), 0).apply(sender);
+		try {
+			return root_param.check_accept(prepend(args, alias), 0).apply(sender);
+		} catch (Exception e) {
+			sender.sendMessage("§cAn unexpected error occurred. Please examine the console log and/or notify a server administator.");
+			throw e;
+		}
 	}
 
 	@Override

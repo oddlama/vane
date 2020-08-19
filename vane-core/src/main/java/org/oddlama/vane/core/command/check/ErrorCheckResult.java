@@ -42,7 +42,7 @@ public class ErrorCheckResult implements CheckResult {
 	}
 
 	@Override
-	public CheckResult prepend(String argument_type, Object parsed_arg) {
+	public CheckResult prepend(String argument_type, Object parsed_arg, boolean include) {
 		// Save parsed arguments in argument chain, and propagate error
 		arg_chain = "§3" + argument_type + "§6 → " + arg_chain;
 		return this;

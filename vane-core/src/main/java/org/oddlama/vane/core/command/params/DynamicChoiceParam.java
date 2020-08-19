@@ -35,7 +35,7 @@ public class DynamicChoiceParam<T> extends BaseParam {
 			return new ErrorCheckResult(offset, "§6invalid §3" + argument_type + "§6: §b" + args[offset] + "§r");
 		}
 		return super.check_accept(args, offset)
-			.prepend(argument_type, parsed);
+			.prepend(argument_type, parsed, true);
 	}
 
 	private T parse(String arg) {

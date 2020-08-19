@@ -29,16 +29,14 @@ public class ExecutorCheckResult implements CheckResult {
 	}
 
 	public boolean apply(CommandSender sender) {
-		System.out.println("APPLY! " + executor);
-		for (var o : parsed_args) {
-			System.out.println(o);
-		}
-		return true;
+		return executor.execute(sender, parsed_args);
 	}
 
 	@Override
-	public CheckResult prepend(String argument_type, Object parsed_arg) {
-		parsed_args.add(0, parsed_arg);
+	public CheckResult prepend(String argument_type, Object parsed_arg, boolean include) {
+		if (include) {
+			parsed_args.add(0, parsed_arg);
+		}
 		return this;
 	}
 }

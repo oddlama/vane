@@ -23,4 +23,5 @@ import org.oddlama.vane.core.functional.Function5;
 import org.oddlama.vane.core.functional.Function6;
 
 public interface Executor {
+	public boolean execute(CommandSender sender, List<Object> parsed_args);
 }

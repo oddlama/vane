@@ -27,7 +27,7 @@ public class FixedParam<T> extends BaseParam {
 			return new ErrorCheckResult(offset, "§6invalid argument: expected §3" + fixed_arg_str + "§6 got §b" + args[offset] + "§r");
 		}
 		return super.check_accept(args, offset)
-			.prepend(fixed_arg_str, parsed);
+			.prepend(fixed_arg_str, parsed, false);
 	}
 
 	private T parse(String arg) {
