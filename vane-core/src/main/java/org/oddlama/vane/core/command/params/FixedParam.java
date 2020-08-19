@@ -10,11 +10,25 @@ import org.oddlama.vane.core.functional.Function1;
 public class FixedParam<T> extends BaseParam {
 	private T fixed_arg;
 	private String fixed_arg_str;
+	private boolean include_param = false;
+	private boolean ignore_case = false;
 
 	public FixedParam(Command command, T fixed_arg, Function1<T, String> to_string) {
 		super(command);
 		this.fixed_arg = fixed_arg;
 		this.fixed_arg_str = to_string.apply(fixed_arg);
+	}
+
+	/** Will ignore the case of the given argument when matching */
+	public FixedParam<T> ignore_case() {
+		this.ignore_case = true;
+		return this;
+	}
+
+	/** Will pass this fixed parameter as an argument to the executed function */
+	public FixedParam<T> include_param() {
+		this.include_param = true;
+		return this;
 	}
 
 	@Override
@@ -27,14 +41,20 @@ public class FixedParam<T> extends BaseParam {
 			return new ErrorCheckResult(offset, "§6invalid argument: expected §3" + fixed_arg_str + "§6 got §b" + args[offset] + "§r");
 		}
 		return super.check_accept(args, offset)
-			.prepend(fixed_arg_str, parsed, false);
+			.prepend(fixed_arg_str, parsed, include_param);
 	}
 
 	private T parse(String arg) {
-		if (arg.equals(fixed_arg_str)) {
-			return fixed_arg;
+		if (ignore_case) {
+			if (arg.equalsIgnoreCase(fixed_arg_str)) {
+				return fixed_arg;
+			}
 		} else {
-			return null;
+			if (arg.equals(fixed_arg_str)) {
+				return fixed_arg;
+			}
 		}
+
+		return null;
 	}
 }

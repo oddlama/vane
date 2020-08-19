@@ -51,6 +51,16 @@ public abstract class Command extends org.bukkit.command.Command implements Plug
 		return root_param;
 	}
 
+	public boolean print_usage(CommandSender sender) {
+		sender.sendMessage(getUsage());
+		return true;
+	}
+
+	@Override
+	public String getPermission() {
+		return "vane." + module.get_name() + ".commands." + getName();
+	}
+
 	@Override
 	public Plugin getPlugin() {
 		return module;

@@ -17,12 +17,13 @@ public class CommandVane extends Command {
 	public CommandVane(Module module) {
 		super(module);
 
-		var reload = params().fixed("reload");
+		// Add help
+		params().fixed("help").ignore_case().exec(this::print_usage);
+
+		// Add reload param
+		var reload = params().fixed("reload").ignore_case();
 		reload.exec(this::reload_all);
-			// TODO ignore case on some comparisons
-		reload.choose_module()
-			// TODO test no exec
-			.exec(this::reload_module);
+		reload.choose_module().exec(this::reload_module);
 	}
 
 	private boolean reload_module(CommandSender sender, Module module) {

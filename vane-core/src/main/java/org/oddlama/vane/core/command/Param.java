@@ -7,12 +7,14 @@ import org.oddlama.vane.core.command.check.ErrorCheckResult;
 import org.oddlama.vane.core.command.check.CombinedErrorCheckResult;
 import org.oddlama.vane.core.command.params.AnyParam;
 import org.oddlama.vane.core.command.params.ChoiceParam;
+import org.oddlama.vane.core.Module;
 import org.oddlama.vane.core.command.params.DynamicChoiceParam;
 import org.oddlama.vane.core.command.params.FixedParam;
 import org.oddlama.vane.core.command.params.SentinelExecutorParam;
 
 import java.util.Optional;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -60,17 +62,17 @@ public interface Param {
 		return any("string", str -> str);
 	}
 
-	default public <T> Param any(String argument_type, Function1<String, ? extends T> from_string) {
+	default public <T> AnyParam<? extends T> any(String argument_type, Function1<String, ? extends T> from_string) {
 		final var p = new AnyParam<>(get_command(), argument_type, from_string);
 		add_param(p);
 		return p;
 	}
 
-	default public Param fixed(String fixed) {
+	default public FixedParam<String> fixed(String fixed) {
 		return fixed(fixed, str -> str);
 	}
 
-	default public <T> Param fixed(T fixed, Function1<T, String> to_string) {
+	default public <T> FixedParam<T> fixed(T fixed, Function1<T, String> to_string) {
 		final var p = new FixedParam<>(get_command(), fixed, to_string);
 		add_param(p);
 		return p;
@@ -80,7 +82,7 @@ public interface Param {
 		return choice("choice", choices, str -> str);
 	}
 
-	default public <T> Param choice(String argument_type,
+	default public <T> ChoiceParam<T> choice(String argument_type,
 	                                Collection<? extends T> choices,
 	                                Function1<T, String> to_string) {
 		final var p = new ChoiceParam<>(get_command(), argument_type, choices, to_string);
@@ -88,7 +90,7 @@ public interface Param {
 		return p;
 	}
 
-	default public <T> Param choice(String argument_type,
+	default public <T> DynamicChoiceParam<T> choice(String argument_type,
 	                                Supplier<Collection<? extends T>> choices,
 	                                Function1<T, String> to_string,
 	                                Function1<String, ? extends T> from_string) {
@@ -97,7 +99,7 @@ public interface Param {
 		return p;
 	}
 
-	default public Param choose_module() {
+	default public DynamicChoiceParam<Module> choose_module() {
 		return choice("module",
 				() -> get_command().module.core.get_modules(),
 				m -> m.get_name(),
@@ -107,7 +109,7 @@ public interface Param {
 					.orElse(null));
 	}
 
-	default public Param choose_online_player() {
+	default public DynamicChoiceParam<Player> choose_online_player() {
 		return choice("online_player",
 				() -> get_command().module.getServer().getOnlinePlayers(),
 				p -> p.getName(),
