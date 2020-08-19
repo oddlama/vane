@@ -1,7 +1,8 @@
 package org.oddlama.vane.util;
 
-import org.bukkit.NamespacedKey;
 import java.util.Arrays;
+
+import org.bukkit.NamespacedKey;
 
 public class Util {
 	@SuppressWarnings("deprecation")

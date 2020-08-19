@@ -1,13 +1,13 @@
 package org.oddlama.vane.core;
 
+import java.util.Collections;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import java.util.Collections;
 
-import org.oddlama.vane.core.commands.CommandVane;
 import org.oddlama.vane.annotation.VaneModule;
 import org.oddlama.vane.annotation.config.ConfigVersion;
 import org.oddlama.vane.annotation.lang.LangVersion;
+import org.oddlama.vane.core.commands.CommandVane;
 
 @VaneModule("core")
 public class Core extends Module {

@@ -1,7 +1,7 @@
 package org.oddlama.vane.annotation.processor;
 
-import java.util.Set;
 import java.lang.annotation.Annotation;
+import java.util.Set;
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
@@ -12,9 +12,8 @@ import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
 import javax.tools.Diagnostic;
 
-import org.oddlama.vane.annotation.command.Name;
-import org.oddlama.vane.annotation.command.Aliases;
 import org.oddlama.vane.annotation.command.Description;
+import org.oddlama.vane.annotation.command.Name;
 
 @SupportedAnnotationTypes({
 	"org.oddlama.vane.annotation.command.VaneCommand",

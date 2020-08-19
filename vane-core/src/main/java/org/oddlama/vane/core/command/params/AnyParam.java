@@ -1,11 +1,8 @@
 package org.oddlama.vane.core.command.params;
 
+import org.oddlama.vane.core.command.Command;
 import org.oddlama.vane.core.command.check.CheckResult;
 import org.oddlama.vane.core.command.check.ErrorCheckResult;
-import org.oddlama.vane.core.command.Param;
-import org.oddlama.vane.core.command.Command;
-
-import java.util.Optional;
 import org.oddlama.vane.core.functional.Function1;
 
 public class AnyParam<T> extends BaseParam {

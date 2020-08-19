@@ -1,13 +1,10 @@
 package org.oddlama.vane.core.functional;
 
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.Collection;
-import java.util.function.Supplier;
-import java.lang.reflect.ParameterizedType;
 import java.lang.invoke.SerializedLambda;
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Objects;
 
 public interface GenericsFinder extends Serializable {
 	default SerializedLambda serialized() {

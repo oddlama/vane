@@ -1,16 +1,10 @@
 package org.oddlama.vane.core.command.params;
 
-import org.oddlama.vane.core.command.Param;
-import org.oddlama.vane.core.command.Command;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.ArrayList;
-import org.oddlama.vane.core.command.Executor;
-import org.bukkit.command.CommandSender;
 
-import java.util.Optional;
-import java.util.ArrayList;
-import java.util.stream.Collectors;
-import java.util.Collections;
+import org.oddlama.vane.core.command.Command;
+import org.oddlama.vane.core.command.Param;
 
 public abstract class BaseParam implements Param {
 	private Command command;

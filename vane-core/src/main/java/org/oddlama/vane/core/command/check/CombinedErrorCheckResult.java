@@ -1,7 +1,7 @@
 package org.oddlama.vane.core.command.check;
 
 import java.util.List;
-import java.util.Collections;
+
 import org.bukkit.command.CommandSender;
 
 public class CombinedErrorCheckResult extends ErrorCheckResult {

@@ -1,33 +1,20 @@
 package org.oddlama.vane.core.command.params;
 
-import org.oddlama.vane.core.command.check.CheckResult;
-import org.oddlama.vane.core.command.check.ExecutorCheckResult;
-import java.util.stream.Collectors;
-import java.util.Collections;
+import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.List;
-import org.oddlama.vane.core.command.check.ErrorCheckResult;
+import java.util.stream.Collectors;
+
 import org.bukkit.command.CommandSender;
+
+import org.oddlama.vane.core.command.Command;
 import org.oddlama.vane.core.command.Executor;
 import org.oddlama.vane.core.command.Param;
-import org.oddlama.vane.core.command.Command;
-
+import org.oddlama.vane.core.command.check.CheckResult;
+import org.oddlama.vane.core.command.check.ErrorCheckResult;
+import org.oddlama.vane.core.command.check.ExecutorCheckResult;
 import org.oddlama.vane.core.functional.ErasedFunctor;
-import org.oddlama.vane.core.functional.Function1;
-import java.util.Optional;
 import org.oddlama.vane.core.functional.GenericsFinder;
-import org.oddlama.vane.core.functional.Function2;
-import org.oddlama.vane.core.functional.Function3;
-import org.oddlama.vane.core.functional.Function4;
-import org.oddlama.vane.core.functional.Function5;
-import org.oddlama.vane.core.functional.Function6;
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.Collection;
-import java.util.function.Supplier;
-import java.lang.reflect.ParameterizedType;
-import java.lang.invoke.SerializedLambda;
-import java.lang.reflect.Method;
-import java.lang.reflect.InvocationTargetException;
 
 public class SentinelExecutorParam<T> extends BaseParam implements Executor {
 	private T function;

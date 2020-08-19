@@ -1,21 +1,20 @@
 package org.oddlama.vane.core.command;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import org.bukkit.plugin.Plugin;
 import static org.oddlama.vane.util.Util.prepend;
+
+import java.util.List;
+
 import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginIdentifiableCommand;
+import org.bukkit.plugin.Plugin;
 
-import org.oddlama.vane.core.Module;
-import org.oddlama.vane.core.command.params.AnyParam;
-import org.oddlama.vane.annotation.command.VaneCommand;
-import java.util.Collection;
-import org.oddlama.vane.annotation.command.Name;
 import org.oddlama.vane.annotation.command.Aliases;
 import org.oddlama.vane.annotation.command.Description;
+import org.oddlama.vane.annotation.command.Name;
+import org.oddlama.vane.annotation.command.VaneCommand;
+import org.oddlama.vane.core.Module;
+import org.oddlama.vane.core.command.params.AnyParam;
 
 @VaneCommand
 public abstract class Command extends org.bukkit.command.Command implements PluginIdentifiableCommand {
@@ -51,8 +50,9 @@ public abstract class Command extends org.bukkit.command.Command implements Plug
 		return root_param;
 	}
 
-	public boolean print_usage(CommandSender sender) {
+	public boolean print_help(CommandSender sender) {
 		sender.sendMessage(getUsage());
+		sender.sendMessage(getDescription());
 		return true;
 	}
 

@@ -1,26 +1,21 @@
 package org.oddlama.vane.core.command;
 
-import static org.oddlama.vane.util.Util.append;
+import java.util.Collection;
+import java.util.List;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
+import org.bukkit.entity.Player;
+
+import org.oddlama.vane.core.Module;
 import org.oddlama.vane.core.command.check.CheckResult;
-import org.oddlama.vane.core.command.check.ErrorCheckResult;
 import org.oddlama.vane.core.command.check.CombinedErrorCheckResult;
+import org.oddlama.vane.core.command.check.ErrorCheckResult;
 import org.oddlama.vane.core.command.params.AnyParam;
 import org.oddlama.vane.core.command.params.ChoiceParam;
-import org.oddlama.vane.core.Module;
 import org.oddlama.vane.core.command.params.DynamicChoiceParam;
 import org.oddlama.vane.core.command.params.FixedParam;
 import org.oddlama.vane.core.command.params.SentinelExecutorParam;
-
-import java.util.Optional;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.stream.Collectors;
-import java.util.List;
-import java.util.function.Supplier;
-import org.bukkit.command.CommandSender;
 import org.oddlama.vane.core.functional.Function1;
 import org.oddlama.vane.core.functional.Function2;
 import org.oddlama.vane.core.functional.Function3;

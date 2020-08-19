@@ -1,7 +1,5 @@
 package org.oddlama.vane.core.command.check;
 
-import java.util.ArrayList;
-import java.util.Optional;
 import org.bukkit.command.CommandSender;
 
 public class ErrorCheckResult implements CheckResult {

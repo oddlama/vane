@@ -1,12 +1,10 @@
 package org.oddlama.vane.core.command.check;
 
-import org.oddlama.vane.core.command.Executor;
+import java.util.ArrayList;
+
 import org.bukkit.command.CommandSender;
 
-import java.util.Optional;
-import java.util.ArrayList;
-import java.util.stream.Collectors;
-import java.util.Collections;
+import org.oddlama.vane.core.command.Executor;
 
 public class ExecutorCheckResult implements CheckResult {
 	private int depth;

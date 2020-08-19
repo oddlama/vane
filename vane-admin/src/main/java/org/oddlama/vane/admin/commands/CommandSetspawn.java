@@ -2,11 +2,11 @@ package org.oddlama.vane.admin.commands;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.oddlama.vane.core.Module;
 
-import org.oddlama.vane.core.command.Command;
-import org.oddlama.vane.annotation.command.Name;
 import org.oddlama.vane.annotation.command.Description;
+import org.oddlama.vane.annotation.command.Name;
+import org.oddlama.vane.core.Module;
+import org.oddlama.vane.core.command.Command;
 
 // TODO
 @Name("setspawn")
