@@ -4,7 +4,6 @@ import static org.oddlama.vane.util.Util.prepend;
 
 import java.util.List;
 
-import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginIdentifiableCommand;
 import org.bukkit.plugin.Plugin;

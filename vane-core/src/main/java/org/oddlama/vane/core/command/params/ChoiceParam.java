@@ -1,11 +1,9 @@
 package org.oddlama.vane.core.command.params;
 
-import java.util.Collections;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Collection;
 import java.util.stream.Collectors;
-import java.util.function.Supplier;
 
 import org.oddlama.vane.core.command.Command;
 import org.oddlama.vane.core.command.check.CheckResult;

@@ -1,10 +1,8 @@
 package org.oddlama.vane.core.command.params;
 
-import java.util.Collections;
-import java.util.List;
-
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,7 +13,6 @@ import org.oddlama.vane.core.command.Executor;
 import org.oddlama.vane.core.command.Param;
 import org.oddlama.vane.core.command.check.CheckResult;
 import org.oddlama.vane.core.command.check.ErrorCheckResult;
-import org.oddlama.vane.core.command.check.ParseCheckResult;
 import org.oddlama.vane.core.command.check.ExecutorCheckResult;
 import org.oddlama.vane.core.functional.ErasedFunctor;
 import org.oddlama.vane.core.functional.GenericsFinder;

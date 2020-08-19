@@ -1,17 +1,16 @@
 package org.oddlama.vane.core.command.params;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Collection;
-import java.util.stream.Collectors;
+import java.util.List;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
-import org.oddlama.vane.util.Util;
 import org.oddlama.vane.core.command.Command;
 import org.oddlama.vane.core.command.check.CheckResult;
 import org.oddlama.vane.core.command.check.ErrorCheckResult;
 import org.oddlama.vane.core.command.check.ParseCheckResult;
 import org.oddlama.vane.core.functional.Function1;
+import org.oddlama.vane.util.Util;
 
 public class DynamicChoiceParam<T> extends BaseParam {
 	private String argument_type;
