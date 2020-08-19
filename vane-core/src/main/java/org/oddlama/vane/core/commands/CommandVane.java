@@ -13,7 +13,6 @@ import org.oddlama.vane.annotation.command.Description;
 @Description("lol")
 //@Permission("vane.core.commands.vane") // TODO needed?
 //@Usage("§")
-//@AllowedSenders({ Player.class, })
 public class CommandVane extends Command {
 	public CommandVane(Module module) {
 		super(module);
@@ -23,17 +22,14 @@ public class CommandVane extends Command {
 			// TODO ignore case on some comparisons
 		reload.choose_module()
 			// TODO test no exec
-			// TODO check wrong function syntax
 			.exec(this::reload_module);
-		params().any_string()
-			.choose_module().exec((Boolean b, Object y) -> true);
 	}
 
 	private boolean reload_module(CommandSender sender, Module module) {
 		if (module.reload_configuration()) {
-			sender.sendMessage("§cerror:§6 could not reload §bvane-" + module.get_name() + "§6: Invalid configuration");
+			sender.sendMessage("§bvane-" + module.get_name() + ": §areloaded");
 		} else {
-			sender.sendMessage("§areloaded§r §bvane-" + module.get_name());
+			sender.sendMessage("§cerror:§6 §bvane-" + module.get_name() + "§6: Invalid configuration");
 		}
 		return true;
 	}

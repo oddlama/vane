@@ -11,6 +11,7 @@ import org.oddlama.vane.core.command.Executor;
 import org.oddlama.vane.core.command.Param;
 import org.oddlama.vane.core.command.Command;
 
+import org.oddlama.vane.core.functional.ErasedFunctor;
 import org.oddlama.vane.core.functional.Function1;
 import java.util.Optional;
 import org.oddlama.vane.core.functional.GenericsFinder;
@@ -75,10 +76,9 @@ public class SentinelExecutorParam<T> extends BaseParam implements Executor {
 
 		// Execute functor
 		try {
-			return (boolean)method.invoke(function, parsed_args.toArray());
-		} catch (IllegalAccessException | InvocationTargetException e) {
-			e.printStackTrace();
-			throw new RuntimeException("Error while invoking functor " + method.getDeclaringClass().getName() + "::" + method.getName() + "!");
+			return (boolean)((ErasedFunctor)function).invoke(parsed_args);
+		} catch (Exception e) {
+			throw new RuntimeException("Error while invoking functor " + method.getDeclaringClass().getName() + "::" + method.getName() + "!", e);
 		}
 	}
 
