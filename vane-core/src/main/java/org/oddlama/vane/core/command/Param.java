@@ -27,10 +27,9 @@ import org.oddlama.vane.core.functional.Function5;
 import org.oddlama.vane.core.functional.Function6;
 
 public interface Param {
-	public List<Param> params = new ArrayList<>();
-
+	public List<Param> get_params();
 	default public void add_param(Param param) {
-		params.add(param);
+		get_params().add(param);
 	}
 
 	default public <T1> void exec(Function1<T1, Boolean> f) {
@@ -58,11 +57,11 @@ public interface Param {
 	}
 
 	default public Param any_string() {
-		return any(str -> str);
+		return any("string", str -> str);
 	}
 
-	default public <T> Param any(Function1<String, ? extends T> from_string) {
-		final var p = new AnyParam<>(get_command(), from_string);
+	default public <T> Param any(String argument_type, Function1<String, ? extends T> from_string) {
+		final var p = new AnyParam<>(get_command(), argument_type, from_string);
 		add_param(p);
 		return p;
 	}
@@ -78,26 +77,29 @@ public interface Param {
 	}
 
 	default public Param choice(Collection<String> choices) {
-		return choice(choices, str -> str);
+		return choice("choice", choices, str -> str);
 	}
 
-	default public <T> Param choice(Collection<? extends T> choices,
+	default public <T> Param choice(String argument_type,
+	                                Collection<? extends T> choices,
 	                                Function1<T, String> to_string) {
-		final var p = new ChoiceParam<>(get_command(), choices, to_string);
+		final var p = new ChoiceParam<>(get_command(), argument_type, choices, to_string);
 		add_param(p);
 		return p;
 	}
 
-	default public <T> Param choice(Supplier<Collection<? extends T>> choices,
+	default public <T> Param choice(String argument_type,
+	                                Supplier<Collection<? extends T>> choices,
 	                                Function1<T, String> to_string,
 	                                Function1<String, ? extends T> from_string) {
-		final var p = new DynamicChoiceParam<>(get_command(), choices, to_string, from_string);
+		final var p = new DynamicChoiceParam<>(get_command(), argument_type, choices, to_string, from_string);
 		add_param(p);
 		return p;
 	}
 
 	default public Param choose_module() {
-		return choice(() -> get_command().module.core.get_modules(),
+		return choice("module",
+				() -> get_command().module.core.get_modules(),
 				m -> m.get_name(),
 				m -> get_command().module.core.get_modules().stream()
 					.filter(k -> k.get_name().equalsIgnoreCase(m))
@@ -106,7 +108,8 @@ public interface Param {
 	}
 
 	default public Param choose_online_player() {
-		return choice(() -> get_command().module.getServer().getOnlinePlayers(),
+		return choice("online_player",
+				() -> get_command().module.getServer().getOnlinePlayers(),
 				p -> p.getName(),
 				p -> get_command().module.getServer().getOnlinePlayers().stream()
 					.filter(k -> k.getName().equals(p))
@@ -115,7 +118,11 @@ public interface Param {
 	}
 
 	public default CheckResult check_accept(String[] args, int offset) {
-		var results = params.stream()
+		if (get_params().isEmpty()) {
+			throw new RuntimeException("Encountered parameter without sentinel! This is a bug.");
+		}
+
+		var results = get_params().stream()
 			.map(p -> p.check_accept(args, offset + 1))
 			.collect(Collectors.toList());
 
@@ -126,10 +133,23 @@ public interface Param {
 			}
 		}
 
-		// Otherwise, combine errors into new error
-		return new CombinedErrorCheckResult(results.stream()
+		// Only retain errors from maximum depth
+		var max_depth = results.stream()
+			.map(r -> r.depth())
+			.reduce(0, Integer::max);
+
+		var errors = results.stream()
+			.filter(r -> r.depth() == max_depth)
 			.map(ErrorCheckResult.class::cast)
-			.collect(Collectors.toList()));
+			.collect(Collectors.toList());
+
+		// If there is only a single max-depth sub-error, propagate it.
+		// Otherwise, combine multiple errors into new error.
+		if (errors.size() == 1) {
+			return errors.get(0);
+		} else {
+			return new CombinedErrorCheckResult(errors);
+		}
 	}
 
 	public Command get_command();

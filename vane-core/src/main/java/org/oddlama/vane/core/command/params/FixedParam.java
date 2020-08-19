@@ -7,33 +7,27 @@ import org.oddlama.vane.core.command.Command;
 
 import org.oddlama.vane.core.functional.Function1;
 
-public class FixedParam<T> implements Param {
-	private Command command;
+public class FixedParam<T> extends BaseParam {
 	private T fixed_arg;
 	private String fixed_arg_str;
 
 	public FixedParam(Command command, T fixed_arg, Function1<T, String> to_string) {
-		this.command = command;
+		super(command);
 		this.fixed_arg = fixed_arg;
 		this.fixed_arg_str = to_string.apply(fixed_arg);
 	}
 
 	@Override
-	public Command get_command() {
-		return command;
-	}
-
-	@Override
 	public CheckResult check_accept(String[] args, int offset) {
 		if (args.length <= offset) {
-			return new ErrorCheckResult("§6missing argument: '§3" + fixed_arg_str + "§6'§r");
+			return new ErrorCheckResult(offset, "§6missing argument: §3" + fixed_arg_str + "§r");
 		}
 		var parsed = parse(args[offset]);
 		if (parsed == null) {
-			return new ErrorCheckResult("§6invalid argument: expected '§3" + fixed_arg_str + "§6 got §3'" + args[offset] + "'§r");
+			return new ErrorCheckResult(offset, "§6invalid argument: expected §3" + fixed_arg_str + "§6 got §3" + args[offset] + "§r");
 		}
-		return Param.super.check_accept(args, offset)
-			.prepend(parsed);
+		return super.check_accept(args, offset)
+			.prepend(fixed_arg_str, parsed);
 	}
 
 	private T parse(String arg) {

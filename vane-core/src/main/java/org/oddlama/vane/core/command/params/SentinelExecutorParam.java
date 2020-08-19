@@ -20,18 +20,12 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.function.Supplier;
 
-public class SentinelExecutorParam<T> implements Param, Executor {
-	private Command command;
+public class SentinelExecutorParam<T> extends BaseParam implements Executor {
 	private T function;
 
 	public SentinelExecutorParam(Command command, T function) {
-		this.command = command;
+		super(command);
 		this.function = function;
-	}
-
-	@Override
-	public Command get_command() {
-		return command;
 	}
 
 	@Override
@@ -42,14 +36,18 @@ public class SentinelExecutorParam<T> implements Param, Executor {
 	@Override
 	public CheckResult check_accept(String[] args, int offset) {
 		if (args.length > offset) {
-			return new ErrorCheckResult("§6excess arguments: {" +
-			                                          Arrays.stream(args)
+			// Excess arguments are an error of the previous level, so we subtract one from the offset (depth)
+			// This will cause invalid arguments to be prioritized on optional arguments.
+			// For example /vane reload [module], with an invalid module name should show "invalid module" over
+			// excess arguments.
+			return new ErrorCheckResult(offset - 1, "§6excess arguments: {" +
+			                                          Arrays.stream(args, offset, args.length)
 			                                              .map(s -> "§4" + s + "§6")
 			                                              .collect(Collectors.joining(", ")) +
 			                                          "}§r");
 		} else if (args.length < offset) {
 			throw new RuntimeException("Sentinel executor received missing arguments! This is a bug.");
 		}
-		return new ExecutorCheckResult(this);
+		return new ExecutorCheckResult(offset, this);
 	}
 }

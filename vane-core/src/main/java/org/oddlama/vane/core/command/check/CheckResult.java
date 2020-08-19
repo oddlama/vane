@@ -8,7 +8,8 @@ import java.util.stream.Collectors;
 import java.util.Collections;
 
 public interface CheckResult {
+	public int depth();
 	public boolean apply(CommandSender sender);
-	public CheckResult prepend(Object parsed_arg);
+	public CheckResult prepend(String argument_type, Object parsed_arg);
 	public boolean good();
 }

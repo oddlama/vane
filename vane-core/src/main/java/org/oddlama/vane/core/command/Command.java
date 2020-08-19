@@ -10,6 +10,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginIdentifiableCommand;
 
 import org.oddlama.vane.core.Module;
+import org.oddlama.vane.core.command.params.AnyParam;
 import org.oddlama.vane.annotation.command.VaneCommand;
 import java.util.Collection;
 import org.oddlama.vane.annotation.command.Name;
@@ -17,7 +18,8 @@ import org.oddlama.vane.annotation.command.Aliases;
 import org.oddlama.vane.annotation.command.Description;
 
 @VaneCommand
-public abstract class Command extends org.bukkit.command.Command implements Param, PluginIdentifiableCommand {
+public abstract class Command extends org.bukkit.command.Command implements PluginIdentifiableCommand {
+	private AnyParam<String> root_param;
 	protected Module module;
 
 	public Command(Module module) {
@@ -36,10 +38,17 @@ public abstract class Command extends org.bukkit.command.Command implements Para
 		if (aliases != null) {
 			setAliases(List.of(aliases.value()));
 		}
+
+		// Initialize root parameter
+		root_param = new AnyParam<String>(this, getName(), str -> str);
 	}
 
 	public String get_prefix() {
 		return "vane:" + module.get_name();
+	}
+
+	public Param params() {
+		return root_param;
 	}
 
 	@Override
@@ -48,13 +57,8 @@ public abstract class Command extends org.bukkit.command.Command implements Para
 	}
 
 	@Override
-	public Command get_command() {
-		return this;
-	}
-
-	@Override
 	public boolean execute(CommandSender sender, String alias, String[] args) {
-		return check_accept(args, -1).apply(sender);
+		return root_param.check_accept(prepend(args, alias), 0).apply(sender);
 	}
 
 	@Override

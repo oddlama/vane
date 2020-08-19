@@ -12,16 +12,14 @@ import java.util.Collection;
 import java.util.function.Supplier;
 import org.oddlama.vane.core.functional.Function1;
 
-public class ChoiceParam<T> implements Param {
-	private Class<T> persistent_class;
-	private Command command;
+public class ChoiceParam<T> extends BaseParam {
+	private String argument_type;
 	private HashMap<String, T> from_string = new HashMap<>();
 	private Collection<? extends T> choices;
 
-	@SuppressWarnings("unchecked")
-	public ChoiceParam(Command command, Collection<? extends T> choices, Function1<T, String> to_string) {
-		this.persistent_class = (Class<T>)((ParameterizedType)getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-		this.command = command;
+	public ChoiceParam(Command command, String argument_type, Collection<? extends T> choices, Function1<T, String> to_string) {
+		super(command);
+		this.argument_type = argument_type;
 		this.choices = choices;
 		for (var c : choices) {
 			from_string.put(to_string.apply(c), c);
@@ -29,21 +27,16 @@ public class ChoiceParam<T> implements Param {
 	}
 
 	@Override
-	public Command get_command() {
-		return command;
-	}
-
-	@Override
 	public CheckResult check_accept(String[] args, int offset) {
 		if (args.length <= offset) {
-			return new ErrorCheckResult("§6missing argument: §3" + persistent_class.getSimpleName() + "§r");
+			return new ErrorCheckResult(offset, "§6missing argument: §3" + argument_type + "§r");
 		}
 		var parsed = parse(args[offset]);
 		if (parsed == null) {
-			return new ErrorCheckResult("§6invalid §3" + persistent_class.getSimpleName() + "§6: §3'" + args[offset] + "'§r");
+			return new ErrorCheckResult(offset, "§6invalid §3" + argument_type + "§6: §3" + args[offset] + "§r");
 		}
-		return Param.super.check_accept(args, offset)
-			.prepend(parsed);
+		return super.check_accept(args, offset)
+			.prepend(argument_type, parsed);
 	}
 
 	private T parse(String arg) {

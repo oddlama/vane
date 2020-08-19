@@ -18,10 +18,12 @@ public class CommandVane extends Command {
 	public CommandVane(Module module) {
 		super(module);
 
-		var reload = fixed("reload");
+		var reload = params().fixed("reload");
 		reload.exec(this::reload_all);
 			// TODO ignore case on some comparisons
 		reload.choose_module()
+			// TODO test no exec
+			// TODO test error in early branch reload/test <name> <player>
 			.exec(this::reload_module);
 	}
 

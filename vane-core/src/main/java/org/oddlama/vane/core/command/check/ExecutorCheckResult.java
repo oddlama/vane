@@ -9,11 +9,18 @@ import java.util.stream.Collectors;
 import java.util.Collections;
 
 public class ExecutorCheckResult implements CheckResult {
-	private ArrayList<Object> parsed_args_reverse = new ArrayList<>();
+	private int depth;
 	private Executor executor;
+	private ArrayList<Object> parsed_args = new ArrayList<>();
 
-	public ExecutorCheckResult(Executor executor) {
+	public ExecutorCheckResult(int depth, Executor executor) {
+		this.depth = depth;
 		this.executor = executor;
+	}
+
+	@Override
+	public int depth() {
+		return depth;
 	}
 
 	@Override
@@ -22,10 +29,7 @@ public class ExecutorCheckResult implements CheckResult {
 	}
 
 	public boolean apply(CommandSender sender) {
-		var parsed_args = new ArrayList<>(parsed_args_reverse);
-		Collections.reverse(parsed_args);
-
-		System.out.println("APPLY!");
+		System.out.println("APPLY! " + executor);
 		for (var o : parsed_args) {
 			System.out.println(o);
 		}
@@ -33,8 +37,8 @@ public class ExecutorCheckResult implements CheckResult {
 	}
 
 	@Override
-	public CheckResult prepend(Object parsed_arg) {
-		parsed_args_reverse.add(parsed_arg);
+	public CheckResult prepend(String argument_type, Object parsed_arg) {
+		parsed_args.add(0, parsed_arg);
 		return this;
 	}
 }
