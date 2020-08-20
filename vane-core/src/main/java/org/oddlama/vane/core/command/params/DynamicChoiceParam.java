@@ -18,7 +18,7 @@ public class DynamicChoiceParam<T> extends BaseParam {
 	private Function1<T, String> to_string;
 	private Function1<String, ? extends T> from_string;
 
-	public DynamicChoiceParam(Command command, String argument_type, Supplier<Collection<? extends T>> choices, Function1<T, String> to_string, Function1<String, ? extends T> from_string) {
+	public DynamicChoiceParam(Command<?> command, String argument_type, Supplier<Collection<? extends T>> choices, Function1<T, String> to_string, Function1<String, ? extends T> from_string) {
 		super(command);
 		this.argument_type = argument_type;
 		this.choices = choices;

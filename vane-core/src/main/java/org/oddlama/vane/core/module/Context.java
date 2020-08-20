@@ -19,15 +19,15 @@ import org.oddlama.vane.core.command.params.AnyParam;
  * A ModuleContext is an association to a specific Module and also a
  * grouping of config and language variables with a common namespace.
  */
-public interface Context<T> {
+public interface Context<T extends Module<?>> {
 	/** create a subcontext namespace */
 	default public ModuleContext<T> namespace(String namespace) {
-		return new ModuleContext<T>(module, this.namespace + "_" + namespace);
+		return new ModuleContext<T>(get_module(), this.get_namespace() + "_" + namespace);
 	}
 
 	/** create a subcontext group */
-	default public ModuleGroup<T> group(String namespace) {
-		return new ModuleGroup<T>(module, this.namespace + "_" + namespace);
+	default public ModuleGroup<T> group(String namespace, String description) {
+		return new ModuleGroup<T>(get_module(), this.get_namespace() + "_" + namespace, description);
 	}
 
 	/**

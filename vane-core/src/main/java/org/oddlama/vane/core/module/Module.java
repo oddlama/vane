@@ -25,7 +25,7 @@ import org.oddlama.vane.core.Core;
 import org.oddlama.vane.core.config.ConfigManager;
 import org.oddlama.vane.core.lang.LangManager;
 
-public abstract class Module<T> extends JavaPlugin implements Context<T> {
+public abstract class Module<T extends Module<?>> extends JavaPlugin implements Context<T> {
 	public Core core;
 	public Logger log;
 
@@ -37,7 +37,10 @@ public abstract class Module<T> extends JavaPlugin implements Context<T> {
 	public String config_lang;
 
 	// Context<T> interface proxy
+	@SuppressWarnings("unchecked")
 	private ModuleGroup<T> context_group = new ModuleGroup<>((T)this, "", "The module will only add functionality if this is set to true.");
+	public void compile(ModuleComponent<T> component) { context_group.compile(component); }
+	@SuppressWarnings("unchecked")
 	public T get_module() { return (T)this; }
 	public String get_namespace() { return context_group.get_namespace(); }
 	public void enable() { context_group.enable(); }
@@ -196,14 +199,14 @@ public abstract class Module<T> extends JavaPlugin implements Context<T> {
 		return name;
 	}
 
-	public void register_command(Command command) {
+	public void register_command(Command<?> command) {
 		if (!getServer().getCommandMap().register(command.get_name(), command.get_prefix(), command.get_bukkit_command())) {
 			log.warning("Command " + command.get_name() + " was registered using the fallback prefix!");
 			log.warning("Another command with the same name already exists!");
 		}
 	}
 
-	public void unregister_command(Command command) {
+	public void unregister_command(Command<?> command) {
 		var bukkit_command = command.get_bukkit_command();
 		getServer().getCommandMap().getKnownCommands().values().remove(bukkit_command);
 		bukkit_command.unregister(getServer().getCommandMap());

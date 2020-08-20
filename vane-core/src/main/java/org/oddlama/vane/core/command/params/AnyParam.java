@@ -13,7 +13,7 @@ public class AnyParam<T> extends BaseParam {
 	private String argument_type;
 	private Function1<String, ? extends T> from_string;
 
-	public AnyParam(Command command, String argument_type, Function1<String, ? extends T> from_string) {
+	public AnyParam(Command<?> command, String argument_type, Function1<String, ? extends T> from_string) {
 		super(command);
 		this.argument_type = argument_type;
 		this.from_string = from_string;

@@ -35,9 +35,9 @@ import org.oddlama.vane.core.config.ConfigVersionField;
 public class ConfigManager {
 	private List<ConfigField<?>> config_fields = new ArrayList<>();
 	ConfigVersionField field_version;
-	Module module;
+	Module<?> module;
 
-	public ConfigManager(Module module) {
+	public ConfigManager(Module<?> module) {
 		this.module = module;
 		compile(module, s -> s);
 	}

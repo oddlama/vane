@@ -25,11 +25,11 @@ public class ErrorCheckResult implements CheckResult {
 	}
 
 	@Override
-	public boolean apply(Command command ,CommandSender sender) {
+	public boolean apply(Command<?> command ,CommandSender sender) {
 		return apply(command, sender, "");
 	}
 
-	public boolean apply(Command command, CommandSender sender, String indent) {
+	public boolean apply(Command<?> command, CommandSender sender, String indent) {
 		var str = indent;
 		if (indent == "") {
 			str += "§cerror: ";

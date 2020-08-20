@@ -15,7 +15,7 @@ public class FixedParam<T> extends BaseParam {
 	private boolean include_param = false;
 	private boolean ignore_case = false;
 
-	public FixedParam(Command command, T fixed_arg, Function1<T, String> to_string) {
+	public FixedParam(Command<?> command, T fixed_arg, Function1<T, String> to_string) {
 		super(command);
 		this.fixed_arg = fixed_arg;
 		this.fixed_arg_str = to_string.apply(fixed_arg);

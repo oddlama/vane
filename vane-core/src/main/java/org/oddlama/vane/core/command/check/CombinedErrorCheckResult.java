@@ -18,7 +18,7 @@ public class CombinedErrorCheckResult extends ErrorCheckResult {
 	}
 
 	@Override
-	public boolean apply(Command command, CommandSender sender, String indent) {
+	public boolean apply(Command<?> command, CommandSender sender, String indent) {
 		super.apply(command, sender, indent);
 		for (var err : errors) {
 			err.apply(command, sender, indent + "  ");

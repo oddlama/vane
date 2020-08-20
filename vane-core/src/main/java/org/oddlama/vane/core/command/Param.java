@@ -38,7 +38,7 @@ public interface Param {
 
 	default public boolean require_player(CommandSender sender) {
 		if (!(sender instanceof Player)) {
-			sender.sendMessage(get_command().module.core.lang_command_not_a_player);
+			sender.sendMessage(get_command().get_module().core.lang_command_not_a_player);
 			return false;
 		}
 
@@ -186,11 +186,11 @@ public interface Param {
 		return p;
 	}
 
-	default public DynamicChoiceParam<Module> choose_module() {
+	default public DynamicChoiceParam<Module<?>> choose_module() {
 		return choice("module",
-				() -> get_command().module.core.get_modules(),
+				() -> get_command().get_module().core.get_modules(),
 				m -> m.get_name(),
-				m -> get_command().module.core.get_modules().stream()
+				m -> get_command().get_module().core.get_modules().stream()
 					.filter(k -> k.get_name().equalsIgnoreCase(m))
 					.findFirst()
 					.orElse(null));
@@ -198,9 +198,9 @@ public interface Param {
 
 	default public DynamicChoiceParam<Player> choose_online_player() {
 		return choice("online_player",
-				() -> get_command().module.getServer().getOnlinePlayers(),
+				() -> get_command().get_module().getServer().getOnlinePlayers(),
 				p -> p.getName(),
-				p -> get_command().module.getServer().getOnlinePlayers().stream()
+				p -> get_command().get_module().getServer().getOnlinePlayers().stream()
 					.filter(k -> k.getName().equals(p))
 					.findFirst()
 					.orElse(null));
@@ -284,5 +284,5 @@ public interface Param {
 
 	public List<String> completions_for(String arg);
 	public CheckResult check_parse(String[] args, int offset);
-	public Command get_command();
+	public Command<?> get_command();
 }

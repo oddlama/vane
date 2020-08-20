@@ -18,7 +18,7 @@ import org.oddlama.vane.annotation.lang.LangVersion;
 import org.oddlama.vane.core.module.Module;
 
 @VaneModule("trifles")
-public class Trifles extends Module implements Listener {
+public class Trifles extends Module<Trifles> implements Listener {
 	// Configuration
 	@ConfigVersion(1)
 	public long config_version;

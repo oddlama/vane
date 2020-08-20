@@ -27,7 +27,7 @@ public class ExecutorCheckResult implements CheckResult {
 		return true;
 	}
 
-	public boolean apply(Command command, CommandSender sender) {
+	public boolean apply(Command<?> command, CommandSender sender) {
 		return executor.execute(command, sender, parsed_args);
 	}
 

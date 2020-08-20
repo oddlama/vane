@@ -18,7 +18,7 @@ public class ChoiceParam<T> extends BaseParam {
 	private HashMap<String, T> from_string = new HashMap<>();
 	private boolean ignore_case = false;
 
-	public ChoiceParam(Command command, String argument_type, Collection<? extends T> choices, Function1<T, String> to_string) {
+	public ChoiceParam(Command<?> command, String argument_type, Collection<? extends T> choices, Function1<T, String> to_string) {
 		super(command);
 		this.argument_type = argument_type;
 		this.choices = choices;

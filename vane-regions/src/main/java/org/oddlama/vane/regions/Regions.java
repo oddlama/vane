@@ -8,7 +8,7 @@ import org.oddlama.vane.annotation.lang.LangVersion;
 import org.oddlama.vane.core.module.Module;
 
 @VaneModule("regions")
-public class Regions extends Module implements Listener {
+public class Regions extends Module<Regions> implements Listener {
 	// Configuration
 	@ConfigVersion(1)
 	public long config_version;

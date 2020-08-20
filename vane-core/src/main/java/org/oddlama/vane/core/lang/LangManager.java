@@ -25,9 +25,9 @@ import org.oddlama.vane.core.lang.LangVersionField;
 public class LangManager {
 	private List<LangField<?>> lang_fields = new ArrayList<>();
 	LangVersionField field_version;
-	Module module;
+	Module<?> module;
 
-	public LangManager(Module module) {
+	public LangManager(Module<?> module) {
 		this.module = module;
 		compile(module, s -> s);
 	}

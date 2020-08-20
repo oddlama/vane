@@ -31,7 +31,7 @@ public class CommandVane extends Command<Core> {
 	}
 
 	private void reload_all(CommandSender sender) {
-		for (var m : module.core.get_modules()) {
+		for (var m : get_module().core.get_modules()) {
 			reload_module(sender, m);
 		}
 	}

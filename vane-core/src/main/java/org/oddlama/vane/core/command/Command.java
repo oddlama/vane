@@ -19,15 +19,15 @@ import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.core.command.params.AnyParam;
 
 @VaneCommand
-public abstract class Command<T> extends ModuleComponent<T> {
-	private class BukkitCommand extends org.bukkit.command.Command implements PluginIdentifiableCommand {
-		public BukkitCommand() {
-			super("");
+public abstract class Command<T extends Module<?>> extends ModuleComponent<T> {
+	public class BukkitCommand extends org.bukkit.command.Command implements PluginIdentifiableCommand {
+		public BukkitCommand(String name) {
+			super(name);
 		}
 
 		@Override
 		public String getPermission() {
-			return "vane." + Command.this.get_module().get_name() + ".commands." + getName();
+			return Command.this.permission;
 		}
 
 		@Override
@@ -50,7 +50,7 @@ public abstract class Command<T> extends ModuleComponent<T> {
 			// Ambigous matches will always execute the
 			// first chain based on definition order.
 			try {
-				return root_param.check_accept(prepend(args, alias), 0).apply(this, sender);
+				return root_param.check_accept(prepend(args, alias), 0).apply(Command.this, sender);
 			} catch (Exception e) {
 				sender.sendMessage("§cAn unexpected error occurred. Please examine the console log and/or notify a server administator.");
 				throw e;
@@ -80,9 +80,12 @@ public abstract class Command<T> extends ModuleComponent<T> {
 	@LangString
 	public String lang_description;
 
-	// Root parameter
+	// Variables
 	private String name;
+	private String permission;
 	private BukkitCommand bukkit_command;
+
+	// Root parameter
 	private AnyParam<String> root_param;
 
 	public Command(Context<T> context) {
@@ -99,8 +102,11 @@ public abstract class Command<T> extends ModuleComponent<T> {
 			bukkit_command.setAliases(List.of(aliases.value()));
 		}
 
+		// Initialize permission string
+		permission = "vane." + get_module().get_name() + ".commands." + name;
+
 		// Initialize root parameter
-		root_param = new AnyParam<String>(this, "/" + getName(), str -> str);
+		root_param = new AnyParam<String>(this, "/" + get_name(), str -> str);
 	}
 
 	public BukkitCommand get_bukkit_command() {
@@ -111,12 +117,30 @@ public abstract class Command<T> extends ModuleComponent<T> {
 		return name;
 	}
 
+	public String get_permission() {
+		return permission;
+	}
+
 	public String get_prefix() {
-		return "vane:" + module.get_name();
+		return "vane:" + get_module().get_name();
 	}
 
 	public Param params() {
 		return root_param;
+	}
+
+	@Override
+	protected void on_enable() {
+		get_module().register_command(this);
+	}
+
+	@Override
+	protected void on_disable() {
+		get_module().unregister_command(this);
+	}
+
+	@Override
+	protected void on_config_change() {
 	}
 
 	public void print_help(CommandSender sender) {

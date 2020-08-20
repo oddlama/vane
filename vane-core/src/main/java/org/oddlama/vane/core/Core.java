@@ -24,7 +24,7 @@ public class Core extends Module<Core> {
 
 	// Variables
 	private CommandVane command_vane = new CommandVane(this);
-	private SortedSet<Module> vane_modules = new TreeSet<>((a, b) -> a.get_name().compareTo(b.get_name()));
+	private SortedSet<Module<?>> vane_modules = new TreeSet<>((a, b) -> a.get_name().compareTo(b.get_name()));
 
 	@Override
 	protected void on_enable() {
@@ -40,15 +40,15 @@ public class Core extends Module<Core> {
 	protected void on_config_change() {
 	}
 
-	public void register_module(Module module) {
+	public void register_module(Module<?> module) {
 		vane_modules.add(module);
 	}
 
-	public void unregister_module(Module module) {
+	public void unregister_module(Module<?> module) {
 		vane_modules.remove(module);
 	}
 
-	public SortedSet<Module> get_modules() {
+	public SortedSet<Module<?>> get_modules() {
 		return Collections.unmodifiableSortedSet(vane_modules);
 	}
 }

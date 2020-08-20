@@ -32,7 +32,7 @@ public class ParseCheckResult implements CheckResult {
 	}
 
 	@Override
-	public boolean apply(Command command, CommandSender sender) {
+	public boolean apply(Command<?> command, CommandSender sender) {
 		throw new RuntimeException("ParseCheckResult cannot be applied! This is a bug.");
 	}
 

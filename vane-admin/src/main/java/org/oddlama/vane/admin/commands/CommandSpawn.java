@@ -7,8 +7,8 @@ import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.core.command.Command;
 
 @Name("spawn")
-public class CommandSpawn extends Command {
-	public CommandSpawn(ModuleContext<Admin> context) {
+public class CommandSpawn extends Command<Admin> {
+	public CommandSpawn(Context<Admin> context) {
 		super(context);
 
 		// Add help
@@ -17,7 +17,7 @@ public class CommandSpawn extends Command {
 		params().exec_player(this::tp_spawn);
 	}
 
-	private void tp_spawn(Player player, Module module) {
+	private void tp_spawn(Player player) {
 		// TODO save world in setspawn in key-value store.
 	}
 }

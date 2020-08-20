@@ -22,7 +22,7 @@ public class SentinelExecutorParam<T> extends BaseParam implements Executor {
 	private T function;
 	private Function1<CommandSender, Boolean> check_requirements;
 
-	public SentinelExecutorParam(Command command, T function, Function1<CommandSender, Boolean> check_requirements) {
+	public SentinelExecutorParam(Command<?> command, T function, Function1<CommandSender, Boolean> check_requirements) {
 		super(command);
 		this.function = function;
 		this.check_requirements = check_requirements;
@@ -54,7 +54,7 @@ public class SentinelExecutorParam<T> extends BaseParam implements Executor {
 	}
 
 	@Override
-	public boolean execute(Command command, CommandSender sender, List<Object> parsed_args) {
+	public boolean execute(Command<?> command, CommandSender sender, List<Object> parsed_args) {
 		// Replace command name argument (unused) with sender
 		parsed_args.set(0, sender);
 
@@ -71,7 +71,7 @@ public class SentinelExecutorParam<T> extends BaseParam implements Executor {
 		}
 
 		// Check permission
-		if (!sender.hasPermission(command.getPermission())) {
+		if (!sender.hasPermission(command.get_permission())) {
 			// TODO localization
 			sender.sendMessage("§cerror:§6 permission denied!");
 			return false;
