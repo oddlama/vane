@@ -15,7 +15,7 @@ import org.oddlama.vane.annotation.command.VaneCommand;
 import org.oddlama.vane.annotation.lang.LangString;
 import org.oddlama.vane.core.command.params.AnyParam;
 
-public abstract class ModuleComponent<T extends Module<?>> {
+public abstract class ModuleComponent<T extends Module<T>> {
 	private Context<T> context;
 
 	public ModuleComponent(Context<T> context) {
@@ -35,5 +35,5 @@ public abstract class ModuleComponent<T extends Module<?>> {
 
 	protected abstract void on_enable();
 	protected abstract void on_disable();
-	protected abstract void on_config_change();
+	protected void on_config_change() {}
 }

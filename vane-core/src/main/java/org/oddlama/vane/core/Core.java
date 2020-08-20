@@ -22,33 +22,14 @@ public class Core extends Module<Core> {
 	@LangString
 	public String lang_command_not_a_player;
 
-	// Variables
-	private CommandVane command_vane = new CommandVane(this);
+	// Module registry
 	private SortedSet<Module<?>> vane_modules = new TreeSet<>((a, b) -> a.get_name().compareTo(b.get_name()));
+	public void register_module(Module<?> module) { vane_modules.add(module); }
+	public void unregister_module(Module<?> module) { vane_modules.remove(module); }
+	public SortedSet<Module<?>> get_modules() { return Collections.unmodifiableSortedSet(vane_modules); }
 
-	@Override
-	protected void on_enable() {
-		register_command(command_vane);
-	}
-
-	@Override
-	protected void on_disable() {
-		unregister_command(command_vane);
-	}
-
-	@Override
-	protected void on_config_change() {
-	}
-
-	public void register_module(Module<?> module) {
-		vane_modules.add(module);
-	}
-
-	public void unregister_module(Module<?> module) {
-		vane_modules.remove(module);
-	}
-
-	public SortedSet<Module<?>> get_modules() {
-		return Collections.unmodifiableSortedSet(vane_modules);
+	public Core() {
+		// Components
+		new CommandVane(this);
 	}
 }

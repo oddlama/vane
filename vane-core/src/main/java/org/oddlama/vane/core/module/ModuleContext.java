@@ -21,17 +21,20 @@ import org.oddlama.vane.core.command.params.AnyParam;
  * A ModuleContext is an association to a specific Module and also a
  * grouping of config and language variables with a common namespace.
  */
-public class ModuleContext<T extends Module<?>> implements Context<T> {
-	protected T module;
+public class ModuleContext<T extends Module<T>> implements Context<T> {
+	protected Context<T> context;
+	protected T module; // cache to not generate chains of get_context()
 	private String namespace;
+	private List<Context<T>> subcontexts = new ArrayList<>();
 	private List<ModuleComponent<T>> components = new ArrayList<>();
 
-	public ModuleContext(T module, String namespace) {
-		this(module, namespace, true);
+	public ModuleContext(Context<T> context, String namespace) {
+		this(context, namespace, true);
 	}
 
-	public ModuleContext(T module, String namespace, boolean compile_self) {
-		this.module = module;
+	public ModuleContext(Context<T> context, String namespace, boolean compile_self) {
+		this.context = context;
+		this.module = context.get_module();
 		this.namespace = namespace;
 
 		if (compile_self) {
@@ -47,6 +50,7 @@ public class ModuleContext<T extends Module<?>> implements Context<T> {
 		// Compile localization and config fields
 		module.lang_manager.compile(this, this::get_namespaced_variable);
 		module.config_manager.compile(this, this::get_namespaced_variable);
+		context.add_child(this);
 	}
 
 	@Override
@@ -54,6 +58,16 @@ public class ModuleContext<T extends Module<?>> implements Context<T> {
 		components.add(component);
 		module.lang_manager.compile(component, this::get_namespaced_variable);
 		module.config_manager.compile(component, this::get_namespaced_variable);
+	}
+
+	@Override
+	public void add_child(Context<T> subcontext) {
+		subcontexts.add(subcontext);
+	}
+
+	@Override
+	public Context<T> get_context() {
+		return context;
 	}
 
 	@Override
@@ -68,22 +82,34 @@ public class ModuleContext<T extends Module<?>> implements Context<T> {
 
 	@Override
 	public void enable() {
+		on_enable();
 		for (var component : components) {
 			component.on_enable();
+		}
+		for (var subcontext : subcontexts) {
+			subcontext.enable();
 		}
 	}
 
 	@Override
 	public void disable() {
+		on_disable();
 		for (var component : components) {
 			component.on_disable();
+		}
+		for (var subcontext : subcontexts) {
+			subcontext.disable();
 		}
 	}
 
 	@Override
 	public void config_change() {
+		on_config_change();
 		for (var component : components) {
 			component.on_config_change();
+		}
+		for (var subcontext : subcontexts) {
+			subcontext.config_change();
 		}
 	}
 }

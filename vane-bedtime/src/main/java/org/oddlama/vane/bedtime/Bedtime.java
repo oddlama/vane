@@ -28,7 +28,7 @@ import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.util.Nms;
 
 @VaneModule("bedtime")
-public class Bedtime extends Module<Bedtime> implements Listener {
+public class Bedtime extends Module<Bedtime> {
 	// One set of sleeping players per world, to keep track
 	private HashMap<UUID, HashSet<UUID>> world_sleepers = new HashMap<>();
 
@@ -53,20 +53,6 @@ public class Bedtime extends Module<Bedtime> implements Listener {
 	MessageFormat lang_player_bed_leave;
 	@LangString
 	String lang_sleep_success;
-
-	@Override
-	protected void on_enable() {
-		register_listener(this);
-	}
-
-	@Override
-	protected void on_disable() {
-		unregister_listener(this);
-	}
-
-	@Override
-	protected void on_config_change() {
-	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void on_player_bed_enter(PlayerBedEnterEvent event) {

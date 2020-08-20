@@ -23,24 +23,25 @@ import org.oddlama.vane.core.command.params.AnyParam;
  * with description to the context. If the group is disabled, on_enable() will
  * not be called.
  */
-public class ModuleGroup<T extends Module<?>> extends ModuleContext<T> {
+public class ModuleGroup<T extends Module<T>> extends ModuleContext<T> {
 	@ConfigBoolean(def = true, desc = "<will be overwritten at runtime>")
 	private boolean config_enabled;
 
-	public ModuleGroup(T module, String namespace, String description) {
-		this(module, namespace, description, true);
+	public ModuleGroup(Context<T> context, String namespace, String description) {
+		this(context, namespace, description, true);
 	}
 
-	public ModuleGroup(T module, String namespace, String description, boolean compile_self) {
-		super(module, namespace, false);
+	public ModuleGroup(Context<T> context, String namespace, String description, boolean compile_self) {
+		super(context, namespace, false);
 
-		// Set description of config_enable
+		// Set description of config_enabled
 		try {
-			Field field = ModuleGroup.class.getField("config_enable");
+			Field field = getClass().getDeclaredField("config_enabled");
+			field.setAccessible(true);
 			final ConfigBoolean annotation = field.getAnnotation(ConfigBoolean.class);
 			change_annotation_value(annotation, "value", description);
 		} catch (NoSuchFieldException e) {
-			throw new RuntimeException("Could not find config_enable field on " + ModuleGroup.class.getName() + "! This is a bug.");
+			throw new RuntimeException("Could not find config_enabled field on " + getClass().getName() + "! This is a bug.");
 		}
 
 		if (compile_self) {

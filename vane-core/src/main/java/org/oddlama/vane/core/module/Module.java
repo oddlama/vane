@@ -25,7 +25,7 @@ import org.oddlama.vane.core.Core;
 import org.oddlama.vane.core.config.ConfigManager;
 import org.oddlama.vane.core.lang.LangManager;
 
-public abstract class Module<T extends Module<?>> extends JavaPlugin implements Context<T> {
+public abstract class Module<T extends Module<T>> extends JavaPlugin implements Context<T> {
 	public Core core;
 	public Logger log;
 
@@ -37,9 +37,10 @@ public abstract class Module<T extends Module<?>> extends JavaPlugin implements 
 	public String config_lang;
 
 	// Context<T> interface proxy
-	@SuppressWarnings("unchecked")
-	private ModuleGroup<T> context_group = new ModuleGroup<>((T)this, "", "The module will only add functionality if this is set to true.");
+	private ModuleGroup<T> context_group = new ModuleGroup<>(this, "", "The module will only add functionality if this is set to true.");
 	public void compile(ModuleComponent<T> component) { context_group.compile(component); }
+	public void add_child(Context<T> subcontext) { context_group.add_child(subcontext); }
+	public Context<T> get_context() { return this; }
 	@SuppressWarnings("unchecked")
 	public T get_module() { return (T)this; }
 	public String get_namespace() { return context_group.get_namespace(); }
@@ -49,9 +50,9 @@ public abstract class Module<T extends Module<?>> extends JavaPlugin implements 
 
 	// Callbacks for derived classes
 	protected void on_load() {}
-	protected abstract void on_enable();
-	protected abstract void on_disable();
-	protected abstract void on_config_change();
+	public void on_enable() {}
+	public void on_disable() {}
+	public void on_config_change() {}
 
 	@Override
 	public final void onLoad() {

@@ -19,7 +19,7 @@ import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.core.command.params.AnyParam;
 
 @VaneCommand
-public abstract class Command<T extends Module<?>> extends ModuleComponent<T> {
+public abstract class Command<T extends Module<T>> extends ModuleComponent<T> {
 	public class BukkitCommand extends org.bukkit.command.Command implements PluginIdentifiableCommand {
 		public BukkitCommand(String name) {
 			super(name);
@@ -137,10 +137,6 @@ public abstract class Command<T extends Module<?>> extends ModuleComponent<T> {
 	@Override
 	protected void on_disable() {
 		get_module().unregister_command(this);
-	}
-
-	@Override
-	protected void on_config_change() {
 	}
 
 	public void print_help(CommandSender sender) {

@@ -6,6 +6,9 @@ import org.oddlama.vane.annotation.VaneModule;
 import org.oddlama.vane.annotation.config.ConfigVersion;
 import org.oddlama.vane.annotation.lang.LangVersion;
 import org.oddlama.vane.core.module.Module;
+import org.oddlama.vane.core.module.ModuleGroup;
+import org.oddlama.vane.admin.commands.CommandSetspawn;
+import org.oddlama.vane.admin.commands.CommandSpawn;
 
 @VaneModule("admin")
 public class Admin extends Module<Admin> {
@@ -17,9 +20,13 @@ public class Admin extends Module<Admin> {
 	@LangVersion(1)
 	public long lang_version;
 
-	// Variables
-	private ModuleContext<Admin> autostop_context = group("autostop",
-			"Enable automatic server stop after certain time without online players.");
-	private AutoStopListener autostop_listener = new AutoStopListener(autostop_context);
-	private CommandAutoStop autostop_command = new CommandAutoStop(autostop_context);
+	public Admin() {
+		// Create components
+		new CommandSetspawn(this);
+		new CommandSpawn(this);
+
+		var autostop_group = group("autostop", "Enable automatic server stop after certain time without online players.");
+		new AutostopListener(autostop_group);
+		//new CommandAutostop(autostop_group);
+	}
 }
