@@ -39,7 +39,14 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 	// Context<T> interface proxy
 	private ModuleGroup<T> context_group = new ModuleGroup<>(this, "", "The module will only add functionality if this is set to true.");
 	public void compile(ModuleComponent<T> component) { context_group.compile(component); }
-	public void add_child(Context<T> subcontext) { context_group.add_child(subcontext); }
+	public void add_child(Context<T> subcontext) {
+		if (context_group == null) {
+			// This happens, when context_group (above) is initialized and calls compile_self(),
+			// while will try to register it to the parent context (us), but we fake that anyway.
+			return;
+		}
+		context_group.add_child(subcontext);
+	}
 	public Context<T> get_context() { return this; }
 	@SuppressWarnings("unchecked")
 	public T get_module() { return (T)this; }
