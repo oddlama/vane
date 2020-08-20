@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import org.oddlama.vane.core.Module;
+import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.core.command.check.CheckResult;
 import org.oddlama.vane.core.command.check.CombinedErrorCheckResult;
 import org.oddlama.vane.core.command.check.ErrorCheckResult;

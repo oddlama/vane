@@ -5,7 +5,7 @@ import org.bukkit.event.Listener;
 import org.oddlama.vane.annotation.VaneModule;
 import org.oddlama.vane.annotation.config.ConfigVersion;
 import org.oddlama.vane.annotation.lang.LangVersion;
-import org.oddlama.vane.core.Module;
+import org.oddlama.vane.core.module.Module;
 
 @VaneModule("enchantments")
 public class Enchantments extends Module implements Listener {

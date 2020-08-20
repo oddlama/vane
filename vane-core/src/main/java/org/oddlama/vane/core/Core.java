@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.annotation.VaneModule;
 import org.oddlama.vane.annotation.config.ConfigVersion;
 import org.oddlama.vane.annotation.lang.LangString;
@@ -11,7 +12,7 @@ import org.oddlama.vane.annotation.lang.LangVersion;
 import org.oddlama.vane.core.commands.CommandVane;
 
 @VaneModule("core")
-public class Core extends Module {
+public class Core extends Module<Core> {
 	@ConfigVersion(1)
 	public long config_version;
 

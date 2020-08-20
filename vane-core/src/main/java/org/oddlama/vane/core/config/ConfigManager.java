@@ -21,7 +21,7 @@ import org.oddlama.vane.annotation.config.ConfigLong;
 import org.oddlama.vane.annotation.config.ConfigMaterialSet;
 import org.oddlama.vane.annotation.config.ConfigString;
 import org.oddlama.vane.annotation.config.ConfigVersion;
-import org.oddlama.vane.core.Module;
+import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.core.YamlLoadException;
 import org.oddlama.vane.core.config.ConfigBooleanField;
 import org.oddlama.vane.core.config.ConfigDoubleField;

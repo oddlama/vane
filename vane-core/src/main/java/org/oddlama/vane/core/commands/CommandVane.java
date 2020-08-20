@@ -3,13 +3,15 @@ package org.oddlama.vane.core.commands;
 import org.bukkit.command.CommandSender;
 
 import org.oddlama.vane.annotation.command.Name;
-import org.oddlama.vane.core.Module;
+import org.oddlama.vane.core.module.Module;
+import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.command.Command;
+import org.oddlama.vane.core.Core;
 
 @Name("vane")
-public class CommandVane extends Command {
-	public CommandVane(Module module) {
-		super(module);
+public class CommandVane extends Command<Core> {
+	public CommandVane(Context<Core> context) {
+		super(context);
 
 		// Add help
 		params().fixed("help").ignore_case().exec(this::print_help);
@@ -20,7 +22,7 @@ public class CommandVane extends Command {
 		reload.choose_module().exec(this::reload_module);
 	}
 
-	private void reload_module(CommandSender sender, Module module) {
+	private void reload_module(CommandSender sender, Module<?> module) {
 		if (module.reload_configuration()) {
 			sender.sendMessage("§bvane-" + module.get_name() + ": §areload successful");
 		} else {

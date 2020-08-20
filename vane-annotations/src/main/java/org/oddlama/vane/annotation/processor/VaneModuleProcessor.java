@@ -28,15 +28,18 @@ public class VaneModuleProcessor extends AbstractProcessor {
 
 	private void verify_is_class(Element element) {
 		if (element.getKind() != ElementKind.CLASS) {
-			processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, element.asType().toString() + ": @VaneModule must be applied to a class");
+			processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, element.asType().toString()
+					+ ": @VaneModule must be applied to a class");
 
 		}
 	}
 
 	private void verify_extends_module(Element element) {
 		var t = (TypeElement)element;
-		if (!t.getSuperclass().toString().equals("org.oddlama.vane.core.Module")) {
-			processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, element.asType().toString() + ": @VaneModule must be applied to a class inheriting from org.oddlama.vane.core.Module");
+		if (!t.getSuperclass().toString().startsWith("org.oddlama.vane.core.module.Module<")) {
+			processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, element.asType().toString()
+					+ ": @VaneModule must be applied to a class inheriting from org.oddlama.vane.core.module.Module, but it inherits from "
+					+ t.getSuperclass().toString());
 		}
 	}
 }

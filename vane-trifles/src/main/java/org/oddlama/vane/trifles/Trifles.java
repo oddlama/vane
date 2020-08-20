@@ -15,7 +15,7 @@ import org.oddlama.vane.annotation.config.ConfigLong;
 import org.oddlama.vane.annotation.config.ConfigMaterialSet;
 import org.oddlama.vane.annotation.config.ConfigVersion;
 import org.oddlama.vane.annotation.lang.LangVersion;
-import org.oddlama.vane.core.Module;
+import org.oddlama.vane.core.module.Module;
 
 @VaneModule("trifles")
 public class Trifles extends Module implements Listener {
@@ -24,10 +24,10 @@ public class Trifles extends Module implements Listener {
 	public long config_version;
 
 	@ConfigBoolean(def = true, desc = "Enable faster walking on certain materials.")
-	boolean config_enable_fast_walking;
+	boolean config_fast_walking_enable;
 
 	@ConfigLong(def = 2000, min = 50, max = 5000, desc = "Speed effect duration in milliseconds.")
-	long config_speed_duration;
+	long config_fast_walking_duration;
 
 	@ConfigMaterialSet(def = {Material.GRASS_PATH}, desc = "Materials on which players will walk faster.")
 	Set<Material> config_fast_walking_materials;
@@ -42,7 +42,7 @@ public class Trifles extends Module implements Listener {
 
 	@Override
 	public void on_enable() {
-		if (config_enable_fast_walking) {
+		if (config_fast_walking_enable) {
 			register_listener(walk_speed_listener);
 		}
 	}
@@ -54,7 +54,7 @@ public class Trifles extends Module implements Listener {
 
 	@Override
 	protected void on_config_change() {
-		walk_speed_effect = new PotionEffect(PotionEffectType.SPEED, (int)ms_to_ticks(config_speed_duration), 1)
+		walk_speed_effect = new PotionEffect(PotionEffectType.SPEED, (int)ms_to_ticks(config_fast_walking_duration), 1)
 			.withAmbient(false)
 			.withParticles(false)
 			.withIcon(false);

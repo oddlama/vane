@@ -3,13 +3,13 @@ package org.oddlama.vane.admin.commands;
 import org.bukkit.entity.Player;
 
 import org.oddlama.vane.annotation.command.Name;
-import org.oddlama.vane.core.Module;
+import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.core.command.Command;
 
 @Name("spawn")
 public class CommandSpawn extends Command {
-	public CommandSpawn(Module module) { // TODO pass admin to get localization?
-		super(module);
+	public CommandSpawn(ModuleContext<Admin> context) {
+		super(context);
 
 		// Add help
 		params().fixed("help").ignore_case().exec(this::print_help);

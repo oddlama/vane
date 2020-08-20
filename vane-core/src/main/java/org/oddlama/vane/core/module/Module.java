@@ -1,4 +1,4 @@
-package org.oddlama.vane.core;
+package org.oddlama.vane.core.module;
 
 import static org.oddlama.vane.util.ResourceList.get_resources;
 
@@ -21,10 +21,11 @@ import org.oddlama.vane.annotation.VaneModule;
 import org.oddlama.vane.annotation.config.ConfigBoolean;
 import org.oddlama.vane.annotation.config.ConfigString;
 import org.oddlama.vane.core.command.Command;
+import org.oddlama.vane.core.Core;
 import org.oddlama.vane.core.config.ConfigManager;
 import org.oddlama.vane.core.lang.LangManager;
 
-public abstract class Module extends JavaPlugin {
+public abstract class Module<T> extends JavaPlugin implements Context<T> {
 	public Core core;
 	public Logger log;
 
@@ -35,9 +36,15 @@ public abstract class Module extends JavaPlugin {
 	@ConfigString(def = "inherit", desc = "The language for this module. The corresponding language file must be named lang-{lang}.yml. Specifying 'inherit' will load the value set for vane-core.")
 	public String config_lang;
 
-	@ConfigBoolean(def = true, desc = "The module will only add functionality if this is set to true.")
-	public boolean config_enabled = false;
+	// Context<T> interface proxy
+	private ModuleGroup<T> context_group = new ModuleGroup<>((T)this, "", "The module will only add functionality if this is set to true.");
+	public T get_module() { return (T)this; }
+	public String get_namespace() { return context_group.get_namespace(); }
+	public void enable() { context_group.enable(); }
+	public void disable() { context_group.disable(); }
+	public void config_change() { context_group.config_change(); }
 
+	// Callbacks for derived classes
 	protected void on_load() {}
 	protected abstract void on_enable();
 	protected abstract void on_disable();
@@ -83,7 +90,7 @@ public abstract class Module extends JavaPlugin {
 	}
 
 	public boolean reload_configuration() {
-		boolean was_enabled = config_enabled;
+		boolean was_enabled = context_group.enabled();
 
 		// Generate new file if not existing
 		final var file = new File(getDataFolder(), "config.yml");
@@ -111,13 +118,16 @@ public abstract class Module extends JavaPlugin {
 		}
 
 		// Disable plugin if needed
-		if (was_enabled && !config_enabled) {
-			on_disable();
-		} else if (!was_enabled && config_enabled) {
+		if (was_enabled && !context_group.enabled()) {
 			on_enable();
+			context_group.disable();
+		} else if (!was_enabled && context_group.enabled()) {
+			context_group.enable();
+			on_disable();
 		}
 
 		on_config_change();
+		context_group.config_change();
 		return true;
 	}
 
@@ -187,15 +197,16 @@ public abstract class Module extends JavaPlugin {
 	}
 
 	public void register_command(Command command) {
-		if (!getServer().getCommandMap().register(command.getName(), command.get_prefix(), command)) {
-			log.warning("Command " + command.getName() + " was registered using the fallback prefix!");
+		if (!getServer().getCommandMap().register(command.get_name(), command.get_prefix(), command.get_bukkit_command())) {
+			log.warning("Command " + command.get_name() + " was registered using the fallback prefix!");
 			log.warning("Another command with the same name already exists!");
 		}
 	}
 
 	public void unregister_command(Command command) {
-		getServer().getCommandMap().getKnownCommands().values().remove(command);
-		command.unregister(getServer().getCommandMap());
+		var bukkit_command = command.get_bukkit_command();
+		getServer().getCommandMap().getKnownCommands().values().remove(bukkit_command);
+		bukkit_command.unregister(getServer().getCommandMap());
 	}
 
 	public void schedule_task(Runnable task, long delay_ticks) {

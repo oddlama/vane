@@ -13,40 +13,102 @@ import org.oddlama.vane.annotation.command.Aliases;
 import org.oddlama.vane.annotation.command.Name;
 import org.oddlama.vane.annotation.command.VaneCommand;
 import org.oddlama.vane.annotation.lang.LangString;
-import org.oddlama.vane.core.Module;
+import org.oddlama.vane.core.module.Context;
+import org.oddlama.vane.core.module.ModuleComponent;
+import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.core.command.params.AnyParam;
 
 @VaneCommand
-public abstract class Command extends org.bukkit.command.Command implements PluginIdentifiableCommand {
-	private AnyParam<String> root_param;
-	protected Module module;
+public abstract class Command<T> extends ModuleComponent<T> {
+	private class BukkitCommand extends org.bukkit.command.Command implements PluginIdentifiableCommand {
+		public BukkitCommand() {
+			super("");
+		}
 
+		@Override
+		public String getPermission() {
+			return "vane." + Command.this.get_module().get_name() + ".commands." + getName();
+		}
+
+		@Override
+		public String getUsage() {
+			return Command.this.lang_usage;
+		}
+
+		@Override
+		public String getDescription() {
+			return Command.this.lang_description;
+		}
+
+		@Override
+		public Plugin getPlugin() {
+			return Command.this.get_module();
+		}
+
+		@Override
+		public boolean execute(CommandSender sender, String alias, String[] args) {
+			// Ambigous matches will always execute the
+			// first chain based on definition order.
+			try {
+				return root_param.check_accept(prepend(args, alias), 0).apply(this, sender);
+			} catch (Exception e) {
+				sender.sendMessage("§cAn unexpected error occurred. Please examine the console log and/or notify a server administator.");
+				throw e;
+			}
+		}
+
+		@Override
+		public List<String> tabComplete(CommandSender sender, String alias, String[] args) throws IllegalArgumentException {
+			// Don't allow information exfiltration!
+			if (!sender.hasPermission(getPermission())) {
+				return Collections.emptyList();
+			}
+
+			try {
+				return root_param.build_completions(prepend(args, alias), 0);
+			} catch (Exception e) {
+				sender.sendMessage("§cAn unexpected error occurred. Please examine the console log and/or notify a server administator.");
+				throw e;
+			}
+		}
+	}
+
+	// Language
 	@LangString
 	public String lang_usage;
 
 	@LangString
 	public String lang_description;
 
-	public Command(Module module) {
-		super("");
-		this.module = module;
+	// Root parameter
+	private String name;
+	private BukkitCommand bukkit_command;
+	private AnyParam<String> root_param;
+
+	public Command(Context<T> context) {
+		super(context.namespace("command_" + Command.class.getAnnotation(Name.class).value()));
 
 		// Load annotation values
-		var name = getClass().getAnnotation(Name.class).value();
-		setLabel(name);
-		setName(name);
+		name = Command.class.getAnnotation(Name.class).value();
+		bukkit_command = new BukkitCommand(name);
+		bukkit_command.setLabel(name);
+		bukkit_command.setName(name);
 
-		var aliases = getClass().getAnnotation(Aliases.class);
+		var aliases = Command.class.getAnnotation(Aliases.class);
 		if (aliases != null) {
-			setAliases(List.of(aliases.value()));
+			bukkit_command.setAliases(List.of(aliases.value()));
 		}
-
-		// Add localization and config fields to managers
-		module.lang_manager.compile(this, s -> "command_" + name + "_" + s);
-		module.config_manager.compile(this, s -> "command_" + name + "_" + s);
 
 		// Initialize root parameter
 		root_param = new AnyParam<String>(this, "/" + getName(), str -> str);
+	}
+
+	public BukkitCommand get_bukkit_command() {
+		return bukkit_command;
+	}
+
+	public String get_name() {
+		return name;
 	}
 
 	public String get_prefix() {
@@ -58,54 +120,7 @@ public abstract class Command extends org.bukkit.command.Command implements Plug
 	}
 
 	public void print_help(CommandSender sender) {
-		sender.sendMessage("§7/§3" + getName() + " " + getUsage());
-		sender.sendMessage(getDescription());
-	}
-
-	@Override
-	public String getPermission() {
-		return "vane." + module.get_name() + ".commands." + getName();
-	}
-
-	@Override
-	public String getUsage() {
-		return lang_usage;
-	}
-
-	@Override
-	public String getDescription() {
-		return lang_description;
-	}
-
-	@Override
-	public Plugin getPlugin() {
-		return module;
-	}
-
-	@Override
-	public boolean execute(CommandSender sender, String alias, String[] args) {
-		// Ambigous matches will always execute the
-		// first chain based on definition order.
-		try {
-			return root_param.check_accept(prepend(args, alias), 0).apply(this, sender);
-		} catch (Exception e) {
-			sender.sendMessage("§cAn unexpected error occurred. Please examine the console log and/or notify a server administator.");
-			throw e;
-		}
-	}
-
-	@Override
-	public List<String> tabComplete(CommandSender sender, String alias, String[] args) throws IllegalArgumentException {
-		// Don't allow information exfiltration!
-		if (!sender.hasPermission(getPermission())) {
-			return Collections.emptyList();
-		}
-
-		try {
-			return root_param.build_completions(prepend(args, alias), 0);
-		} catch (Exception e) {
-			sender.sendMessage("§cAn unexpected error occurred. Please examine the console log and/or notify a server administator.");
-			throw e;
-		}
+		sender.sendMessage("§7/§3" + bukkit_command.getName() + " " + bukkit_command.getUsage());
+		sender.sendMessage(bukkit_command.getDescription());
 	}
 }
