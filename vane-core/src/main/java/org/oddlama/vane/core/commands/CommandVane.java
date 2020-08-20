@@ -2,16 +2,11 @@ package org.oddlama.vane.core.commands;
 
 import org.bukkit.command.CommandSender;
 
-import org.oddlama.vane.annotation.command.Description;
 import org.oddlama.vane.annotation.command.Name;
-import org.oddlama.vane.annotation.command.Usage;
 import org.oddlama.vane.core.Module;
 import org.oddlama.vane.core.command.Command;
 
-// TODO localized strings....
 @Name("vane")
-@Usage("§areload §8[§bmodule§8]")
-@Description("§areload§7:§r Reloads the given vane module, or all modules if no module is specified.")
 public class CommandVane extends Command {
 	public CommandVane(Module module) {
 		super(module);

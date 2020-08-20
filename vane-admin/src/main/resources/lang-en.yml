@@ -13,3 +13,8 @@
 # DO NOT CHANGE! The version of this language file. Used to determine
 # if the file needs to be updated.
 version: 1
+
+command_spawn_usage: ""
+command_spawn_description: "Teleports you to the spawn."
+command_setspawn_usage: ""
+command_setspawn_description: "Sets the global spawn location to your current position."

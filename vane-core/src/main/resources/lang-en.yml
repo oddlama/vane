@@ -13,3 +13,10 @@
 # DO NOT CHANGE! The version of this language file. Used to determine
 # if the file needs to be updated.
 version: 1
+
+# This message is sent when a command requires a player but is executed
+# by a non-player.
+command_not_a_player: "§cerror:§6 command must be executed by a player!"
+
+command_vane_usage: "§areload §8[§bmodule§8]"
+command_vane_description: "§areload§7:§r Reloads the given vane module, or all modules if no module is specified."

@@ -7,7 +7,7 @@ import java.util.TreeSet;
 
 import org.oddlama.vane.annotation.VaneModule;
 import org.oddlama.vane.annotation.config.ConfigVersion;
-import org.oddlama.vane.annotation.lang.LangMessage;
+import org.oddlama.vane.annotation.lang.LangString;
 import org.oddlama.vane.annotation.lang.LangVersion;
 import org.oddlama.vane.core.commands.CommandVane;
 
@@ -19,8 +19,12 @@ public class Core extends Module {
 	@LangVersion(1)
 	public long lang_version;
 
-	@LangMessage
-	public MessageFormat lang_command_not_a_player;
+	@LangString
+	public String lang_command_not_a_player;
+	@LangString
+	public String lang_command_vane_usage;
+	@LangString
+	public String lang_command_vane_description;
 
 	// Variables
 	private CommandVane command_vane = new CommandVane(this);

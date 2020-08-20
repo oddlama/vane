@@ -37,6 +37,7 @@ public class ConfigManager {
 
 	public ConfigManager(Module module) {
 		this.module = module;
+		compile();
 	}
 
 	public long expected_version() {
@@ -99,7 +100,7 @@ public class ConfigManager {
 	}
 
 	@SuppressWarnings("unchecked")
-	public void compile(Module module) {
+	private void compile() {
 		config_fields = getAllFields(module.getClass()).stream()
 			.filter(this::has_config_annotation)
 		// Compile all annotated fields

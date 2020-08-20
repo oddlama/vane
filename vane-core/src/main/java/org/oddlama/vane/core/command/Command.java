@@ -10,17 +10,18 @@ import org.bukkit.command.PluginIdentifiableCommand;
 import org.bukkit.plugin.Plugin;
 
 import org.oddlama.vane.annotation.command.Aliases;
-import org.oddlama.vane.annotation.command.Description;
 import org.oddlama.vane.annotation.command.Name;
-import org.oddlama.vane.annotation.command.Usage;
 import org.oddlama.vane.annotation.command.VaneCommand;
 import org.oddlama.vane.core.Module;
+import org.oddlama.vane.core.lang.LangStringField;
 import org.oddlama.vane.core.command.params.AnyParam;
 
 @VaneCommand
 public abstract class Command extends org.bukkit.command.Command implements PluginIdentifiableCommand {
 	private AnyParam<String> root_param;
 	protected Module module;
+	private LangStringField lang_usage_field;
+	private LangStringField lang_description_field;
 
 	public Command(Module module) {
 		super("");
@@ -31,11 +32,13 @@ public abstract class Command extends org.bukkit.command.Command implements Plug
 		setLabel(name);
 		setName(name);
 
-		var desc = getClass().getAnnotation(Description.class).value();
-		setDescription(desc);
-
-		var usage = getClass().getAnnotation(Usage.class).value();
-		setUsage(usage);
+		// Load localized fields
+		try {
+			lang_usage_field = module.lang_manager.<LangStringField>get_field("command_" + getName() + "_usage");
+			lang_description_field = module.lang_manager.<LangStringField>get_field("command_" + getName() + "_description");
+		} catch (Exception e) {
+			throw new RuntimeException("Module is missing language field for command!", e);
+		}
 
 		var aliases = getClass().getAnnotation(Aliases.class);
 		if (aliases != null) {
@@ -62,6 +65,16 @@ public abstract class Command extends org.bukkit.command.Command implements Plug
 	@Override
 	public String getPermission() {
 		return "vane." + module.get_name() + ".commands." + getName();
+	}
+
+	@Override
+	public String getUsage() {
+		return lang_usage_field.get();
+	}
+
+	@Override
+	public String getDescription() {
+		return lang_description_field.get();
 	}
 
 	@Override

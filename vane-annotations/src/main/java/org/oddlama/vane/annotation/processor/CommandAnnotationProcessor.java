@@ -12,24 +12,18 @@ import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
 import javax.tools.Diagnostic;
 
-import org.oddlama.vane.annotation.command.Description;
 import org.oddlama.vane.annotation.command.Name;
-import org.oddlama.vane.annotation.command.Usage;
 
 @SupportedAnnotationTypes({
 	"org.oddlama.vane.annotation.command.Aliases",
-	"org.oddlama.vane.annotation.command.Description",
 	"org.oddlama.vane.annotation.command.Name",
-	"org.oddlama.vane.annotation.command.Usage",
 	"org.oddlama.vane.annotation.command.VaneCommand",
 })
 @SupportedSourceVersion(SourceVersion.RELEASE_11)
 public class CommandAnnotationProcessor extends AbstractProcessor {
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	private static final Class<? extends Annotation>[] mandatory_annotations = new Class[] {
-	    Description.class,
 	    Name.class,
-	    Usage.class,
 	};
 
 	@Override

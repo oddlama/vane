@@ -68,10 +68,6 @@ public abstract class Module extends JavaPlugin {
 		// Register in core
 		core.register_module(this);
 
-		// Compile config and lang variables
-		config_manager.compile(this);
-		lang_manager.compile(this);
-
 		log = getLogger();
 		if (!reload_configuration()) {
 			// Force stop server, we encountered an invalid config file version

@@ -22,6 +22,10 @@ public abstract class LangField<T> {
 		field.setAccessible(true);
 	}
 
+	public String get_name() {
+		return name;
+	}
+
 	public String get_yaml_path() {
 		return name;
 	}
@@ -34,4 +38,13 @@ public abstract class LangField<T> {
 
 	public abstract void check_loadable(YamlConfiguration yaml) throws YamlLoadException;
 	public abstract void load(YamlConfiguration yaml);
+
+	@SuppressWarnings("unchecked")
+	public T get() {
+		try {
+			return (T)field.get(module);
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException("Invalid field access on '" + field.getName() + "'. This is a bug.");
+		}
+	}
 }

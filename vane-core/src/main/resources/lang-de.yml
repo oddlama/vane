@@ -15,3 +15,5 @@
 # DO NOT CHANGE! The version of this language file. Used to determine
 # if the file needs to be updated.
 version: 1
+
+command_not_a_player: "§cerror:§6 Befehl muss von einem Spieler ausgeführt werden!"

@@ -28,6 +28,7 @@ public class LangManager {
 
 	public LangManager(Module module) {
 		this.module = module;
+		compile();
 	}
 
 	public long expected_version() {
@@ -82,7 +83,7 @@ public class LangManager {
 	}
 
 	@SuppressWarnings("unchecked")
-	public void compile(Module module) {
+	private void compile() {
 		// Compile all annotated fields
 		lang_fields = getAllFields(module.getClass()).stream()
 			.filter(this::has_lang_annotation)
@@ -115,6 +116,19 @@ public class LangManager {
 		}
 
 		return true;
+	}
+
+	public <T> T get_field(String name) {
+		var field = lang_fields.stream()
+			.filter(f -> f.get_name().equals(name))
+			.findFirst()
+			.orElseThrow(() -> new RuntimeException("Missing lang field lang_" + name));
+
+		//if (!(field instanceof T)) {
+		//	throw new RuntimeException("Invalid lang field type for lang_" + name);
+		//}
+
+		return (T)field;
 	}
 
 	public boolean reload(File file) {
