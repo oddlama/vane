@@ -1,5 +1,6 @@
 package org.oddlama.vane.core.config;
 
+import java.util.function.Function;
 import static org.oddlama.vane.util.MaterialUtil.material_from;
 import static org.oddlama.vane.util.Util.namespaced_key;
 
@@ -21,8 +22,8 @@ import org.oddlama.vane.core.YamlLoadException;
 public class ConfigMaterialSetField extends ConfigField<Set<Material>> {
 	public ConfigMaterialSet annotation;
 
-	public ConfigMaterialSetField(Module module, Field field, ConfigMaterialSet annotation) {
-		super(module, field, "set of materials");
+	public ConfigMaterialSetField(Object owner, Field field, Function<String, String> map_name, ConfigMaterialSet annotation) {
+		super(owner, field, map_name, "set of materials");
 		this.annotation = annotation;
 	}
 
@@ -88,7 +89,7 @@ public class ConfigMaterialSetField extends ConfigField<Set<Material>> {
 		}
 
 		try {
-			field.set(module, set);
+			field.set(owner, set);
 		} catch (IllegalAccessException e) {
 			throw new RuntimeException("Invalid field access on '" + field.getName() + "'. This is a bug.");
 		}

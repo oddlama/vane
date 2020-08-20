@@ -1,5 +1,6 @@
 package org.oddlama.vane.core.config;
 
+import java.util.function.Function;
 import static org.reflections.ReflectionUtils.*;
 
 import java.lang.StringBuilder;
@@ -14,8 +15,8 @@ import org.oddlama.vane.core.YamlLoadException;
 public class ConfigVersionField extends ConfigField<Long> {
 	public ConfigVersion annotation;
 
-	public ConfigVersionField(Module module, Field field, ConfigVersion annotation) {
-		super(module, field, "version id");
+	public ConfigVersionField(Object owner, Field field, Function<String, String> map_name, ConfigVersion annotation) {
+		super(owner, field, map_name, "version id");
 		this.annotation = annotation;
 
 		// Version field should be at the bottom
@@ -45,7 +46,7 @@ public class ConfigVersionField extends ConfigField<Long> {
 
 	public void load(YamlConfiguration yaml) {
 		try {
-			field.setLong(module, yaml.getLong(get_yaml_path()));
+			field.setLong(owner, yaml.getLong(get_yaml_path()));
 		} catch (IllegalAccessException e) {
 			throw new RuntimeException("Invalid field access on '" + field.getName() + "'. This is a bug.");
 		}

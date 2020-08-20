@@ -42,8 +42,9 @@ public abstract class Command extends org.bukkit.command.Command implements Plug
 			setAliases(List.of(aliases.value()));
 		}
 
-		// Add localization fields to language manager
+		// Add localization and config fields to managers
 		module.lang_manager.compile(this, s -> "command_" + name + "_" + s);
+		module.config_manager.compile(this, s -> "command_" + name + "_" + s);
 
 		// Initialize root parameter
 		root_param = new AnyParam<String>(this, "/" + getName(), str -> str);

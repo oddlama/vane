@@ -1,5 +1,6 @@
 package org.oddlama.vane.core.config;
 
+import java.util.function.Function;
 import static org.reflections.ReflectionUtils.*;
 
 import java.lang.StringBuilder;
@@ -14,8 +15,8 @@ import org.oddlama.vane.core.YamlLoadException;
 public class ConfigLongField extends ConfigField<Long> {
 	public ConfigLong annotation;
 
-	public ConfigLongField(Module module, Field field, ConfigLong annotation) {
-		super(module, field, "long");
+	public ConfigLongField(Object owner, Field field, Function<String, String> map_name, ConfigLong annotation) {
+		super(owner, field, map_name, "long");
 		this.annotation = annotation;
 	}
 
@@ -46,7 +47,7 @@ public class ConfigLongField extends ConfigField<Long> {
 
 	public void load(YamlConfiguration yaml) {
 		try {
-			field.setLong(module, yaml.getLong(get_yaml_path()));
+			field.setLong(owner, yaml.getLong(get_yaml_path()));
 		} catch (IllegalAccessException e) {
 			throw new RuntimeException("Invalid field access on '" + field.getName() + "'. This is a bug.");
 		}

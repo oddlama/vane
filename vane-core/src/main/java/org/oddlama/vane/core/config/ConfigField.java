@@ -10,19 +10,21 @@ import org.apache.commons.lang.WordUtils;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import org.oddlama.vane.core.Module;
+import java.util.function.Function;
+import java.lang.Comparable;
 import org.oddlama.vane.core.YamlLoadException;
 
-public abstract class ConfigField<T> {
-	protected Module module;
+public abstract class ConfigField<T> implements Comparable<ConfigField<?>> {
+	protected Object owner;
 	protected Field field;
 	protected String name;
 	protected String type_name;
 	protected int sort_priority = 0;
 
-	public ConfigField(Module module, Field field, String type_name) {
-		this.module = module;
+	public ConfigField(Object owner, Field field, Function<String, String> map_name, String type_name) {
+		this.owner = owner;
 		this.field = field;
-		this.name = field.getName().substring("config_".length());
+		this.name = map_name.apply(field.getName().substring("config_".length()));
 		this.type_name = type_name;
 
 		if (this.name.equals("lang")) {
@@ -36,10 +38,15 @@ public abstract class ConfigField<T> {
 		field.setAccessible(true);
 	}
 
+	public String get_name() {
+		return name;
+	}
+
 	public String get_yaml_path() {
 		return name;
 	}
 
+	@Override
 	public int compareTo(ConfigField<?> other) {
 		if (sort_priority != other.sort_priority) {
 			return sort_priority - other.sort_priority;
@@ -102,4 +109,13 @@ public abstract class ConfigField<T> {
 	public abstract void generate_yaml(StringBuilder builder);
 	public abstract void check_loadable(YamlConfiguration yaml) throws YamlLoadException;
 	public abstract void load(YamlConfiguration yaml);
+
+	@SuppressWarnings("unchecked")
+	public T get() {
+		try {
+			return (T)field.get(owner);
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException("Invalid field access on '" + field.getName() + "'. This is a bug.");
+		}
+	}
 }

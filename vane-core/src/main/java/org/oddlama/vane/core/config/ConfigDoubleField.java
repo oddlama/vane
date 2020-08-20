@@ -8,14 +8,15 @@ import java.lang.reflect.Field;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import org.oddlama.vane.annotation.config.ConfigDouble;
+import java.util.function.Function;
 import org.oddlama.vane.core.Module;
 import org.oddlama.vane.core.YamlLoadException;
 
 public class ConfigDoubleField extends ConfigField<Double> {
 	public ConfigDouble annotation;
 
-	public ConfigDoubleField(Module module, Field field, ConfigDouble annotation) {
-		super(module, field, "double");
+	public ConfigDoubleField(Object owner, Field field, Function<String, String> map_name, ConfigDouble annotation) {
+		super(owner, field, map_name, "double");
 		this.annotation = annotation;
 	}
 
@@ -46,7 +47,7 @@ public class ConfigDoubleField extends ConfigField<Double> {
 
 	public void load(YamlConfiguration yaml) {
 		try {
-			field.setDouble(module, yaml.getDouble(get_yaml_path()));
+			field.setDouble(owner, yaml.getDouble(get_yaml_path()));
 		} catch (IllegalAccessException e) {
 			throw new RuntimeException("Invalid field access on '" + field.getName() + "'. This is a bug.");
 		}

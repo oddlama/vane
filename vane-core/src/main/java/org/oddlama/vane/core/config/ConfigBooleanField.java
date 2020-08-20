@@ -9,13 +9,14 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import org.oddlama.vane.annotation.config.ConfigBoolean;
 import org.oddlama.vane.core.Module;
+import java.util.function.Function;
 import org.oddlama.vane.core.YamlLoadException;
 
 public class ConfigBooleanField extends ConfigField<Boolean> {
 	public ConfigBoolean annotation;
 
-	public ConfigBooleanField(Module module, Field field, ConfigBoolean annotation) {
-		super(module, field, "boolean");
+	public ConfigBooleanField(Object owner, Field field, Function<String, String> map_name, ConfigBoolean annotation) {
+		super(owner, field, map_name, "boolean");
 		this.annotation = annotation;
 	}
 
@@ -37,7 +38,7 @@ public class ConfigBooleanField extends ConfigField<Boolean> {
 
 	public void load(YamlConfiguration yaml) {
 		try {
-			field.setBoolean(module, yaml.getBoolean(get_yaml_path()));
+			field.setBoolean(owner, yaml.getBoolean(get_yaml_path()));
 		} catch (IllegalAccessException e) {
 			throw new RuntimeException("Invalid field access on '" + field.getName() + "'. This is a bug.");
 		}

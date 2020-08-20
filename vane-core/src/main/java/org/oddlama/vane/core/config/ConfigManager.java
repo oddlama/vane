@@ -5,6 +5,8 @@ import static org.reflections.ReflectionUtils.*;
 import java.io.File;
 import java.lang.StringBuilder;
 import java.lang.annotation.Annotation;
+import java.util.function.Function;
+import java.util.Collections;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +39,7 @@ public class ConfigManager {
 
 	public ConfigManager(Module module) {
 		this.module = module;
-		compile();
+		compile(module, s -> s);
 	}
 
 	public long expected_version() {
@@ -59,7 +61,7 @@ public class ConfigManager {
 		}
 	}
 
-	private ConfigField<?> compile_field(Field field) {
+	private ConfigField<?> compile_field(Object owner, Field field, Function<String, String> map_name) {
 		assert_field_prefix(field);
 
 		// Get the annotation
@@ -78,49 +80,28 @@ public class ConfigManager {
 
 		// Return correct wrapper object
 		if (atype.equals(ConfigBoolean.class)) {
-			return new ConfigBooleanField(module, field, (ConfigBoolean)annotation);
+			return new ConfigBooleanField(owner, field, map_name, (ConfigBoolean)annotation);
 		} else if (atype.equals(ConfigDouble.class)) {
-			return new ConfigDoubleField(module, field, (ConfigDouble)annotation);
+			return new ConfigDoubleField(owner, field, map_name, (ConfigDouble)annotation);
 		} else if (atype.equals(ConfigInt.class)) {
-			return new ConfigIntField(module, field, (ConfigInt)annotation);
+			return new ConfigIntField(owner, field, map_name, (ConfigInt)annotation);
 		} else if (atype.equals(ConfigLong.class)) {
-			return new ConfigLongField(module, field, (ConfigLong)annotation);
+			return new ConfigLongField(owner, field, map_name, (ConfigLong)annotation);
 		} else if (atype.equals(ConfigMaterialSet.class)) {
-			return new ConfigMaterialSetField(module, field, (ConfigMaterialSet)annotation);
+			return new ConfigMaterialSetField(owner, field, map_name, (ConfigMaterialSet)annotation);
 		} else if (atype.equals(ConfigString.class)) {
-			return new ConfigStringField(module, field, (ConfigString)annotation);
+			return new ConfigStringField(owner, field, map_name, (ConfigString)annotation);
 		} else if (atype.equals(ConfigVersion.class)) {
-			if (field_version != null) {
-				throw new RuntimeException("There must be exactly one @ConfigVersion field! (found multiple)");
+			if (owner != module) {
+				throw new RuntimeException("@ConfigVersion can only be used inside the main module. This is a bug.");
 			}
-			return field_version = new ConfigVersionField(module, field, (ConfigVersion)annotation);
+			if (field_version != null) {
+				throw new RuntimeException("There must be exactly one @ConfigVersion field! (found multiple). This is a bug.");
+			}
+			return field_version = new ConfigVersionField(owner, field, map_name, (ConfigVersion)annotation);
 		} else {
 			throw new RuntimeException("Missing ConfigField handler for @" + atype.getName() + ". This is a bug.");
 		}
-	}
-
-	@SuppressWarnings("unchecked")
-	private void compile() {
-		config_fields = getAllFields(module.getClass()).stream()
-			.filter(this::has_config_annotation)
-		// Compile all annotated fields
-			.map(this::compile_field)
-		// Sort fields alphabetically, and put version and lang first
-			.sorted((a, b) -> a.compareTo(b))
-			.collect(Collectors.toList());
-
-		if (field_version == null) {
-			throw new RuntimeException("There must be exactly one @ConfigVersion field! (found none)");
-		}
-	}
-
-	public void generate_yaml(StringBuilder builder) {
-		builder.append("# vim: set tabstop=2 softtabstop=0 expandtab shiftwidth=2:\n");
-
-		config_fields.forEach(f -> {
-			builder.append("\n");
-			f.generate_yaml(builder);
-		});
 	}
 
 	private boolean verify_version(File file, long version) {
@@ -145,6 +126,45 @@ public class ConfigManager {
 		}
 
 		return true;
+	}
+
+	@SuppressWarnings("unchecked")
+	public void compile(Object owner, Function<String, String> map_name) {
+		// Compile all annotated fields
+		config_fields.addAll(getAllFields(owner.getClass()).stream()
+			.filter(this::has_config_annotation)
+			.map(f -> compile_field(owner, f, map_name))
+			.collect(Collectors.toList()));
+
+		// Sort fields alphabetically, and by precedence (e.g. put version last and lang first)
+		Collections.sort(config_fields);
+
+		if (owner == module && field_version == null) {
+			throw new RuntimeException("There must be exactly one @ConfigVersion field! (found none). This is a bug.");
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T> T get_field(String name) {
+		var field = config_fields.stream()
+			.filter(f -> f.get_name().equals(name))
+			.findFirst()
+			.orElseThrow(() -> new RuntimeException("Missing config field config_" + name));
+
+		try {
+			return (T)field;
+		} catch (ClassCastException e) {
+			throw new RuntimeException("Invalid config field type for config_" + name, e);
+		}
+	}
+
+	public void generate_yaml(StringBuilder builder) {
+		builder.append("# vim: set tabstop=2 softtabstop=0 expandtab shiftwidth=2:\n");
+
+		config_fields.forEach(f -> {
+			builder.append("\n");
+			f.generate_yaml(builder);
+		});
 	}
 
 	public boolean reload(File file) {

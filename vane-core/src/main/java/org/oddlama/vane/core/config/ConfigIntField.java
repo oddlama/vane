@@ -1,5 +1,7 @@
 package org.oddlama.vane.core.config;
 
+import java.util.function.Function;
+
 import static org.reflections.ReflectionUtils.*;
 
 import java.lang.StringBuilder;
@@ -14,8 +16,8 @@ import org.oddlama.vane.core.YamlLoadException;
 public class ConfigIntField extends ConfigField<Integer> {
 	public ConfigInt annotation;
 
-	public ConfigIntField(Module module, Field field, ConfigInt annotation) {
-		super(module, field, "int");
+	public ConfigIntField(Object owner, Field field, Function<String, String> map_name, ConfigInt annotation) {
+		super(owner, field, map_name, "int");
 		this.annotation = annotation;
 	}
 
@@ -46,7 +48,7 @@ public class ConfigIntField extends ConfigField<Integer> {
 
 	public void load(YamlConfiguration yaml) {
 		try {
-			field.setInt(module, yaml.getInt(get_yaml_path()));
+			field.setInt(owner, yaml.getInt(get_yaml_path()));
 		} catch (IllegalAccessException e) {
 			throw new RuntimeException("Invalid field access on '" + field.getName() + "'. This is a bug.");
 		}

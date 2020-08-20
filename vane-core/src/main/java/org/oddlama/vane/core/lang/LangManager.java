@@ -75,10 +75,10 @@ public class LangManager {
 			return new LangMessageField(owner, field, map_name, (LangMessage)annotation);
 		} else if (atype.equals(LangVersion.class)) {
 			if (owner != module) {
-				throw new RuntimeException("@LangVersion can only be used inside a module");
+				throw new RuntimeException("@LangVersion can only be used inside the main module. This is a bug.");
 			}
 			if (field_version != null) {
-				throw new RuntimeException("There must be exactly one @LangVersion field! (found multiple)");
+				throw new RuntimeException("There must be exactly one @LangVersion field! (found multiple). This is a bug.");
 			}
 			return field_version = new LangVersionField(owner, field, map_name, (LangVersion)annotation);
 		} else {
@@ -118,7 +118,7 @@ public class LangManager {
 			.collect(Collectors.toList()));
 
 		if (owner == module && field_version == null) {
-			throw new RuntimeException("There must be exactly one @LangVersion field! (found none)");
+			throw new RuntimeException("There must be exactly one @LangVersion field! (found none). This is a bug.");
 		}
 	}
 
