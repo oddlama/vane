@@ -1,15 +1,14 @@
 package org.oddlama.vane.core.config;
 
-import java.util.function.Function;
 import static org.reflections.ReflectionUtils.*;
 
 import java.lang.StringBuilder;
 import java.lang.reflect.Field;
+import java.util.function.Function;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import org.oddlama.vane.annotation.config.ConfigLong;
-import org.oddlama.vane.core.Module;
 import org.oddlama.vane.core.YamlLoadException;
 
 public class ConfigLongField extends ConfigField<Long> {

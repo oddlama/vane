@@ -3,11 +3,11 @@ package org.oddlama.vane.core.lang;
 import static org.reflections.ReflectionUtils.*;
 
 import java.lang.reflect.Field;
+import java.util.function.Function;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import org.oddlama.vane.annotation.lang.LangString;
-import java.util.function.Function;
 import org.oddlama.vane.core.YamlLoadException;
 
 public class LangStringField extends LangField<String> {

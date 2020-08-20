@@ -5,11 +5,11 @@ import static org.reflections.ReflectionUtils.*;
 import java.io.File;
 import java.lang.StringBuilder;
 import java.lang.annotation.Annotation;
-import java.util.function.Function;
-import java.util.Collections;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.bukkit.configuration.file.YamlConfiguration;

@@ -4,12 +4,11 @@ import static org.reflections.ReflectionUtils.*;
 
 import java.lang.StringBuilder;
 import java.lang.reflect.Field;
+import java.util.function.Function;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import org.oddlama.vane.annotation.config.ConfigBoolean;
-import org.oddlama.vane.core.Module;
-import java.util.function.Function;
 import org.oddlama.vane.core.YamlLoadException;
 
 public class ConfigBooleanField extends ConfigField<Boolean> {

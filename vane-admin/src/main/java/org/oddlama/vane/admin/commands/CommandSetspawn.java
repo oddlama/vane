@@ -1,6 +1,5 @@
 package org.oddlama.vane.admin.commands;
 
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import org.oddlama.vane.annotation.command.Name;

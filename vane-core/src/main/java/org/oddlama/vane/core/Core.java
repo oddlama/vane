@@ -1,6 +1,5 @@
 package org.oddlama.vane.core;
 
-import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.SortedSet;
 import java.util.TreeSet;

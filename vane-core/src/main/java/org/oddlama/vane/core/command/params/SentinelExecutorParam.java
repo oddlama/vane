@@ -14,8 +14,8 @@ import org.oddlama.vane.core.command.Param;
 import org.oddlama.vane.core.command.check.CheckResult;
 import org.oddlama.vane.core.command.check.ErrorCheckResult;
 import org.oddlama.vane.core.command.check.ExecutorCheckResult;
-import org.oddlama.vane.core.functional.Function1;
 import org.oddlama.vane.core.functional.ErasedFunctor;
+import org.oddlama.vane.core.functional.Function1;
 import org.oddlama.vane.core.functional.GenericsFinder;
 
 public class SentinelExecutorParam<T> extends BaseParam implements Executor {

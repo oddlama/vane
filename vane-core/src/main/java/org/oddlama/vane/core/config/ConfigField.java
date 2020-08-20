@@ -2,16 +2,15 @@ package org.oddlama.vane.core.config;
 
 import static org.reflections.ReflectionUtils.*;
 
+import java.lang.Comparable;
 import java.lang.StringBuilder;
 import java.lang.reflect.Field;
+import java.util.function.Function;
 
 import org.apache.commons.lang.WordUtils;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import org.oddlama.vane.core.Module;
-import java.util.function.Function;
-import java.lang.Comparable;
 import org.oddlama.vane.core.YamlLoadException;
 
 public abstract class ConfigField<T> implements Comparable<ConfigField<?>> {

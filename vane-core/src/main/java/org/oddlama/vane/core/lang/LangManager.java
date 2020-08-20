@@ -3,11 +3,11 @@ package org.oddlama.vane.core.lang;
 import static org.reflections.ReflectionUtils.*;
 
 import java.io.File;
-import java.util.function.Function;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.bukkit.configuration.file.YamlConfiguration;
