@@ -2,10 +2,6 @@ package org.oddlama.vane.util;
 
 import java.util.Arrays;
 import java.util.Map;
-import java.lang.reflect.Method;
-import java.lang.reflect.Field;
-import java.lang.reflect.Proxy;
-import java.lang.annotation.Annotation;
 
 import org.bukkit.NamespacedKey;
 
@@ -38,33 +34,5 @@ public class Util {
 		arr = Arrays.copyOf(arr, n + 1);
 		arr[n] = element;
 		return arr;
-	}
-
-	/**
-	 * Changes the annotation value for the given key of the given annotation to new_value and returns
-	 * the previous value.
-	 */
-	@SuppressWarnings("unchecked")
-	public static Object change_annotation_value(Annotation annotation, String key, Object new_value) {
-		Object handler = Proxy.getInvocationHandler(annotation);
-		Field f;
-		try {
-			f = handler.getClass().getDeclaredField("memberValues");
-		} catch (NoSuchFieldException | SecurityException e) {
-			throw new IllegalStateException(e);
-		}
-		f.setAccessible(true);
-		Map<String, Object> member_values;
-		try {
-			member_values = (Map<String, Object>)f.get(handler);
-		} catch (IllegalArgumentException | IllegalAccessException e) {
-			throw new IllegalStateException(e);
-		}
-		var old_value = member_values.get(key);
-		if (old_value == null || old_value.getClass() != new_value.getClass()) {
-			throw new IllegalArgumentException();
-		}
-		member_values.put(key, new_value);
-		return old_value;
 	}
 }

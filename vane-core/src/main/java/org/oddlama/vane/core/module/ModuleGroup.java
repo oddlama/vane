@@ -1,7 +1,6 @@
 package org.oddlama.vane.core.module;
 
 import static org.oddlama.vane.util.Util.prepend;
-import static org.oddlama.vane.util.Util.change_annotation_value;
 
 import java.util.Collections;
 import java.util.List;
@@ -18,14 +17,24 @@ import org.oddlama.vane.annotation.config.ConfigBoolean;
 import org.oddlama.vane.annotation.lang.LangString;
 import org.oddlama.vane.core.command.params.AnyParam;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.Map;
 /**
  * A ModuleGroup is a ModuleContext that automatically adds an enable variable
  * with description to the context. If the group is disabled, on_enable() will
  * not be called.
  */
 public class ModuleGroup<T extends Module<T>> extends ModuleContext<T> {
-	@ConfigBoolean(def = true, desc = "<will be overwritten at runtime>")
+	@ConfigBoolean(def = true, desc = "")
 	private boolean config_enabled;
+	private String config_enabled_desc;
+
+	// Having the annotation desc = "" will cause this method to be called instead.
+	public String config_enabled_desc() {
+		return config_enabled_desc;
+	}
 
 	public ModuleGroup(Context<T> context, String namespace, String description) {
 		this(context, namespace, description, true);
@@ -33,16 +42,7 @@ public class ModuleGroup<T extends Module<T>> extends ModuleContext<T> {
 
 	public ModuleGroup(Context<T> context, String namespace, String description, boolean compile_self) {
 		super(context, namespace, false);
-
-		// Set description of config_enabled
-		try {
-			Field field = getClass().getDeclaredField("config_enabled");
-			field.setAccessible(true);
-			final ConfigBoolean annotation = field.getAnnotation(ConfigBoolean.class);
-			change_annotation_value(annotation, "value", description);
-		} catch (NoSuchFieldException e) {
-			throw new RuntimeException("Could not find config_enabled field on " + getClass().getName() + "! This is a bug.");
-		}
+		this.config_enabled_desc = description;
 
 		if (compile_self) {
 			compile_self();
