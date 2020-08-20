@@ -3,21 +3,21 @@ package org.oddlama.vane.core.lang;
 import static org.reflections.ReflectionUtils.*;
 
 import java.lang.reflect.Field;
+import java.util.function.Function;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import org.oddlama.vane.core.Module;
 import org.oddlama.vane.core.YamlLoadException;
 
 public abstract class LangField<T> {
-	protected Module module;
+	protected Object owner;
 	protected Field field;
 	protected String name;
 
-	public LangField(Module module, Field field) {
-		this.module = module;
+	public LangField(Object owner, Field field, Function<String, String> map_name) {
+		this.owner = owner;
 		this.field = field;
-		this.name = field.getName().substring("lang_".length());
+		this.name = map_name.apply(field.getName().substring("lang_".length()));
 
 		field.setAccessible(true);
 	}
@@ -42,7 +42,7 @@ public abstract class LangField<T> {
 	@SuppressWarnings("unchecked")
 	public T get() {
 		try {
-			return (T)field.get(module);
+			return (T)field.get(owner);
 		} catch (IllegalAccessException e) {
 			throw new RuntimeException("Invalid field access on '" + field.getName() + "'. This is a bug.");
 		}

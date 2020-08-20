@@ -7,14 +7,14 @@ import java.lang.reflect.Field;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import org.oddlama.vane.annotation.lang.LangString;
-import org.oddlama.vane.core.Module;
+import java.util.function.Function;
 import org.oddlama.vane.core.YamlLoadException;
 
 public class LangStringField extends LangField<String> {
 	public LangString annotation;
 
-	public LangStringField(Module module, Field field, LangString annotation) {
-		super(module, field);
+	public LangStringField(Object owner, Field field, Function<String, String> map_name, LangString annotation) {
+		super(owner, field, map_name);
 		this.annotation = annotation;
 	}
 
@@ -29,7 +29,7 @@ public class LangStringField extends LangField<String> {
 
 	public void load(YamlConfiguration yaml) {
 		try {
-			field.set(module, yaml.getString(get_yaml_path()));
+			field.set(owner, yaml.getString(get_yaml_path()));
 		} catch (IllegalAccessException e) {
 			throw new RuntimeException("Invalid field access on '" + field.getName() + "'. This is a bug.");
 		}

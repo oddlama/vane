@@ -3,6 +3,7 @@ package org.oddlama.vane.core.lang;
 import static org.reflections.ReflectionUtils.*;
 
 import java.io.File;
+import java.util.function.Function;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ public class LangManager {
 
 	public LangManager(Module module) {
 		this.module = module;
-		compile();
+		compile(module, s -> s);
 	}
 
 	public long expected_version() {
@@ -50,7 +51,7 @@ public class LangManager {
 		}
 	}
 
-	private LangField<?> compile_field(Field field) {
+	private LangField<?> compile_field(Object owner, Field field, Function<String, String> map_name) {
 		assert_field_prefix(field);
 
 		// Get the annotation
@@ -69,29 +70,19 @@ public class LangManager {
 
 		// Return correct wrapper object
 		if (atype.equals(LangString.class)) {
-			return new LangStringField(module, field, (LangString)annotation);
+			return new LangStringField(owner, field, map_name, (LangString)annotation);
 		} else if (atype.equals(LangMessage.class)) {
-			return new LangMessageField(module, field, (LangMessage)annotation);
+			return new LangMessageField(owner, field, map_name, (LangMessage)annotation);
 		} else if (atype.equals(LangVersion.class)) {
+			if (owner != module) {
+				throw new RuntimeException("@LangVersion can only be used inside a module");
+			}
 			if (field_version != null) {
 				throw new RuntimeException("There must be exactly one @LangVersion field! (found multiple)");
 			}
-			return field_version = new LangVersionField(module, field, (LangVersion)annotation);
+			return field_version = new LangVersionField(owner, field, map_name, (LangVersion)annotation);
 		} else {
 			throw new RuntimeException("Missing LangField handler for @" + atype.getName() + ". This is a bug.");
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	private void compile() {
-		// Compile all annotated fields
-		lang_fields = getAllFields(module.getClass()).stream()
-			.filter(this::has_lang_annotation)
-			.map(this::compile_field)
-			.collect(Collectors.toList());
-
-		if (field_version == null) {
-			throw new RuntimeException("There must be exactly one @LangVersion field! (found none)");
 		}
 	}
 
@@ -118,17 +109,31 @@ public class LangManager {
 		return true;
 	}
 
+	@SuppressWarnings("unchecked")
+	public void compile(Object owner, Function<String, String> map_name) {
+		// Compile all annotated fields
+		lang_fields.addAll(getAllFields(owner.getClass()).stream()
+			.filter(this::has_lang_annotation)
+			.map(f -> compile_field(owner, f, map_name))
+			.collect(Collectors.toList()));
+
+		if (owner == module && field_version == null) {
+			throw new RuntimeException("There must be exactly one @LangVersion field! (found none)");
+		}
+	}
+
+	@SuppressWarnings("unchecked")
 	public <T> T get_field(String name) {
 		var field = lang_fields.stream()
 			.filter(f -> f.get_name().equals(name))
 			.findFirst()
 			.orElseThrow(() -> new RuntimeException("Missing lang field lang_" + name));
 
-		//if (!(field instanceof T)) {
-		//	throw new RuntimeException("Invalid lang field type for lang_" + name);
-		//}
-
-		return (T)field;
+		try {
+			return (T)field;
+		} catch (ClassCastException e) {
+			throw new RuntimeException("Invalid lang field type for lang_" + name, e);
+		}
 	}
 
 	public boolean reload(File file) {

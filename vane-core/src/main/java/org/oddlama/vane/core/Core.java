@@ -21,10 +21,6 @@ public class Core extends Module {
 
 	@LangString
 	public String lang_command_not_a_player;
-	@LangString
-	public String lang_command_vane_usage;
-	@LangString
-	public String lang_command_vane_description;
 
 	// Variables
 	private CommandVane command_vane = new CommandVane(this);

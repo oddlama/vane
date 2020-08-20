@@ -15,13 +15,18 @@ import org.oddlama.vane.annotation.command.VaneCommand;
 import org.oddlama.vane.core.Module;
 import org.oddlama.vane.core.lang.LangStringField;
 import org.oddlama.vane.core.command.params.AnyParam;
+import org.oddlama.vane.annotation.lang.LangString;
 
 @VaneCommand
 public abstract class Command extends org.bukkit.command.Command implements PluginIdentifiableCommand {
 	private AnyParam<String> root_param;
 	protected Module module;
-	private LangStringField lang_usage_field;
-	private LangStringField lang_description_field;
+
+	@LangString
+	public String lang_usage;
+
+	@LangString
+	public String lang_description;
 
 	public Command(Module module) {
 		super("");
@@ -32,18 +37,13 @@ public abstract class Command extends org.bukkit.command.Command implements Plug
 		setLabel(name);
 		setName(name);
 
-		// Load localized fields
-		try {
-			lang_usage_field = module.lang_manager.<LangStringField>get_field("command_" + getName() + "_usage");
-			lang_description_field = module.lang_manager.<LangStringField>get_field("command_" + getName() + "_description");
-		} catch (Exception e) {
-			throw new RuntimeException("Module is missing language field for command!", e);
-		}
-
 		var aliases = getClass().getAnnotation(Aliases.class);
 		if (aliases != null) {
 			setAliases(List.of(aliases.value()));
 		}
+
+		// Add localization fields to language manager
+		module.lang_manager.compile(this, s -> "command_" + name + "_" + s);
 
 		// Initialize root parameter
 		root_param = new AnyParam<String>(this, "/" + getName(), str -> str);
@@ -69,12 +69,12 @@ public abstract class Command extends org.bukkit.command.Command implements Plug
 
 	@Override
 	public String getUsage() {
-		return lang_usage_field.get();
+		return lang_usage;
 	}
 
 	@Override
 	public String getDescription() {
-		return lang_description_field.get();
+		return lang_description;
 	}
 
 	@Override

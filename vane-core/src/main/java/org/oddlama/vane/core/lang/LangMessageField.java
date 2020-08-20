@@ -4,18 +4,18 @@ import static org.reflections.ReflectionUtils.*;
 
 import java.lang.reflect.Field;
 import java.text.MessageFormat;
+import java.util.function.Function;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import org.oddlama.vane.annotation.lang.LangMessage;
-import org.oddlama.vane.core.Module;
 import org.oddlama.vane.core.YamlLoadException;
 
 public class LangMessageField extends LangField<MessageFormat> {
 	public LangMessage annotation;
 
-	public LangMessageField(Module module, Field field, LangMessage annotation) {
-		super(module, field);
+	public LangMessageField(Object owner, Field field, Function<String, String> map_name, LangMessage annotation) {
+		super(owner, field, map_name);
 		this.annotation = annotation;
 	}
 
@@ -30,7 +30,7 @@ public class LangMessageField extends LangField<MessageFormat> {
 
 	public void load(YamlConfiguration yaml) {
 		try {
-			field.set(module, new MessageFormat(yaml.getString(get_yaml_path())));
+			field.set(owner, new MessageFormat(yaml.getString(get_yaml_path())));
 		} catch (IllegalAccessException e) {
 			throw new RuntimeException("Invalid field access on '" + field.getName() + "'. This is a bug.");
 		}
