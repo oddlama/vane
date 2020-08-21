@@ -45,7 +45,14 @@ public interface Param {
 		return true;
 	}
 
+	default public boolean is_executor() {
+		return false;
+	}
+
 	default public void add_param(Param param) {
+		if (param.is_executor() && get_params().stream().anyMatch(p -> p.is_executor())) {
+			throw new RuntimeException("Cannot define multiple executors for the same parameter! This is a bug.");
+		}
 		get_params().add(param);
 	}
 

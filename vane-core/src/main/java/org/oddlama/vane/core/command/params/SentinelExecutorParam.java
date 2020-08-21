@@ -65,13 +65,26 @@ public class SentinelExecutorParam<T> extends BaseParam implements Executor {
 	}
 
 	@Override
+	public boolean is_executor() {
+		return true;
+	}
+
+	@Override
 	public boolean execute(Command<?> command, CommandSender sender, List<Object> parsed_args) {
 		// Replace command name argument (unused) with sender
 		parsed_args.set(0, sender);
 
+		// Disable logger while reflecting on the lambda.
+		// FIXME? This is an ugly workaround to prevent Spigot from displaying
+		// a warning, that we load a class from a plugin we do not depend on,
+		// but this is absolutely intended, and errornous behavior in any way.
+		var log = command.get_module().core.log;
+		var saved_filter = log.getFilter();
+		log.setFilter(record -> false);
 		// Get method reflection
 		var gf = (GenericsFinder)function;
 		var method = gf.method();
+		log.setFilter(saved_filter);
 
 		// Check method signature against given argument types
 		check_signature(method, parsed_args);
