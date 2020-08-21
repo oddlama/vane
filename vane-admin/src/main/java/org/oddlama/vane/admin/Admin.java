@@ -10,6 +10,16 @@ import org.oddlama.vane.core.module.ModuleGroup;
 import org.oddlama.vane.admin.commands.CommandSetspawn;
 import org.oddlama.vane.admin.commands.CommandSpawn;
 
+import org.bukkit.GameMode;
+import org.bukkit.World;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerKickEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+
 @VaneModule("admin")
 public class Admin extends Module<Admin> {
 	// Configuration
@@ -29,4 +39,19 @@ public class Admin extends Module<Admin> {
 		new AutostopListener(autostop_group);
 		//new CommandAutostop(autostop_group);
 	}
+
+	//@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	//public static void on_player_join(PlayerJoinEvent event) {
+	//	event.setJoinMessage(lang_player_join.format("%player%", event.getPlayer().getPlayerListName()));
+	//}
+
+	//@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	//public static void on_player_kick(PlayerKickEvent event) {
+	//	event.setLeaveMessage(Configuration.CHAT_PLAYER_KICK.get().replace("%player%", event.getPlayer().getPlayerListName()));
+	//}
+
+	//@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	//public static void on_player_quit(PlayerQuitEvent event) {
+	//	event.setQuitMessage(Configuration.CHAT_PLAYER_QUIT.get().replace("%player%", event.getPlayer().getPlayerListName()));
+	//}
 }

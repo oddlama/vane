@@ -15,14 +15,14 @@
 version: 1
 
 # This message is broadcast in the world, when a player enters the bed.
-# {0} = player name
-# {1} = percentage of sleeping players
+# {0}: player name
+# {1}: percentage of sleeping players
 player_bed_enter: "§6{0}§e is now sleeping (§6{1,number,#.##}%§e)"
 
 # This message is broadcast in the world, when a player leaves the bed early,
 # before time was advanced.
-# {0} = player name
-# {1} = percentage of sleeping players
+# {0}: player name
+# {1}: percentage of sleeping players
 player_bed_leave: "§6{0}§e feels rested (§6{1,number,#.##}%§e)"
 
 # Message sent when enough players were sleeping and time was advanced.

@@ -3,7 +3,6 @@ package org.oddlama.vane.bedtime;
 import static org.oddlama.vane.util.WorldUtil.broadcast;
 import static org.oddlama.vane.util.WorldUtil.change_time_smoothly;
 
-import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.UUID;
@@ -26,6 +25,7 @@ import org.oddlama.vane.annotation.lang.LangString;
 import org.oddlama.vane.annotation.lang.LangVersion;
 import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.util.Nms;
+import org.oddlama.vane.util.Message;
 
 @VaneModule("bedtime")
 public class Bedtime extends Module<Bedtime> {
@@ -48,9 +48,9 @@ public class Bedtime extends Module<Bedtime> {
 	public long lang_version;
 
 	@LangMessage
-	MessageFormat lang_player_bed_enter;
+	Message lang_player_bed_enter;
 	@LangMessage
-	MessageFormat lang_player_bed_leave;
+	Message lang_player_bed_leave;
 	@LangString
 	String lang_sleep_success;
 
@@ -132,9 +132,7 @@ public class Bedtime extends Module<Bedtime> {
 
 		// Broadcast sleeping message
 		var percent = get_percentage_sleeping(world);
-		broadcast(world, lang_player_bed_enter.format(new Object[] {
-		                               player.getName(),
-		                               100.0 * percent}));
+		broadcast(world, lang_player_bed_enter.format(player.getName(), 100.0 * percent));
 	}
 
 	private void remove_sleeping(Player player) {
@@ -151,9 +149,7 @@ public class Bedtime extends Module<Bedtime> {
 		if (sleepers.remove(player.getUniqueId())) {
 			// Broadcast sleeping message
 			var percent = get_percentage_sleeping(world);
-			broadcast(world, lang_player_bed_leave.format(new Object[] {
-			                               player.getName(),
-			                               100.0 * percent}));
+			broadcast(world, lang_player_bed_leave.format(player.getName(), 100.0 * percent));
 		}
 	}
 

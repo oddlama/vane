@@ -50,7 +50,7 @@ public class ConfigAndLangProcessor extends AbstractProcessor {
 		map.put("org.oddlama.vane.annotation.config.ConfigLong", "long");
 		map.put("org.oddlama.vane.annotation.config.ConfigString", "java.lang.String");
 		map.put("org.oddlama.vane.annotation.config.ConfigVersion", "long");
-		map.put("org.oddlama.vane.annotation.lang.LangMessage", "java.text.MessageFormat");
+		map.put("org.oddlama.vane.annotation.lang.LangMessage", "org.oddlama.vane.util.Message");
 		map.put("org.oddlama.vane.annotation.lang.LangString", "java.lang.String");
 		map.put("org.oddlama.vane.annotation.lang.LangVersion", "long");
 		field_type_mapping = Collections.unmodifiableMap(map);
