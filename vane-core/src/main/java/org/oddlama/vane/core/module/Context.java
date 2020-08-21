@@ -20,7 +20,7 @@ import org.oddlama.vane.core.command.params.AnyParam;
  * grouping of config and language variables with a common namespace.
  */
 public interface Context<T extends Module<T>> {
-	default public String append_namespace(String ns1, String ns2) {
+	public static String append_namespace(String ns1, String ns2) {
 		if (ns1.isEmpty()) {
 			return ns2;
 		}

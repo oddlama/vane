@@ -25,7 +25,7 @@ import org.oddlama.vane.core.Core;
 import org.oddlama.vane.core.config.ConfigManager;
 import org.oddlama.vane.core.lang.LangManager;
 
-public abstract class Module<T extends Module<T>> extends JavaPlugin implements Context<T> {
+public abstract class Module<T extends Module<T>> extends JavaPlugin implements Context<T>, org.bukkit.event.Listener {
 	public Core core;
 	public Logger log;
 
@@ -130,11 +130,13 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 
 		// Disable plugin if needed
 		if (was_enabled && !context_group.enabled()) {
+			register_listener(this);
 			on_enable();
 			context_group.disable();
 		} else if (!was_enabled && context_group.enabled()) {
 			context_group.enable();
 			on_disable();
+			unregister_listener(this);
 		}
 
 		on_config_change();

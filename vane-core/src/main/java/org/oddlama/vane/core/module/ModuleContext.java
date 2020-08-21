@@ -43,7 +43,7 @@ public class ModuleContext<T extends Module<T>> implements Context<T> {
 	}
 
 	private String get_namespaced_variable(String variable) {
-		return namespace + "_" + variable;
+		return Context.append_namespace(namespace, variable);
 	}
 
 	protected void compile_self() {
@@ -94,11 +94,11 @@ public class ModuleContext<T extends Module<T>> implements Context<T> {
 	@Override
 	public void disable() {
 		on_disable();
-		for (var component : components) {
-			component.on_disable();
+		for (int i = components.size() - 1; i >= 0; --i) {
+			components.get(i).on_disable();
 		}
-		for (var subcontext : subcontexts) {
-			subcontext.disable();
+		for (int i = subcontexts.size() - 1; i >= 0; --i) {
+			subcontexts.get(i).disable();
 		}
 	}
 
