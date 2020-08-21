@@ -14,6 +14,11 @@
 # if the file needs to be updated.
 version: 1
 
+player_chat_format: "{0}{1}§7:§r {2}"
+player_join: "§6{0}§e hat den Server betreten"
+player_kick: "§6{0}§e wurde vom Server §lgekicked"
+player_quit: "§6{0}§e hat den Server verlassen"
+
 command_spawn_usage: ""
 command_spawn_description: "Teleportiert dich zum Spawn."
 command_setspawn_usage: ""

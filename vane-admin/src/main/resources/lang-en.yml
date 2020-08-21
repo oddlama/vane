@@ -14,6 +14,12 @@
 # if the file needs to be updated.
 version: 1
 
+# This is the format for player chat messages
+# {0}: color tag based on permission level
+# {1}: player name
+# {2}: message
+player_chat_format: "{0}{1}§7:§r {2}"
+
 # This message is sent when a player joins the server
 # {0}: player name
 player_join: "§6{0}§e has joined the server"
@@ -25,12 +31,6 @@ player_kick: "§6{0}§e was §lkicked§r§e from the server"
 # This message is sent when a player leaves the server
 # {0}: player name
 player_quit: "§6{0}§e has left the server"
-
-# This is the format for player chat messages
-# {0}: color tag based on permission level
-# {1}: player name
-# {2}: message
-chat_message: "{0}{1}§7:§r {2}"
 
 command_spawn_usage: ""
 command_spawn_description: "Teleports you to the spawn."

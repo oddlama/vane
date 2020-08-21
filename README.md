@@ -75,6 +75,10 @@ by letting them vouch for the new player)
 
 #### IDEAS
 
+- permission groups
+  - vane.trifles.command.home (item!! -> back death?)
+  - vane.trifles.command.spawn
+
 - full netherite armor for one enchantment 
 - dragon egg (catalyst?)
 - nether star
