@@ -89,15 +89,19 @@ public abstract class Command<T extends Module<T>> extends ModuleComponent<T> {
 	private AnyParam<String> root_param;
 
 	public Command(Context<T> context) {
-		super(context.namespace("command_" + Command.class.getAnnotation(Name.class).value()));
+		super(null);
+
+		// Make namespace
+		context = context.namespace("command_" + getClass().getAnnotation(Name.class).value());
+		set_context(context);
 
 		// Load annotation values
-		name = Command.class.getAnnotation(Name.class).value();
+		name = getClass().getAnnotation(Name.class).value();
 		bukkit_command = new BukkitCommand(name);
 		bukkit_command.setLabel(name);
 		bukkit_command.setName(name);
 
-		var aliases = Command.class.getAnnotation(Aliases.class);
+		var aliases = getClass().getAnnotation(Aliases.class);
 		if (aliases != null) {
 			bukkit_command.setAliases(List.of(aliases.value()));
 		}

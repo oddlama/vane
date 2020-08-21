@@ -16,12 +16,21 @@ import org.oddlama.vane.annotation.lang.LangString;
 import org.oddlama.vane.core.command.params.AnyParam;
 
 public abstract class ModuleComponent<T extends Module<T>> {
-	private Context<T> context;
+	private Context<T> context = null;
 
 	public ModuleComponent(Context<T> context) {
-		this.context = context;
+		if (context == null) {
+			// Delay until set_context is called.
+			return;
+		}
+		set_context(context);
+	}
 
-		// Compile localization and config fields, and register callbacks
+	public void set_context(Context<T> context) {
+		if (this.context != null) {
+			throw new RuntimeException("Cannot replace existing context! This is a bug.");
+		}
+		this.context = context;
 		context.compile(this);
 	}
 

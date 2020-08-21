@@ -43,7 +43,7 @@ public class ModuleContext<T extends Module<T>> implements Context<T> {
 	}
 
 	private String get_namespaced_variable(String variable) {
-		return namespace + variable;
+		return namespace + "_" + variable;
 	}
 
 	protected void compile_self() {

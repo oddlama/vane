@@ -20,14 +20,21 @@ import org.oddlama.vane.core.command.params.AnyParam;
  * grouping of config and language variables with a common namespace.
  */
 public interface Context<T extends Module<T>> {
+	default public String append_namespace(String ns1, String ns2) {
+		if (ns1.isEmpty()) {
+			return ns2;
+		}
+		return ns1 + "_" + ns2;
+	}
+
 	/** create a subcontext namespace */
 	default public ModuleContext<T> namespace(String namespace) {
-		return new ModuleContext<T>(this, this.get_namespace() + "_" + namespace);
+		return new ModuleContext<T>(this, append_namespace(this.get_namespace(), namespace));
 	}
 
 	/** create a subcontext group */
 	default public ModuleGroup<T> group(String namespace, String description) {
-		return new ModuleGroup<T>(this, this.get_namespace() + "_" + namespace, description);
+		return new ModuleGroup<T>(this, append_namespace(this.get_namespace(), namespace), description);
 	}
 
 	/**
