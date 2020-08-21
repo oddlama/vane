@@ -128,15 +128,16 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 			return false;
 		}
 
-		// Disable plugin if needed
 		if (was_enabled && !context_group.enabled()) {
-			register_listener(this);
-			on_enable();
+			// Disable plugin if needed
+			unregister_listener(this);
+			on_disable();
 			context_group.disable();
 		} else if (!was_enabled && context_group.enabled()) {
+			// Enable plugin if needed
 			context_group.enable();
-			on_disable();
-			unregister_listener(this);
+			on_enable();
+			register_listener(this);
 		}
 
 		on_config_change();

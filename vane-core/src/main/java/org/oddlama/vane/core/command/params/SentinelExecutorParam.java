@@ -21,11 +21,19 @@ import org.oddlama.vane.core.functional.GenericsFinder;
 public class SentinelExecutorParam<T> extends BaseParam implements Executor {
 	private T function;
 	private Function1<CommandSender, Boolean> check_requirements;
+	private Function1<Integer, Boolean> skip_argument_check;
 
+	public SentinelExecutorParam(Command<?> command, T function) {
+		this(command, function, x -> true);
+	}
 	public SentinelExecutorParam(Command<?> command, T function, Function1<CommandSender, Boolean> check_requirements) {
+		this(command, function, check_requirements, i -> false);
+	}
+	public SentinelExecutorParam(Command<?> command, T function, Function1<CommandSender, Boolean> check_requirements, Function1<Integer, Boolean> skip_argument_check) {
 		super(command);
 		this.function = function;
 		this.check_requirements = check_requirements;
+		this.skip_argument_check = skip_argument_check;
 	}
 
 	private boolean check_signature(final Method method, final List<Object> args) {
@@ -42,6 +50,9 @@ public class SentinelExecutorParam<T> extends BaseParam implements Executor {
 
 		// Assert assignable types
 		for (int i = 0; i < args.size(); ++i) {
+			if (skip_argument_check.apply(i)) {
+				continue;
+			}
 			var needs = method.getParameters()[i].getType();
 			var got = args.get(i).getClass();
 			if (!needs.isAssignableFrom(got)) {

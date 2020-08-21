@@ -50,99 +50,99 @@ public interface Param {
 	}
 
 	default public <T1> void exec_player(Consumer1<T1> f) {
-		add_param(new SentinelExecutorParam<>(get_command(), f, this::require_player));
+		add_param(new SentinelExecutorParam<>(get_command(), f, this::require_player, i -> i == 0));
 	}
 
 	default public <T1, T2> void exec_player(Consumer2<T1, T2> f) {
-		add_param(new SentinelExecutorParam<>(get_command(), f, this::require_player));
+		add_param(new SentinelExecutorParam<>(get_command(), f, this::require_player, i -> i == 0));
 	}
 
 	default public <T1, T2, T3> void exec_player(Consumer3<T1, T2, T3> f) {
-		add_param(new SentinelExecutorParam<>(get_command(), f, this::require_player));
+		add_param(new SentinelExecutorParam<>(get_command(), f, this::require_player, i -> i == 0));
 	}
 
 	default public <T1, T2, T3, T4> void exec_player(Consumer4<T1, T2, T3, T4> f) {
-		add_param(new SentinelExecutorParam<>(get_command(), f, this::require_player));
+		add_param(new SentinelExecutorParam<>(get_command(), f, this::require_player, i -> i == 0));
 	}
 
 	default public <T1, T2, T3, T4, T5> void exec_player(Consumer5<T1, T2, T3, T4, T5> f) {
-		add_param(new SentinelExecutorParam<>(get_command(), f, this::require_player));
+		add_param(new SentinelExecutorParam<>(get_command(), f, this::require_player, i -> i == 0));
 	}
 
 	default public <T1, T2, T3, T4, T5, T6> void exec_player(Consumer6<T1, T2, T3, T4, T5, T6> f) {
-		add_param(new SentinelExecutorParam<>(get_command(), f, this::require_player));
+		add_param(new SentinelExecutorParam<>(get_command(), f, this::require_player, i -> i == 0));
 	}
 
 	default public <T1> void exec_player(Function1<T1, Boolean> f) {
-		add_param(new SentinelExecutorParam<>(get_command(), f, this::require_player));
+		add_param(new SentinelExecutorParam<>(get_command(), f, this::require_player, i -> i == 0));
 	}
 
 	default public <T1, T2> void exec_player(Function2<T1, T2, Boolean> f) {
-		add_param(new SentinelExecutorParam<>(get_command(), f, this::require_player));
+		add_param(new SentinelExecutorParam<>(get_command(), f, this::require_player, i -> i == 0));
 	}
 
 	default public <T1, T2, T3> void exec_player(Function3<T1, T2, T3, Boolean> f) {
-		add_param(new SentinelExecutorParam<>(get_command(), f, this::require_player));
+		add_param(new SentinelExecutorParam<>(get_command(), f, this::require_player, i -> i == 0));
 	}
 
 	default public <T1, T2, T3, T4> void exec_player(Function4<T1, T2, T3, T4, Boolean> f) {
-		add_param(new SentinelExecutorParam<>(get_command(), f, this::require_player));
+		add_param(new SentinelExecutorParam<>(get_command(), f, this::require_player, i -> i == 0));
 	}
 
 	default public <T1, T2, T3, T4, T5> void exec_player(Function5<T1, T2, T3, T4, T5, Boolean> f) {
-		add_param(new SentinelExecutorParam<>(get_command(), f, this::require_player));
+		add_param(new SentinelExecutorParam<>(get_command(), f, this::require_player, i -> i == 0));
 	}
 
 	default public <T1, T2, T3, T4, T5, T6> void exec_player(Function6<T1, T2, T3, T4, T5, T6, Boolean> f) {
-		add_param(new SentinelExecutorParam<>(get_command(), f, this::require_player));
+		add_param(new SentinelExecutorParam<>(get_command(), f, this::require_player, i -> i == 0));
 	}
 
 	default public <T1> void exec(Consumer1<T1> f) {
-		add_param(new SentinelExecutorParam<>(get_command(), f, s -> true));
+		add_param(new SentinelExecutorParam<>(get_command(), f));
 	}
 
 	default public <T1, T2> void exec(Consumer2<T1, T2> f) {
-		add_param(new SentinelExecutorParam<>(get_command(), f, s -> true));
+		add_param(new SentinelExecutorParam<>(get_command(), f));
 	}
 
 	default public <T1, T2, T3> void exec(Consumer3<T1, T2, T3> f) {
-		add_param(new SentinelExecutorParam<>(get_command(), f, s -> true));
+		add_param(new SentinelExecutorParam<>(get_command(), f));
 	}
 
 	default public <T1, T2, T3, T4> void exec(Consumer4<T1, T2, T3, T4> f) {
-		add_param(new SentinelExecutorParam<>(get_command(), f, s -> true));
+		add_param(new SentinelExecutorParam<>(get_command(), f));
 	}
 
 	default public <T1, T2, T3, T4, T5> void exec(Consumer5<T1, T2, T3, T4, T5> f) {
-		add_param(new SentinelExecutorParam<>(get_command(), f, s -> true));
+		add_param(new SentinelExecutorParam<>(get_command(), f));
 	}
 
 	default public <T1, T2, T3, T4, T5, T6> void exec(Consumer6<T1, T2, T3, T4, T5, T6> f) {
-		add_param(new SentinelExecutorParam<>(get_command(), f, s -> true));
+		add_param(new SentinelExecutorParam<>(get_command(), f));
 	}
 
 	default public <T1> void exec(Function1<T1, Boolean> f) {
-		add_param(new SentinelExecutorParam<>(get_command(), f, s -> true));
+		add_param(new SentinelExecutorParam<>(get_command(), f));
 	}
 
 	default public <T1, T2> void exec(Function2<T1, T2, Boolean> f) {
-		add_param(new SentinelExecutorParam<>(get_command(), f, s -> true));
+		add_param(new SentinelExecutorParam<>(get_command(), f));
 	}
 
 	default public <T1, T2, T3> void exec(Function3<T1, T2, T3, Boolean> f) {
-		add_param(new SentinelExecutorParam<>(get_command(), f, s -> true));
+		add_param(new SentinelExecutorParam<>(get_command(), f));
 	}
 
 	default public <T1, T2, T3, T4> void exec(Function4<T1, T2, T3, T4, Boolean> f) {
-		add_param(new SentinelExecutorParam<>(get_command(), f, s -> true));
+		add_param(new SentinelExecutorParam<>(get_command(), f));
 	}
 
 	default public <T1, T2, T3, T4, T5> void exec(Function5<T1, T2, T3, T4, T5, Boolean> f) {
-		add_param(new SentinelExecutorParam<>(get_command(), f, s -> true));
+		add_param(new SentinelExecutorParam<>(get_command(), f));
 	}
 
 	default public <T1, T2, T3, T4, T5, T6> void exec(Function6<T1, T2, T3, T4, T5, T6, Boolean> f) {
-		add_param(new SentinelExecutorParam<>(get_command(), f, s -> true));
+		add_param(new SentinelExecutorParam<>(get_command(), f));
 	}
 
 	default public Param any_string() {
