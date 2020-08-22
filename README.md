@@ -19,16 +19,22 @@ So if you don't want a certain feature, simply disable it.
 
 #### Little things & quality of life
 
-- [ ] Advancements to guide you through most additions
 - [x] Walk faster on grass paths
-- [x] Skip night with 50% of players sleeping
 - [ ] Harvest finished crops by right-clicking
+- [ ] Double doors open simultaneously
 - [ ] Craft lights that automatically turn on when it's night
 - [ ] Sort chests with redstone
-- [ ] Modify individual connections of walls, fences, panes, etc.
-- [ ] Simpler, slightly colorized chat layout
+- [x] Skip night with 50% of players sleeping
 - [ ] Store XP in bottles (with slight loss)
+- [ ] Modify individual connections of walls, fences, panes, etc.
+
+#### Administrative and 'meta' features
+
+- [ ] Advancements to guide you through most additions
 - [ ] Inaccessible commands will not be shown to players
+- [x] Slightly colorized chat message format for better readability
+- [x] Convenience commands for time, weather, gamemode, spawn, ...
+- [ ] Players without any permissions cannot alter the world (just look, no touch!)
 
 #### Unique features
 
