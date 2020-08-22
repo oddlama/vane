@@ -29,6 +29,9 @@ autostop_command_autostop_description: "§aabort§7:§r Bricht den geplaten Auto
   §aschedule §7[§bdelay§7]:§r Plant Autostop sofort, ohne Beachtung der Spieleranzahl. Akzeptiert ein delay als Ersatz des konfigurierten Werts.\n\
   §astatus§7:§r Zeigt den aktuellen Autostop status."
 
+command_enchant_level_too_low: "§cerror:§6 Level §b{0}§6 ist zu niedrig, Mindestlevel ist §a{1}"
+command_enchant_level_too_high: "§cerror:§6 Level §b{0}§6 is zu hoch, Maximallevel ist §a{1}"
+command_enchant_invalid_enchantment: "§cerror: §a{1} kann nicht mit §b{0}§6 verzaubert werden"
 command_enchant_usage: ""
 command_enchant_description: "Verzaubert das Item in deiner Hand."
 command_gamemode_set: "§7Gamemode von §b{0}§7 wurde auf §a{1}§7 gesetzt."

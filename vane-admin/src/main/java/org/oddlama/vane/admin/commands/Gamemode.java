@@ -17,6 +17,9 @@ import org.oddlama.vane.util.Message;
 @Name("gamemode")
 @Aliases({"gm"})
 public class Gamemode extends Command<Admin> {
+	@LangMessage
+	private Message lang_set;
+
 	public Gamemode(Context<Admin> context) {
 		super(context);
 
@@ -28,9 +31,6 @@ public class Gamemode extends Command<Admin> {
 		gamemode.exec_player(this::set_gamemode_self);
 		gamemode.choose_online_player().exec(this::set_gamemode);
 	}
-
-	@LangMessage
-	private Message lang_set;
 
 	private void toggle_gamemode_self(Player player) {
 		set_gamemode(player, player.getGameMode() == GameMode.CREATIVE
