@@ -9,7 +9,6 @@ import org.oddlama.vane.annotation.VaneModule;
 import org.oddlama.vane.annotation.config.ConfigVersion;
 import org.oddlama.vane.annotation.lang.LangString;
 import org.oddlama.vane.annotation.lang.LangVersion;
-import org.oddlama.vane.core.commands.CommandVane;
 
 @VaneModule("core")
 public class Core extends Module<Core> {
@@ -21,6 +20,8 @@ public class Core extends Module<Core> {
 
 	@LangString
 	public String lang_command_not_a_player;
+	@LangString
+	public String lang_command_permission_denied;
 
 	// Module registry
 	private SortedSet<Module<?>> vane_modules = new TreeSet<>((a, b) -> a.get_name().compareTo(b.get_name()));
@@ -30,6 +31,6 @@ public class Core extends Module<Core> {
 
 	public Core() {
 		// Components
-		new CommandVane(this);
+		new org.oddlama.vane.core.commands.Vane(this);
 	}
 }

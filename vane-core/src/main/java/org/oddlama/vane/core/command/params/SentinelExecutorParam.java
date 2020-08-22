@@ -96,8 +96,7 @@ public class SentinelExecutorParam<T> extends BaseParam implements Executor {
 
 		// Check permission
 		if (!sender.hasPermission(command.get_permission())) {
-			// TODO localization
-			sender.sendMessage("§cerror:§6 permission denied!");
+			sender.sendMessage(command.get_module().core.lang_command_permission_denied);
 			return false;
 		}
 

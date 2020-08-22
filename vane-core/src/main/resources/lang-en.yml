@@ -17,6 +17,9 @@ version: 1
 # This message is sent when a command requires a player but is executed
 # by a non-player.
 command_not_a_player: "§cerror:§6 command must be executed by a player!"
+# This message is sent when the command sender is missing the required
+# permission.
+command_permission_denied: "§cerror:§6 permission denied!"
 
 command_vane_usage: "§areload §8[§bmodule§8]"
 command_vane_description: "§areload§7:§r Reloads the given vane module, or all modules if no module is specified."

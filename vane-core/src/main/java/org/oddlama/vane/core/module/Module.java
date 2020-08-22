@@ -222,12 +222,4 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 		getServer().getCommandMap().getKnownCommands().values().remove(bukkit_command);
 		bukkit_command.unregister(getServer().getCommandMap());
 	}
-
-	public void schedule_task(Runnable task, long delay_ticks) {
-		getServer().getScheduler().runTaskLater(this, task, delay_ticks);
-	}
-
-	public void schedule_next_tick(Runnable task) {
-		getServer().getScheduler().runTask(this, task);
-	}
 }

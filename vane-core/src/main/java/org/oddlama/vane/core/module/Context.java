@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginIdentifiableCommand;
+import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.plugin.Plugin;
 
 import org.oddlama.vane.annotation.command.Aliases;
@@ -54,4 +55,12 @@ public interface Context<T extends Module<T>> {
 	default public void on_enable() {}
 	default public void on_disable() {}
 	default public void on_config_change() {}
+
+	default public BukkitTask schedule_task(Runnable task, long delay_ticks) {
+		return get_module().getServer().getScheduler().runTaskLater(get_module(), task, delay_ticks);
+	}
+
+	default public BukkitTask schedule_next_tick(Runnable task) {
+		return get_module().getServer().getScheduler().runTask(get_module(), task);
+	}
 }

@@ -32,6 +32,26 @@ player_kick: "§6{0}§e was §lkicked§r§e from the server"
 # {0}: player name
 player_quit: "§6{0}§e has left the server"
 
+# This message is sent when autostop is aborted, due to an administrative command
+# or a player joining the server.
+autostop_aborted: "§7Autostop §daborted"
+# This message is sent when autostop is scheduled, due to an administrative command
+# or the last player leaving the server.
+# {0}: Time until stop
+autostop_scheduled: "§7Autostop §dscheduled in §b{0}"
+# This message is sent when autostop status is requested and autostop is already scheduled.
+# {0}: Time until stop
+autostop_status: "§7Autostop in §b{0}"
+# This message is sent when autostop status is requested but autostop is not scheduled.
+autostop_status_not_scheduled: "§7Autostop §dnot scheduled"
+# This message is sent when the actual autostop is performed.
+autostop_shutdown: "§dAutostop initiated!"
+
+autostop_command_autostop_usage: "§8<§aabort§8|§aschedule§8|§astatus§8>"
+autostop_command_autostop_description: "§aabort§7:§r Aborts the scheduled autostop task.
+  §aschedule§7:§r Schedules the autostop task immediatly regardless of player count.
+  §astatus§7:§r Shows the current autostop status."
+
 command_spawn_usage: ""
 command_spawn_description: "Teleports you to the spawn."
 command_setspawn_usage: ""

@@ -7,8 +7,6 @@ import org.oddlama.vane.annotation.config.ConfigVersion;
 import org.oddlama.vane.annotation.lang.LangVersion;
 import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.core.module.ModuleGroup;
-import org.oddlama.vane.admin.commands.CommandSetspawn;
-import org.oddlama.vane.admin.commands.CommandSpawn;
 
 import org.bukkit.GameMode;
 import org.bukkit.World;
@@ -44,12 +42,12 @@ public class Admin extends Module<Admin> {
 
 	public Admin() {
 		// Create components
-		new CommandSetspawn(this);
-		new CommandSpawn(this);
+		new org.oddlama.vane.admin.commands.Setspawn(this);
+		new org.oddlama.vane.admin.commands.Spawn(this);
 
-		var autostop_group = group("autostop", "Enable automatic server stop after certain time without online players.");
+		var autostop_group = new AutostopGroup(this);
 		new AutostopListener(autostop_group);
-		//new CommandAutostop(autostop_group);
+		new org.oddlama.vane.admin.commands.Autostop(autostop_group);
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

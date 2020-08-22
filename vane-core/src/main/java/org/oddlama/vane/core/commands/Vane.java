@@ -9,8 +9,8 @@ import org.oddlama.vane.core.command.Command;
 import org.oddlama.vane.core.Core;
 
 @Name("vane")
-public class CommandVane extends Command<Core> {
-	public CommandVane(Context<Core> context) {
+public class Vane extends Command<Core> {
+	public Vane(Context<Core> context) {
 		super(context);
 
 		// Add help

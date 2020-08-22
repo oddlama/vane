@@ -8,19 +8,18 @@ import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.command.Command;
 
-@Name("setspawn")
-public class CommandSetspawn extends Command<Admin> {
-	public CommandSetspawn(Context<Admin> context) {
+@Name("spawn")
+public class Spawn extends Command<Admin> {
+	public Spawn(Context<Admin> context) {
 		super(context);
 
 		// Add help
 		params().fixed("help").ignore_case().exec(this::print_help);
 		// Command parameters
-		params().exec_player(this::set_spawn);
+		params().exec_player(this::tp_spawn);
 	}
 
-	private void set_spawn(Player player) {
-		player.getWorld().setSpawnLocation(player.getLocation());
-		player.sendMessage("§aSpawn §7set!");
+	private void tp_spawn(Player player) {
+		// TODO save world in setspawn in key-value store.
 	}
 }

@@ -19,6 +19,16 @@ player_join: "§6{0}§e hat den Server betreten"
 player_kick: "§6{0}§e wurde vom Server §lgekicked"
 player_quit: "§6{0}§e hat den Server verlassen"
 
+autostop_aborted: "§7Autostop §dabgebrochen§7"
+autostop_scheduled: "§7Autostop §dgeplant in §b{0}"
+autostop_status: "§7Autostop in §b{0}"
+autostop_status_not_scheduled: "§7Autostop §dnicht geplant"
+autostop_shutdown: "§dAutostop initiiert!"
+autostop_command_autostop_usage: "§8<§aabort§8|§aschedule§8|§astatus§8>"
+autostop_command_autostop_description: "§aabort§7:§r Bricht den geplaten Autostop ab.
+  §aschedule§7:§r Plant Autostop sofort, ohne Beachten der Spieleranzahl.
+  §astatus§7:§r Zeigt den aktuellen Autostop status."
+
 command_spawn_usage: ""
 command_spawn_description: "Teleportiert dich zum Spawn."
 command_setspawn_usage: ""
