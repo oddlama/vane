@@ -45,12 +45,22 @@ public abstract class ConfigField<T> implements Comparable<ConfigField<?>> {
 		return name;
 	}
 
+	private String modify_yaml_path_for_sorting(String path) {
+		// Enable fields should always be at the top, and therfore
+		// get treated without the suffix.
+		if (path.endsWith("_enable")) {
+			return path.substring("_enable".length());
+		}
+		return path;
+	}
+
 	@Override
 	public int compareTo(ConfigField<?> other) {
 		if (sort_priority != other.sort_priority) {
 			return sort_priority - other.sort_priority;
 		} else {
-			return get_yaml_path().compareTo(other.get_yaml_path());
+			return modify_yaml_path_for_sorting(get_yaml_path()).compareTo(
+					modify_yaml_path_for_sorting(other.get_yaml_path()));
 		}
 	}
 
