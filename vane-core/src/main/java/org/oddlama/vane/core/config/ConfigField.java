@@ -49,7 +49,7 @@ public abstract class ConfigField<T> implements Comparable<ConfigField<?>> {
 		// Enable fields should always be at the top, and therfore
 		// get treated without the suffix.
 		if (path.endsWith("_enabled")) {
-			return path.substring("_enabled".length());
+			return path.substring(0, path.lastIndexOf("_enabled"));
 		}
 		return path;
 	}
