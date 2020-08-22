@@ -21,7 +21,7 @@ So if you don't want a certain feature, simply disable it.
 
 - [x] Walk faster on grass paths
 - [ ] Harvest finished crops by right-clicking
-- [ ] Double doors open simultaneously
+- [x] Double doors open simultaneously
 - [ ] Craft lights that automatically turn on when it's night
 - [ ] Sort chests with redstone
 - [x] Skip night with 50% of players sleeping

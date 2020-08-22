@@ -28,5 +28,6 @@ public class Trifles extends Module<Trifles> {
 	public Trifles() {
 		var fast_walking_group = new FastWalkingGroup(this);
 		new FastWalkingListener(fast_walking_group);
+		new DoubleDoorListener(this);
 	}
 }

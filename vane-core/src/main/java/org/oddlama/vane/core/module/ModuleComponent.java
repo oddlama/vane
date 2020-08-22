@@ -1,6 +1,8 @@
 package org.oddlama.vane.core.module;
 
 import static org.oddlama.vane.util.Util.prepend;
+import org.bukkit.scheduler.BukkitTask;
+import org.bukkit.plugin.Plugin;
 
 import java.util.Collections;
 import java.util.List;
@@ -45,4 +47,12 @@ public abstract class ModuleComponent<T extends Module<T>> {
 	protected abstract void on_enable();
 	protected abstract void on_disable();
 	protected void on_config_change() {}
+
+	public final BukkitTask schedule_task(Runnable task, long delay_ticks) {
+		return context.schedule_task(task, delay_ticks);
+	}
+
+	public final BukkitTask schedule_next_tick(Runnable task) {
+		return context.schedule_next_tick(task);
+	}
 }
