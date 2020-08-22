@@ -2,6 +2,7 @@ package org.oddlama.vane.core.command.params;
 
 import java.util.Collections;
 import java.util.List;
+import org.bukkit.command.CommandSender;
 
 import org.oddlama.vane.core.command.Command;
 import org.oddlama.vane.core.command.check.CheckResult;
@@ -20,7 +21,7 @@ public class AnyParam<T> extends BaseParam {
 	}
 
 	@Override
-	public CheckResult check_parse(String[] args, int offset) {
+	public CheckResult check_parse(CommandSender sender, String[] args, int offset) {
 		if (args.length <= offset) {
 			return new ErrorCheckResult(offset, "§6missing argument: §3" + argument_type + "§r");
 		}
@@ -32,7 +33,7 @@ public class AnyParam<T> extends BaseParam {
 	}
 
 	@Override
-	public List<String> completions_for(String arg) {
+	public List<String> completions_for(CommandSender sender, String[] args, int offset) {
 		return Collections.emptyList();
 	}
 

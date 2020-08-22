@@ -42,8 +42,12 @@ public class Admin extends Module<Admin> {
 
 	public Admin() {
 		// Create components
+		new org.oddlama.vane.admin.commands.Enchant(this);
+		new org.oddlama.vane.admin.commands.Gamemode(this);
 		new org.oddlama.vane.admin.commands.Setspawn(this);
 		new org.oddlama.vane.admin.commands.Spawn(this);
+		new org.oddlama.vane.admin.commands.Time(this);
+		new org.oddlama.vane.admin.commands.Weather(this);
 
 		var autostop_group = new AutostopGroup(this);
 		new AutostopListener(autostop_group);

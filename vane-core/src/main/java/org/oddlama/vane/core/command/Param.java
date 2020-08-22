@@ -1,12 +1,17 @@
 package org.oddlama.vane.core.command;
 
+import static org.oddlama.vane.util.Util.namespaced_key;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Supplier;
+import org.bukkit.World;
 import java.util.stream.Collectors;
+import java.util.Arrays;
+import org.bukkit.enchantments.Enchantment;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 
 import org.oddlama.vane.core.module.Module;
@@ -185,9 +190,9 @@ public interface Param {
 	}
 
 	default public <T> DynamicChoiceParam<T> choice(String argument_type,
-	                                Supplier<Collection<? extends T>> choices,
-	                                Function1<T, String> to_string,
-	                                Function1<String, ? extends T> from_string) {
+	                                Function1<CommandSender, Collection<? extends T>> choices,
+	                                Function2<CommandSender, T, String> to_string,
+	                                Function2<CommandSender, String, ? extends T> from_string) {
 		var p = new DynamicChoiceParam<>(get_command(), argument_type, choices, to_string, from_string);
 		add_param(p);
 		return p;
@@ -195,32 +200,71 @@ public interface Param {
 
 	default public DynamicChoiceParam<Module<?>> choose_module() {
 		return choice("module",
-				() -> get_command().get_module().core.get_modules(),
-				m -> m.get_name(),
-				m -> get_command().get_module().core.get_modules().stream()
-					.filter(k -> k.get_name().equalsIgnoreCase(m))
+				sender -> get_command().get_module().core.get_modules(),
+				(sender, m) -> m.get_name(),
+				(sender, str) -> get_command().get_module().core.get_modules().stream()
+					.filter(k -> k.get_name().equalsIgnoreCase(str))
+					.findFirst()
+					.orElse(null));
+	}
+
+	default public DynamicChoiceParam<World> choose_world() {
+		return choice("world",
+				sender -> get_command().get_module().getServer().getWorlds(),
+				(sender, w) -> w.getName().toLowerCase(),
+				(sender, str) -> get_command().get_module().getServer().getWorlds().stream()
+					.filter(w -> w.getName().equalsIgnoreCase(str))
 					.findFirst()
 					.orElse(null));
 	}
 
 	default public DynamicChoiceParam<Player> choose_online_player() {
 		return choice("online_player",
-				() -> get_command().get_module().getServer().getOnlinePlayers(),
-				p -> p.getName(),
-				p -> get_command().get_module().getServer().getOnlinePlayers().stream()
-					.filter(k -> k.getName().equals(p))
+				sender -> get_command().get_module().getServer().getOnlinePlayers(),
+				(sender, p) -> p.getName(),
+				(sender, str) -> get_command().get_module().getServer().getOnlinePlayers().stream()
+					.filter(k -> k.getName().equals(str))
 					.findFirst()
 					.orElse(null));
 	}
 
-	default public CheckResult check_accept_delegate(String[] args, int offset) {
+	default public ChoiceParam<GameMode> choose_gamemode() {
+		return choice("gamemode",
+				List.of(GameMode.values()),
+				m -> m.name().toLowerCase()).ignore_case();
+	}
+
+	default public DynamicChoiceParam<Enchantment> choose_enchantment() {
+		return choose_enchantment((sender, e) -> true);
+	}
+
+	default public DynamicChoiceParam<Enchantment> choose_enchantment(final Function2<CommandSender, Enchantment, Boolean> filter) {
+		return choice("enchantment",
+				sender -> Arrays.stream(Enchantment.values())
+					.filter(e -> filter.apply(sender, e))
+					.collect(Collectors.toList()),
+				(sender, e) -> e.getKey().toString(),
+				(sender, str) -> {
+					var parts = str.split(":");
+					if (parts.length != 2) {
+						return null;
+					}
+					var e = Enchantment.getByKey(namespaced_key(parts[0], parts[1]));
+					if (!filter.apply(sender, e)) {
+						return null;
+					}
+					return e;
+				});
+	}
+
+	default public CheckResult check_accept_delegate(CommandSender sender, String[] args, int offset) {
 		if (get_params().isEmpty()) {
 			throw new RuntimeException("Encountered parameter without sentinel! This is a bug.");
 		}
 
 		// Delegate to children
 		var results = get_params().stream()
-			.map(p -> p.check_accept(args, offset + 1))
+			.map(p -> p.check_accept(sender, args, offset + 1))
 			.collect(Collectors.toList());
 
 		// Return first executor result, if any
@@ -249,47 +293,47 @@ public interface Param {
 		}
 	}
 
-	default public CheckResult check_accept(String[] args, int offset) {
-		var result = check_parse(args, offset);
+	default public CheckResult check_accept(CommandSender sender, String[] args, int offset) {
+		var result = check_parse(sender, args, offset);
 		if (!(result instanceof ParseCheckResult)) {
 			return result;
 		}
 
 		var p = (ParseCheckResult)result;
-		return check_accept_delegate(args, offset)
+		return check_accept_delegate(sender, args, offset)
 			.prepend(p.argument_type(), p.parsed(), p.include_param());
 	}
 
-	default public List<String> build_completions_delegate(String[] args, int offset) {
+	default public List<String> build_completions_delegate(CommandSender sender, String[] args, int offset) {
 		if (get_params().isEmpty()) {
 			throw new RuntimeException("Encountered parameter without sentinel! This is a bug.");
 		}
 
 		// Delegate to children
 		return get_params().stream()
-			.map(p -> p.build_completions(args, offset + 1))
+			.map(p -> p.build_completions(sender, args, offset + 1))
 			.flatMap(Collection::stream)
 			.collect(Collectors.toList());
 	}
 
-	default public List<String> build_completions(String[] args, int offset) {
+	default public List<String> build_completions(CommandSender sender, String[] args, int offset) {
 		if (offset != args.length - 1) {
 			// We are not the last argument.
 			// Delegate completion to children if the param accepts the given arguments,
 			// return no completions if it doesn't
-			if (check_parse(args, offset) instanceof ParseCheckResult) {
-				return build_completions_delegate(args, offset);
+			if (check_parse(sender, args, offset) instanceof ParseCheckResult) {
+				return build_completions_delegate(sender, args, offset);
 			} else {
 				return Collections.emptyList();
 			}
 		} else {
 			// We are the parameter that needs to be completed.
 			// Offer (partial) completions if our depth is the completion depth
-			return completions_for(args[offset]);
+			return completions_for(sender, args, offset);
 		}
 	}
 
-	public List<String> completions_for(String arg);
-	public CheckResult check_parse(String[] args, int offset);
+	public List<String> completions_for(CommandSender sender, String[] args, int offset);
+	public CheckResult check_parse(CommandSender sender, String[] args, int offset);
 	public Command<?> get_command();
 }

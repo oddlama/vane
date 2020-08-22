@@ -1,6 +1,7 @@
 package org.oddlama.vane.core.command.params;
 
 import java.util.Collection;
+import org.bukkit.command.CommandSender;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -39,7 +40,7 @@ public class ChoiceParam<T> extends BaseParam {
 	}
 
 	@Override
-	public CheckResult check_parse(String[] args, int offset) {
+	public CheckResult check_parse(CommandSender sender, String[] args, int offset) {
 		if (args.length <= offset) {
 			return new ErrorCheckResult(offset, "§6missing argument: §3" + argument_type + "§r");
 		}
@@ -51,9 +52,10 @@ public class ChoiceParam<T> extends BaseParam {
 	}
 
 	@Override
-	public List<String> completions_for(String arg) {
+	public List<String> completions_for(CommandSender sender, String[] args, int offset) {
 		return choices.stream()
 			.map(choice -> to_string.apply(choice))
+			.filter(str -> str.toLowerCase().startsWith(args[offset].toLowerCase()))
 			.collect(Collectors.toList());
 	}
 

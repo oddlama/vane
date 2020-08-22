@@ -50,7 +50,7 @@ public abstract class Command<T extends Module<T>> extends ModuleComponent<T> {
 			// Ambigous matches will always execute the
 			// first chain based on definition order.
 			try {
-				return root_param.check_accept(prepend(args, alias), 0).apply(Command.this, sender);
+				return root_param.check_accept(sender, prepend(args, alias), 0).apply(Command.this, sender);
 			} catch (Exception e) {
 				sender.sendMessage("§cAn unexpected error occurred. Please examine the console log and/or notify a server administator.");
 				throw e;
@@ -65,7 +65,7 @@ public abstract class Command<T extends Module<T>> extends ModuleComponent<T> {
 			}
 
 			try {
-				return root_param.build_completions(prepend(args, alias), 0);
+				return root_param.build_completions(sender, prepend(args, alias), 0);
 			} catch (Exception e) {
 				sender.sendMessage("§cAn unexpected error occurred. Please examine the console log and/or notify a server administator.");
 				throw e;

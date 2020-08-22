@@ -17,3 +17,7 @@
 version: 1
 
 command_not_a_player: "§cerror:§6 Befehl muss von einem Spieler ausgeführt werden!"
+command_permission_denied: "§cerror:§6 Fehlende Berechtigung!"
+
+command_vane_usage: "§areload §7[§bmodule§7]"
+command_vane_description: "§areload§7:§r Reloads the given vane module, or all modules if no module is specified."

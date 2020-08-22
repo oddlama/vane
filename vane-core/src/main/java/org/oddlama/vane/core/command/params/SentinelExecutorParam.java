@@ -2,6 +2,7 @@ package org.oddlama.vane.core.command.params;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import org.bukkit.command.CommandSender;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -116,17 +117,17 @@ public class SentinelExecutorParam<T> extends BaseParam implements Executor {
 	}
 
 	@Override
-	public CheckResult check_parse(String[] args, int offset) {
+	public CheckResult check_parse(CommandSender sender, String[] args, int offset) {
 		return null;
 	}
 
 	@Override
-	public List<String> completions_for(String arg) {
+	public List<String> completions_for(CommandSender sender, String[] args, int offset) {
 		return Collections.emptyList();
 	}
 
 	@Override
-	public CheckResult check_accept(String[] args, int offset) {
+	public CheckResult check_accept(CommandSender sender, String[] args, int offset) {
 		if (args.length > offset) {
 			// Excess arguments are an error of the previous level, so we subtract one from the offset (depth)
 			// This will cause invalid arguments to be prioritized on optional arguments.
