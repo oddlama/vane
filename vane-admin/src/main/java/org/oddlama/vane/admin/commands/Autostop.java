@@ -1,5 +1,7 @@
 package org.oddlama.vane.admin.commands;
 
+import static org.oddlama.vane.util.Util.parse_time;
+
 import org.oddlama.vane.admin.AutostopGroup;
 import org.oddlama.vane.admin.Admin;
 import org.oddlama.vane.annotation.command.Name;
@@ -20,11 +22,20 @@ public class Autostop extends Command<Admin> {
 		// Command parameters
 		params().exec(this::status);
 		params().fixed("abort").ignore_case().exec(this::abort);
-		params().fixed("schedule").ignore_case().exec(this::schedule);
 		params().fixed("status").ignore_case().exec(this::status);
+		var schedule = params().fixed("schedule").ignore_case();
+		schedule.exec(this::schedule);
+		schedule.any_string().exec(this::schedule_delay);
 	}
 
 	private void status(CommandSender sender) { autostop.status(sender); }
 	private void abort(CommandSender sender) { autostop.abort(sender); }
 	private void schedule(CommandSender sender) { autostop.schedule(sender); }
+	private void schedule_delay(CommandSender sender, String delay) {
+		try {
+			autostop.schedule(sender, parse_time(delay));
+		} catch (NumberFormatException e) {
+			sender.sendMessage("§cerror:§6 invalid time: " + e.getMessage());
+		}
+	}
 }

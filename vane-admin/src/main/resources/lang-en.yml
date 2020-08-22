@@ -34,22 +34,22 @@ player_quit: "§6{0}§e has left the server"
 
 # This message is sent when autostop is aborted, due to an administrative command
 # or a player joining the server.
-autostop_aborted: "§7Autostop §daborted"
+autostop_aborted: "§dAutostop aborted"
 # This message is sent when autostop is scheduled, due to an administrative command
 # or the last player leaving the server.
 # {0}: Time until stop
-autostop_scheduled: "§7Autostop §dscheduled in §b{0}"
+autostop_scheduled: "§dAutostop scheduled in §b{0}"
 # This message is sent when autostop status is requested and autostop is already scheduled.
 # {0}: Time until stop
 autostop_status: "§7Autostop in §b{0}"
 # This message is sent when autostop status is requested but autostop is not scheduled.
-autostop_status_not_scheduled: "§7Autostop §dnot scheduled"
+autostop_status_not_scheduled: "§dAutostop not scheduled"
 # This message is sent when the actual autostop is performed.
 autostop_shutdown: "§dAutostop initiated!"
 
 autostop_command_autostop_usage: "§8<§aabort§8|§aschedule§8|§astatus§8>"
-autostop_command_autostop_description: "§aabort§7:§r Aborts the scheduled autostop task.
-  §aschedule§7:§r Schedules the autostop task immediatly regardless of player count.
+autostop_command_autostop_description: "§aabort§7:§r Aborts the scheduled autostop task.\n\
+  §aschedule §8[§bdelay§8]§7:§r Schedules the autostop task immediately regardless of player count. Accepts a delay to override the configured value.\n\
   §astatus§7:§r Shows the current autostop status."
 
 command_spawn_usage: ""

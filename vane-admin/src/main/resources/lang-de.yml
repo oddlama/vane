@@ -20,13 +20,13 @@ player_kick: "§6{0}§e wurde vom Server §lgekicked"
 player_quit: "§6{0}§e hat den Server verlassen"
 
 autostop_aborted: "§7Autostop §dabgebrochen§7"
-autostop_scheduled: "§7Autostop §dgeplant in §b{0}"
+autostop_scheduled: "§dAutostop geplant in §b{0}"
 autostop_status: "§7Autostop in §b{0}"
-autostop_status_not_scheduled: "§7Autostop §dnicht geplant"
+autostop_status_not_scheduled: "§dAutostop nicht geplant"
 autostop_shutdown: "§dAutostop initiiert!"
 autostop_command_autostop_usage: "§8<§aabort§8|§aschedule§8|§astatus§8>"
-autostop_command_autostop_description: "§aabort§7:§r Bricht den geplaten Autostop ab.
-  §aschedule§7:§r Plant Autostop sofort, ohne Beachten der Spieleranzahl.
+autostop_command_autostop_description: "§aabort§7:§r Bricht den geplaten Autostop ab.\n\
+  §aschedule §8[§bdelay§8]§7:§r Plant Autostop sofort, ohne Beachtung der Spieleranzahl. Akzeptiert ein delay als Ersatz des konfigurierten Werts.\n\
   §astatus§7:§r Zeigt den aktuellen Autostop status."
 
 command_spawn_usage: ""

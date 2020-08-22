@@ -70,7 +70,8 @@ public class AutostopGroup extends ModuleGroup<Admin> {
 	}
 
 	public void schedule() { schedule(null); }
-	public void schedule(CommandSender sender) {
+	public void schedule(CommandSender sender) { schedule(sender, config_delay); }
+	public void schedule(CommandSender sender, long delay) {
 		if (task != null) {
 			abort(sender);
 		}
@@ -79,9 +80,9 @@ public class AutostopGroup extends ModuleGroup<Admin> {
 		task = schedule_task(() -> {
 			send_message(null, lang_shutdown);
 			get_module().getServer().shutdown();
-		}, ms_to_ticks(config_delay));
+		}, ms_to_ticks(delay));
 
-		send_message(sender, lang_scheduled.format(format_time(config_delay)));
+		send_message(sender, lang_scheduled.format(format_time(delay)));
 	}
 
 	public void status(CommandSender sender) {
