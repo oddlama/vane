@@ -12,7 +12,6 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerBedLeaveEvent;
 
@@ -24,8 +23,8 @@ import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.annotation.lang.LangString;
 import org.oddlama.vane.annotation.lang.LangVersion;
 import org.oddlama.vane.core.module.Module;
-import org.oddlama.vane.util.Nms;
 import org.oddlama.vane.util.Message;
+import org.oddlama.vane.util.Nms;
 
 @VaneModule("bedtime")
 public class Bedtime extends Module<Bedtime> {

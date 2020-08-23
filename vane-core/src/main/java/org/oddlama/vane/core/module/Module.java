@@ -12,18 +12,18 @@ import java.nio.file.StandardCopyOption;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
-import org.bukkit.configuration.file.YamlConfiguration;
-import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
+
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import org.oddlama.vane.annotation.VaneModule;
-import org.oddlama.vane.annotation.config.ConfigBoolean;
 import org.oddlama.vane.annotation.config.ConfigString;
-import org.oddlama.vane.core.command.Command;
 import org.oddlama.vane.core.Core;
+import org.oddlama.vane.core.command.Command;
 import org.oddlama.vane.core.config.ConfigManager;
 import org.oddlama.vane.core.lang.LangManager;
 

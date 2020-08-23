@@ -1,10 +1,11 @@
 package org.oddlama.vane.core.command.params;
 
 import java.util.Collection;
-import org.bukkit.command.CommandSender;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.bukkit.command.CommandSender;
 
 import org.oddlama.vane.core.command.Command;
 import org.oddlama.vane.core.command.check.CheckResult;

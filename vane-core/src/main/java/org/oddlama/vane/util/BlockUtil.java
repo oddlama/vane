@@ -1,13 +1,6 @@
 package org.oddlama.vane.util;
 import org.bukkit.block.Block;
-
-import java.util.HashMap;
-import java.util.UUID;
-
-import org.bukkit.World;
 import org.bukkit.block.BlockFace;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.scheduler.BukkitTask;
 
 public class BlockUtil {
 	public static final BlockFace[] BLOCK_FACES = new BlockFace[] {

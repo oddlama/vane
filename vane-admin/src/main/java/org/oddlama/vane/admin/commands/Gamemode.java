@@ -1,17 +1,15 @@
 package org.oddlama.vane.admin.commands;
 
-import org.bukkit.entity.Player;
-import org.bukkit.World;
 import org.bukkit.GameMode;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import org.oddlama.vane.admin.Admin;
 import org.oddlama.vane.annotation.command.Aliases;
 import org.oddlama.vane.annotation.command.Name;
 import org.oddlama.vane.annotation.lang.LangMessage;
-import org.oddlama.vane.core.module.Module;
-import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.command.Command;
+import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.util.Message;
 
 @Name("gamemode")

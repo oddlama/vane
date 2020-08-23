@@ -5,7 +5,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 import org.oddlama.vane.core.Listener;
-import org.oddlama.vane.core.module.Context;
 
 public class FastWalkingListener extends Listener<Trifles> {
 	FastWalkingGroup fast_walking;

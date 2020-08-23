@@ -2,7 +2,6 @@ package org.oddlama.vane.core.command.params;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
-import org.bukkit.command.CommandSender;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;

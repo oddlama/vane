@@ -20,6 +20,7 @@ package org.oddlama.vane.packet;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
+
 import com.mojang.brigadier.suggestion.Suggestions;
 
 public class WrapperPlayServerTabComplete extends AbstractPacket {

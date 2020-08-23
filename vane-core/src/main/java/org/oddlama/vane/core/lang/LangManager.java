@@ -15,12 +15,12 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.annotation.lang.LangString;
 import org.oddlama.vane.annotation.lang.LangVersion;
-import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.core.YamlLoadException;
 import org.oddlama.vane.core.lang.LangField;
 import org.oddlama.vane.core.lang.LangMessageField;
 import org.oddlama.vane.core.lang.LangStringField;
 import org.oddlama.vane.core.lang.LangVersionField;
+import org.oddlama.vane.core.module.Module;
 
 public class LangManager {
 	private List<LangField<?>> lang_fields = new ArrayList<>();

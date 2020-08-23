@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.bukkit.command.CommandSender;
+
 import org.oddlama.vane.core.command.Command;
 import org.oddlama.vane.core.command.check.CheckResult;
 import org.oddlama.vane.core.command.check.ErrorCheckResult;

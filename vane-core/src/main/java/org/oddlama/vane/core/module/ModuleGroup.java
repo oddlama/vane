@@ -1,26 +1,7 @@
 package org.oddlama.vane.core.module;
 
-import static org.oddlama.vane.util.Util.prepend;
-
-import java.util.Collections;
-import java.util.List;
-import java.lang.reflect.Field;
-
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.PluginIdentifiableCommand;
-import org.bukkit.plugin.Plugin;
-
-import org.oddlama.vane.annotation.command.Aliases;
-import org.oddlama.vane.annotation.command.Name;
-import org.oddlama.vane.annotation.command.VaneCommand;
 import org.oddlama.vane.annotation.config.ConfigBoolean;
-import org.oddlama.vane.annotation.lang.LangString;
-import org.oddlama.vane.core.command.params.AnyParam;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.Map;
 /**
  * A ModuleGroup is a ModuleContext that automatically adds an enable variable
  * with description to the context. If the group is disabled, on_enable() will

@@ -1,25 +1,18 @@
 package org.oddlama.vane.admin;
 
-import org.bukkit.event.Listener;
-
-import org.oddlama.vane.annotation.VaneModule;
-import org.oddlama.vane.annotation.config.ConfigVersion;
-import org.oddlama.vane.annotation.lang.LangVersion;
-import org.oddlama.vane.core.module.Module;
-import org.oddlama.vane.core.module.ModuleGroup;
-
-import org.bukkit.GameMode;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.oddlama.vane.annotation.lang.LangMessage;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.oddlama.vane.util.Message;
-import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+
+import org.oddlama.vane.annotation.VaneModule;
+import org.oddlama.vane.annotation.config.ConfigVersion;
+import org.oddlama.vane.annotation.lang.LangMessage;
+import org.oddlama.vane.annotation.lang.LangVersion;
+import org.oddlama.vane.core.module.Module;
+import org.oddlama.vane.util.Message;
 
 @VaneModule("admin")
 public class Admin extends Module<Admin> {

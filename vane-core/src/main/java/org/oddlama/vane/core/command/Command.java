@@ -13,10 +13,10 @@ import org.oddlama.vane.annotation.command.Aliases;
 import org.oddlama.vane.annotation.command.Name;
 import org.oddlama.vane.annotation.command.VaneCommand;
 import org.oddlama.vane.annotation.lang.LangString;
-import org.oddlama.vane.core.module.Context;
-import org.oddlama.vane.core.module.ModuleComponent;
-import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.core.command.params.AnyParam;
+import org.oddlama.vane.core.module.Context;
+import org.oddlama.vane.core.module.Module;
+import org.oddlama.vane.core.module.ModuleComponent;
 
 @VaneCommand
 public abstract class Command<T extends Module<T>> extends ModuleComponent<T> {

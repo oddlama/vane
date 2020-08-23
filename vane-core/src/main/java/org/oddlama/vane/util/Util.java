@@ -1,8 +1,8 @@
 package org.oddlama.vane.util;
 
 import java.util.Arrays;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.bukkit.NamespacedKey;
 

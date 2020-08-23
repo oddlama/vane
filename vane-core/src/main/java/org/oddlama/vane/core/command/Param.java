@@ -2,19 +2,18 @@ package org.oddlama.vane.core.command;
 
 import static org.oddlama.vane.util.Util.namespaced_key;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import org.bukkit.World;
 import java.util.stream.Collectors;
-import java.util.Arrays;
-import org.bukkit.enchantments.Enchantment;
 
-import org.bukkit.command.CommandSender;
 import org.bukkit.GameMode;
+import org.bukkit.World;
+import org.bukkit.command.CommandSender;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 
-import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.core.command.check.CheckResult;
 import org.oddlama.vane.core.command.check.CombinedErrorCheckResult;
 import org.oddlama.vane.core.command.check.ErrorCheckResult;
@@ -36,6 +35,7 @@ import org.oddlama.vane.core.functional.Function3;
 import org.oddlama.vane.core.functional.Function4;
 import org.oddlama.vane.core.functional.Function5;
 import org.oddlama.vane.core.functional.Function6;
+import org.oddlama.vane.core.module.Module;
 
 @SuppressWarnings("overloads")
 public interface Param {

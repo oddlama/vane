@@ -2,12 +2,11 @@ package org.oddlama.vane.admin.commands;
 
 import static org.oddlama.vane.util.Util.parse_time;
 
-import org.oddlama.vane.admin.AutostopGroup;
-import org.oddlama.vane.admin.Admin;
-import org.oddlama.vane.annotation.command.Name;
-import org.oddlama.vane.core.module.Module;
-import org.oddlama.vane.core.module.Context;
 import org.bukkit.command.CommandSender;
+
+import org.oddlama.vane.admin.Admin;
+import org.oddlama.vane.admin.AutostopGroup;
+import org.oddlama.vane.annotation.command.Name;
 import org.oddlama.vane.core.command.Command;
 
 @Name("autostop")

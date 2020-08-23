@@ -1,28 +1,16 @@
 package org.oddlama.vane.admin;
 
-import static org.oddlama.vane.util.Util.ms_to_ticks;
 import static org.oddlama.vane.util.Util.format_time;
-
-import java.util.Set;
-
-import org.bukkit.Material;
-import org.bukkit.event.Listener;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
+import static org.oddlama.vane.util.Util.ms_to_ticks;
 
 import org.bukkit.command.CommandSender;
-import org.oddlama.vane.annotation.VaneModule;
-import org.oddlama.vane.annotation.config.ConfigBoolean;
-import org.oddlama.vane.annotation.config.ConfigLong;
-import org.oddlama.vane.annotation.config.ConfigMaterialSet;
-import org.oddlama.vane.annotation.config.ConfigVersion;
 import org.bukkit.scheduler.BukkitTask;
-import org.oddlama.vane.annotation.lang.LangVersion;
-import org.oddlama.vane.core.module.Module;
-import org.oddlama.vane.core.module.ModuleGroup;
-import org.oddlama.vane.core.module.Context;
-import org.oddlama.vane.annotation.lang.LangString;
+
+import org.oddlama.vane.annotation.config.ConfigLong;
 import org.oddlama.vane.annotation.lang.LangMessage;
+import org.oddlama.vane.annotation.lang.LangString;
+import org.oddlama.vane.core.module.Context;
+import org.oddlama.vane.core.module.ModuleGroup;
 import org.oddlama.vane.util.Message;
 
 public class AutostopGroup extends ModuleGroup<Admin> {

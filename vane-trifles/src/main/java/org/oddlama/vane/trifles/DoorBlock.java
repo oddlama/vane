@@ -1,23 +1,11 @@
 package org.oddlama.vane.trifles;
 
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.type.Door;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockRedstoneEvent;
-import org.bukkit.event.entity.EntityInteractEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 
 import org.oddlama.vane.util.BlockUtil;
-import org.oddlama.vane.core.Listener;
-import org.oddlama.vane.core.module.Context;
 
 public class DoorBlock {
 	private Block lower_block; // Must be lower block

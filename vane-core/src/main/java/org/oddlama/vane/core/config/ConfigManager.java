@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import org.oddlama.vane.annotation.config.ConfigBoolean;
@@ -22,7 +21,6 @@ import org.oddlama.vane.annotation.config.ConfigLong;
 import org.oddlama.vane.annotation.config.ConfigMaterialSet;
 import org.oddlama.vane.annotation.config.ConfigString;
 import org.oddlama.vane.annotation.config.ConfigVersion;
-import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.core.YamlLoadException;
 import org.oddlama.vane.core.config.ConfigBooleanField;
 import org.oddlama.vane.core.config.ConfigDoubleField;
@@ -32,6 +30,7 @@ import org.oddlama.vane.core.config.ConfigLongField;
 import org.oddlama.vane.core.config.ConfigMaterialSetField;
 import org.oddlama.vane.core.config.ConfigStringField;
 import org.oddlama.vane.core.config.ConfigVersionField;
+import org.oddlama.vane.core.module.Module;
 
 public class ConfigManager {
 	private List<ConfigField<?>> config_fields = new ArrayList<>();

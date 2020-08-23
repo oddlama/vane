@@ -1,16 +1,13 @@
 package org.oddlama.vane.admin;
 
-import java.util.Collection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import org.oddlama.vane.core.Listener;
-import org.oddlama.vane.core.module.Context;
 
 public class AutostopListener extends Listener<Admin> {
 	AutostopGroup autostop;
