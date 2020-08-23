@@ -26,6 +26,18 @@ public class ConfigMaterialSetField extends ConfigField<Set<Material>> {
 		this.annotation = annotation;
 	}
 
+	private void append_material_set_defintion(StringBuilder builder, String indent, String prefix) {
+		Arrays.stream(annotation.def()).forEach(m -> {
+			builder.append(indent);
+			builder.append(prefix);
+			builder.append("  - \"");
+			builder.append(m.getKey().getNamespace());
+			builder.append(":");
+			builder.append(m.getKey().getKey());
+			builder.append("\"\n");
+		});
+	}
+
 	@Override
 	public void generate_yaml(StringBuilder builder, String indent) {
 		append_description(builder, indent, annotation.desc());
@@ -33,29 +45,13 @@ public class ConfigMaterialSetField extends ConfigField<Set<Material>> {
 		// Default
 		builder.append(indent);
 		builder.append("# Default:\n");
-		Arrays.stream(annotation.def())
-			.forEach(m -> {
-				builder.append(indent);
-				builder.append("#   - \"");
-				builder.append(m.getKey().getNamespace());
-				builder.append(":");
-				builder.append(m.getKey().getKey());
-				builder.append("\"\n");
-			});
+		append_material_set_defintion(builder, indent, "# ");
 
 		// Definition
 		builder.append(indent);
 		builder.append(basename());
 		builder.append(":\n");
-		Arrays.stream(annotation.def())
-			.forEach(m -> {
-				builder.append(indent);
-				builder.append("  - \"");
-				builder.append(m.getKey().getNamespace());
-				builder.append(":");
-				builder.append(m.getKey().getKey());
-				builder.append("\"\n");
-			});
+		append_material_set_defintion(builder, indent, "");
 	}
 
 	@Override
@@ -68,7 +64,7 @@ public class ConfigMaterialSetField extends ConfigField<Set<Material>> {
 
 		for (var obj : yaml.getList(yaml_path())) {
 			if (!(obj instanceof String)) {
-				throw new YamlLoadException("Invalid type for yaml path '" + yaml_path() + "', expected list");
+				throw new YamlLoadException("Invalid type for yaml path '" + yaml_path() + "', expected string");
 			}
 
 			final var str = (String)obj;

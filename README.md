@@ -31,6 +31,7 @@ So if you don't want a certain feature, simply disable it.
 #### Administrative and 'meta' features
 
 - [ ] Builtin lightweight permissions plugin (permission groups, group inheritance, live editing)
+- [x] All default permissions are revoked and need to be added explicitly
 - [x] All tab completions will respect required command permissions
 - [ ] Inaccessible commands will not be shown to players
 - [x] Slightly colorized chat message format for better readability

@@ -21,6 +21,7 @@ import javax.tools.Diagnostic;
     "org.oddlama.vane.annotation.config.ConfigLong",
     "org.oddlama.vane.annotation.config.ConfigMaterialSet",
     "org.oddlama.vane.annotation.config.ConfigString",
+    "org.oddlama.vane.annotation.config.ConfigStringListMap",
     "org.oddlama.vane.annotation.config.ConfigVersion",
     "org.oddlama.vane.annotation.lang.LangMessage",
     "org.oddlama.vane.annotation.lang.LangString",
@@ -42,13 +43,12 @@ public class ConfigAndLangProcessor extends AbstractProcessor {
 	static {
 		Map<String, String> map = new HashMap<>();
 		map.put("org.oddlama.vane.annotation.config.ConfigBoolean", "boolean");
-		map.put("org.oddlama.vane.annotation.config.ConfigInt", "int");
-		map.put("org.oddlama.vane.annotation.config.ConfigMaterialSet", "java.util.Set<org.bukkit.Material>");
 		map.put("org.oddlama.vane.annotation.config.ConfigDouble", "double");
+		map.put("org.oddlama.vane.annotation.config.ConfigInt", "int");
 		map.put("org.oddlama.vane.annotation.config.ConfigLong", "long");
+		map.put("org.oddlama.vane.annotation.config.ConfigMaterialSet", "java.util.Set<org.bukkit.Material>");
 		map.put("org.oddlama.vane.annotation.config.ConfigString", "java.lang.String");
-		map.put("org.oddlama.vane.annotation.config.ConfigLong", "long");
-		map.put("org.oddlama.vane.annotation.config.ConfigString", "java.lang.String");
+		map.put("org.oddlama.vane.annotation.config.ConfigStringListMap", "java.util.Map<java.lang.String,java.util.List<java.lang.String>>");
 		map.put("org.oddlama.vane.annotation.config.ConfigVersion", "long");
 		map.put("org.oddlama.vane.annotation.lang.LangMessage", "org.oddlama.vane.util.Message");
 		map.put("org.oddlama.vane.annotation.lang.LangString", "java.lang.String");

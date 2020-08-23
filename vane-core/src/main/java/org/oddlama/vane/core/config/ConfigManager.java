@@ -19,6 +19,7 @@ import org.oddlama.vane.annotation.config.ConfigDouble;
 import org.oddlama.vane.annotation.config.ConfigInt;
 import org.oddlama.vane.annotation.config.ConfigLong;
 import org.oddlama.vane.annotation.config.ConfigMaterialSet;
+import org.oddlama.vane.annotation.config.ConfigStringListMap;
 import org.oddlama.vane.annotation.config.ConfigString;
 import org.oddlama.vane.annotation.config.ConfigVersion;
 import org.oddlama.vane.core.YamlLoadException;
@@ -28,6 +29,7 @@ import org.oddlama.vane.core.config.ConfigField;
 import org.oddlama.vane.core.config.ConfigIntField;
 import org.oddlama.vane.core.config.ConfigLongField;
 import org.oddlama.vane.core.config.ConfigMaterialSetField;
+import org.oddlama.vane.core.config.ConfigStringListMapField;
 import org.oddlama.vane.core.config.ConfigStringField;
 import org.oddlama.vane.core.config.ConfigVersionField;
 import org.oddlama.vane.core.module.Module;
@@ -91,6 +93,8 @@ public class ConfigManager {
 			return new ConfigMaterialSetField(owner, field, map_name, (ConfigMaterialSet)annotation);
 		} else if (atype.equals(ConfigString.class)) {
 			return new ConfigStringField(owner, field, map_name, (ConfigString)annotation);
+		} else if (atype.equals(ConfigStringListMap.class)) {
+			return new ConfigStringListMapField(owner, field, map_name, (ConfigStringListMap)annotation);
 		} else if (atype.equals(ConfigVersion.class)) {
 			if (owner != module) {
 				throw new RuntimeException("@ConfigVersion can only be used inside the main module. This is a bug.");

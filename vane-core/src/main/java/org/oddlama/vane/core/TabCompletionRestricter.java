@@ -18,6 +18,7 @@ public class TabCompletionRestricter extends ModuleComponent<Core> {
 		public Adapter(ListenerPriority priority, PacketType[] packet_types) {
 			super(TabCompletionRestricter.this.get_module(), priority, packet_types);
 		}
+
 		@Override
 		public void onPacketSending(final PacketEvent event) {
 			if (event.getPacketType() != PacketType.Play.Server.TAB_COMPLETE) {
