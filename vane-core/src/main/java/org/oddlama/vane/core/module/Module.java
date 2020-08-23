@@ -51,6 +51,7 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 	@SuppressWarnings("unchecked")
 	public T get_module() { return (T)this; }
 	public String yaml_path() { return ""; }
+	public String variable_yaml_path(String variable) { return variable; }
 	public void enable() { context_group.enable(); }
 	public void disable() { context_group.disable(); }
 	public void config_change() { context_group.config_change(); }

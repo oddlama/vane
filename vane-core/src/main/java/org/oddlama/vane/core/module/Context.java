@@ -48,6 +48,7 @@ public interface Context<T extends Module<T>> {
 	public Context<T> get_context();
 	public T get_module();
 	public String yaml_path();
+	public String variable_yaml_path(String variable);
 	public void enable();
 	public void disable();
 	public void config_change();

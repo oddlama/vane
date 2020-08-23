@@ -92,11 +92,11 @@ public abstract class Command<T extends Module<T>> extends ModuleComponent<T> {
 		super(null);
 
 		// Make namespace
-		context = context.namespace("command_" + getClass().getAnnotation(Name.class).value());
+		name = getClass().getAnnotation(Name.class).value();
+		context = context.group("command_" + name, "Enable command " + name);
 		set_context(context);
 
 		// Load annotation values
-		name = getClass().getAnnotation(Name.class).value();
 		bukkit_command = new BukkitCommand(name);
 		bukkit_command.setLabel(name);
 		bukkit_command.setName(name);

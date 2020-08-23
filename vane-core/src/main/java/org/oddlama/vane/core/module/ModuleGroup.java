@@ -59,6 +59,11 @@ public class ModuleGroup<T extends Module<T>> extends ModuleContext<T> {
 	}
 
 	@Override
+	public String variable_yaml_path(String variable) {
+		return Context.append_yaml_path(yaml_path(), variable, ".");
+	}
+
+	@Override
 	public void enable() {
 		if (config_enabled) {
 			super.enable();

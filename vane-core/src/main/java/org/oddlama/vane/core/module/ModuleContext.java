@@ -47,8 +47,8 @@ public class ModuleContext<T extends Module<T>> implements Context<T> {
 		return Context.append_yaml_path(context.yaml_path(), name, "_");
 	}
 
-	private String variable_yaml_path(String variable) {
-		return Context.append_yaml_path(yaml_path(), variable, ".");
+	public String variable_yaml_path(String variable) {
+		return Context.append_yaml_path(yaml_path(), variable, "_");
 	}
 
 	protected void compile_self() {
