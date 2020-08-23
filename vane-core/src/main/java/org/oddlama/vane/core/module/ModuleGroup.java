@@ -36,12 +36,12 @@ public class ModuleGroup<T extends Module<T>> extends ModuleContext<T> {
 		return config_enabled_desc;
 	}
 
-	public ModuleGroup(Context<T> context, String namespace, String description) {
-		this(context, namespace, description, true);
+	public ModuleGroup(Context<T> context, String group, String description) {
+		this(context, group, description, true);
 	}
 
-	public ModuleGroup(Context<T> context, String namespace, String description, boolean compile_self) {
-		super(context, namespace, false);
+	public ModuleGroup(Context<T> context, String group, String description, boolean compile_self) {
+		super(context, group, false);
 		this.config_enabled_desc = description;
 
 		if (compile_self) {
@@ -51,6 +51,11 @@ public class ModuleGroup<T extends Module<T>> extends ModuleContext<T> {
 
 	public boolean enabled() {
 		return config_enabled;
+	}
+
+	@Override
+	public String yaml_path() {
+		return Context.append_yaml_path(context.yaml_path(), name, ".");
 	}
 
 	@Override

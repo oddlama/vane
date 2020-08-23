@@ -21,21 +21,21 @@ import org.oddlama.vane.core.command.params.AnyParam;
  * grouping of config and language variables with a common namespace.
  */
 public interface Context<T extends Module<T>> {
-	public static String append_namespace(String ns1, String ns2) {
+	public static String append_yaml_path(String ns1, String ns2, String separator) {
 		if (ns1.isEmpty()) {
 			return ns2;
 		}
-		return ns1 + "_" + ns2;
+		return ns1 + separator + ns2;
 	}
 
 	/** create a subcontext namespace */
-	default public ModuleContext<T> namespace(String namespace) {
-		return new ModuleContext<T>(this, append_namespace(this.get_namespace(), namespace));
+	default public ModuleContext<T> namespace(String name) {
+		return new ModuleContext<T>(this, name);
 	}
 
 	/** create a subcontext group */
-	default public ModuleGroup<T> group(String namespace, String description) {
-		return new ModuleGroup<T>(this, append_namespace(this.get_namespace(), namespace), description);
+	default public ModuleGroup<T> group(String group, String description) {
+		return new ModuleGroup<T>(this, group, description);
 	}
 
 	/**
@@ -47,7 +47,7 @@ public interface Context<T extends Module<T>> {
 
 	public Context<T> get_context();
 	public T get_module();
-	public String get_namespace();
+	public String yaml_path();
 	public void enable();
 	public void disable();
 	public void config_change();

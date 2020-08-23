@@ -20,33 +20,33 @@ public class ConfigIntField extends ConfigField<Integer> {
 	}
 
 	@Override
-	public void generate_yaml(StringBuilder builder) {
-		append_description(builder, annotation.desc());
-		append_value_range(builder, annotation.min(), annotation.max(), Integer.MIN_VALUE, Integer.MAX_VALUE);
-		append_default_value(builder, annotation.def());
-		append_field_definition(builder, annotation.def());
+	public void generate_yaml(StringBuilder builder, String indent) {
+		append_description(builder, indent, annotation.desc());
+		append_value_range(builder, indent, annotation.min(), annotation.max(), Integer.MIN_VALUE, Integer.MAX_VALUE);
+		append_default_value(builder, indent, annotation.def());
+		append_field_definition(builder, indent, annotation.def());
 	}
 
 	@Override
 	public void check_loadable(YamlConfiguration yaml) throws YamlLoadException {
 		check_yaml_path(yaml);
 
-		if (!(yaml.get(get_yaml_path()) instanceof Number)) {
-			throw new YamlLoadException("Invalid type for yaml path '" + get_yaml_path() + "', expected int");
+		if (!(yaml.get(yaml_path()) instanceof Number)) {
+			throw new YamlLoadException("Invalid type for yaml path '" + yaml_path() + "', expected int");
 		}
 
-		var val = yaml.getInt(get_yaml_path());
+		var val = yaml.getInt(yaml_path());
 		if (annotation.min() != Integer.MIN_VALUE && val < annotation.min()) {
-			throw new YamlLoadException("Configuration '" + get_yaml_path() + "' has an invalid value: Value must be >= " + annotation.min());
+			throw new YamlLoadException("Configuration '" + yaml_path() + "' has an invalid value: Value must be >= " + annotation.min());
 		}
 		if (annotation.max() != Integer.MAX_VALUE && val > annotation.max()) {
-			throw new YamlLoadException("Configuration '" + get_yaml_path() + "' has an invalid value: Value must be <= " + annotation.max());
+			throw new YamlLoadException("Configuration '" + yaml_path() + "' has an invalid value: Value must be <= " + annotation.max());
 		}
 	}
 
 	public void load(YamlConfiguration yaml) {
 		try {
-			field.setInt(owner, yaml.getInt(get_yaml_path()));
+			field.setInt(owner, yaml.getInt(yaml_path()));
 		} catch (IllegalAccessException e) {
 			throw new RuntimeException("Invalid field access on '" + field.getName() + "'. This is a bug.");
 		}

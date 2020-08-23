@@ -19,29 +19,43 @@ player_join: "§6{0}§e hat den Server betreten"
 player_kick: "§6{0}§e wurde vom Server §lgekicked"
 player_quit: "§6{0}§e hat den Server verlassen"
 
-autostop_aborted: "§7Autostop §dabgebrochen§7"
-autostop_scheduled: "§dAutostop geplant in §b{0}"
-autostop_status: "§7Autostop in §b{0}"
-autostop_status_not_scheduled: "§dAutostop nicht geplant"
-autostop_shutdown: "§dAutostop initiiert!"
-autostop_command_autostop_usage: "§7<§aabort§7|§aschedule§7|§astatus§7>"
-autostop_command_autostop_description: "§aabort§7:§r Bricht den geplaten Autostop ab.\n\
-  §aschedule §7[§bdelay§7]:§r Plant Autostop sofort, ohne Beachtung der Spieleranzahl. Akzeptiert ein delay als Ersatz des konfigurierten Werts.\n\
-  §astatus§7:§r Zeigt den aktuellen Autostop status."
+autostop:
+  aborted: "§7Autostop §dabgebrochen§7"
+  scheduled: "§dAutostop geplant in §b{0}"
+  status: "§7Autostop in §b{0}"
+  status_not_scheduled: "§dAutostop nicht geplant"
+  shutdown: "§dAutostop initiiert!"
 
-command_enchant_level_too_low: "§cerror:§6 Level §b{0}§6 ist zu niedrig, Mindestlevel ist §a{1}"
-command_enchant_level_too_high: "§cerror:§6 Level §b{0}§6 is zu hoch, Maximallevel ist §a{1}"
-command_enchant_invalid_enchantment: "§cerror: §a{1} kann nicht mit §b{0}§6 verzaubert werden"
-command_enchant_usage: ""
-command_enchant_description: "Verzaubert das Item in deiner Hand."
-command_gamemode_set: "§7Gamemode von §b{0}§7 wurde auf §a{1}§7 gesetzt."
-command_gamemode_usage: "§bgamemode §7[§bplayer§7]"
-command_gamemode_description: "Setzt den Gamemode des aktuellen oder gegebenen Spielers."
-command_setspawn_usage: ""
-command_setspawn_description: "Setzt den globalen Spawn auf deine aktuelle Position."
-command_spawn_usage: ""
-command_spawn_description: "Teleportiert dich zum Spawn."
-command_time_usage: "§btime §7[§bworld§7]"
-command_time_description: "Setzt die Zeit der aktuellen oder gegebenen Welt."
-command_weather_usage: "§bweather §7[§bworld§7]"
-command_weather_description: "Setzt das Wetter der aktuellen oder gegebenen Welt."
+  command_autostop:
+    usage: "§7<§aabort§7|§aschedule§7|§astatus§7>"
+    description: "§aabort§7:§r Bricht den geplaten Autostop ab.\n\
+      §aschedule §7[§bdelay§7]:§r Plant Autostop sofort, ohne Beachtung der Spieleranzahl. Akzeptiert ein delay als Ersatz des konfigurierten Werts.\n\
+      §astatus§7:§r Zeigt den aktuellen Autostop status."
+
+command_enchant:
+  level_too_low: "§cerror:§6 Level §b{0}§6 ist zu niedrig, Mindestlevel ist §a{1}"
+  level_too_high: "§cerror:§6 Level §b{0}§6 is zu hoch, Maximallevel ist §a{1}"
+  invalid_enchantment: "§cerror: §a{1} kann nicht mit §b{0}§6 verzaubert werden"
+  usage: ""
+  description: "Verzaubert das Item in deiner Hand."
+
+command_gamemode:
+  set: "§7Gamemode von §b{0}§7 wurde auf §a{1}§7 gesetzt."
+  usage: "§bgamemode §7[§bplayer§7]"
+  description: "Setzt den Gamemode des aktuellen oder gegebenen Spielers."
+
+command_setspawn:
+  usage: ""
+  description: "Setzt den globalen Spawn auf deine aktuelle Position."
+
+command_spawn:
+  usage: ""
+  description: "Teleportiert dich zum Spawn."
+
+command_time:
+  usage: "§btime §7[§bworld§7]"
+  description: "Setzt die Zeit der aktuellen oder gegebenen Welt."
+
+command_weather:
+  usage: "§bweather §7[§bworld§7]"
+  description: "Setzt das Wetter der aktuellen oder gegebenen Welt."

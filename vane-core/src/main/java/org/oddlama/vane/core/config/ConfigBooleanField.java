@@ -30,24 +30,24 @@ public class ConfigBooleanField extends ConfigField<Boolean> {
 	}
 
 	@Override
-	public void generate_yaml(StringBuilder builder) {
-		append_description(builder, desc);
-		append_default_value(builder, annotation.def());
-		append_field_definition(builder, annotation.def());
+	public void generate_yaml(StringBuilder builder, String indent) {
+		append_description(builder, indent, desc);
+		append_default_value(builder, indent, annotation.def());
+		append_field_definition(builder, indent, annotation.def());
 	}
 
 	@Override
 	public void check_loadable(YamlConfiguration yaml) throws YamlLoadException {
 		check_yaml_path(yaml);
 
-		if (!yaml.isBoolean(get_yaml_path())) {
-			throw new YamlLoadException("Invalid type for yaml path '" + get_yaml_path() + "', expected boolean");
+		if (!yaml.isBoolean(yaml_path())) {
+			throw new YamlLoadException("Invalid type for yaml path '" + yaml_path() + "', expected boolean");
 		}
 	}
 
 	public void load(YamlConfiguration yaml) {
 		try {
-			field.setBoolean(owner, yaml.getBoolean(get_yaml_path()));
+			field.setBoolean(owner, yaml.getBoolean(yaml_path()));
 		} catch (IllegalAccessException e) {
 			throw new RuntimeException("Invalid field access on '" + field.getName() + "'. This is a bug.");
 		}

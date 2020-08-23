@@ -27,14 +27,16 @@ public class ConfigMaterialSetField extends ConfigField<Set<Material>> {
 	}
 
 	@Override
-	public void generate_yaml(StringBuilder builder) {
-		append_description(builder, annotation.desc());
+	public void generate_yaml(StringBuilder builder, String indent) {
+		append_description(builder, indent, annotation.desc());
 
 		// Default
+		builder.append(indent);
 		builder.append("# Default:\n");
 		Arrays.stream(annotation.def())
 			.forEach(m -> {
-				builder.append("#  - \"");
+				builder.append(indent);
+				builder.append("#   - \"");
 				builder.append(m.getKey().getNamespace());
 				builder.append(":");
 				builder.append(m.getKey().getKey());
@@ -42,10 +44,12 @@ public class ConfigMaterialSetField extends ConfigField<Set<Material>> {
 			});
 
 		// Definition
-		builder.append(name);
+		builder.append(indent);
+		builder.append(basename());
 		builder.append(":\n");
 		Arrays.stream(annotation.def())
 			.forEach(m -> {
+				builder.append(indent);
 				builder.append("  - \"");
 				builder.append(m.getKey().getNamespace());
 				builder.append(":");
@@ -58,31 +62,31 @@ public class ConfigMaterialSetField extends ConfigField<Set<Material>> {
 	public void check_loadable(YamlConfiguration yaml) throws YamlLoadException {
 		check_yaml_path(yaml);
 
-		if (!yaml.isList(get_yaml_path())) {
-			throw new YamlLoadException("Invalid type for yaml path '" + get_yaml_path() + "', expected list");
+		if (!yaml.isList(yaml_path())) {
+			throw new YamlLoadException("Invalid type for yaml path '" + yaml_path() + "', expected list");
 		}
 
-		for (var obj : yaml.getList(get_yaml_path())) {
+		for (var obj : yaml.getList(yaml_path())) {
 			if (!(obj instanceof String)) {
-				throw new YamlLoadException("Invalid type for yaml path '" + get_yaml_path() + "', expected list");
+				throw new YamlLoadException("Invalid type for yaml path '" + yaml_path() + "', expected list");
 			}
 
 			final var str = (String)obj;
 			final var split = str.split(":");
 			if (split.length != 2) {
-				throw new YamlLoadException("Invalid material entry in list '" + get_yaml_path() + "': '" + str + "' is not a valid namespaced key");
+				throw new YamlLoadException("Invalid material entry in list '" + yaml_path() + "': '" + str + "' is not a valid namespaced key");
 			}
 
 			final var mat = material_from(namespaced_key(split[0], split[1]));
 			if (mat == null) {
-				throw new YamlLoadException("Invalid material entry in list '" + get_yaml_path() + "': '" + str + "' does not exist");
+				throw new YamlLoadException("Invalid material entry in list '" + yaml_path() + "': '" + str + "' does not exist");
 			}
 		}
 	}
 
 	public void load(YamlConfiguration yaml) {
 		final var set = new HashSet<>();
-		for (var obj : yaml.getList(get_yaml_path())) {
+		for (var obj : yaml.getList(yaml_path())) {
 			final var split = ((String)obj).split(":");
 			set.add(material_from(namespaced_key(split[0], split[1])));
 		}

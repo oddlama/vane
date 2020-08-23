@@ -24,40 +24,45 @@ import org.oddlama.vane.core.command.params.AnyParam;
 public class ModuleContext<T extends Module<T>> implements Context<T> {
 	protected Context<T> context;
 	protected T module; // cache to not generate chains of get_context()
-	private String namespace;
+	protected String name;
 	private List<Context<T>> subcontexts = new ArrayList<>();
 	private List<ModuleComponent<T>> components = new ArrayList<>();
 
-	public ModuleContext(Context<T> context, String namespace) {
-		this(context, namespace, true);
+	public ModuleContext(Context<T> context, String name) {
+		this(context, name, true);
 	}
 
-	public ModuleContext(Context<T> context, String namespace, boolean compile_self) {
+	public ModuleContext(Context<T> context, String name, boolean compile_self) {
 		this.context = context;
 		this.module = context.get_module();
-		this.namespace = namespace;
+		this.name = name;
 
 		if (compile_self) {
 			compile_self();
 		}
 	}
 
-	private String get_namespaced_variable(String variable) {
-		return Context.append_namespace(namespace, variable);
+	@Override
+	public String yaml_path() {
+		return Context.append_yaml_path(context.yaml_path(), name, "_");
+	}
+
+	private String variable_yaml_path(String variable) {
+		return Context.append_yaml_path(yaml_path(), variable, ".");
 	}
 
 	protected void compile_self() {
 		// Compile localization and config fields
-		module.lang_manager.compile(this, this::get_namespaced_variable);
-		module.config_manager.compile(this, this::get_namespaced_variable);
+		module.lang_manager.compile(this, this::variable_yaml_path);
+		module.config_manager.compile(this, this::variable_yaml_path);
 		context.add_child(this);
 	}
 
 	@Override
 	public void compile(ModuleComponent<T> component) {
 		components.add(component);
-		module.lang_manager.compile(component, this::get_namespaced_variable);
-		module.config_manager.compile(component, this::get_namespaced_variable);
+		module.lang_manager.compile(component, this::variable_yaml_path);
+		module.config_manager.compile(component, this::variable_yaml_path);
 	}
 
 	@Override
@@ -73,11 +78,6 @@ public class ModuleContext<T extends Module<T>> implements Context<T> {
 	@Override
 	public T get_module() {
 		return module;
-	}
-
-	@Override
-	public String get_namespace() {
-		return namespace;
 	}
 
 	@Override

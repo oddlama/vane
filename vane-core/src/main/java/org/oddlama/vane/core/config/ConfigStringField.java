@@ -20,25 +20,25 @@ public class ConfigStringField extends ConfigField<String> {
 	}
 
 	@Override
-	public void generate_yaml(StringBuilder builder) {
-		append_description(builder, annotation.desc());
+	public void generate_yaml(StringBuilder builder, String indent) {
+		append_description(builder, indent, annotation.desc());
 		var def = "\"" + annotation.def().replace("\"", "\\\"") + "\"";
-		append_default_value(builder, def);
-		append_field_definition(builder, def);
+		append_default_value(builder, indent, def);
+		append_field_definition(builder, indent, def);
 	}
 
 	@Override
 	public void check_loadable(YamlConfiguration yaml) throws YamlLoadException {
 		check_yaml_path(yaml);
 
-		if (!yaml.isString(get_yaml_path())) {
-			throw new YamlLoadException("Invalid type for yaml path '" + get_yaml_path() + "', expected string");
+		if (!yaml.isString(yaml_path())) {
+			throw new YamlLoadException("Invalid type for yaml path '" + yaml_path() + "', expected string");
 		}
 	}
 
 	public void load(YamlConfiguration yaml) {
 		try {
-			field.set(owner, yaml.getString(get_yaml_path()));
+			field.set(owner, yaml.getString(yaml_path()));
 		} catch (IllegalAccessException e) {
 			throw new RuntimeException("Invalid field access on '" + field.getName() + "'. This is a bug.");
 		}

@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import org.oddlama.vane.annotation.config.ConfigBoolean;
@@ -144,27 +145,36 @@ public class ConfigManager {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	public <T> T get_field(String name) {
-		var field = config_fields.stream()
-			.filter(f -> f.get_name().equals(name))
-			.findFirst()
-			.orElseThrow(() -> new RuntimeException("Missing config field config_" + name));
-
-		try {
-			return (T)field;
-		} catch (ClassCastException e) {
-			throw new RuntimeException("Invalid config field type for config_" + name, e);
-		}
+	private String indent_str(int level) {
+		return "  ".repeat(level);
 	}
 
 	public void generate_yaml(StringBuilder builder) {
 		builder.append("# vim: set tabstop=2 softtabstop=0 expandtab shiftwidth=2:\n");
 
-		config_fields.forEach(f -> {
+		// Use the version field as a neutral field in the root group
+		ConfigField<?> last_field = field_version;
+		var indent = "";
+
+		for (var f : config_fields) {
 			builder.append("\n");
-			f.generate_yaml(builder);
-		});
+
+			if (!ConfigField.same_group(last_field, f)) {
+				final var last_indent_level = last_field.group_count();
+				final var new_indent_level = f.group_count();
+				final var common_indent_level = ConfigField.common_group_count(last_field, f);
+				for (int i = common_indent_level; i < new_indent_level; ++i) {
+					indent = indent_str(i);
+					builder.append(indent + f.components()[i] + ":\n");
+				}
+
+				indent = indent_str(new_indent_level);
+			}
+
+			// Append field yaml
+			f.generate_yaml(builder, indent);
+			last_field = f;
+		}
 	}
 
 	public boolean reload(File file) {

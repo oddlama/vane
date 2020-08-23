@@ -23,29 +23,29 @@ public class ConfigVersionField extends ConfigField<Long> {
 	}
 
 	@Override
-	public void generate_yaml(StringBuilder builder) {
+	public void generate_yaml(StringBuilder builder, String indent) {
 		final var description = "DO NOT CHANGE! The version of this config file. Used to determine if the config needs to be updated.";
-		append_description(builder, description);
-		append_field_definition(builder, annotation.value());
+		append_description(builder, indent, description);
+		append_field_definition(builder, indent, annotation.value());
 	}
 
 	@Override
 	public void check_loadable(YamlConfiguration yaml) throws YamlLoadException {
 		check_yaml_path(yaml);
 
-		if (!(yaml.get(get_yaml_path()) instanceof Number)) {
-			throw new YamlLoadException("Invalid type for yaml path '" + get_yaml_path() + "', expected long");
+		if (!(yaml.get(yaml_path()) instanceof Number)) {
+			throw new YamlLoadException("Invalid type for yaml path '" + yaml_path() + "', expected long");
 		}
 
-		var val = yaml.getLong(get_yaml_path());
+		var val = yaml.getLong(yaml_path());
 		if (val < 1) {
-			throw new YamlLoadException("Configuration '" + get_yaml_path() + "' has an invalid value: Value must be >= 1");
+			throw new YamlLoadException("Configuration '" + yaml_path() + "' has an invalid value: Value must be >= 1");
 		}
 	}
 
 	public void load(YamlConfiguration yaml) {
 		try {
-			field.setLong(owner, yaml.getLong(get_yaml_path()));
+			field.setLong(owner, yaml.getLong(yaml_path()));
 		} catch (IllegalAccessException e) {
 			throw new RuntimeException("Invalid field access on '" + field.getName() + "'. This is a bug.");
 		}

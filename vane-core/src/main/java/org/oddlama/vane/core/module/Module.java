@@ -50,7 +50,7 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 	public Context<T> get_context() { return this; }
 	@SuppressWarnings("unchecked")
 	public T get_module() { return (T)this; }
-	public String get_namespace() { return context_group.get_namespace(); }
+	public String yaml_path() { return ""; }
 	public void enable() { context_group.enable(); }
 	public void disable() { context_group.disable(); }
 	public void config_change() { context_group.config_change(); }
