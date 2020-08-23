@@ -32,5 +32,6 @@ public class Core extends Module<Core> {
 	public Core() {
 		// Components
 		new org.oddlama.vane.core.commands.Vane(this);
+		new TabCompletionRestricter(this);
 	}
 }

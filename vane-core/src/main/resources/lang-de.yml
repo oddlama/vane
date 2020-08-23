@@ -21,4 +21,5 @@ command_permission_denied: "§cerror:§6 Fehlende Berechtigung!"
 
 command_vane:
   usage: "§areload §7[§bmodule§7]"
-  description: "§areload§7:§r Reloads the given vane module, or all modules if no module is specified."
+  description: "Verwalted vane plugins."
+  help: "§areload§7:§r Läd alle oder das gegebene vane Modul erneut."

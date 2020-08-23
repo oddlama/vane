@@ -13,6 +13,8 @@ import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 import org.bukkit.configuration.file.YamlConfiguration;
+import com.comphenix.protocol.ProtocolManager;
+import com.comphenix.protocol.ProtocolLibrary;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -62,6 +64,9 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 	public void on_disable() {}
 	public void on_config_change() {}
 
+	// ProtocolLib
+	public ProtocolManager protocol_manager;
+
 	@Override
 	public final void onLoad() {
 		// Load name
@@ -86,6 +91,9 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 
 		// Register in core
 		core.register_module(this);
+
+		// Get protocollib manager
+		protocol_manager = ProtocolLibrary.getProtocolManager();
 
 		log = getLogger();
 		if (!reload_configuration()) {

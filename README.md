@@ -30,11 +30,13 @@ So if you don't want a certain feature, simply disable it.
 
 #### Administrative and 'meta' features
 
-- [ ] Advancements to guide you through most additions
+- [ ] Builtin lightweight permissions plugin (permission groups, group inheritance, live editing)
+- [x] All tab completions will respect required command permissions
 - [ ] Inaccessible commands will not be shown to players
 - [x] Slightly colorized chat message format for better readability
 - [x] Convenience commands for time, weather, gamemode, spawn, ...
 - [ ] Players without any permissions cannot alter the world (just look, no touch!)
+- [ ] Advancements to guide you through most additions
 
 #### Unique features
 
@@ -62,6 +64,7 @@ Regions:
 
 Allow players to own a patch of land, and control certain
 environmental conditions inside, as well as other players permissions.
+Permission integration allows subtractive merging of permissions when in a region (can only take permissions away)
 
 #### Administrative utilities
 

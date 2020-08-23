@@ -76,9 +76,10 @@ public abstract class Command<T extends Module<T>> extends ModuleComponent<T> {
 	// Language
 	@LangString
 	public String lang_usage;
-
 	@LangString
 	public String lang_description;
+	@LangString
+	public String lang_help;
 
 	// Variables
 	private String name;
@@ -144,7 +145,7 @@ public abstract class Command<T extends Module<T>> extends ModuleComponent<T> {
 	}
 
 	public void print_help(CommandSender sender) {
-		sender.sendMessage("§7/§3" + bukkit_command.getName() + " " + bukkit_command.getUsage());
-		sender.sendMessage(bukkit_command.getDescription());
+		sender.sendMessage("§7/§3" + name + " " + lang_usage);
+		sender.sendMessage(lang_help);
 	}
 }
