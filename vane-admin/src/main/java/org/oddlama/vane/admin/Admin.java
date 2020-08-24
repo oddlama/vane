@@ -14,7 +14,7 @@ import org.oddlama.vane.annotation.lang.LangVersion;
 import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.util.Message;
 
-@VaneModule("admin")
+@VaneModule(name = "admin", bstats = 8638)
 public class Admin extends Module<Admin> {
 	// Configuration
 	@ConfigVersion(1)

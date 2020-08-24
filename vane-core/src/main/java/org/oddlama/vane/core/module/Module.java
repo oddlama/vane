@@ -15,12 +15,15 @@ import java.util.regex.Pattern;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 
+import org.bstats.bukkit.Metrics;
+
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import org.oddlama.vane.annotation.VaneModule;
+import org.oddlama.vane.annotation.config.ConfigBoolean;
 import org.oddlama.vane.annotation.config.ConfigString;
 import org.oddlama.vane.core.Core;
 import org.oddlama.vane.core.command.Command;
@@ -38,9 +41,14 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 	@ConfigString(def = "inherit", desc = "The language for this module. The corresponding language file must be named lang-{lang}.yml. Specifying 'inherit' will load the value set for vane-core.")
 	public String config_lang;
 
+	@ConfigBoolean(def = true, desc = "Enable plugin metrics via bStats. You can opt-out here or via the global bStats configuration.")
+	public boolean config_metrics_enabled;
+
 	// Context<T> interface proxy
 	private ModuleGroup<T> context_group = new ModuleGroup<>(this, "", "The module will only add functionality if this is set to true.");
+	@Override
 	public void compile(ModuleComponent<T> component) { context_group.compile(component); }
+	@Override
 	public void add_child(Context<T> subcontext) {
 		if (context_group == null) {
 			// This happens, when context_group (above) is initialized and calls compile_self(),
@@ -49,14 +57,15 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 		}
 		context_group.add_child(subcontext);
 	}
+	@Override
 	public Context<T> get_context() { return this; }
 	@SuppressWarnings("unchecked")
+	@Override
 	public T get_module() { return (T)this; }
+	@Override
 	public String yaml_path() { return ""; }
+	@Override
 	public String variable_yaml_path(String variable) { return variable; }
-	public void enable() { context_group.enable(); }
-	public void disable() { context_group.disable(); }
-	public void config_change() { context_group.config_change(); }
 
 	// Callbacks for derived classes
 	protected void on_load() {}
@@ -67,10 +76,13 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 	// ProtocolLib
 	public ProtocolManager protocol_manager;
 
+	// bStats
+	Metrics metrics;
+
 	@Override
 	public final void onLoad() {
 		// Load name
-		name = getClass().getAnnotation(VaneModule.class).value();
+		name = getClass().getAnnotation(VaneModule.class).name();
 
 		// Create data directory
 		if (!getDataFolder().exists()) {
@@ -109,6 +121,33 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 		core.unregister_module(this);
 	}
 
+	@Override
+	public void enable() {
+		if (config_metrics_enabled) {
+			var id = getClass().getAnnotation(VaneModule.class).bstats();
+			if (id != -1) {
+				metrics = new Metrics(this, id);
+			}
+		}
+		on_enable();
+		context_group.enable();
+		register_listener(this);
+	}
+
+	@Override
+	public void disable() {
+		unregister_listener(this);
+		context_group.disable();
+		on_disable();
+		metrics = null;
+	}
+
+	@Override
+	public void config_change() {
+		on_config_change();
+		context_group.config_change();
+	}
+
 	public boolean reload_configuration() {
 		boolean was_enabled = context_group.enabled();
 
@@ -139,18 +178,13 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 
 		if (was_enabled && !context_group.enabled()) {
 			// Disable plugin if needed
-			unregister_listener(this);
-			on_disable();
-			context_group.disable();
+			disable();
 		} else if (!was_enabled && context_group.enabled()) {
 			// Enable plugin if needed
-			context_group.enable();
-			on_enable();
-			register_listener(this);
+			enable();
 		}
 
-		on_config_change();
-		context_group.config_change();
+		config_change();
 		return true;
 	}
 

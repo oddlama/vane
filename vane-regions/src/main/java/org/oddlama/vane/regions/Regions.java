@@ -5,7 +5,7 @@ import org.oddlama.vane.annotation.config.ConfigVersion;
 import org.oddlama.vane.annotation.lang.LangVersion;
 import org.oddlama.vane.core.module.Module;
 
-@VaneModule("regions")
+@VaneModule(name = "regions", bstats = 8643)
 public class Regions extends Module<Regions> {
 	// Configuration
 	@ConfigVersion(1)

@@ -10,7 +10,7 @@ import org.oddlama.vane.annotation.lang.LangString;
 import org.oddlama.vane.annotation.lang.LangVersion;
 import org.oddlama.vane.core.module.Module;
 
-@VaneModule("core")
+@VaneModule(name = "core", bstats = 8637)
 public class Core extends Module<Core> {
 	@ConfigVersion(1)
 	public long config_version;
@@ -32,6 +32,6 @@ public class Core extends Module<Core> {
 	public Core() {
 		// Components
 		new org.oddlama.vane.core.commands.Vane(this);
-		new TabCompletionRestricter(this);
+		//new TabCompletionRestricter(this);
 	}
 }

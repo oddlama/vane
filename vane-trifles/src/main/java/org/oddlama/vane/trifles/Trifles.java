@@ -5,7 +5,7 @@ import org.oddlama.vane.annotation.config.ConfigVersion;
 import org.oddlama.vane.annotation.lang.LangVersion;
 import org.oddlama.vane.core.module.Module;
 
-@VaneModule("trifles")
+@VaneModule(name = "trifles", bstats = 8644)
 public class Trifles extends Module<Trifles> {
 	// Configuration
 	@ConfigVersion(1)

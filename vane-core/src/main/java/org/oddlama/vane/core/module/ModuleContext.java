@@ -81,13 +81,13 @@ public class ModuleContext<T extends Module<T>> implements Context<T> {
 
 	@Override
 	public void disable() {
-		on_disable();
-		for (int i = components.size() - 1; i >= 0; --i) {
-			components.get(i).on_disable();
-		}
 		for (int i = subcontexts.size() - 1; i >= 0; --i) {
 			subcontexts.get(i).disable();
 		}
+		for (int i = components.size() - 1; i >= 0; --i) {
+			components.get(i).on_disable();
+		}
+		on_disable();
 	}
 
 	@Override

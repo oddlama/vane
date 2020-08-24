@@ -8,5 +8,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface VaneModule {
-	String value();
+	String name();
+	int bstats() default -1;
 }

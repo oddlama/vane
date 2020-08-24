@@ -15,8 +15,8 @@ import org.oddlama.vane.packet.WrapperPlayServerTabComplete;
 
 public class TabCompletionRestricter extends ModuleComponent<Core> {
 	public class Adapter extends PacketAdapter {
-		public Adapter(ListenerPriority priority, PacketType[] packet_types) {
-			super(TabCompletionRestricter.this.get_module(), priority, packet_types);
+		public Adapter() {
+			super(TabCompletionRestricter.this.get_module(), ListenerPriority.HIGHEST, new PacketType[] {PacketType.Play.Server.TAB_COMPLETE});
 		}
 
 		@Override
@@ -63,7 +63,7 @@ public class TabCompletionRestricter extends ModuleComponent<Core> {
 
 	@Override
 	protected void on_enable() {
-		adapter = new Adapter(ListenerPriority.HIGHEST, new PacketType[] {PacketType.Play.Server.TAB_COMPLETE});
+		adapter = new Adapter();
 		get_module().protocol_manager.addPacketListener(adapter);
 	}
 

@@ -16,6 +16,7 @@ subprojects {
 		maven { url 'https://repo.dmulloy2.net/nexus/repository/public/' };
 		maven { url 'https://repo.mikeprimm.com/' };
 		maven { url 'https://papermc.io/repo/repository/maven-public/' };
+		maven { url 'https://repo.codemc.org/repository/maven-public/' };
 		flatDir {
 			dir rootProject.file('libs');
 		}
