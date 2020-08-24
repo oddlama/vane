@@ -96,6 +96,9 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 
 	@Override
 	public final void onEnable() {
+		// Get logger
+		log = getLogger();
+
 		// Get core plugin reference, important for inherited configuration
 		if (this.getName().equals("vane-core")) {
 			core = (Core)this;
@@ -109,9 +112,8 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 		// Get protocollib manager
 		protocol_manager = ProtocolLibrary.getProtocolManager();
 
-		log = getLogger();
-		reload_configuration();
 		load_persistent_storage();
+		reload_configuration();
 	}
 
 	@Override
@@ -156,11 +158,11 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 		if (!file.exists()) {
 			final var builder = new StringBuilder();
 			config_manager.generate_yaml(builder);
-			final var contents = builder.toString();
+			final var content = builder.toString();
 
-			// Save contents to file
+			// Save content to file
 			try {
-				Files.write(file.toPath(), contents.getBytes(StandardCharsets.UTF_8));
+				Files.write(file.toPath(), content.getBytes(StandardCharsets.UTF_8));
 			} catch (IOException e) {
 				e.printStackTrace();
 				return false;
@@ -258,10 +260,6 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 	public void load_persistent_storage() {
 		// Load automatic persistent variables
 		final var file = get_persistent_storage_file();
-		if (file.exists()) {
-			return;
-		}
-
 		if (!persistent_storage_manager.load(file)) {
 			// Force stop server, we encountered an invalid persistent storage file.
 			// This prevents further corruption.

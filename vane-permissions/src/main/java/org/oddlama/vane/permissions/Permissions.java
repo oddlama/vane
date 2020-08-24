@@ -54,7 +54,7 @@ public class Permissions extends Module<Permissions> {
 
 	// Persistent storage
 	@Persistent
-	public Map<String, List<String>> player_permission_groups;
+	public Map<String, List<String>> player_permission_groups = new HashMap<>();
 
 	// Variables
 	private final Map<String, List<String>> permission_groups = new HashMap<>();
@@ -62,6 +62,7 @@ public class Permissions extends Module<Permissions> {
 
 	@Override
 	public void on_enable() {
+		player_permission_groups.put("a", new ArrayList<String>());
 		schedule_next_tick(() -> {
 			if (config_remove_defaults) {
 				for (var perm : getServer().getPluginManager().getPermissions()) {

@@ -6,6 +6,7 @@ import java.lang.Comparable;
 import java.lang.StringBuilder;
 import java.lang.reflect.Field;
 import java.util.function.Function;
+import java.util.Map;
 
 import org.apache.commons.lang.WordUtils;
 
@@ -26,7 +27,27 @@ public class PersistentField {
 		return path;
 	}
 
-	public void load() throws LoadException {
-		throw new LoadException("");
+	public Object get() {
+		try {
+			return field.get(owner);
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException("Invalid field access on '" + field.getName() + "'. This is a bug.");
+		}
+	}
+
+	public void save(Map<String, Object> map) {
+		map.put(path, get());
+	}
+
+	public void load(Map<String, Object> map) throws LoadException {
+		if (!map.containsKey(path)) {
+			throw new LoadException("Missing key in persistent map: '" + path + "'");
+		}
+
+		try {
+			field.set(owner, map.get(path));
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException("Invalid field access on '" + field.getName() + "'. This is a bug.");
+		}
 	}
 }

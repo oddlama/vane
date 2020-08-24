@@ -36,12 +36,13 @@ public abstract class ConfigField<T> implements Comparable<ConfigField<?>> {
 		this.basename = yaml_path_components[yaml_path_components.length - 1];
 		this.type_name = type_name;
 
+		// lang, enabled, metrics_enabled should be at the top
 		if (this.path.equals("lang")) {
-			// lang should be at the top
 			this.sort_priority = -10;
 		} else if (this.path.equals("enabled")) {
-			// enabled should be just below lang
 			this.sort_priority = -9;
+		} else if (this.path.equals("metrics_enabled")) {
+			this.sort_priority = -8;
 		}
 
 		field.setAccessible(true);

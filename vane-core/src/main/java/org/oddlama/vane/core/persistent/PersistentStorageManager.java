@@ -2,14 +2,21 @@ package org.oddlama.vane.core.persistent;
 
 import static org.reflections.ReflectionUtils.*;
 
+import com.google.gson.Gson;
+import com.google.common.reflect.TypeToken;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.io.File;
 import java.lang.StringBuilder;
+import java.nio.file.Files;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
+import org.json.simple.JSONObject;
 import java.util.stream.Collectors;
 
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -85,17 +92,41 @@ public class PersistentStorageManager {
 			.collect(Collectors.toList()));
 	}
 
+	@SuppressWarnings("unchecked")
 	public boolean load(File file) {
+		if (!file.exists()) {
+			if (is_loaded) {
+				module.log.severe("Cannot reload persistent storage from nonexistent file '" + file.getName() + "'");
+				return false;
+			} else {
+				// First start, variables will have their defaults.
+				is_loaded = true;
+				return true;
+			}
+		}
 
+		// Reset loaded status
 		is_loaded = false;
 
-		// Load file
+		// Open file and read json
+		var content = "";
+		try {
+			content = Files.readString(file.toPath(), StandardCharsets.UTF_8);
+		} catch (IOException e) {
+			module.log.severe("error while loading persistent data from '" + file.getName() + "':");
+			module.log.severe(e.getMessage());
+			return false;
+		}
 
-		// Check version
+		// Json to map
+		var map = (HashMap<String, Object>)new Gson().fromJson(content, new TypeToken<HashMap<String, Object>>(){}.getType());
+
+		// Check version and migrate if necessary
+		// TODO
 
 		try {
 			for (var f : persistent_fields) {
-				f.load();
+				f.load(map);
 			}
 		} catch (LoadException e) {
 			module.log.severe("error while loading persistent variables from '" + file.getName() + "':");
@@ -111,6 +142,23 @@ public class PersistentStorageManager {
 		if (!is_loaded) {
 			// Don't save if never loaded or a previous load was faulty.
 			return;
+		}
+
+		// Create map of all fields
+		var map = new HashMap<String, Object>();
+		for (var f : persistent_fields) {
+			f.save(map);
+		}
+
+		// Map to json
+		var json = new Gson().toJson(map);
+
+		// Save to file
+		try {
+			Files.write(file.toPath(), json.getBytes(StandardCharsets.UTF_8));
+		} catch (IOException e) {
+			module.log.severe("error while saving persistent data!");
+			module.log.severe(e.getMessage());
 		}
 	}
 }

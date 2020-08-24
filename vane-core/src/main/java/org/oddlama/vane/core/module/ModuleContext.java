@@ -39,18 +39,22 @@ public class ModuleContext<T extends Module<T>> implements Context<T> {
 		return Context.append_yaml_path(yaml_path(), variable, "_");
 	}
 
+	private void compile_component(Object component) {
+		module.lang_manager.compile(component, this::variable_yaml_path);
+		module.config_manager.compile(component, this::variable_yaml_path);
+		module.persistent_storage_manager.compile(component, this::variable_yaml_path);
+	}
+
 	protected void compile_self() {
 		// Compile localization and config fields
-		module.lang_manager.compile(this, this::variable_yaml_path);
-		module.config_manager.compile(this, this::variable_yaml_path);
+		compile_component(this);
 		context.add_child(this);
 	}
 
 	@Override
 	public void compile(ModuleComponent<T> component) {
 		components.add(component);
-		module.lang_manager.compile(component, this::variable_yaml_path);
-		module.config_manager.compile(component, this::variable_yaml_path);
+		compile_component(component);
 	}
 
 	@Override
