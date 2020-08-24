@@ -7,9 +7,16 @@ import org.oddlama.vane.core.Core;
 import org.oddlama.vane.core.command.Command;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.Module;
+import org.oddlama.vane.annotation.lang.LangMessage;
+import org.oddlama.vane.util.Message;
 
 @Name("vane")
 public class Vane extends Command<Core> {
+	@LangMessage
+	private Message lang_reload_success;
+	@LangMessage
+	private Message lang_reload_fail;
+
 	public Vane(Context<Core> context) {
 		super(context);
 
@@ -24,9 +31,9 @@ public class Vane extends Command<Core> {
 
 	private void reload_module(CommandSender sender, Module<?> module) {
 		if (module.reload_configuration()) {
-			sender.sendMessage("§bvane-" + module.get_name() + ": §areload successful");
+			sender.sendMessage(lang_reload_success.format("vane-" + module.get_name()));
 		} else {
-			sender.sendMessage("§cerror:§6 §bvane-" + module.get_name() + "§6: Invalid configuration");
+			sender.sendMessage(lang_reload_fail.format("vane-" + module.get_name(), "invalid configuration"));
 		}
 	}
 

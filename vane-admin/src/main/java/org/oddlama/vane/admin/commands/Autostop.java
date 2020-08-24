@@ -34,7 +34,7 @@ public class Autostop extends Command<Admin> {
 		try {
 			autostop.schedule(sender, parse_time(delay));
 		} catch (NumberFormatException e) {
-			sender.sendMessage("§cerror:§6 invalid time: " + e.getMessage());
+			sender.sendMessage(get_module().core.lang_invalid_time_format.format(e.getMessage()));
 		}
 	}
 }

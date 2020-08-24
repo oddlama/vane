@@ -73,7 +73,7 @@ public class ConfigManager {
 				if (annotation == null) {
 					annotation = a;
 				} else {
-					throw new RuntimeException("Configuration fields must have exactly one annotation.");
+					throw new RuntimeException("Configuration fields must have exactly one @Config annotation.");
 				}
 			}
 		}
@@ -196,7 +196,9 @@ public class ConfigManager {
 				f.check_loadable(yaml);
 			}
 
-			config_fields.stream().forEach(f -> f.load(yaml));
+			for (var f : config_fields) {
+				f.load(yaml);
+			}
 		} catch (YamlLoadException e) {
 			module.log.severe("error while loading '" + file.getName() + "':");
 			module.log.severe(e.getMessage());

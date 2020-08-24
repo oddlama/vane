@@ -61,7 +61,7 @@ public class LangManager {
 				if (annotation == null) {
 					annotation = a;
 				} else {
-					throw new RuntimeException("Language fields must have exactly one annotation.");
+					throw new RuntimeException("Language fields must have exactly one @Lang annotation.");
 				}
 			}
 		}
@@ -152,7 +152,9 @@ public class LangManager {
 				f.check_loadable(yaml);
 			}
 
-			lang_fields.stream().forEach(f -> f.load(yaml));
+			for (var f : lang_fields) {
+				f.load(yaml);
+			}
 		} catch (YamlLoadException e) {
 			module.log.severe("error while loading '" + file.getName() + "':");
 			module.log.severe(e.getMessage());

@@ -26,6 +26,7 @@ import org.oddlama.vane.annotation.config.ConfigBoolean;
 import org.oddlama.vane.annotation.config.ConfigString;
 import org.oddlama.vane.annotation.config.ConfigStringListMap;
 import org.oddlama.vane.annotation.config.ConfigStringListMapEntry;
+import org.oddlama.vane.annotation.persistent.Persistent;
 import org.oddlama.vane.annotation.lang.LangVersion;
 import org.oddlama.vane.core.module.Module;
 
@@ -50,6 +51,10 @@ public class Permissions extends Module<Permissions> {
 	// Language
 	@LangVersion(1)
 	public long lang_version;
+
+	// Persistent storage
+	@Persistent
+	public Map<String, List<String>> player_permission_groups;
 
 	// Variables
 	private final Map<String, List<String>> permission_groups = new HashMap<>();

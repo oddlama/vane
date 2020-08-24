@@ -7,8 +7,10 @@ import java.util.TreeSet;
 import org.oddlama.vane.annotation.VaneModule;
 import org.oddlama.vane.annotation.config.ConfigVersion;
 import org.oddlama.vane.annotation.lang.LangString;
+import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.annotation.lang.LangVersion;
 import org.oddlama.vane.core.module.Module;
+import org.oddlama.vane.util.Message;
 
 @VaneModule(name = "core", bstats = 8637)
 public class Core extends Module<Core> {
@@ -22,6 +24,9 @@ public class Core extends Module<Core> {
 	public String lang_command_not_a_player;
 	@LangString
 	public String lang_command_permission_denied;
+
+	@LangMessage
+	public Message lang_invalid_time_format;
 
 	// Module registry
 	private SortedSet<Module<?>> vane_modules = new TreeSet<>((a, b) -> a.get_name().compareTo(b.get_name()));

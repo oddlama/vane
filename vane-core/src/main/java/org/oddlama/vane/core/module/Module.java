@@ -29,6 +29,7 @@ import org.oddlama.vane.core.Core;
 import org.oddlama.vane.core.command.Command;
 import org.oddlama.vane.core.config.ConfigManager;
 import org.oddlama.vane.core.lang.LangManager;
+import org.oddlama.vane.core.persistent.PersistentStorageManager;
 
 public abstract class Module<T extends Module<T>> extends JavaPlugin implements Context<T>, org.bukkit.event.Listener {
 	public Core core;
@@ -37,6 +38,7 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 	private String name;
 	public ConfigManager config_manager = new ConfigManager(this);
 	public LangManager lang_manager = new LangManager(this);
+	public PersistentStorageManager persistent_storage_manager = new PersistentStorageManager(this);
 
 	@ConfigString(def = "inherit", desc = "The language for this module. The corresponding language file must be named lang-{lang}.yml. Specifying 'inherit' will load the value set for vane-core.")
 	public String config_lang;
@@ -108,15 +110,15 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 		protocol_manager = ProtocolLibrary.getProtocolManager();
 
 		log = getLogger();
-		if (!reload_configuration()) {
-			// Force stop server, we encountered an invalid config file version
-			log.severe("Invalid plugin configuration. Shutting down.");
-			getServer().shutdown();
-		}
+		reload_configuration();
+		load_persistent_storage();
 	}
 
 	@Override
 	public void onDisable() {
+		// Save persistent storage
+		save_persistent_storage();
+
 		// Unregister in core
 		core.unregister_module(this);
 	}
@@ -148,9 +150,7 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 		context_group.config_change();
 	}
 
-	public boolean reload_configuration() {
-		boolean was_enabled = context_group.enabled();
-
+	private boolean try_reload_configuration() {
 		// Generate new file if not existing
 		final var file = new File(getDataFolder(), "config.yml");
 		if (!file.exists()) {
@@ -163,29 +163,12 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 				Files.write(file.toPath(), contents.getBytes(StandardCharsets.UTF_8));
 			} catch (IOException e) {
 				e.printStackTrace();
+				return false;
 			}
 		}
 
 		// Reload automatic variables
-		if (!config_manager.reload(file)) {
-			return false;
-		}
-
-		// Reload localization
-		if (!reload_localization()) {
-			return false;
-		}
-
-		if (was_enabled && !context_group.enabled()) {
-			// Disable plugin if needed
-			disable();
-		} else if (!was_enabled && context_group.enabled()) {
-			// Enable plugin if needed
-			enable();
-		}
-
-		config_change();
-		return true;
+		return config_manager.reload(file);
 	}
 
 	private void update_lang_file(String lang_file) {
@@ -211,7 +194,7 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 		}
 	}
 
-	public boolean reload_localization() {
+	private boolean try_reload_localization() {
 		// Copy all embedded lang files, if their version is newer.
 		get_resources(getClass(), Pattern.compile("lang-.*\\.yml")).stream().forEach(this::update_lang_file);
 
@@ -234,11 +217,63 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 		}
 
 		// Reload automatic variables
-		if (!lang_manager.reload(file)) {
+		return lang_manager.reload(file);
+	}
+
+	public boolean reload_configuration() {
+		boolean was_enabled = context_group.enabled();
+
+		if (!try_reload_configuration()) {
+			// Force stop server, we encountered an invalid config file
+			log.severe("Invalid plugin configuration. Shutting down.");
+			getServer().shutdown();
 			return false;
 		}
 
+		// Reload localization
+		if (!try_reload_localization()) {
+			// Force stop server, we encountered an invalid lang file
+			log.severe("Invalid localization file. Shutting down.");
+			getServer().shutdown();
+			return false;
+		}
+
+		if (was_enabled && !context_group.enabled()) {
+			// Disable plugin if needed
+			disable();
+		} else if (!was_enabled && context_group.enabled()) {
+			// Enable plugin if needed
+			enable();
+		}
+
+		config_change();
 		return true;
+	}
+
+	public File get_persistent_storage_file() {
+		// Generate new file if not existing
+		return new File(getDataFolder(), "data.json");
+	}
+
+	public void load_persistent_storage() {
+		// Load automatic persistent variables
+		final var file = get_persistent_storage_file();
+		if (file.exists()) {
+			return;
+		}
+
+		if (!persistent_storage_manager.load(file)) {
+			// Force stop server, we encountered an invalid persistent storage file.
+			// This prevents further corruption.
+			log.severe("Invalid persistent storage. Shutting down to prevent further corruption.");
+			getServer().shutdown();
+		}
+	}
+
+	public void save_persistent_storage() {
+		// Save automatic persistent variables
+		final var file = get_persistent_storage_file();
+		persistent_storage_manager.save(file);
 	}
 
 	public void register_listener(Listener listener) {

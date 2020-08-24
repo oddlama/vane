@@ -18,10 +18,21 @@ version: 1
 # by a non-player.
 command_not_a_player: "§cerror:§6 command must be executed by a player!"
 # This message is sent when the command sender is missing the required
-# permissiog.
+# permission.
 command_permission_denied: "§cerror:§6 permission denied!"
 
+# This message is sent when an invalid time format is encountered.
+# {0}: format error message
+invalid_time_format: "§cerror:§6 invalid time: {0}"
+
 command_vane:
+  # This message is sent when a module has been successfully reloaded
+  # {0}: module
+  reload_success: "§b{0}: §areload successful"
+  # This message is sent when a module failed to reload
+  # {0}: module
+  # {1}: failure reason
+  reload_fail: "§b{0}: §creload failed: §6{1}"
   usage: "§areload §7[§bmodule§7]"
   description: "Manages vane plugins."
   help: "§areload§7:§r Reloads all or the given vane module."
