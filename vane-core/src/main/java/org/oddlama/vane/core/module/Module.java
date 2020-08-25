@@ -51,7 +51,9 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 	public LangManager lang_manager = new LangManager(this);
 	public PersistentStorageManager persistent_storage_manager = new PersistentStorageManager(this);
 
-	// Per module command catch-all permission
+	// Vane global catch-all permission (only registered by core)
+	public Permission permission_command_catchall = new Permission("vane.*.commands.*", "Allow access to all vane commands (ONLY FOR ADMINS!)", PermissionDefault.FALSE);
+	// Per module catch-all permissions
 	public Permission permission_command_catchall_module;
 
 	// Permission attachment for console
@@ -108,6 +110,12 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 	// bStats
 	Metrics metrics;
 
+	public Module() {
+		// Create per module command catch-all permission
+		permission_command_catchall_module = new Permission("vane." + get_name() + ".commands.*", "Allow access to all vane-" + get_name() + " commands", PermissionDefault.FALSE);
+		register_permission(permission_command_catchall_module);
+	}
+
 	@Override
 	public final void onLoad() {
 		// Create data directory
@@ -129,10 +137,6 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 		} else {
 			core = (Core)getServer().getPluginManager().getPlugin("vane-core");
 		}
-
-		// Create per module command catch-all permission
-		permission_command_catchall_module = new Permission("vane." + get_name() + ".commands.*", "Allow access to all vane-" + get_name() + " commands", PermissionDefault.FALSE);
-		register_permission(permission_command_catchall_module);
 
 		// Create console permission attachment
 		console_attachment = getServer().getConsoleSender().addAttachment(this);

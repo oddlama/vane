@@ -39,8 +39,7 @@ public class Permissions extends Module<Permissions> {
 		@ConfigStringListMapEntry(key = "default", list = {
 			"bukkit.command.help",
 			"bukkit.broadcast",
-			"bukkit.broadcast.user",
-			"vane.admin.modify_world" }),
+			"bukkit.broadcast.user" }),
 		@ConfigStringListMapEntry(key = "user", list = {
 			"vane.permissions.groups.default",
 			"vane.admin.modify_world" }),
@@ -104,19 +103,33 @@ public class Permissions extends Module<Permissions> {
 			final var set = new HashSet<String>();
 			for (var perm : v) {
 				if (perm.startsWith("vane.permissions.groups.")) {
-					final var group = perm.substring("vane.permissions.groups.".length());
-					final var group_perms = permission_groups.get(group);
-					if (group_perms == null) {
-						log.severe("Permission group '" + group + "' referenced before definition by group '" + k + "'; Ignoring statement!");
-						continue;
-					}
-					set.addAll(group_perms);
+					// Resolving will be delayed to second pass
 				} else {
 					set.add(perm);
 				}
 			}
 			permission_groups.put(k, set);
 		});
+
+		// Resolve group inheritance
+		var modified = new Object() { boolean value = false; };
+		do {
+			modified.value = false;
+			config_groups.forEach((k, v) -> {
+				final var set = permission_groups.get(k);
+				for (var perm : v) {
+					if (perm.startsWith("vane.permissions.groups.")) {
+						final var group = perm.substring("vane.permissions.groups.".length());
+						final var group_perms = permission_groups.get(group);
+						if (group_perms == null) {
+							log.severe("Nonexistent permission group '" + group + "' referenced by group '" + k + "'; Ignoring statement!");
+							continue;
+						}
+						modified.value |= set.addAll(group_perms);
+					}
+				}
+			});
+		} while (modified.value);
 	}
 
 	private void register_player(final Player player) {
