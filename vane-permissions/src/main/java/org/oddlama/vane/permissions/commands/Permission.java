@@ -3,6 +3,7 @@ package org.oddlama.vane.permissions.commands;
 import static org.oddlama.vane.util.Util.parse_time;
 
 import java.util.HashSet;
+import java.util.Collections;
 import org.bukkit.command.CommandSender;
 
 import org.oddlama.vane.permissions.Permissions;
@@ -124,6 +125,30 @@ public class Permission extends Command<Permissions> {
 			// Player is offline, show configured permissions only.
 			// Information from other plugins might be missing.
 			sender.sendMessage(lang_list_player_offline);
+			final var groups = get_module().storage_player_groups.get(player.getUniqueId());
+			if (groups == null) {
+				sender.sendMessage("§b∅");
+			} else {
+				for (var group : groups) {
+					for (var p : get_module().permission_groups.getOrDefault(group, Collections.emptySet())) {
+						var perm = get_module().getServer().getPluginManager().getPermission(p);
+						if (perm == null) {
+							get_module().log.warning("Use of unregistered permission '" + p + "' might have unintended effects.");
+							sender.sendMessage(lang_list_permission.format(
+										p,
+										permission_value_color_code(true),
+										String.valueOf(true),
+										""));
+						} else {
+							sender.sendMessage(lang_list_permission.format(
+										perm.getName(),
+										permission_value_color_code(true),
+										String.valueOf(true),
+										perm.getDescription()));
+						}
+					}
+				}
+			}
 		} else {
 			var effective_permissions = player.getEffectivePermissions();
 			if (effective_permissions.isEmpty()) {
@@ -149,7 +174,7 @@ public class Permission extends Command<Permissions> {
 	}
 
 	private void list_groups_for_player(CommandSender sender, OfflinePlayer offline_player) {
-		var set = get_module().permission_groups.get(offline_player.getUniqueId());
+		var set = get_module().storage_player_groups.get(offline_player.getUniqueId());
 		if (set == null) {
 			sender.sendMessage("§b∅");
 		} else {

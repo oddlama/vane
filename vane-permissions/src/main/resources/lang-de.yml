@@ -19,7 +19,7 @@ command_permission:
   list_header_permissions: "Registrierte Berechtigungen:\nFormat: <permission> (<default>): <description>"
   list_header_player_groups: "Berechtigungsgruppen für §b{0}§r:"
   list_header_player_permissions: "Berechtigungen für §b{0}§r:\nFormat: <permission> (<default>): <description>"
-  list_player_offline: "Der angeforderte Spieler ist offline. Es werden nur direkt konfigurierte Berechtigungen gezeigt. Berechtigungen die durch andere Plugins gesetzt werden fehlen möglicherweise."
+  list_player_offline: "§6Der angeforderte Spieler ist offline. Es werden nur direkt konfigurierte Berechtigungen gezeigt. Berechtigungen die durch andere Plugins gesetzt werden fehlen möglicherweise."
   list_group: " §7- §b{0}"
   list_permission: " §7- §d{0} §7({1}{2}§7): {3}"
   group_assigned: "§b{1} §awurde §b{1}§a zugewiesen"
