@@ -63,4 +63,8 @@ public interface Context<T extends Module<T>> {
 		}
 		return variable_yaml_path(field.substring("storage_".length()));
 	}
+
+	default public void save_persistent_storage() {
+		get_module().save_persistent_storage();
+	}
 }

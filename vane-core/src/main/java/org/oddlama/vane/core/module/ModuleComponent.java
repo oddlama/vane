@@ -50,4 +50,9 @@ public abstract class ModuleComponent<T extends Module<T>> {
 	public final String storage_path_of(String field) {
 		return context.storage_path_of(field);
 	}
+
+
+	public final void save_persistent_storage() {
+		context.save_persistent_storage();
+	}
 }

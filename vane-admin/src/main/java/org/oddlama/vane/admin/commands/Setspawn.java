@@ -1,6 +1,7 @@
 package org.oddlama.vane.admin.commands;
 
 import org.bukkit.entity.Player;
+import org.oddlama.vane.core.persistent.PersistentLocation;
 
 import org.oddlama.vane.admin.Admin;
 import org.oddlama.vane.annotation.command.Name;
@@ -19,7 +20,13 @@ public class Setspawn extends Command<Admin> {
 	}
 
 	private void set_spawn(Player player) {
-		player.getWorld().setSpawnLocation(player.getLocation());
+		final var loc = player.getLocation();
+		player.getWorld().setSpawnLocation(loc);
+
+		// Save location in storage
+		get_module().storage_spawn_location = PersistentLocation.from(loc);
+		save_persistent_storage();
+
 		player.sendMessage("§aSpawn §7set!");
 	}
 }

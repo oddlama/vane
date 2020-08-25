@@ -12,7 +12,7 @@ import org.oddlama.vane.annotation.lang.LangVersion;
 import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.util.Message;
 
-@VaneModule(name = "core", bstats = 8637, config_version = 1, lang_version = 1, storage_version = 2)
+@VaneModule(name = "core", bstats = 8637, config_version = 1, lang_version = 1, storage_version = 1)
 public class Core extends Module<Core> {
 	@LangString
 	public String lang_command_not_a_player;
@@ -32,10 +32,5 @@ public class Core extends Module<Core> {
 		// Components
 		new org.oddlama.vane.core.commands.Vane(this);
 		//new TabCompletionRestricter(this);
-
-		add_storage_migration_to(1, "initializer", map -> {});
-		add_storage_migration_to(2, "test", map -> {
-			System.out.println(map.get(storage_path_of("storage_version")));
-		});
 	}
 }

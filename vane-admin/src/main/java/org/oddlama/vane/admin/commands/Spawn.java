@@ -1,6 +1,7 @@
 package org.oddlama.vane.admin.commands;
 
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 import org.oddlama.vane.admin.Admin;
 import org.oddlama.vane.annotation.command.Name;
@@ -19,6 +20,8 @@ public class Spawn extends Command<Admin> {
 	}
 
 	private void tp_spawn(Player player) {
-		// TODO save world in setspawn in key-value store.
+		if (get_module().storage_spawn_location != null) {
+			player.teleport(get_module().storage_spawn_location.get(), TeleportCause.COMMAND);
+		}
 	}
 }
