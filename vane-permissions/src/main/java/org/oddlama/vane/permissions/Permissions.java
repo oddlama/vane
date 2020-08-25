@@ -36,8 +36,17 @@ public class Permissions extends Module<Permissions> {
 	public String config_default_group;
 
 	@ConfigStringListMap(def = {
-		@ConfigStringListMapEntry(key = "default", list = {"bukkit.command.help", "bukkit.broadcast", "bukkit.broadcast.user"}),
-		@ConfigStringListMapEntry(key = "admin", list = {"vane.permissions.groups.default"}),
+		@ConfigStringListMapEntry(key = "default", list = {
+			"bukkit.command.help",
+			"bukkit.broadcast",
+			"bukkit.broadcast.user",
+			"vane.admin.modify_world" }),
+		@ConfigStringListMapEntry(key = "user", list = {
+			"vane.permissions.groups.default",
+			"vane.admin.modify_world" }),
+		@ConfigStringListMapEntry(key = "admin", list = {
+			"vane.permissions.groups.user",
+			"vane.*.commands.*" }),
 	}, desc = "The permission groups. A player can have multiple permission groups assigned. Permission groups can inherit other permission groups by specifying vane.permissions.groups.<groupname> as a permission.")
 	public Map<String, List<String>> config_groups;
 

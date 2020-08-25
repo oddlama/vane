@@ -2,6 +2,8 @@ package org.oddlama.vane.core.module;
 
 import static org.oddlama.vane.util.ResourceList.get_resources;
 
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
 import java.io.File;
 import java.util.logging.Level;
 import java.io.IOException;
@@ -48,6 +50,9 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 	public ConfigManager config_manager = new ConfigManager(this);
 	public LangManager lang_manager = new LangManager(this);
 	public PersistentStorageManager persistent_storage_manager = new PersistentStorageManager(this);
+
+	// Per module command catch-all permission
+	public Permission permission_command_catchall_module;
 
 	// Permission attachment for console
 	private List<String> pending_console_permissions = new ArrayList<>();
@@ -124,6 +129,10 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 		} else {
 			core = (Core)getServer().getPluginManager().getPlugin("vane-core");
 		}
+
+		// Create per module command catch-all permission
+		permission_command_catchall_module = new Permission("vane." + get_name() + ".commands.*", "Allow access to all vane-" + get_name() + " commands", PermissionDefault.FALSE);
+		register_permission(permission_command_catchall_module);
 
 		// Create console permission attachment
 		console_attachment = getServer().getConsoleSender().addAttachment(this);
