@@ -48,7 +48,7 @@ public class Admin extends Module<Admin> {
 	public void on_player_chat(AsyncPlayerChatEvent event) {
 		// TODO color based on privilege or config value.... somehow
 		// link permission groups to different config values....
-		String color = "§a";
+		String color = "§b";
 		event.setFormat(lang_player_chat_format.format(color, "%1$s", "%2$s"));
 	}
 

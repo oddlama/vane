@@ -25,11 +25,7 @@ public abstract class Command<T extends Module<T>> extends ModuleComponent<T> {
 	public class BukkitCommand extends org.bukkit.command.Command implements PluginIdentifiableCommand {
 		public BukkitCommand(String name) {
 			super(name);
-		}
-
-		@Override
-		public String getPermission() {
-			return Command.this.permission.getName();
+			setPermission(Command.this.permission.getName());
 		}
 
 		@Override

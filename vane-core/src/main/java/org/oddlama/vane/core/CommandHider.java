@@ -43,7 +43,7 @@ public class CommandHider extends Listener<Core> {
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void on_player_command_preprocess(PlayerCommandPreprocessEvent event) {
-		if (allow_command_event(event.getMessage(), event.getPlayer())) {
+		if (!allow_command_event(event.getMessage(), event.getPlayer())) {
 			event.getPlayer().sendMessage("Unknown Command");
 			event.setCancelled(true);
 		}

@@ -125,7 +125,7 @@ public class Permission extends Command<Permissions> {
 			// Player is offline, show configured permissions only.
 			// Information from other plugins might be missing.
 			sender.sendMessage(lang_list_player_offline);
-			final var groups = get_module().storage_player_groups.get(player.getUniqueId());
+			final var groups = get_module().storage_player_groups.get(offline_player.getUniqueId());
 			if (groups == null) {
 				sender.sendMessage("§b∅");
 			} else {
