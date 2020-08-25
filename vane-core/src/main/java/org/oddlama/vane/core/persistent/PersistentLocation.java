@@ -7,6 +7,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
 public class PersistentLocation implements Serializable {
+	private static final long serialVersionUID = 1l;
+
     private UUID world_id;
     private double x;
     private double y;
