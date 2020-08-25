@@ -31,7 +31,7 @@ So if you don't want a certain feature, simply disable it.
 #### Administrative and 'meta' features
 
 - [x] Full localization support, currently provides english (default) and german.
-- [ ] Builtin lightweight permissions plugin (permission groups, group inheritance, live editing)
+- [x] Builtin lightweight permissions plugin (permission groups, group inheritance, live editing)
 - [x] All default permissions are revoked and need to be added explicitly
 - [x] Hide commands from players, if they don't have the required permission
 - [ ] Inaccessible commands will not be shown to players
