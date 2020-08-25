@@ -25,7 +25,7 @@ public class Gamemode extends Command<Admin> {
 		params().fixed("help").ignore_case().exec(this::print_help);
 		// Command parameters
 		params().exec_player(this::toggle_gamemode_self);
-		params().choose_online_player().exec_player(this::toggle_gamemode_player);
+		params().choose_online_player().exec(this::toggle_gamemode_player);
 		var gamemode = params().choose_gamemode();
 		gamemode.exec_player(this::set_gamemode_self);
 		gamemode.choose_online_player().exec(this::set_gamemode);
