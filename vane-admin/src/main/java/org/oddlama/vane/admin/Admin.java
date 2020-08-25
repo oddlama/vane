@@ -42,6 +42,8 @@ public class Admin extends Module<Admin> {
 		var autostop_group = new AutostopGroup(this);
 		new AutostopListener(autostop_group);
 		new org.oddlama.vane.admin.commands.Autostop(autostop_group);
+
+		new HazardProtection(this);
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

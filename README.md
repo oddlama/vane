@@ -33,10 +33,10 @@ So if you don't want a certain feature, simply disable it.
 - [x] Full localization support, currently provides english (default) and german.
 - [x] Builtin lightweight permissions plugin (permission groups, group inheritance, live editing)
 - [x] All default permissions are revoked and need to be added explicitly
-- [x] Hide commands from players, if they don't have the required permission
-- [ ] Inaccessible commands will not be shown to players
+- [x] Inaccessible commands will not be shown to players (sends "Unknown Command" instead)
 - [x] Slightly colorized chat message format for better readability
 - [x] Convenience commands for time, weather, gamemode, spawn, ...
+- [x] Hazard protection against creeper/wither explosions, door breaking, ...
 - [ ] Players without any permissions cannot alter the world (just look, no touch!)
 - [ ] Advancements to guide you through most additions
 
