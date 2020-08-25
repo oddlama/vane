@@ -20,7 +20,7 @@ So if you don't want a certain feature, simply disable it.
 #### Little things & quality of life
 
 - [x] Walk faster on grass paths
-- [ ] Harvest finished crops by right-clicking
+- [x] Harvest finished crops by right-clicking
 - [x] Double doors open simultaneously
 - [ ] Craft lights that automatically turn on when it's night
 - [ ] Sort chests with redstone
@@ -110,6 +110,7 @@ spawn with remnants of old world
 /verify system for players -> adds permission groups
 
 
+per chunk cache for regions, like "chunk is fully in region"
 
 check achievement on anvil
 
