@@ -13,3 +13,21 @@
 # DO NOT CHANGE! The version of this language file. Used to determine
 # if the file needs to be updated.
 version: 1
+
+command_permission:
+  list_header_groups: "Registrierte Gruppen:"
+  list_header_permissions: "Registrierte Berechtigungen:\nFormat: <permission> (<default>): <description>"
+  list_header_player_groups: "Berechtigungsgruppen für §b{0}§r:"
+  list_header_player_permissions: "Berechtigungen für §b{0}§r:\nFormat: <permission> (<default>): <description>"
+  list_player_offline: "Der angeforderte Spieler ist offline. Es werden nur direkt konfigurierte Berechtigungen gezeigt. Berechtigungen die durch andere Plugins gesetzt werden fehlen möglicherweise."
+  list_group: " §7- §b{0}"
+  list_permission: " §7- §d{0} §7({1}{2}§7): {3}"
+  group_assigned: "§b{1} §awurde §b{1}§a zugewiesen"
+  group_removed: "§b{1} §awurde von §b{1}§a entfernt"
+  group_already_assigned: "§6Gruppe bereits zugewiesen"
+  group_not_assigned: "§6Gruppe nicht zugewiesen"
+  usage: "§7<§alist§7|§aadd§7|§aremove§7>"
+  description: "Verwaltet Spielerberechtigungen."
+  help: "§alist §7<§agroups§7|§apermissions§7>:§r Listet alle verfügbaren Berechtigungen oder Berechtigungsgruppen.\n\
+    §aadd §bplayer §bgroup§7:§r Fügt einen Spieler zu einer Berechtigungsgruppe hinzu.\n\
+    §aremove §bplayer §bgroup§7:§r Entfernt einen Spieler aus einer Berechtigungsgruppe."

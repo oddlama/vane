@@ -3,6 +3,8 @@ package org.oddlama.vane.permissions;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Map;
 import java.util.UUID;
 
@@ -40,11 +42,15 @@ public class Permissions extends Module<Permissions> {
 
 	// Persistent storage
 	@Persistent
-	public Map<String, List<String>> storage_player_groups = new HashMap<>();
+	public Map<UUID, Set<String>> storage_player_groups = new HashMap<>();
 
 	// Variables
-	private final Map<String, List<String>> permission_groups = new HashMap<>();
+	public final Map<String, Set<String>> permission_groups = new HashMap<>();
 	private final Map<UUID, PermissionAttachment> player_attachments = new HashMap<>();
+
+	public Permissions() {
+		new org.oddlama.vane.permissions.commands.Permission(this);
+	}
 
 	@Override
 	public void on_enable() {
@@ -52,7 +58,10 @@ public class Permissions extends Module<Permissions> {
 			if (config_remove_defaults) {
 				for (var perm : getServer().getPluginManager().getPermissions()) {
 					perm.setDefault(PermissionDefault.FALSE);
-					getServer().getPluginManager().removePermission(perm);
+					getServer().getPluginManager().recalculatePermissionDefaults(perm);
+
+					// But still allow the console to execute commands
+					Permissions.this.add_console_permission(perm);
 				}
 			}
 		});
@@ -82,7 +91,7 @@ public class Permissions extends Module<Permissions> {
 	private void flatten_groups() {
 		permission_groups.clear();
 		config_groups.forEach((k, v) -> {
-			final var list = new ArrayList<String>();
+			final var set = new HashSet<String>();
 			for (var perm : v) {
 				if (perm.startsWith("vane.permissions.groups.")) {
 					final var group = perm.substring("vane.permissions.groups.".length());
@@ -91,12 +100,12 @@ public class Permissions extends Module<Permissions> {
 						log.severe("Permission group '" + group + "' referenced before definition by group '" + k + "'; Ignoring statement!");
 						continue;
 					}
-					list.addAll(group_perms);
+					set.addAll(group_perms);
 				} else {
-					list.add(perm);
+					set.add(perm);
 				}
 			}
-			permission_groups.put(k, list);
+			permission_groups.put(k, set);
 		});
 	}
 
@@ -105,11 +114,13 @@ public class Permissions extends Module<Permissions> {
 		final var attachment = player.addAttachment(this);
 		player_attachments.put(player.getUniqueId(), attachment);
 
-		// TODO command to assign / list / remove groups from players
-		// TODO command list all groups
+		// TODO warn if a permission doent exist when adding it to an attachment
 
 		// Update list of commands for client side root tab completion
 		player.updateCommands();
+	}
+
+	public void recalculate_player_permissions(final Player player) {
 	}
 
 	private void unregister_player(final Player player) {

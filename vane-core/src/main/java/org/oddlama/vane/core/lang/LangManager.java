@@ -1,5 +1,6 @@
 package org.oddlama.vane.core.lang;
 
+import java.util.logging.Level;
 import static org.reflections.ReflectionUtils.*;
 
 import java.io.File;
@@ -156,8 +157,7 @@ public class LangManager {
 				f.load(yaml);
 			}
 		} catch (YamlLoadException e) {
-			module.log.severe("error while loading '" + file.getName() + "':");
-			module.log.severe(e.getMessage());
+			module.log.log(Level.SEVERE, "error while loading '" + file.getName() + "'", e);
 			return false;
 		}
 		return true;

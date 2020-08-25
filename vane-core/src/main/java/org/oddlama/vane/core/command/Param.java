@@ -8,11 +8,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.bukkit.permissions.Permission;
 import org.bukkit.GameMode;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.OfflinePlayer;
 
 import org.oddlama.vane.core.command.check.CheckResult;
 import org.oddlama.vane.core.command.check.CombinedErrorCheckResult;
@@ -218,14 +220,32 @@ public interface Param {
 					.orElse(null));
 	}
 
+	default public DynamicChoiceParam<OfflinePlayer> choose_any_player() {
+		return choice("any_player",
+				sender -> Arrays.asList(get_command().get_module().getServer().getOfflinePlayers()),
+				(sender, p) -> p.getName(),
+				(sender, str) -> Arrays.stream(get_command().get_module().getServer().getOfflinePlayers())
+					.filter(k -> k.getName().equalsIgnoreCase(str))
+					.findFirst()
+					.orElse(null));
+	}
+
 	default public DynamicChoiceParam<Player> choose_online_player() {
 		return choice("online_player",
 				sender -> get_command().get_module().getServer().getOnlinePlayers(),
 				(sender, p) -> p.getName(),
 				(sender, str) -> get_command().get_module().getServer().getOnlinePlayers().stream()
-					.filter(k -> k.getName().equals(str))
+					.filter(k -> k.getName().equalsIgnoreCase(str))
 					.findFirst()
 					.orElse(null));
+	}
+
+	// TODO (minor): Make choose_permission filter results based on the previously specified player.
+	default public DynamicChoiceParam<Permission> choose_permission() {
+		return choice("permission",
+				sender -> get_command().get_module().getServer().getPluginManager().getPermissions(),
+				(sender, p) -> p.getName(),
+				(sender, str) -> get_command().get_module().getServer().getPluginManager().getPermission(str));
 	}
 
 	default public ChoiceParam<GameMode> choose_gamemode() {

@@ -13,3 +13,47 @@
 # DO NOT CHANGE! The version of this language file. Used to determine
 # if the file needs to be updated.
 version: 1
+
+command_permission:
+  # This message is sent as a first header line for group list output
+  list_header_groups: "Listing all registered groups:"
+  # This message is sent as a first header line for permission list output
+  list_header_permissions: "Listing all registered permissions:\nFormat: <permission> (<default>): <description>"
+  # This message is sent as a first header line for player group list output
+  # {0}: Player name
+  list_header_player_groups: "Listing all groups for §b{0}§r:"
+  # This message is sent as a first header line for player permission list output
+  # {0}: Player name
+  list_header_player_permissions: "Listing all permissions for §b{0}§r:\nFormat: <permission> (<default>): <description>"
+  # This message is sent when permissions are queried on an offline player
+  list_player_offline: "The requested player is offline. Only configured permissions will be shown. Permissions from other permission management plugins might be missing."
+  # This message is sent for each group when a list of all groups is requested.
+  # {0}: Group name
+  list_group: " §7- §b{0}"
+  # This message is sent for each permission when a list of all permissions is requested.
+  # {0}: Permission name
+  # {1}: Permission value color code
+  # {2}: Permission value
+  # {3}: Permission description
+  list_permission: " §7- §d{0} §7({1}{2}§7): {3}"
+  # This message is sent when a group is added to a player.
+  # {0}: Group name
+  # {1}: Player name
+  group_assigned: "§b{1} was assigned to §b{0}"
+  # This message is sent when a group is removed from a player.
+  # {0}: Group name
+  # {1}: Player name
+  group_removed: "§b{1} was removed from §b{0}"
+  # This message is sent when a group is added to a player, but it is already assigned.
+  # {0}: Group name
+  # {1}: Player name
+  group_already_assigned: "§6Group already assigned"
+  # This message is sent when a group is removed from a player, but it wasn't assigned.
+  # {0}: Group name
+  # {1}: Player name
+  group_not_assigned: "§6Group not assigned"
+  usage: "§7<§alist§7|§aadd§7|§aremove§7>"
+  description: "Manages player permissions."
+  help: "§alist §7<§agroups§7|§apermissions§7>:§r Lists all available permissions or permission groups.\n\
+    §aadd §bplayer §bgroup§7:§r Adds the player to the given permission group.\n\
+    §aremove §bplayer §bgroup§7:§r Removed the player from the given permission group."

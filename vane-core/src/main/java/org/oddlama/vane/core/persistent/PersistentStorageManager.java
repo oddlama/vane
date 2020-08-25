@@ -3,6 +3,7 @@ package org.oddlama.vane.core.persistent;
 import static org.reflections.ReflectionUtils.*;
 
 import java.io.File;
+import java.util.logging.Level;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -116,8 +117,7 @@ public class PersistentStorageManager {
 			try (var ois = new ObjectInputStream(new FileInputStream(file))) {
 				map = (Map<String, Object>)ois.readObject();
 			} catch (IOException | ClassNotFoundException e) {
-				module.log.severe("error while loading persistent data from '" + file.getName() + "':");
-				module.log.severe(e.getMessage());
+				module.log.log(Level.SEVERE, "error while loading persistent data from '" + file.getName() + "'", e);
 				return false;
 			}
 		} else {
@@ -158,8 +158,7 @@ public class PersistentStorageManager {
 				f.load(map);
 			}
 		} catch (LoadException e) {
-			module.log.severe("error while loading persistent variables from '" + file.getName() + "':");
-			module.log.severe(e.getMessage());
+			module.log.log(Level.SEVERE, "error while loading persistent variables from '" + file.getName() + "'", e);
 			return false;
 		}
 
@@ -183,8 +182,7 @@ public class PersistentStorageManager {
 		try (var oos = new ObjectOutputStream(new FileOutputStream(file))) {
 			oos.writeObject(map);
 		} catch (IOException e) {
-			module.log.severe("error while saving persistent data!");
-			module.log.severe(e.getMessage());
+			module.log.log(Level.SEVERE, "error while saving persistent data!", e);
 		}
 	}
 }

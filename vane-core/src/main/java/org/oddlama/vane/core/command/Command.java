@@ -14,6 +14,8 @@ import org.oddlama.vane.annotation.command.Name;
 import org.oddlama.vane.annotation.command.VaneCommand;
 import org.oddlama.vane.annotation.lang.LangString;
 import org.oddlama.vane.core.command.params.AnyParam;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.core.module.ModuleComponent;
@@ -27,7 +29,7 @@ public abstract class Command<T extends Module<T>> extends ModuleComponent<T> {
 
 		@Override
 		public String getPermission() {
-			return Command.this.permission;
+			return Command.this.permission.getName();
 		}
 
 		@Override
@@ -83,7 +85,7 @@ public abstract class Command<T extends Module<T>> extends ModuleComponent<T> {
 
 	// Variables
 	private String name;
-	private String permission;
+	private Permission permission;
 	private BukkitCommand bukkit_command;
 
 	// Root parameter
@@ -107,8 +109,12 @@ public abstract class Command<T extends Module<T>> extends ModuleComponent<T> {
 			bukkit_command.setAliases(List.of(aliases.value()));
 		}
 
-		// Initialize permission string
-		permission = "vane." + get_module().get_name() + ".commands." + name;
+		// Register permission
+		permission = new Permission("vane." + get_module().get_name() + ".commands." + name, "Allow access to /" + name, PermissionDefault.FALSE);
+		get_module().register_permission(permission);
+
+		// Always allow the console to execute commands
+		get_module().add_console_permission(permission);
 
 		// Initialize root parameter
 		root_param = new AnyParam<String>(this, "/" + get_name(), str -> str);
@@ -123,7 +129,7 @@ public abstract class Command<T extends Module<T>> extends ModuleComponent<T> {
 	}
 
 	public String get_permission() {
-		return permission;
+		return permission.getName();
 	}
 
 	public String get_prefix() {

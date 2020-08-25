@@ -3,6 +3,7 @@ package org.oddlama.vane.core.module;
 import static org.oddlama.vane.util.ResourceList.get_resources;
 
 import java.io.File;
+import java.util.logging.Level;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.StringBuilder;
@@ -11,6 +12,9 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
+import java.util.List;
+import java.util.ArrayList;
+import org.bukkit.permissions.PermissionAttachment;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
@@ -20,6 +24,7 @@ import org.bstats.bukkit.Metrics;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
+import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import org.oddlama.vane.annotation.VaneModule;
@@ -35,27 +40,33 @@ import org.oddlama.vane.core.lang.LangManager;
 import org.oddlama.vane.core.persistent.PersistentStorageManager;
 
 public abstract class Module<T extends Module<T>> extends JavaPlugin implements Context<T>, org.bukkit.event.Listener {
+	public VaneModule annotation = getClass().getAnnotation(VaneModule.class);
 	public Core core;
 	public Logger log;
 
-	public VaneModule annotation = getClass().getAnnotation(VaneModule.class);
-
+	// Managers
 	public ConfigManager config_manager = new ConfigManager(this);
 	public LangManager lang_manager = new LangManager(this);
 	public PersistentStorageManager persistent_storage_manager = new PersistentStorageManager(this);
 
-	@ConfigString(def = "inherit", desc = "The language for this module. The corresponding language file must be named lang-{lang}.yml. Specifying 'inherit' will load the value set for vane-core.")
-	public String config_lang;
+	// Permission attachment for console
+	private List<String> pending_console_permissions = new ArrayList<>();
+	private PermissionAttachment console_attachment;
 
-	@ConfigBoolean(def = true, desc = "Enable plugin metrics via bStats. You can opt-out here or via the global bStats configuration.")
-	public boolean config_metrics_enabled;
-
+	// Version fields for config, lang, storage
 	@ConfigVersion
 	public long config_version;
 	@LangVersion
 	public long lang_version;
 	@Persistent
 	public long storage_version = 0;
+
+	// Base configuration
+	@ConfigString(def = "inherit", desc = "The language for this module. The corresponding language file must be named lang-{lang}.yml. Specifying 'inherit' will load the value set for vane-core.")
+	public String config_lang;
+
+	@ConfigBoolean(def = true, desc = "Enable plugin metrics via bStats. You can opt-out here or via the global bStats configuration.")
+	public boolean config_metrics_enabled;
 
 	// Context<T> interface proxy
 	private ModuleGroup<T> context_group = new ModuleGroup<>(this, "", "The module will only add functionality if this is set to true.");
@@ -113,6 +124,13 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 		} else {
 			core = (Core)getServer().getPluginManager().getPlugin("vane-core");
 		}
+
+		// Create console permission attachment
+		console_attachment = getServer().getConsoleSender().addAttachment(this);
+		for (var perm : pending_console_permissions) {
+			console_attachment.setPermission(perm, true);
+		}
+		pending_console_permissions.clear();
 
 		// Register in core
 		core.register_module(this);
@@ -305,5 +323,29 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 		var bukkit_command = command.get_bukkit_command();
 		getServer().getCommandMap().getKnownCommands().values().remove(bukkit_command);
 		bukkit_command.unregister(getServer().getCommandMap());
+	}
+
+	public void add_console_permission(Permission permission) {
+		add_console_permission(permission.getName());
+	}
+
+	public void add_console_permission(String permission) {
+		if (console_attachment == null) {
+			pending_console_permissions.add(permission);
+		} else {
+			console_attachment.setPermission(permission, true);
+		}
+	}
+
+	public void register_permission(Permission permission) {
+		try {
+			getServer().getPluginManager().addPermission(permission);
+		} catch (IllegalArgumentException e) {
+			log.log(Level.SEVERE, "Permission '" + permission.getName() + "' was already defined", e);
+		}
+	}
+
+	public void unregister_permission(Permission permission) {
+		getServer().getPluginManager().removePermission(permission);
 	}
 }
