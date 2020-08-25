@@ -47,7 +47,7 @@ public class LangManager {
 
 	private void assert_field_prefix(Field field) {
 		if (!field.getName().startsWith("lang_")) {
-			throw new RuntimeException("Language fields must be named lang_. This is a bug.");
+			throw new RuntimeException("Language fields must be prefixed lang_. This is a bug.");
 		}
 	}
 

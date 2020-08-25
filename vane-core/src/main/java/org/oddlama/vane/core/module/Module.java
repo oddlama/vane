@@ -38,7 +38,8 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 	public Core core;
 	public Logger log;
 
-	public VaneModule annotation;
+	public VaneModule annotation = getClass().getAnnotation(VaneModule.class);
+
 	public ConfigManager config_manager = new ConfigManager(this);
 	public LangManager lang_manager = new LangManager(this);
 	public PersistentStorageManager persistent_storage_manager = new PersistentStorageManager(this);
@@ -93,9 +94,6 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 
 	@Override
 	public final void onLoad() {
-		// Load annotation
-		annotation = getClass().getAnnotation(VaneModule.class);
-
 		// Create data directory
 		if (!getDataFolder().exists()) {
 			getDataFolder().mkdirs();
@@ -264,7 +262,7 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 
 	public File get_persistent_storage_file() {
 		// Generate new file if not existing
-		return new File(getDataFolder(), "data.json");
+		return new File(getDataFolder(), "storage.dat");
 	}
 
 	public void load_persistent_storage() {

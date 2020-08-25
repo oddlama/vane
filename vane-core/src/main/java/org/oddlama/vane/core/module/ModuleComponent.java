@@ -43,7 +43,11 @@ public abstract class ModuleComponent<T extends Module<T>> {
 		return context.schedule_next_tick(task);
 	}
 
-	public final void add_storage_migration_to(long to, String description, Consumer<Map<String, Object>> migrator) {
-		context.add_storage_migration_to(to, description, migrator);
+	public final void add_storage_migration_to(long to, String name, Consumer<Map<String, Object>> migrator) {
+		context.add_storage_migration_to(to, name, migrator);
+	}
+
+	public final String storage_path_of(String field) {
+		return context.storage_path_of(field);
 	}
 }

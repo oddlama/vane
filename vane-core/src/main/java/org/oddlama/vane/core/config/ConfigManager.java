@@ -59,7 +59,7 @@ public class ConfigManager {
 
 	private void assert_field_prefix(Field field) {
 		if (!field.getName().startsWith("config_")) {
-			throw new RuntimeException("Configuration fields must be named config_. This is a bug.");
+			throw new RuntimeException("Configuration fields must be prefixed config_. This is a bug.");
 		}
 	}
 

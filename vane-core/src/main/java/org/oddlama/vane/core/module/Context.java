@@ -53,7 +53,14 @@ public interface Context<T extends Module<T>> {
 		return get_module().getServer().getScheduler().runTask(get_module(), task);
 	}
 
-	default public void add_storage_migration_to(long to, String description, Consumer<Map<String, Object>> migrator) {
-		get_module().persistent_storage_manager.add_migration_to(to, description, migrator);
+	default public void add_storage_migration_to(long to, String name, Consumer<Map<String, Object>> migrator) {
+		get_module().persistent_storage_manager.add_migration_to(to, name, migrator);
+	}
+
+	default public String storage_path_of(String field) {
+		if (!field.startsWith("storage_")) {
+			throw new RuntimeException("Configuration fields must be prefixed storage_. This is a bug.");
+		}
+		return variable_yaml_path(field.substring("storage_".length()));
 	}
 }

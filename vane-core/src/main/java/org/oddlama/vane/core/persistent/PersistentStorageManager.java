@@ -2,11 +2,13 @@ package org.oddlama.vane.core.persistent;
 
 import static org.reflections.ReflectionUtils.*;
 
-import com.google.gson.Gson;
-import com.google.common.reflect.TypeToken;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.io.File;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.lang.StringBuilder;
 import java.nio.file.Files;
 import java.lang.annotation.Annotation;
@@ -17,7 +19,6 @@ import java.util.Map;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
-import org.json.simple.JSONObject;
 import java.util.stream.Collectors;
 
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -46,12 +47,12 @@ import java.util.function.Consumer;
 public class PersistentStorageManager {
 	public class Migration {
 		public long to;
-		public String description;
+		public String name;
 		public Consumer<Map<String, Object>> migrator;
 
-		public Migration(long to, String description, Consumer<Map<String, Object>> migrator) {
+		public Migration(long to, String name, Consumer<Map<String, Object>> migrator) {
 			this.to = to;
-			this.description = description;
+			this.name = name;
 			this.migrator = migrator;
 		}
 	}
@@ -77,7 +78,7 @@ public class PersistentStorageManager {
 
 	private void assert_field_prefix(Field field) {
 		if (!field.getName().startsWith("storage_")) {
-			throw new RuntimeException("Configuration fields must be named storage_. This is a bug.");
+			throw new RuntimeException("Configuration fields must be prefixed storage_. This is a bug.");
 		}
 	}
 
@@ -115,44 +116,67 @@ public class PersistentStorageManager {
 			.collect(Collectors.toList()));
 	}
 
-	public void add_migration_to(long to, String description, Consumer<Map<String, Object>> migrator) {
-		migrations.add(new Migration(to, description, migrator));
+	public void add_migration_to(long to, String name, Consumer<Map<String, Object>> migrator) {
+		migrations.add(new Migration(to, name, migrator));
 	}
 
 	@SuppressWarnings("unchecked")
 	public boolean load(File file) {
-		if (!file.exists()) {
-			if (is_loaded) {
-				module.log.severe("Cannot reload persistent storage from nonexistent file '" + file.getName() + "'");
-				return false;
-			} else {
-				// First start, variables will have their defaults.
-				is_loaded = true;
-				return true;
-			}
+		if (!file.exists() && is_loaded) {
+			module.log.severe("Cannot reload persistent storage from nonexistent file '" + file.getName() + "'");
+			return false;
 		}
 
 		// Reset loaded status
 		is_loaded = false;
 
-		// Open file and read json
-		var content = "";
-		try {
-			content = Files.readString(file.toPath(), StandardCharsets.UTF_8);
-		} catch (IOException e) {
-			module.log.severe("error while loading persistent data from '" + file.getName() + "':");
-			module.log.severe(e.getMessage());
-			return false;
+		// Declare map
+		Map<String, Object> map;
+
+		// Open file and read map
+		if (file.exists()) {
+			try (var ois = new ObjectInputStream(new FileInputStream(file))) {
+				map = (Map<String, Object>)ois.readObject();
+			} catch (IOException | ClassNotFoundException e) {
+				module.log.severe("error while loading persistent data from '" + file.getName() + "':");
+				module.log.severe(e.getMessage());
+				return false;
+			}
+		} else {
+			map = new HashMap<String, Object>();
 		}
 
-		// Json to map
-		var map = (HashMap<String, Object>)new Gson().fromJson(content, new TypeToken<HashMap<String, Object>>(){}.getType());
-
 		// Check version and migrate if necessary
-		// TODO migrate persistent storage
+		final var version_path = module.storage_path_of("storage_version");
+		final var version_obj = (Long)map.get(version_path);
+		final var version = version_obj == null ? 0 : (long)version_obj;
+		final var needed_version = module.annotation.storage_version();
+		if (version != needed_version && migrations.size() > 0) {
+			module.log.info("Persistent storage is out of date.");
+			module.log.info("§dMigrating storage from version §b" + version + " → " + needed_version + "§d:");
+
+			// Sort migrations by target version,
+			// then apply new migrations in order.
+			migrations.stream()
+				.filter(m -> m.to >= version)
+				.sorted((a, b) -> Long.compare(a.to, b.to))
+				.forEach(m -> {
+					module.log.info("  → §b" + m.to + "§r : Applying migration '§a" + m.name + "§r'");
+					m.migrator.accept(map);
+				});
+		}
+
+		// Save new version
+		map.put(version_path, needed_version);
 
 		try {
 			for (var f : persistent_fields) {
+				// If we have just initialized a new map, we only load values that
+				// have defined keys (e.g. from initialization migrations)
+				if (version == 0 && !map.containsKey(f.path())) {
+					continue;
+				}
+
 				f.load(map);
 			}
 		} catch (LoadException e) {
@@ -177,12 +201,9 @@ public class PersistentStorageManager {
 			f.save(map);
 		}
 
-		// Map to json
-		var json = new Gson().toJson(map);
-
 		// Save to file
-		try {
-			Files.write(file.toPath(), json.getBytes(StandardCharsets.UTF_8));
+		try (var oos = new ObjectOutputStream(new FileOutputStream(file))) {
+			oos.writeObject(map);
 		} catch (IOException e) {
 			module.log.severe("error while saving persistent data!");
 			module.log.severe(e.getMessage());
