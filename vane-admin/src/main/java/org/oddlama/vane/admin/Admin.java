@@ -43,6 +43,7 @@ public class Admin extends Module<Admin> {
 		new AutostopListener(autostop_group);
 		new org.oddlama.vane.admin.commands.Autostop(autostop_group);
 
+		new WorldProtection(this);
 		new HazardProtection(this);
 	}
 

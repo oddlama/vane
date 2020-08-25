@@ -37,7 +37,7 @@ So if you don't want a certain feature, simply disable it.
 - [x] Slightly colorized chat message format for better readability
 - [x] Convenience commands for time, weather, gamemode, spawn, ...
 - [x] Hazard protection against creeper/wither explosions, door breaking, ...
-- [ ] Players without any permissions cannot alter the world (just look, no touch!)
+- [x] Players without any permissions cannot alter the world (just look, no touch!)
 - [ ] Advancements to guide you through most additions
 
 #### Unique features
