@@ -24,18 +24,21 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import org.oddlama.vane.annotation.VaneModule;
 import org.oddlama.vane.annotation.config.ConfigBoolean;
+import org.oddlama.vane.annotation.config.ConfigVersion;
+import org.oddlama.vane.annotation.lang.LangVersion;
 import org.oddlama.vane.annotation.config.ConfigString;
 import org.oddlama.vane.core.Core;
 import org.oddlama.vane.core.command.Command;
 import org.oddlama.vane.core.config.ConfigManager;
 import org.oddlama.vane.core.lang.LangManager;
+import org.oddlama.vane.annotation.persistent.Persistent;
 import org.oddlama.vane.core.persistent.PersistentStorageManager;
 
 public abstract class Module<T extends Module<T>> extends JavaPlugin implements Context<T>, org.bukkit.event.Listener {
 	public Core core;
 	public Logger log;
 
-	private String name;
+	public VaneModule annotation;
 	public ConfigManager config_manager = new ConfigManager(this);
 	public LangManager lang_manager = new LangManager(this);
 	public PersistentStorageManager persistent_storage_manager = new PersistentStorageManager(this);
@@ -45,6 +48,13 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 
 	@ConfigBoolean(def = true, desc = "Enable plugin metrics via bStats. You can opt-out here or via the global bStats configuration.")
 	public boolean config_metrics_enabled;
+
+	@ConfigVersion
+	public long config_version;
+	@LangVersion
+	public long lang_version;
+	@Persistent
+	public long storage_version = 0;
 
 	// Context<T> interface proxy
 	private ModuleGroup<T> context_group = new ModuleGroup<>(this, "", "The module will only add functionality if this is set to true.");
@@ -83,8 +93,8 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 
 	@Override
 	public final void onLoad() {
-		// Load name
-		name = getClass().getAnnotation(VaneModule.class).name();
+		// Load annotation
+		annotation = getClass().getAnnotation(VaneModule.class);
 
 		// Create data directory
 		if (!getDataFolder().exists()) {
@@ -128,7 +138,7 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 	@Override
 	public void enable() {
 		if (config_metrics_enabled) {
-			var id = getClass().getAnnotation(VaneModule.class).bstats();
+			var id = annotation.bstats();
 			if (id != -1) {
 				metrics = new Metrics(this, id);
 			}
@@ -283,7 +293,7 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 	}
 
 	public String get_name() {
-		return name;
+		return annotation.name();
 	}
 
 	public void register_command(Command<?> command) {

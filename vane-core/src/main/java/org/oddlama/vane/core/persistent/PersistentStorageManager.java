@@ -13,6 +13,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
@@ -40,9 +41,23 @@ import org.oddlama.vane.core.config.ConfigStringListMapField;
 import org.oddlama.vane.core.config.ConfigStringField;
 import org.oddlama.vane.core.config.ConfigVersionField;
 import org.oddlama.vane.core.module.Module;
+import java.util.function.Consumer;
 
 public class PersistentStorageManager {
+	public class Migration {
+		public long to;
+		public String description;
+		public Consumer<Map<String, Object>> migrator;
+
+		public Migration(long to, String description, Consumer<Map<String, Object>> migrator) {
+			this.to = to;
+			this.description = description;
+			this.migrator = migrator;
+		}
+	}
+
 	private List<PersistentField> persistent_fields = new ArrayList<>();
+	private List<Migration> migrations = new ArrayList<>();
 	Module<?> module;
 	boolean is_loaded = false;
 
@@ -60,7 +75,15 @@ public class PersistentStorageManager {
 		return false;
 	}
 
+	private void assert_field_prefix(Field field) {
+		if (!field.getName().startsWith("storage_")) {
+			throw new RuntimeException("Configuration fields must be named storage_. This is a bug.");
+		}
+	}
+
 	private PersistentField compile_field(Object owner, Field field, Function<String, String> map_name) {
+		assert_field_prefix(field);
+
 		// Get the annotation
 		Annotation annotation = null;
 		for (var a : field.getAnnotations()) {
@@ -90,6 +113,10 @@ public class PersistentStorageManager {
 			.filter(this::has_persistent_annotation)
 			.map(f -> compile_field(owner, f, map_name))
 			.collect(Collectors.toList()));
+	}
+
+	public void add_migration_to(long to, String description, Consumer<Map<String, Object>> migrator) {
+		migrations.add(new Migration(to, description, migrator));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -122,7 +149,7 @@ public class PersistentStorageManager {
 		var map = (HashMap<String, Object>)new Gson().fromJson(content, new TypeToken<HashMap<String, Object>>(){}.getType());
 
 		// Check version and migrate if necessary
-		// TODO
+		// TODO migrate persistent storage
 
 		try {
 			for (var f : persistent_fields) {

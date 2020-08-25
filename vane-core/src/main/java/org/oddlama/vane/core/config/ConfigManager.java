@@ -45,7 +45,7 @@ public class ConfigManager {
 	}
 
 	public long expected_version() {
-		return field_version.annotation.value();
+		return module.annotation.config_version();
 	}
 
 	private boolean has_config_annotation(Field field) {

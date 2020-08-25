@@ -14,16 +14,9 @@ import org.oddlama.vane.annotation.lang.LangVersion;
 import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.util.Message;
 
-@VaneModule(name = "admin", bstats = 8638)
+@VaneModule(name = "admin", bstats = 8638, config_version = 1, lang_version = 1, storage_version = 1)
 public class Admin extends Module<Admin> {
-	// Configuration
-	@ConfigVersion(1)
-	public long config_version;
-
 	// Language
-	@LangVersion(1)
-	public long lang_version;
-
 	@LangMessage
 	private Message lang_player_chat_format;
 	@LangMessage

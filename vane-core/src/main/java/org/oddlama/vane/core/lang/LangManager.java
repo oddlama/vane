@@ -33,7 +33,7 @@ public class LangManager {
 	}
 
 	public long expected_version() {
-		return field_version.annotation.value();
+		return module.annotation.lang_version();
 	}
 
 	private boolean has_lang_annotation(Field field) {

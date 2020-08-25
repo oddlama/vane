@@ -18,7 +18,7 @@ public class PersistentField {
 	public PersistentField(Object owner, Field field, Function<String, String> map_name) {
 		this.owner = owner;
 		this.field = field;
-		this.path = map_name.apply(field.getName());
+		this.path = map_name.apply(field.getName().substring("storage_".length()));
 
 		field.setAccessible(true);
 	}

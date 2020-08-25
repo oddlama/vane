@@ -26,15 +26,12 @@ import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.util.Message;
 import org.oddlama.vane.util.Nms;
 
-@VaneModule(name = "bedtime", bstats = 8639)
+@VaneModule(name = "bedtime", bstats = 8639, config_version = 1, lang_version = 1, storage_version = 1)
 public class Bedtime extends Module<Bedtime> {
 	// One set of sleeping players per world, to keep track
 	private HashMap<UUID, HashSet<UUID>> world_sleepers = new HashMap<>();
 
 	// Configuration
-	@ConfigVersion(1)
-	public long config_version;
-
 	@ConfigDouble(def = 0.5, min = 0.0, max = 1.0, desc = "The percentage of sleeping players required to advance time.")
 	double config_sleep_threshold;
 	@ConfigLong(def = 1000, min = 0, max = 12000, desc = "The target time in ticks to advance to. 1000 is just after sunrise.")
@@ -43,9 +40,6 @@ public class Bedtime extends Module<Bedtime> {
 	long config_interpolation_ticks;
 
 	// Language
-	@LangVersion(1)
-	public long lang_version;
-
 	@LangMessage
 	Message lang_player_bed_enter;
 	@LangMessage

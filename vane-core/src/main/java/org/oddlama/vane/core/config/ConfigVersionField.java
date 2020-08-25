@@ -2,6 +2,7 @@ package org.oddlama.vane.core.config;
 
 import static org.reflections.ReflectionUtils.*;
 
+import org.oddlama.vane.core.module.Module;
 import java.lang.StringBuilder;
 import java.lang.reflect.Field;
 import java.util.function.Function;
@@ -26,7 +27,7 @@ public class ConfigVersionField extends ConfigField<Long> {
 	public void generate_yaml(StringBuilder builder, String indent) {
 		final var description = "DO NOT CHANGE! The version of this config file. Used to determine if the config needs to be updated.";
 		append_description(builder, indent, description);
-		append_field_definition(builder, indent, annotation.value());
+		append_field_definition(builder, indent, ((Module<?>)owner).annotation.config_version());
 	}
 
 	@Override

@@ -1,6 +1,8 @@
 package org.oddlama.vane.core.module;
 
 import org.bukkit.scheduler.BukkitTask;
+import java.util.function.Consumer;
+import java.util.Map;
 
 /**
  * A ModuleContext is an association to a specific Module and also a
@@ -49,5 +51,9 @@ public interface Context<T extends Module<T>> {
 
 	default public BukkitTask schedule_next_tick(Runnable task) {
 		return get_module().getServer().getScheduler().runTask(get_module(), task);
+	}
+
+	default public void add_storage_migration_to(long to, String description, Consumer<Map<String, Object>> migrator) {
+		get_module().persistent_storage_manager.add_migration_to(to, description, migrator);
 	}
 }

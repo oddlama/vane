@@ -30,12 +30,9 @@ import org.oddlama.vane.annotation.persistent.Persistent;
 import org.oddlama.vane.annotation.lang.LangVersion;
 import org.oddlama.vane.core.module.Module;
 
-@VaneModule(name = "permissions", bstats = 8641)
+@VaneModule(name = "permissions", bstats = 8641, config_version = 1, lang_version = 1, storage_version = 1)
 public class Permissions extends Module<Permissions> {
 	// Configuration
-	@ConfigVersion(1)
-	public long config_version;
-
 	@ConfigBoolean(def = true, desc = "Remove all default permissions to start with a clean preset.")
 	public boolean config_remove_defaults;
 
@@ -48,13 +45,9 @@ public class Permissions extends Module<Permissions> {
 	}, desc = "The permission groups. A player can have multiple permission groups assigned. Permission groups can inherit other permission groups by specifying vane.permissions.groups.<groupname> as a permission.")
 	public Map<String, List<String>> config_groups;
 
-	// Language
-	@LangVersion(1)
-	public long lang_version;
-
 	// Persistent storage
 	@Persistent
-	public Map<String, List<String>> player_permission_groups = new HashMap<>();
+	public Map<String, List<String>> storage_player_groups = new HashMap<>();
 
 	// Variables
 	private final Map<String, List<String>> permission_groups = new HashMap<>();
@@ -62,7 +55,6 @@ public class Permissions extends Module<Permissions> {
 
 	@Override
 	public void on_enable() {
-		player_permission_groups.put("a", new ArrayList<String>());
 		schedule_next_tick(() -> {
 			if (config_remove_defaults) {
 				for (var perm : getServer().getPluginManager().getPermissions()) {

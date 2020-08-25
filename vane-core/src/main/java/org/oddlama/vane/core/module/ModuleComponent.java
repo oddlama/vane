@@ -1,6 +1,8 @@
 package org.oddlama.vane.core.module;
 
 import org.bukkit.scheduler.BukkitTask;
+import java.util.Map;
+import java.util.function.Consumer;
 
 public abstract class ModuleComponent<T extends Module<T>> {
 	private Context<T> context = null;
@@ -39,5 +41,9 @@ public abstract class ModuleComponent<T extends Module<T>> {
 
 	public final BukkitTask schedule_next_tick(Runnable task) {
 		return context.schedule_next_tick(task);
+	}
+
+	public final void add_storage_migration_to(long to, String description, Consumer<Map<String, Object>> migrator) {
+		context.add_storage_migration_to(to, description, migrator);
 	}
 }

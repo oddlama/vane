@@ -12,14 +12,8 @@ import org.oddlama.vane.annotation.lang.LangVersion;
 import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.util.Message;
 
-@VaneModule(name = "core", bstats = 8637)
+@VaneModule(name = "core", bstats = 8637, config_version = 1, lang_version = 1, storage_version = 1)
 public class Core extends Module<Core> {
-	@ConfigVersion(1)
-	public long config_version;
-
-	@LangVersion(1)
-	public long lang_version;
-
 	@LangString
 	public String lang_command_not_a_player;
 	@LangString
@@ -38,5 +32,8 @@ public class Core extends Module<Core> {
 		// Components
 		new org.oddlama.vane.core.commands.Vane(this);
 		//new TabCompletionRestricter(this);
+
+		// TODO this in any component, can use storage_*_.path() to get the correct path.
+		add_storage_migration_to(2, "test", map -> {});
 	}
 }

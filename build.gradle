@@ -25,12 +25,14 @@ subprojects {
 	compileJava {
 		options.encoding = 'UTF-8';
 		options.compilerArgs << '-Xlint:all';
+		options.compilerArgs << '-Xlint:-processing';
 	}
 
 	dependencies {
 		//implementation group: 'com.destroystokyo.paper', name: 'paper-api', version: '1.16.1-R0.1-SNAPSHOT';
 		// We need the full implementation with CraftBukkit and NMS to compile
 		implementation name: 'paper-133-patched';
+		compileOnly group: 'org.jetbrains', name: 'annotations', version: '20.0.0';
 	}
 }
 
