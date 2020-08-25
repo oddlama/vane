@@ -101,16 +101,6 @@ public abstract class Command<T extends Module<T>> extends ModuleComponent<T> {
 		context = context.group("command_" + name, "Enable command " + name);
 		set_context(context);
 
-		// Load annotation values
-		bukkit_command = new BukkitCommand(name);
-		bukkit_command.setLabel(name);
-		bukkit_command.setName(name);
-
-		var aliases = getClass().getAnnotation(Aliases.class);
-		if (aliases != null) {
-			bukkit_command.setAliases(List.of(aliases.value()));
-		}
-
 		// Register permission
 		permission = new Permission("vane." + get_module().get_name() + ".commands." + name, "Allow access to /" + name, PermissionDefault.FALSE);
 		get_module().register_permission(permission);
@@ -120,6 +110,16 @@ public abstract class Command<T extends Module<T>> extends ModuleComponent<T> {
 
 		// Initialize root parameter
 		root_param = new AnyParam<String>(this, "/" + get_name(), str -> str);
+
+		// Create bukkit command
+		bukkit_command = new BukkitCommand(name);
+		bukkit_command.setLabel(name);
+		bukkit_command.setName(name);
+
+		var aliases = getClass().getAnnotation(Aliases.class);
+		if (aliases != null) {
+			bukkit_command.setAliases(List.of(aliases.value()));
+		}
 	}
 
 	public BukkitCommand get_bukkit_command() {
