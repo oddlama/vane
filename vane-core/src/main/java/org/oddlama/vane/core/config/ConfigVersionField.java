@@ -2,7 +2,6 @@ package org.oddlama.vane.core.config;
 
 import static org.reflections.ReflectionUtils.*;
 
-import org.oddlama.vane.core.module.Module;
 import java.lang.StringBuilder;
 import java.lang.reflect.Field;
 import java.util.function.Function;
@@ -11,6 +10,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import org.oddlama.vane.annotation.config.ConfigVersion;
 import org.oddlama.vane.core.YamlLoadException;
+import org.oddlama.vane.core.module.Module;
 
 public class ConfigVersionField extends ConfigField<Long> {
 	public ConfigVersion annotation;

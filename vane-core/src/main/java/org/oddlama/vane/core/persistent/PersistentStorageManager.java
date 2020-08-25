@@ -2,47 +2,25 @@ package org.oddlama.vane.core.persistent;
 
 import static org.reflections.ReflectionUtils.*;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.io.File;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.lang.StringBuilder;
-import java.nio.file.Files;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import org.bukkit.configuration.file.YamlConfiguration;
-
 import org.oddlama.vane.annotation.persistent.Persistent;
-import org.oddlama.vane.annotation.config.ConfigDouble;
-import org.oddlama.vane.annotation.config.ConfigInt;
-import org.oddlama.vane.annotation.config.ConfigLong;
-import org.oddlama.vane.annotation.config.ConfigMaterialSet;
-import org.oddlama.vane.annotation.config.ConfigStringListMap;
-import org.oddlama.vane.annotation.config.ConfigString;
-import org.oddlama.vane.annotation.config.ConfigVersion;
-import org.oddlama.vane.core.YamlLoadException;
-import org.oddlama.vane.core.persistent.PersistentField;
-import org.oddlama.vane.core.config.ConfigDoubleField;
-import org.oddlama.vane.core.config.ConfigField;
-import org.oddlama.vane.core.config.ConfigIntField;
-import org.oddlama.vane.core.config.ConfigLongField;
-import org.oddlama.vane.core.config.ConfigMaterialSetField;
-import org.oddlama.vane.core.config.ConfigStringListMapField;
-import org.oddlama.vane.core.config.ConfigStringField;
-import org.oddlama.vane.core.config.ConfigVersionField;
 import org.oddlama.vane.core.module.Module;
-import java.util.function.Consumer;
+import org.oddlama.vane.core.persistent.PersistentField;
 
 public class PersistentStorageManager {
 	public class Migration {

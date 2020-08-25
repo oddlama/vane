@@ -1,8 +1,9 @@
 package org.oddlama.vane.core.module;
 
-import org.bukkit.scheduler.BukkitTask;
-import java.util.function.Consumer;
 import java.util.Map;
+import java.util.function.Consumer;
+
+import org.bukkit.scheduler.BukkitTask;
 
 /**
  * A ModuleContext is an association to a specific Module and also a

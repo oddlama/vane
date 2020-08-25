@@ -1,8 +1,9 @@
 package org.oddlama.vane.core.module;
 
-import org.bukkit.scheduler.BukkitTask;
 import java.util.Map;
 import java.util.function.Consumer;
+
+import org.bukkit.scheduler.BukkitTask;
 
 public abstract class ModuleComponent<T extends Module<T>> {
 	private Context<T> context = null;

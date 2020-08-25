@@ -24,14 +24,14 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import org.oddlama.vane.annotation.VaneModule;
 import org.oddlama.vane.annotation.config.ConfigBoolean;
+import org.oddlama.vane.annotation.config.ConfigString;
 import org.oddlama.vane.annotation.config.ConfigVersion;
 import org.oddlama.vane.annotation.lang.LangVersion;
-import org.oddlama.vane.annotation.config.ConfigString;
+import org.oddlama.vane.annotation.persistent.Persistent;
 import org.oddlama.vane.core.Core;
 import org.oddlama.vane.core.command.Command;
 import org.oddlama.vane.core.config.ConfigManager;
 import org.oddlama.vane.core.lang.LangManager;
-import org.oddlama.vane.annotation.persistent.Persistent;
 import org.oddlama.vane.core.persistent.PersistentStorageManager;
 
 public abstract class Module<T extends Module<T>> extends JavaPlugin implements Context<T>, org.bukkit.event.Listener {

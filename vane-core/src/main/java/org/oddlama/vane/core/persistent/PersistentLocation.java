@@ -1,10 +1,10 @@
 package org.oddlama.vane.core.persistent;
 
-import java.util.UUID;
 import java.io.Serializable;
+import java.util.UUID;
 
-import org.bukkit.Location;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 
 public class PersistentLocation implements Serializable {
     private UUID world_id;

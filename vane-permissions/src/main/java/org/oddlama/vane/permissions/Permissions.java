@@ -1,33 +1,26 @@
 package org.oddlama.vane.permissions;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
-import org.bukkit.entity.Player;
-import org.bukkit.permissions.PermissionDefault;
-import org.bukkit.permissions.PermissionAttachment;
-import org.bukkit.permissions.PermissionAttachmentInfo;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.List;
-import java.util.HashMap;
-import java.util.ArrayList;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.permissions.PermissionAttachment;
+import org.bukkit.permissions.PermissionDefault;
 
 import org.oddlama.vane.annotation.VaneModule;
-import org.oddlama.vane.annotation.config.ConfigVersion;
 import org.oddlama.vane.annotation.config.ConfigBoolean;
 import org.oddlama.vane.annotation.config.ConfigString;
 import org.oddlama.vane.annotation.config.ConfigStringListMap;
 import org.oddlama.vane.annotation.config.ConfigStringListMapEntry;
 import org.oddlama.vane.annotation.persistent.Persistent;
-import org.oddlama.vane.annotation.lang.LangVersion;
 import org.oddlama.vane.core.module.Module;
 
 @VaneModule(name = "permissions", bstats = 8641, config_version = 1, lang_version = 1, storage_version = 1)

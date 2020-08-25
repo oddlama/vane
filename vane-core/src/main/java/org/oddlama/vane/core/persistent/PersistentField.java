@@ -2,13 +2,9 @@ package org.oddlama.vane.core.persistent;
 
 import static org.reflections.ReflectionUtils.*;
 
-import java.lang.Comparable;
-import java.lang.StringBuilder;
 import java.lang.reflect.Field;
-import java.util.function.Function;
 import java.util.Map;
-
-import org.apache.commons.lang.WordUtils;
+import java.util.function.Function;
 
 public class PersistentField {
 	private Object owner;
