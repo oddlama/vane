@@ -139,9 +139,6 @@ public class Permissions extends Module<Permissions> {
 
 		// Attach permissions
 		recalculate_player_permissions(player);
-
-		// Update list of commands for client side root tab completion
-		player.updateCommands();
 	}
 
 	public void recalculate_player_permissions(final Player player) {
@@ -166,6 +163,9 @@ public class Permissions extends Module<Permissions> {
 				}
 			}
 		}
+
+		// Update list of commands for client side root tab completion
+		player.updateCommands();
 	}
 
 	private void unregister_player(final Player player) {
