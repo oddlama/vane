@@ -49,6 +49,12 @@ public abstract class Command<T extends Module<T>> extends ModuleComponent<T> {
 
 		@Override
 		public boolean execute(CommandSender sender, String alias, String[] args) {
+			// Pre check permission
+			if (!sender.hasPermission(Command.this.permission)) {
+				sender.sendMessage(get_module().core.lang_command_permission_denied);
+				return true;
+			}
+
 			// Ambigous matches will always execute the
 			// first chain based on definition order.
 			try {

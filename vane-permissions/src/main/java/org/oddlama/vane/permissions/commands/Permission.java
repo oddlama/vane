@@ -146,7 +146,7 @@ public class Permission extends Command<Permissions> {
 	private void list_groups_for_player(CommandSender sender, OfflinePlayer offline_player) {
 		var set = get_module().permission_groups.get(offline_player.getUniqueId());
 		if (set == null) {
-			sender.sendMessage("§a∅");
+			sender.sendMessage("§b∅");
 		} else {
 			sender.sendMessage(lang_list_header_player_permissions.format(offline_player.getName()));
 			for (var group : set) {

@@ -94,12 +94,6 @@ public class SentinelExecutorParam<T> extends BaseParam implements Executor {
 			return false;
 		}
 
-		// Check permission
-		if (!sender.hasPermission(command.get_permission())) {
-			sender.sendMessage(command.get_module().core.lang_command_permission_denied);
-			return false;
-		}
-
 		// Execute functor
 		try {
 			var result = ((ErasedFunctor)function).invoke(parsed_args);
