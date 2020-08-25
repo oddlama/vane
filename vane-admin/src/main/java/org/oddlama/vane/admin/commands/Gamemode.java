@@ -25,13 +25,18 @@ public class Gamemode extends Command<Admin> {
 		params().fixed("help").ignore_case().exec(this::print_help);
 		// Command parameters
 		params().exec_player(this::toggle_gamemode_self);
+		params().choose_online_player().exec_player(this::toggle_gamemode_player);
 		var gamemode = params().choose_gamemode();
 		gamemode.exec_player(this::set_gamemode_self);
 		gamemode.choose_online_player().exec(this::set_gamemode);
 	}
 
 	private void toggle_gamemode_self(Player player) {
-		set_gamemode(player, player.getGameMode() == GameMode.CREATIVE
+		toggle_gamemode_player(player, player);
+	}
+
+	private void toggle_gamemode_player(CommandSender sender, Player player) {
+		set_gamemode(sender, player.getGameMode() == GameMode.CREATIVE
 		                       ? GameMode.SURVIVAL
 		                       : GameMode.CREATIVE, player);
 	}
