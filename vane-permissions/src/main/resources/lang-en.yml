@@ -39,11 +39,11 @@ command_permission:
   # This message is sent when a group is added to a player.
   # {0}: Group name
   # {1}: Player name
-  group_assigned: "§b{1} was assigned to §b{0}"
+  group_assigned: "§b{1} §awas assigned to §b{0}"
   # This message is sent when a group is removed from a player.
   # {0}: Group name
   # {1}: Player name
-  group_removed: "§b{1} was removed from §b{0}"
+  group_removed: "§b{1} §awas removed from §b{0}"
   # This message is sent when a group is added to a player, but it is already assigned.
   # {0}: Group name
   # {1}: Player name
@@ -56,4 +56,4 @@ command_permission:
   description: "Manages player permissions."
   help: "§alist §7<§agroups§7|§apermissions§7>:§r Lists all available permissions or permission groups.\n\
     §aadd §bplayer §bgroup§7:§r Adds the player to the given permission group.\n\
-    §aremove §bplayer §bgroup§7:§r Removed the player from the given permission group."
+    §aremove §bplayer §bgroup§7:§r Remove the player from the given permission group."

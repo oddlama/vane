@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Map;
+import java.util.Collections;
 import java.util.UUID;
 
 import org.bukkit.entity.Player;
@@ -114,13 +115,36 @@ public class Permissions extends Module<Permissions> {
 		final var attachment = player.addAttachment(this);
 		player_attachments.put(player.getUniqueId(), attachment);
 
-		// TODO warn if a permission doent exist when adding it to an attachment
+		// Attach permissions
+		recalculate_player_permissions(player);
 
 		// Update list of commands for client side root tab completion
 		player.updateCommands();
 	}
 
 	public void recalculate_player_permissions(final Player player) {
+		// Clear attachment
+		final var attachment = player_attachments.get(player.getUniqueId());
+		final var attached_perms = attachment.getPermissions();
+		attached_perms.forEach((p, v) -> {
+				attachment.unsetPermission(p);
+			});
+
+		// Add permissions again
+		final var groups = storage_player_groups.get(player.getUniqueId());
+		if (groups == null) {
+			// Nothing to add.
+		} else {
+			for (var group : groups) {
+				for (var p : permission_groups.getOrDefault(group, Collections.emptySet())) {
+					var perm = getServer().getPluginManager().getPermission(p);
+					if (perm == null) {
+						log.warning("Use of unregistered permission '" + p + "' might have unintended effects.");
+					}
+					attachment.setPermission(p, true);
+				}
+			}
+		}
 	}
 
 	private void unregister_player(final Player player) {

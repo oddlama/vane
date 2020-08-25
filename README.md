@@ -33,7 +33,7 @@ So if you don't want a certain feature, simply disable it.
 - [x] Full localization support, currently provides english (default) and german.
 - [ ] Builtin lightweight permissions plugin (permission groups, group inheritance, live editing)
 - [x] All default permissions are revoked and need to be added explicitly
-- [x] All tab completions will respect required command permissions
+- [x] Hide commands from players, if they don't have the required permission
 - [ ] Inaccessible commands will not be shown to players
 - [x] Slightly colorized chat message format for better readability
 - [x] Convenience commands for time, weather, gamemode, spawn, ...

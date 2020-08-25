@@ -125,21 +125,26 @@ public class Permission extends Command<Permissions> {
 			// Information from other plugins might be missing.
 			sender.sendMessage(lang_list_player_offline);
 		} else {
-			player.getEffectivePermissions()
-				.stream()
-				.sorted((a, b) -> a.getPermission().compareTo(b.getPermission()))
-				.forEach(att -> {
-					var perm = get_module().getServer().getPluginManager().getPermission(att.getPermission());
-					if (perm == null) {
-						get_module().log.warning("Encountered unregistered permission '" + att.getPermission() + "'");
-						return;
-					}
-					sender.sendMessage(lang_list_permission.format(
-								perm.getName(),
-								permission_value_color_code(att.getValue()),
-								String.valueOf(att.getValue()),
-								perm.getDescription()));
-				});
+			var effective_permissions = player.getEffectivePermissions();
+			if (effective_permissions.isEmpty()) {
+				sender.sendMessage("§b∅");
+			} else {
+				player.getEffectivePermissions()
+					.stream()
+					.sorted((a, b) -> a.getPermission().compareTo(b.getPermission()))
+					.forEach(att -> {
+						var perm = get_module().getServer().getPluginManager().getPermission(att.getPermission());
+						if (perm == null) {
+							get_module().log.warning("Encountered unregistered permission '" + att.getPermission() + "'");
+							return;
+						}
+						sender.sendMessage(lang_list_permission.format(
+									perm.getName(),
+									permission_value_color_code(att.getValue()),
+									String.valueOf(att.getValue()),
+									perm.getDescription()));
+					});
+			}
 		}
 	}
 
