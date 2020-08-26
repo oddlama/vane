@@ -1,7 +1,12 @@
 package org.oddlama.vane.enchantments;
 
+import java.util.List;
+import java.util.ArrayList;
 import org.oddlama.vane.util.Nms;
 import org.bukkit.inventory.ItemStack;
+import net.minecraft.server.v1_16_R1.IChatBaseComponent;
+import net.minecraft.server.v1_16_R1.EnumChatFormat;
+import net.minecraft.server.v1_16_R1.ChatMessage;
 import static org.oddlama.vane.util.Util.namespaced_key;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
@@ -21,13 +26,14 @@ import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.module.Module;
 
-import org.bukkit.craftbukkit.v1_16_R1.enchantments.CraftEnchantment;
-
 public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 	private VaneEnchantment annotation = getClass().getAnnotation(VaneEnchantment.class);
 	private String name;
-	private EnchantmentWrapper wrapper;
+	private NativeEnchantmentWrapper native_wrapper;
+	private BukkitEnchantmentWrapper bukkit_wrapper;
 	private NamespacedKey key;
+
+	private final ArrayList<Enchantment> supersedes = new ArrayList<>();
 
 	public CustomEnchantment(Context<T> context) {
 		super(null);
@@ -40,30 +46,40 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 		// Create namespaced key
 		key = namespaced_key("vane", name);
 
-		// Create wrapper
-		wrapper = new EnchantmentWrapper(this);
-		register();
+		// Register and create wrappers
+		native_wrapper = new NativeEnchantmentWrapper(this);
+		Nms.register_enchantment(get_key(), native_wrapper);
+
+		// After registering in NMS we can create a wrapper for bukkit
+		bukkit_wrapper = new BukkitEnchantmentWrapper(this, native_wrapper);
+		Enchantment.registerEnchantment(bukkit_wrapper);
+	}
+
+	public List<Enchantment> supersedes() {
+		return supersedes;
+	}
+
+	public void supersedes(Enchantment e) {
+		supersedes.add(e);
 	}
 
 	public NamespacedKey get_key() {
 		return key;
 	}
 
-	private void register() {
-		Nms.register_enchantment(get_key(), wrapper);
-		Enchantment.registerEnchantment(new CraftEnchantment(wrapper) {
-			@SuppressWarnings("deprecation")
-			@Deprecated
-			@NotNull
-			@Override
-			public String getName() {
-				return CustomEnchantment.this.get_name();
-			}
-		});
-	}
-
 	public String get_name() {
 		return name;
+	}
+
+	public IChatBaseComponent display_name(int level) {
+        var display_name = new ChatMessage(native_wrapper.g());
+		display_name.a(EnumChatFormat.RESET, EnumChatFormat.RED);
+
+        if (level != 1 || max_level() != 1) {
+            display_name.c(" ").addSibling(new ChatMessage("enchantment.level." + level));
+        }
+
+        return display_name;
 	}
 
 	public int start_level() {
@@ -76,13 +92,19 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 
 	@NotNull
 	public EnchantmentTarget item_target() {
+		// TODO brrrrrr
 		return EnchantmentTarget.BREAKABLE;
 	}
 
 	public boolean can_enchant_item(@NotNull ItemStack item) {
+		// TODO brrrrrr
 		return true;
 	}
 
+		// TODO brrrrrr
+		// TODO brrrrrr
+		// TODO brrrrrr
+		// TODO brrrrrr
 	public boolean is_treasure() { return false; }
 	public boolean is_cursed() { return false; }
 	public boolean conflicts_with(@NotNull Enchantment other) { return false; }

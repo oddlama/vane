@@ -13,10 +13,10 @@ import net.minecraft.server.v1_16_R1.Enchantment;
 import net.minecraft.server.v1_16_R1.EnchantmentSlotType;
 import net.minecraft.server.v1_16_R1.EnumItemSlot;
 
-public class EnchantmentWrapper extends Enchantment {
+public class NativeEnchantmentWrapper extends Enchantment {
 	private CustomEnchantment<?> enchantment;
 
-	public EnchantmentWrapper(CustomEnchantment<?> enchantment) {
+	public NativeEnchantmentWrapper(CustomEnchantment<?> enchantment) {
 		super(Enchantment.Rarity.COMMON, EnchantmentSlotType.BREAKABLE, new EnumItemSlot[] { EnumItemSlot.MAINHAND });
 		this.enchantment = enchantment;
 	}

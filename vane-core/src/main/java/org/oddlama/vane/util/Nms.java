@@ -2,10 +2,15 @@ package org.oddlama.vane.util;
 
 import net.minecraft.server.v1_16_R1.EntityPlayer;
 
+import java.util.List;
+import java.util.logging.Level;
+import org.bukkit.Bukkit;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.craftbukkit.v1_16_R1.entity.CraftPlayer;
 import net.minecraft.server.v1_16_R1.Enchantment;
 import net.minecraft.server.v1_16_R1.IRegistry;
 import net.minecraft.server.v1_16_R1.MinecraftKey;
+import net.minecraft.server.v1_16_R1.IChatBaseComponent;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 
@@ -16,5 +21,20 @@ public class Nms {
 
 	public static void register_enchantment(NamespacedKey key, Enchantment enchantment) {
 		IRegistry.a(IRegistry.ENCHANTMENT, new MinecraftKey(key.getNamespace(), key.getKey()), enchantment);
+	}
+
+	public static void set_lore(ItemMeta meta, List<IChatBaseComponent> lore) {
+		if (!meta.getClass().getName().equals("org.bukkit.craftbukkit.v1_16_R1.inventory.CraftMetaItem")) {
+			Bukkit.getLogger().warning("Called set_lore() on ItemMeta which isn't an instance of CraftMetaItem! Operation cancelled.");
+			return;
+		}
+
+		try {
+			final var lore_field = meta.getClass().getDeclaredField("lore");
+			lore_field.setAccessible(true);
+			lore_field.set(meta, lore);
+		} catch (NoSuchFieldException |	IllegalAccessException e) {
+			Bukkit.getLogger().log(Level.WARNING, "Could not set CraftMetaItem.lore field!", e);
+		}
 	}
 }
