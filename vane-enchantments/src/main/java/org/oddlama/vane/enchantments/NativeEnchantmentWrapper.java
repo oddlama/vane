@@ -22,6 +22,8 @@ public class NativeEnchantmentWrapper extends Enchantment {
 	private CustomEnchantment<?> enchantment;
 
 	public NativeEnchantmentWrapper(CustomEnchantment<?> enchantment) {
+		// TODO rarity
+		// TODO color
 		super(Enchantment.Rarity.COMMON, null, new EnumItemSlot[] { });
 		this.enchantment = enchantment;
 	}
@@ -48,8 +50,8 @@ public class NativeEnchantmentWrapper extends Enchantment {
 		return this.a(level) + 5;
 	}
 
-	@Override
 	// display_name
+	@Override
 	public IChatBaseComponent d(int level) {
 		return enchantment.display_name(level);
 	}
@@ -59,8 +61,8 @@ public class NativeEnchantmentWrapper extends Enchantment {
 		return enchantment.is_treasure();
 	}
 
-	@Override
 	// is_compatible
+	@Override
 	public boolean a(@NotNull Enchantment other) {
 		return this != other && enchantment.is_compatible(bukkit_enchantment(other));
 	}

@@ -75,11 +75,18 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 	}
 
 	public IChatBaseComponent display_name(int level) {
+		// TODO configurable
+		var color_format = EnumChatFormat.GRAY;
+
         var display_name = new ChatMessage(native_wrapper.g());
-		display_name.a(EnumChatFormat.RESET, EnumChatFormat.RED);
+		display_name.setChatModifier(display_name.getChatModifier().setItalic(false))
+			.a(color_format);
 
         if (level != 1 || max_level() != 1) {
-            display_name.c(" ").addSibling(new ChatMessage("enchantment.level." + level));
+			var chat_level = new ChatMessage("enchantment.level." + level);
+			chat_level.setChatModifier(chat_level.getChatModifier().setItalic(false))
+				.a(color_format);
+            display_name.c(" ").addSibling(chat_level);
         }
 
         return display_name;
@@ -93,8 +100,8 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 		return annotation.max_level();
 	}
 
-	public boolean is_treasure() {
-		return false;
+	public final boolean is_treasure() {
+		return annotation.treasure();
 	}
 
 	public boolean is_compatible(@NotNull Enchantment other) {

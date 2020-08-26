@@ -9,6 +9,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface VaneEnchantment {
 	String name();
-	int start_level() default 1;
-	int max_level() default 1;
+	int start_level();
+	int max_level();
+	boolean treasure() default false;
 }

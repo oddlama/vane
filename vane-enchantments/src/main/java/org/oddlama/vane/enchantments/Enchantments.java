@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.List;
 import org.jetbrains.annotations.NotNull;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
+import org.bukkit.event.enchantment.EnchantItemEvent;
 
 import org.bukkit.inventory.ItemStack;
 import org.oddlama.vane.annotation.VaneModule;
@@ -32,34 +33,6 @@ public class Enchantments extends Module<Enchantments> {
 
 		new org.oddlama.vane.enchantments.enchantments.Rake(this);
 	}
-
-	//public String getRarityColor(net.minecraft.server.v1_14_R1.Enchantment enchantment) {
-	//	switch (enchantment.d()) {
-	//		case COMMON:
-	//		case ORDINARY:
-	//		case UNCOMMON:
-	//		case ODD:
-	//		case RARE:
-	//		case SPECIAL:
-	//		case VERY_RARE:
-	//			return "§r§7";
-
-	//		case HEROIC:
-	//			return "§r§2";
-
-	//		case EPIC:
-	//			return "§r§3";
-
-	//		case MYTHICAL:
-	//			return "§r§6";
-
-	//		case LEGENDARY:
-	//			return "§r§5§l";
-
-	//		default:
-	//			return "§r§7";
-	//	}
-	//}
 
 	public ItemStack update_enchanted_item(ItemStack item_stack) {
 		remove_superseded(item_stack);
@@ -135,5 +108,10 @@ public class Enchantments extends Module<Enchantments> {
 		}
 
 		event.setResult(update_enchanted_item(event.getResult().clone()));
+	}
+
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	public void on_enchant_item(final EnchantItemEvent event) {
+		// TODO ... also /enchant
 	}
 }

@@ -40,10 +40,12 @@ So if you don't want a certain feature, simply disable it.
 - [x] Players without any permissions cannot alter the world (just look, no touch!)
 - [ ] Advancements to guide you through most additions
 
-#### Unique features
+#### Custom enchantments
 
-- [x] Seamless integration of custom enchantments
+- [x] Seamless integration of custom enchantments (with [API](TODO)!)
 - [x] Client side translations for custom items and enchantments
+
+#### Unique features
 
 Lore friendly custom enchantments:
 
@@ -109,6 +111,9 @@ spawn with remnants of old world
 
 
 
+javadoc comment code (or at least semi public api),
+then generate javadoc
+
 
 /verify system for players -> adds permission groups
 
@@ -122,6 +127,8 @@ check achievement on anvil
 
 
 /<module> reload to reload config for all!!!!! automatic.
+
+todo datapack and language from yaml!
 
 
 playerlist footer and header
