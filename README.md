@@ -42,6 +42,9 @@ So if you don't want a certain feature, simply disable it.
 
 #### Unique features
 
+- [x] Seamless integration of custom enchantments
+- [x] Client side translations for custom items and enchantments
+
 Lore friendly custom enchantments:
 
 Harvest additions:

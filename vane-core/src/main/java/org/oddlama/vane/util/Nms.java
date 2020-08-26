@@ -1,5 +1,6 @@
 package org.oddlama.vane.util;
 
+import org.bukkit.craftbukkit.v1_16_R1.util.CraftNamespacedKey;
 import net.minecraft.server.v1_16_R1.EntityPlayer;
 
 import java.util.List;
@@ -7,6 +8,9 @@ import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.craftbukkit.v1_16_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_16_R1.inventory.CraftItemStack;
+import net.minecraft.server.v1_16_R1.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import net.minecraft.server.v1_16_R1.Enchantment;
 import net.minecraft.server.v1_16_R1.IRegistry;
 import net.minecraft.server.v1_16_R1.MinecraftKey;
@@ -36,5 +40,15 @@ public class Nms {
 		} catch (NoSuchFieldException |	IllegalAccessException e) {
 			Bukkit.getLogger().log(Level.WARNING, "Could not set CraftMetaItem.lore field!", e);
 		}
+	}
+
+	public static org.bukkit.enchantments.Enchantment bukkit_enchantment(Enchantment enchantment) {
+		final var key = IRegistry.ENCHANTMENT.getKey(enchantment);
+		return org.bukkit.enchantments.Enchantment.getByKey(CraftNamespacedKey.fromMinecraft(key));
+	}
+
+	@NotNull
+	public static org.bukkit.inventory.ItemStack bukkit_item_stack(ItemStack stack) {
+		return CraftItemStack.asCraftMirror(stack);
 	}
 }

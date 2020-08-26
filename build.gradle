@@ -26,6 +26,7 @@ subprojects {
 		options.encoding = 'UTF-8';
 		options.compilerArgs << '-Xlint:all';
 		options.compilerArgs << '-Xlint:-processing';
+		options.compilerArgs << '-Xdiags:verbose';
 	}
 
 	dependencies {

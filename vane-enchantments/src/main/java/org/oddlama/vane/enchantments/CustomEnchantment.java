@@ -29,14 +29,17 @@ import org.oddlama.vane.core.module.Module;
 public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 	private VaneEnchantment annotation = getClass().getAnnotation(VaneEnchantment.class);
 	private String name;
+	private NamespacedKey key;
+	private EnchantmentTarget item_target;
 	private NativeEnchantmentWrapper native_wrapper;
 	private BukkitEnchantmentWrapper bukkit_wrapper;
-	private NamespacedKey key;
 
 	private final ArrayList<Enchantment> supersedes = new ArrayList<>();
 
-	public CustomEnchantment(Context<T> context) {
+	public CustomEnchantment(Context<T> context, EnchantmentTarget item_target) {
 		super(null);
+
+		this.item_target = item_target;
 
 		// Make namespace
 		name = annotation.name();
@@ -55,19 +58,19 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 		Enchantment.registerEnchantment(bukkit_wrapper);
 	}
 
-	public List<Enchantment> supersedes() {
+	public final List<Enchantment> supersedes() {
 		return supersedes;
 	}
 
-	public void supersedes(Enchantment e) {
+	public final void supersedes(Enchantment e) {
 		supersedes.add(e);
 	}
 
-	public NamespacedKey get_key() {
+	public final NamespacedKey get_key() {
 		return key;
 	}
 
-	public String get_name() {
+	public final String get_name() {
 		return name;
 	}
 
@@ -82,30 +85,23 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
         return display_name;
 	}
 
-	public int start_level() {
+	public final int start_level() {
 		return annotation.start_level();
 	}
 
-	public int max_level() {
+	public final int max_level() {
 		return annotation.max_level();
 	}
 
-	@NotNull
-	public EnchantmentTarget item_target() {
-		// TODO brrrrrr
-		return EnchantmentTarget.BREAKABLE;
+	public boolean is_treasure() {
+		return false;
 	}
 
-	public boolean can_enchant_item(@NotNull ItemStack item) {
-		// TODO brrrrrr
+	public boolean is_compatible(@NotNull Enchantment other) {
 		return true;
 	}
 
-		// TODO brrrrrr
-		// TODO brrrrrr
-		// TODO brrrrrr
-		// TODO brrrrrr
-	public boolean is_treasure() { return false; }
-	public boolean is_cursed() { return false; }
-	public boolean conflicts_with(@NotNull Enchantment other) { return false; }
+	public boolean can_enchant(@NotNull ItemStack item_stack) {
+		return item_target.includes(item_stack);
+	}
 }
