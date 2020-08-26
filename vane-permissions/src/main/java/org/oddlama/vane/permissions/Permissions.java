@@ -156,7 +156,8 @@ public class Permissions extends Module<Permissions> {
 		} else {
 			for (var group : groups) {
 				for (var p : permission_groups.getOrDefault(group, Collections.emptySet())) {
-					if (getServer().getPluginManager().getPermission(p) == null) {
+					final var perm = getServer().getPluginManager().getPermission(p);
+					if (perm == null) {
 						log.warning("Use of unregistered permission '" + p + "' might have unintended effects.");
 					}
 					attachment.setPermission(p, true);

@@ -28,6 +28,9 @@ public class Core extends Module<Core> {
 	public void unregister_module(Module<?> module) { vane_modules.remove(module); }
 	public SortedSet<Module<?>> get_modules() { return Collections.unmodifiableSortedSet(vane_modules); }
 
+	// Vane global command catch-all permission
+	public Permission permission_command_catchall = new Permission("vane.*.commands.*", "Allow access to all vane commands (ONLY FOR ADMINS!)", PermissionDefault.FALSE);
+
 	public Core() {
 		// Create global command catch-all permission
 		register_permission(permission_command_catchall);

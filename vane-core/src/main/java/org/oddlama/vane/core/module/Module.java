@@ -44,15 +44,13 @@ import org.oddlama.vane.core.persistent.PersistentStorageManager;
 public abstract class Module<T extends Module<T>> extends JavaPlugin implements Context<T>, org.bukkit.event.Listener {
 	public VaneModule annotation = getClass().getAnnotation(VaneModule.class);
 	public Core core;
-	public Logger log;
+	public Logger log = getLogger();
 
 	// Managers
 	public ConfigManager config_manager = new ConfigManager(this);
 	public LangManager lang_manager = new LangManager(this);
 	public PersistentStorageManager persistent_storage_manager = new PersistentStorageManager(this);
 
-	// Vane global catch-all permission (only registered by core)
-	public Permission permission_command_catchall = new Permission("vane.*.commands.*", "Allow access to all vane commands (ONLY FOR ADMINS!)", PermissionDefault.FALSE);
 	// Per module catch-all permissions
 	public Permission permission_command_catchall_module;
 
@@ -111,6 +109,14 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 	Metrics metrics;
 
 	public Module() {
+		// Get core plugin reference, important for inherited configuration
+		// and shared state between vane modules
+		if (this.getName().equals("vane-core")) {
+			core = (Core)this;
+		} else {
+			core = (Core)getServer().getPluginManager().getPlugin("vane-core");
+		}
+
 		// Create per module command catch-all permission
 		permission_command_catchall_module = new Permission("vane." + get_name() + ".commands.*", "Allow access to all vane-" + get_name() + " commands", PermissionDefault.FALSE);
 		register_permission(permission_command_catchall_module);
@@ -128,16 +134,6 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 
 	@Override
 	public final void onEnable() {
-		// Get logger
-		log = getLogger();
-
-		// Get core plugin reference, important for inherited configuration
-		if (this.getName().equals("vane-core")) {
-			core = (Core)this;
-		} else {
-			core = (Core)getServer().getPluginManager().getPlugin("vane-core");
-		}
-
 		// Create console permission attachment
 		console_attachment = getServer().getConsoleSender().addAttachment(this);
 		for (var perm : pending_console_permissions) {

@@ -103,9 +103,9 @@ public abstract class Command<T extends Module<T>> extends ModuleComponent<T> {
 
 		// Register permission
 		permission = new Permission("vane." + get_module().get_name() + ".commands." + name, "Allow access to /" + name, PermissionDefault.FALSE);
-		permission.addParent(get_module().permission_command_catchall_module, true);
-		permission.addParent(get_module().permission_command_catchall, true);
 		get_module().register_permission(permission);
+		permission.addParent(get_module().permission_command_catchall_module, true);
+		permission.addParent(get_module().core.permission_command_catchall, true);
 
 		// Always allow the console to execute commands
 		get_module().add_console_permission(permission);

@@ -24,6 +24,7 @@ public class Permission extends Command<Permissions> {
 	@LangString  private String  lang_list_header_permissions;
 	@LangMessage private Message lang_list_header_player_groups;
 	@LangMessage private Message lang_list_header_player_permissions;
+	@LangMessage private Message lang_list_header_group_permissions;
 	@LangString  private String  lang_list_player_offline;
 	@LangMessage private Message lang_list_group;
 	@LangMessage private Message lang_list_permission;
@@ -50,6 +51,11 @@ public class Permission extends Command<Permissions> {
 		var permissions = list.fixed("permissions").ignore_case();
 		permissions.exec(this::list_permissions);
 		permissions.choose_any_player().exec(this::list_permissions_for_player);
+		permissions.choice("permission_group",
+					sender -> get_module().permission_groups.keySet(),
+					(sender, g) -> g,
+					(sender, str) -> get_module().permission_groups.containsKey(str) ? str : null)
+			.exec(this::list_permissions_for_group);
 
 		// add group to player
 		params().fixed("add").ignore_case()
@@ -119,23 +125,7 @@ public class Permission extends Command<Permissions> {
 				sender.sendMessage("§b∅");
 			} else {
 				for (var group : groups) {
-					for (var p : get_module().permission_groups.getOrDefault(group, Collections.emptySet())) {
-						var perm = get_module().getServer().getPluginManager().getPermission(p);
-						if (perm == null) {
-							get_module().log.warning("Use of unregistered permission '" + p + "' might have unintended effects.");
-							sender.sendMessage(lang_list_permission.format(
-										p,
-										permission_value_color_code(true),
-										String.valueOf(true),
-										""));
-						} else {
-							sender.sendMessage(lang_list_permission.format(
-										perm.getName(),
-										permission_value_color_code(true),
-										String.valueOf(true),
-										perm.getDescription()));
-						}
-					}
+					list_permissions_for_group_no_header(sender, group);
 				}
 			}
 		} else {
@@ -160,6 +150,31 @@ public class Permission extends Command<Permissions> {
 					});
 			}
 		}
+	}
+
+	private void list_permissions_for_group_no_header(CommandSender sender, String group) {
+		for (var p : get_module().permission_groups.getOrDefault(group, Collections.emptySet())) {
+			var perm = get_module().getServer().getPluginManager().getPermission(p);
+			if (perm == null) {
+				get_module().log.warning("Use of unregistered permission '" + p + "' might have unintended effects.");
+				sender.sendMessage(lang_list_permission.format(
+							p,
+							permission_value_color_code(true),
+							String.valueOf(true),
+							""));
+			} else {
+				sender.sendMessage(lang_list_permission.format(
+							perm.getName(),
+							permission_value_color_code(true),
+							String.valueOf(true),
+							perm.getDescription()));
+			}
+		}
+	}
+
+	private void list_permissions_for_group(CommandSender sender, String group) {
+		sender.sendMessage(lang_list_header_group_permissions.format(group));
+		list_permissions_for_group_no_header(sender, group);
 	}
 
 	private void list_groups_for_player(CommandSender sender, OfflinePlayer offline_player) {

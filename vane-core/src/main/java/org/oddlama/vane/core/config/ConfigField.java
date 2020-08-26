@@ -65,7 +65,7 @@ public abstract class ConfigField<T> implements Comparable<ConfigField<?>> {
 	}
 
 	private String modify_yaml_path_for_sorting(String path) {
-		// Enable fields should always be at the top, and therfore
+		// "enable" fields should always be at the top, and therefore
 		// get treated without the suffix.
 		if (path.endsWith(".enabled")) {
 			return path.substring(0, path.lastIndexOf(".enabled"));
