@@ -1,5 +1,6 @@
 package org.oddlama.vane.enchantments;
 
+import org.oddlama.vane.util.Nms;
 import org.bukkit.inventory.ItemStack;
 import static org.oddlama.vane.util.Util.namespaced_key;
 import org.bukkit.enchantments.Enchantment;
@@ -19,6 +20,8 @@ import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.module.Module;
+
+import org.bukkit.craftbukkit.v1_16_R1.enchantments.CraftEnchantment;
 
 public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 	private VaneEnchantment annotation = getClass().getAnnotation(VaneEnchantment.class);
@@ -47,8 +50,16 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 	}
 
 	private void register() {
-		//Enchantment.registerEnchantment(wrapper);
-		Enchantment.registerEnchantment(wrapper);
+		Nms.register_enchantment(get_key(), wrapper);
+		Enchantment.registerEnchantment(new CraftEnchantment(wrapper) {
+			@SuppressWarnings("deprecation")
+			@Deprecated
+			@NotNull
+			@Override
+			public String getName() {
+				return CustomEnchantment.this.get_name();
+			}
+		});
 	}
 
 	public String get_name() {

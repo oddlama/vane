@@ -75,7 +75,7 @@ public class Bedtime extends Module<Bedtime> {
 					// Wakeup players as if they were actually sleeping through the night
 					world.getPlayers().stream().filter(p -> p.isSleeping()).forEach(p -> {
 						// flag0 false = set ticks sleeping to 100, flag1 true = recalculate world.everyoneSleeping
-						Nms.getPlayer(player).wakeup(false, false);
+						Nms.get_player(player).wakeup(false, false);
 					});
 
 				// Subtract two ticks so this runs one tick before minecraft would

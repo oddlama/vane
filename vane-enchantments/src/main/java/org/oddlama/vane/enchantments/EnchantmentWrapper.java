@@ -1,19 +1,23 @@
 package org.oddlama.vane.enchantments;
 
+import org.oddlama.vane.util.Nms;
 import org.bukkit.inventory.ItemStack;
 import static org.oddlama.vane.util.Util.namespaced_key;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
 
 import org.oddlama.vane.annotation.VaneModule;
 import org.jetbrains.annotations.NotNull;
 import org.oddlama.vane.core.module.Module;
 
+import net.minecraft.server.v1_16_R1.Enchantment;
+import net.minecraft.server.v1_16_R1.EnchantmentSlotType;
+import net.minecraft.server.v1_16_R1.EnumItemSlot;
+
 public class EnchantmentWrapper extends Enchantment {
 	private CustomEnchantment<?> enchantment;
 
 	public EnchantmentWrapper(CustomEnchantment<?> enchantment) {
-		super(enchantment.get_key());
+		super(Enchantment.Rarity.COMMON, EnchantmentSlotType.BREAKABLE, new EnumItemSlot[] { EnumItemSlot.MAINHAND });
 		this.enchantment = enchantment;
 	}
 
@@ -27,39 +31,16 @@ public class EnchantmentWrapper extends Enchantment {
 		return enchantment.max_level();
 	}
 
-	@NotNull
-	@Override
-	public EnchantmentTarget getItemTarget() {
-		return enchantment.item_target();
+	public int a(int i) {
+		return 1 + i * 10;
 	}
 
-	@Override
-	public boolean canEnchantItem(@NotNull ItemStack item) {
-		return enchantment.can_enchant_item(item);
-	}
-
-	@SuppressWarnings("deprecation")
-	@Deprecated
-	@NotNull
-	@Override
-	public String getName() {
-		return enchantment.get_name();
+	public int b(int i) {
+		return this.a(i) + 5;
 	}
 
 	@Override
 	public boolean isTreasure() {
 		return enchantment.is_treasure();
-	}
-
-	@SuppressWarnings("deprecation")
-	@Deprecated
-	@Override
-	public boolean isCursed() {
-		return enchantment.is_cursed();
-	}
-
-	@Override
-	public boolean conflictsWith(@NotNull Enchantment other) {
-		return enchantment.conflicts_with(other);
 	}
 }
