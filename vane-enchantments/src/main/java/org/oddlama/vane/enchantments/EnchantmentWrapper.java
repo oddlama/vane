@@ -2,44 +2,40 @@ package org.oddlama.vane.enchantments;
 
 import org.bukkit.inventory.ItemStack;
 import static org.oddlama.vane.util.Util.namespaced_key;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
 
 import org.oddlama.vane.annotation.VaneModule;
 import org.jetbrains.annotations.NotNull;
 import org.oddlama.vane.core.module.Module;
 
-public class Enchantment extends org.bukkit.enchantments.Enchantment {
-	private String name;
-	public Enchantment(String name) {
-		super(namespaced_key("vane", name));
-		this.name = name;
-	}
+public class EnchantmentWrapper extends Enchantment {
+	private CustomEnchantment<?> enchantment;
 
-	//@NotNull
-	//public org.bukkit.enchantments.Enchantment getEnchantment() {
-	//	return Enchantment.getByKey(getKey());
-	//}
+	public EnchantmentWrapper(CustomEnchantment<?> enchantment) {
+		super(enchantment.get_key());
+		this.enchantment = enchantment;
+	}
 
 	@Override
 	public int getStartLevel() {
-		return 1;
+		return enchantment.start_level();
 	}
 
 	@Override
 	public int getMaxLevel() {
-		return 1;
+		return enchantment.max_level();
 	}
 
 	@NotNull
 	@Override
 	public EnchantmentTarget getItemTarget() {
-		return EnchantmentTarget.BREAKABLE;
+		return enchantment.item_target();
 	}
 
 	@Override
 	public boolean canEnchantItem(@NotNull ItemStack item) {
-		return true;
-		//return getEnchantment().canEnchantItem(item);
+		return enchantment.can_enchant_item(item);
 	}
 
 	@SuppressWarnings("deprecation")
@@ -47,26 +43,23 @@ public class Enchantment extends org.bukkit.enchantments.Enchantment {
 	@NotNull
 	@Override
 	public String getName() {
-		return name;
+		return enchantment.get_name();
 	}
 
 	@Override
 	public boolean isTreasure() {
-		return false;
-		//return getEnchantment().isTreasure();
+		return enchantment.is_treasure();
 	}
 
 	@SuppressWarnings("deprecation")
 	@Deprecated
 	@Override
 	public boolean isCursed() {
-		return false;
-		//return getEnchantment().isCursed();
+		return enchantment.is_cursed();
 	}
 
 	@Override
-	public boolean conflictsWith(@NotNull org.bukkit.enchantments.Enchantment other) {
-		return false;
-		//return getEnchantment().conflictsWith(other);
+	public boolean conflictsWith(@NotNull Enchantment other) {
+		return enchantment.conflicts_with(other);
 	}
 }

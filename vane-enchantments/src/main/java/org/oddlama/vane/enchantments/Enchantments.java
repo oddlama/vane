@@ -19,6 +19,6 @@ public class Enchantments extends Module<Enchantments> {
 			getServer().shutdown();
 		}
 
-		Enchantment.registerEnchantment(new org.oddlama.vane.enchantments.Enchantment("echatest"));
+		new org.oddlama.vane.enchantments.enchantments.Rake(this);
 	}
 }
