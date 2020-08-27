@@ -208,14 +208,14 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 			resource_version = YamlConfiguration.loadConfiguration(reader)
 			                       .getLong("version", -1);
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.log(Level.SEVERE, "Error while updating lang file '" + file + "'", e);
 		}
 
 		if (resource_version > file_version) {
 			try {
 				Files.copy(getResource(lang_file), file.toPath(), StandardCopyOption.REPLACE_EXISTING);
 			} catch (IOException e) {
-				e.printStackTrace();
+				log.log(Level.SEVERE, "Error while copying lang file '" + file + "'", e);
 			}
 		}
 	}

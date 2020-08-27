@@ -6,10 +6,12 @@ import java.io.IOException;
 import java.io.FileOutputStream;
 import java.util.zip.ZipOutputStream;
 import java.util.zip.ZipEntry;
+import java.util.logging.Level;
 import java.util.Collections;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import org.bukkit.Bukkit;
 import org.bukkit.permissions.Permission;
 import java.nio.file.Files;
 import org.bukkit.permissions.PermissionDefault;
@@ -59,6 +61,7 @@ public class ResourcePackGenerator {
 				zip.closeEntry();
 			}
 		} catch (IOException e) {
+			Bukkit.getLogger().log(Level.SEVERE, "Error while writing resourcepack", e);
 		}
 	}
 }

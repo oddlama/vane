@@ -208,7 +208,7 @@ public class ConfigManager {
 		try {
 			Files.write(file.toPath(), content.getBytes(StandardCharsets.UTF_8));
 		} catch (IOException e) {
-			e.printStackTrace();
+			module.log.log(Level.SEVERE, "Error while writing config file '" + file + "'", e);
 			return false;
 		}
 
