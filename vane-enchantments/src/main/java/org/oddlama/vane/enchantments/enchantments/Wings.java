@@ -28,10 +28,10 @@ import net.minecraft.server.v1_16_R1.ChatModifier;
 
 @VaneEnchantment(name = "wings", max_level = 4, rarity = Rarity.RARE, treasure = true)
 public class Wings extends CustomEnchantment<Enchantments> {
-	@ConfigIntList(def = {7000, 5000, 3500}, min = 0, desc = "Boost cooldown in milliseconds for each enchantment level.")
+	@ConfigIntList(def = {7000, 5000, 3500, 2800}, min = 0, desc = "Boost cooldown in milliseconds for each enchantment level.")
 	private List<Integer> config_boost_cooldowns;
-	@ConfigDoubleList(def = {0.4, 0.5, 0.6}, min = 0.0, desc = "Boost strenghts for each enchantment level.")
-	private List<Double> config_boost_strenghts;
+	@ConfigDoubleList(def = {0.4, 0.47, 0.54, 0.6}, min = 0.0, desc = "Boost strength for each enchantment level.")
+	private List<Double> config_boost_strengths;
 
 	public Wings(Context<Enchantments> context) {
 		super(context);
@@ -51,9 +51,9 @@ public class Wings extends CustomEnchantment<Enchantments> {
 
 	private double get_boost_strength(int level) {
 		if (level > 0 && level <= config_boost_cooldowns.size()) {
-			return config_boost_strenghts.get(level - 1);
+			return config_boost_strengths.get(level - 1);
 		}
-		return config_boost_strenghts.get(0);
+		return config_boost_strengths.get(0);
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
@@ -71,9 +71,6 @@ public class Wings extends CustomEnchantment<Enchantments> {
 			return;
 		}
 
-		final var player_id = player.getUniqueId();
-		final var now = System.currentTimeMillis();
-
 		// Check cooldown
 		if (player.getCooldown(Material.ELYTRA) > 0) {
 			return;
@@ -83,6 +80,5 @@ public class Wings extends CustomEnchantment<Enchantments> {
 		player.setCooldown(Material.ELYTRA, (int)ms_to_ticks(get_boost_cooldown(level)));
 		apply_elytra_boost(player, get_boost_strength(level));
 		damage_item(player, chest, (int)(1.0 + 2.0 * Math.random()));
-		// TODO set player attack cooldown to display cooldown??!
 	}
 }
