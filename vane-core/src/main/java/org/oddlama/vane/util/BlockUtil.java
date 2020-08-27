@@ -1,11 +1,11 @@
 package org.oddlama.vane.util;
 
-import org.bukkit.block.Block;
-import org.bukkit.block.data.Ageable;
-import org.bukkit.block.BlockFace;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.Material;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.Ageable;
+import org.bukkit.inventory.ItemStack;
 
 public class BlockUtil {
 	public static final BlockFace[] BLOCK_FACES = new BlockFace[] {

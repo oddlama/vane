@@ -10,7 +10,6 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.DeclaredType;
-import javax.lang.model.type.TypeMirror;
 import javax.tools.Diagnostic;
 
 @SupportedAnnotationTypes("org.oddlama.vane.annotation.enchantment.VaneEnchantment")

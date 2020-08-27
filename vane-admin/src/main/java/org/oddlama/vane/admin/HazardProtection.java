@@ -1,25 +1,16 @@
 package org.oddlama.vane.admin;
 
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.permissions.Permission;
-import org.bukkit.permissions.PermissionDefault;
-import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.entity.EntityBreakDoorEvent;
-import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
-import org.bukkit.entity.EntityType;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
-import org.bukkit.event.player.PlayerKickEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 
-import org.oddlama.vane.core.module.Context;
-import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.annotation.config.ConfigBoolean;
+import org.oddlama.vane.core.Listener;
+import org.oddlama.vane.core.module.Context;
 
 public class HazardProtection extends Listener<Admin> {
 	@ConfigBoolean(def = true, desc = "Disables explosions from the wither.")

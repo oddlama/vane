@@ -1,24 +1,21 @@
 package org.oddlama.vane.enchantments;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import net.minecraft.server.v1_16_R1.IChatBaseComponent;
+
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import static org.oddlama.vane.util.Util.namespaced_key;
-import org.bukkit.enchantments.Enchantment;
-import net.minecraft.server.v1_16_R1.IChatBaseComponent;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.List;
-import org.jetbrains.annotations.NotNull;
-import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.event.enchantment.EnchantItemEvent;
-
+import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.inventory.ItemStack;
+
 import org.oddlama.vane.annotation.VaneModule;
-import org.oddlama.vane.util.Nms;
-import org.jetbrains.annotations.NotNull;
 import org.oddlama.vane.core.module.Module;
+import org.oddlama.vane.util.Nms;
 
 @VaneModule(name = "enchantments", bstats = 8640, config_version = 1, lang_version = 1, storage_version = 1)
 public class Enchantments extends Module<Enchantments> {

@@ -1,18 +1,15 @@
 package org.oddlama.vane.trifles;
 
-import org.bukkit.block.Block;
-import org.bukkit.event.EventHandler;
-import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockRedstoneEvent;
-import org.bukkit.event.entity.EntityInteractEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-
-import static org.oddlama.vane.util.MaterialUtil.is_seed;
 import static org.oddlama.vane.util.BlockUtil.harvest_plant;
+import static org.oddlama.vane.util.MaterialUtil.is_seed;
 
 import org.bukkit.Material;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
+
 import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.module.Context;
 

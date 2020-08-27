@@ -4,10 +4,11 @@ import java.util.Collections;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import org.oddlama.vane.annotation.VaneModule;
-import org.oddlama.vane.annotation.lang.LangMessage;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
+
+import org.oddlama.vane.annotation.VaneModule;
+import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.annotation.lang.LangString;
 import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.util.Message;

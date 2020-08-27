@@ -7,6 +7,8 @@ import java.util.List;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginIdentifiableCommand;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.Plugin;
 
 import org.oddlama.vane.annotation.command.Aliases;
@@ -14,8 +16,6 @@ import org.oddlama.vane.annotation.command.Name;
 import org.oddlama.vane.annotation.command.VaneCommand;
 import org.oddlama.vane.annotation.lang.LangString;
 import org.oddlama.vane.core.command.params.AnyParam;
-import org.bukkit.permissions.Permission;
-import org.bukkit.permissions.PermissionDefault;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.core.module.ModuleComponent;

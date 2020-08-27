@@ -1,7 +1,6 @@
 package org.oddlama.vane.core.config;
 
 import static org.reflections.ReflectionUtils.*;
-import java.util.logging.Level;
 
 import java.io.File;
 import java.lang.StringBuilder;
@@ -11,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 import org.bukkit.configuration.file.YamlConfiguration;

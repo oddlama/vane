@@ -1,32 +1,28 @@
 package org.oddlama.vane.enchantments;
 
-import java.util.List;
+import static org.oddlama.vane.util.Util.namespaced_key;
+
 import java.util.ArrayList;
-import org.oddlama.vane.util.Nms;
-import org.bukkit.inventory.ItemStack;
-import net.minecraft.server.v1_16_R1.IChatBaseComponent;
-import net.minecraft.server.v1_16_R1.EnumChatFormat;
+import java.util.List;
+
 import net.minecraft.server.v1_16_R1.ChatMessage;
 import net.minecraft.server.v1_16_R1.ChatModifier;
-import static org.oddlama.vane.util.Util.namespaced_key;
+import net.minecraft.server.v1_16_R1.EnumChatFormat;
+import net.minecraft.server.v1_16_R1.IChatBaseComponent;
+
+import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
-import org.bukkit.NamespacedKey;
+import org.bukkit.inventory.ItemStack;
 
-import org.oddlama.vane.annotation.VaneModule;
 import org.jetbrains.annotations.NotNull;
-import org.oddlama.vane.annotation.command.Aliases;
-import org.oddlama.vane.annotation.command.Name;
+
 import org.oddlama.vane.annotation.enchantment.Rarity;
 import org.oddlama.vane.annotation.enchantment.VaneEnchantment;
-import org.oddlama.vane.annotation.lang.LangString;
-import org.oddlama.vane.core.command.params.AnyParam;
-import org.bukkit.permissions.Permission;
-import org.bukkit.permissions.PermissionDefault;
+import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.Module;
-import org.oddlama.vane.core.Listener;
-import org.oddlama.vane.core.module.Module;
+import org.oddlama.vane.util.Nms;
 
 public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 	private VaneEnchantment annotation = getClass().getAnnotation(VaneEnchantment.class);

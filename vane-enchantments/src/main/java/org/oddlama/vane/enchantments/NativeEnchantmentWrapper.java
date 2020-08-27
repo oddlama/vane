@@ -1,19 +1,16 @@
 package org.oddlama.vane.enchantments;
 
-import org.oddlama.vane.util.Nms;
-import static org.oddlama.vane.util.Util.namespaced_key;
-import net.minecraft.server.v1_16_R1.IChatBaseComponent;
 import static org.oddlama.vane.util.Nms.bukkit_enchantment;
 import static org.oddlama.vane.util.Nms.enchantment_slot_type;
-import org.bukkit.enchantments.EnchantmentTarget;
-
-import net.minecraft.server.v1_16_R1.ItemStack;
-import org.oddlama.vane.annotation.VaneModule;
-import org.jetbrains.annotations.NotNull;
-import org.oddlama.vane.core.module.Module;
 
 import net.minecraft.server.v1_16_R1.Enchantment;
 import net.minecraft.server.v1_16_R1.EnumItemSlot;
+import net.minecraft.server.v1_16_R1.IChatBaseComponent;
+import net.minecraft.server.v1_16_R1.ItemStack;
+
+import org.jetbrains.annotations.NotNull;
+
+import org.oddlama.vane.util.Nms;
 
 /**
  * Provides a native counterpart for CustomEnchantment.

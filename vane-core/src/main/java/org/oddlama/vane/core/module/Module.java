@@ -2,21 +2,18 @@ package org.oddlama.vane.core.module;
 
 import static org.oddlama.vane.util.ResourceList.get_resources;
 
-import org.bukkit.permissions.Permission;
-import org.bukkit.permissions.PermissionDefault;
 import java.io.File;
-import java.util.logging.Level;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.StringBuilder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
-import java.util.List;
-import java.util.ArrayList;
-import org.bukkit.permissions.PermissionAttachment;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
@@ -27,6 +24,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionAttachment;
+import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import org.oddlama.vane.annotation.VaneModule;

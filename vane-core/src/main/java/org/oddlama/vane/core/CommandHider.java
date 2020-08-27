@@ -1,14 +1,9 @@
 package org.oddlama.vane.core;
 
 import org.bukkit.entity.Player;
-import org.bukkit.block.Block;
-import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockRedstoneEvent;
-import org.bukkit.event.entity.EntityInteractEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
 import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.module.Context;

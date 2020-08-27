@@ -1,24 +1,26 @@
 package org.oddlama.vane.util;
 
-import org.bukkit.craftbukkit.v1_16_R1.util.CraftNamespacedKey;
-import net.minecraft.server.v1_16_R1.EntityPlayer;
-import net.minecraft.server.v1_16_R1.EnchantmentSlotType;
-
 import java.util.List;
 import java.util.logging.Level;
+
+import net.minecraft.server.v1_16_R1.Enchantment;
+import net.minecraft.server.v1_16_R1.EnchantmentSlotType;
+import net.minecraft.server.v1_16_R1.EntityPlayer;
+import net.minecraft.server.v1_16_R1.IChatBaseComponent;
+import net.minecraft.server.v1_16_R1.IRegistry;
+import net.minecraft.server.v1_16_R1.ItemStack;
+import net.minecraft.server.v1_16_R1.MinecraftKey;
+
 import org.bukkit.Bukkit;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.enchantments.EnchantmentTarget;
+import org.bukkit.NamespacedKey;
 import org.bukkit.craftbukkit.v1_16_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_16_R1.inventory.CraftItemStack;
-import net.minecraft.server.v1_16_R1.ItemStack;
-import org.jetbrains.annotations.NotNull;
-import net.minecraft.server.v1_16_R1.Enchantment;
-import net.minecraft.server.v1_16_R1.IRegistry;
-import net.minecraft.server.v1_16_R1.MinecraftKey;
-import net.minecraft.server.v1_16_R1.IChatBaseComponent;
-import org.bukkit.NamespacedKey;
+import org.bukkit.craftbukkit.v1_16_R1.util.CraftNamespacedKey;
+import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.meta.ItemMeta;
+
+import org.jetbrains.annotations.NotNull;
 
 public class Nms {
 	public static EntityPlayer get_player(Player player) {
