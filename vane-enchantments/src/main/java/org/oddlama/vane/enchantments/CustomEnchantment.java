@@ -7,6 +7,7 @@ import org.bukkit.inventory.ItemStack;
 import net.minecraft.server.v1_16_R1.IChatBaseComponent;
 import net.minecraft.server.v1_16_R1.EnumChatFormat;
 import net.minecraft.server.v1_16_R1.ChatMessage;
+import net.minecraft.server.v1_16_R1.ChatModifier;
 import static org.oddlama.vane.util.Util.namespaced_key;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
@@ -16,6 +17,7 @@ import org.oddlama.vane.annotation.VaneModule;
 import org.jetbrains.annotations.NotNull;
 import org.oddlama.vane.annotation.command.Aliases;
 import org.oddlama.vane.annotation.command.Name;
+import org.oddlama.vane.annotation.enchantment.Rarity;
 import org.oddlama.vane.annotation.enchantment.VaneEnchantment;
 import org.oddlama.vane.annotation.lang.LangString;
 import org.oddlama.vane.core.command.params.AnyParam;
@@ -30,16 +32,13 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 	private VaneEnchantment annotation = getClass().getAnnotation(VaneEnchantment.class);
 	private String name;
 	private NamespacedKey key;
-	private EnchantmentTarget item_target;
 	private NativeEnchantmentWrapper native_wrapper;
 	private BukkitEnchantmentWrapper bukkit_wrapper;
 
 	private final ArrayList<Enchantment> supersedes = new ArrayList<>();
 
-	public CustomEnchantment(Context<T> context, EnchantmentTarget item_target) {
+	public CustomEnchantment(Context<T> context) {
 		super(null);
-
-		this.item_target = item_target;
 
 		// Make namespace
 		name = annotation.name();
@@ -58,61 +57,136 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 		Enchantment.registerEnchantment(bukkit_wrapper);
 	}
 
+	/**
+	 * Returns all enchantments that are superseded by this enchantment.
+	 */
 	public final List<Enchantment> supersedes() {
 		return supersedes;
 	}
 
+	/**
+	 * Adds a superseded enchantment. Superseded enchantments will be removed
+	 * from the item when this enchantment is added.
+	 */
 	public final void supersedes(Enchantment e) {
 		supersedes.add(e);
 	}
 
+	/**
+	 * Returns the namespaced key for this enchantment.
+	 */
 	public final NamespacedKey get_key() {
 		return key;
 	}
 
-	public final String get_name() {
+	/**
+	 * Only for internal use.
+	 */
+	final String get_name() {
 		return name;
 	}
 
+	/**
+	 * Returns the display format for the display name.
+	 * By default the same gray color is used as for normal enchantments.
+	 */
+	public ChatModifier display_format(ChatModifier mod) {
+		return mod.setColor(EnumChatFormat.GRAY);
+	}
+
+	/**
+	 * Determines the display name of the enchantment.
+	 * This should most probably not be overridden, as this implementation
+	 * already uses clientside translation keys and supports chat formatting.
+	 */
 	public IChatBaseComponent display_name(int level) {
-		// TODO configurable
-		var color_format = EnumChatFormat.GRAY;
-
         var display_name = new ChatMessage(native_wrapper.g());
-		display_name.setChatModifier(display_name.getChatModifier().setItalic(false))
-			.a(color_format);
+		display_name.setChatModifier(display_format(
+		    display_name.getChatModifier().setItalic(false)));
 
-        if (level != 1 || max_level() != 1) {
+		if (level != 1 || max_level() != 1) {
 			var chat_level = new ChatMessage("enchantment.level." + level);
-			chat_level.setChatModifier(chat_level.getChatModifier().setItalic(false))
-				.a(color_format);
-            display_name.c(" ").addSibling(chat_level);
+			chat_level.setChatModifier(display_format(
+			    chat_level.getChatModifier().setItalic(false)));
+			display_name.c(" ").addSibling(chat_level);
         }
 
         return display_name;
 	}
 
+	/**
+	 * The minimum level this enchantment can have. Always fixed to 1.
+	 */
 	public final int start_level() {
-		return annotation.start_level();
+		return 1;
 	}
 
+	/**
+	 * The maximum level this enchantment can have.
+	 * Always reflects the annotation value {@link VaneEnchantment#max_level()}.
+	 */
 	public final int max_level() {
 		return annotation.max_level();
 	}
 
+	/**
+	 * Determines the minimum enchanting table level at which this enchantment
+	 * can occur at the given level.
+	 */
+	public int min_enchanting_level(int level) {
+		return 1 + level * 10;
+	}
+
+	/**
+	 * Determines the maximum enchanting table level at which this enchantment
+	 * can occur at the given level.
+	 */
+	public int max_enchanting_level(int level) {
+		return min_enchanting_level(level) + 5;
+	}
+
+	/**
+	 * Determines if this enchantment can be obtained with the enchanting table.
+	 * Always reflects the annotation value {@link VaneEnchantment#treasure()}.
+	 */
 	public final boolean is_treasure() {
 		return annotation.treasure();
 	}
 
+	/**
+	 * Determines which item types this enchantment can be applied to.
+	 * {@link #can_enchant()} can be used to further limit the applicable items.
+	 * Always reflects the annotation value {@link VaneEnchantment#target()}.
+	 */
 	public final EnchantmentTarget target() {
-		return item_target;
+		return annotation.target();
 	}
 
+	/**
+	 * Determines the enchantment rarity.
+	 * Always reflects the annotation value {@link VaneEnchantment#rarity()}.
+	 */
+	public final Rarity rarity() {
+		return annotation.rarity();
+	}
+
+	/**
+	 * Determines if this enchantment is compatible with the given enchantment.
+	 * By default all enchantments are compatible. Override this if you want
+	 * to express conflicting enchantments.
+	 */
 	public boolean is_compatible(@NotNull Enchantment other) {
 		return true;
 	}
 
+	/**
+	 * Determines if this enchantment can be applied to the given item.
+	 * By default this returns true if the {@link #target()} category includes
+	 * the given itemstack. Unfortunately this method cannot be used to widen
+	 * the allowed items, just to narrow it (limitation due to minecraft server internals).
+	 * So for best results, always check super.can_enchant first when overriding.
+	 */
 	public boolean can_enchant(@NotNull ItemStack item_stack) {
-		return item_target.includes(item_stack);
+		return annotation.target().includes(item_stack);
 	}
 }

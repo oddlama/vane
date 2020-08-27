@@ -23,11 +23,21 @@ public class NativeEnchantmentWrapper extends Enchantment {
 	private CustomEnchantment<?> enchantment;
 
 	public NativeEnchantmentWrapper(CustomEnchantment<?> enchantment) {
-		// TODO rarity
-		// TODO color
-		super(Enchantment.Rarity.COMMON, enchantment_slot_type(enchantment.target()), new EnumItemSlot[] { });
+		super(Enchantment.Rarity.VERY_RARE, enchantment_slot_type(enchantment.target()), new EnumItemSlot[] { });
 		this.enchantment = enchantment;
 	}
+
+	// rarity()
+	@Override
+    public Enchantment.Rarity d() {
+		switch (enchantment.rarity()) {
+			case COMMON:    return Enchantment.Rarity.COMMON;
+			case UNCOMMON:  return Enchantment.Rarity.UNCOMMON;
+			case RARE:      return Enchantment.Rarity.RARE;
+			case VERY_RARE: return Enchantment.Rarity.VERY_RARE;
+			default:        return Enchantment.Rarity.VERY_RARE;
+		}
+    }
 
 	@Override
 	public int getStartLevel() {
@@ -39,19 +49,19 @@ public class NativeEnchantmentWrapper extends Enchantment {
 		return enchantment.max_level();
 	}
 
-	// min_required_enchanting_level
+	// min_enchanting_level()
 	@Override
 	public int a(int level) {
-		return 1 + level * 10;
+		return enchantment.min_enchanting_level(level);
 	}
 
-	// max_required_enchanting_level
+	// max_enchanting_level()
 	@Override
 	public int b(int level) {
-		return this.a(level) + 5;
+		return enchantment.max_enchanting_level(level);
 	}
 
-	// display_name
+	// display_name()
 	@Override
 	public IChatBaseComponent d(int level) {
 		return enchantment.display_name(level);
@@ -62,7 +72,7 @@ public class NativeEnchantmentWrapper extends Enchantment {
 		return enchantment.is_treasure();
 	}
 
-	// is_compatible
+	// is_compatible()
 	@Override
 	public boolean a(@NotNull Enchantment other) {
 		return this != other && enchantment.is_compatible(bukkit_enchantment(other));

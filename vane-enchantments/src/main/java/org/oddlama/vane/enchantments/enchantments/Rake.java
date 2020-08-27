@@ -14,9 +14,9 @@ import org.oddlama.vane.core.command.Command;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.util.Message;
 
-@VaneEnchantment(name = "rake", start_level = 1, max_level = 4)
+@VaneEnchantment(name = "rake", max_level = 4)
 public class Rake extends CustomEnchantment<Enchantments> {
 	public Rake(Context<Enchantments> context) {
-		super(context, EnchantmentTarget.BREAKABLE);
+		super(context);
 	}
 }

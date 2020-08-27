@@ -46,7 +46,7 @@ public class Enchantments extends Module<Enchantments> {
 		return item_stack;
 	}
 
-	public void remove_superseded(ItemStack item_stack, Map<Enchantment, Integer> enchantments) {
+	private void remove_superseded(ItemStack item_stack, Map<Enchantment, Integer> enchantments) {
 		if (enchantments.isEmpty()) {
 			return;
 		}
@@ -89,7 +89,7 @@ public class Enchantments extends Module<Enchantments> {
 		}
 	}
 
-	public void update_lore(ItemStack item_stack, Map<Enchantment, Integer> enchantments) {
+	private void update_lore(ItemStack item_stack, Map<Enchantment, Integer> enchantments) {
 		// Create lore by converting enchantment name and level to string
 		// and prepend rarity color (can be overwritten in description)
 		final var lore = new ArrayList<IChatBaseComponent>();

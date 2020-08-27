@@ -2,10 +2,6 @@ package org.oddlama.vane.annotation.processor;
 
 import java.util.Set;
 import javax.annotation.processing.AbstractProcessor;
-import javax.lang.model.element.ElementKind;
-import javax.lang.model.element.TypeElement;
-import javax.lang.model.type.DeclaredType;
-import javax.lang.model.type.TypeMirror;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.annotation.processing.SupportedSourceVersion;
@@ -13,11 +9,13 @@ import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.type.DeclaredType;
+import javax.lang.model.type.TypeMirror;
 import javax.tools.Diagnostic;
 
-@SupportedAnnotationTypes("org.oddlama.vane.annotation.VaneModule")
+@SupportedAnnotationTypes("org.oddlama.vane.annotation.enchantment.VaneEnchantment")
 @SupportedSourceVersion(SourceVersion.RELEASE_11)
-public class VaneModuleProcessor extends AbstractProcessor {
+public class VaneEnchantmentProcessor extends AbstractProcessor {
 	@Override
 	public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment round_env) {
 		for (var annotation : annotations) {
@@ -33,7 +31,7 @@ public class VaneModuleProcessor extends AbstractProcessor {
 	private void verify_is_class(Element element) {
 		if (element.getKind() != ElementKind.CLASS) {
 			processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, element.asType().toString()
-					+ ": @VaneModule must be applied to a class");
+					+ ": @VaneEnchantment must be applied to a class");
 
 		}
 	}
@@ -41,7 +39,7 @@ public class VaneModuleProcessor extends AbstractProcessor {
 	private void verify_extends_module(Element element) {
 		var t = (TypeElement)element;
 		while (true) {
-			if (t.asType().toString().startsWith("org.oddlama.vane.core.module.Module<")) {
+			if (t.asType().toString().startsWith("org.oddlama.vane.enchantments.CustomEnchantment<")) {
 				return;
 			}
 			if (t.getSuperclass() instanceof DeclaredType) {
@@ -52,6 +50,6 @@ public class VaneModuleProcessor extends AbstractProcessor {
 		}
 
 		processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, element.asType().toString()
-				+ ": @VaneModule must be applied to a class inheriting from org.oddlama.vane.core.Module");
+				+ ": @VaneEnchantment must be applied to a class inheriting from org.oddlama.vane.enchantments.CustomEnchantment");
 	}
 }

@@ -1,3 +1,4 @@
 org.oddlama.vane.annotation.processor.VaneModuleProcessor
+org.oddlama.vane.annotation.processor.VaneEnchantmentProcessor
 org.oddlama.vane.annotation.processor.ConfigAndLangProcessor
 org.oddlama.vane.annotation.processor.CommandAnnotationProcessor
