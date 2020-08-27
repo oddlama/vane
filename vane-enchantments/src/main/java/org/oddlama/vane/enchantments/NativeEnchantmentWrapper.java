@@ -4,6 +4,7 @@ import org.oddlama.vane.util.Nms;
 import static org.oddlama.vane.util.Util.namespaced_key;
 import net.minecraft.server.v1_16_R1.IChatBaseComponent;
 import static org.oddlama.vane.util.Nms.bukkit_enchantment;
+import static org.oddlama.vane.util.Nms.enchantment_slot_type;
 import org.bukkit.enchantments.EnchantmentTarget;
 
 import net.minecraft.server.v1_16_R1.ItemStack;
@@ -24,7 +25,7 @@ public class NativeEnchantmentWrapper extends Enchantment {
 	public NativeEnchantmentWrapper(CustomEnchantment<?> enchantment) {
 		// TODO rarity
 		// TODO color
-		super(Enchantment.Rarity.COMMON, null, new EnumItemSlot[] { });
+		super(Enchantment.Rarity.COMMON, enchantment_slot_type(enchantment.target()), new EnumItemSlot[] { });
 		this.enchantment = enchantment;
 	}
 

@@ -8,6 +8,7 @@ import net.minecraft.server.v1_16_R1.IChatBaseComponent;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Map;
+import java.util.HashMap;
 import java.util.List;
 import org.jetbrains.annotations.NotNull;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
@@ -35,13 +36,17 @@ public class Enchantments extends Module<Enchantments> {
 	}
 
 	public ItemStack update_enchanted_item(ItemStack item_stack) {
-		remove_superseded(item_stack);
-		update_lore(item_stack);
+		return update_enchanted_item(item_stack, item_stack.getEnchantments());
+	}
+
+	public ItemStack update_enchanted_item(ItemStack item_stack, Map<Enchantment, Integer> enchantments) {
+		remove_superseded(item_stack, enchantments);
+		update_lore(item_stack, enchantments);
 		return item_stack;
 	}
 
-	public void remove_superseded(ItemStack item_stack) {
-		if (item_stack.getEnchantments().isEmpty()) {
+	public void remove_superseded(ItemStack item_stack, Map<Enchantment, Integer> enchantments) {
+		if (enchantments.isEmpty()) {
 			return;
 		}
 
@@ -55,7 +60,7 @@ public class Enchantments extends Module<Enchantments> {
 		var superseding = new ArrayList<CustomEnchantment<?>>();
 
 		// Get superseded and superseding enchantments
-		for (var e : item_stack.getEnchantments().keySet()) {
+		for (var e : enchantments.keySet()) {
 			if (!(e instanceof BukkitEnchantmentWrapper)) {
 				continue;
 			}
@@ -83,11 +88,11 @@ public class Enchantments extends Module<Enchantments> {
 		}
 	}
 
-	public void update_lore(ItemStack item_stack) {
+	public void update_lore(ItemStack item_stack, Map<Enchantment, Integer> enchantments) {
 		// Create lore by converting enchantment name and level to string
 		// and prepend rarity color (can be overwritten in description)
 		final var lore = new ArrayList<IChatBaseComponent>();
-		item_stack.getEnchantments().entrySet().stream()
+		enchantments.entrySet().stream()
 			.filter(p -> p.getKey() instanceof BukkitEnchantmentWrapper)
 			.sorted(Map.Entry.<Enchantment, Integer>comparingByKey((a, b) -> a.getKey().toString().compareTo(b.getKey().toString()))
 				.thenComparing(Map.Entry.<Enchantment, Integer>comparingByValue()))
@@ -112,6 +117,9 @@ public class Enchantments extends Module<Enchantments> {
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void on_enchant_item(final EnchantItemEvent event) {
+		final var map = new HashMap<Enchantment, Integer>(event.getEnchantsToAdd());
+		map.putAll(event.getItem().getEnchantments());
+		update_enchanted_item(event.getItem(), map);
 		// TODO ... also /enchant
 	}
 }

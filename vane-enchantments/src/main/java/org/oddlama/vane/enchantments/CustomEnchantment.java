@@ -104,6 +104,10 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 		return annotation.treasure();
 	}
 
+	public final EnchantmentTarget target() {
+		return item_target;
+	}
+
 	public boolean is_compatible(@NotNull Enchantment other) {
 		return true;
 	}

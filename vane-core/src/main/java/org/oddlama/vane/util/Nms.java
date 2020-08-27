@@ -2,11 +2,13 @@ package org.oddlama.vane.util;
 
 import org.bukkit.craftbukkit.v1_16_R1.util.CraftNamespacedKey;
 import net.minecraft.server.v1_16_R1.EntityPlayer;
+import net.minecraft.server.v1_16_R1.EnchantmentSlotType;
 
 import java.util.List;
 import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.craftbukkit.v1_16_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_16_R1.inventory.CraftItemStack;
 import net.minecraft.server.v1_16_R1.ItemStack;
@@ -50,5 +52,25 @@ public class Nms {
 	@NotNull
 	public static org.bukkit.inventory.ItemStack bukkit_item_stack(ItemStack stack) {
 		return CraftItemStack.asCraftMirror(stack);
+	}
+
+	public static EnchantmentSlotType enchantment_slot_type(EnchantmentTarget target) {
+		switch (target) {
+			case ARMOR:       return EnchantmentSlotType.ARMOR;
+			case ARMOR_FEET:  return EnchantmentSlotType.ARMOR_FEET;
+			case ARMOR_HEAD:  return EnchantmentSlotType.ARMOR_HEAD;
+			case ARMOR_LEGS:  return EnchantmentSlotType.ARMOR_LEGS;
+			case ARMOR_TORSO: return EnchantmentSlotType.ARMOR_CHEST;
+			case TOOL:        return EnchantmentSlotType.DIGGER;
+			case WEAPON:      return EnchantmentSlotType.WEAPON;
+			case BOW:         return EnchantmentSlotType.BOW;
+			case FISHING_ROD: return EnchantmentSlotType.FISHING_ROD;
+			case BREAKABLE:   return EnchantmentSlotType.BREAKABLE;
+			case WEARABLE:    return EnchantmentSlotType.WEARABLE;
+			case TRIDENT:     return EnchantmentSlotType.TRIDENT;
+			case CROSSBOW:    return EnchantmentSlotType.CROSSBOW;
+			case VANISHABLE:  return EnchantmentSlotType.VANISHABLE;
+			default:          return null;
+		}
 	}
 }
