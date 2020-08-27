@@ -58,6 +58,10 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 		Enchantment.registerEnchantment(bukkit_wrapper);
 	}
 
+	public void on_create_datapack() {
+		//datapack.add_translation(variable_yaml_path("name"), native_wrapper.g());
+	}
+
 	/**
 	 * Returns the bukkit wrapper for this enchantment.
 	 */

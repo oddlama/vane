@@ -188,19 +188,9 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 
 	private boolean try_reload_configuration() {
 		// Generate new file if not existing
-		final var file = new File(getDataFolder(), "config.yml");
-		if (!file.exists()) {
-			final var builder = new StringBuilder();
-			config_manager.generate_yaml(builder);
-			final var content = builder.toString();
-
-			// Save content to file
-			try {
-				Files.write(file.toPath(), content.getBytes(StandardCharsets.UTF_8));
-			} catch (IOException e) {
-				e.printStackTrace();
-				return false;
-			}
+		final var file = config_manager.standard_file();
+		if (!file.exists() && !config_manager.generate_file(file)) {
+			return false;
 		}
 
 		// Reload automatic variables

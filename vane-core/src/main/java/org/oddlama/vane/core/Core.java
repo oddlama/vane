@@ -1,5 +1,10 @@
 package org.oddlama.vane.core;
 
+import java.io.IOException;
+import java.io.FileOutputStream;
+import java.util.zip.ZipOutputStream;
+import java.util.zip.ZipEntry;
+import java.io.File;
 import java.util.Collections;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -39,5 +44,17 @@ public class Core extends Module<Core> {
 		// Components
 		new org.oddlama.vane.core.commands.Vane(this);
 		new CommandHider(this);
+	}
+
+	public void create_resource_pack() {
+		var resource_pack = new ResourcePackGenerator();
+		resource_pack.set_description("Vane plugin resource pack");
+		resource_pack.set_icon_png(new File(getDataFolder(), "pack.png"));
+
+		//for (var m : vane_modules) {
+		//	m.create_resource_pack(zip);
+		//}
+
+		resource_pack.write(new File("vane-resource-pack.zip"));
 	}
 }

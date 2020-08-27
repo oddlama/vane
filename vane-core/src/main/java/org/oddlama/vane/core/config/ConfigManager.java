@@ -9,6 +9,9 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.nio.file.Files;
+import java.nio.charset.StandardCharsets;
+import java.io.IOException;
 import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
@@ -127,8 +130,11 @@ public class ConfigManager {
 				module.log.severe("system permission issue, please report this to https://github.com/oddlama/vane/issues");
 			} else if (version < expected_version()) {
 				module.log.severe("This config is for an older version of " + module.getName() + ".");
-				module.log.severe("Please backup the file and delete it afterwards. It will");
-				module.log.severe("then be regenerated the next time the server is started.");
+				module.log.severe("Please update your configuration. A new default configuration");
+				module.log.severe("has been generated as 'config.yml.new'. Alternatively you can");
+				module.log.severe("delete your configuration to have a new one generated next time.");
+
+				generate_file(new File(module.getDataFolder(), "config.yml.new"));
 			} else {
 				module.log.severe("This config is for a future version of " + module.getName() + ".");
 				module.log.severe("Please use the correct file for this version, or delete it and");
@@ -187,6 +193,26 @@ public class ConfigManager {
 			f.generate_yaml(builder, indent);
 			last_field = f;
 		}
+	}
+
+	public File standard_file() {
+		return new File(module.getDataFolder(), "config.yml");
+	}
+
+	public boolean generate_file(File file) {
+		final var builder = new StringBuilder();
+		generate_yaml(builder);
+		final var content = builder.toString();
+
+		// Save content to file
+		try {
+			Files.write(file.toPath(), content.getBytes(StandardCharsets.UTF_8));
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+
+		return true;
 	}
 
 	public boolean reload(File file) {
