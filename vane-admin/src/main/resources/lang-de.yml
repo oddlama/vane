@@ -33,13 +33,6 @@ autostop:
       §aschedule §7[§bdelay§7]:§r Plant Autostop sofort, ohne Beachtung der Spieleranzahl. Akzeptiert ein delay als Ersatz des konfigurierten Werts.\n\
       §astatus§7:§r Zeigt den aktuellen Autostop status."
 
-command_enchant:
-  level_too_low: "§cerror:§6 Level §b{0}§6 ist zu niedrig, Mindestlevel ist §a{1}"
-  level_too_high: "§cerror:§6 Level §b{0}§6 is zu hoch, Maximallevel ist §a{1}"
-  invalid_enchantment: "§cerror: §a{1} kann nicht mit §b{0}§6 verzaubert werden"
-  usage: "Verzaubert das Item in deiner Hand."
-  help: "Verzaubert das Item in deiner Hand."
-
 command_gamemode:
   set: "§7Gamemode von §b{0}§7 wurde auf §a{1}§7 gesetzt."
   usage: "§bgamemode §7[§bplayer§7]"

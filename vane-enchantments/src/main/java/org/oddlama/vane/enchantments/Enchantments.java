@@ -32,6 +32,7 @@ public class Enchantments extends Module<Enchantments> {
 			getServer().shutdown();
 		}
 
+		new org.oddlama.vane.enchantments.commands.Enchant(this);
 		new org.oddlama.vane.enchantments.enchantments.Rake(this);
 	}
 
@@ -120,6 +121,5 @@ public class Enchantments extends Module<Enchantments> {
 		final var map = new HashMap<Enchantment, Integer>(event.getEnchantsToAdd());
 		map.putAll(event.getItem().getEnchantments());
 		update_enchanted_item(event.getItem(), map);
-		// TODO ... also /enchant
 	}
 }

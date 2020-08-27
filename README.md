@@ -43,6 +43,7 @@ So if you don't want a certain feature, simply disable it.
 #### Custom enchantments
 
 - [x] Seamless integration of custom enchantments (with [API](TODO)!)
+  - (as of 1.16.2) Showing enchantment names inside the enchantment table doesn't work due to protocol limitations. Names will be blank.
 - [x] Client side translations for custom items and enchantments
 
 #### Unique features

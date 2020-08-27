@@ -13,3 +13,10 @@
 # DO NOT CHANGE! The version of this language file. Used to determine
 # if the file needs to be updated.
 version: 1
+
+command_enchant:
+  level_too_low: "§cerror:§6 Level §b{0}§6 ist zu niedrig, Mindestlevel ist §a{1}"
+  level_too_high: "§cerror:§6 Level §b{0}§6 is zu hoch, Maximallevel ist §a{1}"
+  invalid_enchantment: "§cerror: §a{1} kann nicht mit §b{0}§6 verzaubert werden"
+  usage: "Verzaubert das Item in deiner Hand."
+  help: "Verzaubert das Item in deiner Hand."
