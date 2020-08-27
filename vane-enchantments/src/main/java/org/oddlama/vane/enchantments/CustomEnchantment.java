@@ -155,7 +155,7 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 
 	/**
 	 * Determines which item types this enchantment can be applied to.
-	 * {@link #can_enchant()} can be used to further limit the applicable items.
+	 * {@link #can_enchant(ItemStack)} can be used to further limit the applicable items.
 	 * Always reflects the annotation value {@link VaneEnchantment#target()}.
 	 */
 	public final EnchantmentTarget target() {
