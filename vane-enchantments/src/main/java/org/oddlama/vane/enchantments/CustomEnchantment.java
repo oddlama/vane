@@ -5,6 +5,7 @@ import static org.oddlama.vane.util.Util.namespaced_key;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.oddlama.vane.annotation.lang.LangString;
 import net.minecraft.server.v1_16_R1.ChatMessage;
 import net.minecraft.server.v1_16_R1.ChatModifier;
 import net.minecraft.server.v1_16_R1.EnumChatFormat;
@@ -33,6 +34,10 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 
 	private final ArrayList<Enchantment> supersedes = new ArrayList<>();
 
+	// Language
+	@LangString
+	public String lang_name;
+
 	public CustomEnchantment(Context<T> context) {
 		super(null);
 
@@ -51,6 +56,13 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 		// After registering in NMS we can create a wrapper for bukkit
 		bukkit_wrapper = new BukkitEnchantmentWrapper(this, native_wrapper);
 		Enchantment.registerEnchantment(bukkit_wrapper);
+	}
+
+	/**
+	 * Returns the bukkit wrapper for this enchantment.
+	 */
+	public final BukkitEnchantmentWrapper bukkit() {
+		return bukkit_wrapper;
 	}
 
 	/**
@@ -84,10 +96,20 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 
 	/**
 	 * Returns the display format for the display name.
-	 * By default the same gray color is used as for normal enchantments.
+	 * By default the color is dependent on the rarity.
+	 * COMMON: gray
+	 * UNCOMMON: dark blue
+	 * RARE: gold
+	 * VERY_RARE: bold dark purple
 	 */
 	public ChatModifier display_format(ChatModifier mod) {
-		return mod.setColor(EnumChatFormat.GRAY);
+		switch (annotation.rarity()) {
+			default:
+			case UNCOMMON:  return mod.setColor(EnumChatFormat.GRAY);
+			case COMMON:    return mod.setColor(EnumChatFormat.DARK_BLUE);
+			case RARE:      return mod.setColor(EnumChatFormat.GOLD);
+			case VERY_RARE: return mod.setColor(EnumChatFormat.DARK_PURPLE).setBold(true);
+		}
 	}
 
 	/**

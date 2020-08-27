@@ -31,6 +31,7 @@ public class Enchantments extends Module<Enchantments> {
 
 		new org.oddlama.vane.enchantments.commands.Enchant(this);
 		new org.oddlama.vane.enchantments.enchantments.Rake(this);
+		new org.oddlama.vane.enchantments.enchantments.Wings(this);
 	}
 
 	public ItemStack update_enchanted_item(ItemStack item_stack) {

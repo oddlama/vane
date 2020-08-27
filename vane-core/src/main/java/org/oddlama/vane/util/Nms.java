@@ -6,6 +6,7 @@ import java.util.logging.Level;
 import net.minecraft.server.v1_16_R1.Enchantment;
 import net.minecraft.server.v1_16_R1.EnchantmentSlotType;
 import net.minecraft.server.v1_16_R1.EntityPlayer;
+import org.bukkit.craftbukkit.v1_16_R1.inventory.CraftItemStack;
 import net.minecraft.server.v1_16_R1.IChatBaseComponent;
 import net.minecraft.server.v1_16_R1.IRegistry;
 import net.minecraft.server.v1_16_R1.ItemStack;
@@ -74,5 +75,22 @@ public class Nms {
 			case VANISHABLE:  return EnchantmentSlotType.VANISHABLE;
 			default:          return null;
 		}
+	}
+
+	public static ItemStack item_handle(org.bukkit.inventory.ItemStack item_stack) {
+		try {
+			final var handle = CraftItemStack.class.getDeclaredField("handle");
+			handle.setAccessible(true);
+			return (ItemStack)handle.get(item_stack);
+		} catch (NoSuchFieldException |	IllegalAccessException e) {
+			return null;
+		}
+	}
+
+	public static EntityPlayer player_handle(org.bukkit.entity.Player player) {
+		if (!(player instanceof CraftPlayer)) {
+			return null;
+		}
+		return ((CraftPlayer)player).getHandle();
 	}
 }

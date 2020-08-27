@@ -6,12 +6,14 @@ import java.lang.Comparable;
 import java.lang.StringBuilder;
 import java.lang.reflect.Field;
 import java.util.function.Function;
+import java.util.Arrays;
 
 import org.apache.commons.lang.WordUtils;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import org.oddlama.vane.core.YamlLoadException;
+import org.oddlama.vane.core.functional.Consumer2;
 
 public abstract class ConfigField<T> implements Comparable<ConfigField<?>> {
 	protected Object owner;
@@ -95,7 +97,17 @@ public abstract class ConfigField<T> implements Comparable<ConfigField<?>> {
 		builder.append("\n");
 	}
 
-	protected void append_value_range(StringBuilder builder, String indent, T min, T max, T invalid_min, T invalid_max) {
+	protected<U> void append_list_definition(StringBuilder builder, String indent, String prefix, U[] arr, Consumer2<StringBuilder, U> append) {
+		Arrays.stream(arr).forEach(i -> {
+			builder.append(indent);
+			builder.append(prefix);
+			builder.append("  - ");
+			append.apply(builder, i);
+			builder.append("\n");
+		});
+	}
+
+	protected<U> void append_value_range(StringBuilder builder, String indent, U min, U max, U invalid_min, U invalid_max) {
 		builder.append(indent);
 		builder.append("# Valid values: ");
 		if (!min.equals(invalid_min)) {

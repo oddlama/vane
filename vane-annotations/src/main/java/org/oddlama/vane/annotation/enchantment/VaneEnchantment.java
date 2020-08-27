@@ -11,8 +11,8 @@ import org.bukkit.enchantments.EnchantmentTarget;
 @Target(ElementType.TYPE)
 public @interface VaneEnchantment {
 	String name();
-	Rarity rarity() default Rarity.COMMON;
 	int max_level() default 1;
+	Rarity rarity() default Rarity.COMMON;
 	boolean treasure() default false;
 	EnchantmentTarget target() default EnchantmentTarget.BREAKABLE;
 }

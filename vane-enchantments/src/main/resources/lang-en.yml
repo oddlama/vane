@@ -14,6 +14,14 @@
 # if the file needs to be updated.
 version: 1
 
+enchantment_rake:
+  # The display name of this enchantment. Will be packed into a datapack.
+  name: "Rake"
+
+enchantment_wings:
+  # The display name of this enchantment. Will be packed into a datapack.
+  name: "Wings"
+
 command_enchant:
   # This message is sent when an enchantment level is given that is too low for the chosen enchantment.
   # {0}: Given level

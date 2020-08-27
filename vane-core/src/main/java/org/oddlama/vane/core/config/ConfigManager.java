@@ -17,7 +17,9 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import org.oddlama.vane.annotation.config.ConfigBoolean;
 import org.oddlama.vane.annotation.config.ConfigDouble;
+import org.oddlama.vane.annotation.config.ConfigDoubleList;
 import org.oddlama.vane.annotation.config.ConfigInt;
+import org.oddlama.vane.annotation.config.ConfigIntList;
 import org.oddlama.vane.annotation.config.ConfigLong;
 import org.oddlama.vane.annotation.config.ConfigMaterialSet;
 import org.oddlama.vane.annotation.config.ConfigString;
@@ -26,8 +28,10 @@ import org.oddlama.vane.annotation.config.ConfigVersion;
 import org.oddlama.vane.core.YamlLoadException;
 import org.oddlama.vane.core.config.ConfigBooleanField;
 import org.oddlama.vane.core.config.ConfigDoubleField;
+import org.oddlama.vane.core.config.ConfigDoubleListField;
 import org.oddlama.vane.core.config.ConfigField;
 import org.oddlama.vane.core.config.ConfigIntField;
+import org.oddlama.vane.core.config.ConfigIntListField;
 import org.oddlama.vane.core.config.ConfigLongField;
 import org.oddlama.vane.core.config.ConfigMaterialSetField;
 import org.oddlama.vane.core.config.ConfigStringField;
@@ -86,8 +90,12 @@ public class ConfigManager {
 			return new ConfigBooleanField(owner, field, map_name, (ConfigBoolean)annotation);
 		} else if (atype.equals(ConfigDouble.class)) {
 			return new ConfigDoubleField(owner, field, map_name, (ConfigDouble)annotation);
+		} else if (atype.equals(ConfigDoubleList.class)) {
+			return new ConfigDoubleListField(owner, field, map_name, (ConfigDoubleList)annotation);
 		} else if (atype.equals(ConfigInt.class)) {
 			return new ConfigIntField(owner, field, map_name, (ConfigInt)annotation);
+		} else if (atype.equals(ConfigIntList.class)) {
+			return new ConfigIntListField(owner, field, map_name, (ConfigIntList)annotation);
 		} else if (atype.equals(ConfigLong.class)) {
 			return new ConfigLongField(owner, field, map_name, (ConfigLong)annotation);
 		} else if (atype.equals(ConfigMaterialSet.class)) {
