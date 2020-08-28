@@ -27,6 +27,7 @@ So if you don't want a certain feature, simply disable it.
 - [x] Skip night with 50% of players sleeping
 - [ ] Store XP in bottles (with slight loss)
 - [ ] Modify individual connections of walls, fences, panes, etc.
+- [ ] All recipes are automatically unlocked when joining the server
 
 #### Administrative and 'meta' features
 
@@ -45,6 +46,7 @@ So if you don't want a certain feature, simply disable it.
 - [x] Seamless integration of custom enchantments (with [API](TODO)!)
   - (as of 1.16.2) Showing enchantment names inside the enchantment table doesn't work due to protocol limitations. Names will be blank.
 - [x] Client side translations for custom items and enchantments
+- [x] Wings: Occasionally boost your elytra mid-air by sneaking
 
 #### Unique features
 

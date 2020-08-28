@@ -30,12 +30,6 @@ public class HarvestListener extends Listener<Trifles> {
 			return;
 		}
 
-		// Only when main hand is empty
-		final var player = event.getPlayer();
-		if (player.getEquipment().getItemInMainHand().getType() != Material.AIR) {
-			return;
-		}
-
 		harvest_plant(event.getClickedBlock());
 	}
 }
