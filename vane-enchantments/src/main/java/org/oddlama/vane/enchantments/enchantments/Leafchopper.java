@@ -7,9 +7,9 @@ import org.oddlama.vane.enchantments.CustomEnchantment;
 import org.oddlama.vane.enchantments.Enchantments;
 import org.oddlama.vane.annotation.enchantment.Rarity;
 
-@VaneEnchantment(name = "rake", max_level = 4, rarity = Rarity.COMMON, treasure = true, target = EnchantmentTarget.TOOL)
-public class Rake extends CustomEnchantment<Enchantments> {
-	public Rake(Context<Enchantments> context) {
+@VaneEnchantment(name = "leafchopper", rarity = Rarity.COMMON, treasure = true, target = EnchantmentTarget.TOOL)
+public class Leafchopper extends CustomEnchantment<Enchantments> {
+	public Leafchopper(Context<Enchantments> context) {
 		super(context);
 	}
 }
