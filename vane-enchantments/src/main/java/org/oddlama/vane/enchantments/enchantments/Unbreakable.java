@@ -33,7 +33,7 @@ public class Unbreakable extends CustomEnchantment<Enchantments> {
 		event.setCancelled(true);
 
 		// Set item unbreakable to prevent further event calls
-		var meta = item.getItemMeta();
+		final var meta = item.getItemMeta();
 		meta.setUnbreakable(true);
 		item.setItemMeta(meta);
 	}
