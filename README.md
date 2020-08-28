@@ -43,10 +43,25 @@ So if you don't want a certain feature, simply disable it.
 
 #### Custom enchantments
 
+While vane's API allows enchantments to be acquired using the enchanting table,
+most (TODO all??) enchantments from this plugin will be acquired by treasure
+or crafting, for the simple reason that late-game enchanting is too easy,
+and therefore not well suited for giving out valuable traits (like *Angel* or *Unbreakable*).
+
 - [x] Seamless integration of custom enchantments (with [API](TODO)!)
   - (as of 1.16.2) Showing enchantment names inside the enchantment table doesn't work due to protocol limitations. Names will be blank.
 - [x] Client side translations for custom items and enchantments
+
 - [x] Wings: Occasionally boost your elytra mid-air by sneaking
+- [x] Careless: Tilling long grass will remove it and till the block below
+- [x] Rake: Tilling farmland again will till the nearest block around it. Use multiple times to slowly create a circle. Works in combination with Careless to till grass with long grass on top.
+- [x] Seeding: Right click your crops to plant crops of the same type around them. Use multiple times to create a circle.
+- [x] Take Off: Double jump to start gliding with your elytra and receive a small boost.
+- [x] Hell Bent: Don't hurt your head when flying into a wall. Again.
+- [x] Grappling Hook: Finally put your fishing rod to good use!
+- [x] Leafchopper: Remove leaves instantly with your axe. Leaves will drop items as if they decayed naturally.
+- [x] Angel: A legendary enchantment to accelerate your elytra while pressing shift! Gives a more natural feeling than using rockets. (Replaces *Wings*)
+- [x] Unbreakable: Well... A legendary enchantment for truly unbreakable items. Extremely rare. (Replaces *Unbreaking* and *Mending*)
 
 #### Unique features
 
