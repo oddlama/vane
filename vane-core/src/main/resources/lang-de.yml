@@ -28,8 +28,9 @@ invalid_time_format: "§cerror:§6 Ungültige Zeit: {0}"
 command_vane:
   reload_success: "§b{0}: §areload erfolgreich"
   reload_fail: "§b{0}: §creload fehlgeschlagen: §6{1}"
-  resource_pack_create_success: "Resource Pack wurde §aerfolgreich§r erstellt"
-  usage: "§7<§areload§7|§acreate_resource_pack§7>"
+  resource_pack_generate_success: "§aResource Pack wurde erfolgreich erstellt"
+  resource_pack_generate_fail: "§cBeim Erstellen des Resource Pack ist ein Fehler aufgetreten"
+  usage: "§7<§areload§7|§agenerate_resource_pack§7>"
   description: "Verwaltet Vane plugins."
   help: "§areload §7[§bmodule§7]:§r Läd alle oder das gegebene Vane-Modul erneut.\n\
-    §acreate_resource_pack§7:§r Erstellt das Vane Resource Pack."
+    §agenerate_resource_pack§7:§r Erstellt das Vane Resource Pack."

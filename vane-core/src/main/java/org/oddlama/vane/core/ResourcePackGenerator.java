@@ -2,11 +2,11 @@ package org.oddlama.vane.core;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
+import java.io.InputStream;
 import java.io.IOException;
 import java.io.FileOutputStream;
 import java.util.zip.ZipOutputStream;
 import java.util.zip.ZipEntry;
-import java.util.logging.Level;
 import java.util.Collections;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -28,27 +28,31 @@ import org.oddlama.vane.util.Message;
 
 public class ResourcePackGenerator {
 	private String description = "";
-	private File icon = null;
+	private byte[] icon_png_content = null;
 	private Map<String, Map<String, JSONObject>> translations = new HashMap<>();
 
 	public void set_description(String description) {
 		this.description = description;
 	}
 
-	public void set_icon_png(File icon) {
-		this.icon = icon;
+	public void set_icon_png(File file) throws IOException {
+		this.icon_png_content = Files.readAllBytes(file.toPath());
 	}
 
-	public JSONObject translations(String namespace, String code) {
+	public void set_icon_png(InputStream data) throws IOException {
+		this.icon_png_content = data.readAllBytes();
+	}
+
+	public JSONObject translations(String namespace, String lang_code) {
 		var ns = translations.get(namespace);
 		if (ns == null) {
 			ns = new HashMap<String, JSONObject>();
 			translations.put(namespace, ns);
 		}
-		var lang_map = ns.get(code);
+		var lang_map = ns.get(lang_code);
 		if (lang_map == null) {
 			lang_map = new JSONObject();
-			ns.put(namespace, lang_map);
+			ns.put(lang_code, lang_map);
 		}
 		return lang_map;
 	}
@@ -78,21 +82,21 @@ public class ResourcePackGenerator {
 		}
 	}
 
-	public void write(File file) {
+	public void write(File file) throws IOException {
 		try (var zip = new ZipOutputStream(new FileOutputStream(file))) {
 			zip.putNextEntry(new ZipEntry("pack.mcmeta"));
 			zip.write(generate_pack_mcmeta().getBytes(StandardCharsets.UTF_8));
 			zip.closeEntry();
 
-			if (icon != null) {
+			if (icon_png_content != null) {
 				zip.putNextEntry(new ZipEntry("pack.png"));
-				zip.write(Files.readString(icon.toPath()).getBytes(StandardCharsets.UTF_8));
+				zip.write(icon_png_content);
 				zip.closeEntry();
 			}
 
 			write_translations(zip);
 		} catch (IOException e) {
-			Bukkit.getLogger().log(Level.SEVERE, "Error while writing resourcepack", e);
+			throw e;
 		}
 	}
 }

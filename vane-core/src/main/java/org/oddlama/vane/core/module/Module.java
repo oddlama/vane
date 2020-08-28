@@ -102,10 +102,10 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 	public void on_disable() {}
 	public void on_config_change() {}
 
-	public void create_resource_pack(ResourcePackGenerator pack) {
+	public void generate_resource_pack(ResourcePackGenerator pack) {
 		get_resources(getClass(), Pattern.compile("lang-.*\\.yml")).stream().forEach(lang_file -> {
 			final var yaml = YamlConfiguration.loadConfiguration(new File(getDataFolder(), lang_file));
-			lang_manager.create_resource_pack(pack, yaml);
+			lang_manager.generate_resource_pack(pack, yaml);
 		});
 	}
 

@@ -169,7 +169,8 @@ public class LangManager {
 		return true;
 	}
 
-	public void create_resource_pack(ResourcePackGenerator pack, YamlConfiguration yaml) {
+	@SuppressWarnings("unchecked")
+	public void generate_resource_pack(ResourcePackGenerator pack, YamlConfiguration yaml) {
 		var lang_code = yaml.getString("resource_pack_lang_code");
 		for (var f : lang_fields) {
 			if (f.has_resource_pack_translation()) {

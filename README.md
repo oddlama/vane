@@ -124,12 +124,19 @@ per chunk cache for regions, like "chunk is fully in region"
 check achievement on anvil
 
 
-/ihaterecipes -> get recipes
+!!!automatic recipes unlocking
 
+sign editor tool.
+
+
+harvest with any right click that isnt a tools
+
+wither in overworld = big nono
 
 /<module> reload to reload config for all!!!!! automatic.
 
 todo datapack and language from yaml!
 
+shulker box right click with item to add?
 
 playerlist footer and header

@@ -1,5 +1,6 @@
 package org.oddlama.vane.core;
 
+import java.util.logging.Level;
 import java.io.IOException;
 import java.io.FileOutputStream;
 import java.util.zip.ZipOutputStream;
@@ -46,15 +47,21 @@ public class Core extends Module<Core> {
 		new CommandHider(this);
 	}
 
-	public void create_resource_pack() {
-		var pack = new ResourcePackGenerator();
-		pack.set_description("Vane plugin resource pack");
-		pack.set_icon_png(new File(getDataFolder(), "pack.png"));
+	public boolean generate_resource_pack() {
+		try {
+			var pack = new ResourcePackGenerator();
+			pack.set_description("Vane plugin resource pack");
+			pack.set_icon_png(getResource("pack.png"));
 
-		for (var m : vane_modules) {
-			m.create_resource_pack(pack);
+			for (var m : vane_modules) {
+				m.generate_resource_pack(pack);
+			}
+
+			pack.write(new File("vane-resource-pack.zip"));
+		} catch (Exception e) {
+			log.log(Level.SEVERE, "Error while writing resourcepack", e);
+			return false;
 		}
-
-		pack.write(new File("vane-resource-pack.zip"));
+		return true;
 	}
 }

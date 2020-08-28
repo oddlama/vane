@@ -19,7 +19,9 @@ public class Vane extends Command<Core> {
 	private Message lang_reload_fail;
 
 	@LangString
-	private String lang_resource_pack_create_success;
+	private String lang_resource_pack_generate_success;
+	@LangString
+	private String lang_resource_pack_generate_fail;
 
 	public Vane(Context<Core> context) {
 		super(context);
@@ -32,7 +34,7 @@ public class Vane extends Command<Core> {
 		reload.exec(this::reload_all);
 		reload.choose_module().exec(this::reload_module);
 
-		params().fixed("create_resource_pack").ignore_case().exec(this::create_resource_pack);
+		params().fixed("generate_resource_pack").ignore_case().exec(this::generate_resource_pack);
 	}
 
 	private void reload_module(CommandSender sender, Module<?> module) {
@@ -49,8 +51,11 @@ public class Vane extends Command<Core> {
 		}
 	}
 
-	private void create_resource_pack(CommandSender sender) {
-		get_module().create_resource_pack();
-		sender.sendMessage(lang_resource_pack_create_success);
+	private void generate_resource_pack(CommandSender sender) {
+		if (get_module().generate_resource_pack()) {
+			sender.sendMessage(lang_resource_pack_generate_success);
+		} else {
+			sender.sendMessage(lang_resource_pack_generate_fail);
+		}
 	}
 }
