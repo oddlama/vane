@@ -24,7 +24,7 @@ import org.bukkit.event.EventPriority;
 public class Angel extends CustomEnchantment<Enchantments> {
 	@ConfigDouble(def = 0.1, min = 0.0, max = 1.0, desc = "Acceleration percentage. Each tick, the current flying speed is increased X percent towards the target speed. Low values (~0.1) typically result in a smooth acceleration curve and a natural feeling.")
 	private double config_acceleration_percentage;
-	@ConfigDoubleList(def = {1.0, 1.2, 1.5, 1.9, 2.4}, min = 0.0, desc = "Flying speed in blocks per second for each enchantment level.")
+	@ConfigDoubleList(def = {0.7, 1.1, 1.4, 1.7, 2.0}, min = 0.0, desc = "Flying speed in blocks per second for each enchantment level.")
 	private List<Double> config_speed;
 
 	public Angel(Context<Enchantments> context) {

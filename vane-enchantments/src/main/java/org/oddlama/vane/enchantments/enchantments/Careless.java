@@ -10,6 +10,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -50,7 +51,7 @@ public class Careless extends CustomEnchantment<Enchantments> {
 		}
 
 		// Check if underlying block if tillable
-		var below = event.getClickedBlock().getRelative(0, -1, 0);
+		var below = event.getClickedBlock().getRelative(BlockFace.DOWN);
 		if (below == null || !is_tillable(below.getType())) {
 			return;
 		}
@@ -63,14 +64,7 @@ public class Careless extends CustomEnchantment<Enchantments> {
 		}
 
 		// Create block break event for clicked block and check if it gets cancelled
-		var break_event = new BlockBreakEvent(event.getClickedBlock(), player);
-		get_module().getServer().getPluginManager().callEvent(break_event);
-		if (break_event.isCancelled()) {
-			return;
-		}
-
-		// Create block break event for block to till and check if it gets cancelled
-		break_event = new BlockBreakEvent(below, player);
+		final var break_event = new BlockBreakEvent(event.getClickedBlock(), player);
 		get_module().getServer().getPluginManager().callEvent(break_event);
 		if (break_event.isCancelled()) {
 			return;
@@ -78,7 +72,8 @@ public class Careless extends CustomEnchantment<Enchantments> {
 
 		// Till block
 		event.getClickedBlock().setType(Material.AIR);
-		till_block(player, below);
-		damage_item(player, item, 1);
+		if (till_block(player, below)) {
+			damage_item(player, item, 1);
+		}
 	}
 }

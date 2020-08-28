@@ -39,7 +39,7 @@ public class Rake extends CustomEnchantment<Enchantments> {
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-	public void on_player_till_farmland(PlayerInteractEvent event) {
+	public void on_player_till_farmland(final PlayerInteractEvent event) {
 		if (!event.hasBlock() || event.getHand() != EquipmentSlot.HAND || event.getAction() != Action.RIGHT_CLICK_BLOCK) {
 			return;
 		}
@@ -57,10 +57,15 @@ public class Rake extends CustomEnchantment<Enchantments> {
 			return;
 		}
 
+		// Get tillable block
 		final var careless = item.getEnchantmentLevel(CustomEnchantment.bukkit(Careless.class)) > 0;
-		var tillable = next_tillable_block(event.getClickedBlock(), level, careless);
-		if (tillable != null) {
-			till_block(player, tillable);
+		final var tillable = next_tillable_block(event.getClickedBlock(), level, careless);
+		if (tillable == null) {
+			return;
+		}
+
+		// Till block
+		if (till_block(player, tillable)) {
 			damage_item(player, item, 1);
 		}
 	}

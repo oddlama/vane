@@ -130,7 +130,7 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 		switch (annotation.rarity()) {
 			default:
 			case UNCOMMON:  return mod.setColor(EnumChatFormat.GRAY);
-			case COMMON:    return mod.setColor(EnumChatFormat.DARK_BLUE);
+			case COMMON:    return mod.setColor(EnumChatFormat.DARK_AQUA);
 			case RARE:      return mod.setColor(EnumChatFormat.GOLD);
 			case VERY_RARE: return mod.setColor(EnumChatFormat.DARK_PURPLE).setBold(true);
 		}

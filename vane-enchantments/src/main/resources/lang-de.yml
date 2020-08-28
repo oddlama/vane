@@ -18,6 +18,33 @@ version: 1
 # language code (ISO 639) and the country code (ISO 3166).
 resource_pack_lang_code: 'de_de'
 
+enchantment_seeding:
+  name: "Saat"
+
+enchantment_careless:
+  name: "Achtlos"
+
+enchantment_rake:
+  name: "Harke"
+
+enchantment_take_off:
+  name: "Abflug"
+
+enchantment_unbreakable:
+  name: "Unzerbrechlich"
+
+enchantment_hell_bent:
+  name: "Dickschädel"
+
+enchantment_grappling_hook:
+  name: "Greifhaken"
+
+enchantment_leafchopper:
+  name: "Blattschneider"
+
+enchantment_angel:
+  name: "Engel"
+
 enchantment_rake:
   name: "Rake"
 

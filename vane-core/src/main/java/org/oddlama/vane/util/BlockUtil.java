@@ -102,12 +102,9 @@ public class BlockUtil {
 		return ret;
 	}
 
-	public static Block next_tillable_block(Block root_block, int radius, boolean careless) {
+	public static Block next_tillable_block(final Block root_block, int radius, boolean careless) {
 		for (var relative_pos : BlockUtil.NEAREST_RELATIVE_BLOCKS_FOR_RADIUS.get(radius - 1)) {
 			var block = root_block.getRelative(relative_pos.x, relative_pos.y, relative_pos.z);
-			if (block == null) {
-				continue;
-			}
 
 			// Check for a tillable material
 			if (!is_tillable(block.getType())) {
@@ -127,6 +124,21 @@ public class BlockUtil {
 				// If the item has the careless enchantment, and the block above
 				// is replaceable grass, delete it and return the block.
 				above.setType(Material.AIR);
+				return block;
+			}
+		}
+
+		// We are outside of the radius.
+		return null;
+	}
+
+	public static Block next_seedable_block(final Block root_block, Material farmland_type, int radius) {
+		for (var relative_pos : BlockUtil.NEAREST_RELATIVE_BLOCKS_FOR_RADIUS.get(radius - 1)) {
+			var block = root_block.getRelative(relative_pos.x, relative_pos.y, relative_pos.z);
+			var below = block.getRelative(BlockFace.DOWN);
+
+			// Block below must be farmland and the block itself must be air
+			if (below.getType() == farmland_type && block.getType() == Material.AIR) {
 				return block;
 			}
 		}

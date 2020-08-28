@@ -28,7 +28,7 @@ public class GrapplingHook extends CustomEnchantment<Enchantments> {
 
 	@ConfigDouble(def = 16.0, min = 2.0, max = 50.0, desc = "Ideal grappling distance for maximum grapple strength. Strength increases rapidly before, and falls of slowly after.")
 	private double config_ideal_distance;
-	@ConfigDoubleList(def = {0.4, 0.52, 0.67}, min = 0.0, desc = "Grappling strength for each enchantment level.")
+	@ConfigDoubleList(def = {1.6, 2.1, 2.7}, min = 0.0, desc = "Grappling strength for each enchantment level.")
 	private List<Double> config_strength;
 
 	public GrapplingHook(Context<Enchantments> context) {

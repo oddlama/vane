@@ -18,6 +18,42 @@ version: 1
 # language code (ISO 639) and the country code (ISO 3166).
 resource_pack_lang_code: 'en_us'
 
+enchantment_seeding:
+  # The display name of this enchantment. Will be packed into a datapack.
+  name: "Seeding"
+
+enchantment_careless:
+  # The display name of this enchantment. Will be packed into a datapack.
+  name: "Careless"
+
+enchantment_rake:
+  # The display name of this enchantment. Will be packed into a datapack.
+  name: "Rake"
+
+enchantment_take_off:
+  # The display name of this enchantment. Will be packed into a datapack.
+  name: "Take Off"
+
+enchantment_unbreakable:
+  # The display name of this enchantment. Will be packed into a datapack.
+  name: "Unbreakable"
+
+enchantment_hell_bent:
+  # The display name of this enchantment. Will be packed into a datapack.
+  name: "Hell Bent"
+
+enchantment_grappling_hook:
+  # The display name of this enchantment. Will be packed into a datapack.
+  name: "Grappling Hook"
+
+enchantment_leafchopper:
+  # The display name of this enchantment. Will be packed into a datapack.
+  name: "Leafchopper"
+
+enchantment_angel:
+  # The display name of this enchantment. Will be packed into a datapack.
+  name: "Angel"
+
 enchantment_rake:
   # The display name of this enchantment. Will be packed into a datapack.
   name: "Rake"

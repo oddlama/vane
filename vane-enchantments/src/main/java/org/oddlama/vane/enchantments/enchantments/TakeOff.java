@@ -51,7 +51,7 @@ import net.minecraft.server.v1_16_R1.ChatModifier;
 import org.oddlama.vane.enchantments.Enchantments;
 import net.minecraft.server.v1_16_R1.ChatModifier;
 
-@VaneEnchantment(name = "take_off", max_level = 4, rarity = Rarity.RARE, treasure = true)
+@VaneEnchantment(name = "take_off", max_level = 3, rarity = Rarity.UNCOMMON, treasure = true)
 public class TakeOff extends CustomEnchantment<Enchantments> {
 	@ConfigDoubleList(def = {0.2, 0.4, 0.6}, min = 0.0, desc = "Boost strength for each enchantment level.")
 	private List<Double> config_boost_strengths;
