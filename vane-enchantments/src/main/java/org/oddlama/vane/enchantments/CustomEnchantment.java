@@ -4,6 +4,8 @@ import static org.oddlama.vane.util.Util.namespaced_key;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 import org.oddlama.vane.annotation.lang.LangString;
 import net.minecraft.server.v1_16_R1.ChatMessage;
@@ -27,6 +29,9 @@ import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.util.Nms;
 
 public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
+	// Track instances
+	private static final Map<Class<?>, CustomEnchantment<?>> instances = new HashMap<>();
+
 	private VaneEnchantment annotation = getClass().getAnnotation(VaneEnchantment.class);
 	private String name;
 	private NamespacedKey key;
@@ -51,6 +56,12 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 		// Create namespaced key
 		key = namespaced_key("vane", name);
 
+		// Check if instance is already exists
+		if (instances.get(getClass()) != null) {
+			throw new RuntimeException("Cannot create two instances of a custom enchantment!");
+		}
+		instances.put(getClass(), this);
+
 		// Register and create wrappers
 		native_wrapper = new NativeEnchantmentWrapper(this);
 		Nms.register_enchantment(get_key(), native_wrapper);
@@ -62,6 +73,13 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 
 	public String lang_name_translation_key() {
 		return native_wrapper.g();
+	}
+
+	/**
+	 * Returns the bukkit wrapper for the given custom enchantment.
+	 */
+	public static BukkitEnchantmentWrapper bukkit(Class<? extends CustomEnchantment<?>> cls) {
+		return instances.get(cls).bukkit();
 	}
 
 	/**

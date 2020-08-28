@@ -22,4 +22,27 @@ public class MaterialUtil {
 				return true;
 		}
 	}
+
+	public static boolean is_replaceable_grass(Material type) {
+		switch (type) {
+			default:
+				return false;
+
+			case TALL_GRASS:
+			case GRASS:
+				return true;
+		}
+	}
+
+	public static boolean is_tillable(Material type) {
+		switch (type) {
+			default:
+				return false;
+
+			case DIRT:
+			case GRASS_BLOCK:
+				return true;
+		}
+	}
+
 }
