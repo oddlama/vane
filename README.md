@@ -131,6 +131,9 @@ check achievement on anvil
 sign editor tool.
 
 
+NO TOO EXPENSIVE! set cost at anvil output anvil.
+
+
 harvest with any right click that isnt a tools
 
 wither in overworld = big nono
