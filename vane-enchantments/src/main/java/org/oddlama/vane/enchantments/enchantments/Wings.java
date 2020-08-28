@@ -22,7 +22,6 @@ import org.oddlama.vane.enchantments.CustomEnchantment;
 import org.jetbrains.annotations.NotNull;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 
-import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.oddlama.vane.enchantments.Enchantments;
 import net.minecraft.server.v1_16_R1.ChatModifier;
 
@@ -50,7 +49,7 @@ public class Wings extends CustomEnchantment<Enchantments> {
 	}
 
 	private double get_boost_strength(int level) {
-		if (level > 0 && level <= config_boost_cooldowns.size()) {
+		if (level > 0 && level <= config_boost_strengths.size()) {
 			return config_boost_strengths.get(level - 1);
 		}
 		return config_boost_strengths.get(0);
