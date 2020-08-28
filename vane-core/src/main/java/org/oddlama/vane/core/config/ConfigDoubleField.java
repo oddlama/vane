@@ -15,13 +15,13 @@ public class ConfigDoubleField extends ConfigField<Double> {
 	public ConfigDouble annotation;
 
 	public ConfigDoubleField(Object owner, Field field, Function<String, String> map_name, ConfigDouble annotation) {
-		super(owner, field, map_name, "double");
+		super(owner, field, map_name, "double", annotation.desc());
 		this.annotation = annotation;
 	}
 
 	@Override
 	public void generate_yaml(StringBuilder builder, String indent) {
-		append_description(builder, indent, annotation.desc());
+		append_description(builder, indent);
 		append_value_range(builder, indent, annotation.min(), annotation.max(), Double.NaN, Double.NaN);
 		append_default_value(builder, indent, annotation.def());
 		append_field_definition(builder, indent, annotation.def());

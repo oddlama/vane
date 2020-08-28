@@ -16,7 +16,7 @@ public class ConfigVersionField extends ConfigField<Long> {
 	public ConfigVersion annotation;
 
 	public ConfigVersionField(Object owner, Field field, Function<String, String> map_name, ConfigVersion annotation) {
-		super(owner, field, map_name, "version id");
+		super(owner, field, map_name, "version id", "DO NOT CHANGE! The version of this config file. Used to determine if the config needs to be updated.");
 		this.annotation = annotation;
 
 		// Version field should be at the bottom
@@ -25,8 +25,7 @@ public class ConfigVersionField extends ConfigField<Long> {
 
 	@Override
 	public void generate_yaml(StringBuilder builder, String indent) {
-		final var description = "DO NOT CHANGE! The version of this config file. Used to determine if the config needs to be updated.";
-		append_description(builder, indent, description);
+		append_description(builder, indent);
 		append_field_definition(builder, indent, ((Module<?>)owner).annotation.config_version());
 	}
 

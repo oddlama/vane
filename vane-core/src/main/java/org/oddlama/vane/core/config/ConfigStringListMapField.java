@@ -20,7 +20,7 @@ public class ConfigStringListMapField extends ConfigField<Map<String, List<Strin
 	public ConfigStringListMap annotation;
 
 	public ConfigStringListMapField(Object owner, Field field, Function<String, String> map_name, ConfigStringListMap annotation) {
-		super(owner, field, map_name, "map of string lists");
+		super(owner, field, map_name, "map of string lists", annotation.desc());
 		this.annotation = annotation;
 	}
 
@@ -44,7 +44,7 @@ public class ConfigStringListMapField extends ConfigField<Map<String, List<Strin
 
 	@Override
 	public void generate_yaml(StringBuilder builder, String indent) {
-		append_description(builder, indent, annotation.desc());
+		append_description(builder, indent);
 
 		// Default
 		builder.append(indent);

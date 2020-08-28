@@ -15,13 +15,13 @@ public class ConfigLongField extends ConfigField<Long> {
 	public ConfigLong annotation;
 
 	public ConfigLongField(Object owner, Field field, Function<String, String> map_name, ConfigLong annotation) {
-		super(owner, field, map_name, "long");
+		super(owner, field, map_name, "long", annotation.desc());
 		this.annotation = annotation;
 	}
 
 	@Override
 	public void generate_yaml(StringBuilder builder, String indent) {
-		append_description(builder, indent, annotation.desc());
+		append_description(builder, indent);
 		append_value_range(builder, indent, annotation.min(), annotation.max(), Long.MIN_VALUE, Long.MAX_VALUE);
 		append_default_value(builder, indent, annotation.def());
 		append_field_definition(builder, indent, annotation.def());

@@ -20,6 +20,7 @@ import org.jetbrains.annotations.NotNull;
 
 import org.oddlama.vane.annotation.enchantment.Rarity;
 import org.oddlama.vane.annotation.enchantment.VaneEnchantment;
+import org.oddlama.vane.annotation.lang.ResourcePackTranslation;
 import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.Module;
@@ -36,6 +37,7 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 
 	// Language
 	@LangString
+	@ResourcePackTranslation(namespace = "vane") // key is set by #lang_name_translation_key()
 	public String lang_name;
 
 	public CustomEnchantment(Context<T> context) {
@@ -58,8 +60,8 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 		Enchantment.registerEnchantment(bukkit_wrapper);
 	}
 
-	public void on_create_datapack() {
-		//datapack.add_translation(variable_yaml_path("name"), native_wrapper.g());
+	public String lang_name_translation_key() {
+		return native_wrapper.g();
 	}
 
 	/**

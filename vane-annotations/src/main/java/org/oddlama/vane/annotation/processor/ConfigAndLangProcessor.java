@@ -28,6 +28,7 @@ import javax.tools.Diagnostic;
     "org.oddlama.vane.annotation.lang.LangMessage",
     "org.oddlama.vane.annotation.lang.LangString",
     "org.oddlama.vane.annotation.lang.LangVersion",
+    "org.oddlama.vane.annotation.lang.ResourcePackTranslation",
 })
 @SupportedSourceVersion(SourceVersion.RELEASE_11)
 public class ConfigAndLangProcessor extends AbstractProcessor {
@@ -63,9 +64,29 @@ public class ConfigAndLangProcessor extends AbstractProcessor {
 	private void verify_type(TypeElement annotation, Element element) {
 		var type = ((VariableElement)element).asType().toString();
 		var required_type = field_type_mapping.get(annotation.asType().toString());
-		if (!required_type.equals(type)) {
+		if (required_type == null) {
+			if (annotation.asType().toString().equals("org.oddlama.vane.annotation.lang.ResourcePackTranslation")) {
+				boolean has_lang_annotation = false;
+				for (var a : element.getAnnotationMirrors()) {
+					if (a.getAnnotationType().toString().startsWith("org.oddlama.vane.annotation.lang.Lang")) {
+						has_lang_annotation = true;
+						break;
+					}
+				}
+				if (!has_lang_annotation) {
+					processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, element.asType().toString()
+							+ ": @" + annotation.getSimpleName() + " requires a @Lang* annotation");
+				}
+				return;
+			}
 			processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, element.asType().toString()
-					+ ": @" + annotation.getSimpleName() + " requires a field of type " + required_type + " but got " + type);
+					+ ": @" + annotation.getSimpleName() + " has no required_type mapping! This is a bug.");
+		} else {
+			if (!required_type.equals(type)) {
+				processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, element.asType().toString()
+						+ ": @" + annotation.getSimpleName() + " requires a field of type " + required_type + " but got " + type);
+				return;
+			}
 		}
 	}
 }

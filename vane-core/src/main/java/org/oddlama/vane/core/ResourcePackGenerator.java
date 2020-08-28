@@ -10,6 +10,8 @@ import java.util.logging.Level;
 import java.util.Collections;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.permissions.Permission;
@@ -25,9 +27,9 @@ import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.util.Message;
 
 public class ResourcePackGenerator {
-	private int format = 6;
 	private String description = "";
 	private File icon = null;
+	private Map<String, Map<String, JSONObject>> translations = new HashMap<>();
 
 	public void set_description(String description) {
 		this.description = description;
@@ -37,16 +39,43 @@ public class ResourcePackGenerator {
 		this.icon = icon;
 	}
 
+	public JSONObject translations(String namespace, String code) {
+		var ns = translations.get(namespace);
+		if (ns == null) {
+			ns = new HashMap<String, JSONObject>();
+			translations.put(namespace, ns);
+		}
+		var lang_map = ns.get(code);
+		if (lang_map == null) {
+			lang_map = new JSONObject();
+			ns.put(namespace, lang_map);
+		}
+		return lang_map;
+	}
+
 	@SuppressWarnings("unchecked")
 	private String generate_pack_mcmeta() {
 		final var pack = new JSONObject();
-		pack.put("pack_format", format);
+		pack.put("pack_format", 6);
 		pack.put("description", description);
 
 		final var root = new JSONObject();
 		root.put("pack", pack);
 
 		return root.toString();
+	}
+
+	private void write_translations(final ZipOutputStream zip) throws IOException {
+		for (var t : translations.entrySet()) {
+			var namespace = t.getKey();
+			for (var ns : t.getValue().entrySet()) {
+				var lang_code = ns.getKey();
+				var lang_map = ns.getValue();
+				zip.putNextEntry(new ZipEntry("assets/" + namespace + "/lang/" + lang_code + ".json"));
+				zip.write(lang_map.toString().getBytes(StandardCharsets.UTF_8));
+				zip.closeEntry();
+			}
+		}
 	}
 
 	public void write(File file) {
@@ -60,6 +89,8 @@ public class ResourcePackGenerator {
 				zip.write(Files.readString(icon.toPath()).getBytes(StandardCharsets.UTF_8));
 				zip.closeEntry();
 			}
+
+			write_translations(zip);
 		} catch (IOException e) {
 			Bukkit.getLogger().log(Level.SEVERE, "Error while writing resourcepack", e);
 		}

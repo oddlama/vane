@@ -15,13 +15,13 @@ public class ConfigIntField extends ConfigField<Integer> {
 	public ConfigInt annotation;
 
 	public ConfigIntField(Object owner, Field field, Function<String, String> map_name, ConfigInt annotation) {
-		super(owner, field, map_name, "int");
+		super(owner, field, map_name, "int", annotation.desc());
 		this.annotation = annotation;
 	}
 
 	@Override
 	public void generate_yaml(StringBuilder builder, String indent) {
-		append_description(builder, indent, annotation.desc());
+		append_description(builder, indent);
 		append_value_range(builder, indent, annotation.min(), annotation.max(), Integer.MIN_VALUE, Integer.MAX_VALUE);
 		append_default_value(builder, indent, annotation.def());
 		append_field_definition(builder, indent, annotation.def());

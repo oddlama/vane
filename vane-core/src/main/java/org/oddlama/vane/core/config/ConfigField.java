@@ -1,10 +1,9 @@
 package org.oddlama.vane.core.config;
 
-import static org.reflections.ReflectionUtils.*;
-
 import java.lang.Comparable;
 import java.lang.StringBuilder;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.function.Function;
 import java.util.Arrays;
 
@@ -25,8 +24,9 @@ public abstract class ConfigField<T> implements Comparable<ConfigField<?>> {
 	private String[] yaml_path_components;
 	private String yaml_group_path;
 	private String basename;
+	private String description;
 
-	public ConfigField(Object owner, Field field, Function<String, String> map_name, String type_name) {
+	public ConfigField(Object owner, Field field, Function<String, String> map_name, String type_name, String description) {
 		this.owner = owner;
 		this.field = field;
 		this.path = map_name.apply(field.getName().substring("config_".length()));
@@ -48,6 +48,16 @@ public abstract class ConfigField<T> implements Comparable<ConfigField<?>> {
 		}
 
 		field.setAccessible(true);
+
+		// Dynamic description
+		this.description = description;
+		if (this.description.equals("")) {
+			try {
+				this.description = (String)owner.getClass().getMethod(field.getName() + "_desc").invoke(owner);
+			} catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
+				throw new RuntimeException("Could not call " + owner.getClass().getName() + "." + field.getName() + "_desc() to override description value", e);
+			}
+		}
 	}
 
 	public String get_yaml_group_path() {
@@ -91,7 +101,7 @@ public abstract class ConfigField<T> implements Comparable<ConfigField<?>> {
 		}
 	}
 
-	protected void append_description(StringBuilder builder, String indent, String description) {
+	protected void append_description(StringBuilder builder, String indent) {
 		final var description_wrapped = indent + "# " + WordUtils.wrap(description, 80, "\n" + indent + "# ", false);
 		builder.append(description_wrapped);
 		builder.append("\n");

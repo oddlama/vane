@@ -47,14 +47,14 @@ public class Core extends Module<Core> {
 	}
 
 	public void create_resource_pack() {
-		var resource_pack = new ResourcePackGenerator();
-		resource_pack.set_description("Vane plugin resource pack");
-		resource_pack.set_icon_png(new File(getDataFolder(), "pack.png"));
+		var pack = new ResourcePackGenerator();
+		pack.set_description("Vane plugin resource pack");
+		pack.set_icon_png(new File(getDataFolder(), "pack.png"));
 
-		//for (var m : vane_modules) {
-		//	m.create_resource_pack(zip);
-		//}
+		for (var m : vane_modules) {
+			m.create_resource_pack(pack);
+		}
 
-		resource_pack.write(new File("vane-resource-pack.zip"));
+		pack.write(new File("vane-resource-pack.zip"));
 	}
 }

@@ -2,10 +2,13 @@ package org.oddlama.vane.core.lang;
 
 import static org.reflections.ReflectionUtils.*;
 
+import org.oddlama.vane.core.ResourcePackGenerator;
 import java.io.File;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.List;
 import java.util.function.Function;
 import java.util.logging.Level;
@@ -24,9 +27,12 @@ import org.oddlama.vane.core.lang.LangVersionField;
 import org.oddlama.vane.core.module.Module;
 
 public class LangManager {
+	Module<?> module;
 	private List<LangField<?>> lang_fields = new ArrayList<>();
 	LangVersionField field_version;
-	Module<?> module;
+
+	// Maps namespace -> yaml_path -> translation_key in resource pack
+	private Map<String, Map<String, String>> resource_pack_translations = new HashMap<>();
 
 	public LangManager(Module<?> module) {
 		this.module = module;
@@ -161,5 +167,15 @@ public class LangManager {
 			return false;
 		}
 		return true;
+	}
+
+	public void create_resource_pack(ResourcePackGenerator pack, YamlConfiguration yaml) {
+		var lang_code = yaml.getString("resource_pack_lang_code");
+		for (var f : lang_fields) {
+			if (f.has_resource_pack_translation()) {
+				pack.translations(f.resource_pack_translation_namespace(), lang_code)
+					.put(f.resource_pack_translation_key(), yaml.getString(f.get_yaml_path()));
+			}
+		}
 	}
 }

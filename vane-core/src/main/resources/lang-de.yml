@@ -15,6 +15,10 @@
 # DO NOT CHANGE! The version of this language file. Used to determine
 # if the file needs to be updated.
 version: 1
+# The corresponding language code used in resource packs. Used for
+# resource pack generation. Typically this is a combination of the
+# language code (ISO 639) and the country code (ISO 3166).
+resource_pack_lang_code: 'de_de'
 
 command_not_a_player: "§cerror:§6 Befehl muss von einem Spieler ausgeführt werden!"
 command_permission_denied: "§cerror:§6 Fehlende Berechtigung!"

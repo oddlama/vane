@@ -35,6 +35,7 @@ import org.oddlama.vane.annotation.config.ConfigVersion;
 import org.oddlama.vane.annotation.lang.LangVersion;
 import org.oddlama.vane.annotation.persistent.Persistent;
 import org.oddlama.vane.core.Core;
+import org.oddlama.vane.core.ResourcePackGenerator;
 import org.oddlama.vane.core.command.Command;
 import org.oddlama.vane.core.config.ConfigManager;
 import org.oddlama.vane.core.lang.LangManager;
@@ -100,6 +101,13 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 	public void on_enable() {}
 	public void on_disable() {}
 	public void on_config_change() {}
+
+	public void create_resource_pack(ResourcePackGenerator pack) {
+		get_resources(getClass(), Pattern.compile("lang-.*\\.yml")).stream().forEach(lang_file -> {
+			final var yaml = YamlConfiguration.loadConfiguration(new File(getDataFolder(), lang_file));
+			lang_manager.create_resource_pack(pack, yaml);
+		});
+	}
 
 	// ProtocolLib
 	public ProtocolManager protocol_manager;

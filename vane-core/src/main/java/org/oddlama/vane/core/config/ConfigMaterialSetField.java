@@ -22,7 +22,7 @@ public class ConfigMaterialSetField extends ConfigField<Set<Material>> {
 	public ConfigMaterialSet annotation;
 
 	public ConfigMaterialSetField(Object owner, Field field, Function<String, String> map_name, ConfigMaterialSet annotation) {
-		super(owner, field, map_name, "set of materials");
+		super(owner, field, map_name, "set of materials", annotation.desc());
 		this.annotation = annotation;
 	}
 
@@ -38,7 +38,7 @@ public class ConfigMaterialSetField extends ConfigField<Set<Material>> {
 
 	@Override
 	public void generate_yaml(StringBuilder builder, String indent) {
-		append_description(builder, indent, annotation.desc());
+		append_description(builder, indent);
 
 		// Default
 		builder.append(indent);

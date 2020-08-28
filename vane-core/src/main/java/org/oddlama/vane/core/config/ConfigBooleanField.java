@@ -14,24 +14,15 @@ import org.oddlama.vane.core.YamlLoadException;
 
 public class ConfigBooleanField extends ConfigField<Boolean> {
 	private ConfigBoolean annotation;
-	private String desc;
 
 	public ConfigBooleanField(Object owner, Field field, Function<String, String> map_name, ConfigBoolean annotation) {
-		super(owner, field, map_name, "boolean");
+		super(owner, field, map_name, "boolean", annotation.desc());
 		this.annotation = annotation;
-		this.desc = annotation.desc();
-		if (desc.equals("")) {
-			try {
-				desc = (String)owner.getClass().getMethod(field.getName() + "_desc").invoke(owner);
-			} catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
-				throw new RuntimeException("Could not call " + owner.getClass().getName() + "." + field.getName() + "_desc() to override description value", e);
-			}
-		}
 	}
 
 	@Override
 	public void generate_yaml(StringBuilder builder, String indent) {
-		append_description(builder, indent, desc);
+		append_description(builder, indent);
 		append_default_value(builder, indent, annotation.def());
 		append_field_definition(builder, indent, annotation.def());
 	}

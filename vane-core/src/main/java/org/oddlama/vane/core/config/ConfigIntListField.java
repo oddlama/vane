@@ -21,7 +21,7 @@ public class ConfigIntListField extends ConfigField<Map<String, List<String>>> {
 	public ConfigIntList annotation;
 
 	public ConfigIntListField(Object owner, Field field, Function<String, String> map_name, ConfigIntList annotation) {
-		super(owner, field, map_name, "int list");
+		super(owner, field, map_name, "int list", annotation.desc());
 		this.annotation = annotation;
 	}
 
@@ -31,7 +31,7 @@ public class ConfigIntListField extends ConfigField<Map<String, List<String>>> {
 
 	@Override
 	public void generate_yaml(StringBuilder builder, String indent) {
-		append_description(builder, indent, annotation.desc());
+		append_description(builder, indent);
 		append_value_range(builder, indent, annotation.min(), annotation.max(), Integer.MIN_VALUE, Integer.MAX_VALUE);
 
 		// Default
