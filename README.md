@@ -1,16 +1,14 @@
 ## About vane
 
-Vane is a plugin which provides many
+Vane is a group of plugins which provide many
 immersive and lore friendly extensions for vanilla minecraft.
 It runs on any [papermc](https://papermc.io) based server.
 
-Vane follows a **strict no-nonsense** rule.
-Every feature must have a real value to the players or the admins,
-and is designed to augment the classic vanilla experience in a lore friendly way.
-All features can be disabled independently.
-So while there will be some administrative tools, a lot of features will just be
-simple things and quality of life changes, with
-only very few greater (but generally appreciated) features like regions and portals.
+These plugins follow a **strict no-nonsense** rule:
+- [x] Only actually useful additions
+- [x] Features must be lore friendly, properly integrated and unobstrusive
+- [x] Everything can be disabled individually
+- [x] Augments the classic vanilla experience
 
 ### Features
 
