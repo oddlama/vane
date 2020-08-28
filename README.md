@@ -49,9 +49,7 @@ or crafting, for the simple reason that late-game enchanting is too easy,
 and therefore not well suited for giving out valuable traits (like *Angel* or *Unbreakable*).
 
 - [x] Seamless integration of custom enchantments (with [API](TODO)!)
-  - (as of 1.16.2) Showing enchantment names inside the enchantment table doesn't work due to protocol limitations. Names will be blank.
 - [x] Client side translations for custom items and enchantments
-
 - [x] Wings: Occasionally boost your elytra mid-air by sneaking
 - [x] Careless: Tilling long grass will remove it and till the block below
 - [x] Rake: Tilling farmland again will till the nearest block around it. Use multiple times to slowly create a circle. Works in combination with Careless to till grass with long grass on top.
@@ -62,6 +60,10 @@ and therefore not well suited for giving out valuable traits (like *Angel* or *U
 - [x] Leafchopper: Remove leaves instantly with your axe. Leaves will drop items as if they decayed naturally.
 - [x] Angel: A legendary enchantment to accelerate your elytra while pressing shift! Gives a more natural feeling than using rockets. (Replaces *Wings*)
 - [x] Unbreakable: Well... A legendary enchantment for truly unbreakable items. Extremely rare. (Replaces *Unbreaking* and *Mending*)
+
+Remarks:
+
+> [as of 1.16.2] Showing enchantment names inside the enchantment table doesn't work due to protocol limitations. Names will be blank.
 
 #### Unique features
 
