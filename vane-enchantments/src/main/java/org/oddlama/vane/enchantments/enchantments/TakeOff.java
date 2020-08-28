@@ -1,55 +1,25 @@
 package org.oddlama.vane.enchantments.enchantments;
 
-import org.bukkit.event.entity.EntityToggleGlideEvent;
+import static org.oddlama.vane.util.ItemUtil.damage_item;
+import static org.oddlama.vane.util.PlayerUtil.apply_elytra_boost;
+
+import java.util.List;
+
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import static org.oddlama.vane.util.PlayerUtil.apply_elytra_boost;
-import static org.oddlama.vane.util.ItemUtil.damage_item;
-import static org.oddlama.vane.util.Util.ms_to_ticks;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-
+import org.bukkit.event.entity.EntityToggleGlideEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.Material;
-import java.util.UUID;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.List;
+
+import org.jetbrains.annotations.NotNull;
 
 import org.oddlama.vane.annotation.config.ConfigDoubleList;
-import org.oddlama.vane.annotation.config.ConfigIntList;
 import org.oddlama.vane.annotation.enchantment.Rarity;
 import org.oddlama.vane.annotation.enchantment.VaneEnchantment;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.enchantments.CustomEnchantment;
-import org.jetbrains.annotations.NotNull;
-import org.bukkit.event.player.PlayerToggleSneakEvent;
-import static org.oddlama.vane.util.PlayerUtil.apply_elytra_boost;
-import static org.oddlama.vane.util.ItemUtil.damage_item;
-import static org.oddlama.vane.util.Util.ms_to_ticks;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.Material;
-import java.util.UUID;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.List;
-
-import org.oddlama.vane.annotation.config.ConfigDoubleList;
-import org.oddlama.vane.annotation.config.ConfigIntList;
-import org.oddlama.vane.annotation.enchantment.Rarity;
-import org.oddlama.vane.annotation.enchantment.VaneEnchantment;
-import org.oddlama.vane.core.module.Context;
-import org.oddlama.vane.enchantments.CustomEnchantment;
-import org.jetbrains.annotations.NotNull;
-import org.bukkit.event.player.PlayerToggleSneakEvent;
-
 import org.oddlama.vane.enchantments.Enchantments;
-import net.minecraft.server.v1_16_R1.ChatModifier;
-
-import org.oddlama.vane.enchantments.Enchantments;
-import net.minecraft.server.v1_16_R1.ChatModifier;
 
 @VaneEnchantment(name = "take_off", max_level = 3, rarity = Rarity.UNCOMMON, treasure = true)
 public class TakeOff extends CustomEnchantment<Enchantments> {

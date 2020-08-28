@@ -3,7 +3,6 @@ package org.oddlama.vane.trifles;
 import static org.oddlama.vane.util.BlockUtil.harvest_plant;
 import static org.oddlama.vane.util.MaterialUtil.is_seeded_plant;
 
-import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;

@@ -3,11 +3,10 @@ package org.oddlama.vane.enchantments;
 import static org.oddlama.vane.util.Util.namespaced_key;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
 
-import org.oddlama.vane.annotation.lang.LangString;
 import net.minecraft.server.v1_16_R1.ChatMessage;
 import net.minecraft.server.v1_16_R1.ChatModifier;
 import net.minecraft.server.v1_16_R1.EnumChatFormat;
@@ -22,6 +21,7 @@ import org.jetbrains.annotations.NotNull;
 
 import org.oddlama.vane.annotation.enchantment.Rarity;
 import org.oddlama.vane.annotation.enchantment.VaneEnchantment;
+import org.oddlama.vane.annotation.lang.LangString;
 import org.oddlama.vane.annotation.lang.ResourcePackTranslation;
 import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.module.Context;

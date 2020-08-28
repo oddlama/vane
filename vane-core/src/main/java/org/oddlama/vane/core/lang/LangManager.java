@@ -2,14 +2,13 @@ package org.oddlama.vane.core.lang;
 
 import static org.reflections.ReflectionUtils.*;
 
-import org.oddlama.vane.core.ResourcePackGenerator;
 import java.io.File;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
@@ -19,6 +18,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.annotation.lang.LangString;
 import org.oddlama.vane.annotation.lang.LangVersion;
+import org.oddlama.vane.core.ResourcePackGenerator;
 import org.oddlama.vane.core.YamlLoadException;
 import org.oddlama.vane.core.lang.LangField;
 import org.oddlama.vane.core.lang.LangMessageField;

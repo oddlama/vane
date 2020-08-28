@@ -1,11 +1,12 @@
 package org.oddlama.vane.util;
 
-import java.util.List;
+import static org.oddlama.vane.util.MaterialUtil.is_replaceable_grass;
+import static org.oddlama.vane.util.MaterialUtil.is_tillable;
+
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
-import static org.oddlama.vane.util.MaterialUtil.is_tillable;
-import static org.oddlama.vane.util.MaterialUtil.is_replaceable_grass;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;

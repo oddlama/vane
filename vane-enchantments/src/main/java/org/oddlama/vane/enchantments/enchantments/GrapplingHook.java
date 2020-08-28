@@ -1,24 +1,19 @@
 package org.oddlama.vane.enchantments.enchantments;
 
-import java.util.UUID;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.List;
+
 import org.bukkit.enchantments.EnchantmentTarget;
-import org.oddlama.vane.annotation.config.ConfigDoubleList;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.player.PlayerFishEvent;
+import org.bukkit.util.Vector;
+
 import org.oddlama.vane.annotation.config.ConfigDouble;
-import org.oddlama.vane.annotation.enchantment.Rarity;
-import org.oddlama.vane.annotation.enchantment.VaneEnchantment;
+import org.oddlama.vane.annotation.config.ConfigDoubleList;
 import org.oddlama.vane.annotation.enchantment.Rarity;
 import org.oddlama.vane.annotation.enchantment.VaneEnchantment;
 import org.oddlama.vane.core.module.Context;
-import org.bukkit.Material;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerFishEvent;
 import org.oddlama.vane.enchantments.CustomEnchantment;
-import org.bukkit.util.Vector;
 import org.oddlama.vane.enchantments.Enchantments;
 
 @VaneEnchantment(name = "grappling_hook", max_level = 3, rarity = Rarity.UNCOMMON, treasure = true, target = EnchantmentTarget.FISHING_ROD)

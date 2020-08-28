@@ -3,15 +3,15 @@ package org.oddlama.vane.core.config;
 import static org.reflections.ReflectionUtils.*;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.StringBuilder;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.nio.file.Files;
-import java.nio.charset.StandardCharsets;
-import java.io.IOException;
 import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.stream.Collectors;

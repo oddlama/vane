@@ -5,8 +5,6 @@ import static org.oddlama.vane.util.ResourceList.get_resources;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.StringBuilder;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;

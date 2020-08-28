@@ -1,35 +1,29 @@
 package org.oddlama.vane.enchantments.enchantments;
 
-import com.destroystokyo.paper.MaterialTags;
-import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.SoundCategory;
-import org.bukkit.block.Block;
-import org.bukkit.enchantments.EnchantmentTarget;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
+import static org.oddlama.vane.util.BlockUtil.next_seedable_block;
+import static org.oddlama.vane.util.ItemUtil.damage_item;
+import static org.oddlama.vane.util.MaterialUtil.farmland_for;
 import static org.oddlama.vane.util.MaterialUtil.is_seeded_plant;
 import static org.oddlama.vane.util.MaterialUtil.seed_for;
-import static org.oddlama.vane.util.MaterialUtil.farmland_for;
+import static org.oddlama.vane.util.PlayerUtil.seed_block;
+
+import com.destroystokyo.paper.MaterialTags;
+
+import org.bukkit.enchantments.EnchantmentTarget;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+
 import org.jetbrains.annotations.NotNull;
+
 import org.oddlama.vane.annotation.enchantment.Rarity;
 import org.oddlama.vane.annotation.enchantment.VaneEnchantment;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.enchantments.CustomEnchantment;
 import org.oddlama.vane.enchantments.Enchantments;
-import static org.oddlama.vane.util.ItemUtil.damage_item;
-import static org.oddlama.vane.util.MaterialUtil.is_replaceable_grass;
-import static org.oddlama.vane.util.MaterialUtil.is_tillable;
-import org.oddlama.vane.util.BlockUtil;
-import static org.oddlama.vane.util.PlayerUtil.till_block;
-import static org.oddlama.vane.util.PlayerUtil.seed_block;
-import static org.oddlama.vane.util.BlockUtil.next_seedable_block;
 
 @VaneEnchantment(name = "seeding", max_level = 4, rarity = Rarity.COMMON, treasure = true, target = EnchantmentTarget.TOOL)
 public class Seeding extends CustomEnchantment<Enchantments> {

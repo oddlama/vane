@@ -1,14 +1,10 @@
 package org.oddlama.vane.core;
 
-import java.util.logging.Level;
-import java.io.IOException;
-import java.io.FileOutputStream;
-import java.util.zip.ZipOutputStream;
-import java.util.zip.ZipEntry;
 import java.io.File;
 import java.util.Collections;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.logging.Level;
 
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;

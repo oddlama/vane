@@ -5,10 +5,10 @@ import static org.reflections.ReflectionUtils.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.function.Function;
-import org.oddlama.vane.annotation.lang.ResourcePackTranslation;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import org.oddlama.vane.annotation.lang.ResourcePackTranslation;
 import org.oddlama.vane.core.YamlLoadException;
 
 public abstract class LangField<T> {

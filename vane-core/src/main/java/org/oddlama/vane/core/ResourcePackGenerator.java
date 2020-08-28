@@ -1,30 +1,17 @@
 package org.oddlama.vane.core;
 
 import java.io.File;
-import java.nio.charset.StandardCharsets;
-import java.io.InputStream;
-import java.io.IOException;
 import java.io.FileOutputStream;
-import java.util.zip.ZipOutputStream;
-import java.util.zip.ZipEntry;
-import java.util.Collections;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.bukkit.Bukkit;
-import org.bukkit.permissions.Permission;
-import java.nio.file.Files;
-import org.bukkit.permissions.PermissionDefault;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import org.json.simple.JSONObject;
-
-import org.oddlama.vane.annotation.VaneModule;
-import org.oddlama.vane.annotation.lang.LangMessage;
-import org.oddlama.vane.annotation.lang.LangString;
-import org.oddlama.vane.core.module.Module;
-import org.oddlama.vane.util.Message;
 
 public class ResourcePackGenerator {
 	private String description = "";

@@ -6,7 +6,6 @@ import java.util.logging.Level;
 import net.minecraft.server.v1_16_R1.Enchantment;
 import net.minecraft.server.v1_16_R1.EnchantmentSlotType;
 import net.minecraft.server.v1_16_R1.EntityPlayer;
-import org.bukkit.craftbukkit.v1_16_R1.inventory.CraftItemStack;
 import net.minecraft.server.v1_16_R1.IChatBaseComponent;
 import net.minecraft.server.v1_16_R1.IRegistry;
 import net.minecraft.server.v1_16_R1.ItemStack;

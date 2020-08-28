@@ -1,17 +1,18 @@
 package org.oddlama.vane.enchantments.enchantments;
 
-import static org.oddlama.vane.util.PlayerUtil.apply_elytra_boost;
 import static org.oddlama.vane.util.ItemUtil.damage_item;
+import static org.oddlama.vane.util.PlayerUtil.apply_elytra_boost;
 import static org.oddlama.vane.util.Util.ms_to_ticks;
+
+import java.util.List;
+
+import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-
+import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.Material;
-import java.util.UUID;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.List;
+
+import org.jetbrains.annotations.NotNull;
 
 import org.oddlama.vane.annotation.config.ConfigDoubleList;
 import org.oddlama.vane.annotation.config.ConfigIntList;
@@ -19,11 +20,7 @@ import org.oddlama.vane.annotation.enchantment.Rarity;
 import org.oddlama.vane.annotation.enchantment.VaneEnchantment;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.enchantments.CustomEnchantment;
-import org.jetbrains.annotations.NotNull;
-import org.bukkit.event.player.PlayerToggleSneakEvent;
-
 import org.oddlama.vane.enchantments.Enchantments;
-import net.minecraft.server.v1_16_R1.ChatModifier;
 
 @VaneEnchantment(name = "wings", max_level = 4, rarity = Rarity.RARE, treasure = true)
 public class Wings extends CustomEnchantment<Enchantments> {
@@ -76,7 +73,8 @@ public class Wings extends CustomEnchantment<Enchantments> {
 		}
 
 		// Apply boost
-		player.setCooldown(Material.ELYTRA, (int)ms_to_ticks(get_boost_cooldown(level)));
+		final var cooldown = ms_to_ticks(get_boost_cooldown(level));
+		player.setCooldown(Material.ELYTRA, (int)cooldown);
 		apply_elytra_boost(player, get_boost_strength(level));
 		damage_item(player, chest, (int)(1.0 + 2.0 * Math.random()));
 	}
