@@ -105,7 +105,7 @@ public class BlockUtil {
 
 	public static Block next_tillable_block(final Block root_block, int radius, boolean careless) {
 		for (var relative_pos : BlockUtil.NEAREST_RELATIVE_BLOCKS_FOR_RADIUS.get(radius - 1)) {
-			var block = root_block.getRelative(relative_pos.x, relative_pos.y, relative_pos.z);
+			var block = relative_pos.relative(root_block);
 
 			// Check for a tillable material
 			if (!is_tillable(block.getType())) {
@@ -135,7 +135,7 @@ public class BlockUtil {
 
 	public static Block next_seedable_block(final Block root_block, Material farmland_type, int radius) {
 		for (var relative_pos : BlockUtil.NEAREST_RELATIVE_BLOCKS_FOR_RADIUS.get(radius - 1)) {
-			var block = root_block.getRelative(relative_pos.x, relative_pos.y, relative_pos.z);
+			var block = relative_pos.relative(root_block);
 			var below = block.getRelative(BlockFace.DOWN);
 
 			// Block below must be farmland and the block itself must be air

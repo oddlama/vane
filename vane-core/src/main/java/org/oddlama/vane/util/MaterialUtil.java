@@ -36,12 +36,12 @@ public class MaterialUtil {
 
 	public static Material farmland_for(Material seed_type) {
 		switch (seed_type) {
-			default:          return null;
-			case WHEAT:       return Material.FARMLAND;
-			case CARROTS:     return Material.FARMLAND;
-			case POTATOES:    return Material.FARMLAND;
-			case BEETROOTS:   return Material.FARMLAND;
-			case NETHER_WART: return Material.SOUL_SAND;
+			default:             return null;
+			case WHEAT_SEEDS:    return Material.FARMLAND;
+			case CARROT:         return Material.FARMLAND;
+			case POTATO:         return Material.FARMLAND;
+			case BEETROOT_SEEDS: return Material.FARMLAND;
+			case NETHER_WART:    return Material.SOUL_SAND;
 		}
 	}
 

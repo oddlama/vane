@@ -36,7 +36,7 @@ public class PlayerUtil {
 		// Till block
 		block.setType(Material.FARMLAND);
 
-		// Play sound, damage item and swing arm
+		// Play sound, swing arm
 		player.getWorld().playSound(player.getLocation(), Sound.ITEM_HOE_TILL, SoundCategory.BLOCKS, 1.0f, 1.0f);
 		player.swingMainHand();
 		return true;
@@ -51,9 +51,8 @@ public class PlayerUtil {
 			return false;
 		}
 
-		// Remove seed item
+		// Remove one seed from inventory if not in creative mode
 		if (player.getGameMode() != GameMode.CREATIVE) {
-			// Remove one seed from inventory if not in creative mode
 			final var seedstack = new ItemStack(seed_type, 1);
 			if (!player.getInventory().containsAtLeast(seedstack, 1)) {
 				return false;
@@ -67,6 +66,13 @@ public class PlayerUtil {
 		final var ageable = (Ageable)block.getBlockData();
 		ageable.setAge(0);
 		block.setBlockData(ageable);
+
+		// Play sound, swing arm
+		player.getWorld().playSound(player.getLocation(),
+				seed_type == Material.NETHER_WART
+				? Sound.ITEM_NETHER_WART_PLANT
+				: Sound.ITEM_CROP_PLANT, SoundCategory.BLOCKS, 1.0f, 1.0f);
+		player.swingMainHand();
 		return true;
 	}
 }

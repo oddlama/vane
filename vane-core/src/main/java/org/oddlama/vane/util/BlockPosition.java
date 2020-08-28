@@ -1,5 +1,6 @@
 package org.oddlama.vane.util;
 
+import org.bukkit.block.Block;
 import java.util.Comparator;
 
 public class BlockPosition {
@@ -37,6 +38,10 @@ public class BlockPosition {
 		result = 31 * result + y;
 		result = 31 * result + z;
 		return result;
+	}
+
+	public Block relative(Block origin) {
+		return origin.getRelative(x, y, z);
 	}
 
 	public static class RadiusComparator implements Comparator<BlockPosition> {
