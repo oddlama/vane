@@ -9,10 +9,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import net.minecraft.server.v1_16_R1.ChatMessage;
-import net.minecraft.server.v1_16_R1.ChatModifier;
-import net.minecraft.server.v1_16_R1.EnumChatFormat;
-import net.minecraft.server.v1_16_R1.IChatBaseComponent;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.TranslatableComponent;
 
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
@@ -66,7 +65,7 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 
 		// Register and create wrappers
 		native_wrapper = new NativeEnchantmentWrapper(this);
-		Nms.register_enchantment(get_key(), native_wrapper);
+		Nms.register_enchantment(key(), native_wrapper);
 
 		// After registering in NMS we can create a wrapper for bukkit
 		bukkit_wrapper = new BukkitEnchantmentWrapper(this, native_wrapper);
@@ -123,7 +122,7 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 	/**
 	 * Returns the namespaced key for this enchantment.
 	 */
-	public final NamespacedKey get_key() {
+	public final NamespacedKey key() {
 		return key;
 	}
 
@@ -142,31 +141,44 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 	 * RARE: gold
 	 * VERY_RARE: bold dark purple
 	 */
-	public ChatModifier display_format(ChatModifier mod) {
+	public void apply_display_format(BaseComponent component) {
 		switch (annotation.rarity()) {
 			default:
-			case UNCOMMON:  return mod.setColor(EnumChatFormat.GRAY);
-			case COMMON:    return mod.setColor(EnumChatFormat.DARK_AQUA);
-			case RARE:      return mod.setColor(EnumChatFormat.GOLD);
-			case VERY_RARE: return mod.setColor(EnumChatFormat.DARK_PURPLE).setBold(true);
+			case UNCOMMON:
+				component.setColor(ChatColor.GRAY);
+				break;
+
+			case COMMON:
+				component.setColor(ChatColor.DARK_AQUA);
+				break;
+
+			case RARE:
+				component.setColor(ChatColor.GOLD);
+				break;
+
+			case VERY_RARE:
+				component.setColor(ChatColor.DARK_PURPLE);
+				component.setBold(true);
+				break;
 		}
 	}
 
 	/**
 	 * Determines the display name of the enchantment.
-	 * This should most probably not be overridden, as this implementation
-	 * already uses clientside translation keys and supports chat formatting.
+	 * Usually you don't need to override this method, as it already
+	 * uses clientside translation keys and supports chat formatting.
 	 */
-	public IChatBaseComponent display_name(int level) {
-        var display_name = new ChatMessage(native_wrapper.g());
-		display_name.setChatModifier(display_format(
-		    display_name.getChatModifier().setItalic(false)));
+	public BaseComponent display_name(int level) {
+        final var display_name = new TranslatableComponent(native_wrapper.g());
+		display_name.setItalic(false);
+		apply_display_format(display_name);
 
 		if (level != 1 || max_level() != 1) {
-			var chat_level = new ChatMessage("enchantment.level." + level);
-			chat_level.setChatModifier(display_format(
-			    chat_level.getChatModifier().setItalic(false)));
-			display_name.c(" ").addSibling(chat_level);
+			final var chat_level = new TranslatableComponent("enchantment.level." + level);
+			chat_level.setItalic(false);
+			apply_display_format(chat_level);
+			display_name.addExtra(" ");
+			display_name.addExtra(chat_level);
         }
 
         return display_name;

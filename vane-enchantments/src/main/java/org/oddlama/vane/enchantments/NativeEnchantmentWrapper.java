@@ -59,10 +59,10 @@ public class NativeEnchantmentWrapper extends Enchantment {
 	}
 
 	// display_name()
-	@Override
-	public IChatBaseComponent d(int level) {
-		return enchantment.display_name(level);
-	}
+	//@Override
+	//public IChatBaseComponent d(int level) {
+	//	return enchantment.display_name(level);
+	//}
 
 	@Override
 	public boolean isTreasure() {

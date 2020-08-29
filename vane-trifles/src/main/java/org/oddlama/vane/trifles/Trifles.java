@@ -11,6 +11,6 @@ public class Trifles extends Module<Trifles> {
 		new DoubleDoorListener(this);
 		new HarvestListener(this);
 
-		new org.oddlama.vane.trifles.items.Scythe(this);
+		new org.oddlama.vane.trifles.items.Sickle(this);
 	}
 }

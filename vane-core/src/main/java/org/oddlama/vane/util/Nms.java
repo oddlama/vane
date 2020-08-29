@@ -31,20 +31,20 @@ public class Nms {
 		IRegistry.a(IRegistry.ENCHANTMENT, new MinecraftKey(key.getNamespace(), key.getKey()), enchantment);
 	}
 
-	public static void set_lore(ItemMeta meta, List<IChatBaseComponent> lore) {
-		if (!meta.getClass().getName().equals("org.bukkit.craftbukkit.v1_16_R1.inventory.CraftMetaItem")) {
-			Bukkit.getLogger().warning("Called set_lore() on ItemMeta which isn't an instance of CraftMetaItem! Operation cancelled.");
-			return;
-		}
+	//TODO public static void set_lore(ItemMeta meta, List<IChatBaseComponent> lore) {
+	//	if (!meta.getClass().getName().equals("org.bukkit.craftbukkit.v1_16_R1.inventory.CraftMetaItem")) {
+	//		Bukkit.getLogger().warning("Called set_lore() on ItemMeta which isn't an instance of CraftMetaItem! Operation cancelled.");
+	//		return;
+	//	}
 
-		try {
-			final var lore_field = meta.getClass().getDeclaredField("lore");
-			lore_field.setAccessible(true);
-			lore_field.set(meta, lore);
-		} catch (NoSuchFieldException |	IllegalAccessException e) {
-			Bukkit.getLogger().log(Level.WARNING, "Could not set CraftMetaItem.lore field!", e);
-		}
-	}
+	//	try {
+	//		final var lore_field = meta.getClass().getDeclaredField("lore");
+	//		lore_field.setAccessible(true);
+	//		lore_field.set(meta, lore);
+	//	} catch (NoSuchFieldException |	IllegalAccessException e) {
+	//		Bukkit.getLogger().log(Level.WARNING, "Could not set CraftMetaItem.lore field!", e);
+	//	}
+	//}
 
 	public static org.bukkit.enchantments.Enchantment bukkit_enchantment(Enchantment enchantment) {
 		final var key = IRegistry.ENCHANTMENT.getKey(enchantment);

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.minecraft.server.v1_16_R1.IChatBaseComponent;
+import net.md_5.bungee.api.chat.BaseComponent;
 
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.EventHandler;
@@ -104,18 +104,20 @@ public class Enchantments extends Module<Enchantments> {
 	private void update_lore(ItemStack item_stack, Map<Enchantment, Integer> enchantments) {
 		// Create lore by converting enchantment name and level to string
 		// and prepend rarity color (can be overwritten in description)
-		final var lore = new ArrayList<IChatBaseComponent>();
+		final var lore = new ArrayList<BaseComponent[]>();
 		enchantments.entrySet().stream()
 			.filter(p -> p.getKey() instanceof BukkitEnchantmentWrapper)
 			.sorted(Map.Entry.<Enchantment, Integer>comparingByKey((a, b) -> a.getKey().toString().compareTo(b.getKey().toString()))
 				.thenComparing(Map.Entry.<Enchantment, Integer>comparingByValue()))
 			.forEach(p -> {
-				lore.add(((BukkitEnchantmentWrapper)p.getKey()).custom_enchantment().display_name(p.getValue()));
+				lore.add(new BaseComponent[] {
+					((BukkitEnchantmentWrapper)p.getKey()).custom_enchantment().display_name(p.getValue())
+				});
 			});
 
 		// Set lore
-		var meta = item_stack.getItemMeta();
-		Nms.set_lore(meta, lore);
+		final var meta = item_stack.getItemMeta();
+		meta.setLoreComponents(lore);
 		item_stack.setItemMeta(meta);
 	}
 

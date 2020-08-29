@@ -103,7 +103,12 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 	public void generate_resource_pack(ResourcePackGenerator pack) {
 		get_resources(getClass(), Pattern.compile("lang-.*\\.yml")).stream().forEach(lang_file -> {
 			final var yaml = YamlConfiguration.loadConfiguration(new File(getDataFolder(), lang_file));
-			lang_manager.generate_resource_pack(pack, yaml);
+			try {
+				lang_manager.generate_resource_pack(pack, yaml);
+			} catch (Exception e) {
+				log.severe("Error while generating language for '" + lang_file + "'");
+				throw e;
+			}
 		});
 	}
 

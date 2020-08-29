@@ -5,10 +5,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.bukkit.enchantments.EnchantmentTarget;
+import org.bukkit.Material;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface VaneItem {
 	String name();
+	Material base() default Material.STICK;
 }

@@ -172,6 +172,9 @@ public class LangManager {
 	@SuppressWarnings("unchecked")
 	public void generate_resource_pack(ResourcePackGenerator pack, YamlConfiguration yaml) {
 		var lang_code = yaml.getString("resource_pack_lang_code");
+		if (lang_code == null) {
+			throw new RuntimeException("Missing yaml key: resource_pack_lang_code");
+		}
 		for (var f : lang_fields) {
 			if (f.has_resource_pack_translation()) {
 				pack.translations(f.resource_pack_translation_namespace(), lang_code)

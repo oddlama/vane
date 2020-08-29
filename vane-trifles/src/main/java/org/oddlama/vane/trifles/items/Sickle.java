@@ -12,9 +12,11 @@ import org.oddlama.vane.annotation.item.VaneItem;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.item.CustomItem;
 
-@VaneItem(name = "scythe")
-public class Scythe extends CustomItem<Trifles> {
-	public Scythe(Context<Trifles> context) {
+@VaneItem(name = "sickle")
+public class Sickle extends CustomItem<Trifles> {
+	public Sickle(Context<Trifles> context) {
 		super(context);
+
+		//add_recipe()
 	}
 }
