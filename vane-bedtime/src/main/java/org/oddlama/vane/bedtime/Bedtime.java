@@ -86,7 +86,7 @@ public class Bedtime extends Module<Bedtime> {
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void onPlayerBedLeave(PlayerBedLeaveEvent event) {
+	public void on_player_bed_leave(PlayerBedLeaveEvent event) {
 		remove_sleeping(event.getPlayer());
 	}
 

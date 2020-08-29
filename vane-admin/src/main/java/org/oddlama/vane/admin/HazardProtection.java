@@ -66,7 +66,7 @@ public class HazardProtection extends Listener<Admin> {
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void onBlockIgnite(final BlockIgniteEvent event) {
+	public void on_block_ignite(final BlockIgniteEvent event) {
 		switch (event.getCause()) {
 			default:
 				return;

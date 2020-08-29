@@ -21,7 +21,7 @@ public class Unbreakable extends CustomEnchantment<Enchantments> {
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onPlayerItemDamage(PlayerItemDamageEvent event) {
+	public void on_player_item_damage(final PlayerItemDamageEvent event) {
 		// Check enchantment
 		final var item = event.getItem();
 		if (item.getEnchantmentLevel(this.bukkit()) == 0) {
