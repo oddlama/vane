@@ -17,6 +17,16 @@ import org.oddlama.vane.util.Message;
 
 @VaneModule(name = "core", bstats = 8637, config_version = 1, lang_version = 1, storage_version = 1)
 public class Core extends Module<Core> {
+	/** The base offset for any model data used by vane plugins. */
+	public static final int ITEM_DATA_BASE_OFFSET = 0x76616e65; // 0x76616e65 = "vane"
+	/** The amount of reserved model data id's per section (usually one section per plugin). */
+	public static final int ITEM_DATA_SECTION_SIZE = 0x10000; // 0x10000 = 65k
+
+	/** Returns the item model data given the section and id */
+	public static int model_data(int section, int id) {
+		return ITEM_DATA_BASE_OFFSET + section * ITEM_DATA_SECTION_SIZE + id;
+	}
+
 	@LangString
 	public String lang_command_not_a_player;
 	@LangString
@@ -55,7 +65,7 @@ public class Core extends Module<Core> {
 
 			pack.write(new File("vane-resource-pack.zip"));
 		} catch (Exception e) {
-			log.log(Level.SEVERE, "Error while writing resourcepack", e);
+			log.log(Level.SEVERE, "Error while generating resourcepack", e);
 			return false;
 		}
 		return true;

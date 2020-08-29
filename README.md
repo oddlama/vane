@@ -67,7 +67,7 @@ Remarks:
 
 #### Custom items
 
-- [ ] The *Scythe* allows you to harvest a small radius of finished crops. Similar to the hand-harvesting addition, this will drop only product and no seeds.
+- [ ] The *Sickle* allows you to harvest a small radius of finished crops. Similar to the hand-harvesting addition, this will drop only product and no seeds.
 - [ ] The *File* allows you to modify block individual connections of fences, walls, glass panes and blocks alike.
 
 #### Unique features
@@ -144,3 +144,5 @@ wither in overworld = big nono
 shulker box right click with item to add?
 
 playerlist footer and header
+
+TODO licenses of included shadowed libraries

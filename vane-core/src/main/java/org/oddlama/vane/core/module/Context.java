@@ -1,9 +1,11 @@
 package org.oddlama.vane.core.module;
 
 import java.util.Map;
+import java.io.IOException;
 import java.util.function.Consumer;
 
 import org.bukkit.scheduler.BukkitTask;
+import org.oddlama.vane.core.ResourcePackGenerator;
 
 /**
  * A ModuleContext is an association to a specific Module and also a
@@ -41,10 +43,12 @@ public interface Context<T extends Module<T>> {
 	public void enable();
 	public void disable();
 	public void config_change();
+	public void generate_resource_pack(final ResourcePackGenerator pack) throws IOException;
 
 	default public void on_enable() {}
 	default public void on_disable() {}
 	default public void on_config_change() {}
+	default public void on_generate_resource_pack(final ResourcePackGenerator pack) throws IOException {}
 
 	default public BukkitTask schedule_task(Runnable task, long delay_ticks) {
 		return get_module().getServer().getScheduler().runTaskLater(get_module(), task, delay_ticks);

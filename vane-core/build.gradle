@@ -6,6 +6,7 @@ dependencies {
 	implementation group: 'org.bstats', name: 'bstats-bukkit', version: '1.7';
 	implementation group: 'io.papermc', name: 'paperlib', version: '1.0.6-SNAPSHOT';
 	implementation group: 'org.reflections', name: 'reflections', version: '0.9.12';
+	implementation group: 'org.json', name: 'json', version: '20200518';
 	implementation project(':vane-annotations');
 }
 
@@ -14,9 +15,11 @@ shadowJar {
 		include(dependency('org.bstats:bstats-bukkit'));
 		include(dependency('io.papermc:paperlib'));
 		include(dependency('org.reflections:reflections'));
+		include(dependency('org.json:json'));
 		include(dependency(':vane-annotations'));
 	}
 	relocate 'org.bstats', 'org.oddlama.vane.external.bstats';
 	relocate 'io.papermc.lib', 'org.oddlama.vane.external.paperlib';
 	relocate 'org.reflections', 'org.oddlama.vane.external.reflections';
+	relocate 'org.json', 'org.oddlama.vane.external.json';
 }

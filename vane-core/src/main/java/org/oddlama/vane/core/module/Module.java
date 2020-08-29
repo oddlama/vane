@@ -33,6 +33,7 @@ import org.oddlama.vane.annotation.config.ConfigVersion;
 import org.oddlama.vane.annotation.lang.LangVersion;
 import org.oddlama.vane.annotation.persistent.Persistent;
 import org.oddlama.vane.core.Core;
+import org.oddlama.vane.core.item.ModelDataEnum;
 import org.oddlama.vane.core.ResourcePackGenerator;
 import org.oddlama.vane.core.command.Command;
 import org.oddlama.vane.core.config.ConfigManager;
@@ -99,18 +100,7 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 	public void on_enable() {}
 	public void on_disable() {}
 	public void on_config_change() {}
-
-	public void generate_resource_pack(ResourcePackGenerator pack) {
-		get_resources(getClass(), Pattern.compile("lang-.*\\.yml")).stream().forEach(lang_file -> {
-			final var yaml = YamlConfiguration.loadConfiguration(new File(getDataFolder(), lang_file));
-			try {
-				lang_manager.generate_resource_pack(pack, yaml);
-			} catch (Exception e) {
-				log.severe("Error while generating language for '" + lang_file + "'");
-				throw e;
-			}
-		});
-	}
+	public void on_generate_resource_pack() throws IOException {}
 
 	// ProtocolLib
 	public ProtocolManager protocol_manager;
@@ -195,6 +185,23 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 	public void config_change() {
 		on_config_change();
 		context_group.config_change();
+	}
+
+    @Override
+	public void generate_resource_pack(final ResourcePackGenerator pack) throws IOException {
+		// Generate language
+		get_resources(getClass(), Pattern.compile("lang-.*\\.yml")).stream().forEach(lang_file -> {
+			final var yaml = YamlConfiguration.loadConfiguration(new File(getDataFolder(), lang_file));
+			try {
+				lang_manager.generate_resource_pack(pack, yaml);
+			} catch (Exception e) {
+				log.severe("Error while generating language for '" + lang_file + "'");
+				throw e;
+			}
+		});
+
+		on_generate_resource_pack(pack);
+		context_group.generate_resource_pack(pack);
 	}
 
 	private boolean try_reload_configuration() {
@@ -356,5 +363,22 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 
 	public void unregister_permission(Permission permission) {
 		getServer().getPluginManager().removePermission(permission);
+	}
+
+	/**
+	 * Returns a enumeration managing model data. Enum members must be named
+	 * like the corresponding item names, but uppercase.
+	 */
+	public Class<? extends ModelDataEnum> model_data_enum() {
+		throw new RuntimeException("A module must override 'model_data_enum()', if it want's to register custom items!");
+	}
+
+	/**
+	 * Returns a globally unique identifier for a given per-plugin unqiue model id.
+	 * [As of 1.16.2]: Unfortunately this is basically a magic value, and must be
+	 * unique per base material across all plugins. That sucks.
+	 */
+	public int model_data(int id) {
+		throw new RuntimeException("A module must override 'model_data(int)', if it want's to register custom items!");
 	}
 }

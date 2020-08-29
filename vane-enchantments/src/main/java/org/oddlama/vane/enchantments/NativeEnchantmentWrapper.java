@@ -58,12 +58,6 @@ public class NativeEnchantmentWrapper extends Enchantment {
 		return enchantment.max_enchanting_level(level);
 	}
 
-	// display_name()
-	//@Override
-	//public IChatBaseComponent d(int level) {
-	//	return enchantment.display_name(level);
-	//}
-
 	@Override
 	public boolean isTreasure() {
 		return enchantment.is_treasure();

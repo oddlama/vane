@@ -2,10 +2,14 @@ package org.oddlama.vane.core.item;
 
 import static org.oddlama.vane.util.Util.namespaced_key;
 
+import java.io.IOException;
+import org.oddlama.vane.core.ResourcePackGenerator;
+import java.util.logging.Level;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.lang.reflect.InvocationTargetException;
 
 import net.minecraft.server.v1_16_R1.ChatMessage;
 import net.minecraft.server.v1_16_R1.ChatModifier;
@@ -57,11 +61,43 @@ public class CustomItem<T extends Module<T>> extends Listener<T> {
 		if (instances.get(getClass()) != null) {
 			throw new RuntimeException("Cannot create two instances of a custom item!");
 		}
+
+		// Check for duplicate model data
+		for (var item : instances.values()) {
+			if (item.base() == base() && item.model_data() == model_data()) {
+				throw new RuntimeException("Cannot register " + getClass() + " with the same base material and model_data as " + item.getClass());
+			}
+		}
+
 		instances.put(getClass(), this);
 	}
 
 	public String lang_name_translation_key() {
 		return "vane.item." + name;
+	}
+
+	/**
+	 * Returns the assigned model data.
+	 */
+	@SuppressWarnings("unchecked")
+	public final int model_data() {
+		final var cls = get_module().model_data_enum();
+
+		try {
+			final var constant = name.toUpperCase();
+			final var value = (ModelDataEnum)Enum.valueOf(cls.asSubclass(Enum.class), constant);
+			return get_module().model_data(value.id());
+		} catch (IllegalArgumentException e) {
+			get_module().log.log(Level.SEVERE, "Missing enum entry for " + getClass() + ", must be called '" + name.toUpperCase() + "'");
+			throw e;
+		}
+	}
+
+	/**
+	 * Returns the base material.
+	 */
+	public final Material base() {
+		return annotation.base();
 	}
 
 	/**
@@ -78,7 +114,7 @@ public class CustomItem<T extends Module<T>> extends Listener<T> {
 		final var custom_item = instances.get(cls);
 		final var item_stack = new ItemStack(custom_item.base(), amount);
 		final var meta = item_stack.getItemMeta();
-		//meta.setCustomModelData(custom_item.model_data());
+		meta.setCustomModelData(custom_item.model_data());
 		item_stack.setItemMeta(meta);
 		return item_stack;
 	}
@@ -90,7 +126,11 @@ public class CustomItem<T extends Module<T>> extends Listener<T> {
 		return key;
 	}
 
-	public final Material base() {
-		return annotation.base();
+	@Override
+	public void on_generate_resource_pack(final ResourcePackGenerator pack) throws IOException {
+		pack.add_item_model(key, get_module().getResource("items/" + name + ".png"));
+		pack.add_item_override(base().getKey(), key, predicate -> {
+			predicate.put("custom_model_data", model_data());
+		});
 	}
 }

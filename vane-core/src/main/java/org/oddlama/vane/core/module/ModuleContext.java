@@ -1,8 +1,10 @@
 package org.oddlama.vane.core.module;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.oddlama.vane.core.ResourcePackGenerator;
 import org.oddlama.vane.core.module.Module;
 
 /**
@@ -102,6 +104,17 @@ public class ModuleContext<T extends Module<T>> implements Context<T> {
 		}
 		for (var subcontext : subcontexts) {
 			subcontext.config_change();
+		}
+	}
+
+	@Override
+	public void generate_resource_pack(final ResourcePackGenerator pack) throws IOException {
+		on_generate_resource_pack(pack);
+		for (var component : components) {
+			component.on_generate_resource_pack(pack);
+		}
+		for (var subcontext : subcontexts) {
+			subcontext.generate_resource_pack(pack);
 		}
 	}
 }
