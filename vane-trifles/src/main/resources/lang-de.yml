@@ -17,3 +17,6 @@ version: 1
 # resource pack generation. Typically this is a combination of the
 # language code (ISO 639) and the country code (ISO 3166).
 resource_pack_lang_code: 'de_de'
+
+item_sickle:
+  name: "Sichel"

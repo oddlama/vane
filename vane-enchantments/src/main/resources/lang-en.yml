@@ -19,47 +19,47 @@ version: 1
 resource_pack_lang_code: 'en_us'
 
 enchantment_seeding:
-  # The display name of this enchantment. Will be packed into a datapack.
+  # The display name of this enchantment. Will be packed into a resource pack.
   name: "Seeding"
 
 enchantment_careless:
-  # The display name of this enchantment. Will be packed into a datapack.
+  # The display name of this enchantment. Will be packed into a resource pack.
   name: "Careless"
 
 enchantment_rake:
-  # The display name of this enchantment. Will be packed into a datapack.
+  # The display name of this enchantment. Will be packed into a resource pack.
   name: "Rake"
 
 enchantment_take_off:
-  # The display name of this enchantment. Will be packed into a datapack.
+  # The display name of this enchantment. Will be packed into a resource pack.
   name: "Take Off"
 
 enchantment_unbreakable:
-  # The display name of this enchantment. Will be packed into a datapack.
+  # The display name of this enchantment. Will be packed into a resource pack.
   name: "Unbreakable"
 
 enchantment_hell_bent:
-  # The display name of this enchantment. Will be packed into a datapack.
+  # The display name of this enchantment. Will be packed into a resource pack.
   name: "Hell Bent"
 
 enchantment_grappling_hook:
-  # The display name of this enchantment. Will be packed into a datapack.
+  # The display name of this enchantment. Will be packed into a resource pack.
   name: "Grappling Hook"
 
 enchantment_leafchopper:
-  # The display name of this enchantment. Will be packed into a datapack.
+  # The display name of this enchantment. Will be packed into a resource pack.
   name: "Leafchopper"
 
 enchantment_angel:
-  # The display name of this enchantment. Will be packed into a datapack.
+  # The display name of this enchantment. Will be packed into a resource pack.
   name: "Angel"
 
 enchantment_rake:
-  # The display name of this enchantment. Will be packed into a datapack.
+  # The display name of this enchantment. Will be packed into a resource pack.
   name: "Rake"
 
 enchantment_wings:
-  # The display name of this enchantment. Will be packed into a datapack.
+  # The display name of this enchantment. Will be packed into a resource pack.
   name: "Wings"
 
 command_enchant:
