@@ -51,6 +51,7 @@ and therefore not well suited for giving out valuable traits (like *Angel* or *U
 - [x] Seamless integration of custom enchantments
 - [x] *Wings*: Occasionally boost your elytra mid-air by sneaking
 - [x] *Careless*: Tilling long grass will remove it and till the block below
+- [ ] *Soulbound*: Soulbound items will be kept on death. They also can't be dropped accidentally.
 - [x] *Rake*: Tilling farmland again will till the nearest block around it. Use multiple times to slowly create a circle. Works in combination with Careless to till grass with long grass on top.
 - [x] *Seeding*: Right click your crops to plant crops of the same type around them. Use multiple times to create a circle.
 - [x] *Take Off*: Double jump to start gliding with your elytra and receive a small boost.

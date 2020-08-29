@@ -10,5 +10,7 @@ public class Trifles extends Module<Trifles> {
 		new FastWalkingListener(fast_walking_group);
 		new DoubleDoorListener(this);
 		new HarvestListener(this);
+
+		new org.oddlama.vane.trifles.items.Scythe(this);
 	}
 }
