@@ -4,8 +4,10 @@ import static org.oddlama.vane.util.Util.namespaced_key;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import net.minecraft.server.v1_16_R1.ChatMessage;
 import net.minecraft.server.v1_16_R1.ChatModifier;
@@ -38,7 +40,7 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 	private NativeEnchantmentWrapper native_wrapper;
 	private BukkitEnchantmentWrapper bukkit_wrapper;
 
-	private final ArrayList<Enchantment> supersedes = new ArrayList<>();
+	private final Set<Enchantment> supersedes = new HashSet<>();
 
 	// Language
 	@LangString
@@ -71,8 +73,22 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 		Enchantment.registerEnchantment(bukkit_wrapper);
 	}
 
-	public String lang_name_translation_key() {
+	/**
+	 * May be overridden to reigster superseding enchantments.
+	 */
+	public void register_superseding() { }
+
+	public final String lang_name_translation_key() {
 		return native_wrapper.g();
+	}
+
+	/**
+	 * Calls register_superseding() on all custom enchantment instances.
+	 * This allows them to add superseding enchantments while having access
+	 * to every other custom enchantment instance.
+	 */
+	public static void call_register_superseding() {
+		instances.values().forEach(CustomEnchantment::register_superseding);
 	}
 
 	/**
@@ -92,7 +108,7 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 	/**
 	 * Returns all enchantments that are superseded by this enchantment.
 	 */
-	public final List<Enchantment> supersedes() {
+	public final Set<Enchantment> supersedes() {
 		return supersedes;
 	}
 

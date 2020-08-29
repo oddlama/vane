@@ -42,6 +42,12 @@ public class Enchantments extends Module<Enchantments> {
 		new org.oddlama.vane.enchantments.enchantments.Wings(this);
 	}
 
+	@Override
+	public void on_load() {
+		// Give custom enchantments a chance to add superseding enchantments
+		CustomEnchantment.call_register_superseding();
+	}
+
 	public ItemStack update_enchanted_item(ItemStack item_stack) {
 		return update_enchanted_item(item_stack, item_stack.getEnchantments());
 	}

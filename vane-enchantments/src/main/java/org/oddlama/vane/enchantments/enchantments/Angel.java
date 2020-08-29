@@ -30,6 +30,11 @@ public class Angel extends CustomEnchantment<Enchantments> {
 	}
 
 	@Override
+	public void register_superseding() {
+		supersedes(bukkit(Unbreakable.class));
+	}
+
+	@Override
 	public boolean can_enchant(@NotNull ItemStack item_stack) {
 		return item_stack.getType() == Material.ELYTRA;
 	}

@@ -15,7 +15,10 @@ import org.oddlama.vane.enchantments.Enchantments;
 public class Unbreakable extends CustomEnchantment<Enchantments> {
 	public Unbreakable(Context<Enchantments> context) {
 		super(context);
+	}
 
+	@Override
+	public void register_superseding() {
 		supersedes(Enchantment.DURABILITY);
 		supersedes(Enchantment.MENDING);
 	}
