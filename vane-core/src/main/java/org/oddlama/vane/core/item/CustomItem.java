@@ -11,10 +11,10 @@ import java.util.List;
 import java.util.Map;
 import java.lang.reflect.InvocationTargetException;
 
-import net.minecraft.server.v1_16_R1.ChatMessage;
-import net.minecraft.server.v1_16_R1.ChatModifier;
-import net.minecraft.server.v1_16_R1.EnumChatFormat;
-import net.minecraft.server.v1_16_R1.IChatBaseComponent;
+import net.minecraft.server.v1_16_R2.ChatMessage;
+import net.minecraft.server.v1_16_R2.ChatModifier;
+import net.minecraft.server.v1_16_R2.EnumChatFormat;
+import net.minecraft.server.v1_16_R2.IChatBaseComponent;
 
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;

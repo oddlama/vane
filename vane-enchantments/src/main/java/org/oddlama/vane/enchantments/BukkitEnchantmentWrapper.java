@@ -1,8 +1,8 @@
 package org.oddlama.vane.enchantments;
 
-import net.minecraft.server.v1_16_R1.Enchantment;
+import net.minecraft.server.v1_16_R2.Enchantment;
 
-import org.bukkit.craftbukkit.v1_16_R1.enchantments.CraftEnchantment;
+import org.bukkit.craftbukkit.v1_16_R2.enchantments.CraftEnchantment;
 
 import org.jetbrains.annotations.NotNull;
 

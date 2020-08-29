@@ -18,7 +18,9 @@ import org.oddlama.vane.util.Message;
 @VaneModule(name = "core", bstats = 8637, config_version = 1, lang_version = 1, storage_version = 1)
 public class Core extends Module<Core> {
 	/** The base offset for any model data used by vane plugins. */
-	public static final int ITEM_DATA_BASE_OFFSET = 0x76616e65; // 0x76616e65 = "vane"
+	// "vane" = 0x76616e65, but the value will be saved as float (json...), so only -2^24 - 2^24 can be accurately represented.
+	// therefore we use -0x76616e (as hopefully nobody else would use negative numbers).
+	public static final int ITEM_DATA_BASE_OFFSET = -0x76616e;
 	/** The amount of reserved model data id's per section (usually one section per plugin). */
 	public static final int ITEM_DATA_SECTION_SIZE = 0x10000; // 0x10000 = 65k
 

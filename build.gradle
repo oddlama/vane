@@ -31,8 +31,9 @@ subprojects {
 
 	dependencies {
 		//implementation group: 'com.destroystokyo.paper', name: 'paper-api', version: '1.16.1-R0.1-SNAPSHOT';
-		// We need the full implementation with CraftBukkit and NMS to compile
-		implementation name: 'paper-133-patched';
+		// We need the full implementation with CraftBukkit and NMS to compile.
+		// Simply copy cache/patched_{..}.jar from a paper server.
+		implementation name: 'patched_1.16.2';
 		compileOnly group: 'org.jetbrains', name: 'annotations', version: '20.0.0';
 	}
 }
