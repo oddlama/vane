@@ -74,6 +74,11 @@ public class AutostopGroup extends ModuleGroup<Admin> {
 	}
 
 	public void status(CommandSender sender) {
+		if (task == null) {
+			send_message(sender, lang_status_not_scheduled);
+			return;
+		}
+
 		send_message(sender, lang_status.format(format_time(remaining())));
 	}
 
