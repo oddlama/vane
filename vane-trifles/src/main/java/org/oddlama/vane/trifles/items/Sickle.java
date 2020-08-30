@@ -47,7 +47,6 @@ public class Sickle extends CustomItem<Trifles, Sickle> {
 	public Sickle(Context<Trifles> context) {
 		super(context, Variant.values(), SickleVariant::new);
 
-		// TODO sickle variants .... how to name and stats...
 		// TODO attack speed and ....
 
 		//((ShapedRecipe)add_recipe(recipe_key(), new ShapedRecipe(recipe_key(), item())))
