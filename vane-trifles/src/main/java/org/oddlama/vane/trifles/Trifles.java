@@ -22,7 +22,7 @@ public class Trifles extends Module<Trifles> {
 	}
 
 	@Override
-	public int model_data(int id) {
-		return Core.model_data(0, id);
+	public int model_data(int item_id, int variant_id) {
+		return Core.model_data(0, item_id, variant_id);
 	}
 }

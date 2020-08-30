@@ -23,10 +23,12 @@ public class Core extends Module<Core> {
 	public static final int ITEM_DATA_BASE_OFFSET = -0x76616e;
 	/** The amount of reserved model data id's per section (usually one section per plugin). */
 	public static final int ITEM_DATA_SECTION_SIZE = 0x10000; // 0x10000 = 65k
+	/** The amount of reserved model data id's per section (usually one section per plugin). */
+	public static final int ITEM_VARIANT_SECTION_SIZE = (1 << 6); // 65k total → 1024 (items) * 64 (variants per item)
 
 	/** Returns the item model data given the section and id */
-	public static int model_data(int section, int id) {
-		return ITEM_DATA_BASE_OFFSET + section * ITEM_DATA_SECTION_SIZE + id;
+	public static int model_data(int section, int item_id, int variant_id) {
+		return ITEM_DATA_BASE_OFFSET + section * ITEM_DATA_SECTION_SIZE + item_id * ITEM_VARIANT_SECTION_SIZE + variant_id;
 	}
 
 	@LangString

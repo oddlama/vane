@@ -20,4 +20,15 @@ resource_pack_lang_code: 'en_us'
 
 item_sickle:
   # The display name of this item. Will be packed into a resource pack.
-  name: "Sickle"
+  wooden:
+    name: "Wooden Sickle"
+  stone:
+    name: "Stone Sickle"
+  iron:
+    name: "Iron Sickle"
+  golden:
+    name: "Golden Sickle"
+  diamond:
+    name: "Diamond Sickle"
+  netherite:
+    name: "Netherite Sickle"
