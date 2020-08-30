@@ -41,6 +41,8 @@ public class Sickle extends CustomItem<Trifles, Sickle> {
 	public static class SickleVariant extends CustomItemVariant<Trifles, Sickle, Variant> {
 		public SickleVariant(Sickle parent, Variant variant) {
 			super(parent, variant);
+
+			add_shaped_recipe();
 		}
 	}
 

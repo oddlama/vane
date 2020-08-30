@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 
+import org.bukkit.inventory.ShapedRecipe;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TranslatableComponent;
 
@@ -109,14 +110,37 @@ public class CustomItemVariant<T extends Module<T>, V extends CustomItem<T, V>, 
 		return parent.item(this, amount);
 	}
 
+	public final NamespacedKey recipe_key(String recipe_name) {
+		if (recipe_name.equals("")) {
+			return namespaced_key("vane", variant_name + "_recipe");
+		}
+		return namespaced_key("vane", variant_name + "_recipe_" + recipe_name);
+	}
+
+	private final void add_recipe_or_throw(NamespacedKey recipe_key, Recipe recipe) {
+		if (recipes.containsKey(recipe_key)) {
+			throw new RuntimeException("A recipe with the same key ('" + recipe_key + "') is already defined!");
+		}
+		recipes.put(recipe_key, recipe);
+	}
+
 	/**
-	 * Use this to define recipes for the custom item.
-	 * Will automatically be add to the server in on_enable()
-	 * and removed in on_disable().
+	 * Adds a related recipe to this item.
+	 * Useful if you need non-standard recipes.
 	 */
-	public final Recipe add_recipe(NamespacedKey key, Recipe recipe) {
-		// TODO get key from recipe... or make overloads... (better i guess)
-		recipes.put(key(), recipe);
+	public final Recipe add_recipe(NamespacedKey recipe_key, Recipe recipe) {
+		add_recipe_or_throw(recipe_key, recipe);
+		return recipe;
+	}
+
+	/**
+	 * Adds a recipe for this item.
+	 */
+	public final Recipe add_shaped_recipe() { return add_shaped_recipe(""); }
+	public final Recipe add_shaped_recipe(String recipe_name) {
+		final var recipe_key = recipe_key(recipe_name);
+		final var recipe = new ShapedRecipe(recipe_key, item());
+		add_recipe_or_throw(recipe_key, recipe);
 		return recipe;
 	}
 
@@ -135,7 +159,7 @@ public class CustomItemVariant<T extends Module<T>, V extends CustomItem<T, V>, 
 	@Override
 	public void on_disable() {
 		// TODO this good? apparently causes loss of discovered state
-		//recipes.keySet().forEach(get_module().getServer()::removeRecipe);
+		recipes.keySet().forEach(get_module().getServer()::removeRecipe);
 	}
 
 	@Override
