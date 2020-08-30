@@ -3,7 +3,10 @@ package org.oddlama.vane.trifles.items;
 import org.bukkit.Material;
 import static org.oddlama.vane.util.MaterialUtil.is_seeded_plant;
 import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.SmithingRecipe;
 import org.bukkit.enchantments.EnchantmentTarget;
+import org.bukkit.Tag;
+import org.bukkit.inventory.RecipeChoice.MaterialChoice;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
@@ -42,20 +45,58 @@ public class Sickle extends CustomItem<Trifles, Sickle> {
 		public SickleVariant(Sickle parent, Variant variant) {
 			super(parent, variant);
 
-			add_shaped_recipe();
+			final var recipe_key = recipe_key();
+			if (variant == Variant.NETHERITE) {
+				// TODO add_recipe(recipe_key, new SmithingRecipe(recipe_key, item(), item(Variant.DIAMOND), Material.NETHERITE_INGOT));
+			} else {
+				final var recipe = new ShapedRecipe(recipe_key, item())
+					.shape(" m ",
+						   "  m",
+						   "sm ")
+					.setIngredient('s', Material.STICK);
+
+				switch (variant) {
+					case WOODEN:  recipe.setIngredient('m', new MaterialChoice(Tag.PLANKS)); break;
+					case STONE:   recipe.setIngredient('m', new MaterialChoice(Tag.ITEMS_STONE_TOOL_MATERIALS)); break;
+					case IRON:    recipe.setIngredient('m', Material.IRON_INGOT); break;
+					case GOLDEN:  recipe.setIngredient('m', Material.GOLD_INGOT); break;
+					case DIAMOND: recipe.setIngredient('m', Material.DIAMOND); break;
+
+					case NETHERITE:
+						// Can't happen
+						break;
+				}
+
+				add_recipe(recipe_key, recipe);
+			}
+		}
+
+		@Override
+		public ItemStack modify_item_stack(ItemStack item) {
+			double attack_speed = 0.0;
+			double attack_damage = 0.0;
+			switch (variant()) {
+				case WOODEN:    attack_speed = 1.0; attack_damage = 2.0; break;
+				case STONE:     attack_speed = 2.0; attack_damage = 3.0; break;
+				case IRON:      attack_speed = 3.0; attack_damage = 4.0; break;
+				case GOLDEN:    attack_speed = 5.0; attack_damage = 3.0; break;
+				case DIAMOND:   attack_speed = 4.0; attack_damage = 5.0; break;
+				case NETHERITE: attack_speed = 4.0; attack_damage = 6.0; break;
+			}
+
+			final var meta = item.getItemMeta();
+			// TODO meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier(""));
+			// TODO meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, );
+			item.setItemMeta(meta);
+			return item;
 		}
 	}
 
 	public Sickle(Context<Trifles> context) {
 		super(context, Variant.class, Variant.values(), SickleVariant::new);
-
 		// TODO attack speed and ....
-		// TODO on create item
-
-		//((ShapedRecipe)add_recipe(recipe_key(), new ShapedRecipe(recipe_key(), item())))
-		//	.shape(" x ", " x ", " x ")
-		//	.setIngredient('x', Material.STICK);
-		//add_recipe(recipe);
+		// TODO anti carrot behaviour in special listener for all custom items
+		// TODO test grindstone repairing
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
@@ -78,6 +119,6 @@ public class Sickle extends CustomItem<Trifles, Sickle> {
 			return;
 		}
 
-		System.out.println("interact with " + variant.lang_name + " " + variant.variant());
+		System.out.println("interact with " + variant.lang_name + " " + variant.variant() + " " + item.getItemMeta().getAttributeModifiers());
 	}
 }

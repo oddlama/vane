@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.logging.Level;
 
 import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.ShapelessRecipe;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TranslatableComponent;
 
@@ -110,6 +111,23 @@ public class CustomItemVariant<T extends Module<T>, V extends CustomItem<T, V>, 
 		return parent.item(this, amount);
 	}
 
+	/**
+	 * Returns an itemstack of this item with the given variant.
+	 */
+	public <U extends ItemVariantEnum> ItemStack item(U variant) {
+		return parent.item(variant, 1);
+	}
+
+	/**
+	 * Returns an itemstack of this item with the given variant and amount.
+	 */
+	public <U extends ItemVariantEnum> ItemStack item(U variant, int amount) {
+		return parent.item(variant, amount);
+	}
+
+	/** Returns the main recipe key */
+	public final NamespacedKey recipe_key() { return recipe_key(""); }
+	/** Returns a named recipe key */
 	public final NamespacedKey recipe_key(String recipe_name) {
 		if (recipe_name.equals("")) {
 			return namespaced_key("vane", variant_name + "_recipe");
@@ -134,21 +152,10 @@ public class CustomItemVariant<T extends Module<T>, V extends CustomItem<T, V>, 
 	}
 
 	/**
-	 * Adds a recipe for this item.
-	 */
-	public final Recipe add_shaped_recipe() { return add_shaped_recipe(""); }
-	public final Recipe add_shaped_recipe(String recipe_name) {
-		final var recipe_key = recipe_key(recipe_name);
-		final var recipe = new ShapedRecipe(recipe_key, item());
-		add_recipe_or_throw(recipe_key, recipe);
-		return recipe;
-	}
-
-	/**
 	 * Override this to add properties to created item stacks per variant.
 	 */
-	public ItemStack modify_item_stack(ItemStack stack) {
-		return stack;
+	public ItemStack modify_item_stack(ItemStack item_stack) {
+		return item_stack;
 	}
 
 	@Override
@@ -164,7 +171,12 @@ public class CustomItemVariant<T extends Module<T>, V extends CustomItem<T, V>, 
 
 	@Override
 	public void on_generate_resource_pack(final ResourcePackGenerator pack) throws IOException {
-		pack.add_item_model(key, get_module().getResource("items/" + variant_name + ".png"));
+		final var resource_name = "items/" + variant_name + ".png";
+		final var resource = get_module().getResource(resource_name);
+		if (resource == null) {
+			throw new RuntimeException("Missing resource '" + resource_name + "'. This is a bug.");
+		}
+		pack.add_item_model(key, resource);
 		pack.add_item_override(parent.base().getKey(), key, predicate -> {
 			predicate.put("custom_model_data", model_data());
 		});
