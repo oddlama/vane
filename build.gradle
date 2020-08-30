@@ -35,6 +35,7 @@ subprojects {
 		// Simply copy cache/patched_{..}.jar from a paper server.
 		implementation name: 'patched_1.16.2';
 		compileOnly group: 'org.jetbrains', name: 'annotations', version: '20.0.0';
+		annotationProcessor 'org.jetbrains:annotations:20.0.0';
 	}
 }
 
