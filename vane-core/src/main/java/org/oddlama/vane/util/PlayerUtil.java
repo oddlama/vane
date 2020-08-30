@@ -109,9 +109,10 @@ public class PlayerUtil {
 		}
 
 
-		// Simply reset crop state
+		// Simply reset crop state and swing arm
 		ageable.setAge(0);
 		block.setBlockData(ageable);
+		player.swingMainHand();
 
 		// Drop items
 		for (ItemStack drop : drops) {
