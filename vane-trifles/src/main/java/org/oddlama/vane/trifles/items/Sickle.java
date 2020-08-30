@@ -45,7 +45,7 @@ public class Sickle extends CustomItem<Trifles, Sickle> {
 	}
 
 	public Sickle(Context<Trifles> context) {
-		super(context, Variant.values(), SickleVariant::new);
+		super(context, Variant.class, Variant.values(), SickleVariant::new);
 
 		// TODO attack speed and ....
 

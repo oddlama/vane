@@ -96,6 +96,20 @@ public class CustomItemVariant<T extends Module<T>, V extends CustomItem<T, V>, 
 	}
 
 	/**
+	 * Returns an itemstack of this item variant.
+	 */
+	public final ItemStack item() {
+		return parent.item(this, 1);
+	}
+
+	/**
+	 * Returns an itemstack of this item variant with the given amount.
+	 */
+	public final ItemStack item(int amount) {
+		return parent.item(this, amount);
+	}
+
+	/**
 	 * Use this to define recipes for the custom item.
 	 * Will automatically be add to the server in on_enable()
 	 * and removed in on_disable().

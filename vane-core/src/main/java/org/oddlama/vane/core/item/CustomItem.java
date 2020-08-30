@@ -38,6 +38,7 @@ public class CustomItem<T extends Module<T>, V extends CustomItem<T, V>> extends
 
 	private VaneItem annotation = getClass().getAnnotation(VaneItem.class);
 	private String name;
+	private Class<? extends ItemVariantEnum> variant_enum_class;
 	private ItemVariantEnum variant_min;
 	private ItemVariantEnum variant_max;
 
@@ -48,15 +49,16 @@ public class CustomItem<T extends Module<T>, V extends CustomItem<T, V>> extends
 	 * Single variant item constructor.
 	 */
 	public CustomItem(Context<T> context) {
-		this(context, SingleVariant.values(), CustomItemVariant<T, V, SingleVariant>::new);
+		this(context, SingleVariant.class, SingleVariant.values(), CustomItemVariant<T, V, SingleVariant>::new);
 	}
 
 	/**
 	 * Multi variant item constructor.
 	 */
 	@SuppressWarnings("unchecked")
-	public<U extends ItemVariantEnum> CustomItem(Context<T> context, U[] variant_enum_values, Function2<V, U, CustomItemVariant<T, V, U>> create_instance) {
+	public<U extends ItemVariantEnum> CustomItem(Context<T> context, Class<U> variant_enum_class, U[] variant_enum_values, Function2<V, U, CustomItemVariant<T, V, U>> create_instance) {
 		super(null);
+		this.variant_enum_class = variant_enum_class;
 
 		// Make namespace
 		name = annotation.name();
@@ -100,13 +102,19 @@ public class CustomItem<T extends Module<T>, V extends CustomItem<T, V>> extends
 		return name;
 	}
 
+	private final void assert_correct_variant_class(ItemVariantEnum variant) {
+		if (!variant.getClass().equals(variant_enum_class)) {
+			throw new RuntimeException("Invalid ItemVariantEnum class " + variant.getClass() + " for item " + getClass() + ": expected " + variant_enum_class);
+		}
+	}
+
 	/**
 	 * Returns the assigned model data.
 	 */
 	@SuppressWarnings("unchecked")
 	public final int model_data(ItemVariantEnum variant) {
+		assert_correct_variant_class(variant);
 		final var cls = get_module().model_data_enum();
-
 		try {
 			final var constant = name.toUpperCase();
 			final var custom_item_id = (ModelDataEnum)Enum.valueOf(cls.asSubclass(Enum.class), constant);
@@ -168,17 +176,37 @@ public class CustomItem<T extends Module<T>, V extends CustomItem<T, V>> extends
 	}
 
 	/**
+	 * Returns an itemstack of this item with the given variant.
+	 */
+	public <U extends ItemVariantEnum> ItemStack item(CustomItemVariant<T, V, U> variant) {
+		return item(variant, 1);
+	}
+
+	private static ItemStack construct_item_stack(Material base, int amount, int model_data, BaseComponent display_name) {
+		final var item_stack = new ItemStack(base, amount);
+		final var meta = item_stack.getItemMeta();
+		meta.setCustomModelData(model_data);
+		meta.setDisplayNameComponent(new BaseComponent[] { display_name });
+		item_stack.setItemMeta(meta);
+		return item_stack;
+	}
+
+	/**
+	 * Returns an itemstack of this item with the given variant and amount.
+	 */
+	public <U extends ItemVariantEnum> ItemStack item(CustomItemVariant<T, V, U> variant, int amount) {
+		assert_correct_variant_class(variant.variant());
+		return construct_item_stack(base(), amount, model_data(variant.variant()), variant.display_name());
+	}
+
+	/**
 	 * Returns an itemstack for the given custom item with the given amount
 	 */
-	public static ItemStack item(Class<?> cls, int amount) {
-		//final var custom_item = instances.get(cls);
-		//final var item_stack = new ItemStack(custom_item.base(), amount);
-		//final var meta = item_stack.getItemMeta();
-		//meta.setCustomModelData(custom_item.model_data());
-		//meta.setDisplayNameComponent(new BaseComponent[] { custom_item.display_name() });
-		//item_stack.setItemMeta(meta);
-		//return item_stack;
-		return null;
+	public static <U extends ItemVariantEnum> ItemStack item(Class<?> cls, U variant, int amount) {
+		final var custom_item = instances.get(cls);
+		custom_item.assert_correct_variant_class(variant);
+		final var custom_item_variant = custom_item.variants().get(variant.ordinal());
+		return construct_item_stack(custom_item.base(), amount, custom_item.model_data(variant), custom_item_variant.display_name());
 	}
 
 	public static enum SingleVariant implements ItemVariantEnum {
