@@ -15,13 +15,12 @@ import java.util.zip.ZipFile;
  */
 public class ResourceList {
 	/**
-     * for all elements of java.class.path get a Collection of resources Pattern
-     * pattern = Pattern.compile(".*"); gets all resources
-     *
-     * @param pattern
-     *            the pattern to match
-     * @return the resources in the order they are found
-     */
+	 * For all elements of java.class.path get a Collection of resources Pattern
+	 * pattern = Pattern.compile(".*"); gets all resources
+	 *
+	 * @param pattern the pattern to match
+	 * @return the resources in the order they are found
+	 */
 	public static Collection<String> get_resources(final Class<?> clazz, final Pattern pattern) {
 		final var jar_url = clazz.getProtectionDomain().getCodeSource().getLocation();
 		var jar = jar_url.toString();

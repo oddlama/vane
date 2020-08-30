@@ -97,6 +97,13 @@ by letting them vouch for the new player)
 
 
 
+### Building from source
+
+You need Java 11 or higher.
+
+- Copy `cache/patched_{version}.jar` from a paper server to `libs/`.
+- Execute `./gradlew build && ./gradlew shadowJar`
+
 #### IDEAS
 
 - full netherite armor for one enchantment 

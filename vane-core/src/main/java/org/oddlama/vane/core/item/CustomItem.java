@@ -2,8 +2,12 @@ package org.oddlama.vane.core.item;
 
 import static org.oddlama.vane.util.Util.namespaced_key;
 
+import org.bukkit.inventory.Recipe;
 import java.io.IOException;
 import org.oddlama.vane.core.ResourcePackGenerator;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.TranslatableComponent;
 import java.util.logging.Level;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,6 +45,9 @@ public class CustomItem<T extends Module<T>> extends Listener<T> {
 	private String name;
 	private NamespacedKey key;
 
+	// All associated recipes
+	private Map<NamespacedKey, Recipe> recipes = new HashMap<>();
+
 	// Language
 	@LangString
 	@ResourcePackTranslation(namespace = "vane") // key is set by #lang_name_translation_key()
@@ -73,7 +80,7 @@ public class CustomItem<T extends Module<T>> extends Listener<T> {
 	}
 
 	public String lang_name_translation_key() {
-		return "vane.item." + name;
+		return "item.vane." + name;
 	}
 
 	/**
@@ -101,20 +108,44 @@ public class CustomItem<T extends Module<T>> extends Listener<T> {
 	}
 
 	/**
+	 * Returns the base material.
+	 */
+	public BaseComponent display_name() {
+		final var display_name = new TranslatableComponent(lang_name_translation_key());
+		display_name.setItalic(false);
+		return display_name;
+	}
+
+	/**
+	 * Returns an itemstack for this custom item, with amount = 1.
+	 */
+	public ItemStack item() {
+		return item(1);
+	}
+
+	/**
+	 * Returns an itemstack for this custom item, with amount = 1.
+	 */
+	public ItemStack item(int amount) {
+		return item(getClass(), amount);
+	}
+
+	/**
 	 * Returns an itemstack for the given custom item, with amount = 1.
 	 */
-	public static ItemStack item(Class<? extends CustomItem<?>> cls) {
+	public static ItemStack item(Class<?> cls) {
 		return item(cls, 1);
 	}
 
 	/**
 	 * Returns an itemstack for the given custom item with the given amount
 	 */
-	public static ItemStack item(Class<? extends CustomItem<?>> cls, int amount) {
+	public static ItemStack item(Class<?> cls, int amount) {
 		final var custom_item = instances.get(cls);
 		final var item_stack = new ItemStack(custom_item.base(), amount);
 		final var meta = item_stack.getItemMeta();
 		meta.setCustomModelData(custom_item.model_data());
+		meta.setDisplayNameComponent(new BaseComponent[] { custom_item.display_name() });
 		item_stack.setItemMeta(meta);
 		return item_stack;
 	}
@@ -124,6 +155,42 @@ public class CustomItem<T extends Module<T>> extends Listener<T> {
 	 */
 	public final NamespacedKey key() {
 		return key;
+	}
+
+	/**
+	 * Returns a namespaced key for the main related recipe.
+	 */
+	public final NamespacedKey recipe_key() {
+		return namespaced_key("vane", name + "_recipe");
+	}
+
+	/**
+	 * Returns a namespaced key for a related recipe.
+	 */
+	public final NamespacedKey recipe_key(String identifier) {
+		return namespaced_key("vane", name + "_recipe_" + identifier);
+	}
+
+	/**
+	 * Use this to define recipes for the custom item.
+	 * Will automatically be add to the server in on_enable()
+	 * and removed in on_disable().
+	 */
+	public final Recipe add_recipe(NamespacedKey key, Recipe recipe) {
+		// TODO get key from recipe... or make overloads... (better i guess)
+		recipes.put(key, recipe);
+		return recipe;
+	}
+
+	@Override
+	public void on_enable() {
+		recipes.values().forEach(get_module().getServer()::addRecipe);
+	}
+
+	@Override
+	public void on_disable() {
+		// TODO this good? apparently causes loss of discovered state
+		recipes.keySet().forEach(get_module().getServer()::removeRecipe);
 	}
 
 	@Override
