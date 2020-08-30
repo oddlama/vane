@@ -18,5 +18,19 @@ version: 1
 # language code (ISO 639) and the country code (ISO 3166).
 resource_pack_lang_code: 'de_de'
 
+item_file:
+  name: "Feile"
+
 item_sickle:
-  name: "Sichel"
+  wooden:
+    name: "Holzsichel"
+  stone:
+    name: "Steinsichel"
+  iron:
+    name: "Eisensichel"
+  golden:
+    name: "Goldsichel"
+  diamond:
+    name: "Diamantsichel"
+  netherite:
+    name: "Netheritsichel"

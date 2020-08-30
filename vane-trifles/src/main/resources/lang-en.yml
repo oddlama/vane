@@ -18,17 +18,25 @@ version: 1
 # language code (ISO 639) and the country code (ISO 3166).
 resource_pack_lang_code: 'en_us'
 
+item_file:
+  name: "File"
+
 item_sickle:
-  # The display name of this item. Will be packed into a resource pack.
   wooden:
+    # The display name of this item variant. Will be packed into a resource pack.
     name: "Wooden Sickle"
   stone:
+    # The display name of this item variant. Will be packed into a resource pack.
     name: "Stone Sickle"
   iron:
+    # The display name of this item variant. Will be packed into a resource pack.
     name: "Iron Sickle"
   golden:
+    # The display name of this item variant. Will be packed into a resource pack.
     name: "Golden Sickle"
   diamond:
+    # The display name of this item variant. Will be packed into a resource pack.
     name: "Diamond Sickle"
   netherite:
+    # The display name of this item variant. Will be packed into a resource pack.
     name: "Netherite Sickle"
