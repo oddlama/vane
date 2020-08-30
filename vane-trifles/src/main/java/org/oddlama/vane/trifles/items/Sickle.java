@@ -48,6 +48,7 @@ public class Sickle extends CustomItem<Trifles, Sickle> {
 		super(context, Variant.class, Variant.values(), SickleVariant::new);
 
 		// TODO attack speed and ....
+		// TODO on create item
 
 		//((ShapedRecipe)add_recipe(recipe_key(), new ShapedRecipe(recipe_key(), item())))
 		//	.shape(" x ", " x ", " x ")

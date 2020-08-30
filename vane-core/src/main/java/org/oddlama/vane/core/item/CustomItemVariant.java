@@ -114,11 +114,18 @@ public class CustomItemVariant<T extends Module<T>, V extends CustomItem<T, V>, 
 	 * Will automatically be add to the server in on_enable()
 	 * and removed in on_disable().
 	 */
-	//public final Recipe add_recipe(NamespacedKey key, Recipe recipe) {
-	//	// TODO get key from recipe... or make overloads... (better i guess)
-	//	recipes.put(key(), recipe);
-	//	return recipe;
-	//}
+	public final Recipe add_recipe(NamespacedKey key, Recipe recipe) {
+		// TODO get key from recipe... or make overloads... (better i guess)
+		recipes.put(key(), recipe);
+		return recipe;
+	}
+
+	/**
+	 * Override this to add properties to created item stacks per variant.
+	 */
+	public ItemStack modify_item_stack(ItemStack stack) {
+		return stack;
+	}
 
 	@Override
 	public void on_enable() {

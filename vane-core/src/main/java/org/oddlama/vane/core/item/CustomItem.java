@@ -182,13 +182,17 @@ public class CustomItem<T extends Module<T>, V extends CustomItem<T, V>> extends
 		return item(variant, 1);
 	}
 
-	private static ItemStack construct_item_stack(Material base, int amount, int model_data, BaseComponent display_name) {
-		final var item_stack = new ItemStack(base, amount);
+	private static<A extends CustomItem<?, ?>, B extends CustomItemVariant<?, ?, ?>>
+		ItemStack construct_item_stack(int amount, A custom_item, B custom_item_variant)
+	{
+		final var item_stack = new ItemStack(custom_item.base(), amount);
 		final var meta = item_stack.getItemMeta();
-		meta.setCustomModelData(model_data);
-		meta.setDisplayNameComponent(new BaseComponent[] { display_name });
+		meta.setCustomModelData(custom_item.model_data(custom_item_variant.variant()));
+		meta.setDisplayNameComponent(new BaseComponent[] {
+			custom_item_variant.display_name() });
 		item_stack.setItemMeta(meta);
-		return item_stack;
+		return custom_item.modify_item_stack(
+				custom_item_variant.modify_item_stack(item_stack));
 	}
 
 	/**
@@ -196,7 +200,7 @@ public class CustomItem<T extends Module<T>, V extends CustomItem<T, V>> extends
 	 */
 	public <U extends ItemVariantEnum> ItemStack item(CustomItemVariant<T, V, U> variant, int amount) {
 		assert_correct_variant_class(variant.variant());
-		return construct_item_stack(base(), amount, model_data(variant.variant()), variant.display_name());
+		return construct_item_stack(amount, this, variant);
 	}
 
 	/**
@@ -206,7 +210,15 @@ public class CustomItem<T extends Module<T>, V extends CustomItem<T, V>> extends
 		final var custom_item = instances.get(cls);
 		custom_item.assert_correct_variant_class(variant);
 		final var custom_item_variant = custom_item.variants().get(variant.ordinal());
-		return construct_item_stack(custom_item.base(), amount, custom_item.model_data(variant), custom_item_variant.display_name());
+		return construct_item_stack(amount, custom_item, custom_item_variant);
+	}
+
+	/**
+	 * Override this to add properties to created item stacks.
+	 * Will be called after CustomItemVariant.modify_item_stack.
+	 */
+	public ItemStack modify_item_stack(ItemStack stack) {
+		return stack;
 	}
 
 	public static enum SingleVariant implements ItemVariantEnum {
