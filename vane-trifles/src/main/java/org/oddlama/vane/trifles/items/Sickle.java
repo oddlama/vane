@@ -1,18 +1,12 @@
 package org.oddlama.vane.trifles.items;
 
-import org.oddlama.vane.trifles.Trifles;
-
 import org.bukkit.Material;
 import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.player.PlayerItemDamageEvent;
 
-import org.oddlama.vane.annotation.enchantment.Rarity;
 import org.oddlama.vane.annotation.item.VaneItem;
-import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.item.CustomItem;
+import org.oddlama.vane.core.module.Context;
+import org.oddlama.vane.trifles.Trifles;
 
 @VaneItem(name = "sickle")
 public class Sickle extends CustomItem<Trifles> {

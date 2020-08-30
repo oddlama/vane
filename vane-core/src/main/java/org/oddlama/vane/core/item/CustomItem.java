@@ -2,40 +2,26 @@ package org.oddlama.vane.core.item;
 
 import static org.oddlama.vane.util.Util.namespaced_key;
 
-import org.bukkit.inventory.Recipe;
 import java.io.IOException;
-import org.oddlama.vane.core.ResourcePackGenerator;
-import net.md_5.bungee.api.ChatColor;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TranslatableComponent;
-import java.util.logging.Level;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.lang.reflect.InvocationTargetException;
-
-import net.minecraft.server.v1_16_R2.ChatMessage;
-import net.minecraft.server.v1_16_R2.ChatModifier;
-import net.minecraft.server.v1_16_R2.EnumChatFormat;
-import net.minecraft.server.v1_16_R2.IChatBaseComponent;
 
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
 
-import org.jetbrains.annotations.NotNull;
-
-import org.oddlama.vane.annotation.enchantment.Rarity;
 import org.oddlama.vane.annotation.item.VaneItem;
 import org.oddlama.vane.annotation.lang.LangString;
 import org.oddlama.vane.annotation.lang.ResourcePackTranslation;
 import org.oddlama.vane.core.Listener;
+import org.oddlama.vane.core.ResourcePackGenerator;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.Module;
-import org.oddlama.vane.util.Nms;
 
 public class CustomItem<T extends Module<T>> extends Listener<T> {
 	// Track instances

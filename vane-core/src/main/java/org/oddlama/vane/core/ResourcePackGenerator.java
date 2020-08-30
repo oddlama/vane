@@ -8,13 +8,14 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-import java.util.function.Consumer;
 
 import org.bukkit.NamespacedKey;
-import org.json.JSONObject;
+
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class ResourcePackGenerator {
 	private String description = "";

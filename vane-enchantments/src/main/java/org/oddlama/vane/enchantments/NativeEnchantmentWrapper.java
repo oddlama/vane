@@ -5,7 +5,6 @@ import static org.oddlama.vane.util.Nms.enchantment_slot_type;
 
 import net.minecraft.server.v1_16_R2.Enchantment;
 import net.minecraft.server.v1_16_R2.EnumItemSlot;
-import net.minecraft.server.v1_16_R2.IChatBaseComponent;
 import net.minecraft.server.v1_16_R2.ItemStack;
 
 import org.jetbrains.annotations.NotNull;

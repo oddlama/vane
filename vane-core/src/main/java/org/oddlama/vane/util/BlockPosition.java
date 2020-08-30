@@ -1,7 +1,8 @@
 package org.oddlama.vane.util;
 
-import org.bukkit.block.Block;
 import java.util.Comparator;
+
+import org.bukkit.block.Block;
 
 public class BlockPosition {
 	public int x;

@@ -3,9 +3,10 @@ package org.oddlama.vane.core.module;
 import java.io.IOException;
 import java.util.Map;
 import java.util.function.Consumer;
-import org.oddlama.vane.core.ResourcePackGenerator;
 
 import org.bukkit.scheduler.BukkitTask;
+
+import org.oddlama.vane.core.ResourcePackGenerator;
 
 public abstract class ModuleComponent<T extends Module<T>> {
 	private Context<T> context = null;
