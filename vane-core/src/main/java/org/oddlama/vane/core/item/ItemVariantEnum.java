@@ -2,14 +2,14 @@ package org.oddlama.vane.core.item;
 
 public interface ItemVariantEnum {
 	/**
-	 * The variant id.
+	 * The variant ordinal.
 	 */
-	public int id();
+	public int ordinal();
 
 	/**
-	 * The variant identifier.
+	 * The variant prefix.
 	 */
-	public String identifier();
+	public String prefix();
 
 	/**
 	 * Return false to disable the associated item variant.

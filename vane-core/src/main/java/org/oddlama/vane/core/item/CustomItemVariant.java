@@ -2,6 +2,7 @@ package org.oddlama.vane.core.item;
 
 import static org.oddlama.vane.util.Util.namespaced_key;
 
+import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -44,13 +45,13 @@ public class CustomItemVariant<T extends Module<T>, V extends CustomItem<T, V>, 
 		this.parent = parent;
 		this.variant = variant;
 
-		if (variant.identifier().equals("")) {
+		if (variant.prefix().equals("")) {
 			// Singleton item
 			this.variant_name = parent.name();
 		} else {
 			// Multi variant item, create sub namespace
-			this.variant_name = variant.identifier() + "_" + parent.name();
-			set_context(parent.get_context().group(variant.identifier(), "Enable '" + variant.identifier() + "' item variant"));
+			this.variant_name = variant.prefix() + "_" + parent.name();
+			set_context(parent.get_context().group(variant.prefix(), "Enable '" + variant.prefix() + "' item variant"));
 		}
 
 		// Create namespaced_key
@@ -88,6 +89,13 @@ public class CustomItemVariant<T extends Module<T>, V extends CustomItem<T, V>, 
 	}
 
 	/**
+	 * Returns the variant enum for this item.
+	 */
+	public final U variant() {
+		return variant;
+	}
+
+	/**
 	 * Use this to define recipes for the custom item.
 	 * Will automatically be add to the server in on_enable()
 	 * and removed in on_disable().
@@ -105,7 +113,6 @@ public class CustomItemVariant<T extends Module<T>, V extends CustomItem<T, V>, 
 
 	@Override
 	public void on_disable() {
-		// TODO warning super.on_disable();
 		// TODO this good? apparently causes loss of discovered state
 		//recipes.keySet().forEach(get_module().getServer()::removeRecipe);
 	}

@@ -1,7 +1,15 @@
 package org.oddlama.vane.trifles.items;
 
 import org.bukkit.Material;
+import static org.oddlama.vane.util.MaterialUtil.is_seeded_plant;
 import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.enchantments.EnchantmentTarget;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
 
 import org.oddlama.vane.annotation.item.VaneItem;
 import org.oddlama.vane.core.item.CustomItem;
@@ -13,28 +21,20 @@ import org.oddlama.vane.trifles.Trifles;
 @VaneItem(name = "sickle")
 public class Sickle extends CustomItem<Trifles, Sickle> {
 	public static enum Variant implements ItemVariantEnum {
-		WOODEN_SICKLE("wooden", 0),
-		STONE_SICKLE("stone", 1),
-		IRON_SICKLE("iron", 2, false),
-		GOLDEN_SICKLE("golden", 3),
-		DIAMOND_SICKLE("diamond", 4),
-		NETHERITE_SICKLE("netherite", 5);
+		WOODEN,
+		STONE,
+		IRON(false),
+		GOLDEN,
+		DIAMOND,
+		NETHERITE;
 
-		private String identifier;
-		private int id;
 		private boolean enabled;
-		private Variant(String identifier, int id) {
-			this(identifier, id, true);
-		}
-
-		private Variant(String identifier, int id, boolean enabled) {
-			this.identifier = identifier;
-			this.id = id;
+		private Variant() { this(true); }
+		private Variant(boolean enabled) {
 			this.enabled = enabled;
 		}
 
-		@Override public int id() { return id; }
-		@Override public String identifier() { return identifier; }
+		@Override public String prefix() { return name().toLowerCase(); }
 		@Override public boolean enabled() { return enabled; }
 	}
 
@@ -53,5 +53,28 @@ public class Sickle extends CustomItem<Trifles, Sickle> {
 		//	.shape(" x ", " x ", " x ")
 		//	.setIngredient('x', Material.STICK);
 		//add_recipe(recipe);
+	}
+
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	public void on_player_right_click_plant(final PlayerInteractEvent event) {
+		if (!event.hasBlock() || event.getHand() != EquipmentSlot.HAND || event.getAction() != Action.RIGHT_CLICK_BLOCK) {
+			return;
+		}
+
+		// Only seed when right clicking a plant
+		final var plant_type = event.getClickedBlock().getType();
+		if (!is_seeded_plant(plant_type)) {
+			return;
+		}
+
+		// Get item variant
+		final var player = event.getPlayer();
+		final var item = player.getEquipment().getItemInMainHand();
+		final var variant = this.<SickleVariant>variant_of(item);
+		if (variant == null) {
+			return;
+		}
+
+		System.out.println("interact with " + variant.lang_name + " " + variant.variant());
 	}
 }

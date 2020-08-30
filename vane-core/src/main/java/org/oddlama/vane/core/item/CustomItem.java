@@ -4,9 +4,11 @@ import static org.oddlama.vane.util.Util.namespaced_key;
 
 import java.io.IOException;
 import java.util.HashMap;
+import org.jetbrains.annotations.NotNull;
 import java.util.Map;
 import java.util.logging.Level;
-import java.util.Collection;
+import java.util.List;
+import java.util.ArrayList;
 
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TranslatableComponent;
@@ -36,9 +38,11 @@ public class CustomItem<T extends Module<T>, V extends CustomItem<T, V>> extends
 
 	private VaneItem annotation = getClass().getAnnotation(VaneItem.class);
 	private String name;
+	private ItemVariantEnum variant_min;
+	private ItemVariantEnum variant_max;
 
 	// Track variants
-	private final Map<ItemVariantEnum, CustomItemVariant<T, V, ?>> variants = new HashMap<>();
+	private final List<CustomItemVariant<T, V, ?>> variants = new ArrayList<>();
 
 	/**
 	 * Single variant item constructor.
@@ -59,6 +63,10 @@ public class CustomItem<T extends Module<T>, V extends CustomItem<T, V>> extends
 		context = context.group("item_" + name, "Enable item " + name);
 		set_context(context);
 
+		// Track lowest and highest variant
+		variant_min = variant_enum_values[0];
+		variant_max = variant_enum_values[variant_enum_values.length - 1];
+
 		// Check if instance is already exists
 		if (instances.get(getClass()) != null) {
 			throw new RuntimeException("Cannot create two instances of a custom item!");
@@ -66,7 +74,7 @@ public class CustomItem<T extends Module<T>, V extends CustomItem<T, V>> extends
 
 		// Create variants
 		for (var variant : variant_enum_values) {
-			variants.put(variant, create_instance.apply((V)this, variant));
+			variants.add(create_instance.apply((V)this, variant));
 		}
 
 		instances.put(getClass(), this);
@@ -102,7 +110,7 @@ public class CustomItem<T extends Module<T>, V extends CustomItem<T, V>> extends
 		try {
 			final var constant = name.toUpperCase();
 			final var custom_item_id = (ModelDataEnum)Enum.valueOf(cls.asSubclass(Enum.class), constant);
-			return get_module().model_data(custom_item_id.id(), variant.id());
+			return get_module().model_data(custom_item_id.id(), variant.ordinal());
 		} catch (IllegalArgumentException e) {
 			get_module().log.log(Level.SEVERE, "Missing enum entry for " + getClass() + ", must be called '" + name.toUpperCase() + "'");
 			throw e;
@@ -112,8 +120,8 @@ public class CustomItem<T extends Module<T>, V extends CustomItem<T, V>> extends
 	/**
 	 * Returns all variants of this item.
 	 */
-	public final Collection<CustomItemVariant<T, V, ?>> variants() {
-		return variants.values();
+	public final List<CustomItemVariant<T, V, ?>> variants() {
+		return variants;
 	}
 
 	/**
@@ -121,6 +129,42 @@ public class CustomItem<T extends Module<T>, V extends CustomItem<T, V>> extends
 	 */
 	public final Material base() {
 		return annotation.base();
+	}
+
+	/**
+	 * Returns the lower bound for this custom item.
+	 */
+	private int model_data_range_lower_bound() {
+		return model_data(variant_min);
+	}
+
+	/**
+	 * Returns the upper bound for this custom item.
+	 */
+	private int model_data_range_upper_bound() {
+		return model_data(variant_max);
+	}
+
+	/**
+	 * Returns the variant of the given item or null if the item
+	 * is not an instance of this custom item. Also returns null
+	 * the corresponding item variant is disabled.
+	 */
+	@SuppressWarnings("unchecked")
+	public<U> U variant_of(@NotNull ItemStack item) {
+		// Check base item
+		if (item.getType() != base()) {
+			return null;
+		}
+
+		// Check custom model data range
+		final var meta = item.getItemMeta();
+		final var custom_model_data = meta.getCustomModelData();
+		if (model_data_range_lower_bound() <= custom_model_data && custom_model_data <= model_data_range_upper_bound()) {
+			return (U)variants().get(custom_model_data - model_data_range_lower_bound());
+		}
+
+		return null;
 	}
 
 	/**
@@ -140,8 +184,7 @@ public class CustomItem<T extends Module<T>, V extends CustomItem<T, V>> extends
 	public static enum SingleVariant implements ItemVariantEnum {
 		SINGLETON;
 
-		@Override public int id() { return 0; }
-		@Override public String identifier() { return ""; }
+		@Override public String prefix() { return ""; }
 		@Override public boolean enabled() { return true; }
 	}
 }
