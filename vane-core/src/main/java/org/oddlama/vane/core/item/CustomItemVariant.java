@@ -151,6 +151,10 @@ public class CustomItemVariant<T extends Module<T>, V extends CustomItem<T, V>, 
 		return recipe;
 	}
 
+	public final boolean enabled() {
+		return variant.enabled();
+	}
+
 	/**
 	 * Override this to add properties to created item stacks per variant.
 	 */
@@ -160,13 +164,17 @@ public class CustomItemVariant<T extends Module<T>, V extends CustomItem<T, V>, 
 
 	@Override
 	public void on_enable() {
-		recipes.values().forEach(get_module().getServer()::addRecipe);
+		if (variant().enabled()) {
+			recipes.values().forEach(get_module().getServer()::addRecipe);
+		}
 	}
 
 	@Override
 	public void on_disable() {
 		// TODO this good? apparently causes loss of discovered state
-		recipes.keySet().forEach(get_module().getServer()::removeRecipe);
+		if (variant().enabled()) {
+			recipes.keySet().forEach(get_module().getServer()::removeRecipe);
+		}
 	}
 
 	@Override

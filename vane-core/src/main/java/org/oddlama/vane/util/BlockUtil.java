@@ -40,42 +40,6 @@ public class BlockUtil {
 		return b1.getX() == b2.getX() && b1.getY() == b2.getY() && b1.getZ() == b2.getZ();
 	}
 
-	public static void harvest_plant(Block block) {
-		ItemStack[] drops = null;
-		switch (block.getType()) {
-			default:
-				return;
-
-			case WHEAT:       drops = new ItemStack[] {new ItemStack(Material.WHEAT,       1 + (int)(Math.random() * 2.5))}; break;
-			case CARROTS:     drops = new ItemStack[] {new ItemStack(Material.CARROT,      1 + (int)(Math.random() * 2.5))}; break;
-			case POTATOES:    drops = new ItemStack[] {new ItemStack(Material.POTATO,      1 + (int)(Math.random() * 2.5))}; break;
-			case BEETROOTS:   drops = new ItemStack[] {new ItemStack(Material.BEETROOT,    1 + (int)(Math.random() * 2.5))}; break;
-			case NETHER_WART: drops = new ItemStack[] {new ItemStack(Material.NETHER_WART, 1 + (int)(Math.random() * 2.5))}; break;
-		}
-
-		if (!(block.getBlockData() instanceof Ageable)) {
-			return;
-		}
-
-		// Only harvest fully grown plants
-		var ageable = (Ageable)block.getBlockData();
-		if (ageable.getAge() != ageable.getMaximumAge()) {
-			return;
-		}
-
-		// Fire event
-		// TODO
-
-		// Simply reset crop state
-		ageable.setAge(0);
-		block.setBlockData(ageable);
-
-		// Drop items
-		for (ItemStack drop : drops) {
-			drop_naturally(block, drop);
-		}
-	}
-
 	public static void drop_naturally(Block block, ItemStack drop) {
 		drop_naturally(block.getLocation().add(0.5, 0.5, 0.5), drop);
 	}
@@ -85,7 +49,7 @@ public class BlockUtil {
 	}
 
 	public static List<BlockPosition> nearest_blocks_for_radius(int radius) {
-		var ret = new ArrayList<BlockPosition>();
+		final var ret = new ArrayList<BlockPosition>();
 
 		// Use square bounding box
 		for (int x = -radius; x <= radius; x++) {
@@ -104,8 +68,8 @@ public class BlockUtil {
 	}
 
 	public static Block next_tillable_block(final Block root_block, int radius, boolean careless) {
-		for (var relative_pos : BlockUtil.NEAREST_RELATIVE_BLOCKS_FOR_RADIUS.get(radius - 1)) {
-			var block = relative_pos.relative(root_block);
+		for (var relative_pos : NEAREST_RELATIVE_BLOCKS_FOR_RADIUS.get(radius - 1)) {
+			final var block = relative_pos.relative(root_block);
 
 			// Check for a tillable material
 			if (!is_tillable(block.getType())) {
@@ -113,7 +77,7 @@ public class BlockUtil {
 			}
 
 			// Get block above
-			var above = block.getRelative(0, 1, 0);
+			final var above = block.getRelative(0, 1, 0);
 			if (above == null) {
 				continue;
 			}
@@ -134,9 +98,9 @@ public class BlockUtil {
 	}
 
 	public static Block next_seedable_block(final Block root_block, Material farmland_type, int radius) {
-		for (var relative_pos : BlockUtil.NEAREST_RELATIVE_BLOCKS_FOR_RADIUS.get(radius - 1)) {
-			var block = relative_pos.relative(root_block);
-			var below = block.getRelative(BlockFace.DOWN);
+		for (var relative_pos : NEAREST_RELATIVE_BLOCKS_FOR_RADIUS.get(radius - 1)) {
+			final var block = relative_pos.relative(root_block);
+			final var below = block.getRelative(BlockFace.DOWN);
 
 			// Block below must be farmland and the block itself must be air
 			if (below.getType() == farmland_type && block.getType() == Material.AIR) {

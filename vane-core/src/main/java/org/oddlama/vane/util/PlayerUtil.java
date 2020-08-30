@@ -1,5 +1,7 @@
 package org.oddlama.vane.util;
 
+import static org.oddlama.vane.util.BlockUtil.drop_naturally;
+
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -73,6 +75,49 @@ public class PlayerUtil {
 				? Sound.ITEM_NETHER_WART_PLANT
 				: Sound.ITEM_CROP_PLANT, SoundCategory.BLOCKS, 1.0f, 1.0f);
 		player.swingMainHand();
+		return true;
+	}
+
+	public static boolean harvest_plant(final Player player, final Block block) {
+		ItemStack[] drops = null;
+		switch (block.getType()) {
+			default:
+				return false;
+
+			case WHEAT:       drops = new ItemStack[] {new ItemStack(Material.WHEAT,       1 + (int)(Math.random() * 2.5))}; break;
+			case CARROTS:     drops = new ItemStack[] {new ItemStack(Material.CARROT,      1 + (int)(Math.random() * 2.5))}; break;
+			case POTATOES:    drops = new ItemStack[] {new ItemStack(Material.POTATO,      1 + (int)(Math.random() * 2.5))}; break;
+			case BEETROOTS:   drops = new ItemStack[] {new ItemStack(Material.BEETROOT,    1 + (int)(Math.random() * 2.5))}; break;
+			case NETHER_WART: drops = new ItemStack[] {new ItemStack(Material.NETHER_WART, 1 + (int)(Math.random() * 2.5))}; break;
+		}
+
+		if (!(block.getBlockData() instanceof Ageable)) {
+			return false;
+		}
+
+		// Only harvest fully grown plants
+		var ageable = (Ageable)block.getBlockData();
+		if (ageable.getAge() != ageable.getMaximumAge()) {
+			return false;
+		}
+
+		// Create block break event for block to harvest and check if it gets cancelled
+		final var break_event = new BlockBreakEvent(block, player);
+		Bukkit.getPluginManager().callEvent(break_event);
+		if (break_event.isCancelled()) {
+			return false;
+		}
+
+
+		// Simply reset crop state
+		ageable.setAge(0);
+		block.setBlockData(ageable);
+
+		// Drop items
+		for (ItemStack drop : drops) {
+			drop_naturally(block, drop);
+		}
+
 		return true;
 	}
 }

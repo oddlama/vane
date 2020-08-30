@@ -1,6 +1,9 @@
 package org.oddlama.vane.trifles.items;
 
 import org.bukkit.Material;
+import org.oddlama.vane.util.BlockUtil;
+import static org.oddlama.vane.util.ItemUtil.damage_item;
+import static org.oddlama.vane.util.PlayerUtil.harvest_plant;
 import static org.oddlama.vane.util.MaterialUtil.is_seeded_plant;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.SmithingRecipe;
@@ -50,9 +53,9 @@ public class Sickle extends CustomItem<Trifles, Sickle> {
 				// TODO add_recipe(recipe_key, new SmithingRecipe(recipe_key, item(), item(Variant.DIAMOND), Material.NETHERITE_INGOT));
 			} else {
 				final var recipe = new ShapedRecipe(recipe_key, item())
-					.shape(" m ",
+					.shape(" mm",
 						   "  m",
-						   "sm ")
+						   " s ")
 					.setIngredient('s', Material.STICK);
 
 				switch (variant) {
@@ -97,6 +100,7 @@ public class Sickle extends CustomItem<Trifles, Sickle> {
 		// TODO attack speed and ....
 		// TODO anti carrot behaviour in special listener for all custom items
 		// TODO test grindstone repairing
+		// TODO test disabling...
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
@@ -106,7 +110,8 @@ public class Sickle extends CustomItem<Trifles, Sickle> {
 		}
 
 		// Only seed when right clicking a plant
-		final var plant_type = event.getClickedBlock().getType();
+		final var root_block = event.getClickedBlock();
+		final var plant_type = root_block.getType();
 		if (!is_seeded_plant(plant_type)) {
 			return;
 		}
@@ -115,10 +120,25 @@ public class Sickle extends CustomItem<Trifles, Sickle> {
 		final var player = event.getPlayer();
 		final var item = player.getEquipment().getItemInMainHand();
 		final var variant = this.<SickleVariant>variant_of(item);
-		if (variant == null) {
+		if (variant == null || !variant.enabled()) {
 			return;
 		}
 
-		System.out.println("interact with " + variant.lang_name + " " + variant.variant() + " " + item.getItemMeta().getAttributeModifiers());
+		// TODO setting
+		final var radius = 3;
+		var total_harvested = 0;
+
+		// Harvest surroundings
+		for (var relative_pos : BlockUtil.NEAREST_RELATIVE_BLOCKS_FOR_RADIUS.get(radius - 1)) {
+			final var block = relative_pos.relative(root_block);
+			if (harvest_plant(player, block)) {
+				++total_harvested;
+			}
+		}
+
+		// Damage item if we harvested at least one plant
+		if (total_harvested > 0) {
+			damage_item(player, item, 1 + (int)(0.1 * total_harvested));
+		}
 	}
 }

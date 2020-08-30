@@ -1,6 +1,6 @@
 package org.oddlama.vane.trifles;
 
-import static org.oddlama.vane.util.BlockUtil.harvest_plant;
+import static org.oddlama.vane.util.PlayerUtil.harvest_plant;
 import static org.oddlama.vane.util.MaterialUtil.is_seeded_plant;
 
 import org.bukkit.event.EventHandler;
@@ -29,6 +29,6 @@ public class HarvestListener extends Listener<Trifles> {
 			return;
 		}
 
-		harvest_plant(event.getClickedBlock());
+		harvest_plant(event.getPlayer(), event.getClickedBlock());
 	}
 }

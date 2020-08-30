@@ -155,8 +155,7 @@ public class CustomItem<T extends Module<T>, V extends CustomItem<T, V>> extends
 
 	/**
 	 * Returns the variant of the given item or null if the item
-	 * is not an instance of this custom item. Also returns null
-	 * the corresponding item variant is disabled.
+	 * is not an instance of this custom item.
 	 */
 	@SuppressWarnings("unchecked")
 	public<U> U variant_of(@NotNull ItemStack item) {
