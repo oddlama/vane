@@ -164,8 +164,12 @@ public class CustomItem<T extends Module<T>, V extends CustomItem<T, V>> extends
 			return null;
 		}
 
-		// Check custom model data range
 		final var meta = item.getItemMeta();
+		if (!meta.hasCustomModelData()) {
+			return null;
+		}
+
+		// Check custom model data range
 		final var custom_model_data = meta.getCustomModelData();
 		if (model_data_range_lower_bound() <= custom_model_data && custom_model_data <= model_data_range_upper_bound()) {
 			return (U)variants().get(custom_model_data - model_data_range_lower_bound());

@@ -43,7 +43,7 @@ public class DynamicChoiceParam<T> extends BaseParam {
 	public List<String> completions_for(CommandSender sender, String[] args, int offset) {
 		return choices.apply(sender).stream()
 			.map(choice -> to_string.apply(sender, choice))
-			.filter(str -> str.toLowerCase().startsWith(args[offset].toLowerCase()))
+			.filter(str -> str.toLowerCase().contains(args[offset].toLowerCase()))
 			.collect(Collectors.toList());
 	}
 
