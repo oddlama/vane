@@ -152,4 +152,11 @@ shulker box right click with item to add?
 
 playerlist footer and header
 
+name resource pack with hash in name for easy deployment.
+
 TODO licenses of included shadowed libraries
+
+
+SERVER SETTINGS RECOMMENDATIONS
+
+dont merge items, or very small merging radius.
