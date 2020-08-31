@@ -5,9 +5,13 @@ import java.util.Collections;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.logging.Level;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.entity.Player;
 
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
+import org.bukkit.event.entity.EntityTargetEvent;
 
 import org.oddlama.vane.annotation.VaneModule;
 import org.oddlama.vane.annotation.lang.LangMessage;
@@ -73,5 +77,28 @@ public class Core extends Module<Core> {
 			return false;
 		}
 		return true;
+	}
+
+
+	// Prevent entity targeting by tempting when the reason is a custom item.
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	public void on_pathfind(final EntityTargetEvent event) {
+		if (event.getReason() != EntityTargetEvent.TargetReason.TEMPT) {
+			return;
+		}
+
+		if (!(event.getTarget() instanceof Player)) {
+			return;
+		}
+
+		final var player = (Player)event.getTarget();
+		final var item = player.getInventory().getItemInMainHand();
+		final var meta = item.getItemMeta();
+		if (!meta.hasCustomModelData() || meta.getCustomModelData() == 0) {
+			return;
+		}
+
+		// Cancel event as it was induced by a custom item
+		event.setCancelled(true);
 	}
 }
