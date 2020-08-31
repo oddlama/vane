@@ -59,6 +59,15 @@ public class ResourcePackGenerator {
 		if (overrides == null) {
 			overrides = new JSONArray();
 			item_overrides.put(base_item_key, overrides);
+
+			// Keep default item override(otherwise custom_model_data < 0 would match for the default item
+			final var predicate = new JSONObject();
+			predicate.put("custom_model_data", 0);
+
+			final var override = new JSONObject();
+			override.put("predicate", predicate);
+			override.put("model", base_item_key.getNamespace() + ":item/" + base_item_key.getKey());
+			overrides.put(override);
 		}
 
 		final var predicate = new JSONObject();

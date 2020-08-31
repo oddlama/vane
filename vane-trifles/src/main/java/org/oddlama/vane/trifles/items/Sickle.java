@@ -126,8 +126,6 @@ public class Sickle extends CustomItem<Trifles, Sickle> {
 
 	public Sickle(Context<Trifles> context) {
 		super(context, Variant.class, Variant.values(), SickleVariant::new);
-		// TODO attack speed and ....
-		// TODO anti carrot behaviour in special listener for all custom items
 		// TODO test grindstone repairing
 	}
 
