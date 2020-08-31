@@ -5,6 +5,7 @@ import static org.oddlama.vane.util.Util.namespaced_key;
 
 import static org.reflections.ReflectionUtils.*;
 
+import java.util.Arrays;
 import java.lang.StringBuilder;
 import java.lang.reflect.Field;
 import java.util.HashSet;
@@ -26,13 +27,23 @@ public class ConfigMaterialSetField extends ConfigField<Set<Material>> {
 	}
 
 	private void append_material_set_defintion(StringBuilder builder, String indent, String prefix) {
-		append_list_definition(builder, indent, prefix, annotation.def(), (b, m) -> {
+		append_list_definition(builder, indent, prefix, def(), (b, m) -> {
 				b.append("\"");
 				b.append(m.getKey().getNamespace());
 				b.append(":");
 				b.append(m.getKey().getKey());
 				b.append("\"");
 			});
+	}
+
+	@Override
+	public Set<Material> def() {
+		final var override = overridden_def();
+		if (override != null) {
+			return override;
+		} else {
+			return new HashSet<>(Arrays.asList(annotation.def()));
+		}
 	}
 
 	@Override

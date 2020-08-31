@@ -9,6 +9,9 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.SmithingRecipe;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.Tag;
+import org.oddlama.vane.annotation.config.ConfigLong;
+import org.oddlama.vane.annotation.config.ConfigDouble;
+import org.oddlama.vane.annotation.config.ConfigMaterialSet;
 import org.bukkit.inventory.RecipeChoice.MaterialChoice;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -45,6 +48,11 @@ public class Sickle extends CustomItem<Trifles, Sickle> {
 	}
 
 	public static class SickleVariant extends CustomItemVariant<Trifles, Sickle, Variant> {
+		@ConfigDouble(def = Double.NaN, desc = "Attack speed modifier.")
+		public double config_attack_speed;
+		@ConfigDouble(def = Double.NaN, desc = "Attack damage modifier.")
+		public double config_attack_damage;
+
 		public SickleVariant(Sickle parent, Variant variant) {
 			super(parent, variant);
 
@@ -74,19 +82,32 @@ public class Sickle extends CustomItem<Trifles, Sickle> {
 			}
 		}
 
+		public double config_attack_speed_def() {
+			switch (variant()) {
+				default:        return 0.0;
+				case WOODEN:    return 1.0;
+				case STONE:     return 2.0;
+				case IRON:      return 3.0;
+				case GOLDEN:    return 5.0;
+				case DIAMOND:   return 4.0;
+				case NETHERITE: return 4.0;
+			}
+		}
+
+		public double config_attack_damage_def() {
+			switch (variant()) {
+				default:        return 0.0;
+				case WOODEN:    return 2.0;
+				case STONE:     return 3.0;
+				case IRON:      return 4.0;
+				case GOLDEN:    return 3.0;
+				case DIAMOND:   return 5.0;
+				case NETHERITE: return 6.0;
+			}
+		}
+
 		@Override
 		public ItemStack modify_item_stack(ItemStack item) {
-			double attack_speed = 0.0;
-			double attack_damage = 0.0;
-			switch (variant()) {
-				case WOODEN:    attack_speed = 1.0; attack_damage = 2.0; break;
-				case STONE:     attack_speed = 2.0; attack_damage = 3.0; break;
-				case IRON:      attack_speed = 3.0; attack_damage = 4.0; break;
-				case GOLDEN:    attack_speed = 5.0; attack_damage = 3.0; break;
-				case DIAMOND:   attack_speed = 4.0; attack_damage = 5.0; break;
-				case NETHERITE: attack_speed = 4.0; attack_damage = 6.0; break;
-			}
-
 			final var meta = item.getItemMeta();
 			// TODO meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier(""));
 			// TODO meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, );
@@ -100,7 +121,6 @@ public class Sickle extends CustomItem<Trifles, Sickle> {
 		// TODO attack speed and ....
 		// TODO anti carrot behaviour in special listener for all custom items
 		// TODO test grindstone repairing
-		// TODO test disabling...
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
@@ -125,6 +145,7 @@ public class Sickle extends CustomItem<Trifles, Sickle> {
 		}
 
 		// TODO setting
+		// TODO _def getter override for @Config
 		final var radius = 3;
 		var total_harvested = 0;
 

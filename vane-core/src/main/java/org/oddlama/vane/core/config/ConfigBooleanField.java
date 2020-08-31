@@ -20,10 +20,20 @@ public class ConfigBooleanField extends ConfigField<Boolean> {
 	}
 
 	@Override
+	public Boolean def() {
+		final var override = overridden_def();
+		if (override != null) {
+			return override;
+		} else {
+			return annotation.def();
+		}
+	}
+
+	@Override
 	public void generate_yaml(StringBuilder builder, String indent) {
 		append_description(builder, indent);
-		append_default_value(builder, indent, annotation.def());
-		append_field_definition(builder, indent, annotation.def());
+		append_default_value(builder, indent, def());
+		append_field_definition(builder, indent, def());
 	}
 
 	@Override

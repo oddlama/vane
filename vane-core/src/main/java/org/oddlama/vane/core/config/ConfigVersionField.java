@@ -24,6 +24,11 @@ public class ConfigVersionField extends ConfigField<Long> {
 	}
 
 	@Override
+	public Long def() {
+		return null;
+	}
+
+	@Override
 	public void generate_yaml(StringBuilder builder, String indent) {
 		append_description(builder, indent);
 		append_field_definition(builder, indent, ((Module<?>)owner).annotation.config_version());

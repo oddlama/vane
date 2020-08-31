@@ -6,6 +6,7 @@ import java.lang.StringBuilder;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.stream.Collectors;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ import java.util.function.Function;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import org.oddlama.vane.annotation.config.ConfigStringListMapEntry;
 import org.oddlama.vane.annotation.config.ConfigStringListMap;
 import org.oddlama.vane.core.YamlLoadException;
 
@@ -40,6 +42,18 @@ public class ConfigStringListMapField extends ConfigField<Map<String, List<Strin
 				builder.append("\n");
 			});
 		});
+	}
+
+	@Override
+	public Map<String, List<String>> def() {
+		final var override = overridden_def();
+		if (override != null) {
+			return override;
+		} else {
+			return Arrays.stream(annotation.def()).collect(
+					Collectors.toMap(ConfigStringListMapEntry::key,
+					e -> Arrays.asList(e.list())));
+		}
 	}
 
 	@Override

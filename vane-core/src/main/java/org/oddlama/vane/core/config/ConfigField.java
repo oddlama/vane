@@ -2,6 +2,8 @@ package org.oddlama.vane.core.config;
 
 import java.lang.Comparable;
 import java.lang.StringBuilder;
+import java.util.List;
+import java.util.Collection;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
@@ -50,13 +52,25 @@ public abstract class ConfigField<T> implements Comparable<ConfigField<?>> {
 		field.setAccessible(true);
 
 		// Dynamic description
-		this.description = description;
-		if (this.description.equals("")) {
-			try {
-				this.description = (String)owner.getClass().getMethod(field.getName() + "_desc").invoke(owner);
-			} catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
-				throw new RuntimeException("Could not call " + owner.getClass().getName() + "." + field.getName() + "_desc() to override description value", e);
-			}
+		try {
+			this.description = (String)owner.getClass().getMethod(field.getName() + "_desc").invoke(owner);
+		} catch (NoSuchMethodException e) {
+			// Ignore, field wasn't overridden
+			this.description = description;
+		} catch (InvocationTargetException | IllegalAccessException e) {
+			throw new RuntimeException("Could not call " + owner.getClass().getName() + "." + field.getName() + "_desc() to override description value", e);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	protected T overridden_def() {
+		try {
+			return (T)owner.getClass().getMethod(field.getName() + "_def").invoke(owner);
+		} catch (NoSuchMethodException e) {
+			// Ignore, field wasn't overridden
+			return null;
+		} catch (InvocationTargetException | IllegalAccessException e) {
+			throw new RuntimeException("Could not call " + owner.getClass().getName() + "." + field.getName() + "_def() to override default value", e);
 		}
 	}
 
@@ -107,8 +121,8 @@ public abstract class ConfigField<T> implements Comparable<ConfigField<?>> {
 		builder.append("\n");
 	}
 
-	protected<U> void append_list_definition(StringBuilder builder, String indent, String prefix, U[] arr, Consumer2<StringBuilder, U> append) {
-		Arrays.stream(arr).forEach(i -> {
+	protected<U> void append_list_definition(StringBuilder builder, String indent, String prefix, Collection<U> list, Consumer2<StringBuilder, U> append) {
+		list.stream().forEach(i -> {
 			builder.append(indent);
 			builder.append(prefix);
 			builder.append("  - ");
@@ -165,6 +179,7 @@ public abstract class ConfigField<T> implements Comparable<ConfigField<?>> {
 		}
 	}
 
+	public abstract T def();
 	public abstract void generate_yaml(StringBuilder builder, String indent);
 	public abstract void check_loadable(YamlConfiguration yaml) throws YamlLoadException;
 	public abstract void load(YamlConfiguration yaml);

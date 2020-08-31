@@ -69,15 +69,14 @@ public abstract class LangField<T> {
 			return null;
 		}
 
-		var translation_key = resource_pack_translation_annotation.key();
-		if (translation_key.equals("")) {
-			try {
-				translation_key = (String)owner.getClass().getMethod(field.getName() + "_translation_key").invoke(owner);
-			} catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
-				throw new RuntimeException("Could not call " + owner.getClass().getName() + "." + field.getName() + "_desc() to override description value", e);
-			}
+		// Resolve dynamic overrides
+		try {
+			return (String)owner.getClass().getMethod(field.getName() + "_translation_key").invoke(owner);
+		} catch (NoSuchMethodException e) {
+			// Ignore, field wasn't overridden
+			return resource_pack_translation_annotation.key();
+		} catch (InvocationTargetException | IllegalAccessException e) {
+			throw new RuntimeException("Could not call " + owner.getClass().getName() + "." + field.getName() + "_desc() to override description value", e);
 		}
-
-		return  translation_key;
 	}
 }

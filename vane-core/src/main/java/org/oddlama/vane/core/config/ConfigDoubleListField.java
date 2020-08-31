@@ -3,6 +3,7 @@ package org.oddlama.vane.core.config;
 import static org.reflections.ReflectionUtils.*;
 
 import java.lang.StringBuilder;
+import java.util.Arrays;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +17,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.oddlama.vane.annotation.config.ConfigDoubleList;
 import org.oddlama.vane.core.YamlLoadException;
 
-public class ConfigDoubleListField extends ConfigField<Map<String, List<String>>> {
+public class ConfigDoubleListField extends ConfigField<List<Double>> {
 	public ConfigDoubleList annotation;
 
 	public ConfigDoubleListField(Object owner, Field field, Function<String, String> map_name, ConfigDoubleList annotation) {
@@ -25,7 +26,17 @@ public class ConfigDoubleListField extends ConfigField<Map<String, List<String>>
 	}
 
 	private void append_double_list_defintion(StringBuilder builder, String indent, String prefix) {
-		append_list_definition(builder, indent, prefix, ArrayUtils.toObject(annotation.def()), (b, d) -> b.append(d));
+		append_list_definition(builder, indent, prefix, def(), (b, d) -> b.append(d));
+	}
+
+	@Override
+	public List<Double> def() {
+		final var override = overridden_def();
+		if (override != null) {
+			return override;
+		} else {
+			return Arrays.asList(ArrayUtils.toObject(annotation.def()));
+		}
 	}
 
 	@Override

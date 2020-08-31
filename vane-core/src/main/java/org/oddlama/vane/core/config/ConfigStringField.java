@@ -20,9 +20,19 @@ public class ConfigStringField extends ConfigField<String> {
 	}
 
 	@Override
+	public String def() {
+		final var override = overridden_def();
+		if (override != null) {
+			return override;
+		} else {
+			return annotation.def();
+		}
+	}
+
+	@Override
 	public void generate_yaml(StringBuilder builder, String indent) {
 		append_description(builder, indent);
-		var def = "\"" + annotation.def().replace("\"", "\\\"") + "\"";
+		var def = "\"" + def().replace("\"", "\\\"") + "\"";
 		append_default_value(builder, indent, def);
 		append_field_definition(builder, indent, def);
 	}
