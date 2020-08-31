@@ -7,7 +7,11 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.HashMap;
+import java.util.Collections;
+import java.util.stream.Collectors;
 import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.function.Consumer;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -21,7 +25,7 @@ public class ResourcePackGenerator {
 	private String description = "";
 	private byte[] icon_png_content = null;
 	private Map<String, Map<String, JSONObject>> translations = new HashMap<>();
-	private Map<NamespacedKey, JSONArray> item_overrides = new HashMap<>();
+	private Map<NamespacedKey, List<JSONObject>> item_overrides = new HashMap<>();
 	private Map<NamespacedKey, byte[]> item_textures = new HashMap<>();
 
 	public void set_description(String description) {
@@ -57,17 +61,8 @@ public class ResourcePackGenerator {
 	public void add_item_override(NamespacedKey base_item_key, NamespacedKey new_item_key, Consumer<JSONObject> create_predicate) {
 		var overrides = item_overrides.get(base_item_key);
 		if (overrides == null) {
-			overrides = new JSONArray();
+			overrides = new ArrayList<JSONObject>();
 			item_overrides.put(base_item_key, overrides);
-
-			// Keep default item override(otherwise custom_model_data < 0 would match for the default item
-			final var predicate = new JSONObject();
-			predicate.put("custom_model_data", 0);
-
-			final var override = new JSONObject();
-			override.put("predicate", predicate);
-			override.put("model", base_item_key.getNamespace() + ":item/" + base_item_key.getKey());
-			overrides.put(override);
 		}
 
 		final var predicate = new JSONObject();
@@ -76,7 +71,7 @@ public class ResourcePackGenerator {
 		final var override = new JSONObject();
 		override.put("predicate", predicate);
 		override.put("model", new_item_key.getNamespace() + ":item/" + new_item_key.getKey());
-		overrides.put(override);
+		overrides.add(override);
 	}
 
 	private String generate_pack_mcmeta() {
@@ -133,10 +128,28 @@ public class ResourcePackGenerator {
 		}
 	}
 
+	private static int compare_item_overrides(JSONObject o1, JSONObject o2) {
+		if (o1.has("custom_model_data")) {
+			if (o2.has("custom_model_data")) {
+				return o1.getInt("custom_model_data") - o2.getInt("custom_model_data");
+			}
+			return -1;
+		} else {
+			if (o2.has("custom_model_data")) {
+				return 1;
+			}
+			return 0;
+		}
+	}
+
 	private void write_item_overrides(final ZipOutputStream zip) throws IOException {
 		for (var entry : item_overrides.entrySet()) {
 			final var key = entry.getKey();
-			final var overrides = entry.getValue();
+
+			// Create sorted JSONArray
+			Collections.sort(entry.getValue(), ResourcePackGenerator::compare_item_overrides);
+			final var overrides = new JSONArray();
+			entry.getValue().forEach(o -> overrides.put(o));
 
 			// Create model json
 			final var model = create_item_model_handheld(key);
