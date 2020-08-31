@@ -9,7 +9,10 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.SmithingRecipe;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.Tag;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
 import org.oddlama.vane.annotation.config.ConfigLong;
+import org.oddlama.vane.annotation.config.ConfigInt;
 import org.oddlama.vane.annotation.config.ConfigDouble;
 import org.oddlama.vane.annotation.config.ConfigMaterialSet;
 import org.bukkit.inventory.RecipeChoice.MaterialChoice;
@@ -32,26 +35,22 @@ public class Sickle extends CustomItem<Trifles, Sickle> {
 	public static enum Variant implements ItemVariantEnum {
 		WOODEN,
 		STONE,
-		IRON(false),
+		IRON,
 		GOLDEN,
 		DIAMOND,
 		NETHERITE;
 
-		private boolean enabled;
-		private Variant() { this(true); }
-		private Variant(boolean enabled) {
-			this.enabled = enabled;
-		}
-
 		@Override public String prefix() { return name().toLowerCase(); }
-		@Override public boolean enabled() { return enabled; }
+		@Override public boolean enabled() { return true; }
 	}
 
 	public static class SickleVariant extends CustomItemVariant<Trifles, Sickle, Variant> {
-		@ConfigDouble(def = Double.NaN, desc = "Attack speed modifier.")
-		public double config_attack_speed;
 		@ConfigDouble(def = Double.NaN, desc = "Attack damage modifier.")
 		public double config_attack_damage;
+		@ConfigDouble(def = Double.NaN, desc = "Attack speed modifier.")
+		public double config_attack_speed;
+		@ConfigInt(def = -1, min = 0, max = BlockUtil.NEAREST_RELATIVE_BLOCKS_FOR_RADIUS_MAX, desc = "Harvesting radius.")
+		public int config_harvest_radius;
 
 		public SickleVariant(Sickle parent, Variant variant) {
 			super(parent, variant);
@@ -67,30 +66,15 @@ public class Sickle extends CustomItem<Trifles, Sickle> {
 					.setIngredient('s', Material.STICK);
 
 				switch (variant) {
-					case WOODEN:  recipe.setIngredient('m', new MaterialChoice(Tag.PLANKS)); break;
-					case STONE:   recipe.setIngredient('m', new MaterialChoice(Tag.ITEMS_STONE_TOOL_MATERIALS)); break;
-					case IRON:    recipe.setIngredient('m', Material.IRON_INGOT); break;
-					case GOLDEN:  recipe.setIngredient('m', Material.GOLD_INGOT); break;
-					case DIAMOND: recipe.setIngredient('m', Material.DIAMOND); break;
-
-					case NETHERITE:
-						// Can't happen
-						break;
+					case WOODEN:    recipe.setIngredient('m', new MaterialChoice(Tag.PLANKS)); break;
+					case STONE:     recipe.setIngredient('m', new MaterialChoice(Tag.ITEMS_STONE_TOOL_MATERIALS)); break;
+					case IRON:      recipe.setIngredient('m', Material.IRON_INGOT); break;
+					case GOLDEN:    recipe.setIngredient('m', Material.GOLD_INGOT); break;
+					case DIAMOND:   recipe.setIngredient('m', Material.DIAMOND); break;
+					case NETHERITE: /* Can't happen */ break;
 				}
 
 				add_recipe(recipe_key, recipe);
-			}
-		}
-
-		public double config_attack_speed_def() {
-			switch (variant()) {
-				default:        return 0.0;
-				case WOODEN:    return 1.0;
-				case STONE:     return 2.0;
-				case IRON:      return 3.0;
-				case GOLDEN:    return 5.0;
-				case DIAMOND:   return 4.0;
-				case NETHERITE: return 4.0;
 			}
 		}
 
@@ -106,11 +90,35 @@ public class Sickle extends CustomItem<Trifles, Sickle> {
 			}
 		}
 
+		public double config_attack_speed_def() {
+			switch (variant()) {
+				default:        return 0.0;
+				case WOODEN:    return 1.0;
+				case STONE:     return 2.0;
+				case IRON:      return 3.0;
+				case GOLDEN:    return 5.0;
+				case DIAMOND:   return 4.0;
+				case NETHERITE: return 4.0;
+			}
+		}
+
+		public int config_harvest_radius_def() {
+			switch (variant()) {
+				default:        return 0;
+				case WOODEN:    return 2;
+				case STONE:     return 2;
+				case IRON:      return 3;
+				case GOLDEN:    return 3;
+				case DIAMOND:   return 3;
+				case NETHERITE: return 3;
+			}
+		}
+
 		@Override
 		public ItemStack modify_item_stack(ItemStack item) {
 			final var meta = item.getItemMeta();
-			// TODO meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier(""));
-			// TODO meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, );
+			meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier("generic.attack_damage", config_attack_damage, AttributeModifier.Operation.ADD_NUMBER));
+			meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier("generic.attack_speed", config_attack_speed, AttributeModifier.Operation.ADD_NUMBER));
 			item.setItemMeta(meta);
 			return item;
 		}
@@ -144,13 +152,9 @@ public class Sickle extends CustomItem<Trifles, Sickle> {
 			return;
 		}
 
-		// TODO setting
-		// TODO _def getter override for @Config
-		final var radius = 3;
 		var total_harvested = 0;
-
 		// Harvest surroundings
-		for (var relative_pos : BlockUtil.NEAREST_RELATIVE_BLOCKS_FOR_RADIUS.get(radius - 1)) {
+		for (var relative_pos : BlockUtil.NEAREST_RELATIVE_BLOCKS_FOR_RADIUS.get(variant.config_harvest_radius)) {
 			final var block = relative_pos.relative(root_block);
 			if (harvest_plant(player, block)) {
 				++total_harvested;

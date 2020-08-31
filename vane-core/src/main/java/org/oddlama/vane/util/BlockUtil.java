@@ -29,10 +29,11 @@ public class BlockUtil {
 	    BlockFace.SOUTH,
 	    BlockFace.WEST};
 
-	public static List<List<BlockPosition>> NEAREST_RELATIVE_BLOCKS_FOR_RADIUS = new ArrayList<>();
+	public static final int NEAREST_RELATIVE_BLOCKS_FOR_RADIUS_MAX = 6;
+	public static final List<List<BlockPosition>> NEAREST_RELATIVE_BLOCKS_FOR_RADIUS = new ArrayList<>();
 	static {
-		for (int i = 0; i < 5; ++i) {
-			NEAREST_RELATIVE_BLOCKS_FOR_RADIUS.add(nearest_blocks_for_radius(i + 1));
+		for (int i = 0; i <= NEAREST_RELATIVE_BLOCKS_FOR_RADIUS_MAX; ++i) {
+			NEAREST_RELATIVE_BLOCKS_FOR_RADIUS.add(nearest_blocks_for_radius(i));
 		}
 	}
 
@@ -55,7 +56,7 @@ public class BlockUtil {
 		for (int x = -radius; x <= radius; x++) {
 			for (int z = -radius; z <= radius; z++) {
 				// Only circular area
-				if (x * x + z * z > (radius * radius + 1)) {
+				if (x * x + z * z > radius * radius + 0.5) {
 					continue;
 				}
 
@@ -68,7 +69,7 @@ public class BlockUtil {
 	}
 
 	public static Block next_tillable_block(final Block root_block, int radius, boolean careless) {
-		for (var relative_pos : NEAREST_RELATIVE_BLOCKS_FOR_RADIUS.get(radius - 1)) {
+		for (var relative_pos : NEAREST_RELATIVE_BLOCKS_FOR_RADIUS.get(radius)) {
 			final var block = relative_pos.relative(root_block);
 
 			// Check for a tillable material
@@ -98,7 +99,7 @@ public class BlockUtil {
 	}
 
 	public static Block next_seedable_block(final Block root_block, Material farmland_type, int radius) {
-		for (var relative_pos : NEAREST_RELATIVE_BLOCKS_FOR_RADIUS.get(radius - 1)) {
+		for (var relative_pos : NEAREST_RELATIVE_BLOCKS_FOR_RADIUS.get(radius)) {
 			final var block = relative_pos.relative(root_block);
 			final var below = block.getRelative(BlockFace.DOWN);
 
