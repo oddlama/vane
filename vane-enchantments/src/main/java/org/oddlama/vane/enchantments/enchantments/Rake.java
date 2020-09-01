@@ -36,6 +36,7 @@ public class Rake extends CustomEnchantment<Enchantments> {
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void on_player_till_farmland(final PlayerInteractEvent event) {
+		// TODO offhand....
 		if (!event.hasBlock() || event.getHand() != EquipmentSlot.HAND || event.getAction() != Action.RIGHT_CLICK_BLOCK) {
 			return;
 		}

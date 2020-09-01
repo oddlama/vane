@@ -2,12 +2,16 @@ package org.oddlama.vane.core;
 
 import java.io.File;
 import java.util.Collections;
+import static org.oddlama.vane.core.item.CustomItem.is_custom_item;
 import java.util.SortedSet;
+import org.bukkit.event.block.Action;
 import java.util.TreeSet;
+import static org.oddlama.vane.util.MaterialUtil.is_tillable;
 import java.util.logging.Level;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.entity.Player;
+import com.destroystokyo.paper.MaterialTags;
 
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
@@ -17,6 +21,7 @@ import org.oddlama.vane.annotation.VaneModule;
 import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.annotation.lang.LangString;
 import org.oddlama.vane.core.module.Module;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.oddlama.vane.util.Message;
 
 @VaneModule(name = "core", bstats = 8637, config_version = 1, lang_version = 1, storage_version = 1)
@@ -79,7 +84,6 @@ public class Core extends Module<Core> {
 		return true;
 	}
 
-
 	// Prevent entity targeting by tempting when the reason is a custom item.
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void on_pathfind(final EntityTargetEvent event) {
@@ -100,5 +104,25 @@ public class Core extends Module<Core> {
 
 		// Cancel event as it was induced by a custom item
 		event.setCancelled(true);
+	}
+
+	// Prevent custom hoe items from tilling blocks
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void on_player_hoe_right_click_block(final PlayerInteractEvent event) {
+		if (!event.hasBlock() || event.getAction() != Action.RIGHT_CLICK_BLOCK) {
+			return;
+		}
+
+		// Only when clicking a tillable block
+		if (!is_tillable(event.getClickedBlock().getType())) {
+			return;
+		}
+
+		// Only when using a custom item that is a hoe
+		final var player = event.getPlayer();
+		final var item = player.getEquipment().getItem(event.getHand());
+		if (is_custom_item(item) && MaterialTags.HOES.isTagged(item)) {
+			event.setCancelled(true);
+		}
 	}
 }
