@@ -63,8 +63,15 @@ public class CustomItemVariant<T extends Module<T>, V extends CustomItem<T, V>, 
 		parent.check_valid_model_data(this);
 	}
 
-	public String lang_name_translation_key() {
+	public final String lang_name_translation_key() {
 		return "item.vane." + variant_name;
+	}
+
+	/**
+	 * Returns the base material. Override if needed.
+	 */
+	public Material base() {
+		return Material.WARPED_FUNGUS_ON_A_STICK;
 	}
 
 	/**
@@ -174,6 +181,8 @@ public class CustomItemVariant<T extends Module<T>, V extends CustomItem<T, V>, 
 		// TODO this good? apparently causes loss of discovered state
 		if (variant().enabled()) {
 			recipes.keySet().forEach(get_module().getServer()::removeRecipe);
+			// TODO nope! reload not working, could stay enabled....
+			recipes.clear();
 		}
 	}
 
@@ -185,7 +194,7 @@ public class CustomItemVariant<T extends Module<T>, V extends CustomItem<T, V>, 
 			throw new RuntimeException("Missing resource '" + resource_name + "'. This is a bug.");
 		}
 		pack.add_item_model(key, resource);
-		pack.add_item_override(parent.base().getKey(), key, predicate -> {
+		pack.add_item_override(base().getKey(), key, predicate -> {
 			predicate.put("custom_model_data", model_data());
 		});
 	}

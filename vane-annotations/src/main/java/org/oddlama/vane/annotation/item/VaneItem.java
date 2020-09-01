@@ -11,5 +11,4 @@ import org.bukkit.Material;
 @Target(ElementType.TYPE)
 public @interface VaneItem {
 	String name();
-	Material base() default Material.WARPED_FUNGUS_ON_A_STICK;
 }

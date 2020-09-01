@@ -15,4 +15,5 @@ public @interface VaneEnchantment {
 	Rarity rarity() default Rarity.COMMON;
 	boolean treasure() default false;
 	EnchantmentTarget target() default EnchantmentTarget.BREAKABLE;
+	boolean allow_custom() default false;
 }

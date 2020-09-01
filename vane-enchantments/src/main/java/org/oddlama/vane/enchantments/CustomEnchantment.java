@@ -239,6 +239,13 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 	}
 
 	/**
+	 * Weather custom items are allowed to be enchanted with this enchantment.
+	 */
+	public final boolean allow_custom() {
+		return annotation.allow_custom();
+	}
+
+	/**
 	 * Determines if this enchantment is compatible with the given enchantment.
 	 * By default all enchantments are compatible. Override this if you want
 	 * to express conflicting enchantments.

@@ -38,7 +38,7 @@ public class Careless extends CustomEnchantment<Enchantments> {
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-	public void onPlayerRightClickReplaceable(PlayerInteractEvent event) {
+	public void on_player_right_click_replaceable(PlayerInteractEvent event) {
 		if (!event.hasBlock() || event.getHand() != EquipmentSlot.HAND || event.getAction() != Action.RIGHT_CLICK_BLOCK) {
 			return;
 		}

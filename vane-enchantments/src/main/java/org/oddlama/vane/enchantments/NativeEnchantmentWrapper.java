@@ -2,6 +2,7 @@ package org.oddlama.vane.enchantments;
 
 import static org.oddlama.vane.util.Nms.bukkit_enchantment;
 import static org.oddlama.vane.util.Nms.enchantment_slot_type;
+import static org.oddlama.vane.core.item.CustomItem.is_custom_item;
 
 import net.minecraft.server.v1_16_R2.Enchantment;
 import net.minecraft.server.v1_16_R2.EnumItemSlot;
@@ -70,6 +71,11 @@ public class NativeEnchantmentWrapper extends Enchantment {
 
 	@Override
 	public boolean canEnchant(ItemStack itemstack) {
-		return enchantment.can_enchant(Nms.bukkit_item_stack(itemstack));
+		// Custom item pre-check
+		final var bukkit_item = Nms.bukkit_item_stack(itemstack);
+		if (!enchantment.allow_custom() && is_custom_item(bukkit_item)) {
+			return false;
+		}
+		return enchantment.can_enchant(bukkit_item);
 	}
 }

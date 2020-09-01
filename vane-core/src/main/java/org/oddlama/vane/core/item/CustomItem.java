@@ -87,11 +87,11 @@ public class CustomItem<T extends Module<T>, V extends CustomItem<T, V>> extends
 	 */
 	protected final void check_valid_model_data(CustomItemVariant<T, V, ?> variant) {
 		for (var item : instances.values()) {
-			if (item.base() == base()) {
-				for (var other_variant : item.variants()) {
+			for (var other_variant : item.variants()) {
+				if (other_variant.base() == variant.base()) {
 					if (other_variant.model_data() == variant.model_data()) {
 						throw new RuntimeException("Cannot register custom item " + getClass() + " variant " + variant
-								+ " with the same base material and model_data as " + item.getClass() + " variant " + other_variant);
+								+ " with the same base material " + variant.base() + " and model_data as " + item.getClass() + " variant " + other_variant);
 					}
 				}
 			}
@@ -133,13 +133,6 @@ public class CustomItem<T extends Module<T>, V extends CustomItem<T, V>> extends
 	}
 
 	/**
-	 * Returns the base material.
-	 */
-	public final Material base() {
-		return annotation.base();
-	}
-
-	/**
 	 * Returns the lower bound for this custom item.
 	 */
 	private int model_data_range_lower_bound() {
@@ -153,17 +146,16 @@ public class CustomItem<T extends Module<T>, V extends CustomItem<T, V>> extends
 		return model_data(variant_max);
 	}
 
+	public static boolean is_custom_item(@NotNull ItemStack item) {
+		return item.getItemMeta().hasCustomModelData();
+	}
+
 	/**
 	 * Returns the variant of the given item or null if the item
 	 * is not an instance of this custom item.
 	 */
 	@SuppressWarnings("unchecked")
 	public<U> U variant_of(@NotNull ItemStack item) {
-		// Check base item
-		if (item.getType() != base()) {
-			return null;
-		}
-
 		final var meta = item.getItemMeta();
 		if (!meta.hasCustomModelData()) {
 			return null;
@@ -220,7 +212,7 @@ public class CustomItem<T extends Module<T>, V extends CustomItem<T, V>> extends
 	private static<A extends CustomItem<?, ?>, B extends CustomItemVariant<?, ?, ?>>
 		ItemStack construct_item_stack(int amount, A custom_item, B custom_item_variant)
 	{
-		final var item_stack = new ItemStack(custom_item.base(), amount);
+		final var item_stack = new ItemStack(custom_item_variant.base(), amount);
 		final var meta = item_stack.getItemMeta();
 		meta.setCustomModelData(custom_item.model_data(custom_item_variant.variant()));
 		meta.setDisplayNameComponent(new BaseComponent[] {
