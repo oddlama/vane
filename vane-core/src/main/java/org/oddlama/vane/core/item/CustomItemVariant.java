@@ -63,6 +63,11 @@ public class CustomItemVariant<T extends Module<T>, V extends CustomItem<T, V>, 
 		parent.check_valid_model_data(this);
 	}
 
+	/**
+	 * Override this and add your related recipes here.
+	 */
+	public void register_recipes() {}
+
 	public final String lang_name_translation_key() {
 		return "item.vane." + variant_name;
 	}
@@ -170,20 +175,22 @@ public class CustomItemVariant<T extends Module<T>, V extends CustomItem<T, V>, 
 	}
 
 	@Override
-	public void on_enable() {
+	public void on_config_change() {
+		recipes.keySet().forEach(get_module().getServer()::removeRecipe);
+		recipes.clear();
+
 		if (variant().enabled()) {
+			register_recipes();
 			recipes.values().forEach(get_module().getServer()::addRecipe);
 		}
 	}
 
 	@Override
+	public void on_enable() {
+	}
+
+	@Override
 	public void on_disable() {
-		// TODO this good? apparently causes loss of discovered state
-		if (variant().enabled()) {
-			recipes.keySet().forEach(get_module().getServer()::removeRecipe);
-			// TODO nope! reload not working, could stay enabled....
-			recipes.clear();
-		}
 	}
 
 	@Override

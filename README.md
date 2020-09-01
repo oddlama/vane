@@ -77,7 +77,7 @@ Spectator accounts:
 
 Portals:
 
-Build portals of any shape any any orientation
+Build portals of any shape and any orientation
 to get around more easily.
 
 Regions:

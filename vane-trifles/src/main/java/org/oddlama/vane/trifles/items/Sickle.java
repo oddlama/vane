@@ -55,14 +55,13 @@ public class Sickle extends CustomItem<Trifles, Sickle> {
 		public double config_attack_speed;
 		@ConfigInt(def = -1, min = 0, max = BlockUtil.NEAREST_RELATIVE_BLOCKS_FOR_RADIUS_MAX, desc = "Harvesting radius.")
 		public int config_harvest_radius;
-		// TODO how? look into Nms itemstack
 
 		public SickleVariant(Sickle parent, Variant variant) {
 			super(parent, variant);
 		}
 
 		@Override
-		public void on_config_change() {
+		public void register_recipes() {
 			final var recipe_key = recipe_key();
 			if (variant() == Variant.NETHERITE) {
 				// TODO add_recipe(recipe_key, new SmithingRecipe(recipe_key, item(), item(Variant.DIAMOND), Material.NETHERITE_INGOT));
