@@ -68,7 +68,7 @@ Remarks:
 #### Custom items
 
 - [x] The *Sickle* allows you to harvest a small radius of finished crops. Similar to the hand-harvesting addition, this will drop only product and no seeds.
-- [ ] The *File* allows you to modify block individual connections of fences, walls, glass panes and blocks alike.
+- [x] The *File* allows you to modify block individual connections of fences, walls, glass panes and blocks alike.
 
 #### Unique features
 

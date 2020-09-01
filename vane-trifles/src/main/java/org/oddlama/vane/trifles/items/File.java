@@ -9,10 +9,13 @@ import static org.oddlama.vane.util.PlayerUtil.swing_arm;
 import static org.oddlama.vane.util.PlayerUtil.harvest_plant;
 import static org.oddlama.vane.util.MaterialUtil.is_seeded_plant;
 import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.SmithingRecipe;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.Tag;
 import java.util.UUID;
+import java.util.Set;
+import java.util.ArrayList;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.attribute.AttributeModifier;
@@ -23,6 +26,24 @@ import org.oddlama.vane.annotation.config.ConfigMaterialSet;
 import org.bukkit.inventory.RecipeChoice.MaterialChoice;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.Bisected;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.MultipleFacing;
+import org.bukkit.block.data.type.Fence;
+import org.bukkit.block.data.type.Stairs;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.util.RayTraceResult;
+import org.bukkit.util.Vector;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
@@ -139,5 +160,183 @@ public class File extends CustomItem<Trifles, File> {
 		if (!event.hasBlock() || event.getAction() != Action.RIGHT_CLICK_BLOCK) {
 			return;
 		}
+
+		// Get item variant
+		final var player = event.getPlayer();
+		final var item = player.getEquipment().getItem(event.getHand());
+		final var variant = this.<FileVariant>variant_of(item);
+		if (variant == null || !variant.enabled()) {
+			return;
+		}
+
+		// Create block break event for block to transmute and check if it gets cancelled
+		final var block = event.getClickedBlock();
+		final var break_event = new BlockBreakEvent(block, player);
+		get_module().getServer().getPluginManager().callEvent(break_event);
+		if (break_event.isCancelled()) {
+			return;
+		}
+
+		Sound sound_effect = null;
+		final var data = block.getBlockData();
+		var clicked_face = event.getBlockFace();
+
+		if (player.isSneaking()) {
+			if (data instanceof Stairs) {
+				// Toggle shapes and set bisected
+				Stairs stairs = (Stairs)data;
+
+				// Check which half was clicked
+				final var hit_half = raytrace_hit_half(player, block);
+				if (hit_half == null) {
+					return;
+				}
+
+				if (hit_half != stairs.getHalf()) {
+					// Change half
+					stairs.setHalf(other_half(stairs.getHalf()));
+				} else {
+					// Change shape
+					stairs.setShape(next_stair_shape(stairs.getShape()));
+				}
+
+				sound_effect = Sound.UI_STONECUTTER_TAKE_RESULT;
+			} else if (data instanceof Bisected) {
+				// Toggle bisected
+				final var bisected = (Bisected)data;
+				bisected.setHalf(other_half(bisected.getHalf()));
+				sound_effect = Sound.UI_STONECUTTER_TAKE_RESULT;
+			} else {
+				return;
+			}
+		} else {
+			if (data instanceof MultipleFacing) {
+				final var mf = (MultipleFacing)data;
+				// Change multiple facing
+				if (!mf.getAllowedFaces().contains(clicked_face)) {
+					return;
+				}
+
+				if (mf instanceof Fence) {
+					// Do special fence raytracing
+					RayTraceFenceResult rtfr = raytrace_fence(player, block);
+					if (rtfr == null) {
+						return;
+					}
+
+					// Only replace facing choice, if we did hit a side,
+					// or if the max_change was big enough.
+					if (rtfr.max_change > .2 || (clicked_face != BlockFace.UP && clicked_face != BlockFace.DOWN)) {
+						clicked_face = rtfr.face;
+					}
+				}
+
+				boolean has_face = mf.hasFace(clicked_face);
+				if (mf.getFaces().size() == 1 && has_face) {
+					// Refuse to remove the last remaining face
+					return;
+				}
+
+				// Toggle clicked block face
+				mf.setFace(clicked_face, !has_face);
+
+				// Choose sound
+				if (has_face) {
+					sound_effect = Sound.BLOCK_GRINDSTONE_USE;
+				} else {
+					sound_effect = Sound.UI_STONECUTTER_TAKE_RESULT;
+				}
+			} else if (data instanceof Stairs) {
+				// Toggle stair facing
+				final var stairs = (Stairs)data;
+				stairs.setFacing(next_facing(stairs.getFaces(), stairs.getFacing()));
+
+				sound_effect = Sound.UI_STONECUTTER_TAKE_RESULT;
+			} else {
+				return;
+			}
+		}
+
+		// Update block data, and don't trigger physics! (We do not want to affect surrounding blocks!)
+		block.setBlockData(data, false);
+		block.getWorld().playSound(block.getLocation(), sound_effect, SoundCategory.BLOCKS, 1.0f, 1.0f);
+
+		// Damage item and swing arm
+		damage_item(player, item, 1);
+		swing_arm(player, event.getHand());
+	}
+
+	private Bisected.Half other_half(Bisected.Half h) {
+		switch (h) {
+			default:
+			case BOTTOM: return Bisected.Half.TOP;
+			case TOP:    return Bisected.Half.BOTTOM;
+		}
+	}
+
+	private Stairs.Shape next_stair_shape(Stairs.Shape s) {
+		return Stairs.Shape.values()[(s.ordinal() + 1) % Stairs.Shape.values().length];
+	}
+
+	private BlockFace next_facing(Set<BlockFace> allowed_faces, BlockFace face) {
+		if (allowed_faces.isEmpty()) {
+			return face;
+		}
+		final var list = new ArrayList<BlockFace>(allowed_faces);
+		final var index = list.indexOf(face);
+		if (index == -1) {
+			return face;
+		}
+		return list.get((index + 1) % list.size());
+	}
+
+	private Bisected.Half raytrace_hit_half(Player player, Block block) {
+		// Ray trace clicked face
+		final var rtr = player.rayTraceBlocks(10.0);
+		if (!block.equals(rtr.getHitBlock())) {
+			return null;
+		}
+		var y_val = rtr.getHitPosition().getY();
+		y_val -= (int)y_val;
+		if (y_val >= 0.5) {
+			return Bisected.Half.TOP;
+		}
+		return Bisected.Half.BOTTOM;
+	}
+
+	private static class RayTraceFenceResult {
+		public BlockFace face = null;
+		public double max_change = 0.0;
+	}
+
+	private RayTraceFenceResult raytrace_fence(final Player player, final Block block) {
+		// Ray trace clicked face
+		final var rtr = player.rayTraceBlocks(10.0);
+		if (!block.equals(rtr.getHitBlock())) {
+			return null;
+		}
+
+		final var block_middle = block.getLocation().toVector().add(new Vector(0.5, 0.5, 0.5));
+		final var hit_position = rtr.getHitPosition();
+		final var diff = hit_position.subtract(block_middle);
+
+		final var ret = new RayTraceFenceResult();
+		for (final var face : BlockUtil.XZ_FACES) {
+			if (face.getModX() != 0) {
+				final var change = diff.getX() * face.getModX();
+				if (change > ret.max_change) {
+					ret.face = face;
+					ret.max_change = change;
+				}
+			} else if (face.getModZ() != 0) {
+				final var change = diff.getZ() * face.getModZ();
+				if (change > ret.max_change) {
+					ret.face = face;
+					ret.max_change = change;
+				}
+			}
+		}
+
+		return ret;
 	}
 }

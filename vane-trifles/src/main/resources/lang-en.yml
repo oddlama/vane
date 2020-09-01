@@ -19,7 +19,24 @@ version: 1
 resource_pack_lang_code: 'en_us'
 
 item_file:
-  name: "File"
+  wooden:
+    # The display name of this item variant. Will be packed into a resource pack.
+    name: "Wooden File"
+  stone:
+    # The display name of this item variant. Will be packed into a resource pack.
+    name: "Stone File"
+  iron:
+    # The display name of this item variant. Will be packed into a resource pack.
+    name: "Iron File"
+  golden:
+    # The display name of this item variant. Will be packed into a resource pack.
+    name: "Golden File"
+  diamond:
+    # The display name of this item variant. Will be packed into a resource pack.
+    name: "Diamond File"
+  netherite:
+    # The display name of this item variant. Will be packed into a resource pack.
+    name: "Netherite File"
 
 item_sickle:
   wooden:

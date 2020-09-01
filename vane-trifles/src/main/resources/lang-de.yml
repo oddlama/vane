@@ -19,7 +19,18 @@ version: 1
 resource_pack_lang_code: 'de_de'
 
 item_file:
-  name: "Feile"
+  wooden:
+    name: "Holzfeile"
+  stone:
+    name: "Steinfeile"
+  iron:
+    name: "Eisenfeile"
+  golden:
+    name: "Goldfeile"
+  diamond:
+    name: "Diamantfeile"
+  netherite:
+    name: "Netheritfeile"
 
 item_sickle:
   wooden:
