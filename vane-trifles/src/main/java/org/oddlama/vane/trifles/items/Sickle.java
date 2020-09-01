@@ -5,6 +5,7 @@ import org.oddlama.vane.util.BlockUtil;
 import static org.oddlama.vane.util.ItemUtil.damage_item;
 import static org.oddlama.vane.util.ItemUtil.MODIFIER_UUID_GENERIC_ATTACK_DAMAGE;
 import static org.oddlama.vane.util.ItemUtil.MODIFIER_UUID_GENERIC_ATTACK_SPEED;
+import static org.oddlama.vane.util.PlayerUtil.swing_arm;
 import static org.oddlama.vane.util.PlayerUtil.harvest_plant;
 import static org.oddlama.vane.util.MaterialUtil.is_seeded_plant;
 import org.bukkit.inventory.ShapedRecipe;
@@ -182,6 +183,7 @@ public class Sickle extends CustomItem<Trifles, Sickle> {
 		// Damage item if we harvested at least one plant
 		if (total_harvested > 0) {
 			damage_item(player, item, 1 + (int)(0.25 * total_harvested));
+			swing_arm(player, event.getHand());
 		}
 	}
 }

@@ -38,9 +38,8 @@ public class PlayerUtil {
 		// Till block
 		block.setType(Material.FARMLAND);
 
-		// Play sound, swing arm
+		// Play sound
 		player.getWorld().playSound(player.getLocation(), Sound.ITEM_HOE_TILL, SoundCategory.BLOCKS, 1.0f, 1.0f);
-		player.swingMainHand();
 		return true;
 	}
 
@@ -69,12 +68,11 @@ public class PlayerUtil {
 		ageable.setAge(0);
 		block.setBlockData(ageable);
 
-		// Play sound, swing arm
+		// Play sound
 		player.getWorld().playSound(player.getLocation(),
 				seed_type == Material.NETHER_WART
 				? Sound.ITEM_NETHER_WART_PLANT
 				: Sound.ITEM_CROP_PLANT, SoundCategory.BLOCKS, 1.0f, 1.0f);
-		player.swingMainHand();
 		return true;
 	}
 
@@ -108,11 +106,9 @@ public class PlayerUtil {
 			return false;
 		}
 
-
-		// Simply reset crop state and swing arm
+		// Simply reset crop state
 		ageable.setAge(0);
 		block.setBlockData(ageable);
-		player.swingMainHand();
 
 		// Drop items
 		for (ItemStack drop : drops) {
@@ -120,6 +116,14 @@ public class PlayerUtil {
 		}
 
 		return true;
+	}
+
+	public static void swing_arm(final Player player, final EquipmentSlot hand) {
+		switch (hand) {
+			case HAND: player.swingMainHand(); break;
+			case OFF_HAND: player.swingOffHand(); break;
+			default: return;
+		}
 	}
 }
 

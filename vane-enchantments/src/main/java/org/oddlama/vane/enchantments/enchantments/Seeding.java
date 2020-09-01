@@ -1,6 +1,7 @@
 package org.oddlama.vane.enchantments.enchantments;
 
 import static org.oddlama.vane.util.BlockUtil.next_seedable_block;
+import static org.oddlama.vane.util.PlayerUtil.swing_arm;
 import static org.oddlama.vane.util.ItemUtil.damage_item;
 import static org.oddlama.vane.util.MaterialUtil.farmland_for;
 import static org.oddlama.vane.util.MaterialUtil.is_seeded_plant;
@@ -67,6 +68,7 @@ public class Seeding extends CustomEnchantment<Enchantments> {
 		// Seed block
 		if (seed_block(player, item, seedable, plant_type, seed_type)) {
 			damage_item(player, item, 1);
+			swing_arm(player, event.getHand());
 		}
 	}
 }

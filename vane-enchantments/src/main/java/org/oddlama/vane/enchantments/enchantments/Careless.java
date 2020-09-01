@@ -1,6 +1,7 @@
 package org.oddlama.vane.enchantments.enchantments;
 
 import static org.oddlama.vane.util.ItemUtil.damage_item;
+import static org.oddlama.vane.util.PlayerUtil.swing_arm;
 import static org.oddlama.vane.util.MaterialUtil.is_replaceable_grass;
 import static org.oddlama.vane.util.MaterialUtil.is_tillable;
 import static org.oddlama.vane.util.PlayerUtil.till_block;
@@ -72,6 +73,7 @@ public class Careless extends CustomEnchantment<Enchantments> {
 		event.getClickedBlock().setType(Material.AIR);
 		if (till_block(player, below)) {
 			damage_item(player, item, 1);
+			swing_arm(player, event.getHand());
 		}
 	}
 }

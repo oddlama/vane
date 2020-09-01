@@ -1,6 +1,7 @@
 package org.oddlama.vane.enchantments.enchantments;
 
 import static org.oddlama.vane.util.BlockUtil.next_tillable_block;
+import static org.oddlama.vane.util.PlayerUtil.swing_arm;
 import static org.oddlama.vane.util.ItemUtil.damage_item;
 import static org.oddlama.vane.util.PlayerUtil.till_block;
 
@@ -63,6 +64,7 @@ public class Rake extends CustomEnchantment<Enchantments> {
 		// Till block
 		if (till_block(player, tillable)) {
 			damage_item(player, item, 1);
+			swing_arm(player, event.getHand());
 		}
 	}
 }
