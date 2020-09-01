@@ -147,7 +147,6 @@ public class Sickle extends CustomItem<Trifles, Sickle> {
 
 	public Sickle(Context<Trifles> context) {
 		super(context, Variant.class, Variant.values(), SickleVariant::new);
-		// TODO test grindstone repairing
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
