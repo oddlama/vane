@@ -36,6 +36,7 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.MultipleFacing;
 import org.bukkit.block.data.type.Fence;
 import org.bukkit.block.data.type.Stairs;
+import org.bukkit.block.data.type.Wall;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -185,10 +186,10 @@ public class File extends CustomItem<Trifles, File> {
 		if (player.isSneaking()) {
 			if (data instanceof Stairs) {
 				// Toggle shapes and set bisected
-				Stairs stairs = (Stairs)data;
+				final var stairs = (Stairs)data;
 
 				// Check which half was clicked
-				final var hit_half = raytrace_hit_half(player, block);
+				final var hit_half = raytrace_stair_half(player, block);
 				if (hit_half == null) {
 					return;
 				}
@@ -220,15 +221,15 @@ public class File extends CustomItem<Trifles, File> {
 
 				if (mf instanceof Fence) {
 					// Do special fence raytracing
-					RayTraceFenceResult rtfr = raytrace_fence(player, block);
-					if (rtfr == null) {
+					final var result = raytrace_fence_like(player, block);
+					if (result == null) {
 						return;
 					}
 
 					// Only replace facing choice, if we did hit a side,
 					// or if the max_change was big enough.
-					if (rtfr.max_change > .2 || (clicked_face != BlockFace.UP && clicked_face != BlockFace.DOWN)) {
-						clicked_face = rtfr.face;
+					if (result.max_change > .2 || (clicked_face != BlockFace.UP && clicked_face != BlockFace.DOWN)) {
+						clicked_face = result.face;
 					}
 				}
 
@@ -246,6 +247,48 @@ public class File extends CustomItem<Trifles, File> {
 					sound_effect = Sound.BLOCK_GRINDSTONE_USE;
 				} else {
 					sound_effect = Sound.UI_STONECUTTER_TAKE_RESULT;
+				}
+			} else if (data instanceof Wall) {
+				final var wall = (Wall)data;
+
+				// Do special fence-like raytracing
+				final var result = raytrace_fence_like(player, block);
+				if (result == null) {
+					return;
+				}
+
+				// Only replace facing choice, if we did hit a side,
+				// or if the max_change was big enough.
+				if (result.max_change > .2 || (clicked_face != BlockFace.UP && clicked_face != BlockFace.DOWN)) {
+					clicked_face = result.face;
+				}
+
+				// click side -> toggle side
+				// click top in middle -> toggle up
+				// click top on side -> toggle height
+				if (clicked_face == BlockFace.UP) {
+					todo
+				} else {
+					final var has_face = wall.getHeight(clicked_face) != Wall.Height.NONE;
+					var active_face_count = 0;
+					for (final var face : BlockUtil.XZ_FACES) {
+						active_face_count += (wall.getHeight(face) != Wall.Height.NONE ? 1 : 0);
+					}
+
+					if (has_face && active_face_count == 1) {
+						// Refuse to remove the last remaining face
+						return;
+					}
+
+					// Toggle clicked block face
+					wall.setHeight(clicked_face, has_face ? Wall.Height.NONE : Wall.Height.LOW);
+
+					// Choose sound
+					if (has_face) {
+						sound_effect = Sound.BLOCK_GRINDSTONE_USE;
+					} else {
+						sound_effect = Sound.UI_STONECUTTER_TAKE_RESULT;
+					}
 				}
 			} else if (data instanceof Stairs) {
 				// Toggle stair facing
@@ -292,13 +335,13 @@ public class File extends CustomItem<Trifles, File> {
 		return list.get((index + 1) % list.size());
 	}
 
-	private Bisected.Half raytrace_hit_half(Player player, Block block) {
+	private Bisected.Half raytrace_stair_half(Player player, Block block) {
 		// Ray trace clicked face
-		final var rtr = player.rayTraceBlocks(10.0);
-		if (!block.equals(rtr.getHitBlock())) {
+		final var result = player.rayTraceBlocks(10.0);
+		if (!block.equals(result.getHitBlock())) {
 			return null;
 		}
-		var y_val = rtr.getHitPosition().getY();
+		var y_val = result.getHitPosition().getY();
 		y_val -= (int)y_val;
 		if (y_val >= 0.5) {
 			return Bisected.Half.TOP;
@@ -311,15 +354,15 @@ public class File extends CustomItem<Trifles, File> {
 		public double max_change = 0.0;
 	}
 
-	private RayTraceFenceResult raytrace_fence(final Player player, final Block block) {
+	private RayTraceFenceResult raytrace_fence_like(final Player player, final Block block) {
 		// Ray trace clicked face
-		final var rtr = player.rayTraceBlocks(10.0);
-		if (!block.equals(rtr.getHitBlock())) {
+		final var result = player.rayTraceBlocks(10.0);
+		if (!block.equals(result.getHitBlock())) {
 			return null;
 		}
 
 		final var block_middle = block.getLocation().toVector().add(new Vector(0.5, 0.5, 0.5));
-		final var hit_position = rtr.getHitPosition();
+		final var hit_position = result.getHitPosition();
 		final var diff = hit_position.subtract(block_middle);
 
 		final var ret = new RayTraceFenceResult();
