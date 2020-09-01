@@ -44,10 +44,10 @@ public class PlayerUtil {
 		return true;
 	}
 
-	public static boolean seed_block(final Player player, final Block block, final Material plant_type, final Material seed_type) {
+	public static boolean seed_block(final Player player, final ItemStack used_item, final Block block, final Material plant_type, final Material seed_type) {
 		// Create block place event for seed to place and check if it gets cancelled
 		final var below = block.getRelative(BlockFace.DOWN);
-		final var place_event = new BlockPlaceEvent(block, below.getState(), below, player.getInventory().getItemInMainHand(), player, true, EquipmentSlot.HAND);
+		final var place_event = new BlockPlaceEvent(block, below.getState(), below, used_item, player, true, EquipmentSlot.HAND);
 		Bukkit.getPluginManager().callEvent(place_event);
 		if (place_event.isCancelled()) {
 			return false;

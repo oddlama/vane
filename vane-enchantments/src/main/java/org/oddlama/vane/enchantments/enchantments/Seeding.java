@@ -38,7 +38,7 @@ public class Seeding extends CustomEnchantment<Enchantments> {
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void on_player_right_click_plant(final PlayerInteractEvent event) {
-		if (!event.hasBlock() || event.getHand() != EquipmentSlot.HAND || event.getAction() != Action.RIGHT_CLICK_BLOCK) {
+		if (!event.hasBlock() || event.getAction() != Action.RIGHT_CLICK_BLOCK) {
 			return;
 		}
 
@@ -50,7 +50,7 @@ public class Seeding extends CustomEnchantment<Enchantments> {
 
 		// Get enchantment level
 		final var player = event.getPlayer();
-		final var item = player.getEquipment().getItemInMainHand();
+		final var item = player.getEquipment().getItem(event.getHand());
 		final var level = item.getEnchantmentLevel(this.bukkit());
 		if (level == 0) {
 			return;
@@ -65,7 +65,7 @@ public class Seeding extends CustomEnchantment<Enchantments> {
 		}
 
 		// Seed block
-		if (seed_block(player, seedable, plant_type, seed_type)) {
+		if (seed_block(player, item, seedable, plant_type, seed_type)) {
 			damage_item(player, item, 1);
 		}
 	}

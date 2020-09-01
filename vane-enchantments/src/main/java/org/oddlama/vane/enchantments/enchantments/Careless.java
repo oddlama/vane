@@ -39,7 +39,7 @@ public class Careless extends CustomEnchantment<Enchantments> {
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void on_player_right_click_replaceable(PlayerInteractEvent event) {
-		if (!event.hasBlock() || event.getHand() != EquipmentSlot.HAND || event.getAction() != Action.RIGHT_CLICK_BLOCK) {
+		if (!event.hasBlock() || event.getAction() != Action.RIGHT_CLICK_BLOCK) {
 			return;
 		}
 
@@ -56,7 +56,7 @@ public class Careless extends CustomEnchantment<Enchantments> {
 
 		// Check enchantment
 		final var player = event.getPlayer();
-		final var item = player.getEquipment().getItemInMainHand();
+		final var item = player.getEquipment().getItem(event.getHand());
 		if (item.getEnchantmentLevel(this.bukkit()) == 0) {
 			return;
 		}

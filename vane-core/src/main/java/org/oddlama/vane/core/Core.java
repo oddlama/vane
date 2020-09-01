@@ -96,9 +96,10 @@ public class Core extends Module<Core> {
 		}
 
 		final var player = (Player)event.getTarget();
-		final var item = player.getInventory().getItemInMainHand();
-		final var meta = item.getItemMeta();
-		if (!meta.hasCustomModelData() || meta.getCustomModelData() == 0) {
+		if (is_custom_item(player.getInventory().getItemInMainHand())) {
+			return;
+		}
+		if (is_custom_item(player.getInventory().getItemInOffHand())) {
 			return;
 		}
 

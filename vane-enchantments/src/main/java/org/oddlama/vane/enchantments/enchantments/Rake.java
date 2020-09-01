@@ -36,8 +36,7 @@ public class Rake extends CustomEnchantment<Enchantments> {
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void on_player_till_farmland(final PlayerInteractEvent event) {
-		// TODO offhand....
-		if (!event.hasBlock() || event.getHand() != EquipmentSlot.HAND || event.getAction() != Action.RIGHT_CLICK_BLOCK) {
+		if (!event.hasBlock() || event.getAction() != Action.RIGHT_CLICK_BLOCK) {
 			return;
 		}
 
@@ -48,7 +47,7 @@ public class Rake extends CustomEnchantment<Enchantments> {
 
 		// Get enchantment level
 		final var player = event.getPlayer();
-		final var item = player.getEquipment().getItemInMainHand();
+		final var item = player.getEquipment().getItem(event.getHand());
 		final var level = item.getEnchantmentLevel(this.bukkit());
 		if (level == 0) {
 			return;
