@@ -147,7 +147,7 @@ public class CustomItem<T extends Module<T>, V extends CustomItem<T, V>> extends
 	}
 
 	public static boolean is_custom_item(@NotNull ItemStack item) {
-		return item.getItemMeta().hasCustomModelData();
+		return item.hasItemMeta() && item.getItemMeta().hasCustomModelData();
 	}
 
 	/**
@@ -157,6 +157,9 @@ public class CustomItem<T extends Module<T>, V extends CustomItem<T, V>> extends
 	@SuppressWarnings("unchecked")
 	public<U> U variant_of(@NotNull ItemStack item) {
 		final var meta = item.getItemMeta();
+		if (meta == null) {
+			return null;
+		}
 		if (!meta.hasCustomModelData()) {
 			return null;
 		}
