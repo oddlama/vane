@@ -14,6 +14,7 @@ import org.bukkit.inventory.SmithingRecipe;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.Tag;
 import java.util.UUID;
+import java.util.Collections;
 import java.util.Set;
 import java.util.ArrayList;
 import org.bukkit.attribute.Attribute;
@@ -283,6 +284,7 @@ public class File extends CustomItem<Trifles, File> {
 			return face;
 		}
 		final var list = new ArrayList<BlockFace>(allowed_faces);
+		Collections.sort(list, (a, b) -> a.ordinal() - b.ordinal());
 		final var index = list.indexOf(face);
 		if (index == -1) {
 			return face;
