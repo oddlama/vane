@@ -4,21 +4,21 @@ import static org.oddlama.vane.util.MaterialUtil.is_replaceable_grass;
 import static org.oddlama.vane.util.MaterialUtil.is_tillable;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import org.bukkit.Location;
-import org.bukkit.util.Vector;
-import java.util.Comparator;
-import org.jetbrains.annotations.NotNull;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.data.Ageable;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.BlockVector;
-import org.bukkit.entity.LivingEntity;
+import org.bukkit.util.Vector;
+
+import org.jetbrains.annotations.NotNull;
 
 public class BlockUtil {
 	public static final List<BlockFace> BLOCK_FACES = Arrays.asList(

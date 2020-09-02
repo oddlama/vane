@@ -1,66 +1,52 @@
 package org.oddlama.vane.trifles.items;
 
-import org.bukkit.Material;
-import org.oddlama.vane.util.BlockUtil;
-import static org.oddlama.vane.util.ItemUtil.damage_item;
-import static org.oddlama.vane.util.ItemUtil.MODIFIER_UUID_GENERIC_ATTACK_DAMAGE;
-import static org.oddlama.vane.util.ItemUtil.MODIFIER_UUID_GENERIC_ATTACK_SPEED;
-import static org.oddlama.vane.util.PlayerUtil.swing_arm;
-import static org.oddlama.vane.util.PlayerUtil.harvest_plant;
-import static org.oddlama.vane.util.MaterialUtil.is_seeded_plant;
 import static org.oddlama.vane.util.BlockUtil.raytrace_dominant_face;
 import static org.oddlama.vane.util.BlockUtil.raytrace_oct;
-import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.inventory.SmithingRecipe;
-import org.bukkit.enchantments.EnchantmentTarget;
-import org.bukkit.Tag;
-import java.util.UUID;
+import static org.oddlama.vane.util.ItemUtil.MODIFIER_UUID_GENERIC_ATTACK_DAMAGE;
+import static org.oddlama.vane.util.ItemUtil.MODIFIER_UUID_GENERIC_ATTACK_SPEED;
+import static org.oddlama.vane.util.ItemUtil.damage_item;
+import static org.oddlama.vane.util.PlayerUtil.swing_arm;
+
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Set;
-import java.util.ArrayList;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.attribute.AttributeModifier;
-import org.oddlama.vane.annotation.config.ConfigLong;
-import org.oddlama.vane.annotation.config.ConfigInt;
-import org.oddlama.vane.annotation.config.ConfigDouble;
-import org.oddlama.vane.annotation.config.ConfigMaterialSet;
-import org.bukkit.inventory.RecipeChoice.MaterialChoice;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
+
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
+import org.bukkit.Tag;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected;
-import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.MultipleFacing;
 import org.bukkit.block.data.type.Fence;
-import org.bukkit.block.data.type.Stairs;
 import org.bukkit.block.data.type.GlassPane;
-import org.bukkit.block.data.Directional;
+import org.bukkit.block.data.type.Stairs;
 import org.bukkit.block.data.type.Tripwire;
 import org.bukkit.block.data.type.Wall;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.util.Vector;
-import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.RecipeChoice.MaterialChoice;
+import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.SmithingRecipe;
 
+import org.oddlama.vane.annotation.config.ConfigDouble;
 import org.oddlama.vane.annotation.item.VaneItem;
 import org.oddlama.vane.core.item.CustomItem;
 import org.oddlama.vane.core.item.CustomItemVariant;
 import org.oddlama.vane.core.item.ItemVariantEnum;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.trifles.Trifles;
+import org.oddlama.vane.util.BlockUtil;
 
 @VaneItem(name = "file")
 public class File extends CustomItem<Trifles, File> {

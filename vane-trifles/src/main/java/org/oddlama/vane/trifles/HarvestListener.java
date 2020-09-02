@@ -1,7 +1,7 @@
 package org.oddlama.vane.trifles;
 
-import static org.oddlama.vane.util.PlayerUtil.harvest_plant;
 import static org.oddlama.vane.util.MaterialUtil.is_seeded_plant;
+import static org.oddlama.vane.util.PlayerUtil.harvest_plant;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

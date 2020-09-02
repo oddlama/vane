@@ -2,14 +2,10 @@ package org.oddlama.vane.core.item;
 
 import static org.oddlama.vane.util.Util.namespaced_key;
 
-import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
 
-import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.inventory.ShapelessRecipe;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TranslatableComponent;
 
@@ -18,12 +14,9 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 
-import org.oddlama.vane.annotation.item.VaneItem;
 import org.oddlama.vane.annotation.lang.LangString;
 import org.oddlama.vane.annotation.lang.ResourcePackTranslation;
-import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.ResourcePackGenerator;
-import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.core.module.ModuleComponent;
 

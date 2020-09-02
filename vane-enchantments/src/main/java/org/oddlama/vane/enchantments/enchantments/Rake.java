@@ -1,8 +1,8 @@
 package org.oddlama.vane.enchantments.enchantments;
 
 import static org.oddlama.vane.util.BlockUtil.next_tillable_block;
-import static org.oddlama.vane.util.PlayerUtil.swing_arm;
 import static org.oddlama.vane.util.ItemUtil.damage_item;
+import static org.oddlama.vane.util.PlayerUtil.swing_arm;
 import static org.oddlama.vane.util.PlayerUtil.till_block;
 
 import com.destroystokyo.paper.MaterialTags;
@@ -13,7 +13,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
 import org.jetbrains.annotations.NotNull;

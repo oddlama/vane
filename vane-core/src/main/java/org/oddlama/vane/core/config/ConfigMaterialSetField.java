@@ -5,9 +5,9 @@ import static org.oddlama.vane.util.Util.namespaced_key;
 
 import static org.reflections.ReflectionUtils.*;
 
-import java.util.Arrays;
 import java.lang.StringBuilder;
 import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Function;

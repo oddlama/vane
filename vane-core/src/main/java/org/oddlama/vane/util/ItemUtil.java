@@ -3,9 +3,10 @@ package org.oddlama.vane.util;
 import static org.oddlama.vane.util.Nms.item_handle;
 import static org.oddlama.vane.util.Nms.player_handle;
 
+import java.util.UUID;
+
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import java.util.UUID;
 
 public class ItemUtil {
 	public static final UUID MODIFIER_UUID_GENERIC_ATTACK_DAMAGE = UUID.fromString("CB3F55D3-645C-4F38-A497-9C13A33DB5CF");

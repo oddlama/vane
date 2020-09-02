@@ -1,8 +1,8 @@
 package org.oddlama.vane.enchantments;
 
+import static org.oddlama.vane.core.item.CustomItem.is_custom_item;
 import static org.oddlama.vane.util.Nms.bukkit_enchantment;
 import static org.oddlama.vane.util.Nms.enchantment_slot_type;
-import static org.oddlama.vane.core.item.CustomItem.is_custom_item;
 
 import net.minecraft.server.v1_16_R2.Enchantment;
 import net.minecraft.server.v1_16_R2.EnumItemSlot;
