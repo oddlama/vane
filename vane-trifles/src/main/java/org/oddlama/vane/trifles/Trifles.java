@@ -14,6 +14,7 @@ public class Trifles extends Module<Trifles> {
 		new HarvestListener(this);
 		new RepairCostLimiter(this);
 		new XpBottling(this);
+		new RecipeUnlock(this);
 
 		new org.oddlama.vane.trifles.items.Sickle(this);
 		new org.oddlama.vane.trifles.items.File(this);

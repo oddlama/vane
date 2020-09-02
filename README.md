@@ -25,7 +25,7 @@ So if you don't want a certain feature, simply disable it.
 - [x] Skip night with 50% of players sleeping
 - [ ] Store XP in bottles (with slight loss)
 - [x] Limit anvil repair cost to remove 'too-expensive'
-- [ ] All recipes are automatically unlocked when joining the server
+- [x] All recipes will be unlocked automatically when joining the server
 
 #### Administrative and 'meta' features
 
@@ -137,8 +137,6 @@ per chunk cache for regions, like "chunk is fully in region"
 check achievement on anvil
 
 
-!!!automatic recipes unlocking
-
 sign editor tool.
 
 
@@ -151,6 +149,10 @@ wood set texture o sides (file)
 
 
 make it a chisel??
+
+
+
+custom book icon for enchantments :)) (icon slightly pressed in leather?)
 
 
 

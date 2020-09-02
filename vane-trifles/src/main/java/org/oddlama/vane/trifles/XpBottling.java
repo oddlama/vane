@@ -28,7 +28,6 @@ public class XpBottling extends Listener<Trifles> {
 		super(context.group("xp_bottling", "Enables bottling experience by combining a Bottle o' Enchanting with a iron or gold nugget in an anvil."));
 	}
 
-	// Set maximum item repair cost, if configured
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void on_prepare_anvil(final PrepareAnvilEvent event) {
 		if (event.getResult() != null) {

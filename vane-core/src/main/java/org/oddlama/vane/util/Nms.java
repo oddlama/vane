@@ -6,9 +6,12 @@ import net.minecraft.server.v1_16_R2.EntityPlayer;
 import net.minecraft.server.v1_16_R2.IRegistry;
 import net.minecraft.server.v1_16_R2.ItemStack;
 import net.minecraft.server.v1_16_R2.MinecraftKey;
+import net.minecraft.server.v1_16_R2.DedicatedServer;
 
+import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.craftbukkit.v1_16_R2.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_16_R2.CraftServer;
 import org.bukkit.craftbukkit.v1_16_R2.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.v1_16_R2.util.CraftNamespacedKey;
 import org.bukkit.enchantments.EnchantmentTarget;
@@ -70,5 +73,14 @@ public class Nms {
 			return null;
 		}
 		return ((CraftPlayer)player).getHandle();
+	}
+
+	public static DedicatedServer server_handle() {
+		return ((CraftServer)Bukkit.getServer()).getServer();
+	}
+
+	public static int unlock_all_recipes(final org.bukkit.entity.Player player) {
+		final var recipes = server_handle().getCraftingManager().b();
+		return player_handle(player).discoverRecipes(recipes);
 	}
 }
