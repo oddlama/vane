@@ -18,6 +18,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Ageable;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.BlockVector;
+import org.bukkit.entity.LivingEntity;
 
 public class BlockUtil {
 	public static final List<BlockFace> BLOCK_FACES = Arrays.asList(
@@ -128,6 +129,120 @@ public class BlockUtil {
 			return (a.getBlockX() * a.getBlockX() + a.getBlockY() * a.getBlockY() + a.getBlockZ() * a.getBlockZ())
 			     - (b.getBlockX() * b.getBlockX() + b.getBlockY() * b.getBlockY() + b.getBlockZ() * b.getBlockZ());
 		}
+	}
+
+	public static class Corner {
+		private boolean x;
+		private boolean y;
+		private boolean z;
+		private int id;
+
+		public Corner(final Vector hit) {
+			this.x = hit.getX() >= 0.0;
+			this.y = hit.getY() >= 0.0;
+			this.z = hit.getZ() >= 0.0;
+			this(hit.getX() >= 0.0, hit.getY() >= 0.0, hit.getZ() >= 0.0);
+		}
+
+		public Corner(boolean x, boolean y, boolean z) {
+			this.x = x;
+			this.y = y;
+			this.z = z;
+			final var mx = x ? 1 : 0;
+			final var my = y ? 1 : 0;
+			final var mz = z ? 1 : 0;
+			this.id = (mx << 2) | (my << 1) | (mz << 0);
+		}
+
+		public boolean up() { return y; }
+		public boolean east() { return x; }
+		public boolean south() { return z; }
+
+		public Corner up(boolean up) { return new Corner(x, up, z); }
+		public Corner east(boolean east) { return new Corner(east, y, z); }
+		public Corner south(boolean south) { return new Corner(x, y, south); }
+
+		@Override
+		public int hashCode() {
+			return id;
+		}
+
+		@Override
+		public boolean equals(Object other) {
+			return other != null && other instanceof Corner && ((Corner)other).id == id;
+		}
+	}
+
+	public static class Oct {
+		private Vector hit_pos; // Relative to block middle
+		private Corner corner;
+		private BlockFace face;
+
+		public Oct(final Vector hit_pos, final BlockFace face) {
+			this.hit_pos = hit_pos;
+			this.corner = new Corner(hit_pos);
+			this.face = face;
+		}
+
+		public Vector hit_pos() { return hit_pos; }
+		public Corner corner() { return corner; }
+		public BlockFace face() { return face; }
+	}
+
+	public static Oct raytrace_oct(final LivingEntity entity, final Block block) {
+		// Ray trace position and face
+		final var result = entity.rayTraceBlocks(10.0);
+		if (!block.equals(result.getHitBlock())) {
+			return null;
+		}
+
+		// Get in-block hit position and bias the result
+		// a bit inside the clicked face, so we don't get ambigous results.
+		final var hit = result.getHitPosition()
+			.subtract(new Vector(
+				(int)result.getHitPosition().getX(),
+				(int)result.getHitPosition().getY(),
+				(int)result.getHitPosition().getZ()))
+			.subtract(result.getHitBlockFace().getDirection().multiply(0.25))
+			.subtract(new Vector(0.5, 0.5, 0.5));
+
+		return new Oct(hit, result.getHitBlockFace());
+	}
+
+	public static class RaytraceDominantFaceResult {
+		public BlockFace face = null;
+		public double dominance = 0.0;
+	}
+
+	public static RaytraceDominantFaceResult raytrace_dominant_face(final LivingEntity entity, final Block block) {
+		// Ray trace clicked face
+		final var result = entity.rayTraceBlocks(10.0);
+		if (!block.equals(result.getHitBlock())) {
+			return null;
+		}
+
+		final var block_middle = block.getLocation().toVector().add(new Vector(0.5, 0.5, 0.5));
+		final var hit_position = result.getHitPosition();
+		final var diff = hit_position.subtract(block_middle);
+
+		final var ret = new RaytraceDominantFaceResult();
+		for (final var face : BlockUtil.XZ_FACES) {
+			// Calculate how dominant the current face contributes to the clicked point
+			final double face_dominance;
+			if (face.getModX() != 0) {
+				face_dominance = diff.getX() * face.getModX();
+			} else { //if (face.getModZ() != 0) {
+				face_dominance = diff.getZ() * face.getModZ();
+			}
+
+			// Find maximum dominant face
+			if (face_dominance > ret.dominance) {
+				ret.face = face;
+				ret.dominance = face_dominance;
+			}
+		}
+
+		return ret;
 	}
 }
 

@@ -8,6 +8,8 @@ import static org.oddlama.vane.util.ItemUtil.MODIFIER_UUID_GENERIC_ATTACK_SPEED;
 import static org.oddlama.vane.util.PlayerUtil.swing_arm;
 import static org.oddlama.vane.util.PlayerUtil.harvest_plant;
 import static org.oddlama.vane.util.MaterialUtil.is_seeded_plant;
+import static org.oddlama.vane.util.BlockUtil.raytrace_dominant_face;
+import static org.oddlama.vane.util.BlockUtil.raytrace_oct;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.SmithingRecipe;
@@ -184,100 +186,31 @@ public class File extends CustomItem<Trifles, File> {
 		return list.get((index + 1) % list.size());
 	}
 
-	private static class Oct {
-		public Vector corner;
-		public Bisected.Half half = Bisected.Half.TOP;
-		public BlockFace corner_face = BlockFace.SOUTH_WEST; // One of {SW, SE, NW, NE}
-	}
-
-	private Oct raytrace_oct(Player player, Block block) {
-		// Ray trace clicked face
-		final var result = player.rayTraceBlocks(10.0);
-		if (!block.equals(result.getHitBlock())) {
-			return null;
-		}
-
-		// Get in-block hit position and bias the result
-		// a bit inside the clicked face, so we don't get ambigous results.
-		final var hit = result.getHitPosition()
-			.subtract(new Vector(
-				(int)result.getHitPosition().getX(),
-				(int)result.getHitPosition().getY(),
-				(int)result.getHitPosition().getZ()))
-			.subtract(result.getHitBlockFace().getDirection().multiply(0.25))
-			.subtract(new Vector(0.5, 0.5, 0.5));
-
-		final var oct = new Oct();
-		oct.corner = hit;
-
-		if (hit.getY() < 0.0) {
-			oct.half = Bisected.Half.BOTTOM;
-		} else {
-			oct.half = Bisected.Half.TOP;
-		}
-
-		// Find the corner direction that was hit
-		if (hit.getX() < 0.0) {
-			if (hit.getZ() < 0.0) {
-				oct.corner_face = BlockFace.NORTH_WEST;
-			} else {
-				oct.corner_face = BlockFace.SOUTH_WEST;
-			}
-		} else {
-			if (hit.getZ() < 0.0) {
-				oct.corner_face = BlockFace.NORTH_EAST;
-			} else {
-				oct.corner_face = BlockFace.SOUTH_EAST;
-			}
-		}
-
-		return oct;
-	}
-
-	private static class RaytraceFenceResult {
-		public BlockFace face = null;
-		public double dominance = 0.0;
-	}
-
-	private RaytraceFenceResult raytrace_fence_like(final Player player, final Block block) {
-		// Ray trace clicked face
-		final var result = player.rayTraceBlocks(10.0);
-		if (!block.equals(result.getHitBlock())) {
-			return null;
-		}
-
-		final var block_middle = block.getLocation().toVector().add(new Vector(0.5, 0.5, 0.5));
-		final var hit_position = result.getHitPosition();
-		final var diff = hit_position.subtract(block_middle);
-
-		final var ret = new RaytraceFenceResult();
-		for (final var face : BlockUtil.XZ_FACES) {
-			// Calculate how dominant the current face contributes to the clicked point
-			final double face_dominance;
-			if (face.getModX() != 0) {
-				face_dominance = diff.getX() * face.getModX();
-			} else { //if (face.getModZ() != 0) {
-				face_dominance = diff.getZ() * face.getModZ();
-			}
-
-			// Find maximum dominant face
-			if (face_dominance > ret.dominance) {
-				ret.face = face;
-				ret.dominance = face_dominance;
-			}
-		}
-
-		return ret;
+	private Sound change_stair_half(final Stairs stairs) {
+		// Change half
+		stairs.setHalf(stairs.getHalf() == Bisected.Half.BOTTOM ? Bisected.Half.TOP : Bisected.Half.BOTTOM);
+		return Sound.UI_STONECUTTER_TAKE_RESULT;
 	}
 
 	private Sound change_stair_shape(final Player player, final Block block, final Stairs stairs, final BlockFace clicked_face) {
 		// Check which eighth of the block was clicked
-		final var hit_oct = raytrace_oct(player, block);
-		if (hit_oct == null) {
+		final var oct = raytrace_oct(player, block);
+		if (oct == null) {
 			return null;
 		}
 
-		if (hit_oct != stairs.getHalf()) {
+		var corner = oct.corner();
+		final var is_stair_top = stairs.getHalf() == Bisected.Half.TOP;
+
+		// If we clicked on the base part, toggle the corner up state,
+		// as we always want to reason abount the corner to add/remove.
+		if (corner.up() == is_stair_top) {
+			corner = corner.up(!corner.up());
+		}
+
+		if (stairs.
+
+		if (oct != stairs.getHalf()) {
 			// Change half
 			stairs.setHalf(other_half(stairs.getHalf()));
 		} else {
@@ -294,8 +227,8 @@ public class File extends CustomItem<Trifles, File> {
 			// Allow fences and glass panes to have 0 faces
 			min_faces = 0;
 
-			// Do special fence raytracing
-			final var result = raytrace_fence_like(player, block);
+			// Trace which side is the dominant side
+			final var result = raytrace_dominant_face(player, block);
 			if (result == null) {
 				return null;
 			}
@@ -334,8 +267,8 @@ public class File extends CustomItem<Trifles, File> {
 	}
 
 	private Sound change_wall(final Player player, final Block block, final Wall wall, final BlockFace clicked_face) {
-		// Do special fence-like raytracing
-		final var result = raytrace_fence_like(player, block);
+		// Trace which side is the dominant side
+		final var result = raytrace_dominant_face(player, block);
 		if (result == null) {
 			return null;
 		}
@@ -423,7 +356,7 @@ public class File extends CustomItem<Trifles, File> {
 		final Sound sound;
 		if (player.isSneaking()) {
 			if (data instanceof Stairs) {
-				sound = change_directional_facing(player, block, (Directional)data, clicked_face);
+				sound = change_stair_half((Stairs)data);
 			} else {
 				return;
 			}

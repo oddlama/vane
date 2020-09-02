@@ -8,6 +8,7 @@ import static org.oddlama.vane.util.ItemUtil.MODIFIER_UUID_GENERIC_ATTACK_SPEED;
 import static org.oddlama.vane.util.PlayerUtil.swing_arm;
 import static org.oddlama.vane.util.PlayerUtil.harvest_plant;
 import static org.oddlama.vane.util.MaterialUtil.is_seeded_plant;
+import static org.oddlama.vane.util.BlockUtil.relative;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.SmithingRecipe;
 import org.bukkit.enchantments.EnchantmentTarget;
@@ -173,7 +174,7 @@ public class Sickle extends CustomItem<Trifles, Sickle> {
 		var total_harvested = 0;
 		// Harvest surroundings
 		for (var relative_pos : BlockUtil.NEAREST_RELATIVE_BLOCKS_FOR_RADIUS.get(variant.config_harvest_radius)) {
-			final var block = relative_pos.relative(root_block);
+			final var block = relative(root_block, relative_pos);
 			if (harvest_plant(player, block)) {
 				++total_harvested;
 			}
