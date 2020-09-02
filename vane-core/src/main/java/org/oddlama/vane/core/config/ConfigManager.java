@@ -26,6 +26,7 @@ import org.oddlama.vane.annotation.config.ConfigIntList;
 import org.oddlama.vane.annotation.config.ConfigLong;
 import org.oddlama.vane.annotation.config.ConfigMaterialSet;
 import org.oddlama.vane.annotation.config.ConfigString;
+import org.oddlama.vane.annotation.config.ConfigStringList;
 import org.oddlama.vane.annotation.config.ConfigStringListMap;
 import org.oddlama.vane.annotation.config.ConfigVersion;
 import org.oddlama.vane.core.YamlLoadException;
@@ -38,6 +39,7 @@ import org.oddlama.vane.core.config.ConfigIntListField;
 import org.oddlama.vane.core.config.ConfigLongField;
 import org.oddlama.vane.core.config.ConfigMaterialSetField;
 import org.oddlama.vane.core.config.ConfigStringField;
+import org.oddlama.vane.core.config.ConfigStringListField;
 import org.oddlama.vane.core.config.ConfigStringListMapField;
 import org.oddlama.vane.core.config.ConfigVersionField;
 import org.oddlama.vane.core.module.Module;
@@ -105,6 +107,8 @@ public class ConfigManager {
 			return new ConfigMaterialSetField(owner, field, map_name, (ConfigMaterialSet)annotation);
 		} else if (atype.equals(ConfigString.class)) {
 			return new ConfigStringField(owner, field, map_name, (ConfigString)annotation);
+		} else if (atype.equals(ConfigStringList.class)) {
+			return new ConfigStringListField(owner, field, map_name, (ConfigStringList)annotation);
 		} else if (atype.equals(ConfigStringListMap.class)) {
 			return new ConfigStringListMapField(owner, field, map_name, (ConfigStringListMap)annotation);
 		} else if (atype.equals(ConfigVersion.class)) {

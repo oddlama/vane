@@ -37,6 +37,7 @@ So if you don't want a certain feature, simply disable it.
 - [x] Slightly colorized chat message format for better readability
 - [x] Convenience commands for time, weather, gamemode, spawn, ...
 - [x] Hazard protection against creeper/wither explosions, door breaking, ...
+- [x] Whitelist for worlds in which the Wither may be spawned
 - [x] Players without any permissions cannot alter the world (just look, no touch!)
 - [ ] Advancements to guide you through most additions
 - [x] Client side translations for custom items and enchantments
@@ -145,8 +146,6 @@ NO TOO EXPENSIVE! set cost at anvil output anvil.
 
 
 harvest with any right click that isnt a tools
-
-wither in overworld = big nono
 
 shulker box right click with item to add?
 
