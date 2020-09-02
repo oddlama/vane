@@ -13,7 +13,7 @@ These plugins follow a **strict no-nonsense** rule:
 ### Features
 
 All features are modularized and can be disabled independently of each other.
-So if you don't want a certain feature, simply disable it.
+If you don't want a certain feature, simply disable it.
 
 #### Little things & quality of life
 
@@ -23,7 +23,7 @@ So if you don't want a certain feature, simply disable it.
 - [ ] Craft lights that automatically turn on when it's night
 - [ ] Sort chests with redstone
 - [x] Skip night with 50% of players sleeping
-- [ ] Store XP in bottles (with slight loss)
+- [ ] Store XP in bottles
 - [x] Limit anvil repair cost to remove 'too-expensive'
 - [x] All recipes will be unlocked automatically when joining the server
 
@@ -44,14 +44,14 @@ So if you don't want a certain feature, simply disable it.
 
 #### Custom enchantments
 
-While vane's API allows enchantments to be acquired using the enchanting table,
-most (TODO all??) enchantments from this plugin will be acquired by treasure
-or crafting, for the simple reason that late-game enchanting is too easy,
+While vane technically supports enchantments to be acquired using the enchanting table,
+all enchantments from this plugin will be acquired by treasure or crafting,
+for the simple reason that late-game enchanting is too cheap,
 and therefore not well suited for giving out valuable traits (like *Angel* or *Unbreakable*).
 
-- [x] Seamless integration of custom enchantments
-- [x] *Wings*: Occasionally boost your elytra mid-air by sneaking
-- [x] *Careless*: Tilling long grass will remove it and till the block below
+- [x] Seamless integration of custom enchantments with the vanilla system
+- [x] *Wings*: Occasionally boost your elytra mid-air by sneaking.
+- [x] *Careless*: Tilling long grass will remove it and till the block below.
 - [ ] *Soulbound*: Soulbound items will be kept on death. They also can't be dropped accidentally.
 - [x] *Rake*: Tilling farmland again will till the nearest block around it. Use multiple times to slowly create a circle. Works in combination with Careless to till grass with long grass on top.
 - [x] *Seeding*: Right click your crops to plant crops of the same type around them. Use multiple times to create a circle.
@@ -71,21 +71,23 @@ Remarks:
 - [x] The *Sickle* allows you to harvest a small radius of finished crops. Similar to the hand-harvesting addition, this will drop only product and no seeds.
 - [x] The *File* allows you to modify block individual connections of fences, walls, glass panes and blocks alike.
 
-#### Unique features
+#### Portals
 
-Spectator accounts:
-- Grant players additional spectator accounts (login to a different port)
+- [ ] Build portals of arbitrary shape and orientation to get around easily (even horizontal!)
+- [ ] Integrates with regions to control portal connection access
 
-Portals:
+#### Regions
 
-Build portals of any shape and any orientation
-to get around more easily.
+- [ ] Players can buy an arbitrarily shaped patch of land, and may control certain environmental conditions and player permissions for that area
+- [ ] Server-owned regions can be used to protect gobal areas (e.g. spawn).
+- [ ] Visual selection of any 2D polygon shape with arbitrary heights.
+- [ ] Seamless integration into chest-like menus instead of commands.
 
-Regions:
+#### Spectator accounts
 
-Allow players to own a patch of land, and control certain
-environmental conditions inside, as well as other players permissions.
-Permission integration allows subtractive merging of permissions when in a region (can only take permissions away)
+- [ ] Grant players additional spectator accounts (by proxying logins from a different port via **Waterfall**)
+
+can we inherit skins? maybe hook into data loading?
 
 #### Administrative utilities
 
@@ -123,10 +125,6 @@ armor stand manipulation by perpendicular intersection between Line of sight and
 
 spawn with remnants of old world
 
-
-
-javadoc comment code (or at least semi public api),
-then generate javadoc
 
 
 /verify system for players -> adds permission groups

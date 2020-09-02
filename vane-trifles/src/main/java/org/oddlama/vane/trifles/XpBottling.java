@@ -55,6 +55,8 @@ public class XpBottling extends Listener<Trifles> {
 		inventory.setMaximumRepairCost(levels_to_store);
 		inventory.setRepairCost(levels_to_store);
 
+		// TODO would consume whole second stack...
+		// custom item(s) drinkable :DD
 		// TODO custom item(s) drinkable :DD
 		final var item = new ItemStack(Material.EXPERIENCE_BOTTLE);
 		final var meta = item.getItemMeta();
