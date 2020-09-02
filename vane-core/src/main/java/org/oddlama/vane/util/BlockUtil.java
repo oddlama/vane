@@ -138,9 +138,6 @@ public class BlockUtil {
 		private int id;
 
 		public Corner(final Vector hit) {
-			this.x = hit.getX() >= 0.0;
-			this.y = hit.getY() >= 0.0;
-			this.z = hit.getZ() >= 0.0;
 			this(hit.getX() >= 0.0, hit.getY() >= 0.0, hit.getZ() >= 0.0);
 		}
 
@@ -161,6 +158,37 @@ public class BlockUtil {
 		public Corner up(boolean up) { return new Corner(x, up, z); }
 		public Corner east(boolean east) { return new Corner(east, y, z); }
 		public Corner south(boolean south) { return new Corner(x, y, south); }
+
+		/**
+		 * Rotates the corner as if it were on a north facing block
+		 * given the block's rotation.
+		 */
+		public Corner rotate_to_north_reference(final BlockFace rotation) {
+			switch (rotation) {
+				default: throw new IllegalArgumentException("rotation must be one of NORTH, EAST, SOUTH, WEST");
+				case NORTH: return new Corner( x, y,  z);
+				case EAST:  return new Corner( z, y, !x);
+				case SOUTH: return new Corner(!x, y, !z);
+				case WEST:  return new Corner(!z, y,  x);
+			}
+		}
+
+		/** Returns {NORTH,SOUTH}_{EAST,WEST} to indicate the XZ corner. */
+		public BlockFace xz_face() {
+			if (x) {
+				if (z) {
+					return BlockFace.SOUTH_EAST;
+				} else {
+					return BlockFace.NORTH_EAST;
+				}
+			} else {
+				if (z) {
+					return BlockFace.SOUTH_WEST;
+				} else {
+					return BlockFace.NORTH_WEST;
+				}
+			}
+		}
 
 		@Override
 		public int hashCode() {
@@ -192,19 +220,16 @@ public class BlockUtil {
 	public static Oct raytrace_oct(final LivingEntity entity, final Block block) {
 		// Ray trace position and face
 		final var result = entity.rayTraceBlocks(10.0);
-		if (!block.equals(result.getHitBlock())) {
+		if (block == null || !block.equals(result.getHitBlock())) {
 			return null;
 		}
 
 		// Get in-block hit position and bias the result
 		// a bit inside the clicked face, so we don't get ambigous results.
+		final var block_middle = block.getLocation().toVector().add(new Vector(0.5, 0.5, 0.5));
 		final var hit = result.getHitPosition()
-			.subtract(new Vector(
-				(int)result.getHitPosition().getX(),
-				(int)result.getHitPosition().getY(),
-				(int)result.getHitPosition().getZ()))
-			.subtract(result.getHitBlockFace().getDirection().multiply(0.25))
-			.subtract(new Vector(0.5, 0.5, 0.5));
+			.subtract(block_middle)
+			.subtract(result.getHitBlockFace().getDirection().multiply(0.25));
 
 		return new Oct(hit, result.getHitBlockFace());
 	}
@@ -217,7 +242,7 @@ public class BlockUtil {
 	public static RaytraceDominantFaceResult raytrace_dominant_face(final LivingEntity entity, final Block block) {
 		// Ray trace clicked face
 		final var result = entity.rayTraceBlocks(10.0);
-		if (!block.equals(result.getHitBlock())) {
+		if (block == null || !block.equals(result.getHitBlock())) {
 			return null;
 		}
 
