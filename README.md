@@ -156,6 +156,8 @@ name resource pack with hash in name for easy deployment.
 
 TODO licenses of included shadowed libraries
 
+maybe: copy paste tool for transmutations. toggleable paste-direction awareness.
+
 
 SERVER SETTINGS RECOMMENDATIONS
 

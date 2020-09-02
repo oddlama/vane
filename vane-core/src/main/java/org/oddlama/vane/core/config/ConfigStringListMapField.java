@@ -1,7 +1,5 @@
 package org.oddlama.vane.core.config;
 
-import static org.reflections.ReflectionUtils.*;
-
 import java.lang.StringBuilder;
 import java.lang.reflect.Field;
 import java.util.ArrayList;

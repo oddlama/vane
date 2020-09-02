@@ -1,18 +1,26 @@
 package org.oddlama.vane.admin;
 
+import java.util.List;
+
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.entity.EntityBreakDoorEvent;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 
 import org.oddlama.vane.annotation.config.ConfigBoolean;
+import org.oddlama.vane.annotation.config.ConfigStringList;
 import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.module.Context;
 
 public class HazardProtection extends Listener<Admin> {
+	@ConfigBoolean(def = true, desc = "Restrict wither spawning to a list of worlds defined by wither_world_whitelist.")
+	private boolean config_enable_wither_world_whitelist;
+	@ConfigStringList(def = {"world_nether", "world_the_end"}, desc = "A list of worlds in which the wither may be spawned.")
+	private List<String> config_wither_world_whitelist;
 	@ConfigBoolean(def = true, desc = "Disables explosions from the wither.")
 	private boolean config_disable_wither_explosions;
 	@ConfigBoolean(def = true, desc = "Disables explosions from creepers.")
@@ -77,5 +85,24 @@ public class HazardProtection extends Listener<Admin> {
 				}
 				return;
 		}
+	}
+
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	public void on_creature_spawn(final CreatureSpawnEvent event) {
+		if (!config_enable_wither_world_whitelist) {
+			return;
+		}
+
+		// Only for wither spawns
+		if (event.getEntity().getType() != EntityType.WITHER) {
+			return;
+		}
+
+		// Check if world is whitelisted
+		if (config_wither_world_whitelist.contains(event.getEntity().getWorld().getName())) {
+			return;
+		}
+
+		event.setCancelled(true);
 	}
 }
