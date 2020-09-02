@@ -36,6 +36,9 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.MultipleFacing;
 import org.bukkit.block.data.type.Fence;
 import org.bukkit.block.data.type.Stairs;
+import org.bukkit.block.data.type.GlassPane;
+import org.bukkit.block.data.Directional;
+import org.bukkit.block.data.type.Tripwire;
 import org.bukkit.block.data.type.Wall;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -44,7 +47,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -157,159 +159,6 @@ public class File extends CustomItem<Trifles, File> {
 		super(context, Variant.class, Variant.values(), FileVariant::new);
 	}
 
-	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-	public void on_player_right_click(final PlayerInteractEvent event) {
-		if (!event.hasBlock() || event.getAction() != Action.RIGHT_CLICK_BLOCK) {
-			return;
-		}
-
-		// Get item variant
-		final var player = event.getPlayer();
-		final var item = player.getEquipment().getItem(event.getHand());
-		final var variant = this.<FileVariant>variant_of(item);
-		if (variant == null || !variant.enabled()) {
-			return;
-		}
-
-		// Create block break event for block to transmute and check if it gets cancelled
-		final var block = event.getClickedBlock();
-		final var break_event = new BlockBreakEvent(block, player);
-		get_module().getServer().getPluginManager().callEvent(break_event);
-		if (break_event.isCancelled()) {
-			return;
-		}
-
-		Sound sound_effect = null;
-		final var data = block.getBlockData();
-		var clicked_face = event.getBlockFace();
-
-		if (player.isSneaking()) {
-			if (data instanceof Stairs) {
-				// Toggle shapes and set bisected
-				final var stairs = (Stairs)data;
-
-				// Check which half was clicked
-				final var hit_half = raytrace_stair_half(player, block);
-				if (hit_half == null) {
-					return;
-				}
-
-				if (hit_half != stairs.getHalf()) {
-					// Change half
-					stairs.setHalf(other_half(stairs.getHalf()));
-				} else {
-					// Change shape
-					stairs.setShape(next_stair_shape(stairs.getShape()));
-				}
-
-				sound_effect = Sound.UI_STONECUTTER_TAKE_RESULT;
-			} else if (data instanceof Bisected) {
-				// Toggle bisected
-				final var bisected = (Bisected)data;
-				bisected.setHalf(other_half(bisected.getHalf()));
-				sound_effect = Sound.UI_STONECUTTER_TAKE_RESULT;
-			} else {
-				return;
-			}
-		} else {
-			if (data instanceof MultipleFacing) {
-				final var mf = (MultipleFacing)data;
-				// Change multiple facing
-				if (!mf.getAllowedFaces().contains(clicked_face)) {
-					return;
-				}
-
-				if (mf instanceof Fence) {
-					// Do special fence raytracing
-					final var result = raytrace_fence_like(player, block);
-					if (result == null) {
-						return;
-					}
-
-					// Only replace facing choice, if we did hit a side,
-					// or if the max_change was big enough.
-					if (result.max_change > .2 || (clicked_face != BlockFace.UP && clicked_face != BlockFace.DOWN)) {
-						clicked_face = result.face;
-					}
-				}
-
-				boolean has_face = mf.hasFace(clicked_face);
-				if (mf.getFaces().size() == 1 && has_face) {
-					// Refuse to remove the last remaining face
-					return;
-				}
-
-				// Toggle clicked block face
-				mf.setFace(clicked_face, !has_face);
-
-				// Choose sound
-				if (has_face) {
-					sound_effect = Sound.BLOCK_GRINDSTONE_USE;
-				} else {
-					sound_effect = Sound.UI_STONECUTTER_TAKE_RESULT;
-				}
-			} else if (data instanceof Wall) {
-				final var wall = (Wall)data;
-
-				// Do special fence-like raytracing
-				final var result = raytrace_fence_like(player, block);
-				if (result == null) {
-					return;
-				}
-
-				// Only replace facing choice, if we did hit a side,
-				// or if the max_change was big enough.
-				if (result.max_change > .2 || (clicked_face != BlockFace.UP && clicked_face != BlockFace.DOWN)) {
-					clicked_face = result.face;
-				}
-
-				// click side -> toggle side
-				// click top in middle -> toggle up
-				// click top on side -> toggle height
-				if (clicked_face == BlockFace.UP) {
-					todo
-				} else {
-					final var has_face = wall.getHeight(clicked_face) != Wall.Height.NONE;
-					var active_face_count = 0;
-					for (final var face : BlockUtil.XZ_FACES) {
-						active_face_count += (wall.getHeight(face) != Wall.Height.NONE ? 1 : 0);
-					}
-
-					if (has_face && active_face_count == 1) {
-						// Refuse to remove the last remaining face
-						return;
-					}
-
-					// Toggle clicked block face
-					wall.setHeight(clicked_face, has_face ? Wall.Height.NONE : Wall.Height.LOW);
-
-					// Choose sound
-					if (has_face) {
-						sound_effect = Sound.BLOCK_GRINDSTONE_USE;
-					} else {
-						sound_effect = Sound.UI_STONECUTTER_TAKE_RESULT;
-					}
-				}
-			} else if (data instanceof Stairs) {
-				// Toggle stair facing
-				final var stairs = (Stairs)data;
-				stairs.setFacing(next_facing(stairs.getFaces(), stairs.getFacing()));
-
-				sound_effect = Sound.UI_STONECUTTER_TAKE_RESULT;
-			} else {
-				return;
-			}
-		}
-
-		// Update block data, and don't trigger physics! (We do not want to affect surrounding blocks!)
-		block.setBlockData(data, false);
-		block.getWorld().playSound(block.getLocation(), sound_effect, SoundCategory.BLOCKS, 1.0f, 1.0f);
-
-		// Damage item and swing arm
-		damage_item(player, item, 1);
-		swing_arm(player, event.getHand());
-	}
-
 	private Bisected.Half other_half(Bisected.Half h) {
 		switch (h) {
 			default:
@@ -335,26 +184,62 @@ public class File extends CustomItem<Trifles, File> {
 		return list.get((index + 1) % list.size());
 	}
 
-	private Bisected.Half raytrace_stair_half(Player player, Block block) {
+	private static class Oct {
+		public Vector corner;
+		public Bisected.Half half = Bisected.Half.TOP;
+		public BlockFace corner_face = BlockFace.SOUTH_WEST; // One of {SW, SE, NW, NE}
+	}
+
+	private Oct raytrace_oct(Player player, Block block) {
 		// Ray trace clicked face
 		final var result = player.rayTraceBlocks(10.0);
 		if (!block.equals(result.getHitBlock())) {
 			return null;
 		}
-		var y_val = result.getHitPosition().getY();
-		y_val -= (int)y_val;
-		if (y_val >= 0.5) {
-			return Bisected.Half.TOP;
+
+		// Get in-block hit position and bias the result
+		// a bit inside the clicked face, so we don't get ambigous results.
+		final var hit = result.getHitPosition()
+			.subtract(new Vector(
+				(int)result.getHitPosition().getX(),
+				(int)result.getHitPosition().getY(),
+				(int)result.getHitPosition().getZ()))
+			.subtract(result.getHitBlockFace().getDirection().multiply(0.25))
+			.subtract(new Vector(0.5, 0.5, 0.5));
+
+		final var oct = new Oct();
+		oct.corner = hit;
+
+		if (hit.getY() < 0.0) {
+			oct.half = Bisected.Half.BOTTOM;
+		} else {
+			oct.half = Bisected.Half.TOP;
 		}
-		return Bisected.Half.BOTTOM;
+
+		// Find the corner direction that was hit
+		if (hit.getX() < 0.0) {
+			if (hit.getZ() < 0.0) {
+				oct.corner_face = BlockFace.NORTH_WEST;
+			} else {
+				oct.corner_face = BlockFace.SOUTH_WEST;
+			}
+		} else {
+			if (hit.getZ() < 0.0) {
+				oct.corner_face = BlockFace.NORTH_EAST;
+			} else {
+				oct.corner_face = BlockFace.SOUTH_EAST;
+			}
+		}
+
+		return oct;
 	}
 
-	private static class RayTraceFenceResult {
+	private static class RaytraceFenceResult {
 		public BlockFace face = null;
-		public double max_change = 0.0;
+		public double dominance = 0.0;
 	}
 
-	private RayTraceFenceResult raytrace_fence_like(final Player player, final Block block) {
+	private RaytraceFenceResult raytrace_fence_like(final Player player, final Block block) {
 		// Ray trace clicked face
 		final var result = player.rayTraceBlocks(10.0);
 		if (!block.equals(result.getHitBlock())) {
@@ -365,23 +250,206 @@ public class File extends CustomItem<Trifles, File> {
 		final var hit_position = result.getHitPosition();
 		final var diff = hit_position.subtract(block_middle);
 
-		final var ret = new RayTraceFenceResult();
+		final var ret = new RaytraceFenceResult();
 		for (final var face : BlockUtil.XZ_FACES) {
+			// Calculate how dominant the current face contributes to the clicked point
+			final double face_dominance;
 			if (face.getModX() != 0) {
-				final var change = diff.getX() * face.getModX();
-				if (change > ret.max_change) {
-					ret.face = face;
-					ret.max_change = change;
-				}
-			} else if (face.getModZ() != 0) {
-				final var change = diff.getZ() * face.getModZ();
-				if (change > ret.max_change) {
-					ret.face = face;
-					ret.max_change = change;
-				}
+				face_dominance = diff.getX() * face.getModX();
+			} else { //if (face.getModZ() != 0) {
+				face_dominance = diff.getZ() * face.getModZ();
+			}
+
+			// Find maximum dominant face
+			if (face_dominance > ret.dominance) {
+				ret.face = face;
+				ret.dominance = face_dominance;
 			}
 		}
 
 		return ret;
+	}
+
+	private Sound change_stair_shape(final Player player, final Block block, final Stairs stairs, final BlockFace clicked_face) {
+		// Check which eighth of the block was clicked
+		final var hit_oct = raytrace_oct(player, block);
+		if (hit_oct == null) {
+			return null;
+		}
+
+		if (hit_oct != stairs.getHalf()) {
+			// Change half
+			stairs.setHalf(other_half(stairs.getHalf()));
+		} else {
+			// Change shape
+			stairs.setShape(next_stair_shape(stairs.getShape()));
+		}
+
+		return Sound.UI_STONECUTTER_TAKE_RESULT;
+	}
+
+	private Sound change_multiple_facing(final Player player, final Block block, final MultipleFacing mf, BlockFace clicked_face) {
+		final int min_faces;
+		if (mf instanceof Fence || mf instanceof GlassPane) {
+			// Allow fences and glass panes to have 0 faces
+			min_faces = 0;
+
+			// Do special fence raytracing
+			final var result = raytrace_fence_like(player, block);
+			if (result == null) {
+				return null;
+			}
+
+			// Only replace facing choice, if we did hit a side,
+			// or if the dominance was big enough.
+			if (result.dominance > .2 || (clicked_face != BlockFace.UP && clicked_face != BlockFace.DOWN)) {
+				clicked_face = result.face;
+			}
+		} else if (mf instanceof Tripwire) {
+			min_faces = 0;
+		} else {
+			return null;
+		}
+
+		// Check if the clicked face is allowed to change
+		if (!mf.getAllowedFaces().contains(clicked_face)) {
+			return null;
+		}
+
+		boolean has_face = mf.hasFace(clicked_face);
+		if (has_face && min_faces >= mf.getFaces().size()) {
+			// Refuse to remove beyond minimum face count
+			return null;
+		}
+
+		// Toggle clicked block face
+		mf.setFace(clicked_face, !has_face);
+
+		// Choose sound
+		if (has_face) {
+			return Sound.BLOCK_GRINDSTONE_USE;
+		} else {
+			return Sound.UI_STONECUTTER_TAKE_RESULT;
+		}
+	}
+
+	private Sound change_wall(final Player player, final Block block, final Wall wall, final BlockFace clicked_face) {
+		// Do special fence-like raytracing
+		final var result = raytrace_fence_like(player, block);
+		if (result == null) {
+			return null;
+		}
+
+		final BlockFace adjusted_clicked_face;
+		// Only replace facing choice, if we did hit a side,
+		// or if the dominance was big enough.
+		if (result.dominance > .2 || (clicked_face != BlockFace.UP && clicked_face != BlockFace.DOWN)) {
+			adjusted_clicked_face = result.face;
+		} else {
+			adjusted_clicked_face = clicked_face;
+		}
+
+		if (clicked_face == BlockFace.UP) {
+			final var was_up = wall.isUp();
+			if (adjusted_clicked_face == BlockFace.UP) {
+				// click top in middle -> toggle up
+				wall.setUp(!was_up);
+			} else if (BlockUtil.XZ_FACES.contains(adjusted_clicked_face)) {
+				// click top on side -> toggle height
+				final var height = wall.getHeight(adjusted_clicked_face);
+				switch (height) {
+					case NONE: return null;
+					case LOW:  wall.setHeight(adjusted_clicked_face, Wall.Height.TALL); break;
+					case TALL: wall.setHeight(adjusted_clicked_face, Wall.Height.LOW); break;
+				}
+			}
+
+			if (was_up) {
+				return Sound.BLOCK_GRINDSTONE_USE;
+			} else {
+				return Sound.UI_STONECUTTER_TAKE_RESULT;
+			}
+		} else {
+			// click side -> toggle side
+			final var has_face = wall.getHeight(adjusted_clicked_face) != Wall.Height.NONE;
+
+			// Set height and choose sound
+			if (has_face) {
+				wall.setHeight(adjusted_clicked_face, Wall.Height.NONE);
+				return Sound.BLOCK_GRINDSTONE_USE;
+			} else {
+				// Use opposite face's height, or low if there is nothing.
+				var target_height = wall.getHeight(adjusted_clicked_face.getOppositeFace());
+				if (target_height == Wall.Height.NONE) {
+					target_height = Wall.Height.LOW;
+				}
+				wall.setHeight(adjusted_clicked_face, Wall.Height.LOW);
+				return Sound.UI_STONECUTTER_TAKE_RESULT;
+			}
+		}
+	}
+
+	private Sound change_directional_facing(final Player player, final Block block, final Directional directional, final BlockFace clicked_face) {
+		// Toggle facing
+		directional.setFacing(next_facing(directional.getFaces(), directional.getFacing()));
+		return Sound.UI_STONECUTTER_TAKE_RESULT;
+	}
+
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	public void on_player_right_click(final PlayerInteractEvent event) {
+		if (!event.hasBlock() || event.getAction() != Action.RIGHT_CLICK_BLOCK) {
+			return;
+		}
+
+		// Get item variant
+		final var player = event.getPlayer();
+		final var item = player.getEquipment().getItem(event.getHand());
+		final var variant = this.<FileVariant>variant_of(item);
+		if (variant == null || !variant.enabled()) {
+			return;
+		}
+
+		// Create block break event for block to transmute and check if it gets cancelled
+		final var block = event.getClickedBlock();
+		final var break_event = new BlockBreakEvent(block, player);
+		get_module().getServer().getPluginManager().callEvent(break_event);
+		if (break_event.isCancelled()) {
+			return;
+		}
+
+		final var data = block.getBlockData();
+		final var clicked_face = event.getBlockFace();
+
+		final Sound sound;
+		if (player.isSneaking()) {
+			if (data instanceof Stairs) {
+				sound = change_directional_facing(player, block, (Directional)data, clicked_face);
+			} else {
+				return;
+			}
+		} else {
+			if (data instanceof MultipleFacing) {
+				sound = change_multiple_facing(player, block, (MultipleFacing)data, clicked_face);
+			} else if (data instanceof Wall) {
+				sound = change_wall(player, block, (Wall)data, clicked_face);
+			} else if (data instanceof Stairs) {
+				sound = change_stair_shape(player, block, (Stairs)data, clicked_face);
+			} else {
+				return;
+			}
+		}
+
+		// Return if nothing was done
+		if (sound == null) {
+			return;
+		}
+
+		// Update block data, and don't trigger physics! (We do not want to affect surrounding blocks!)
+		block.setBlockData(data, false);
+		block.getWorld().playSound(block.getLocation(), sound, SoundCategory.BLOCKS, 1.0f, 1.0f);
+
+		// Damage item and swing arm
+		damage_item(player, item, 1);
+		swing_arm(player, event.getHand());
 	}
 }
