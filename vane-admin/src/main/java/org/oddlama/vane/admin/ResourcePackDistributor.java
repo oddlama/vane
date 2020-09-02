@@ -9,6 +9,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.entity.EntityBreakDoorEvent;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
@@ -51,7 +53,7 @@ public class ResourcePackDistributor extends Listener<Admin> {
 	public String config_url;
 	@ConfigString(def = "", desc = "Resource pack SHA-1 sum. Required to verify resource pack integrity.")
 	public String config_sha1;
-	@ConfigBoolean(def = true, desc = "Kick players if they deny to use the specified resource pack (if set).")
+	@ConfigBoolean(def = true, desc = "Kick players if they deny to use the specified resource pack (if set). Individual players can be exempt from this rule by giving them the permission 'vane.admin.resource_pack.bypass'.")
 	public boolean config_force;
 
 	@LangString
@@ -59,24 +61,29 @@ public class ResourcePackDistributor extends Listener<Admin> {
 	@LangString
 	public String lang_download_failed;
 
+	// The permission to bypass the resource pack
+	private Permission bypass_permission;
+
 	public ResourcePackDistributor(Context<Admin> context) {
 		super(context.group("resource_pack", "Enable resource pack distribution."));
+
+		// Register bypass permission
+		bypass_permission = new Permission("vane." + get_module().get_name() + ".resource_pack.bypass", "Allows bypassing an enforced resource pack", PermissionDefault.FALSE);
+		get_module().register_permission(bypass_permission);
 	}
 
 	@Override
 	public void on_config_change() {
-		if (!config_url.isEmpty()) {
-			// Check sha1 sum validity
-			if (config_sha1.length() != 40) {
-				get_module().log.severe("Invalid resource pack SHA-1 sum '" + config_sha1 + "', should be 40 characters long but has " + config_sha1.length());
-				get_module().log.severe("Disabling resource pack serving");
+		// Check sha1 sum validity
+		if (config_sha1.length() != 40) {
+			get_module().log.severe("Invalid resource pack SHA-1 sum '" + config_sha1 + "', should be 40 characters long but has " + config_sha1.length());
+			get_module().log.severe("Disabling resource pack serving");
 
-				// Disable resource pack
-				config_url = "";
-			}
-
-			config_sha1 = config_sha1.toLowerCase();
+			// Disable resource pack
+			config_url = "";
 		}
+
+		config_sha1 = config_sha1.toLowerCase();
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -90,7 +97,7 @@ public class ResourcePackDistributor extends Listener<Admin> {
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void on_player_status(final PlayerResourcePackStatusEvent event) {
-		if (!config_force) {
+		if (!config_force || event.getPlayer().hasPermission(bypass_permission)) {
 			return;
 		}
 
