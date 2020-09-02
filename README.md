@@ -5,10 +5,10 @@ immersive and lore friendly extensions for vanilla minecraft.
 It runs on any [papermc](https://papermc.io) based server.
 
 These plugins follow a **strict no-nonsense** rule:
-- [x] Only actually useful additions
+- [x] If you dislike any feature, you can disable it individually.
 - [x] Features must be lore friendly, properly integrated and unobstrusive
-- [x] Everything can be disabled individually
-- [x] Augments the classic vanilla experience
+- [x] Additions should actually be useful
+- [x] Augments the classic vanilla experience, and doesn't try to replace it.
 
 ### Features
 
@@ -24,7 +24,7 @@ So if you don't want a certain feature, simply disable it.
 - [ ] Sort chests with redstone
 - [x] Skip night with 50% of players sleeping
 - [ ] Store XP in bottles (with slight loss)
-- [ ] Modify individual connections of walls, fences, panes, etc.
+- [x] Limit anvil repair cost to remove 'too-expensive'
 - [ ] All recipes are automatically unlocked when joining the server
 
 #### Administrative and 'meta' features
@@ -142,7 +142,16 @@ check achievement on anvil
 sign editor tool.
 
 
-NO TOO EXPENSIVE! set cost at anvil output anvil.
+
+golden sickle -> golden mistletoe, mistel (viscum album)
+
+used as enchantment binding agent/ catalyst?.
+
+wood set texture o sides (file)
+
+
+make it a chisel??
+
 
 
 harvest with any right click that isnt a tools
