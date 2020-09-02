@@ -27,9 +27,9 @@ public class ConfigMaterialSetField extends ConfigField<Set<Material>> {
 	private void append_material_set_defintion(StringBuilder builder, String indent, String prefix) {
 		append_list_definition(builder, indent, prefix, def(), (b, m) -> {
 				b.append("\"");
-				b.append(m.getKey().getNamespace());
+				b.append(escape_yaml(m.getKey().getNamespace()));
 				b.append(":");
-				b.append(m.getKey().getKey());
+				b.append(escape_yaml(m.getKey().getKey()));
 				b.append("\"");
 			});
 	}

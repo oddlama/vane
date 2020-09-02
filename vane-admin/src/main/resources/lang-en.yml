@@ -59,6 +59,11 @@ autostop:
       §aschedule §7[§bdelay§7]:§r Schedules the autostop task immediately regardless of player count. Accepts a delay to override the configured value.\n\
       §astatus§7:§r Shows the current autostop status."
 
+hazard_protection:
+  # This message is sent when the wither has been prevented from spawning in a non-whitelisted world
+  # {0}: world name
+  wither_spawn_prohibited: "§7The wither may not spawn in this world!"
+
 command_gamemode:
   # This message is sent when the gamemode of a player is changed by the gamemode command.
   # {0}: Player name

@@ -1,5 +1,7 @@
 package org.oddlama.vane.admin;
 
+import static org.oddlama.vane.util.WorldUtil.broadcast;
+
 import java.util.List;
 
 import org.bukkit.entity.EntityType;
@@ -13,8 +15,10 @@ import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 
 import org.oddlama.vane.annotation.config.ConfigBoolean;
 import org.oddlama.vane.annotation.config.ConfigStringList;
+import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.module.Context;
+import org.oddlama.vane.util.Message;
 
 public class HazardProtection extends Listener<Admin> {
 	@ConfigBoolean(def = true, desc = "Restrict wither spawning to a list of worlds defined by wither_world_whitelist.")
@@ -31,6 +35,9 @@ public class HazardProtection extends Listener<Admin> {
 	private boolean config_disable_door_breaking;
 	@ConfigBoolean(def = true, desc = "Disables fire from lightning.")
 	private boolean config_disable_lightning_fire;
+
+	@LangMessage
+	private Message lang_wither_spawn_prohibited;
 
 	public HazardProtection(Context<Admin> context) {
 		super(context.group("hazard_protection", "Enable hazard protection. The options below allow more fine-grained control over the hazards to protect from."));
@@ -99,10 +106,12 @@ public class HazardProtection extends Listener<Admin> {
 		}
 
 		// Check if world is whitelisted
-		if (config_wither_world_whitelist.contains(event.getEntity().getWorld().getName())) {
+		final var world = event.getEntity().getWorld();
+		if (config_wither_world_whitelist.contains(world.getName())) {
 			return;
 		}
 
+		broadcast(world, lang_wither_spawn_prohibited.format(world.getName()));
 		event.setCancelled(true);
 	}
 }

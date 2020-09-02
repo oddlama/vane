@@ -30,7 +30,7 @@ public class ConfigStringField extends ConfigField<String> {
 	@Override
 	public void generate_yaml(StringBuilder builder, String indent) {
 		append_description(builder, indent);
-		var def = "\"" + def().replace("\"", "\\\"") + "\"";
+		final var def = "\"" + escape_yaml(def()) + "\"";
 		append_default_value(builder, indent, def);
 		append_field_definition(builder, indent, def);
 	}

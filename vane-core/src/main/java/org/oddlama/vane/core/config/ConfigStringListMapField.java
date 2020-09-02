@@ -36,7 +36,7 @@ public class ConfigStringListMapField extends ConfigField<Map<String, List<Strin
 				builder.append(indent);
 				builder.append(prefix);
 				builder.append("    - ");
-				builder.append(s);
+				builder.append(escape_yaml(s));
 				builder.append("\n");
 			});
 		});

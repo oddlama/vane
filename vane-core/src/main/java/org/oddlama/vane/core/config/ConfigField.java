@@ -72,6 +72,10 @@ public abstract class ConfigField<T> implements Comparable<ConfigField<?>> {
 		}
 	}
 
+	protected String escape_yaml(String s) {
+		return s.replace("\\", "\\\\").replace("\"", "\\\"");
+	}
+
 	public String get_yaml_group_path() {
 		return path;
 	}

@@ -25,7 +25,7 @@ public class ConfigStringListField extends ConfigField<List<String>> {
 	private void append_string_list_defintion(StringBuilder builder, String indent, String prefix) {
 		append_list_definition(builder, indent, prefix, def(), (b, s) -> {
 				b.append("\"");
-				b.append(s.replace("\"", "\\\"")); // FIXME use proper yaml escaping.. Why does't bukkit have a method for that...
+				b.append(escape_yaml(s));
 				b.append("\"");
 			});
 	}
