@@ -40,6 +40,14 @@ autostop:
 hazard_protection:
   wither_spawn_prohibited: "§7Der Wither kann in dieser Welt nicht spawnen!"
 
+resource_pack:
+  declined: "Du musst das Ressourcenpaket akzeptieren um auf diesem Server zu spielen.\n\
+    Es wird für Übersetzungen und Texturen benötigt."
+  download_failed: "Es gab einen Fehler beim Herunterladen des Ressourcenpakets.\n\
+    Deine Verbindung wurdest unterbrochen um Anzeigefehlern vorzubeugen.\n\
+    \n\
+    Bitte versuche es erneut."
+
 command_gamemode:
   set: "§7Gamemode von §b{0}§7 wurde auf §a{1}§7 gesetzt."
   usage: "§bgamemode §7[§bplayer§7]"

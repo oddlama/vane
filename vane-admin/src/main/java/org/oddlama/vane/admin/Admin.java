@@ -16,16 +16,6 @@ import org.oddlama.vane.util.Message;
 
 @VaneModule(name = "admin", bstats = 8638, config_version = 1, lang_version = 1, storage_version = 1)
 public class Admin extends Module<Admin> {
-	// Language
-	@LangMessage
-	private Message lang_player_chat_format;
-	@LangMessage
-	private Message lang_player_join;
-	@LangMessage
-	private Message lang_player_kick;
-	@LangMessage
-	private Message lang_player_quit;
-
 	// Persistent storage
 	@Persistent
 	public PersistentLocation storage_spawn_location = null;
@@ -44,28 +34,7 @@ public class Admin extends Module<Admin> {
 
 		new WorldProtection(this);
 		new HazardProtection(this);
-	}
-
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void on_player_chat(AsyncPlayerChatEvent event) {
-		// TODO color based on privilege or config value.... somehow
-		// link permission groups to different config values....
-		String color = "§b";
-		event.setFormat(lang_player_chat_format.format(color, "%1$s", "%2$s"));
-	}
-
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void on_player_join(PlayerJoinEvent event) {
-		event.setJoinMessage(lang_player_join.format(event.getPlayer().getPlayerListName()));
-	}
-
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void on_player_kick(PlayerKickEvent event) {
-		event.setLeaveMessage(lang_player_kick.format(event.getPlayer().getPlayerListName()));
-	}
-
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void on_player_quit(PlayerQuitEvent event) {
-		event.setQuitMessage(lang_player_quit.format(event.getPlayer().getPlayerListName()));
+		new ResourcePackDistributor(this);
+		new ChatMessageFormatter(this);
 	}
 }
