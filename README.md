@@ -62,10 +62,6 @@ and therefore not well suited for giving out valuable traits (like *Angel* or *U
 - [x] *Angel*: A legendary enchantment to accelerate your elytra while pressing shift! Gives a more natural feeling than using rockets. Elytra go brrrr! (Replaces *Wings*)
 - [x] *Unbreakable*: Well... A legendary enchantment for truly unbreakable items. Extremely rare. (Replaces *Unbreaking* and *Mending*)
 
-Remarks:
-
-> [as of 1.16.2] Showing enchantment names inside the enchantment table doesn't work due to protocol limitations. Custom enchantments will be shown without any tooltip, and therefore cannot be distinguished from one another.
-
 #### Custom items
 
 - [x] The *Sickle* allows you to harvest a small radius of finished crops. Similar to the hand-harvesting addition, this will drop only product and no seeds.
@@ -87,15 +83,9 @@ Remarks:
 
 - [ ] Grant players additional spectator accounts (by proxying logins from a different port via **Waterfall**)
 
-can we inherit skins? maybe hook into data loading?
+#### Remarks
 
-#### Administrative utilities
-
-Privilege system & Graylist:
-
-Grant privileges to players (or have other players invite new players
-by letting them vouch for the new player)
-
+> [as of 1.16.2] Showing enchantment names inside the enchantment table doesn't work due to protocol limitations. Custom enchantments will be shown without any tooltip, and therefore cannot be distinguished from one another.
 
 
 
@@ -117,6 +107,8 @@ You need Java 11 or higher.
 
 portal ancient debris block like
 
+
+can we inherit spectator skins? maybe hook into data loading?
 
 invisible item frame visible if nothing in it
 

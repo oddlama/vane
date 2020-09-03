@@ -13,11 +13,12 @@ public class Trifles extends Module<Trifles> {
 		new DoubleDoorListener(this);
 		new HarvestListener(this);
 		new RepairCostLimiter(this);
-		new XpBottling(this);
 		new RecipeUnlock(this);
 
 		new org.oddlama.vane.trifles.items.Sickle(this);
 		new org.oddlama.vane.trifles.items.File(this);
+		new org.oddlama.vane.trifles.items.EmptyXpBottle(this);
+		new org.oddlama.vane.trifles.items.XpBottle(this);
 	}
 
 	@Override

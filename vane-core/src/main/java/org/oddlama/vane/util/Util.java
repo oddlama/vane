@@ -96,4 +96,14 @@ public class Util {
 
 		return ret;
 	}
+
+	public static int exp_for_level(int level) {
+		if (level < 17) {
+			return level * level + 6 * level;
+		} else if (level < 32) {
+			return (int)(2.5 * level * level - 40.5 * level) + 360;
+		} else {
+			return (int)(4.5 * level * level - 162.5 * level) + 2220;
+		}
+	}
 }

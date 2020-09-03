@@ -18,6 +18,22 @@ version: 1
 # language code (ISO 639) and the country code (ISO 3166).
 resource_pack_lang_code: 'de_de'
 
+item_xp_bottle:
+  small:
+    name: "Kleine Erfahrungsflasche"
+  medium:
+    name: "Mittlere Erfahrungsflasche"
+  large:
+    name: "Große Erfahrungsflasche"
+
+item_empty_xp_bottle:
+  small:
+    name: "Kleine Leere Erfahrungsflasche"
+  medium:
+    name: "Mittlere Leere Erfahrungsflasche"
+  large:
+    name: "Große Leere Erfahrungsflasche"
+
 item_file:
   wooden:
     name: "Holzfeile"
