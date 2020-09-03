@@ -63,8 +63,8 @@ public class MaterialUtil {
 
 			case DIRT:
 			case GRASS_BLOCK:
+			case GRASS_PATH:
 				return true;
 		}
 	}
-
 }
