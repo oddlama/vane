@@ -1,11 +1,13 @@
 package org.oddlama.vane.trifles.items;
 
 import static org.oddlama.vane.util.BlockUtil.raytrace_dominant_face;
+import static org.oddlama.vane.util.Util.exp_for_level;
 import static org.oddlama.vane.util.BlockUtil.raytrace_oct;
 import static org.oddlama.vane.util.ItemUtil.MODIFIER_UUID_GENERIC_ATTACK_DAMAGE;
 import static org.oddlama.vane.util.ItemUtil.MODIFIER_UUID_GENERIC_ATTACK_SPEED;
 import static org.oddlama.vane.util.ItemUtil.damage_item;
 import static org.oddlama.vane.util.PlayerUtil.swing_arm;
+import static org.oddlama.vane.util.PlayerUtil.give_item;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -41,7 +43,7 @@ import org.bukkit.inventory.RecipeChoice.MaterialChoice;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.SmithingRecipe;
 
-import org.oddlama.vane.annotation.config.ConfigInt;
+import org.oddlama.vane.annotation.config.ConfigDouble;
 import org.oddlama.vane.annotation.item.VaneItem;
 import org.oddlama.vane.core.item.CustomItem;
 import org.oddlama.vane.core.item.CustomItemVariant;
@@ -87,6 +89,9 @@ public class EmptyXpBottle extends CustomItem<Trifles, EmptyXpBottle> {
 		}
 	}
 
+	@ConfigDouble(def = 0.3, min = 0.0, max = 0.999, desc = "Percentage of lost experience while bottling. For 10% loss, bottling 30 levels will require 30 * (1 / (1 - 0.1)) = 33.33 levels")
+	public double config_loss_percentage;
+
 	public EmptyXpBottle(Context<Trifles> context) {
 		super(context, Variant.class, Variant.values(), EmptyXpBottleVariant::new);
 	}
@@ -103,16 +108,16 @@ public class EmptyXpBottle extends CustomItem<Trifles, EmptyXpBottle> {
 
 		final var result_variant = XpBottle.Variant.valueOf(variant.variant().name());
 		final var xp_bottle_variant = CustomItem.<XpBottle.XpBottleVariant>variant_of(XpBottle.class, result_variant);
-		final var levels = xp_bottle_variant.config_capacity;
+		final var exp = (int)((1.0 / (1.0 - config_loss_percentage)) * exp_for_level(xp_bottle_variant.config_capacity));
 
 		// Check if player has enough xp
-		if (player.getLevel() < levels) {
+		if (player.getTotalExperience() < exp) {
 			return;
 		}
 
-		// Take levels, play sound, replace item.
-		player.setLevel(player.getLevel() - levels);
-		player.getEquipment().setItem(event.getHand(), xp_bottle_variant.item());
+		// Take xp, play sound, give item.
+		player.setTotalExperience(player.getTotalExperience() - exp);
+		give_item(player, xp_bottle_variant.item());
 		player.getWorld().playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1.0f, 4.0f);
 	}
 }

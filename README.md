@@ -66,6 +66,8 @@ and therefore not well suited for giving out valuable traits (like *Angel* or *U
 
 - [x] The *Sickle* allows you to harvest a small radius of finished crops. Similar to the hand-harvesting addition, this will drop only product and no seeds.
 - [x] The *File* allows you to modify block individual connections of fences, walls, glass panes and blocks alike.
+- [x] The *Empty Experience Bottle* allows you to bottle your experience (right click) for later use. Drinking the full bottle will grant you the stored experience.
+      Storing experience will cost a small percentage of the bottled xp. It will also deduce a certain amount of experience and not levels to not waste high levels.
 
 #### Portals
 

@@ -2,6 +2,9 @@ package org.oddlama.vane.util;
 
 import static org.oddlama.vane.util.BlockUtil.drop_naturally;
 
+import java.util.Collection;
+import java.util.Arrays;
+
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -25,6 +28,17 @@ public class PlayerUtil {
 		// Set velocity, play sound
 		player.setVelocity(player.getVelocity().add(v));
 		player.getWorld().playSound(player.getLocation(), Sound.ENTITY_ENDER_DRAGON_FLAP, 0.4f, 2.0f);
+	}
+
+	public static void give_item(final Player player, final ItemStack item) {
+		give_items(player, new ItemStack[] { item });
+	}
+
+	public static void give_items(final Player player, final ItemStack[] items) {
+		final var leftovers = player.getInventory().addItem(items);
+		for (final var item : leftovers.values()) {
+			player.getLocation().getWorld().dropItem(player.getLocation(), item).setPickupDelay(0);
+		}
 	}
 
 	public static boolean till_block(final Player player, final Block block) {
