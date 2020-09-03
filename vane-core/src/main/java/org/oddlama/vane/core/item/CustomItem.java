@@ -194,6 +194,16 @@ public class CustomItem<T extends Module<T>, V extends CustomItem<T, V>> extends
 	}
 
 	/**
+	 * Returns the variant for the given registered item and variant enum.
+	 */
+	@SuppressWarnings("unchecked")
+	public static<U> U variant_of(Class<?> cls, ItemVariantEnum variant) {
+		final var custom_item = instances.get(cls);
+		custom_item.assert_correct_variant_class(variant);
+		return (U)custom_item.variants().get(variant.ordinal());
+	}
+
+	/**
 	 * Returns an itemstack for the given custom item with the given amount
 	 */
 	public static <U extends ItemVariantEnum> ItemStack item(Class<?> cls, U variant, int amount) {

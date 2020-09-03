@@ -101,6 +101,18 @@ public class EmptyXpBottle extends CustomItem<Trifles, EmptyXpBottle> {
 			return;
 		}
 
-		player.getWorld().playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1.0f, 1.0f);
+		final var result_variant = XpBottle.Variant.valueOf(variant.variant().name());
+		final var xp_bottle_variant = CustomItem.<XpBottle.XpBottleVariant>variant_of(XpBottle.class, result_variant);
+		final var levels = xp_bottle_variant.config_capacity;
+
+		// Check if player has enough xp
+		if (player.getLevel() < levels) {
+			return;
+		}
+
+		// Take levels, play sound, replace item.
+		player.setLevel(player.getLevel() - levels);
+		player.getEquipment().setItem(event.getHand(), xp_bottle_variant.item());
+		player.getWorld().playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1.0f, 4.0f);
 	}
 }
