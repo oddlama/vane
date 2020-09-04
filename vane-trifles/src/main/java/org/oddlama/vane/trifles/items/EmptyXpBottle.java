@@ -82,11 +82,6 @@ public class EmptyXpBottle extends CustomItem<Trifles, EmptyXpBottle> {
 
 			add_recipe(recipe_key, recipe);
 		}
-
-		@Override
-		public Material base() {
-			return Material.GLASS_BOTTLE;
-		}
 	}
 
 	@ConfigDouble(def = 0.3, min = 0.0, max = 0.999, desc = "Percentage of lost experience while bottling. For 10% loss, bottling 30 levels will require 30 * (1 / (1 - 0.1)) = 33.33 levels")

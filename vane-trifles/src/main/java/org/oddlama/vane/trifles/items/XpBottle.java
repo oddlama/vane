@@ -96,7 +96,7 @@ public class XpBottle extends CustomItem<Trifles, XpBottle> {
 		super(context, Variant.class, Variant.values(), XpBottleVariant::new);
 	}
 
-	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void on_player_item_consume(final PlayerItemConsumeEvent event) {
 		final var player = event.getPlayer();
 
@@ -109,6 +109,8 @@ public class XpBottle extends CustomItem<Trifles, XpBottle> {
 
 		// Add player experience without applying mending effects
 		player.giveExp(exp_for_level(variant.config_capacity), false);
+		// TODO remove from hand
 		// TODO give back bottle
+		event.setCancelled(true);
 	}
 }
