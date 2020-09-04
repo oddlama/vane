@@ -76,24 +76,25 @@ public class File extends CustomItem<Trifles, File> {
 		public void register_recipes() {
 			final var recipe_key = recipe_key();
 			if (variant() == Variant.NETHERITE) {
-				// TODO add_recipe(recipe_key, new SmithingRecipe(recipe_key, item(), item(Variant.DIAMOND), Material.NETHERITE_INGOT));
-			} else {
-				final var recipe = new ShapedRecipe(recipe_key, item())
-					.shape(" m",
-						   "s ")
-					.setIngredient('s', Material.STICK);
-
-				switch (variant()) {
-					case WOODEN:    recipe.setIngredient('m', new MaterialChoice(Tag.PLANKS)); break;
-					case STONE:     recipe.setIngredient('m', new MaterialChoice(Tag.ITEMS_STONE_TOOL_MATERIALS)); break;
-					case IRON:      recipe.setIngredient('m', Material.IRON_INGOT); break;
-					case GOLDEN:    recipe.setIngredient('m', Material.GOLD_INGOT); break;
-					case DIAMOND:   recipe.setIngredient('m', Material.DIAMOND); break;
-					case NETHERITE: /* Can't happen */ break;
-				}
-
-				add_recipe(recipe_key, recipe);
+				// Will be automatically handeled by Core.
+				return;
 			}
+
+			final var recipe = new ShapedRecipe(recipe_key, item())
+				.shape(" m",
+					   "s ")
+				.setIngredient('s', Material.STICK);
+
+			switch (variant()) {
+				case WOODEN:    recipe.setIngredient('m', new MaterialChoice(Tag.PLANKS)); break;
+				case STONE:     recipe.setIngredient('m', new MaterialChoice(Tag.ITEMS_STONE_TOOL_MATERIALS)); break;
+				case IRON:      recipe.setIngredient('m', Material.IRON_INGOT); break;
+				case GOLDEN:    recipe.setIngredient('m', Material.GOLD_INGOT); break;
+				case DIAMOND:   recipe.setIngredient('m', Material.DIAMOND); break;
+				case NETHERITE: /* Can't happen */ break;
+			}
+
+			add_recipe(recipe_key, recipe);
 		}
 
 		@Override
@@ -145,6 +146,16 @@ public class File extends CustomItem<Trifles, File> {
 
 	public File(Context<Trifles> context) {
 		super(context, Variant.class, Variant.values(), FileVariant::new);
+	}
+
+	@Override
+	public ItemVariantEnum netherite_conversion_from() {
+		return Variant.DIAMOND;
+	}
+
+	@Override
+	public ItemVariantEnum netherite_conversion_to() {
+		return Variant.NETHERITE;
 	}
 
 	private Bisected.Half other_half(Bisected.Half h) {

@@ -30,6 +30,16 @@ public class PlayerUtil {
 		player.getWorld().playSound(player.getLocation(), Sound.ENTITY_ENDER_DRAGON_FLAP, 0.4f, 2.0f);
 	}
 
+	public static void remove_one_item_from_hand(final Player player, final EquipmentSlot hand) {
+		final var item = player.getEquipment().getItem(hand);
+		if (item.getAmount() == 1) {
+			player.getInventory().setItem(hand, null);
+		} else {
+			item.setAmount(item.getAmount() - 1);
+			player.getInventory().setItem(hand, item);
+		}
+	}
+
 	public static void give_item(final Player player, final ItemStack item) {
 		give_items(player, new ItemStack[] { item });
 	}

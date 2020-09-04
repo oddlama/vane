@@ -7,6 +7,11 @@ public interface ItemVariantEnum {
 	public int ordinal();
 
 	/**
+	 * The variant name.
+	 */
+	public String name();
+
+	/**
 	 * The variant prefix.
 	 */
 	public String prefix();

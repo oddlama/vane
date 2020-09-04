@@ -8,6 +8,7 @@ import static org.oddlama.vane.util.ItemUtil.MODIFIER_UUID_GENERIC_ATTACK_SPEED;
 import static org.oddlama.vane.util.ItemUtil.damage_item;
 import static org.oddlama.vane.util.PlayerUtil.swing_arm;
 import static org.oddlama.vane.util.PlayerUtil.give_item;
+import static org.oddlama.vane.util.PlayerUtil.remove_one_item_from_hand;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,6 +33,7 @@ import org.bukkit.block.data.type.Stairs;
 import org.bukkit.block.data.type.Tripwire;
 import org.bukkit.block.data.type.Wall;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
@@ -82,6 +84,12 @@ public class EmptyXpBottle extends CustomItem<Trifles, EmptyXpBottle> {
 
 			add_recipe(recipe_key, recipe);
 		}
+
+		@Override
+		public Material base() {
+			// TODO something stackable and air interactable...
+			return Material.GLASS_BOTTLE;
+		}
 	}
 
 	@ConfigDouble(def = 0.3, min = 0.0, max = 0.999, desc = "Percentage of lost experience while bottling. For 10% loss, bottling 30 levels will require 30 * (1 / (1 - 0.1)) = 33.33 levels")
@@ -91,21 +99,30 @@ public class EmptyXpBottle extends CustomItem<Trifles, EmptyXpBottle> {
 		super(context, Variant.class, Variant.values(), EmptyXpBottleVariant::new);
 	}
 
-	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = false) // ignoreCancelled = false to catch right-click-air events
 	public void on_player_right_click(final PlayerInteractEvent event) {
 		// Get item variant
 		final var player = event.getPlayer();
 		final var item = player.getEquipment().getItem(event.getHand());
 		final var variant = this.<EmptyXpBottleVariant>variant_of(item);
-		System.out.println("yee, " + item + " var " + variant);
 		if (variant == null || !variant.enabled()) {
 			return;
+		}
+
+		switch (event.getAction()) {
+			default: return;
+			case RIGHT_CLICK_AIR: break;
+			case RIGHT_CLICK_BLOCK:
+				// Require non-cancelled state (so it won't trigger for block-actions like chests)
+				if (event.useInteractedBlock() != Event.Result.DENY) {
+					return;
+				}
+				break;
 		}
 
 		final var result_variant = XpBottle.Variant.valueOf(variant.variant().name());
 		final var xp_bottle_variant = CustomItem.<XpBottle.XpBottleVariant>variant_of(XpBottle.class, result_variant);
 		final var exp = (int)((1.0 / (1.0 - config_loss_percentage)) * exp_for_level(xp_bottle_variant.config_capacity));
-		System.out.println("exp " + exp);
 
 		// Check if player has enough xp
 		if (player.getTotalExperience() < exp) {
@@ -114,12 +131,7 @@ public class EmptyXpBottle extends CustomItem<Trifles, EmptyXpBottle> {
 
 		// Take xp, take item, play sound, give item.
 		player.setTotalExperience(player.getTotalExperience() - exp);
-		if (item.getAmount() == 1) {
-			player.getInventory().setItem(event.getHand(), null);
-		} else {
-			item.setAmount(item.getAmount() - 1);
-			player.getInventory().setItem(event.getHand(), item);
-		}
+		remove_one_item_from_hand(player, event.getHand());
 		give_item(player, xp_bottle_variant.item());
 		player.getWorld().playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1.0f, 4.0f);
 	}

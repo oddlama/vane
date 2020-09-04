@@ -5,6 +5,7 @@ import static org.oddlama.vane.util.BlockUtil.raytrace_oct;
 import static org.oddlama.vane.util.ItemUtil.MODIFIER_UUID_GENERIC_ATTACK_DAMAGE;
 import static org.oddlama.vane.util.ItemUtil.MODIFIER_UUID_GENERIC_ATTACK_SPEED;
 import static org.oddlama.vane.util.ItemUtil.damage_item;
+import static org.oddlama.vane.util.PlayerUtil.remove_one_item_from_hand;
 import static org.oddlama.vane.util.PlayerUtil.swing_arm;
 import static org.oddlama.vane.util.Util.exp_for_level;
 
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Set;
 
+import static org.oddlama.vane.util.PlayerUtil.give_item;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
@@ -107,10 +109,20 @@ public class XpBottle extends CustomItem<Trifles, XpBottle> {
 			return;
 		}
 
+		// Get empty bottle variant
+		final var empty_variant = EmptyXpBottle.Variant.valueOf(variant.variant().name());
+		final var empty_xp_bottle_variant = CustomItem.<EmptyXpBottle.EmptyXpBottleVariant>variant_of(EmptyXpBottle.class, empty_variant);
+
+		// Exchange items
+		final var main_hand = item.equals(player.getInventory().getItemInMainHand());
+		remove_one_item_from_hand(player, main_hand ? EquipmentSlot.HAND : EquipmentSlot.OFF_HAND);
+		give_item(player, empty_xp_bottle_variant.item());
+
 		// Add player experience without applying mending effects
 		player.giveExp(exp_for_level(variant.config_capacity), false);
-		// TODO remove from hand
-		// TODO give back bottle
+		player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0f, 1.0f);
+
+		// Do not consume actual base item
 		event.setCancelled(true);
 	}
 }

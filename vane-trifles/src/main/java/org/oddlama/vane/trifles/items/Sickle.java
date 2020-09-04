@@ -62,25 +62,26 @@ public class Sickle extends CustomItem<Trifles, Sickle> {
 		public void register_recipes() {
 			final var recipe_key = recipe_key();
 			if (variant() == Variant.NETHERITE) {
-				// TODO add_recipe(recipe_key, new SmithingRecipe(recipe_key, item(), item(Variant.DIAMOND), Material.NETHERITE_INGOT));
-			} else {
-				final var recipe = new ShapedRecipe(recipe_key, item())
-					.shape(" mm",
-						   "  m",
-						   " s ")
-					.setIngredient('s', Material.STICK);
-
-				switch (variant()) {
-					case WOODEN:    recipe.setIngredient('m', new MaterialChoice(Tag.PLANKS)); break;
-					case STONE:     recipe.setIngredient('m', new MaterialChoice(Tag.ITEMS_STONE_TOOL_MATERIALS)); break;
-					case IRON:      recipe.setIngredient('m', Material.IRON_INGOT); break;
-					case GOLDEN:    recipe.setIngredient('m', Material.GOLD_INGOT); break;
-					case DIAMOND:   recipe.setIngredient('m', Material.DIAMOND); break;
-					case NETHERITE: /* Can't happen */ break;
-				}
-
-				add_recipe(recipe_key, recipe);
+				// Will be automatically handeled by Core.
+				return;
 			}
+
+			final var recipe = new ShapedRecipe(recipe_key, item())
+				.shape(" mm",
+					   "  m",
+					   " s ")
+				.setIngredient('s', Material.STICK);
+
+			switch (variant()) {
+				case WOODEN:    recipe.setIngredient('m', new MaterialChoice(Tag.PLANKS)); break;
+				case STONE:     recipe.setIngredient('m', new MaterialChoice(Tag.ITEMS_STONE_TOOL_MATERIALS)); break;
+				case IRON:      recipe.setIngredient('m', Material.IRON_INGOT); break;
+				case GOLDEN:    recipe.setIngredient('m', Material.GOLD_INGOT); break;
+				case DIAMOND:   recipe.setIngredient('m', Material.DIAMOND); break;
+				case NETHERITE: /* Can't happen */ break;
+			}
+
+			add_recipe(recipe_key, recipe);
 		}
 
 		@Override
@@ -146,6 +147,17 @@ public class Sickle extends CustomItem<Trifles, Sickle> {
 		super(context, Variant.class, Variant.values(), SickleVariant::new);
 	}
 
+	@Override
+	public ItemVariantEnum netherite_conversion_from() {
+		return Variant.DIAMOND;
+	}
+
+	@Override
+	public ItemVariantEnum netherite_conversion_to() {
+		return Variant.NETHERITE;
+	}
+
+	// TODO sickle + netherite smiting might yield a hoe...............
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void on_player_right_click_plant(final PlayerInteractEvent event) {
 		if (!event.hasBlock() || event.getAction() != Action.RIGHT_CLICK_BLOCK) {

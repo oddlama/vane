@@ -26,6 +26,8 @@ import org.oddlama.vane.core.module.Module;
 public class CustomItem<T extends Module<T>, V extends CustomItem<T, V>> extends Listener<T> {
 	// Track instances
 	private static final Map<Class<?>, CustomItem<?, ?>> instances = new HashMap<>();
+	// Reverse lookup model data -> custom item class, variant
+	private static final Map<Integer, ReverseLookupEntry> reverse_lookup = new HashMap<>();
 
 	private VaneItem annotation = getClass().getAnnotation(VaneItem.class);
 	private String name;
@@ -67,7 +69,9 @@ public class CustomItem<T extends Module<T>, V extends CustomItem<T, V>> extends
 
 		// Create variants
 		for (var variant : variant_enum_values) {
-			variants.add(create_instance.apply((V)this, variant));
+			final var v = create_instance.apply((V)this, variant);
+			variants.add(v);
+			reverse_lookup.put(v.model_data(), new ReverseLookupEntry(this, variant));
 		}
 
 		instances.put(getClass(), this);
@@ -97,6 +101,18 @@ public class CustomItem<T extends Module<T>, V extends CustomItem<T, V>> extends
 		if (!variant.getClass().equals(variant_enum_class)) {
 			throw new RuntimeException("Invalid ItemVariantEnum class " + variant.getClass() + " for item " + getClass() + ": expected " + variant_enum_class);
 		}
+	}
+
+	public final boolean has_netherite_conversion() {
+		return netherite_conversion_from() != null && netherite_conversion_to() != null;
+	}
+
+	public ItemVariantEnum netherite_conversion_from() {
+		return null;
+	}
+
+	public ItemVariantEnum netherite_conversion_to() {
+		return null;
 	}
 
 	/**
@@ -139,6 +155,14 @@ public class CustomItem<T extends Module<T>, V extends CustomItem<T, V>> extends
 
 	public static boolean is_custom_item(@NotNull ItemStack item) {
 		return item.hasItemMeta() && item.getItemMeta().hasCustomModelData();
+	}
+
+	public static ReverseLookupEntry from_item(@NotNull ItemStack item) {
+		return from_model_data(item.getItemMeta().getCustomModelData());
+	}
+
+	public static ReverseLookupEntry from_model_data(int model_data) {
+		return reverse_lookup.get(model_data);
 	}
 
 	/**
@@ -239,5 +263,15 @@ public class CustomItem<T extends Module<T>, V extends CustomItem<T, V>> extends
 
 		@Override public String prefix() { return ""; }
 		@Override public boolean enabled() { return true; }
+	}
+
+	public static class ReverseLookupEntry {
+		public CustomItem<?,?> custom_item;
+		public ItemVariantEnum variant;
+
+		public ReverseLookupEntry(CustomItem<?,?> custom_item, ItemVariantEnum variant) {
+			this.custom_item = custom_item;
+			this.variant = variant;
+		}
 	}
 }

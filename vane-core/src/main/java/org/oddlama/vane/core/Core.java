@@ -11,12 +11,16 @@ import java.util.logging.Level;
 
 import com.destroystokyo.paper.MaterialTags;
 
+import org.oddlama.vane.core.item.CustomItem;
+import org.oddlama.vane.core.item.CustomItemVariant;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.inventory.PrepareSmithingEvent;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
@@ -127,5 +131,41 @@ public class Core extends Module<Core> {
 		if (is_custom_item(item) && MaterialTags.HOES.isTagged(item)) {
 			event.setCancelled(true);
 		}
+	}
+
+	// Prevent custom items from forming netherite variants, or delegate event to custom item
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void on_prepare_smithing(final PrepareSmithingEvent event) {
+		final var item = event.getInventory().getInputEquipment();
+		if (item == null) {
+			return;
+		}
+
+		if (is_custom_item(item)) {
+			event.setResult(null);
+		}
+
+		// Try to add automatic netherite conversion
+		final var item_lookup = CustomItem.from_item(item);
+		if (!item_lookup.custom_item.has_netherite_conversion()) {
+			return;
+		}
+
+		// Check netherite ingot ingredient
+		final var mineral = event.getInventory().getInputMineral();
+		if (mineral == null || mineral.getType() != Material.NETHERITE_INGOT) {
+			return;
+		}
+
+		// Check matching input variant
+		final var variant_from = item_lookup.custom_item.netherite_conversion_from();
+		if (!item_lookup.variant.equals(variant_from)) {
+			return;
+		}
+
+		// Create new item
+		final var variant_to = item_lookup.custom_item.netherite_conversion_to();
+		final var netherite_item_variant = CustomItem.<CustomItemVariant<?,?,?>>variant_of(item_lookup.custom_item.getClass(), variant_to);
+		event.setResult(netherite_item_variant.item());
 	}
 }
