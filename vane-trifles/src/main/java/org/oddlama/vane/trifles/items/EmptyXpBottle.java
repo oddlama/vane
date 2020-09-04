@@ -130,7 +130,7 @@ public class EmptyXpBottle extends CustomItem<Trifles, EmptyXpBottle> {
 		}
 
 		// Take xp, take item, play sound, give item.
-		player.setTotalExperience(player.getTotalExperience() - exp);
+		player.giveExp(-exp, false);
 		remove_one_item_from_hand(player, event.getHand());
 		give_item(player, xp_bottle_variant.item());
 		player.getWorld().playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1.0f, 4.0f);
