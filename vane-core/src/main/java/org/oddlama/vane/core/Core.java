@@ -165,7 +165,6 @@ public class Core extends Module<Core> {
 
 		// Create new item
 		final var variant_to = item_lookup.custom_item.netherite_conversion_to();
-		final var netherite_item_variant = CustomItem.<CustomItemVariant<?,?,?>>variant_of(item_lookup.custom_item.getClass(), variant_to);
-		event.setResult(netherite_item_variant.item());
+		event.setResult(CustomItem.modify_variant(item, variant_to));
 	}
 }

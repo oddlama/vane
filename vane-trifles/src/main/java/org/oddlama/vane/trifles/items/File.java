@@ -137,8 +137,12 @@ public class File extends CustomItem<Trifles, File> {
 		@Override
 		public ItemStack modify_item_stack(ItemStack item) {
 			final var meta = item.getItemMeta();
-			meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier(MODIFIER_UUID_GENERIC_ATTACK_DAMAGE, "Tool damage", config_attack_damage, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
-			meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier(MODIFIER_UUID_GENERIC_ATTACK_SPEED, "Tool speed", config_attack_speed, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
+			final var modifier_damage = new AttributeModifier(MODIFIER_UUID_GENERIC_ATTACK_DAMAGE, "Tool damage", config_attack_damage, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
+			final var modifier_speed = new AttributeModifier(MODIFIER_UUID_GENERIC_ATTACK_SPEED, "Tool speed", config_attack_speed, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
+			meta.removeAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, modifier_damage);
+			meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, modifier_damage);
+			meta.removeAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, modifier_speed);
+			meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, modifier_speed);
 			item.setItemMeta(meta);
 			return item;
 		}

@@ -238,9 +238,8 @@ public class CustomItem<T extends Module<T>, V extends CustomItem<T, V>> extends
 	}
 
 	private static<A extends CustomItem<?, ?>, B extends CustomItemVariant<?, ?, ?>>
-		ItemStack construct_item_stack(int amount, A custom_item, B custom_item_variant)
+		ItemStack prepare_item_stack(@NotNull ItemStack item_stack, A custom_item, B custom_item_variant)
 	{
-		final var item_stack = new ItemStack(custom_item_variant.base(), amount);
 		final var meta = item_stack.getItemMeta();
 		meta.setCustomModelData(custom_item.model_data(custom_item_variant.variant()));
 		meta.setDisplayNameComponent(new BaseComponent[] {
@@ -248,6 +247,25 @@ public class CustomItem<T extends Module<T>, V extends CustomItem<T, V>> extends
 		item_stack.setItemMeta(meta);
 		return custom_item.modify_item_stack(
 				custom_item_variant.modify_item_stack(item_stack));
+	}
+
+	private static<A extends CustomItem<?, ?>, B extends CustomItemVariant<?, ?, ?>>
+		ItemStack construct_item_stack(int amount, A custom_item, B custom_item_variant)
+	{
+		final var item_stack = new ItemStack(custom_item_variant.base(), amount);
+		return prepare_item_stack(item_stack, custom_item, custom_item_variant);
+	}
+
+	public static<U extends ItemVariantEnum>
+		ItemStack modify_variant(@NotNull ItemStack item, U variant)
+	{
+		final var item_lookup = from_item(item);
+		final var custom_item = item_lookup.custom_item;
+		custom_item.assert_correct_variant_class(variant);
+		final var custom_item_variant = custom_item.variants().get(variant.ordinal());
+		final var item_stack = item.clone();
+		item_stack.setType(custom_item_variant.base());
+		return prepare_item_stack(item_stack, custom_item, custom_item_variant);
 	}
 
 	/**
