@@ -84,6 +84,9 @@ public class ResourcePackDistributor extends Listener<Admin> {
 		}
 
 		config_sha1 = config_sha1.toLowerCase();
+		if (!config_url.isEmpty()) {
+			get_module().log.info("Distributing resource pack from '" + config_url + "' with sha1 " + config_sha1);
+		}
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
