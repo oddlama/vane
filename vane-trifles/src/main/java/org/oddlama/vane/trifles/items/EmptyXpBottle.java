@@ -102,6 +102,7 @@ public class EmptyXpBottle extends CustomItem<Trifles, EmptyXpBottle> {
 		final var player = event.getPlayer();
 		final var item = player.getEquipment().getItem(event.getHand());
 		final var variant = this.<EmptyXpBottleVariant>variant_of(item);
+		System.out.println("yee, " + item + " var " + variant);
 		if (variant == null || !variant.enabled()) {
 			return;
 		}
@@ -109,6 +110,7 @@ public class EmptyXpBottle extends CustomItem<Trifles, EmptyXpBottle> {
 		final var result_variant = XpBottle.Variant.valueOf(variant.variant().name());
 		final var xp_bottle_variant = CustomItem.<XpBottle.XpBottleVariant>variant_of(XpBottle.class, result_variant);
 		final var exp = (int)((1.0 / (1.0 - config_loss_percentage)) * exp_for_level(xp_bottle_variant.config_capacity));
+		System.out.println("exp " + exp);
 
 		// Check if player has enough xp
 		if (player.getTotalExperience() < exp) {

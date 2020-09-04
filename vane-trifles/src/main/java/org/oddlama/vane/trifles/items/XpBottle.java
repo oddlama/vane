@@ -109,5 +109,6 @@ public class XpBottle extends CustomItem<Trifles, XpBottle> {
 
 		// Add player experience without applying mending effects
 		player.giveExp(exp_for_level(variant.config_capacity), false);
+		// TODO give back bottle
 	}
 }
