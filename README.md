@@ -112,59 +112,31 @@ TODO include licenses
 
 #### IDEAS
 
+- [ ] better pack icon
+- [ ] github readme banners
+- [ ] crafting recipes in readme
+- [ ] download links
+- [ ] software licenses
+- [ ] region chunk based cache
+- [ ] set wood side textures with file
+- [ ] /verify or similar
+- [ ] armor stand poser manipulation by perpendicular intersection between Line of sight and arm 
+- [ ] item frame invisibilinator (visible if empty)
+- [ ] custom enchantment book icons
+- [ ] player list footer header configuration
+- [ ] transmutation tool copy pasta with direction awareness
+- [ ] sign editing (a tool ?)
+- [ ] add items to shulker box by right click with item in inventory on box?
+- [ ] Maybe "Advancements to guide you through most additions"
 - full netherite armor for one enchantment 
 - dragon egg (catalyst?)
 - nether star
 - pillager books (recept of unbreakable)
-
-
-portal ancient debris block like
-
-
-can we inherit spectator skins? maybe hook into data loading?
-
-invisible item frame visible if nothing in it
-
-
-armor stand manipulation by perpendicular intersection between Line of sight and arm 
-
-spawn with remnants of old world
-
-
-
-/verify system for players -> adds permission groups
-
-
-per chunk cache for regions, like "chunk is fully in region"
-
-
-sign editor tool.
-
-
-
-golden sickle -> golden mistletoe, mistel (viscum album)
-
-used as enchantment binding agent/ catalyst?.
-
-wood set texture o sides (file)
-
-
-make it a chisel??
-
-
-Maybe "Advancements to guide you through most additions"
-
-custom book icon for enchantments :)) (icon slightly pressed in leather?)
-
-
-
-shulker box right click with item to add?
-
-playerlist footer and header
-
-maybe: copy paste tool for transmutations. toggleable paste-direction awareness.
-
+- can we inherit spectator skins? maybe hook into data loading?
+- golden sickle -> golden mistletoe, mistel (viscum album)
+- used as enchantment binding agent/ catalyst?.
 
 SERVER SETTINGS RECOMMENDATIONS
 
-dont merge items, or very small merging radius.
+- spawn with remnants of old world
+- dont merge items, or very small merging radius.
