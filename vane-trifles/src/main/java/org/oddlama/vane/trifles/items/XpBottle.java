@@ -1,5 +1,6 @@
 package org.oddlama.vane.trifles.items;
 
+import org.bukkit.inventory.ShapelessRecipe;
 import static org.oddlama.vane.util.BlockUtil.raytrace_dominant_face;
 import static org.oddlama.vane.util.BlockUtil.raytrace_oct;
 import static org.oddlama.vane.util.ItemUtil.MODIFIER_UUID_GENERIC_ATTACK_DAMAGE;
@@ -70,6 +71,30 @@ public class XpBottle extends CustomItem<Trifles, XpBottle> {
 
 		public XpBottleVariant(XpBottle parent, Variant variant) {
 			super(parent, variant);
+		}
+
+		@Override
+		public void register_recipes() {
+			final var item = item();
+
+			// Get empty bottle variant
+			final var empty_variant = EmptyXpBottle.Variant.valueOf(variant().name());
+			final var empty_xp_bottle_variant = CustomItem.<EmptyXpBottle.EmptyXpBottleVariant>variant_of(EmptyXpBottle.class, empty_variant);
+			final var empty_xp_bottle_item = empty_xp_bottle_variant.item();
+
+			// Override honey → sugar
+			final var no_sugar_recipe_key = recipe_key("no_sugar");
+			final var no_sugar_recipe = new ShapelessRecipe(no_sugar_recipe_key, empty_xp_bottle_item)
+				.addIngredient(item);
+			add_recipe(no_sugar_recipe_key, no_sugar_recipe);
+
+			// Override 4x honey → honey block
+			final var empty_xp_bottle_item_4 = empty_xp_bottle_item.clone();
+			empty_xp_bottle_item_4.setAmount(4);
+			final var no_honey_block_recipe_key = recipe_key("no_honey_block");
+			final var no_honey_block_recipe = new ShapelessRecipe(no_honey_block_recipe_key, empty_xp_bottle_item_4)
+				.addIngredient(4, item);
+			add_recipe(no_honey_block_recipe_key, no_honey_block_recipe);
 		}
 
 		@Override
