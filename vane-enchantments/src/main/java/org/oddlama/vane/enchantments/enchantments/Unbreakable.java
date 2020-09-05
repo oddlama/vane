@@ -11,7 +11,7 @@ import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.enchantments.CustomEnchantment;
 import org.oddlama.vane.enchantments.Enchantments;
 
-@VaneEnchantment(name = "unbreakable", rarity = Rarity.RARE, treasure = true)
+@VaneEnchantment(name = "unbreakable", rarity = Rarity.RARE, treasure = true, allow_custom = true)
 public class Unbreakable extends CustomEnchantment<Enchantments> {
 	public Unbreakable(Context<Enchantments> context) {
 		super(context);

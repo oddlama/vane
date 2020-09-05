@@ -93,7 +93,7 @@ and therefore not well suited for giving out valuable traits (like *Angel* or *U
 **This plugin requires Java 11!**
 
 Simply download and place all desired module jars into your plugin directory.
-Start the server once to generate configuration files, edit them to your liking
+Start the server once to generate configuration files, edit them to your preference
 and you are good to go!
 
 ### Building from source
@@ -102,7 +102,7 @@ You can of course build the plugin yourself. To do that you need at least JDK 11
 Before you can proceed, you need to copy the fully patched Paper server jar
 to `libs/`. This is required so the compiler can find minecraft-native symbols.
 
-1. Copy `cache/patched_{version}.jar` from a paper server to `libs/`.
+1. Copy `cache/patched_{version}.jar` from a paper server to `libs/` (create folder if necessary).
 2. Execute `./gradlew build`
 3. Resulting jar files will be in `target/'.
 
@@ -111,6 +111,9 @@ to `libs/`. This is required so the compiler can find minecraft-native symbols.
 TODO include licenses
 
 #### IDEAS
+
+- [ ] descr level bottle
+- [ ] bottle fill max
 
 - [ ] better pack icon
 - [ ] github readme banners

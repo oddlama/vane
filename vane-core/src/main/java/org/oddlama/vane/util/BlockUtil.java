@@ -123,14 +123,6 @@ public class BlockUtil {
 		return null;
 	}
 
-	public static class BlockVectorRadiusComparator implements Comparator<BlockVector> {
-		@Override
-		public int compare(BlockVector a, BlockVector b) {
-			return (a.getBlockX() * a.getBlockX() + a.getBlockY() * a.getBlockY() + a.getBlockZ() * a.getBlockZ())
-			     - (b.getBlockX() * b.getBlockX() + b.getBlockY() * b.getBlockY() + b.getBlockZ() * b.getBlockZ());
-		}
-	}
-
 	public static class Corner {
 		private boolean x;
 		private boolean y;
@@ -269,5 +261,12 @@ public class BlockUtil {
 
 		return ret;
 	}
-}
 
+	public static class BlockVectorRadiusComparator implements Comparator<BlockVector> {
+		@Override
+		public int compare(BlockVector a, BlockVector b) {
+			return (a.getBlockX() * a.getBlockX() + a.getBlockY() * a.getBlockY() + a.getBlockZ() * a.getBlockZ())
+			     - (b.getBlockX() * b.getBlockX() + b.getBlockY() * b.getBlockY() + b.getBlockZ() * b.getBlockZ());
+		}
+	}
+}

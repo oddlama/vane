@@ -7,6 +7,11 @@ import net.minecraft.server.v1_16_R2.EntityPlayer;
 import net.minecraft.server.v1_16_R2.IRegistry;
 import net.minecraft.server.v1_16_R2.ItemStack;
 import net.minecraft.server.v1_16_R2.MinecraftKey;
+import net.minecraft.server.v1_16_R2.CreativeModeTab;
+import net.minecraft.server.v1_16_R2.Item;
+import net.minecraft.server.v1_16_R2.ItemBlock;
+
+import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
@@ -83,5 +88,25 @@ public class Nms {
 	public static int unlock_all_recipes(final org.bukkit.entity.Player player) {
 		final var recipes = server_handle().getCraftingManager().b();
 		return player_handle(player).discoverRecipes(recipes);
+	}
+
+	public static int creative_tab_id(final Item item) {
+		CreativeModeTab tab = null;
+		try {
+			final var creative_mode_tab_field = Item.class.getDeclaredField("i");
+			creative_mode_tab_field.setAccessible(true);
+			tab = (CreativeModeTab)creative_mode_tab_field.get(item);
+		} catch (NoSuchFieldException |	IllegalAccessException e) {
+			Bukkit.getLogger().log(Level.SEVERE, "Could not get creative mode tab", e);
+		}
+
+		try {
+			final var id_field = CreativeModeTab.class.getDeclaredField("o");
+			id_field.setAccessible(true);
+			return tab == null ? Integer.MAX_VALUE : (int)id_field.get(tab);
+		} catch (NoSuchFieldException |	IllegalAccessException e) {
+			Bukkit.getLogger().log(Level.SEVERE, "Could not get creative mode tab id", e);
+			return Integer.MAX_VALUE;
+		}
 	}
 }
