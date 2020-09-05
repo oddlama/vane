@@ -81,15 +81,27 @@ public class ChestSorter extends Listener<Trifles> {
 			return;
 		}
 
+		System.out.println("sort " + persistent_data);
 		persistent_data.set(LAST_SORT_TIME, PersistentDataType.LONG, now);
-		final var content = inventory.getStorageContents();
-		// Stack items
-		//for (int index = content.length - 1; index >= 0; --index) {
-		//	items.set(index, sortAddItem(items, items.get(index), index));
-		//}
+
+		// Stack items, restore on failure
+		final var saved_contents = inventory.getStorageContents();
+		try {
+			inventory.clear();
+			final var leftovers = inventory.addItem(saved_contents);
+			if (leftovers.size() != 0) {
+				// Abort! Something went totally wrong!
+				inventory.setStorageContents(saved_contents);
+			}
+		} catch (Exception e) {
+			inventory.setStorageContents(saved_contents);
+			throw e;
+		}
+
 		// Sort
-		Arrays.sort(content, new ItemStackComparator());
-		inventory.setStorageContents(content);
+		final var contents = inventory.getStorageContents();
+		Arrays.sort(contents, new ItemStackComparator());
+		inventory.setStorageContents(contents);
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = false) // ignoreCancelled = false to catch right-click-air events
