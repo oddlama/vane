@@ -37,6 +37,13 @@ subprojects {
 		compileOnly group: 'org.jetbrains', name: 'annotations', version: '20.0.0';
 		annotationProcessor 'org.jetbrains:annotations:20.0.0';
 	}
+
+	task copyJar(type: Copy) {
+		from jar;
+		into "${project.rootProject.projectDir}/target";
+	}
+
+	build.dependsOn copyJar
 }
 
 configure(subprojects.findAll {it.name != 'vane-annotations'}) {

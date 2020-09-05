@@ -23,3 +23,9 @@ shadowJar {
 	relocate 'org.reflections', 'org.oddlama.vane.external.reflections';
 	relocate 'org.json', 'org.oddlama.vane.external.json';
 }
+
+copyJar {
+	from shadowJar;
+	duplicatesStrategy 'include';
+	rename '(.*)-all.jar', '$1.jar';
+}

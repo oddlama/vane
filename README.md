@@ -18,10 +18,10 @@ If you don't want a certain feature, simply disable it.
 #### Little things & quality of life
 
 - [x] Walk faster on grass paths
-- [x] Harvest finished crops by right-clicking
+- [x] Harvest finished crops by right-clicking (or by using a *Sickle*)
 - [x] Double doors open simultaneously
-- [ ] Craft lights that automatically turn on when it's night
 - [ ] Sort chests with redstone
+- [x] Modify individual connections of walls, fences, etc. and easily modify stair shapes using the *File*
 - [x] Skip night with 50% of players sleeping
 - [x] Store XP in bottles
 - [x] Limit anvil repair cost to remove 'too-expensive'
@@ -39,7 +39,6 @@ If you don't want a certain feature, simply disable it.
 - [x] Hazard protection against creeper/wither explosions, door breaking, ...
 - [x] Whitelist for worlds in which the Wither may be spawned
 - [x] Players without any permissions cannot alter the world (just look, no touch!)
-- [ ] Advancements to guide you through most additions
 - [x] Client side translations for custom items and enchantments
 
 #### Custom enchantments
@@ -89,15 +88,27 @@ and therefore not well suited for giving out valuable traits (like *Angel* or *U
 
 > [as of 1.16.2] Showing enchantment names inside the enchantment table doesn't work due to protocol limitations. Custom enchantments will be shown without any tooltip, and therefore cannot be distinguished from one another.
 
+### Installation
 
+**This plugin requires Java 11!**
 
+Simply download and place all desired module jars into your plugin directory.
+Start the server once to generate configuration files, edit them to your liking
+and you are good to go!
 
 ### Building from source
 
-You need Java 11 or higher.
+You can of course build the plugin yourself. To do that you need at least JDK 11.
+Before you can proceed, you need to copy the fully patched Paper server jar
+to `libs/`. This is required so the compiler can find minecraft-native symbols.
 
-- Copy `cache/patched_{version}.jar` from a paper server to `libs/`.
-- Execute `./gradlew build && ./gradlew shadowJar`
+1. Copy `cache/patched_{version}.jar` from a paper server to `libs/`.
+2. Execute `./gradlew build`
+3. Resulting jar files will be in `target/'.
+
+### 3rd-party software
+
+TODO include licenses
 
 #### IDEAS
 
@@ -126,8 +137,6 @@ spawn with remnants of old world
 
 per chunk cache for regions, like "chunk is fully in region"
 
-check achievement on anvil
-
 
 sign editor tool.
 
@@ -143,20 +152,15 @@ wood set texture o sides (file)
 make it a chisel??
 
 
+Maybe "Advancements to guide you through most additions"
 
 custom book icon for enchantments :)) (icon slightly pressed in leather?)
 
 
 
-harvest with any right click that isnt a tools
-
 shulker box right click with item to add?
 
 playerlist footer and header
-
-name resource pack with hash in name for easy deployment.
-
-TODO licenses of included shadowed libraries
 
 maybe: copy paste tool for transmutations. toggleable paste-direction awareness.
 
