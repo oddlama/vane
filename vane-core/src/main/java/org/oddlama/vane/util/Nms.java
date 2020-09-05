@@ -8,6 +8,7 @@ import net.minecraft.server.v1_16_R2.IRegistry;
 import net.minecraft.server.v1_16_R2.ItemStack;
 import net.minecraft.server.v1_16_R2.MinecraftKey;
 
+import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.craftbukkit.v1_16_R2.CraftServer;
 import org.bukkit.craftbukkit.v1_16_R2.entity.CraftPlayer;
@@ -75,7 +76,8 @@ public class Nms {
 	}
 
 	public static DedicatedServer server_handle() {
-		return ((CraftServer)Bukkit.getServer()).getServer();
+		final var bukkit_server = Bukkit.getServer();
+		return ((CraftServer)bukkit_server).getServer();
 	}
 
 	public static int unlock_all_recipes(final org.bukkit.entity.Player player) {
