@@ -87,7 +87,6 @@ public class EmptyXpBottle extends CustomItem<Trifles, EmptyXpBottle> {
 
 		@Override
 		public Material base() {
-			// TODO something stackable and air interactable...
 			return Material.GLASS_BOTTLE;
 		}
 	}
@@ -109,11 +108,15 @@ public class EmptyXpBottle extends CustomItem<Trifles, EmptyXpBottle> {
 			return;
 		}
 
+		// Nevera actually use the base item if it's custom!
+		event.setUseItemInHand(Event.Result.DENY);
+
 		switch (event.getAction()) {
 			default: return;
 			case RIGHT_CLICK_AIR: break;
 			case RIGHT_CLICK_BLOCK:
 				// Require non-cancelled state (so it won't trigger for block-actions like chests)
+				// Second check prevent original item usage (collecting liquids)
 				if (event.useInteractedBlock() != Event.Result.DENY) {
 					return;
 				}
@@ -134,5 +137,6 @@ public class EmptyXpBottle extends CustomItem<Trifles, EmptyXpBottle> {
 		remove_one_item_from_hand(player, event.getHand());
 		give_item(player, xp_bottle_variant.item());
 		player.getWorld().playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1.0f, 4.0f);
+		swing_arm(player, event.getHand());
 	}
 }

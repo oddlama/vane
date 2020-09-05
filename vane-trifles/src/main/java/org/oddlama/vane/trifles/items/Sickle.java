@@ -161,7 +161,6 @@ public class Sickle extends CustomItem<Trifles, Sickle> {
 		return Variant.NETHERITE;
 	}
 
-	// TODO sickle + netherite smiting might yield a hoe...............
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void on_player_right_click_plant(final PlayerInteractEvent event) {
 		if (!event.hasBlock() || event.getAction() != Action.RIGHT_CLICK_BLOCK) {
