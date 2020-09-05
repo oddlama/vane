@@ -81,20 +81,38 @@ public class ChestSorter extends Listener<Trifles> {
 			return;
 		}
 
-		System.out.println("sort " + persistent_data);
+		// TODO wrong persistence is selected..........
 		persistent_data.set(LAST_SORT_TIME, PersistentDataType.LONG, now);
 
-		// Stack items, restore on failure
+		// Find amount of non null item stacks
 		final var saved_contents = inventory.getStorageContents();
+		int non_null = 0;
+		for (final var i : saved_contents) {
+			if (i != null) {
+				++non_null;
+			}
+		}
+
+		// Make new array without null items
+		final var saved_contents_condensed = new ItemStack[non_null];
+		int cur = 0;
+		for (final var i : saved_contents) {
+			if (i != null) {
+				saved_contents_condensed[cur++] = i.clone();
+			}
+		}
+
+		// Clear and add all items again to stack them. Restore saved contents on failure.
 		try {
 			inventory.clear();
-			final var leftovers = inventory.addItem(saved_contents);
+			final var leftovers = inventory.addItem(saved_contents_condensed);
 			if (leftovers.size() != 0) {
 				// Abort! Something went totally wrong!
-				inventory.setStorageContents(saved_contents);
+				inventory.setStorageContents(saved_contents_condensed);
+				get_module().log.warning("Sorting a chest produced leftovers!");
 			}
 		} catch (Exception e) {
-			inventory.setStorageContents(saved_contents);
+			inventory.setStorageContents(saved_contents_condensed);
 			throw e;
 		}
 

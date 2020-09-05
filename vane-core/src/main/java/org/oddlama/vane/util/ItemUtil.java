@@ -12,6 +12,7 @@ import net.minecraft.server.v1_16_R2.Item;
 
 import org.bukkit.craftbukkit.v1_16_R2.enchantments.CraftEnchantment;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -33,8 +34,26 @@ public class ItemUtil {
 	}
 
 	public static int compare_enchantments(final ItemStack item_a, final ItemStack item_b) {
-		final var ae = item_a.getEnchantments();
-		final var be = item_b.getEnchantments();
+		var ae = item_a.getEnchantments();
+		var be = item_b.getEnchantments();
+
+		System.out.println("   " + ae);
+		final var a_meta = item_a.getItemMeta();
+		if (a_meta instanceof EnchantmentStorageMeta) {
+			final var stored = ((EnchantmentStorageMeta)a_meta).getStoredEnchants();
+			if (stored.size() > 0) {
+				ae = stored;
+			}
+		}
+		System.out.println(" → " + ae);
+
+		final var b_meta = item_b.getItemMeta();
+		if (b_meta instanceof EnchantmentStorageMeta) {
+			final var stored = ((EnchantmentStorageMeta)b_meta).getStoredEnchants();
+			if (stored.size() > 0) {
+				be = stored;
+			}
+		}
 
 		// Unenchanted first
 		final var a_count = ae.size();
@@ -47,16 +66,16 @@ public class ItemUtil {
 			return 1;
 		}
 
-		// ;ore enchantments before less enchantments
+		// More enchantments before less enchantments
 		if (a_count != b_count) {
-			return a_count - b_count;
+			return b_count - a_count;
 		}
 
 		// Sort by combined rarity (rare = low value) first
 		final var a_rarity = ae.keySet().stream().mapToInt(e -> CraftEnchantment.getRaw(e).d().a()).sum();
 		final var b_rarity = be.keySet().stream().mapToInt(e -> CraftEnchantment.getRaw(e).d().a()).sum();
 		if (a_rarity != b_rarity) {
-			return a_rarity - b_rarity;
+			return b_rarity - a_rarity;
 		}
 
 		final var a_sorted = ae.entrySet().stream()
