@@ -1,16 +1,12 @@
 package org.oddlama.vane.enchantments.enchantments;
 
-import java.util.List;
-
-import org.bukkit.enchantments.EnchantmentTarget;
-import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.player.PlayerDropItemEvent;
-import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.BaseComponent;
+
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.ItemStack;
 
 import org.oddlama.vane.annotation.enchantment.Rarity;

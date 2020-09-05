@@ -1,11 +1,9 @@
 package org.oddlama.vane.core.config;
 
-import static org.oddlama.vane.util.Util.namespaced_key;
-
 import java.lang.StringBuilder;
 import java.lang.reflect.Field;
-import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 

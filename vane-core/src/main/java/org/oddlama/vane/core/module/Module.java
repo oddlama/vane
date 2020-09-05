@@ -106,7 +106,7 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 	public ProtocolManager protocol_manager;
 
 	// bStats
-	Metrics metrics;
+	private Metrics metrics;
 
 	public Module() {
 		// Get core plugin reference, important for inherited configuration

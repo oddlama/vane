@@ -11,22 +11,21 @@ import java.util.logging.Level;
 
 import com.destroystokyo.paper.MaterialTags;
 
-import org.oddlama.vane.core.item.CustomItem;
-import org.oddlama.vane.core.item.CustomItemVariant;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityTargetEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.inventory.PrepareSmithingEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
 import org.oddlama.vane.annotation.VaneModule;
 import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.annotation.lang.LangString;
+import org.oddlama.vane.core.item.CustomItem;
 import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.util.Message;
 

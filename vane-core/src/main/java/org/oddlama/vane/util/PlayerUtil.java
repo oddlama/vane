@@ -2,9 +2,6 @@ package org.oddlama.vane.util;
 
 import static org.oddlama.vane.util.BlockUtil.drop_naturally;
 
-import java.util.Collection;
-import java.util.Arrays;
-
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;

@@ -1,16 +1,11 @@
 package org.oddlama.vane.trifles;
 
-import static org.oddlama.vane.util.MaterialUtil.is_seeded_plant;
-import static org.oddlama.vane.util.PlayerUtil.harvest_plant;
-
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.inventory.meta.Repairable;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.EquipmentSlot;
-import org.oddlama.vane.annotation.config.ConfigInt;
 
+import org.oddlama.vane.annotation.config.ConfigInt;
 import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.module.Context;
 

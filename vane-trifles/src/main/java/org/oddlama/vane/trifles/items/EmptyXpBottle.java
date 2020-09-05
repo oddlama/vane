@@ -1,49 +1,18 @@
 package org.oddlama.vane.trifles.items;
 
-import static org.oddlama.vane.util.BlockUtil.raytrace_dominant_face;
-import static org.oddlama.vane.util.Util.exp_for_level;
-import static org.oddlama.vane.util.BlockUtil.raytrace_oct;
-import static org.oddlama.vane.util.ItemUtil.MODIFIER_UUID_GENERIC_ATTACK_DAMAGE;
-import static org.oddlama.vane.util.ItemUtil.MODIFIER_UUID_GENERIC_ATTACK_SPEED;
-import static org.oddlama.vane.util.ItemUtil.damage_item;
-import static org.oddlama.vane.util.PlayerUtil.swing_arm;
 import static org.oddlama.vane.util.PlayerUtil.give_item;
 import static org.oddlama.vane.util.PlayerUtil.remove_one_item_from_hand;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Set;
+import static org.oddlama.vane.util.PlayerUtil.swing_arm;
+import static org.oddlama.vane.util.Util.exp_for_level;
 
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
-import org.bukkit.Tag;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.ChatColor;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeModifier;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.block.data.Bisected;
-import org.bukkit.block.data.Directional;
-import org.bukkit.block.data.MultipleFacing;
-import org.bukkit.block.data.type.Fence;
-import org.bukkit.block.data.type.GlassPane;
-import org.bukkit.block.data.type.Stairs;
-import org.bukkit.block.data.type.Tripwire;
-import org.bukkit.block.data.type.Wall;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.RecipeChoice.MaterialChoice;
 import org.bukkit.inventory.ShapelessRecipe;
-import org.bukkit.inventory.SmithingRecipe;
 
 import org.oddlama.vane.annotation.config.ConfigDouble;
 import org.oddlama.vane.annotation.item.VaneItem;
@@ -52,7 +21,6 @@ import org.oddlama.vane.core.item.CustomItemVariant;
 import org.oddlama.vane.core.item.ItemVariantEnum;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.trifles.Trifles;
-import org.oddlama.vane.util.BlockUtil;
 
 @VaneItem(name = "empty_xp_bottle")
 public class EmptyXpBottle extends CustomItem<Trifles, EmptyXpBottle> {
