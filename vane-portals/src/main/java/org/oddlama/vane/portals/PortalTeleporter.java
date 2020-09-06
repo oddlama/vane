@@ -58,88 +58,98 @@ import org.oddlama.vane.annotation.VaneModule;
 import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.core.Listener;
 
-public class PortalConstructor extends Listener<Portals> {
-	public static final Material MATERIAL_BUILD_BOUNDARY = Material.OBSIDIAN;
-	// TODO custom origin block?
-	public static final Material MATERIAL_BUILD_ORIGIN = Material.NETHERITE_BLOCK;
-
+public class PortalTeleporter extends Listener<Portals> {
 	private Portals portals;
-	private HashMap<UUID, Block> pending_console = new HashMap<>();
+	private final HashMap<UUID, Location> entities_portalling = new HashMap<>();
 
-	public PortalConstructor(Portals portals) {
+	public PortalTeleporter(Portals portals) {
 		super(portals);
 		this.portals = portals;
 	}
 
-	private void begin_portal_construction(final Player player, final Block console_block) {
-		// Add console_block as pending console
-		pending_console.put(player.getUniqueId(), console_block);
-		// TODO player.sendMessage(PortalsConfiguration.PORTAL_SELECT_BOUNDARY_NOW.get());
-		player.sendMessage("click boundary");
+	private boolean cancel_portal_event(final Entity entity) {
+		if (entities_portalling.containsKey(entity.getUniqueId())) {
+			return true;
+		}
+
+		if (portals.is_portal_block(entity.getLocation().getBlock())) {
+			return true;
+		}
+
+		return false;
 	}
 
-	private void construct_portal(final Player player, final Block console, final Block boundary_block) {
-		if (portals.is_portal_block(boundary_block)) {
-			get_module().log.severe("construct_portal() was called on a boundary that already belongs to a portal! This is a bug.");
-			return;
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	public void on_player_portal(final PlayerPortalEvent event) {
+		if (cancel_portal_event(event.getPlayer())) {
+			event.setCancelled(true);
 		}
-
-		System.out.println("construct");
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void on_player_interact_construct_portal(final PlayerInteractEvent event) {
-		if (!event.hasBlock() || event.getAction() != Action.RIGHT_CLICK_BLOCK) {
-			return;
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	public void on_entity_portal_event(final EntityPortalEvent event) {
+		if (cancel_portal_event(event.getEntity())) {
+			event.setCancelled(true);
 		}
-
-		final var block = event.getClickedBlock();
-		if (block.getType() != Portals.MATERIAL_CONSOLE) {
-			return;
-		}
-
-		// Abort if the console belongs to another portal already.
-		if (portals.is_portal_block(block)) {
-			return;
-		}
-
-		// TODO portal stone as item instead of shifting?
-		// Only if player sneak-right-clicks the console
-		final var player = event.getPlayer();
-		if (!player.isSneaking() || event.getHand() != EquipmentSlot.HAND) {
-			return;
-		}
-
-		begin_portal_construction(player, block);
-		event.setCancelled(true);
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-	public void on_player_interact_boundary(final PlayerInteractEvent event) {
-		if (!event.hasBlock() || event.getAction() != Action.RIGHT_CLICK_BLOCK) {
-			return;
-		}
-
-		final var block = event.getClickedBlock();
-		final var type = block.getType();
-		if (type != MATERIAL_BUILD_BOUNDARY || type != Portals.MATERIAL_CONSOLE) {
-			return;
-		}
-
-		// Break if no console is pending
+	public void on_player_move(final PlayerMoveEvent event) {
 		final var player = event.getPlayer();
-		final var console = pending_console.get(player.getUniqueId());
-		if (console == null) {
-			return;
-		}
+		final var player_id = player.getUniqueId();
 
-		final var portal = portals.portal_for(block);
-		if (portal == null) {
-			construct_portal(player, console, block);
+		if (!entities_portalling.containsKey(player_id)) {
+			// Check if we walked into a portal
+			final var block = event.getTo().getBlock();
+			if (block.getType() != Portals.MATERIAL_PORTAL) {
+				return;
+			}
+
+			final var portal = portals.portal_for(block);
+			if (portal == null) {
+				return;
+			}
+
+			final var target = portal.target();
+			if (target == null) {
+				return;
+			}
+
+			// Put null to signal initiated teleportation
+			entities_portalling.put(player_id, null);
+
+			var target_location = target.spawn().clone();
+			final var player_location = player.getLocation();
+			target_location.setPitch(player_location.getPitch());
+			target_location.setYaw(player_location.getYaw());
+
+			// Calculate new pitch, yaw and velocity
+			target_location = portal.orientation().apply(target.orientation(), target_location);
+			final var new_velocity = portal.orientation().apply(target.orientation(), player.getVelocity());
+
+			// Set new movement location
+			event.setTo(target_location);
+			get_module().log.info("portal player " + player + " from " + portal + " to " + target);
+
+			// Retain velocity
+			player.setVelocity(new_velocity);
 		} else {
-			portal.link_console(player, console, block);
-		}
+			// We just portalled
+			// TODO ???? if (event.getFrom().getBlock().getType() != PortalsConfiguration.PORTAL_DEFAULT_MATERIAL_PORTAL_AREA_ACTIVATED) {
+			// TODO ???? 	return;
+			// TODO ???? }
 
-		event.setCancelled(true);
+			final var loc = entities_portalling.get(player_id);
+			if (loc == null) {
+				// Initial teleport. Remember current location, so we can check
+				// that the entity moved away far enough to allow another teleport
+				entities_portalling.put(player_id, event.getFrom().clone());
+			} else {
+				// At least 2 blocks away → finish portalling.
+				if (event.getFrom().distance(loc) > 2.0) {
+					entities_portalling.remove(player_id);
+				}
+			}
+		}
 	}
 }

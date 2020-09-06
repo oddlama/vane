@@ -60,15 +60,14 @@ import org.oddlama.vane.core.module.Module;
 
 @VaneModule(name = "portals", bstats = 8642, config_version = 1, lang_version = 1, storage_version = 1)
 public class Portals extends Module<Portals> {
-	public static final Material MATERIAL_BOUNDARY = Material.OBSIDIAN;
-	// TODO custom origin block?
-	public static final Material MATERIAL_ORIGIN = Material.NETHERITE_BLOCK;
 	public static final Material MATERIAL_CONSOLE = Material.ENCHANTING_TABLE;
+	public static final Material MATERIAL_PORTAL = Material.END_GATEWAY;
 
 	public Portals() {
 		new PortalActivator(this);
 		new PortalBlockProtector(this);
 		new PortalConstructor(this);
+		new PortalTeleporter(this);
 	}
 
 	public Portal portal_for(final Block block) {
@@ -115,75 +114,4 @@ public class Portals extends Module<Portals> {
 	public void on_monitor_chunk_load(final ChunkLoadEvent event) {
 		enable_consoles_in_chunk(event.getChunk());
 	}
-
-	//@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	//public void on_player_portal(final PlayerPortalEvent event) {
-	//	if (entitiesPortalling.containsKey(event.getPlayer().getUniqueId())) {
-	//		event.setCancelled(true);
-	//		return;
-	//	}
-
-	//	if (PortalBlock.query(event.getPlayer().getLocation().getBlock()) != null)
-	//		event.setCancelled(true);
-	//}
-
-	//@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	//public void on_entity_portal_event(final EntityPortalEvent event) {
-	//	if (entitiesPortalling.containsKey(event.getEntity().getUniqueId())) {
-	//		event.setCancelled(true);
-	//		return;
-	//	}
-
-	//	if (PortalBlock.query(event.getEntity().getLocation().getBlock()) != null)
-	//		event.setCancelled(true);
-	//}
-
-	//@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-	//public void on_player_move(final PlayerMoveEvent event) {
-	//	if (!entitiesPortalling.containsKey(event.getPlayer().getUniqueId())) {
-	//		/* check if we walked into a portal */
-	//		Block block = event.getTo().getBlock();
-	//		if (block.getType() != PortalsConfiguration.PORTAL_DEFAULT_MATERIAL_PORTAL_AREA_ACTIVATED)
-	//			return;
-
-	//		Portal portal = Portal.query(block);
-	//		if (portal == null)
-	//			return;
-
-	//		Portal target = Portals.getConnectedPortal(portal.getId());
-	//		if (target == null)
-	//			return;
-
-	//		entitiesPortalling.put(event.getPlayer().getUniqueId(), null);
-
-	//		Location targetLocation = target.getSpawn().clone();
-	//		Location playerLocation = event.getPlayer().getLocation();
-	//		targetLocation.setPitch(playerLocation.getPitch());
-	//		targetLocation.setYaw(playerLocation.getYaw());
-
-	//		/* calculate new pitch, yaw and velocity */
-	//		targetLocation = portal.getOrientation().rotateLocation(target.getOrientation(), targetLocation);
-	//		Vector newVelocity = portal.getOrientation().rotateVector(target.getOrientation(), event.getPlayer().getVelocity());
-
-	//		/* set new movement location */
-	//		event.setTo(targetLocation);
-	//		Log.info("portals", "teleport player " + event.getPlayer() + " from " + portal + " to " + target);
-
-	//		/* retain velocity */
-	//		event.getPlayer().setVelocity(newVelocity);
-	//	} else {
-	//		/* we just portalled */
-	//		if (event.getFrom().getBlock().getType() == PortalsConfiguration.PORTAL_DEFAULT_MATERIAL_PORTAL_AREA_ACTIVATED)
-	//			return;
-
-	//		Location loc = entitiesPortalling.get(event.getPlayer().getUniqueId());
-	//		if (loc == null) /* initial teleport */
-	//			entitiesPortalling.put(event.getPlayer().getUniqueId(), event.getFrom().clone());
-	//		else {
-	//			/* 2 blocks away */
-	//			if (event.getFrom().distance(loc) > 2.0)
-	//				entitiesPortalling.remove(event.getPlayer().getUniqueId());
-	//		}
-	//	}
-	//}
 }

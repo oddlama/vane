@@ -55,32 +55,12 @@ import org.oddlama.vane.annotation.VaneModule;
 import org.jetbrains.annotations.Nullable;
 import org.oddlama.vane.core.module.Module;
 
-public class Portal {
-	public void enable(@Nullable final Player player) {
-		// TODO send event check cancelled
-		System.out.println("enable");
+public class Orientation {
+	public Location apply(final Orientation reference, final Location location) {
+		return location;
 	}
 
-	public void disable(@Nullable final Player player) {
-		// TODO send event check cancelled
-		System.out.println("disable");
-	}
-
-	public void link_console(final Player player, final Block console, final Block block) {
-		// TODO send separate?? event check cancelled
-		System.out.println("link");
-	}
-
-	public @Nullable Portal target() {
-		// TODO
-		return null;
-	}
-
-	public Orientation orientation() {
-		return new Orientation();
-	}
-
-	public Location spawn() {
-		return null;
+	public Vector apply(final Orientation reference, final Vector vector) {
+		return vector;
 	}
 }
