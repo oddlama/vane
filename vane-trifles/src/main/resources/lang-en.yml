@@ -30,15 +30,8 @@ item_xp_bottle:
     name: "Large Experience Bottle"
 
 item_empty_xp_bottle:
-  small:
-    # The display name of this item variant. Will be packed into a resource pack.
-    name: "Small Empty Experience Bottle"
-  medium:
-    # The display name of this item variant. Will be packed into a resource pack.
-    name: "Medium Empty Experience Bottle"
-  large:
-    # The display name of this item variant. Will be packed into a resource pack.
-    name: "Large Empty Experience Bottle"
+  # The display name of this item variant. Will be packed into a resource pack.
+  name: "Empty Experience Bottle"
 
 item_file:
   wooden:

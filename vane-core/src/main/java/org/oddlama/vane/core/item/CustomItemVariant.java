@@ -43,6 +43,7 @@ public class CustomItemVariant<T extends Module<T>, V extends CustomItem<T, V>, 
 		if (variant.prefix().equals("")) {
 			// Singleton item
 			this.variant_name = parent.name();
+			set_context(parent.get_context());
 		} else {
 			// Multi variant item, create sub namespace
 			this.variant_name = variant.prefix() + "_" + parent.name();

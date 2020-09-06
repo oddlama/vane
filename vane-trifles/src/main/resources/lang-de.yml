@@ -27,12 +27,7 @@ item_xp_bottle:
     name: "Große Erfahrungsflasche"
 
 item_empty_xp_bottle:
-  small:
-    name: "Kleine Leere Erfahrungsflasche"
-  medium:
-    name: "Mittlere Leere Erfahrungsflasche"
-  large:
-    name: "Große Leere Erfahrungsflasche"
+  name: "Leere Erfahrungsflasche"
 
 item_file:
   wooden:

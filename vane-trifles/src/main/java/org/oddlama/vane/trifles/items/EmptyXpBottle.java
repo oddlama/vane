@@ -24,17 +24,8 @@ import org.oddlama.vane.trifles.Trifles;
 
 @VaneItem(name = "empty_xp_bottle")
 public class EmptyXpBottle extends CustomItem<Trifles, EmptyXpBottle> {
-	public static enum Variant implements ItemVariantEnum {
-		SMALL,
-		MEDIUM,
-		LARGE;
-
-		@Override public String prefix() { return name().toLowerCase(); }
-		@Override public boolean enabled() { return true; }
-	}
-
-	public static class EmptyXpBottleVariant extends CustomItemVariant<Trifles, EmptyXpBottle, Variant> {
-		public EmptyXpBottleVariant(EmptyXpBottle parent, Variant variant) {
+	public static class EmptyXpBottleVariant extends CustomItemVariant<Trifles, EmptyXpBottle, SingleVariant> {
+		public EmptyXpBottleVariant(EmptyXpBottle parent, SingleVariant variant) {
 			super(parent, variant);
 		}
 
@@ -43,13 +34,9 @@ public class EmptyXpBottle extends CustomItem<Trifles, EmptyXpBottle> {
 			final var item = item();
 			final var recipe_key = recipe_key();
 			final var recipe = new ShapelessRecipe(recipe_key, item)
-				.addIngredient(Material.EXPERIENCE_BOTTLE);
-
-			switch (variant()) {
-				case SMALL:  recipe.addIngredient(Material.IRON_NUGGET); break;
-				case MEDIUM: recipe.addIngredient(Material.GOLD_NUGGET); break;
-				case LARGE:  recipe.addIngredient(Material.BLAZE_POWDER); break;
-			}
+				.addIngredient(Material.EXPERIENCE_BOTTLE)
+				.addIngredient(Material.GLASS_BOTTLE)
+				.addIngredient(Material.GOLD_NUGGET);
 
 			add_recipe(recipe_key, recipe);
 		}
@@ -64,7 +51,7 @@ public class EmptyXpBottle extends CustomItem<Trifles, EmptyXpBottle> {
 	public double config_loss_percentage;
 
 	public EmptyXpBottle(Context<Trifles> context) {
-		super(context, Variant.class, Variant.values(), EmptyXpBottleVariant::new);
+		super(context, EmptyXpBottleVariant::new);
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = false) // ignoreCancelled = false to catch right-click-air events
@@ -92,19 +79,29 @@ public class EmptyXpBottle extends CustomItem<Trifles, EmptyXpBottle> {
 				break;
 		}
 
-		final var result_variant = XpBottle.Variant.valueOf(variant.variant().name());
-		final var xp_bottle_variant = CustomItem.<XpBottle.XpBottleVariant>variant_of(XpBottle.class, result_variant);
-		final var exp = (int)((1.0 / (1.0 - config_loss_percentage)) * exp_for_level(xp_bottle_variant.config_capacity));
-
-		// Check if player has enough xp
-		if (player.getTotalExperience() < exp) {
-			return;
-		}
-
 		// Check if last consume time is too recent, to prevent accidential re-filling
 		final var now = System.currentTimeMillis();
 		final var last_consume = get_module().last_xp_bottle_consume_time.getOrDefault(player.getUniqueId(), 0l);
 		if (now - last_consume < 1000) {
+			return;
+		}
+
+		// Find maximum fitting capacity
+		XpBottle.XpBottleVariant xp_bottle_variant = null;
+		int exp = 0;
+		for (final var xpvar : XpBottle.Variant.values()) {
+			var cur_xp_bottle_variant = CustomItem.<XpBottle.XpBottleVariant>variant_of(XpBottle.class, xpvar);
+			var cur_exp = (int)((1.0 / (1.0 - config_loss_percentage)) * exp_for_level(cur_xp_bottle_variant.config_capacity));
+
+			// Check if player has enough xp and this variant has more than the last
+			if (player.getTotalExperience() >= cur_exp && cur_exp > exp) {
+				exp = cur_exp;
+				xp_bottle_variant = cur_xp_bottle_variant;
+			}
+		}
+
+		// Check if there was a fitting bottle
+		if (xp_bottle_variant == null) {
 			return;
 		}
 

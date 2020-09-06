@@ -41,8 +41,8 @@ public class CustomItem<T extends Module<T>, V extends CustomItem<T, V>> extends
 	/**
 	 * Single variant item constructor.
 	 */
-	public CustomItem(Context<T> context) {
-		this(context, SingleVariant.class, SingleVariant.values(), CustomItemVariant<T, V, SingleVariant>::new);
+	public CustomItem(Context<T> context, Function2<V, SingleVariant, CustomItemVariant<T, V, SingleVariant>> create_instance) {
+		this(context, SingleVariant.class, SingleVariant.values(), create_instance);
 	}
 
 	/**

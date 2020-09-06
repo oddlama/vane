@@ -48,7 +48,7 @@ public class XpBottle extends CustomItem<Trifles, XpBottle> {
 			final var item = item();
 
 			// Get empty bottle variant
-			final var empty_variant = EmptyXpBottle.Variant.valueOf(variant().name());
+			final var empty_variant = CustomItem.SingleVariant.SINGLETON;
 			final var empty_xp_bottle_variant = CustomItem.<EmptyXpBottle.EmptyXpBottleVariant>variant_of(EmptyXpBottle.class, empty_variant);
 			final var empty_xp_bottle_item = empty_xp_bottle_variant.item();
 
@@ -105,7 +105,7 @@ public class XpBottle extends CustomItem<Trifles, XpBottle> {
 		}
 
 		// Get empty bottle variant
-		final var empty_variant = EmptyXpBottle.Variant.valueOf(variant.variant().name());
+		final var empty_variant = CustomItem.SingleVariant.SINGLETON;
 		final var empty_xp_bottle_variant = CustomItem.<EmptyXpBottle.EmptyXpBottleVariant>variant_of(EmptyXpBottle.class, empty_variant);
 
 		// Exchange items
