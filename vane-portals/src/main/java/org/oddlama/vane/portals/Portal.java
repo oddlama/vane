@@ -14,8 +14,10 @@ import java.util.List;
 import java.util.UUID;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.block.data.type.Switch;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
@@ -56,6 +58,28 @@ import org.jetbrains.annotations.Nullable;
 import org.oddlama.vane.core.module.Module;
 
 public class Portal {
+	public static enum Visibility {
+		PUBLIC,
+		GROUP,
+		PRIVATE;
+
+		public Visibility next() {
+			final var next = (ordinal() + 1) % values().length;
+			return values()[next];
+		}
+	}
+
+	private UUID id;
+	private String name;
+	private Orientation orientation;
+	private NamespacedKey style;
+	private Location spawn;
+	private ItemStack icon;
+	private Visibility visibility;
+
+	private UUID target_id;
+	private boolean target_locked;
+
 	public boolean activate(@Nullable final Player player) {
 		// TODO send event check cancelled
 		System.out.println("activate");

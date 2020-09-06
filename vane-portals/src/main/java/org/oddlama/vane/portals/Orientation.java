@@ -188,7 +188,8 @@ public enum Orientation {
 				break;
 		}
 
-		return null;
+		// Unreachable
+		throw new RuntimeException("Invalid control flow. This is a bug.");
 	}
 
 	public static Orientation from(final Plane plane, final Block origin, final Block console, final Location entity_location) {
