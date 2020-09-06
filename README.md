@@ -20,7 +20,7 @@ If you don't want a certain feature, simply disable it.
 - [x] Walk faster on grass paths
 - [x] Harvest finished crops by right-clicking (or by using a *Sickle*)
 - [x] Double doors open simultaneously
-- [ ] Sort chests with redstone
+- [x] Sort chests with redstone
 - [x] Modify individual connections of walls, fences, etc. and easily modify stair shapes using the *File*
 - [x] Skip night with 50% of players sleeping
 - [x] Store XP in bottles
@@ -109,37 +109,3 @@ to `libs/`. This is required so the compiler can find minecraft-native symbols.
 ### 3rd-party software
 
 TODO include licenses
-
-#### IDEAS
-
-- [ ] descr level bottle
-- [ ] bottle fill max
-
-- [ ] better pack icon
-- [ ] github readme banners
-- [ ] crafting recipes in readme
-- [ ] download links
-- [ ] software licenses
-- [ ] region chunk based cache
-- [ ] set wood side textures with file
-- [ ] /verify or similar
-- [ ] armor stand poser manipulation by perpendicular intersection between Line of sight and arm 
-- [ ] item frame invisibilinator (visible if empty)
-- [ ] custom enchantment book icons
-- [ ] player list footer header configuration
-- [ ] transmutation tool copy pasta with direction awareness
-- [ ] sign editing (a tool ?)
-- [ ] add items to shulker box by right click with item in inventory on box?
-- [ ] Maybe "Advancements to guide you through most additions"
-- full netherite armor for one enchantment 
-- dragon egg (catalyst?)
-- nether star
-- pillager books (recept of unbreakable)
-- can we inherit spectator skins? maybe hook into data loading?
-- golden sickle -> golden mistletoe, mistel (viscum album)
-- used as enchantment binding agent/ catalyst?.
-
-SERVER SETTINGS RECOMMENDATIONS
-
-- spawn with remnants of old world
-- dont merge items, or very small merging radius.

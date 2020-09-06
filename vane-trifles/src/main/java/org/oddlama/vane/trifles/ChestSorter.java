@@ -70,6 +70,9 @@ public class ChestSorter extends Listener<Trifles> {
 				return;
 			}
 			persistent_data = ((Chest)left_side).getPersistentDataContainer();
+			System.out.println("double: " + (((Chest)double_chest).getPersistentDataContainer()).getOrDefault(LAST_SORT_TIME, PersistentDataType.LONG, 0l));
+			System.out.println("left: " + (((Chest)double_chest.getLeftSide()).getPersistentDataContainer()).getOrDefault(LAST_SORT_TIME, PersistentDataType.LONG, 0l));
+			System.out.println("right: " + (((Chest)double_chest.getRightSide()).getPersistentDataContainer()).getOrDefault(LAST_SORT_TIME, PersistentDataType.LONG, 0l));
 		} else {
 			persistent_data = chest.getPersistentDataContainer();
 		}
