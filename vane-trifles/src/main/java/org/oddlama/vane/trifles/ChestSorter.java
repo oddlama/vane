@@ -24,6 +24,7 @@ import org.bukkit.Tag;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ShapelessRecipe;
+import org.bukkit.inventory.DoubleChestInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -53,7 +54,7 @@ public class ChestSorter extends Listener<Trifles> {
 	}
 
 	private void sort_chest(final Block block) {
-		final var state = block.getState(false);
+		final var state = block.getState();
 		if (!(state instanceof Chest)) {
 			return;
 		}
@@ -62,30 +63,30 @@ public class ChestSorter extends Listener<Trifles> {
 		final var inventory = chest.getInventory();
 
 		// Get persistent data
-		final PersistentDataContainer persistent_data;
-		if (state instanceof DoubleChest) {
-			final var double_chest = (DoubleChest)state;
-			final var left_side = double_chest.getLeftSide();
+		final Chest persistent_chest;
+		if (inventory instanceof DoubleChestInventory) {
+			final var left_side = (((DoubleChestInventory)inventory).getLeftSide()).getHolder();
 			if (!(left_side instanceof Chest)) {
 				return;
 			}
-			persistent_data = ((Chest)left_side).getPersistentDataContainer();
-			System.out.println("double: " + (((Chest)double_chest).getPersistentDataContainer()).getOrDefault(LAST_SORT_TIME, PersistentDataType.LONG, 0l));
-			System.out.println("left: " + (((Chest)double_chest.getLeftSide()).getPersistentDataContainer()).getOrDefault(LAST_SORT_TIME, PersistentDataType.LONG, 0l));
-			System.out.println("right: " + (((Chest)double_chest.getRightSide()).getPersistentDataContainer()).getOrDefault(LAST_SORT_TIME, PersistentDataType.LONG, 0l));
+			persistent_chest = (Chest)left_side;
 		} else {
-			persistent_data = chest.getPersistentDataContainer();
+			persistent_chest = chest;
 		}
 
 		// Check cooldown
+		final var persistent_data = persistent_chest.getPersistentDataContainer();
 		final var last_sort = persistent_data.getOrDefault(LAST_SORT_TIME, PersistentDataType.LONG, 0l);
 		final var now = System.currentTimeMillis();
 		if (now - last_sort < config_cooldown) {
 			return;
 		}
 
-		// TODO wrong persistence is selected..........
 		persistent_data.set(LAST_SORT_TIME, PersistentDataType.LONG, now);
+		if (persistent_chest != chest) {
+			// Save left side block state if we are the right side
+			persistent_chest.update(true, false);
+		}
 
 		// Find amount of non null item stacks
 		final var saved_contents = inventory.getStorageContents();
@@ -148,7 +149,7 @@ public class ChestSorter extends Listener<Trifles> {
 			for (int y = -radius; y <= radius; ++y) {
 				for (int z = -radius; z <= radius; ++z) {
 					final var block = root_block.getRelative(x, y, z);
-					if (block.getState(false) instanceof Chest) {
+					if (block.getState() instanceof Chest) {
 						sort_chest(block);
 					}
 				}
