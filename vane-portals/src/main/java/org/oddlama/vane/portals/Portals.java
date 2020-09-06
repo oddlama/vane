@@ -4,6 +4,7 @@ import static org.oddlama.vane.util.BlockUtil.adjacent_blocks_3d;
 
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.Chunk;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -59,16 +60,15 @@ import org.oddlama.vane.core.module.Module;
 
 @VaneModule(name = "portals", bstats = 8642, config_version = 1, lang_version = 1, storage_version = 1)
 public class Portals extends Module<Portals> {
-	private static final Material MATERIAL_BOUNDARY = Material.OBSIDIAN;
+	public static final Material MATERIAL_BOUNDARY = Material.OBSIDIAN;
 	// TODO custom origin block?
-	private static final Material MATERIAL_ORIGIN = Material.NETHERITE_BLOCK;
-	private static final Material MATERIAL_CONSOLE = Material.ENCHANTING_TABLE;
-
-	private HashMap<UUID, Block> pending_console = new HashMap<>();
+	public static final Material MATERIAL_ORIGIN = Material.NETHERITE_BLOCK;
+	public static final Material MATERIAL_CONSOLE = Material.ENCHANTING_TABLE;
 
 	public Portals() {
-		// TODO new PortalBuilder(this);
+		new PortalActivator(this);
 		new PortalBlockProtector(this);
+		new PortalConstructor(this);
 	}
 
 	public Portal portal_for(final Block block) {
@@ -80,7 +80,7 @@ public class Portals extends Module<Portals> {
 		return portal_for(block) != null;
 	}
 
-	private Portal controlled_portal(final Block block) {
+	public Portal controlled_portal(final Block block) {
 		final var root_portal = portal_for(block);
 		if (root_portal != null) {
 			return root_portal;
@@ -98,129 +98,23 @@ public class Portals extends Module<Portals> {
 		return null;
 	}
 
-	private void begin_portal_construction(final Player player, final Block console_block) {
-		// Add console_block as pending console
-		pending_console.put(player.getUniqueId(), console_block);
-		// TODO player.sendMessage(PortalsConfiguration.PORTAL_SELECT_BOUNDARY_NOW.get());
-		player.sendMessage("click boundary");
+	private void disable_consoles_in_chunk(final Chunk chunk) {
+		// TODO
 	}
 
-	private void construct_portal(final Player player, final Block console, final Block boundary_block) {
-		if (is_portal_block(boundary_block)) {
-			log.severe("construct_portal() was called on a boundary that already belongs to a portal! This is a bug.");
-			return;
-		}
-
-		System.out.println("construct");
+	private void enable_consoles_in_chunk(final Chunk chunk) {
+		// TODO
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void on_player_interact_construct_portal(final PlayerInteractEvent event) {
-		if (!event.hasBlock() || event.getAction() != Action.RIGHT_CLICK_BLOCK) {
-			return;
-		}
-
-		final var block = event.getClickedBlock();
-		if (block.getType() != MATERIAL_CONSOLE) {
-			return;
-		}
-
-		// Abort if the console belongs to another portal already.
-		if (is_portal_block(block)) {
-			return;
-		}
-
-		// TODO portal stone as item instead of shifting?
-		// Only if player sneak-right-clicks the console
-		final var player = event.getPlayer();
-		if (!player.isSneaking() || event.getHand() != EquipmentSlot.HAND) {
-			return;
-		}
-
-		begin_portal_construction(player, block);
-		event.setCancelled(true);
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void on_monitor_chunk_unload(final ChunkUnloadEvent event) {
+		disable_consoles_in_chunk(event.getChunk());
 	}
 
-	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-	public void on_player_interact_boundary(final PlayerInteractEvent event) {
-		if (!event.hasBlock() || event.getAction() != Action.RIGHT_CLICK_BLOCK) {
-			return;
-		}
-
-		final var block = event.getClickedBlock();
-		final var type = block.getType();
-		if (type != MATERIAL_BOUNDARY || type != MATERIAL_CONSOLE) {
-			return;
-		}
-
-		// Break if no console is pending
-		final var player = event.getPlayer();
-		final var console = pending_console.get(player.getUniqueId());
-		if (console == null) {
-			return;
-		}
-
-		final var portal = portal_for(block);
-		if (portal == null) {
-			construct_portal(player, console, block);
-		} else {
-			portal.link_console(player, console, block);
-		}
-
-		event.setCancelled(true);
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void on_monitor_chunk_load(final ChunkLoadEvent event) {
+		enable_consoles_in_chunk(event.getChunk());
 	}
-
-	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-	public void on_player_interact_lever(final PlayerInteractEvent event) {
-		if (!event.hasBlock() || event.getAction() != Action.RIGHT_CLICK_BLOCK) {
-			return;
-		}
-
-		final var block = event.getClickedBlock();
-		if (block.getType() != Material.LEVER) {
-			return;
-		}
-
-		// Get base block the lever is attached to
-		final var lever = (Switch)block.getBlockData();
-		final BlockFace attached_face;
-		switch (lever.getAttachedFace()) {
-			default:
-			case WALL:    attached_face = lever.getFacing().getOppositeFace(); break;
-			case CEILING: attached_face = BlockFace.UP; break;
-			case FLOOR:   attached_face = BlockFace.DOWN; break;
-		}
-
-		// Find controlled portal
-		final var base = block.getRelative(attached_face);
-		final var portal = controlled_portal(base);
-		if (portal == null) {
-			return;
-		}
-
-		// Disable portal
-		final var player = event.getPlayer();
-		if (lever.isPowered()) {
-			// Lever is being switched off
-			portal.disable(player);
-		} else {
-			// Lever is being switched on
-			portal.enable(player);
-		}
-
-		event.setCancelled(true);
-	}
-
-	//@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	//public void on_monitor_chunk_unload(final ChunkUnloadEvent event) {
-	//	/* if chunk will unload */
-	//	Portals.disableConsolesInChunk(event.getChunk());
-	//}
-
-	//@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	//public void on_monitor_chunk_load(final ChunkLoadEvent event) {
-	//	Portals.enableConsolesInChunk(event.getChunk());
-	//}
 
 	//@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	//public void on_player_portal(final PlayerPortalEvent event) {
@@ -292,20 +186,4 @@ public class Portals extends Module<Portals> {
 	//		}
 	//	}
 	//}
-
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void on_block_redstone(final BlockRedstoneEvent event) {
-		// Redstone enable only works on hard-linked portals.
-	    if (event.getOldCurrent() != 0 || event.getNewCurrent() == 0) {
-		    return;
-		}
-
-	    final var portal = portal_for(event.getBlock());
-	    if (portal == null) {
-		    return;
-		}
-
-		// TODO setting for "keep on while pulse active" and "toggle on falling/rising edge"
-		portal.enable(null);
-    }
 }
