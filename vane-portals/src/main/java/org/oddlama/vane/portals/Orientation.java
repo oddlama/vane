@@ -85,10 +85,113 @@ public enum Orientation {
 	}
 
 	public Vector apply(final Orientation reference, final Vector vector) {
-		return vector;
+		final var x = vector.getX();
+		final var y = vector.getY();
+		final var z = vector.getZ();
+
+		switch (this) {
+			case NEGATIVE_X: // Looking east
+				switch (reference) {
+					case NEGATIVE_X: // west
+						return new Vector(-x, y, -z);
+					case POSITIVE_X: // east
+						return new Vector(x, y, z);
+					case NEGATIVE_Z: // north
+						return new Vector(z, y, -x);
+					case POSITIVE_Z: // south
+						return new Vector(-z, y, x);
+					case NEGATIVE_Y: // down
+						return new Vector(y, -x, z);
+					case POSITIVE_Y: // up
+						return new Vector(-y, x, z);
+				}
+				break;
+			case POSITIVE_X: // Looking west
+				switch (reference) {
+					case NEGATIVE_X: // west
+						return new Vector(x, y, z);
+					case POSITIVE_X: // east
+						return new Vector(-x, y, -z);
+					case NEGATIVE_Z: // north
+						return new Vector(-z, y, x);
+					case POSITIVE_Z: // south
+						return new Vector(z, y, -x);
+					case NEGATIVE_Y: // down
+						return new Vector(-y, x, z);
+					case POSITIVE_Y: // up
+						return new Vector(y, -x, z);
+				}
+				break;
+			case NEGATIVE_Z: // Looking south
+				switch (reference) {
+					case NEGATIVE_X: // west
+						return new Vector(-z, y, x);
+					case POSITIVE_X: // east
+						return new Vector(z, y, -x);
+					case NEGATIVE_Z: // north
+						return new Vector(-x, y, -z);
+					case POSITIVE_Z: // south
+						return new Vector(x, y, z);
+					case NEGATIVE_Y: // down
+						return new Vector(x, -z, y);
+					case POSITIVE_Y: // up
+						return new Vector(-x, z, y);
+				}
+				break;
+			case POSITIVE_Z: // Looking north
+				switch (reference) {
+					case NEGATIVE_X: // west
+						return new Vector(z, y, -x);
+					case POSITIVE_X: // east
+						return new Vector(-z, y, x);
+					case NEGATIVE_Z: // north
+						return new Vector(x, y, z);
+					case POSITIVE_Z: // south
+						return new Vector(-x, y, -z);
+					case NEGATIVE_Y: // down
+						return new Vector(-x, z, y);
+					case POSITIVE_Y: // up
+						return new Vector(x, -z, y);
+				}
+				break;
+			case NEGATIVE_Y: // Looking up
+				switch (reference) {
+					case NEGATIVE_X: // west
+						return new Vector(-y, 0, 0);
+					case POSITIVE_X: // east
+						return new Vector(y, 0, 0);
+					case NEGATIVE_Z: // north
+						return new Vector(0, 0, -y);
+					case POSITIVE_Z: // south
+						return new Vector(0, 0, y);
+					case NEGATIVE_Y: // down
+						return new Vector(x, -y, z);
+					case POSITIVE_Y: // up
+						return new Vector(x, y, z);
+				}
+				break;
+			case POSITIVE_Y: // Looking down
+				switch (reference) {
+					case NEGATIVE_X: // west
+						return new Vector(y, 0, 0);
+					case POSITIVE_X: // east
+						return new Vector(-y, 0, 0);
+					case NEGATIVE_Z: // north
+						return new Vector(0, 0, y);
+					case POSITIVE_Z: // south
+						return new Vector(0, 0, -y);
+					case NEGATIVE_Y: // down
+						return new Vector(x, y, z);
+					case POSITIVE_Y: // up
+						return new Vector(-x, -y, -z);
+				}
+				break;
+		}
+
+		return null;
 	}
 
-	public static Orientation getOrientation(final Plane plane, final Block origin, final Block console, final Location entity_location) {
+	public static Orientation from(final Plane plane, final Block origin, final Block console, final Location entity_location) {
 		switch (plane) {
 			case XY: {
 				final var origin_z = origin.getZ() + 0.5;
@@ -127,7 +230,7 @@ public enum Orientation {
 				final var console_y = console.getY() + 0.5;
 				if (console_y >= origin_y) {
 					return NEGATIVE_Y;
-				} else { /* if (console_y < origin_y) */
+				} else { // if (console_y < origin_y)
 					return POSITIVE_Y;
 				}
 			}
