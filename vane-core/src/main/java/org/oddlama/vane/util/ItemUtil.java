@@ -37,7 +37,6 @@ public class ItemUtil {
 		var ae = item_a.getEnchantments();
 		var be = item_b.getEnchantments();
 
-		System.out.println("   " + ae);
 		final var a_meta = item_a.getItemMeta();
 		if (a_meta instanceof EnchantmentStorageMeta) {
 			final var stored = ((EnchantmentStorageMeta)a_meta).getStoredEnchants();
@@ -45,7 +44,6 @@ public class ItemUtil {
 				ae = stored;
 			}
 		}
-		System.out.println(" → " + ae);
 
 		final var b_meta = item_b.getItemMeta();
 		if (b_meta instanceof EnchantmentStorageMeta) {
@@ -82,7 +80,7 @@ public class ItemUtil {
 			.sorted(Map.Entry.<Enchantment, Integer>comparingByKey((a, b) -> a.getKey().toString().compareTo(b.getKey().toString()))
 				.thenComparing(Map.Entry.<Enchantment, Integer>comparingByValue()))
 			.collect(Collectors.toList());
-		final var b_sorted = ae.entrySet().stream()
+		final var b_sorted = be.entrySet().stream()
 			.sorted(Map.Entry.<Enchantment, Integer>comparingByKey((a, b) -> a.getKey().toString().compareTo(b.getKey().toString()))
 				.thenComparing(Map.Entry.<Enchantment, Integer>comparingByValue()))
 			.collect(Collectors.toList());
