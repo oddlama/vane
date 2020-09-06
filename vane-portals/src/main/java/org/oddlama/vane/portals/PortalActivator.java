@@ -1,8 +1,10 @@
 package org.oddlama.vane.portals;
 
 import static org.oddlama.vane.util.BlockUtil.adjacent_blocks_3d;
+import static org.oddlama.vane.util.PlayerUtil.swing_arm;
 
 import org.bukkit.entity.Entity;
+import org.bukkit.event.Event;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -66,6 +68,31 @@ public class PortalActivator extends Listener<Portals> {
 		this.portals = portals;
 	}
 
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void on_player_interact_console(final PlayerInteractEvent event) {
+		if (!event.hasBlock() || event.getAction() != Action.RIGHT_CLICK_BLOCK) {
+			return;
+		}
+
+		final var block = event.getClickedBlock();
+		if (block.getType() != Portals.MATERIAL_CONSOLE) {
+			return;
+		}
+
+		// Abort if the table is not a console
+		final var portal = portals.portal_for(block);
+		if (portal == null) {
+			return;
+		}
+
+		final var player = event.getPlayer();
+		if (portal.open_console(player, block)) {
+			swing_arm(player, event.getHand());
+			event.setUseInteractedBlock(Event.Result.DENY);
+			event.setUseItemInHand(Event.Result.DENY);
+		}
+	}
+
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void on_player_interact_lever(final PlayerInteractEvent event) {
 		if (!event.hasBlock() || event.getAction() != Action.RIGHT_CLICK_BLOCK) {
@@ -94,17 +121,21 @@ public class PortalActivator extends Listener<Portals> {
 			return;
 		}
 
-		// Disable portal
+		// Deactivate portal
 		final var player = event.getPlayer();
 		if (lever.isPowered()) {
-			// Lever is being switched off
-			portal.disable(player);
+			// Lever is being switched off → deactivate
+			if (!portal.deactivate(player)) {
+				event.setUseInteractedBlock(Event.Result.DENY);
+				event.setUseItemInHand(Event.Result.DENY);
+			}
 		} else {
-			// Lever is being switched on
-			portal.enable(player);
+			// Lever is being switched on → activate
+			if (!portal.activate(player)) {
+				event.setUseInteractedBlock(Event.Result.DENY);
+				event.setUseItemInHand(Event.Result.DENY);
+			}
 		}
-
-		event.setCancelled(true);
 	}
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -120,6 +151,6 @@ public class PortalActivator extends Listener<Portals> {
 		}
 
 		// TODO setting for "keep on while pulse active" and "toggle on falling/rising edge"
-		portal.enable(null);
+		portal.activate(null);
     }
 }

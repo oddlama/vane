@@ -6,7 +6,6 @@ authors: [oddlama]
 website: 'https://github.com/oddlama/vane'
 
 depend: [ProtocolLib]
-softdepend: [dynmap]
 
 main: org.oddlama.vane.core.Core
 database: false
