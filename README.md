@@ -57,7 +57,7 @@ and therefore not well suited for giving out valuable traits (like *Angel* or *U
 - [x] *Seeding*: Right click your crops to plant crops of the same type around them. Use multiple times to create a circle.
 - [x] *Take Off*: Double jump to start gliding with your elytra and receive a small boost.
 - [x] *Hell Bent*: Don't hurt your head when flying into a wall. Again.
-- [x] *Grappling Hook*: Finally put your fishing rod to good use!
+- [x] *Grappling Hook*: Finally put that fishing rod to good use!
 - [x] *Leafchopper*: Remove leaves instantly with your axe. Leaves will drop items as if they decayed naturally.
 - [x] *Angel*: A legendary enchantment to accelerate your elytra while pressing shift! Gives a more natural feeling than using rockets. Elytra go brrrr! (Replaces *Wings*)
 - [x] *Unbreakable*: Well... A legendary enchantment for truly unbreakable items. Extremely rare. (Replaces *Unbreaking* and *Mending*)
@@ -67,7 +67,7 @@ and therefore not well suited for giving out valuable traits (like *Angel* or *U
 - [x] The *Sickle* allows you to harvest a small radius of finished crops. Similar to the hand-harvesting addition, this will drop only product and no seeds.
 - [x] The *File* allows you to modify block individual connections of fences, walls, glass panes and blocks alike.
 - [x] The *Empty Experience Bottle* allows you to bottle your experience (right click) for later use. Drinking the full bottle will grant you the stored experience.
-      Storing experience will cost a small percentage of the bottled xp. It will also deduce a certain amount of experience and not levels to not waste high levels.
+      Storing experience will cost a small percentage of the bottled xp. It will also calculate in terms of experience and not levels.
 
 #### Portals
 

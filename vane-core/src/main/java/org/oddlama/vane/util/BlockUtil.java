@@ -108,6 +108,44 @@ public class BlockUtil {
 		return null;
 	}
 
+	public static Block[] adjacent_blocks_3d(final Block root) {
+		final var adjacent = new Block[26];
+
+		// Direct adjacents
+		adjacent[0] = root.getRelative(1, 0, 0);
+		adjacent[1] = root.getRelative(-1, 0, 0);
+		adjacent[2] = root.getRelative(0, 0, 1);
+		adjacent[3] = root.getRelative(0, 0, -1);
+		adjacent[4] = root.getRelative(0, 1, 0);
+		adjacent[5] = root.getRelative(0, -1, 0);
+
+		// Edge adjacents
+		adjacent[6] = root.getRelative(0, -1, -1);
+		adjacent[7] = root.getRelative(0, -1, 1);
+		adjacent[8] = root.getRelative(0, 1, -1);
+		adjacent[9] = root.getRelative(0, 1, 1);
+		adjacent[10] = root.getRelative(-1, 0, -1);
+		adjacent[11] = root.getRelative(-1, 0, 1);
+		adjacent[12] = root.getRelative(1, 0, -1);
+		adjacent[13] = root.getRelative(1, 0, 1);
+		adjacent[14] = root.getRelative(-1, -1, 0);
+		adjacent[15] = root.getRelative(-1, 1, 0);
+		adjacent[16] = root.getRelative(1, -1, 0);
+		adjacent[17] = root.getRelative(1, 1, 0);
+
+		// Corner adjacents
+		adjacent[18] = root.getRelative(-1, -1, -1);
+		adjacent[19] = root.getRelative(-1, -1, 1);
+		adjacent[20] = root.getRelative(-1, 1, -1);
+		adjacent[21] = root.getRelative(-1, 1, 1);
+		adjacent[22] = root.getRelative(1, -1, -1);
+		adjacent[23] = root.getRelative(1, -1, 1);
+		adjacent[24] = root.getRelative(1, 1, -1);
+		adjacent[25] = root.getRelative(1, 1, 1);
+
+		return adjacent;
+	}
+
 	public static Block next_seedable_block(final Block root_block, Material farmland_type, int radius) {
 		for (var relative_pos : NEAREST_RELATIVE_BLOCKS_FOR_RADIUS.get(radius)) {
 			final var block = relative(root_block, relative_pos);

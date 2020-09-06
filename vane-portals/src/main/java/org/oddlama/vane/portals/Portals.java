@@ -1,5 +1,7 @@
 package org.oddlama.vane.portals;
 
+import static org.oddlama.vane.util.BlockUtil.adjacent_blocks_3d;
+
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -23,6 +25,7 @@ import org.bukkit.util.Vector;
 import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
+import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
@@ -56,87 +59,157 @@ import org.oddlama.vane.core.module.Module;
 
 @VaneModule(name = "portals", bstats = 8642, config_version = 1, lang_version = 1, storage_version = 1)
 public class Portals extends Module<Portals> {
+	private static final Material MATERIAL_BOUNDARY = Material.OBSIDIAN;
+	// TODO custom origin block?
+	private static final Material MATERIAL_ORIGIN = Material.NETHERITE_BLOCK;
+	private static final Material MATERIAL_CONSOLE = Material.ENCHANTING_TABLE;
+
+	private HashMap<UUID, Block> pending_console = new HashMap<>();
+
 	public Portals() {
 		// TODO new PortalBuilder(this);
 		new PortalBlockProtector(this);
 	}
 
-	public boolean is_portal_block(final Block block) {
+	public Portal portal_for(final Block block) {
 		// TODO
-		return false;
+		return new Portal();
 	}
 
-	//@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	//public void on_player_interact(final PlayerInteractEvent event) {
-	//	if (!event.hasBlock() || event.getAction() != Action.RIGHT_CLICK_BLOCK) {
-	//		return;
-	//	}
+	public boolean is_portal_block(final Block block) {
+		return portal_for(block) != null;
+	}
 
-	//	final var player = event.getPlayer();
-	//	final var block = event.getClickedBlock();
+	private Portal controlled_portal(final Block block) {
+		final var root_portal = portal_for(block);
+		if (root_portal != null) {
+			return root_portal;
+		}
 
-	//	switch (block.getType()) {
-	//		default:
-	//			return;
+		for (final var adj : adjacent_blocks_3d(block)) {
+			if (adj.getType() == MATERIAL_CONSOLE) {
+				final var portal = portal_for(block);
+				if (portal != null) {
+					return portal;
+				}
+			}
+		}
 
-	//		case OBSIDIAN:
-	//		case GOLD_BLOCK:
-	//			if (ItemUtil.nonNullItemStack(player.getEquipment().getItemInMainHand()).getType() == Material.AIR) {
-	//				if (Portals.linkConsole(player, block))
-	//					event.setCancelled(true);
-	//			}
-	//			break;
+		return null;
+	}
 
-	//		case LEVER: {
-	//			/* only for disable */
-	//			Switch lever = (Switch)block.getBlockData();
-	//			BlockFace attachmentFace;
-	//			switch (lever.getFace()) {
-	//				case CEILING:
-	//					attachmentFace = BlockFace.UP;
-	//					break;
-	//				case FLOOR:
-	//					attachmentFace = BlockFace.DOWN;
-	//					break;
-	//				default:
-	//				case WALL:
-	//					attachmentFace = lever.getFacing().getOppositeFace();
-	//					break;
-	//			}
-	//			Block base = block.getRelative(attachmentFace);
+	private void begin_portal_construction(final Player player, final Block console_block) {
+		// Add console_block as pending console
+		pending_console.put(player.getUniqueId(), console_block);
+		// TODO player.sendMessage(PortalsConfiguration.PORTAL_SELECT_BOUNDARY_NOW.get());
+		player.sendMessage("click boundary");
+	}
 
-	//			//FIXME if (!lever.isPowered())
-	//			//FIXME 	break; /* enable is handled by redstone signal */
+	private void construct_portal(final Player player, final Block console, final Block boundary_block) {
+		if (is_portal_block(boundary_block)) {
+			log.severe("construct_portal() was called on a boundary that already belongs to a portal! This is a bug.");
+			return;
+		}
 
-	//			Portal portal = Portals.getControlledPortal(base);
-	//			if (portal == null)
-	//				break;
+		System.out.println("construct");
+	}
 
-	//			//FIXME Portals.performPortalAction(player, portal, Portals.Action.DISABLE);
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void on_player_interact_construct_portal(final PlayerInteractEvent event) {
+		if (!event.hasBlock() || event.getAction() != Action.RIGHT_CLICK_BLOCK) {
+			return;
+		}
 
-	//			if (lever.isPowered())
-	//				Portals.performPortalAction(player, portal, Portals.Action.DISABLE);
-	//			else
-	//				Portals.performPortalAction(player, portal, Portals.Action.ENABLE);
-	//			event.setCancelled(true);
-	//			break;
-	//		}
+		final var block = event.getClickedBlock();
+		if (block.getType() != MATERIAL_CONSOLE) {
+			return;
+		}
 
-	//		case ENCHANTING_TABLE:
-	//			if (player.isSneaking()) {
-	//				/* only process main hand events */
-	//				if (event.getHand() != EquipmentSlot.HAND)
-	//					break;
+		// Abort if the console belongs to another portal already.
+		if (is_portal_block(block)) {
+			return;
+		}
 
-	//				Portals.createConsole(player, block);
-	//				event.setCancelled(true);
-	//			} else {
-	//				if (Portals.openConsole(player, block))
-	//					event.setCancelled(true);
-	//			}
-	//			break;
-	//	}
-	//}
+		// TODO portal stone as item instead of shifting?
+		// Only if player sneak-right-clicks the console
+		final var player = event.getPlayer();
+		if (!player.isSneaking() || event.getHand() != EquipmentSlot.HAND) {
+			return;
+		}
+
+		begin_portal_construction(player, block);
+		event.setCancelled(true);
+	}
+
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	public void on_player_interact_boundary(final PlayerInteractEvent event) {
+		if (!event.hasBlock() || event.getAction() != Action.RIGHT_CLICK_BLOCK) {
+			return;
+		}
+
+		final var block = event.getClickedBlock();
+		final var type = block.getType();
+		if (type != MATERIAL_BOUNDARY || type != MATERIAL_CONSOLE) {
+			return;
+		}
+
+		// Break if no console is pending
+		final var player = event.getPlayer();
+		final var console = pending_console.get(player.getUniqueId());
+		if (console == null) {
+			return;
+		}
+
+		final var portal = portal_for(block);
+		if (portal == null) {
+			construct_portal(player, console, block);
+		} else {
+			portal.link_console(player, console, block);
+		}
+
+		event.setCancelled(true);
+	}
+
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	public void on_player_interact_lever(final PlayerInteractEvent event) {
+		if (!event.hasBlock() || event.getAction() != Action.RIGHT_CLICK_BLOCK) {
+			return;
+		}
+
+		final var block = event.getClickedBlock();
+		if (block.getType() != Material.LEVER) {
+			return;
+		}
+
+		// Get base block the lever is attached to
+		final var lever = (Switch)block.getBlockData();
+		final BlockFace attached_face;
+		switch (lever.getAttachedFace()) {
+			default:
+			case WALL:    attached_face = lever.getFacing().getOppositeFace(); break;
+			case CEILING: attached_face = BlockFace.UP; break;
+			case FLOOR:   attached_face = BlockFace.DOWN; break;
+		}
+
+		// Find controlled portal
+		final var base = block.getRelative(attached_face);
+		final var portal = controlled_portal(base);
+		if (portal == null) {
+			return;
+		}
+
+		// Disable portal
+		final var player = event.getPlayer();
+		if (lever.isPowered()) {
+			// Lever is being switched off
+			portal.disable(player);
+		} else {
+			// Lever is being switched on
+			portal.enable(player);
+		}
+
+		event.setCancelled(true);
+	}
 
 	//@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	//public void on_monitor_chunk_unload(final ChunkUnloadEvent event) {
@@ -220,20 +293,19 @@ public class Portals extends Module<Portals> {
 	//	}
 	//}
 
-	//	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	//	public void on_block_redstone(BlockRedstoneEvent event)
-	//	{
-	//		if (event.getOldCurrent() != 0 || event.getNewCurrent() != 15)
-	//			return;
-	//
-	//		Portal portal = Portals.getControlledPortal(event.getBlock());
-	//		if (portal == null)
-	//			return;
-	//
-	//		if (System.currentTimeMillis() - lastActivation.getOrDefault(portal.getId(), 0l) < PORTAL_ACTIVATION_DELAY)
-	//			return;
-	//
-	//		if (Portals.performPortalAction(null, portal, Portals.Action.ENABLE))
-	//			lastActivation.put(portal.getId(), System.currentTimeMillis());
-	//	}
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void on_block_redstone(final BlockRedstoneEvent event) {
+		// Redstone enable only works on hard-linked portals.
+	    if (event.getOldCurrent() != 0 || event.getNewCurrent() == 0) {
+		    return;
+		}
+
+	    final var portal = portal_for(event.getBlock());
+	    if (portal == null) {
+		    return;
+		}
+
+		// TODO setting for "keep on while pulse active" and "toggle on falling/rising edge"
+		portal.enable(null);
+    }
 }
