@@ -55,57 +55,21 @@ import org.oddlama.vane.annotation.VaneModule;
 import org.jetbrains.annotations.Nullable;
 import org.oddlama.vane.core.module.Module;
 
-public class Portal {
-	public boolean activate(@Nullable final Player player) {
-		// TODO send event check cancelled
-		System.out.println("activate");
+public enum Plane {
+	XY(true, true, false),
+	YZ(false, true, true),
+	XZ(true, false, true);
 
-		// TODO sound
-		return true;
+	private boolean x;
+	private boolean y;
+	private boolean z;
+	private Plane(boolean x, boolean y, boolean z) {
+		this.x = x;
+		this.y = y;
+		this.z = z;
 	}
 
-	public boolean deactivate(@Nullable final Player player) {
-		// TODO send event check cancelled
-		System.out.println("deactivate");
-
-		// TODO sound
-		return true;
-	}
-
-	public boolean link_console(final Player player, final Block console, final Block boundary) {
-		// TODO send separate?? event check cancelled
-		System.out.println("link");
-		return true;
-	}
-
-	public PortalBlock block(final Block block) {
-		// TODO
-		return null;
-	}
-
-	public boolean open_console(final Player player, final Block console_block) {
-		final var console = block(console_block);
-		if (console == null || console.type() != PortalBlock.Type.CONSOLE) {
-			return false;
-		}
-
-		System.out.println("open console");
-		// TODO send separate?? event check cancelled
-
-		//new ConsoleMenu(player, portal, console).open();
-		return true;
-	}
-
-	public @Nullable Portal target() {
-		// TODO
-		return null;
-	}
-
-	public Orientation orientation() {
-		return Orientation.POSITIVE_X;
-	}
-
-	public Location spawn() {
-		return null;
-	}
+	public boolean x() { return x; }
+	public boolean y() { return y; }
+	public boolean z() { return z; }
 }

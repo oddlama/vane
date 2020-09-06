@@ -55,12 +55,85 @@ import org.oddlama.vane.annotation.VaneModule;
 import org.jetbrains.annotations.Nullable;
 import org.oddlama.vane.core.module.Module;
 
-public class Orientation {
+public enum Orientation {
+	POSITIVE_X(Plane.YZ, new Vector(1, 0, 0)),
+	NEGATIVE_X(Plane.YZ, new Vector(-1, 0, 0)),
+	POSITIVE_Y(Plane.XZ, new Vector(0, 1, 0)),
+	NEGATIVE_Y(Plane.XZ, new Vector(0, -1, 0)),
+	POSITIVE_Z(Plane.XY, new Vector(0, 0, 1)),
+	NEGATIVE_Z(Plane.XY, new Vector(0, 0, -1));
+
+	private Plane plane;
+	private Vector vector;
+	private Orientation(Plane plane, Vector vector) {
+		this.plane = plane;
+		this.vector = vector;
+	}
+
+	public Plane plane() {
+		return plane;
+	}
+
+	public Vector vector() {
+		return vector;
+	}
+
 	public Location apply(final Orientation reference, final Location location) {
-		return location;
+		final var l = location.clone();
+		l.setDirection(apply(reference, location.getDirection()));
+		return l;
 	}
 
 	public Vector apply(final Orientation reference, final Vector vector) {
 		return vector;
+	}
+
+	public static Orientation getOrientation(final Plane plane, final Block origin, final Block console, final Location entity_location) {
+		switch (plane) {
+			case XY: {
+				final var origin_z = origin.getZ() + 0.5;
+				final var console_z = console.getZ() + 0.5;
+				if (console_z > origin_z) {
+					return NEGATIVE_Z;
+				} else if (console_z < origin_z) {
+					return POSITIVE_Z;
+				} else {
+					if (entity_location.getZ() > origin_z) {
+						return NEGATIVE_Z;
+					} else {
+						return POSITIVE_Z;
+					}
+				}
+			}
+
+			case YZ: {
+				final var origin_x = origin.getX() + 0.5;
+				final var console_x = console.getX() + 0.5;
+				if (console_x > origin_x) {
+					return NEGATIVE_X;
+				} else if (console_x < origin_x) {
+					return POSITIVE_X;
+				} else {
+					if (entity_location.getX() > origin_x) {
+						return NEGATIVE_X;
+					} else {
+						return POSITIVE_X;
+					}
+				}
+			}
+
+			case XZ: {
+				final var origin_y = origin.getY() + 0.5;
+				final var console_y = console.getY() + 0.5;
+				if (console_y >= origin_y) {
+					return NEGATIVE_Y;
+				} else { /* if (console_y < origin_y) */
+					return POSITIVE_Y;
+				}
+			}
+		}
+
+		// Unreachable
+		throw new RuntimeException("Invalid control flow. This is a bug.");
 	}
 }
