@@ -74,9 +74,9 @@ public class WorldRebuild extends Listener<Admin> {
 		private BukkitTask task = null;
 		private long delay = 0;
 
-		public Rebuilder(final List<BlockState> states) {
-			this.states = states;
-			if (states.isEmpty()) {
+		public Rebuilder(final List<BlockState> _states) {
+			this.states = _states;
+			if (this.states.isEmpty()) {
 				return;
 			}
 
@@ -87,11 +87,11 @@ public class WorldRebuild extends Listener<Admin> {
 				max_y = Math.max(max_y, state.getY());
 				center.add(state.getLocation().toVector());
 			}
-			center.multiply(1.0 / states.size());
+			center.multiply(1.0 / this.states.size());
 			center.setY(max_y + 1);
 
 			// Sort blocks to rebuild them in a ordered fashion
-			Collections.sort(this.states, new RebuildComparator(center));
+			this.states.sort(new RebuildComparator(center));
 
 			// Initialize delay
 			delay = config_delay;
@@ -115,7 +115,7 @@ public class WorldRebuild extends Listener<Admin> {
 				block.breakNaturally();
 			}
 
-			// Force update without physics
+			// Force update without physics to set block type
 			state.update(true, false);
 			// Second update forces block state specific update
 			state.update(true, false);
@@ -164,9 +164,9 @@ public class WorldRebuild extends Listener<Admin> {
 			final var da = a.getLocation().toVector().subtract(reference_point).lengthSquared();
 			final var db = b.getLocation().toVector().subtract(reference_point).lengthSquared();
 			if (da < db) {
-				return 1;
-			} else if (db > da) {
 				return -1;
+			} else if (da > db) {
+				return 1;
 			} else {
 				return 0;
 			}

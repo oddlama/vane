@@ -37,6 +37,7 @@ If you don't want a certain feature, simply disable it.
 - [x] Slightly colorized chat message format for better readability
 - [x] Convenience commands for time, weather, gamemode, spawn, ...
 - [x] Hazard protection against creeper/wither explosions, door breaking, ...
+- [x] Stylish world rebuilding after explosion hazards.
 - [x] Whitelist for worlds in which the Wither may be spawned
 - [x] Players without any permissions cannot alter the world (just look, no touch!)
 - [x] Client side translations for custom items and enchantments

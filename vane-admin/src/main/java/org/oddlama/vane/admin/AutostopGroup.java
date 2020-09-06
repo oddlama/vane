@@ -14,7 +14,7 @@ import org.oddlama.vane.core.module.ModuleGroup;
 import org.oddlama.vane.util.Message;
 
 public class AutostopGroup extends ModuleGroup<Admin> {
-	@ConfigLong(def = 20 * 60 * 1000, min = 0, desc = "Delay in milliseconds after which to stop the server.")
+	@ConfigLong(def = 20 * 60, min = 0, desc = "Delay in seconds after which to stop the server.")
 	public long config_delay;
 
 	@LangString
@@ -40,7 +40,7 @@ public class AutostopGroup extends ModuleGroup<Admin> {
 		if (start_time == -1) {
 			return -1;
 		}
-		return start_time + config_delay - System.currentTimeMillis();
+		return start_time + (config_delay * 1000) - System.currentTimeMillis();
 	}
 
 	public void abort() { abort(null); }
@@ -58,7 +58,7 @@ public class AutostopGroup extends ModuleGroup<Admin> {
 	}
 
 	public void schedule() { schedule(null); }
-	public void schedule(CommandSender sender) { schedule(sender, config_delay); }
+	public void schedule(CommandSender sender) { schedule(sender, config_delay * 1000); }
 	public void schedule(CommandSender sender, long delay) {
 		if (task != null) {
 			abort(sender);

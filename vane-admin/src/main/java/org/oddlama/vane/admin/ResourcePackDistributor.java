@@ -41,8 +41,8 @@ public class ResourcePackDistributor extends Listener<Admin> {
 	public void on_config_change() {
 		// Check sha1 sum validity
 		if (config_sha1.length() != 40) {
-			get_module().log.severe("Invalid resource pack SHA-1 sum '" + config_sha1 + "', should be 40 characters long but has " + config_sha1.length());
-			get_module().log.severe("Disabling resource pack serving");
+			get_module().log.warning("Invalid resource pack SHA-1 sum '" + config_sha1 + "', should be 40 characters long but has " + config_sha1.length());
+			get_module().log.warning("Disabling resource pack serving");
 
 			// Disable resource pack
 			config_url = "";
