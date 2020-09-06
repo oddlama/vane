@@ -35,6 +35,10 @@ public abstract class ModuleComponent<T extends Module<T>> {
 		return context.get_module();
 	}
 
+	public boolean enabled() {
+		return context.enabled();
+	}
+
 	protected abstract void on_enable();
 	protected abstract void on_disable();
 	protected void on_config_change() {}

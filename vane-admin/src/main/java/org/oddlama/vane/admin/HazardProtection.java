@@ -1,9 +1,18 @@
 package org.oddlama.vane.admin;
 
 import static org.oddlama.vane.util.WorldUtil.broadcast;
+import static org.oddlama.vane.util.Nms.set_air_no_drops;
 
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Collections;
 
+import org.bukkit.Material;
+import org.bukkit.Effect;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
+import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -12,6 +21,7 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityBreakDoorEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
+import org.bukkit.util.Vector;
 
 import org.oddlama.vane.annotation.config.ConfigBoolean;
 import org.oddlama.vane.annotation.config.ConfigStringList;
@@ -21,6 +31,8 @@ import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.util.Message;
 
 public class HazardProtection extends Listener<Admin> {
+	private WorldRebuild world_rebuild;
+
 	@ConfigBoolean(def = true, desc = "Restrict wither spawning to a list of worlds defined by wither_world_whitelist.")
 	private boolean config_enable_wither_world_whitelist;
 	@ConfigStringList(def = {"world_nether", "world_the_end"}, desc = "A list of worlds in which the wither may be spawned.")
@@ -41,6 +53,7 @@ public class HazardProtection extends Listener<Admin> {
 
 	public HazardProtection(Context<Admin> context) {
 		super(context.group("hazard_protection", "Enable hazard protection. The options below allow more fine-grained control over the hazards to protect from."));
+		world_rebuild = new WorldRebuild(get_context());
 	}
 
 	private boolean disable_explosion(EntityType type) {
@@ -62,7 +75,14 @@ public class HazardProtection extends Listener<Admin> {
 		}
 
 		if (disable_explosion(event.getEntityType())) {
-			event.setCancelled(true);
+			if (world_rebuild.enabled()) {
+				// Schedule rebuild
+				world_rebuild.rebuild(event.blockList());
+				// Remove all affected blocks from event
+				event.blockList().clear();
+			} else {
+				event.setCancelled(true);
+			}
 		}
 	}
 

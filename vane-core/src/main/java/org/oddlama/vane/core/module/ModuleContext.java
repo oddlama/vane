@@ -41,6 +41,11 @@ public class ModuleContext<T extends Module<T>> implements Context<T> {
 		return Context.append_yaml_path(yaml_path(), variable, "_");
 	}
 
+	@Override
+	public boolean enabled() {
+		return context.enabled();
+	}
+
 	private void compile_component(Object component) {
 		module.lang_manager.compile(component, this::variable_yaml_path);
 		module.config_manager.compile(component, this::variable_yaml_path);

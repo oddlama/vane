@@ -94,6 +94,8 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 	public String yaml_path() { return ""; }
 	@Override
 	public String variable_yaml_path(String variable) { return variable; }
+	@Override
+	public boolean enabled() { return context_group.enabled(); }
 
 	// Callbacks for derived classes
 	protected void on_load() {}
@@ -265,7 +267,7 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 	}
 
 	public boolean reload_configuration() {
-		boolean was_enabled = context_group.enabled();
+		boolean was_enabled = enabled();
 
 		if (!try_reload_configuration()) {
 			// Force stop server, we encountered an invalid config file
@@ -282,10 +284,10 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 			return false;
 		}
 
-		if (was_enabled && !context_group.enabled()) {
+		if (was_enabled && !enabled()) {
 			// Disable plugin if needed
 			disable();
-		} else if (!was_enabled && context_group.enabled()) {
+		} else if (!was_enabled && enabled()) {
 			// Enable plugin if needed
 			enable();
 		}

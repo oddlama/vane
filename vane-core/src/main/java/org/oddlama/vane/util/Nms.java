@@ -11,10 +11,14 @@ import net.minecraft.server.v1_16_R2.IRegistry;
 import net.minecraft.server.v1_16_R2.Item;
 import net.minecraft.server.v1_16_R2.ItemStack;
 import net.minecraft.server.v1_16_R2.MinecraftKey;
+import net.minecraft.server.v1_16_R2.Clearable;
+import net.minecraft.server.v1_16_R2.BlockPosition;
 
+import org.bukkit.Material;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.craftbukkit.v1_16_R2.CraftServer;
+import org.bukkit.craftbukkit.v1_16_R2.block.CraftBlock;
 import org.bukkit.craftbukkit.v1_16_R2.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_16_R2.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.v1_16_R2.util.CraftNamespacedKey;
@@ -107,5 +111,11 @@ public class Nms {
 			Bukkit.getLogger().log(Level.SEVERE, "Could not get creative mode tab id", e);
 			return Integer.MAX_VALUE;
 		}
+	}
+
+	public static void set_air_no_drops(final org.bukkit.block.Block block) {
+		final var tileentity = ((CraftBlock)block).getCraftWorld().getHandle().getTileEntity(new BlockPosition(block.getX(), block.getY(), block.getZ()));
+		Clearable.a(tileentity);
+		block.setType(Material.AIR, false);
 	}
 }

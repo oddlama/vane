@@ -30,6 +30,7 @@ public class ModuleGroup<T extends Module<T>> extends ModuleContext<T> {
 		}
 	}
 
+	@Override
 	public boolean enabled() {
 		return config_enabled;
 	}
