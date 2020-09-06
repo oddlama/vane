@@ -101,6 +101,13 @@ public class EmptyXpBottle extends CustomItem<Trifles, EmptyXpBottle> {
 			return;
 		}
 
+		// Check if last consume time is too recent, to prevent accidential re-filling
+		final var now = System.currentTimeMillis();
+		final var last_consume = get_module().last_xp_bottle_consume_time.getOrDefault(player.getUniqueId(), 0l);
+		if (now - last_consume < 1000) {
+			return;
+		}
+
 		// Take xp, take item, play sound, give item.
 		player.giveExp(-exp, false);
 		remove_one_item_from_hand(player, event.getHand());

@@ -114,6 +114,7 @@ public class XpBottle extends CustomItem<Trifles, XpBottle> {
 		give_item(player, empty_xp_bottle_variant.item());
 
 		// Add player experience without applying mending effects
+		get_module().last_xp_bottle_consume_time.put(player.getUniqueId(), System.currentTimeMillis());
 		player.giveExp(exp_for_level(variant.config_capacity), false);
 		player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0f, 1.0f);
 
