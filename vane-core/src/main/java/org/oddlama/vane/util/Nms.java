@@ -1,17 +1,16 @@
 package org.oddlama.vane.util;
 
+import java.util.logging.Level;
+
+import net.minecraft.server.v1_16_R2.CreativeModeTab;
 import net.minecraft.server.v1_16_R2.DedicatedServer;
 import net.minecraft.server.v1_16_R2.Enchantment;
 import net.minecraft.server.v1_16_R2.EnchantmentSlotType;
 import net.minecraft.server.v1_16_R2.EntityPlayer;
 import net.minecraft.server.v1_16_R2.IRegistry;
+import net.minecraft.server.v1_16_R2.Item;
 import net.minecraft.server.v1_16_R2.ItemStack;
 import net.minecraft.server.v1_16_R2.MinecraftKey;
-import net.minecraft.server.v1_16_R2.CreativeModeTab;
-import net.minecraft.server.v1_16_R2.Item;
-import net.minecraft.server.v1_16_R2.ItemBlock;
-
-import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;

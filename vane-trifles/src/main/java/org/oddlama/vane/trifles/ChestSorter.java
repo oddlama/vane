@@ -1,47 +1,27 @@
 package org.oddlama.vane.trifles;
 
-import static org.oddlama.vane.util.MaterialUtil.is_seeded_plant;
-import static org.oddlama.vane.util.PlayerUtil.harvest_plant;
 import static org.oddlama.vane.util.ItemUtil.ItemStackComparator;
+import static org.oddlama.vane.util.Util.namespaced_key;
 
 import java.util.Arrays;
 
+import org.bukkit.NamespacedKey;
+import org.bukkit.Tag;
+import org.bukkit.block.Block;
+import org.bukkit.block.Chest;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.Sound;
-import org.bukkit.SoundCategory;
-import org.bukkit.event.Event;
-import org.bukkit.block.Chest;
-import org.bukkit.block.DoubleChest;
-import org.bukkit.event.EventHandler;
-import org.bukkit.NamespacedKey;
-import org.bukkit.Tag;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.DoubleChestInventory;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
-import org.oddlama.vane.annotation.config.ConfigDouble;
-import org.oddlama.vane.annotation.item.VaneItem;
-import org.oddlama.vane.core.item.CustomItem;
-import org.oddlama.vane.core.item.CustomItemVariant;
-import org.oddlama.vane.core.item.ItemVariantEnum;
-import org.oddlama.vane.core.module.Context;
-import org.oddlama.vane.trifles.Trifles;
-
-import static org.oddlama.vane.util.Util.namespaced_key;
 import org.oddlama.vane.annotation.config.ConfigLong;
 import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.module.Context;
+import org.oddlama.vane.trifles.Trifles;
 
 public class ChestSorter extends Listener<Trifles> {
 	private static final NamespacedKey LAST_SORT_TIME = namespaced_key("vane", "last_sort_time");

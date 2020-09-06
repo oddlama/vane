@@ -1,20 +1,21 @@
 package org.oddlama.vane.util;
 
-import static org.oddlama.vane.util.Nms.item_handle;
-import java.util.Comparator;
-import java.util.stream.Collectors;
-import java.util.Map;
-import static org.oddlama.vane.util.Nms.player_handle;
 import static org.oddlama.vane.util.Nms.creative_tab_id;
+import static org.oddlama.vane.util.Nms.item_handle;
+import static org.oddlama.vane.util.Nms.player_handle;
 
+import java.util.Comparator;
+import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
+
 import net.minecraft.server.v1_16_R2.Item;
 
 import org.bukkit.craftbukkit.v1_16_R2.enchantments.CraftEnchantment;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 
 public class ItemUtil {
 	public static final UUID MODIFIER_UUID_GENERIC_ATTACK_DAMAGE = UUID.fromString("CB3F55D3-645C-4F38-A497-9C13A33DB5CF");
