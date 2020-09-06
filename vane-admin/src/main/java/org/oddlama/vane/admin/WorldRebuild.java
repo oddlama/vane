@@ -23,14 +23,21 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.util.Vector;
 
-import org.oddlama.vane.annotation.config.ConfigBoolean;
-import org.oddlama.vane.annotation.config.ConfigStringList;
+import org.oddlama.vane.annotation.config.ConfigLong;
+import org.oddlama.vane.annotation.config.ConfigDouble;
 import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.util.Message;
 
 public class WorldRebuild extends Listener<Admin> {
+	@ConfigLong(def = 2000, min = 0, desc = "Delay in milliseconds until the world will be rebuilt.")
+	private long config_delay;
+	@ConfigDouble(def = 1.5, min = 1.0, desc = "Rebuild speed gain factor. The delay until the next block will be: current_delay / speed_gain.")
+	private double config_speed_gain;
+	@ConfigLong(def = 50, min = 0, desc = "Minimum delay in milliseconds between rebuilding two blocks. Anything <= 50 milliseconds will be one tick.")
+	private long config_min_delay;
+
 	public WorldRebuild(Context<Admin> context) {
 		super(context.group("world_rebuild", "Instead of cancelling explosions, the world will regenerate after a short amount of time."));
 	}
@@ -87,7 +94,7 @@ public class WorldRebuild extends Listener<Admin> {
 			Collections.sort(this.states, new RebuildComparator(center));
 
 			// Initialize delay
-			delay = 2000;
+			delay = config_delay;
 			task = get_module().schedule_task(this, delay / 50);
 		}
 
@@ -138,7 +145,7 @@ public class WorldRebuild extends Listener<Admin> {
 				rebuild_next_block();
 
 				// Adjust delay
-				delay = Math.max(50, (int)(delay / 1.25));
+				delay = Math.max(config_min_delay, (int)(delay / config_speed_gain));
 				WorldRebuild.this.get_module().schedule_task(this, delay / 50);
 			}
 		}
