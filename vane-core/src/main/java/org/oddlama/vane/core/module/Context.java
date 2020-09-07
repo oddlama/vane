@@ -3,6 +3,7 @@ package org.oddlama.vane.core.module;
 import java.io.IOException;
 import java.util.Map;
 import java.util.function.Consumer;
+import org.json.JSONObject;
 
 import org.bukkit.scheduler.BukkitTask;
 
@@ -60,7 +61,7 @@ public interface Context<T extends Module<T>> {
 		return get_module().getServer().getScheduler().runTask(get_module(), task);
 	}
 
-	default public void add_storage_migration_to(long to, String name, Consumer<Map<String, Object>> migrator) {
+	default public void add_storage_migration_to(long to, String name, Consumer<JSONObject> migrator) {
 		get_module().persistent_storage_manager.add_migration_to(to, name, migrator);
 	}
 

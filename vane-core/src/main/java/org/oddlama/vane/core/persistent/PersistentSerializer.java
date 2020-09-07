@@ -15,60 +15,100 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.ArrayList;
 import java.util.function.Function;
+import org.bukkit.Location;
+import org.bukkit.Bukkit;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Material;
 import org.json.JSONObject;
 import org.json.JSONArray;
 
-import org.oddlama.vane.core.functional.Consumer1;
-import org.oddlama.vane.core.functional.Function1;
+import org.jetbrains.annotations.NotNull;
 
 public class PersistentSerializer {
-	private static final Map<Class<?>, Function1<Object, String>> serializers = new HashMap<>();
-	private static final Map<Class<?>, Function1<String, Object>> deserializers = new HashMap<>();
+	@FunctionalInterface
+	public static interface Function<T1, R> {
+		R apply(T1 t1) throws IOException;
+	}
+
+	private static Object serialize_location(@NotNull final Object o) throws IOException {
+		final var location = (Location)o;
+		final var json = new JSONObject();
+		json.put("world_id", primitive_to_json(UUID.class,   location.getWorld().getUID()));
+		json.put("x",        primitive_to_json(double.class, location.getX()));
+		json.put("y",        primitive_to_json(double.class, location.getY()));
+		json.put("z",        primitive_to_json(double.class, location.getZ()));
+		json.put("pitch",    primitive_to_json(float.class, location.getPitch()));
+		json.put("yaw",      primitive_to_json(float.class, location.getYaw()));
+		return json;
+	}
+
+	private static Location deserialize_location(@NotNull final Object o) throws IOException {
+		final var json = (JSONObject)o;
+		final var world_id = primitive_from_json(UUID.class,   json.get("world_id"));
+		final var x        = primitive_from_json(double.class, json.get("x"));
+		final var y        = primitive_from_json(double.class, json.get("y"));
+		final var z        = primitive_from_json(double.class, json.get("z"));
+		final var pitch    = primitive_from_json(float.class, json.get("pitch"));
+		final var yaw      = primitive_from_json(float.class, json.get("yaw"));
+		return new Location(Bukkit.getWorld(world_id), x, y, z, yaw, pitch);
+	}
+
+	private static boolean is_null(Object o) {
+		return o == null || o == JSONObject.NULL;
+	}
+
+	private static final Map<Class<?>, Function<Object, Object>> serializers = new HashMap<>();
+	private static final Map<Class<?>, Function<Object, Object>> deserializers = new HashMap<>();
 	static {
 		// Primitive types
 		serializers.put(boolean.class,    String::valueOf);
-		serializers.put(Boolean.class,    String::valueOf);
 		serializers.put(char.class,       String::valueOf);
-		serializers.put(Character.class,  String::valueOf);
 		serializers.put(double.class,     String::valueOf);
-		serializers.put(Double.class,     String::valueOf);
 		serializers.put(float.class,      String::valueOf);
-		serializers.put(Float.class,      String::valueOf);
 		serializers.put(int.class,        String::valueOf);
-		serializers.put(Integer.class,    String::valueOf);
 		serializers.put(long.class,       String::valueOf);
+		serializers.put(Boolean.class,    String::valueOf);
+		serializers.put(Character.class,  String::valueOf);
+		serializers.put(Double.class,     String::valueOf);
+		serializers.put(Float.class,      String::valueOf);
+		serializers.put(Integer.class,    String::valueOf);
 		serializers.put(Long.class,       String::valueOf);
 
-		deserializers.put(boolean.class,    Boolean::parseBoolean);
-		deserializers.put(Boolean.class,    Boolean::valueOf);
-		deserializers.put(char.class,       s -> s.charAt(0));
-		deserializers.put(Character.class,  s -> s == null ? null : s.charAt(0));
-		deserializers.put(double.class,     Double::parseDouble);
-		deserializers.put(Double.class,     Double::valueOf);
-		deserializers.put(float.class,      Float::parseFloat);
-		deserializers.put(Float.class,      Float::valueOf);
-		deserializers.put(int.class,        Integer::parseInt);
-		deserializers.put(Integer.class,    Integer::valueOf);
-		deserializers.put(long.class,       Long::parseLong);
-		deserializers.put(Long.class,       Long::valueOf);
+		deserializers.put(boolean.class,    x -> Boolean.parseBoolean((String)x));
+		deserializers.put(char.class,       x -> ((String)x).charAt(0));
+		deserializers.put(double.class,     x -> Double.parseDouble((String)x));
+		deserializers.put(float.class,      x -> Float.parseFloat((String)x));
+		deserializers.put(int.class,        x -> Integer.parseInt((String)x));
+		deserializers.put(long.class,       x -> Long.parseLong((String)x));
+		deserializers.put(Boolean.class,    x -> Boolean.valueOf((String)x));
+		deserializers.put(Character.class,  x -> ((String)x).charAt(0));
+		deserializers.put(Double.class,     x -> Double.valueOf((String)x));
+		deserializers.put(Float.class,      x -> Float.valueOf((String)x));
+		deserializers.put(Integer.class,    x -> Integer.valueOf((String)x));
+		deserializers.put(Long.class,       x -> Long.valueOf((String)x));
 
 		// Other types
-		serializers.put(String.class, s -> (String)s);
-		deserializers.put(String.class, s -> s);
-		serializers.put(UUID.class, u -> u.toString());
-		deserializers.put(UUID.class, UUID::fromString);
+		serializers.put(String.class,   x -> x);
+		deserializers.put(String.class, x -> x);
+		serializers.put(UUID.class,     x -> ((UUID)x).toString());
+		deserializers.put(UUID.class,   x -> UUID.fromString((String)x));
 
 		// Bukkit types
+		serializers.put(Location.class,   PersistentSerializer::serialize_location);
+		deserializers.put(Location.class, PersistentSerializer::deserialize_location);
 	}
 
 	public static Object to_json(final Field field, final Object value) throws IOException {
 		return to_json(field.getGenericType(), value);
 	}
 
-	public static String to_string(final Class<?> cls, final Object value) throws IOException {
+	public static Object primitive_to_json(final Class<?> cls, final Object value) throws IOException {
 		final var serializer = serializers.get(cls);
 		if (serializer == null) {
 			throw new IOException("Cannot serialize " + cls + ". This is a bug.");
+		}
+		if (is_null(value)) {
+			return JSONObject.NULL;
 		}
 		return serializer.apply(value);
 	}
@@ -83,7 +123,7 @@ public class PersistentSerializer {
 				final var V = type_args[1];
 				final var json = new JSONObject();
 				for (final var e : ((Map<?,?>)value).entrySet()) {
-					json.put(to_string(K, e.getKey()), to_json(V, e.getValue()));
+					json.put((String)primitive_to_json(K, e.getKey()), to_json(V, e.getValue()));
 				}
 				return json;
 			} else if (base_type.equals(Set.class)) {
@@ -104,7 +144,7 @@ public class PersistentSerializer {
 				throw new IOException("Cannot serialize " + type + ". This is a bug.");
 			}
 		} else {
-			return to_string((Class<?>)type, value);
+			return primitive_to_json((Class<?>)type, value);
 		}
 	}
 
@@ -112,12 +152,16 @@ public class PersistentSerializer {
 		return from_json(field.getGenericType(), value);
 	}
 
-	public static Object from_string(final Class<?> cls, final String value) throws IOException {
+	@SuppressWarnings("unchecked")
+	public static<U> U primitive_from_json(final Class<U> cls, final Object value) throws IOException {
 		final var deserializer = deserializers.get(cls);
 		if (deserializer == null) {
 			throw new IOException("Cannot deserialize " + cls + ". This is a bug.");
 		}
-		return deserializer.apply(value);
+		if (is_null(value)) {
+			return null;
+		}
+		return (U)deserializer.apply(value);
 	}
 
 	public static Object from_json(final Type type, final Object json) throws IOException {
@@ -130,7 +174,7 @@ public class PersistentSerializer {
 				final var V = type_args[1];
 				final var value = new HashMap<Object, Object>();
 				for (final var key : ((JSONObject)json).keySet()) {
-					value.put(from_string(K, key), from_json(V, ((JSONObject)json).get(key)));
+					value.put(primitive_from_json(K, key), from_json(V, ((JSONObject)json).get(key)));
 				}
 				return value;
 			} else if (base_type.equals(Set.class)) {
@@ -151,7 +195,7 @@ public class PersistentSerializer {
 				throw new IOException("Cannot deserialize " + type + ". This is a bug.");
 			}
 		} else {
-			return from_string((Class<?>)type, (String)json);
+			return primitive_from_json((Class<?>)type, json);
 		}
 	}
 }

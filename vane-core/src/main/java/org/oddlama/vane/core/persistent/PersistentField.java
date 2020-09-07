@@ -2,6 +2,7 @@ package org.oddlama.vane.core.persistent;
 
 import static org.reflections.ReflectionUtils.*;
 
+import org.json.JSONObject;
 import java.lang.reflect.Field;
 import java.io.IOException;
 import java.util.Map;
@@ -32,24 +33,17 @@ public class PersistentField {
 		}
 	}
 
-	public void save(Map<String, Object> map) throws IOException {
-		System.out.println(" → " + PersistentSerializer.to_json(field, get()));
-		map.put(path, get());
+	public void save(JSONObject json) throws IOException {
+		json.put(path, PersistentSerializer.to_json(field, get()));
 	}
 
-	public void load(Map<String, Object> map) throws LoadException {
-		//try {
-		//	System.out.println(" → " + PersistentSerializer.from_json(field, get()));
-		//} catch (IOException e) {
-		//	throw new LoadException("Error while serializing", e);
-		//}
-
-		if (!map.containsKey(path)) {
-			throw new LoadException("Missing key in persistent map: '" + path + "'");
+	public void load(JSONObject json) throws IOException {
+		if (!json.has(path)) {
+			throw new IOException("Missing key in persistent storage: '" + path + "'");
 		}
 
 		try {
-			field.set(owner, map.get(path));
+			field.set(owner, PersistentSerializer.from_json(field, json.get(path)));
 		} catch (IllegalAccessException e) {
 			throw new RuntimeException("Invalid field access on '" + field.getName() + "'. This is a bug.");
 		}

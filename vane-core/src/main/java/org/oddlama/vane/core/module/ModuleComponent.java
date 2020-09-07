@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 import org.bukkit.scheduler.BukkitTask;
+import org.json.JSONObject;
 
 import org.oddlama.vane.core.ResourcePackGenerator;
 
@@ -52,7 +53,7 @@ public abstract class ModuleComponent<T extends Module<T>> {
 		return context.schedule_next_tick(task);
 	}
 
-	public final void add_storage_migration_to(long to, String name, Consumer<Map<String, Object>> migrator) {
+	public final void add_storage_migration_to(long to, String name, Consumer<JSONObject> migrator) {
 		context.add_storage_migration_to(to, name, migrator);
 	}
 

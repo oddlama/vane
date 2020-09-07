@@ -6,7 +6,6 @@ import org.oddlama.vane.admin.Admin;
 import org.oddlama.vane.annotation.command.Name;
 import org.oddlama.vane.core.command.Command;
 import org.oddlama.vane.core.module.Context;
-import org.oddlama.vane.core.persistent.PersistentLocation;
 
 @Name("setspawn")
 public class Setspawn extends Command<Admin> {
@@ -24,7 +23,7 @@ public class Setspawn extends Command<Admin> {
 		player.getWorld().setSpawnLocation(loc);
 
 		// Save location in storage
-		get_module().storage_spawn_location = PersistentLocation.from(loc);
+		get_module().storage_spawn_location = loc.clone();
 		save_persistent_storage();
 
 		player.sendMessage("§aSpawn §7set!");

@@ -3,13 +3,13 @@ package org.oddlama.vane.admin;
 import org.oddlama.vane.annotation.VaneModule;
 import org.oddlama.vane.annotation.persistent.Persistent;
 import org.oddlama.vane.core.module.Module;
-import org.oddlama.vane.core.persistent.PersistentLocation;
+import org.bukkit.Location;
 
 @VaneModule(name = "admin", bstats = 8638, config_version = 1, lang_version = 1, storage_version = 1)
 public class Admin extends Module<Admin> {
 	// Persistent storage
 	@Persistent
-	public PersistentLocation storage_spawn_location = null;
+	public Location storage_spawn_location = null;
 
 	public Admin() {
 		// Create components
