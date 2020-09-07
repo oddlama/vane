@@ -191,7 +191,11 @@ public class PersistentStorageManager {
 		// Create map of all fields
 		var map = new HashMap<String, Object>();
 		for (var f : persistent_fields) {
-			f.save(map);
+			try {
+				f.save(map);
+			} catch (IOException e) {
+				module.log.log(Level.SEVERE, "error while serializing persistent data!", e);
+			}
 		}
 
 		// Map to json

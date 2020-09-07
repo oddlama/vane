@@ -298,7 +298,7 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 
 	public File get_persistent_storage_file() {
 		// Generate new file if not existing
-		return new File(getDataFolder(), "storage.dat");
+		return new File(getDataFolder(), "storage.json");
 	}
 
 	public void load_persistent_storage() {

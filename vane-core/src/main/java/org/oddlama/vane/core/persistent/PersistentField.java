@@ -3,6 +3,7 @@ package org.oddlama.vane.core.persistent;
 import static org.reflections.ReflectionUtils.*;
 
 import java.lang.reflect.Field;
+import java.io.IOException;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -31,12 +32,18 @@ public class PersistentField {
 		}
 	}
 
-	public void save(Map<String, Object> map) {
-		map.put(path, get()); //.to_json());
+	public void save(Map<String, Object> map) throws IOException {
+		System.out.println(" → " + PersistentSerializer.to_json(field, get()));
+		map.put(path, get());
 	}
 
 	public void load(Map<String, Object> map) throws LoadException {
-		System.out.println(" → " + PersistentSerializer.to_json(field, get()));
+		//try {
+		//	System.out.println(" → " + PersistentSerializer.from_json(field, get()));
+		//} catch (IOException e) {
+		//	throw new LoadException("Error while serializing", e);
+		//}
+
 		if (!map.containsKey(path)) {
 			throw new LoadException("Missing key in persistent map: '" + path + "'");
 		}

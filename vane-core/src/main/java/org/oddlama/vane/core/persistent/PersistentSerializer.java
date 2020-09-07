@@ -5,10 +5,18 @@ import static org.reflections.ReflectionUtils.*;
 import java.lang.reflect.Type;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Field;
+import java.io.IOException;
 import java.util.Map;
+import java.util.Set;
+import java.util.List;
+import java.util.Collection;
+import java.util.UUID;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.function.Function;
 import org.json.JSONObject;
+import org.json.JSONArray;
 
 import org.oddlama.vane.core.functional.Consumer1;
 import org.oddlama.vane.core.functional.Function1;
@@ -44,48 +52,106 @@ public class PersistentSerializer {
 		deserializers.put(long.class,       Long::parseLong);
 		deserializers.put(Long.class,       Long::valueOf);
 
-		// String
+		// Other types
 		serializers.put(String.class, s -> (String)s);
 		deserializers.put(String.class, s -> s);
+		serializers.put(UUID.class, u -> u.toString());
+		deserializers.put(UUID.class, UUID::fromString);
 
 		// Bukkit types
 	}
 
-	public static String to_string(final Class<?> cls, final Object value) {
+	public static Object to_json(final Field field, final Object value) throws IOException {
+		return to_json(field.getGenericType(), value);
+	}
+
+	public static String to_string(final Class<?> cls, final Object value) throws IOException {
 		final var serializer = serializers.get(cls);
 		if (serializer == null) {
-			// TODO severe
-			System.out.println("no serializer for " + cls);
-			return null;
+			throw new IOException("Cannot serialize " + cls + ". This is a bug.");
 		}
 		return serializer.apply(value);
 	}
 
-	public static Object to_json(final Field field, final Object value) {
-		return to_json(field.getGenericType(), value);
-	}
-
-	public static Object to_json(final Type type, final Object value) {
+	public static Object to_json(final Type type, final Object value) throws IOException {
 		if (type instanceof ParameterizedType) {
 			final var parameterized_type = (ParameterizedType)type;
-			final var map_interface = find_parameterized_interface(Map.class, type);
-			return null;
-			//final var base_type = parameterized_type.getRawType();
-			//if (base_type.equals(Map.class)) {
-			//	final var type_args = parameterized_type.getActualTypeArguments();
-			//	final var K = (Class<?>)type_args[0];
-			//	final var V = (Class<?>)type_args[1];
-			//	final var map = (Map<?,?>)value;
-			//	final var json = new JSONObject();
-			//	final var key = new JSONObject();
-			//	map.forEach((k, v) -> json.put(to_string(K, k), to_json(V, v)));
-			//	return json;
-			//} else {
-			//	// TODO severe
-			//	return null;
-			//}
+			final var base_type = parameterized_type.getRawType();
+			final var type_args = parameterized_type.getActualTypeArguments();
+			if (base_type.equals(Map.class)) {
+				final var K = (Class<?>)type_args[0];
+				final var V = type_args[1];
+				final var json = new JSONObject();
+				for (final var e : ((Map<?,?>)value).entrySet()) {
+					json.put(to_string(K, e.getKey()), to_json(V, e.getValue()));
+				}
+				return json;
+			} else if (base_type.equals(Set.class)) {
+				final var T = type_args[0];
+				final var json = new JSONArray();
+				for (final var t : (Set<?>)value) {
+					json.put(to_json(T, t));
+				}
+				return json;
+			} else if (base_type.equals(List.class)) {
+				final var T = type_args[0];
+				final var json = new JSONArray();
+				for (final var t : (List<?>)value) {
+					json.put(to_json(T, t));
+				}
+				return json;
+			} else {
+				throw new IOException("Cannot serialize " + type + ". This is a bug.");
+			}
 		} else {
 			return to_string((Class<?>)type, value);
+		}
+	}
+
+	public static Object from_json(final Field field, final Object value) throws IOException {
+		return from_json(field.getGenericType(), value);
+	}
+
+	public static Object from_string(final Class<?> cls, final String value) throws IOException {
+		final var deserializer = deserializers.get(cls);
+		if (deserializer == null) {
+			throw new IOException("Cannot deserialize " + cls + ". This is a bug.");
+		}
+		return deserializer.apply(value);
+	}
+
+	public static Object from_json(final Type type, final Object json) throws IOException {
+		if (type instanceof ParameterizedType) {
+			final var parameterized_type = (ParameterizedType)type;
+			final var base_type = parameterized_type.getRawType();
+			final var type_args = parameterized_type.getActualTypeArguments();
+			if (base_type.equals(Map.class)) {
+				final var K = (Class<?>)type_args[0];
+				final var V = type_args[1];
+				final var value = new HashMap<Object, Object>();
+				for (final var key : ((JSONObject)json).keySet()) {
+					value.put(from_string(K, key), from_json(V, ((JSONObject)json).get(key)));
+				}
+				return value;
+			} else if (base_type.equals(Set.class)) {
+				final var T = type_args[0];
+				final var value = new HashSet<Object>();
+				for (final var t : (JSONArray)json) {
+					value.add(from_json(T, t));
+				}
+				return value;
+			} else if (base_type.equals(List.class)) {
+				final var T = type_args[0];
+				final var value = new ArrayList<Object>();
+				for (final var t : (JSONArray)json) {
+					value.add(from_json(T, t));
+				}
+				return value;
+			} else {
+				throw new IOException("Cannot deserialize " + type + ". This is a bug.");
+			}
+		} else {
+			return from_string((Class<?>)type, (String)json);
 		}
 	}
 }
