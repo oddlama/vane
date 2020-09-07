@@ -209,13 +209,14 @@ public class PortalConstructor extends Listener<Portals> {
 		//MenuFactory.createAnvilStringInputMenu(player, MENU_PORTAL_TITLE_NAME_PORTAL, Material.ENDER_PEARL, (menu, name) -> {
 		//	menu.close();
 
-		//	// Re-search for same boundary, as someone could have changed conditions, resulting in a race condition
-		//	PortalBoundary boundary = find_boundary(player, block);
-		//	if (boundary == null)
+		//	// Re-search for same boundary, as someone could have changed blocks. Prevent this race condition.
+		//	final var boundary = find_boundary(player, boundary_block);
+		//	if (boundary == null) {
 		//		return ClickResult.ERROR;
+		//	}
 
 		//	// Determine orientation
-		//	Orientation orientation = Orientation.getOrientation(boundary.getPlane(), boundary.getOriginBlock(), console, player.getLocation());
+		//	Orientation orientation = Orientation.from(boundary.plane(), boundary.origin_block(), console, player.getLocation());
 
 		//	// Check console distance
 		//	if (!can_link_console(boundary, console)) {

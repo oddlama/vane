@@ -178,4 +178,19 @@ public class Portals extends Module<Portals> {
 	public void on_monitor_chunk_load(final ChunkLoadEvent event) {
 		enable_consoles_in_chunk(event.getChunk());
 	}
+
+	private static class PortalDisableRunnable implements Runnable {
+		private UUID src_id;
+		private UUID dst_id;
+
+		public PortalDisableRunnable(UUID src_id, UUID dst_id) {
+			this.src_id = src_id;
+			this.dst_id = dst_id;
+		}
+
+		@Override
+		public void run() {
+			// TODO
+		}
+	}
 }
