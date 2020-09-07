@@ -1,12 +1,15 @@
 package org.oddlama.vane.core.persistent;
 
+import static org.oddlama.vane.util.MaterialUtil.material_from;
 import static org.oddlama.vane.util.Util.namespaced_key;
 
 import java.lang.reflect.Type;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Field;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
+import java.util.Base64;
 import java.util.Set;
 import java.util.List;
 import java.util.Collection;
@@ -18,6 +21,7 @@ import java.util.function.Function;
 import org.bukkit.Location;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.Material;
 import org.json.JSONObject;
 import org.json.JSONArray;
@@ -65,6 +69,22 @@ public class PersistentSerializer {
 		return new Location(Bukkit.getWorld(world_id), x, y, z, yaw, pitch);
 	}
 
+	private static Object serialize_material(@NotNull final Object o) throws IOException {
+		return to_json(NamespacedKey.class, ((Material)o).getKey());
+	}
+
+	private static Material deserialize_material(@NotNull final Object o) throws IOException {
+		return material_from(from_json(NamespacedKey.class, o));
+	}
+
+	private static Object serialize_item_stack(@NotNull final Object o) throws IOException {
+		return new String(Base64.getEncoder().encode(((ItemStack)o).serializeAsBytes()), StandardCharsets.UTF_8);
+	}
+
+	private static ItemStack deserialize_item_stack(@NotNull final Object o) throws IOException {
+		return ItemStack.deserializeBytes(Base64.getDecoder().decode(((String)o).getBytes(StandardCharsets.UTF_8)));
+	}
+
 	private static boolean is_null(Object o) {
 		return o == null || o == JSONObject.NULL;
 	}
@@ -110,6 +130,10 @@ public class PersistentSerializer {
 		deserializers.put(NamespacedKey.class, PersistentSerializer::deserialize_namespaced_key);
 		serializers.put(Location.class,   PersistentSerializer::serialize_location);
 		deserializers.put(Location.class, PersistentSerializer::deserialize_location);
+		serializers.put(Material.class,   PersistentSerializer::serialize_material);
+		deserializers.put(Material.class, PersistentSerializer::deserialize_material);
+		serializers.put(ItemStack.class,   PersistentSerializer::serialize_item_stack);
+		deserializers.put(ItemStack.class, PersistentSerializer::deserialize_item_stack);
 	}
 
 	public static Object to_json(final Field field, final Object value) throws IOException {

@@ -4,6 +4,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.oddlama.vane.core.persistent.PersistentSerializer;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.enchantment.EnchantItemEvent;
@@ -62,6 +63,12 @@ public enum Orientation {
 	NEGATIVE_Y(Plane.XZ, new Vector(0, -1, 0)),
 	POSITIVE_Z(Plane.XY, new Vector(0, 0, 1)),
 	NEGATIVE_Z(Plane.XY, new Vector(0, 0, -1));
+
+	// Add (de-)serializer
+	static {
+		PersistentSerializer.serializers.put(Orientation.class,   x -> ((Orientation)x).name());
+		PersistentSerializer.deserializers.put(Orientation.class, x -> Orientation.valueOf((String)x));
+	}
 
 	private Plane plane;
 	private Vector vector;

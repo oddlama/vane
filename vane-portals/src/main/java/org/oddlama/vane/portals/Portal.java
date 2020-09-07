@@ -177,6 +177,12 @@ public class Portal {
 		GROUP,
 		PRIVATE;
 
+		// Add (de-)serializer
+		static {
+			PersistentSerializer.serializers.put(Visibility.class,   x -> ((Visibility)x).name());
+			PersistentSerializer.deserializers.put(Visibility.class, x -> Visibility.valueOf((String)x));
+		}
+
 		public Visibility next() {
 			final var next = (ordinal() + 1) % values().length;
 			return values()[next];
