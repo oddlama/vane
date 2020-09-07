@@ -1,6 +1,6 @@
 package org.oddlama.vane.core.persistent;
 
-import static org.reflections.ReflectionUtils.*;
+import static org.reflections.ReflectionUtils.getAllFields;
 
 import java.io.File;
 import org.json.JSONObject;

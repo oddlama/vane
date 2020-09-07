@@ -1,7 +1,5 @@
 package org.oddlama.vane.core.persistent;
 
-import static org.reflections.ReflectionUtils.*;
-
 import org.json.JSONObject;
 import java.lang.reflect.Field;
 import java.io.IOException;

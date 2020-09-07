@@ -1,7 +1,5 @@
 package org.oddlama.vane.core.persistent;
 
-import static org.reflections.ReflectionUtils.*;
-
 import java.lang.reflect.Type;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Field;
@@ -57,8 +55,8 @@ public class PersistentSerializer {
 		return o == null || o == JSONObject.NULL;
 	}
 
-	private static final Map<Class<?>, Function<Object, Object>> serializers = new HashMap<>();
-	private static final Map<Class<?>, Function<Object, Object>> deserializers = new HashMap<>();
+	public static final Map<Class<?>, Function<Object, Object>> serializers = new HashMap<>();
+	public static final Map<Class<?>, Function<Object, Object>> deserializers = new HashMap<>();
 	static {
 		// Primitive types
 		serializers.put(boolean.class,    String::valueOf);

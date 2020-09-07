@@ -1,6 +1,6 @@
 package org.oddlama.vane.core.lang;
 
-import static org.reflections.ReflectionUtils.*;
+import static org.reflections.ReflectionUtils.getAllFields;
 
 import java.io.File;
 import java.lang.annotation.Annotation;

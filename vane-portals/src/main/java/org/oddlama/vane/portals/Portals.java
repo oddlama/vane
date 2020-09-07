@@ -60,6 +60,7 @@ import org.bukkit.permissions.PermissionDefault;
 
 import org.oddlama.vane.annotation.VaneModule;
 import org.oddlama.vane.core.module.Module;
+import org.oddlama.vane.annotation.persistent.Persistent;
 
 @VaneModule(name = "portals", bstats = 8642, config_version = 1, lang_version = 1, storage_version = 1)
 public class Portals extends Module<Portals> {
@@ -70,6 +71,13 @@ public class Portals extends Module<Portals> {
 	//public Map<String, Map<String, Map<String, Material>>> config_styles;
 
 	public Map<NamespacedKey, Style> styles = new HashMap<>();
+
+	@Persistent
+	public Map<Long, Map<Long, UUID>> storage_portal_blocks_in_chunk;
+	@Persistent
+	public Map<Long, List<UUID>> storage_portals_in_chunk;
+	@Persistent
+	public Map<UUID, Portal> storage_portals;
 
 	public Portals() {
 		new PortalActivator(this);
@@ -87,12 +95,34 @@ public class Portals extends Module<Portals> {
 	}
 
 	public Portal portal_for(final Block block) {
-		// TODO
-		return new Portal();
+		final var chunk_key = Chunk.getChunkKey(block.getX(), block.getZ());
+		final var block_to_portal = storage_portal_blocks_in_chunk.get(chunk_key);
+		if (block_to_portal == null) {
+			return null;
+		}
+
+		// getBlockKey stores more information than the location in the chunk,
+		// but this is okay here as we only need a unique key for every block in the chunk.
+		final var block_key = block.getBlockKey();
+		final var portal_id = block_to_portal.get(block_key);
+		if (portal_id == null) {
+			return null;
+		}
+
+		return storage_portals.get(portal_id);
 	}
 
 	public boolean is_portal_block(final Block block) {
-		return portal_for(block) != null;
+		final var chunk_key = Chunk.getChunkKey(block.getX(), block.getZ());
+		final var block_to_portal = storage_portal_blocks_in_chunk.get(chunk_key);
+		if (block_to_portal == null) {
+			return false;
+		}
+
+		// getBlockKey stores more information than the location in the chunk,
+		// but this is okay here as we only need a unique key for every block in the chunk.
+		final var block_key = block.getBlockKey();
+		return block_to_portal.containsKey(block_key);
 	}
 
 	public Portal controlled_portal(final Block block) {
@@ -101,6 +131,7 @@ public class Portals extends Module<Portals> {
 			return root_portal;
 		}
 
+		// Find adjacent console blocks in full 3x3x3 cube, which will make this block a controlling block
 		for (final var adj : adjacent_blocks_3d(block)) {
 			if (adj.getType() == MATERIAL_CONSOLE) {
 				final var portal = portal_for(block);
