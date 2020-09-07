@@ -112,7 +112,8 @@ public class Portal {
 	private UUID target_id;
 	private boolean target_locked;
 
-	private Portal() { }
+	private Portal() {
+	}
 
 	public boolean activate(@Nullable final Player player) {
 		// TODO send event check cancelled
