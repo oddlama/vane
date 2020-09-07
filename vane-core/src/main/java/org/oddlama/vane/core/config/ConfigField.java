@@ -160,14 +160,14 @@ public abstract class ConfigField<T> implements Comparable<ConfigField<?>> {
 		builder.append("\n");
 	}
 
-	protected void append_default_value(StringBuilder builder, String indent, T def) {
+	protected void append_default_value(StringBuilder builder, String indent, Object def) {
 		builder.append(indent);
 		builder.append("# Default: ");
 		builder.append(def);
 		builder.append("\n");
 	}
 
-	protected void append_field_definition(StringBuilder builder, String indent, T def) {
+	protected void append_field_definition(StringBuilder builder, String indent, Object def) {
 		builder.append(indent);
 		builder.append(basename);
 		builder.append(": ");
