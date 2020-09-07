@@ -254,7 +254,7 @@ public class PortalConstructor extends Listener<Portals> {
 		}
 
 		final var block = event.getClickedBlock();
-		if (block.getType() != Portals.MATERIAL_CONSOLE) {
+		if (block.getType() != config_material_console) {
 			return;
 		}
 
@@ -284,7 +284,7 @@ public class PortalConstructor extends Listener<Portals> {
 
 		final var block = event.getClickedBlock();
 		final var type = block.getType();
-		if (type != config_build_material_boundary || type != Portals.MATERIAL_CONSOLE) {
+		if (!get_module().portal_boundary_materials.contains(type) || !get_module().portal_console_materials.contains(type)) {
 			return;
 		}
 

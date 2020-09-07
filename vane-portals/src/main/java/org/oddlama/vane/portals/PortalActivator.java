@@ -73,18 +73,18 @@ public class PortalActivator extends Listener<Portals> {
 		}
 
 		final var block = event.getClickedBlock();
-		if (block.getType() != Portals.MATERIAL_CONSOLE) {
+		if (get_module().portal_console_materials.contains(block.getType())) {
 			return;
 		}
 
 		// Abort if the table is not a console
-		final var portal = get_module().portal_for(block);
-		if (portal == null) {
+		final var portal_block = get_module().portal_block_for(block);
+		if (portal_block == null || portal_block.type() != PortalBlock.Type.CONSOLE) {
 			return;
 		}
 
 		final var player = event.getPlayer();
-		if (portal.open_console(player, block)) {
+		if (get_module().portal_for(portal_block).open_console(player, block)) {
 			swing_arm(player, event.getHand());
 			event.setUseInteractedBlock(Event.Result.DENY);
 			event.setUseItemInHand(Event.Result.DENY);

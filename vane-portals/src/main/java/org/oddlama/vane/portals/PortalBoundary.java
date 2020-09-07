@@ -169,7 +169,7 @@ public class PortalBoundary {
 
 	private static void do_flood_fill4_step(final PortalConstructor portal_constructor, final Stack<Block> stack, final Set<Block> out_boundary, final Set<Block> out_portal_area, final Plane plane) {
 		final var block = stack.pop();
-		if (block.getType() == portal_constructor.config_build_material_boundary || block.getType() == portal_constructor.config_build_material_origin) {
+		if (block.getType() == portal_constructor.config_material_boundary || block.getType() == portal_constructor.config_material_origin) {
 			out_boundary.add(block);
 		} else {
 			out_portal_area.add(block);
@@ -274,7 +274,7 @@ public class PortalBoundary {
 		// Assert that there are exactly two boundary blocks
 		int boundary_blocks = 0;
 		for (final var surrounding_block : surrounding_blocks) {
-			if (surrounding_block.getType() == portal_constructor.config_build_material_boundary || surrounding_block.getType() == portal_constructor.config_build_material_origin) {
+			if (surrounding_block.getType() == portal_constructor.config_material_boundary || surrounding_block.getType() == portal_constructor.config_material_origin) {
 				++boundary_blocks;
 			}
 		}
@@ -288,7 +288,7 @@ public class PortalBoundary {
 		boolean had_boundary_block_before = false;
 		for (final var surrounding_block : surrounding_blocks) {
 			// Examine block type
-			if (surrounding_block.getType() == portal_constructor.config_build_material_boundary || surrounding_block.getType() == portal_constructor.config_build_material_origin) {
+			if (surrounding_block.getType() == portal_constructor.config_material_boundary || surrounding_block.getType() == portal_constructor.config_material_origin) {
 				if (!had_boundary_block_before)
 					area_index = (area_index + 1) % 2;
 
@@ -317,7 +317,7 @@ public class PortalBoundary {
 			}
 
 			Block boundary = air.getRelative(0, -1, 0);
-			if (boundary.getType() != portal_constructor.config_build_material_boundary) {
+			if (boundary.getType() != portal_constructor.config_material_boundary) {
 				break;
 			}
 
@@ -380,7 +380,7 @@ public class PortalBoundary {
 		final var iterator = boundary.boundary_blocks.iterator();
 		while (iterator.hasNext()) {
 			final var block = iterator.next();
-			if (block.getType() == portal_constructor.config_build_material_origin) {
+			if (block.getType() == portal_constructor.config_material_origin) {
 				if (boundary.origin_block != null) {
 					// Duplicate origin block
 					boundary.error_state = ErrorState.MULTIPLE_ORIGINS;

@@ -9,6 +9,7 @@ import static org.oddlama.vane.util.Util.namespaced_key;
 import java.util.Set;
 import org.bukkit.Chunk;
 import org.bukkit.event.EventHandler;
+import org.jetbrains.annotations.NotNull;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -80,6 +81,7 @@ public class Portals extends Module<Portals> {
 	// Sets for all possible materials for a specific portal block type
 	public Set<Material> portal_area_materials;
 	public Set<Material> portal_console_materials;
+	public Set<Material> portal_boundary_materials;
 
 	public Portals() {
 		new PortalActivator(this);
@@ -98,13 +100,10 @@ public class Portals extends Module<Portals> {
 		// TODO acquire from styles
 		portal_area_materials.add(Material.END_GATEWAY);
 		portal_console_materials.add(Material.ENCHANTING_TABLE);
+		portal_boundary_materials.add(Material.OBSIDIAN);
 	}
 
-	public Portal portal_for(final PortalBlock block) {
-		return storage_portals.get(block.portal_id);
-	}
-
-	public Portal portal_for(final Block block) {
+	public PortalBlock portal_block_for(final Block block) {
 		final var chunk_key = Chunk.getChunkKey(block.getX(), block.getZ());
 		final var block_to_portal = storage_portal_blocks_in_chunk.get(chunk_key);
 		if (block_to_portal == null) {
@@ -114,12 +113,20 @@ public class Portals extends Module<Portals> {
 		// getBlockKey stores more information than the location in the chunk,
 		// but this is okay here as we only need a unique key for every block in the chunk.
 		final var block_key = block.getBlockKey();
-		final var portal_id = block_to_portal.get(block_key);
-		if (portal_id == null) {
+		return block_to_portal.get(block_key);
+	}
+
+	public Portal portal_for(@NotNull final PortalBlock block) {
+		return storage_portals.get(block.portal_id());
+	}
+
+	public Portal portal_for(final Block block) {
+		final var portal_block = portal_block_for(block);
+		if (portal_block == null) {
 			return null;
 		}
 
-		return storage_portals.get(portal_id);
+		return portal_for(portal_block);
 	}
 
 	public boolean is_portal_block(final Block block) {

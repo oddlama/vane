@@ -66,6 +66,10 @@ public class PortalBlock {
 		PORTAL;
 	}
 
+	public UUID portal_id() {
+		return portal_id;
+	}
+
 	public Type type() {
 		return Type.ORIGIN;
 	}
