@@ -32,10 +32,11 @@ public class PersistentField {
 	}
 
 	public void save(Map<String, Object> map) {
-		map.put(path, get());
+		map.put(path, get()); //.to_json());
 	}
 
 	public void load(Map<String, Object> map) throws LoadException {
+		System.out.println(" → " + PersistentSerializer.to_json(field, get()));
 		if (!map.containsKey(path)) {
 			throw new LoadException("Missing key in persistent map: '" + path + "'");
 		}

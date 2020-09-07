@@ -7,6 +7,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import com.google.gson.Gson;
+import com.google.common.reflect.TypeToken;
 import java.io.ObjectOutputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -109,8 +111,21 @@ public class PersistentStorageManager {
 		// Reset loaded status
 		is_loaded = false;
 
+		// Open file and read json
+		//final String content;
+		//try {
+		//	content = Files.readString(file.toPath(), StandardCharsets.UTF_8);
+		//} catch (IOException e) {
+		//	module.log.severe("error while loading persistent data from '" + file.getName() + "':");
+		//	module.log.severe(e.getMessage());
+		//	return false;
+		//}
+
 		// Declare map
 		Map<String, Object> map;
+
+		// Json to map
+		//var map = (HashMap<String, Object>)new Gson().fromJson(content, new TypeToken<HashMap<String, Object>>(){}.getType());
 
 		// Open file and read map
 		if (file.exists()) {
@@ -146,6 +161,7 @@ public class PersistentStorageManager {
 
 		// Save new version
 		map.put(version_path, needed_version);
+		//map.put(version_path, String.valueOf(needed_version));
 
 		try {
 			for (var f : persistent_fields) {
@@ -178,7 +194,12 @@ public class PersistentStorageManager {
 			f.save(map);
 		}
 
+		// Map to json
+		//var json = new Gson().toJson(map);
+
 		// Save to file
+		//try {
+		//	Files.write(file.toPath(), json.getBytes(StandardCharsets.UTF_8));
 		try (var oos = new ObjectOutputStream(new FileOutputStream(file))) {
 			oos.writeObject(map);
 		} catch (IOException e) {

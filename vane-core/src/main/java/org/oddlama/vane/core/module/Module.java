@@ -63,7 +63,7 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 	@LangVersion
 	public long lang_version;
 	@Persistent
-	public long storage_version = 0;
+	public long storage_version;
 
 	// Base configuration
 	@ConfigString(def = "inherit", desc = "The language for this module. The corresponding language file must be named lang-{lang}.yml. Specifying 'inherit' will load the value set for vane-core.")
