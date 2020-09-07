@@ -1,5 +1,6 @@
 package org.oddlama.vane.portals;
 
+import org.oddlama.vane.portals.event.PortalSelectBoundaryEvent;
 import static org.oddlama.vane.util.BlockUtil.adjacent_blocks_3d;
 import static org.oddlama.vane.util.PlayerUtil.swing_arm;
 
@@ -11,6 +12,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.enchantment.EnchantItemEvent;
+import org.oddlama.vane.core.module.Context;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Collection;
@@ -59,147 +61,190 @@ import org.bukkit.permissions.PermissionDefault;
 
 import org.oddlama.vane.annotation.VaneModule;
 import org.oddlama.vane.core.module.Module;
+import org.oddlama.vane.annotation.lang.LangString;
+import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.core.Listener;
+import org.oddlama.vane.util.Message;
 
 public class PortalConstructor extends Listener<Portals> {
 	public static final Material MATERIAL_BUILD_BOUNDARY = Material.OBSIDIAN;
 	// TODO custom origin block?
 	public static final Material MATERIAL_BUILD_ORIGIN = Material.NETHERITE_BLOCK;
 
-	private Portals portals;
+	// Cross section of portal:
+	//
+	// b1 = leftmost block of portal (bounding box)
+	// b2 = rightmost block of portal (bounding box)
+	// c = console (1 block)
+	// u = maximum distance from console to boundary (blocks in between + 1)
+	// w = maximum width
+	// t = maximum total width
+	//
+	//     u      w      u
+	//   |---|---------|---|
+	//   c   b1       b2   c
+	//
+	// --> PORTAL_AREA_MAX_WIDTH = t - u * 2 - 2;
+	public static final int PORTAL_MAX_WIDTH_IN_CHUNKS = 4; // Minimum is 2, as portals can be built on chunk edges
+	public static final int PORTAL_CONSOLE_MAX_DISTANCE_XZ = 12;
+	public static final int PORTAL_CONSOLE_MAX_DISTANCE_Y = 16;
+	public static final int PORTAL_AREA_FLOODFILL_MAX_STEPS = 1024;
+
+	public static final int PORTAL_AREA_MAX_WIDTH = ((PORTAL_MAX_WIDTH_IN_CHUNKS - 1) * 16) - PORTAL_CONSOLE_MAX_DISTANCE_XZ * 2 - 2;
+	public static final int PORTAL_AREA_MAX_HEIGHT = 24;
+	public static final int PORTAL_AREA_MAX_BLOCKS = 64;
+
+	@LangString public String lang_select_boundary_now;
+	@LangString public String lang_console_too_far_away;
+	@LangString public String lang_created_and_linked;
+	@LangString public String lang_console_linked;
+
+	@LangString public String lang_no_boundary_found;
+	@LangString public String lang_no_origin;
+	@LangString public String lang_multiple_origins;
+	@LangString public String lang_no_portal_block_above_origin;
+	@LangMessage public Message lang_too_large;
+	@LangMessage public Message lang_too_small_spawn;
+	@LangMessage public Message lang_too_many_portal_area_blocks;
+	@LangString public String lang_portal_area_obstructed;
+	@LangString public String lang_build_restricted;
+	@LangString public String lang_intersects_existing_portal;
+
+	@LangString public String lang_target_already_connected;
+	@LangString public String lang_source_use_restricted;
+	@LangString public String lang_target_use_restricted;
+
 	private HashMap<UUID, Block> pending_console = new HashMap<>();
 
-	public PortalConstructor(Portals portals) {
-		super(portals);
-		this.portals = portals;
+	public PortalConstructor(Context<Portals> context) {
+		super(context);
 	}
 
-	private void begin_portal_construction(final Player player, final Block console_block) {
+	public int max_dim_x(Plane plane) { return plane.x() ? PORTAL_AREA_MAX_WIDTH : 1; }
+	public int max_dim_y(Plane plane) { return plane.y() ? PORTAL_AREA_MAX_HEIGHT : 1; }
+	public int max_dim_z(Plane plane) { return plane.z() ? PORTAL_AREA_MAX_WIDTH : 1; }
+
+	private void remember_new_console(final Player player, final Block console_block) {
 		// Add console_block as pending console
 		pending_console.put(player.getUniqueId(), console_block);
-		// TODO player.sendMessage(Portals.PORTAL_SELECT_BOUNDARY_NOW.get());
-		player.sendMessage("click boundary");
+		player.sendMessage(lang_select_boundary_now);
 	}
 
-	private boolean can_link_console(Collection<Block> boundary_blocks, Block origin_block, Block console) {
-		if (!console.getWorld().equals(origin_block.getWorld())) {
+	private boolean can_link_console(final PortalBoundary boundary, final Block console) {
+		if (!console.getWorld().equals(boundary.origin_block().getWorld())) {
 			return false;
 		}
 
-		for (Block block : boundary_blocks) {
-			if (Math.abs(console.getX() - block.getX()) <= Portals.PORTAL_CONSOLE_MAX_DISTANCE_TO_BOUNDARY_XZ &&
-			    Math.abs(console.getY() - block.getY()) <= Portals.PORTAL_CONSOLE_MAX_DISTANCE_TO_BOUNDARY_Y &&
-			    Math.abs(console.getZ() - block.getZ()) <= Portals.PORTAL_CONSOLE_MAX_DISTANCE_TO_BOUNDARY_XZ) {
-					return true;
-				}
-		}
-
-		if (Math.abs(console.getX() - origin_block.getX()) <= Portals.PORTAL_CONSOLE_MAX_DISTANCE_TO_BOUNDARY_XZ &&
-		    Math.abs(console.getY() - origin_block.getY()) <= Portals.PORTAL_CONSOLE_MAX_DISTANCE_TO_BOUNDARY_Y &&
-		    Math.abs(console.getZ() - origin_block.getZ()) <= Portals.PORTAL_CONSOLE_MAX_DISTANCE_TO_BOUNDARY_XZ) {
+		for (final var block : boundary.all_blocks()) {
+			if (Math.abs(console.getX() - block.getX()) <= PORTAL_CONSOLE_MAX_DISTANCE_XZ &&
+			    Math.abs(console.getY() - block.getY()) <= PORTAL_CONSOLE_MAX_DISTANCE_Y &&
+			    Math.abs(console.getZ() - block.getZ()) <= PORTAL_CONSOLE_MAX_DISTANCE_XZ) {
 				return true;
 			}
+		}
+
 		return false;
 	}
 
-		/*
 	private PortalBoundary find_boundary(final Player player, final Block block) {
-		final var maxAreaBlocks = isAdmin ? Portals.PORTAL_AREA_MAX_BLOCKS_ADMIN : Portals.PORTAL_AREA_MAX_BLOCKS;
-
-		PortalBoundary boundary = PortalBoundary.searchAt(block, maxAreaBlocks);
+		final var boundary = PortalBoundary.search_at(this, block);
 		if (boundary == null) {
-			player.sendMessage(Portals.PORTAL_NO_BOUNDARY_FOUND.get());
+			player.sendMessage(lang_no_boundary_found);
 			return null;
 		}
 
-		switch (boundary.getErrorState()) {
-			case NONE:
-				// Boundary is fine
-				break;
-
+		// Check for error
+		switch (boundary.error_state()) {
+			case NONE: /* Boundary is fine */ break;
+			case NO_ORIGIN:                    player.sendMessage(lang_no_origin);                    return null;
+			case MULTIPLE_ORIGINS:             player.sendMessage(lang_multiple_origins);             return null;
+			case NO_PORTAL_BLOCK_ABOVE_ORIGIN: player.sendMessage(lang_no_portal_block_above_origin); return null;
+			case TOO_LARGE_X:                  player.sendMessage(lang_too_large.format("x"));        return null;
+			case TOO_LARGE_Y:                  player.sendMessage(lang_too_large.format("y"));        return null;
+			case TOO_LARGE_Z:                  player.sendMessage(lang_too_large.format("z"));        return null;
+			case TOO_SMALL_SPAWN_X:            player.sendMessage(lang_too_small_spawn.format("x"));  return null;
+			case TOO_SMALL_SPAWN_Y:            player.sendMessage(lang_too_small_spawn.format("y"));  return null;
+			case TOO_SMALL_SPAWN_Z:            player.sendMessage(lang_too_small_spawn.format("z"));  return null;
 			case TOO_MANY_PORTAL_AREA_BLOCKS:
-				player.sendMessage(boundary.getErrorState().getErrorMessage().replace("%maxAreaBlocks%", Integer.toString(maxAreaBlocks)));
+				player.sendMessage(lang_too_many_portal_area_blocks.format(
+					boundary.portal_area_blocks().size(),
+					PORTAL_AREA_MAX_BLOCKS));
 				return null;
-
-			default:
-				player.sendMessage(boundary.getErrorState().getErrorMessage());
-				return null;
+			case PORTAL_AREA_OBSTRUCTED:       player.sendMessage(lang_portal_area_obstructed);       return null;
 		}
 
-		if (boundary.intersectsExistingPortal()) {
-			player.sendMessage(Portals.PORTAL_INTERSECTS_EXISTING_PORTAL.get());
+		if (boundary.intersects_existing_portal(this)) {
+			player.sendMessage(lang_intersects_existing_portal);
 			return null;
 		}
 
-		if (Regions.isRestricted(player, boundary.getOriginBlock(), UserFlag.EDIT_PORTALS)) {
-			player.sendMessage(Portals.PORTAL_RESTRICTED_IN_REGION.get());
+		// Check portal select boundary event
+		final var event = new PortalSelectBoundaryEvent(player, boundary);
+		get_module().getServer().getPluginManager().callEvent(event);
+		if (event.isCancelled()) {
+			player.sendMessage(lang_build_restricted);
 			return null;
 		}
 
-		// FIXME note: in theory, player permissions have to be checked on all involved blocks (build and edit portal)
-		// to make sure that someone does not use existing structures to build a portal
 		return boundary;
 	}
-		*/
 
 	private boolean construct_portal(final Player player, final Block console, final Block boundary_block) {
-		if (portals.is_portal_block(boundary_block)) {
+		if (get_module().is_portal_block(boundary_block)) {
 			get_module().log.severe("construct_portal() was called on a boundary that already belongs to a portal! This is a bug.");
 			return false;
 		}
 
-		/*
 		// Search for valid portal boundary
-		final var test_boundary = find_boundary(player, block);
+		final var test_boundary = find_boundary(player, boundary_block);
 		if (test_boundary == null) {
 			return false;
 		}
 
 		// Check console distance
-		if (!can_link_console(test_boundary.getBoundaryBlocks(), test_boundary.getOriginBlock(), console)) {
-			player.sendMessage(Portals.PORTAL_CONSOLE_TOO_FAR_AWAY.get());
+		if (!can_link_console(test_boundary, console)) {
+			player.sendMessage(lang_console_too_far_away);
 			return true;
 		}
 
 		// Show name chooser
-		MenuFactory.createAnvilStringInputMenu(player, Portals.MENU_PORTAL_TITLE_NAME_PORTAL, Material.ENDER_PEARL, (menu, name) -> {
-			menu.close();
+		//MenuFactory.createAnvilStringInputMenu(player, MENU_PORTAL_TITLE_NAME_PORTAL, Material.ENDER_PEARL, (menu, name) -> {
+		//	menu.close();
 
-			// Re-search for same boundary, as someone could have changed conditions, resulting in a race condition
-			PortalBoundary boundary = find_boundary(player, block);
-			if (boundary == null)
-				return ClickResult.ERROR;
+		//	// Re-search for same boundary, as someone could have changed conditions, resulting in a race condition
+		//	PortalBoundary boundary = find_boundary(player, block);
+		//	if (boundary == null)
+		//		return ClickResult.ERROR;
 
-			// Determine orientation
-			Orientation orientation = Orientation.getOrientation(boundary.getPlane(), boundary.getOriginBlock(), console, player.getLocation());
+		//	// Determine orientation
+		//	Orientation orientation = Orientation.getOrientation(boundary.getPlane(), boundary.getOriginBlock(), console, player.getLocation());
 
-			// Check console distance
-			if (!can_link_console(boundary.getBoundaryBlocks(), boundary.getOriginBlock(), console)) {
-				player.sendMessage(Portals.PORTAL_CONSOLE_TOO_FAR_AWAY.get());
-				return ClickResult.ERROR;
-			}
+		//	// Check console distance
+		//	if (!can_link_console(boundary, console)) {
+		//		player.sendMessage(lang_console_too_far_away);
+		//		return ClickResult.ERROR;
+		//	}
 
-			synchronized (criticalLock) {
-				// Create database entries
-				Portal portal = new Portal(name, orientation, boundary.getSpawn());
-				portal.create();
-				PortalBlock.createAllFromBoundary(portal.getId(), boundary);
+		//	synchronized (criticalLock) {
+		//		// Create database entries
+		//		Portal portal = new Portal(name, orientation, boundary.getSpawn());
+		//		portal.create();
+		//		PortalBlock.createAllFromBoundary(portal.getId(), boundary);
 
-				// Create dynmap marker
-				PortalLayer.createMarker(portal);
+		//		// Create dynmap marker
+		//		PortalLayer.createMarker(portal);
 
-				// Link console
-				new PortalBlock(portal.getId(), console, PortalBlock.Type.CONSOLE).create();
+		//		// Link console
+		//		new PortalBlock(portal.getId(), console, PortalBlock.Type.CONSOLE).create();
 
-				// Transmute blocks
-				for (PortalBlock portalPortalBlock : PortalBlock.queryAllByPortalId(portal.getId()))
-					portal.getStyle().getStyle().create(portal, portalPortalBlock);
-			}
+		//		// Transmute blocks
+		//		for (PortalBlock portalPortalBlock : PortalBlock.queryAllByPortalId(portal.getId()))
+		//			portal.getStyle().getStyle().create(portal, portalPortalBlock);
+		//	}
 
-			player.sendMessage(Portals.PORTAL_CREATED_AND_LINKED.get());
-			return ClickResult.SUCCESS;
-		}).open();
-		*/
+		//	player.sendMessage(lang_created_and_linked);
+		//	return ClickResult.SUCCESS;
+		//}).open();
 
 		return true;
 	}
@@ -216,7 +261,7 @@ public class PortalConstructor extends Listener<Portals> {
 		}
 
 		// Abort if the console belongs to another portal already.
-		if (portals.is_portal_block(block)) {
+		if (get_module().is_portal_block(block)) {
 			return;
 		}
 
@@ -227,7 +272,7 @@ public class PortalConstructor extends Listener<Portals> {
 			return;
 		}
 
-		begin_portal_construction(player, block);
+		remember_new_console(player, block);
 		swing_arm(player, event.getHand());
 		event.setUseInteractedBlock(Event.Result.DENY);
 		event.setUseItemInHand(Event.Result.DENY);
@@ -252,7 +297,7 @@ public class PortalConstructor extends Listener<Portals> {
 			return;
 		}
 
-		final var portal = portals.portal_for(block);
+		final var portal = get_module().portal_for(block);
 		if (portal == null) {
 			if (construct_portal(player, console, block)) {
 				swing_arm(player, event.getHand());

@@ -17,3 +17,24 @@ version: 1
 # resource pack generation. Typically this is a combination of the
 # language code (ISO 639) and the country code (ISO 3166).
 resource_pack_lang_code: 'de_de'
+
+# TODO
+select_boundary_now: "§6Click the portal boundary now"
+console_too_far_away: "§cThe console is too far away from the portal"
+created_and_linked: "§aPortal created"
+console_linked: "§aConsole linked"
+
+no_boundary_found: "§cNo portal boundary was found!"
+no_origin: "§cThe portal has no origin block!"
+multiple_origins: "§cThe portal cannot have multiple origin blocks!"
+no_portal_block_above_origin: "§cThe origin block needs portal area above!"
+too_large: "§cThe portal is too large in {0} direction!"
+too_small_spawn: "§cThe spawn area is too small in {0} direction!"
+too_many_portal_area_blocks: "§cThe portal area is too large! {0}/{1} blocks"
+portal_area_obstructed: "§cThe portal area is obstructed!"
+build_restricted: "§cYou have no permission to build a portal here!"
+intersects_existing_portal: "§cThe portal instersects another portal!"
+
+target_already_connected: "§6The target portal is already connected to another portal!"
+source_use_restricted: "§cYou have no permission to use this portal!"
+target_use_restricted: "§cYou have no permission to use the target portal!"

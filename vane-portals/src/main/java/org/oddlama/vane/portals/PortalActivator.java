@@ -58,14 +58,12 @@ import org.bukkit.permissions.PermissionDefault;
 
 import org.oddlama.vane.annotation.VaneModule;
 import org.oddlama.vane.core.module.Module;
+import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.Listener;
 
 public class PortalActivator extends Listener<Portals> {
-	private Portals portals;
-
-	public PortalActivator(Portals portals) {
-		super(portals);
-		this.portals = portals;
+	public PortalActivator(Context<Portals> context) {
+		super(context);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
@@ -80,7 +78,7 @@ public class PortalActivator extends Listener<Portals> {
 		}
 
 		// Abort if the table is not a console
-		final var portal = portals.portal_for(block);
+		final var portal = get_module().portal_for(block);
 		if (portal == null) {
 			return;
 		}
@@ -116,7 +114,7 @@ public class PortalActivator extends Listener<Portals> {
 
 		// Find controlled portal
 		final var base = block.getRelative(attached_face);
-		final var portal = portals.controlled_portal(base);
+		final var portal = get_module().controlled_portal(base);
 		if (portal == null) {
 			return;
 		}
@@ -140,12 +138,12 @@ public class PortalActivator extends Listener<Portals> {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void on_block_redstone(final BlockRedstoneEvent event) {
-		// Redstone enable only works on hard-linked portals.
+		// Redstone enable only works on hard-linked get_module().
 	    if (event.getOldCurrent() != 0 || event.getNewCurrent() == 0) {
 		    return;
 		}
 
-	    final var portal = portals.portal_for(event.getBlock());
+	    final var portal = get_module().portal_for(event.getBlock());
 	    if (portal == null) {
 		    return;
 		}

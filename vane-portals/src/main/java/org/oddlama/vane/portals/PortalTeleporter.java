@@ -15,6 +15,7 @@ import org.bukkit.event.block.Action;
 import java.util.List;
 import java.util.UUID;
 import org.bukkit.Location;
+import org.oddlama.vane.core.module.Context;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -59,12 +60,10 @@ import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.core.Listener;
 
 public class PortalTeleporter extends Listener<Portals> {
-	private Portals portals;
 	private final HashMap<UUID, Location> entities_portalling = new HashMap<>();
 
-	public PortalTeleporter(Portals portals) {
-		super(portals);
-		this.portals = portals;
+	public PortalTeleporter(Context<Portals> context) {
+		super(context);
 	}
 
 	private boolean cancel_portal_event(final Entity entity) {
@@ -72,7 +71,7 @@ public class PortalTeleporter extends Listener<Portals> {
 			return true;
 		}
 
-		if (portals.is_portal_block(entity.getLocation().getBlock())) {
+		if (get_module().is_portal_block(entity.getLocation().getBlock())) {
 			return true;
 		}
 
@@ -105,7 +104,7 @@ public class PortalTeleporter extends Listener<Portals> {
 				return;
 			}
 
-			final var portal = portals.portal_for(block);
+			final var portal = get_module().portal_for(block);
 			if (portal == null) {
 				return;
 			}

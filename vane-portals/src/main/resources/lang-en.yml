@@ -1,4 +1,4 @@
-# vim: set tabstop=2 softtabstop=0 expandtab shiftwidth=2:
+# vim: set tabstop:2 softtabstop:0 expandtab shiftwidth:2:
 #
 # >> See lang-en.yml for variable descriptions <<
 #
@@ -17,3 +17,47 @@ version: 1
 # resource pack generation. Typically this is a combination of the
 # language code (ISO 639) and the country code (ISO 3166).
 resource_pack_lang_code: 'en_us'
+
+# This message is sent when a new portal console has been selected
+# and the player may now select a boundary block to construct a portal.
+select_boundary_now: "§6Click the portal boundary now"
+# This message is sent when the selected portal boundary is too far away from
+# the console block.
+console_too_far_away: "§cThe console is too far away from the portal"
+# This message is sent when the portal has been created successfully.
+created_and_linked: "§aPortal created"
+# This message is sent when a console has successfully been linked.
+console_linked: "§aConsole linked"
+
+# This message is sent when no boundary was found at the given location
+no_boundary_found: "§cNo portal boundary was found!"
+# This message is sent when the selected boundary doesn't contain an origin block
+no_origin: "§cThe portal has no origin block!"
+# This message is sent when the selected boundary has multiple origin blocks
+multiple_origins: "§cThe portal cannot have multiple origin blocks!"
+# This message is sent when the selected vertical portal boundary has no portal area above the origin block
+no_portal_block_above_origin: "§cThe origin block needs portal area above!"
+# This message is sent when the selected portal boundary is too large in a given direction.
+# {0}: The direction (x,y,z)
+too_large: "§cThe portal is too large in {0} direction!"
+# This message is sent when the selected portal boundary is too small in a given direction.
+# {0}: The direction (x,y,z)
+too_small_spawn: "§cThe spawn area is too small in {0} direction!"
+# This message is sent when the selected portal boundary contains too many portal area blocks.
+# {0}: Current amount of blocks
+# {1}: Maximum allowed amount of blocks
+too_many_portal_area_blocks: "§cThe portal area is too large! {0}/{1} blocks"
+# This message is sent when a portal boundary is selected but
+# a part of the area is obstructed.
+portal_area_obstructed: "§cThe portal area is obstructed!"
+# This message is sent when a player has no permission to build a portal in the area.
+build_restricted: "§cYou have no permission to build a portal here!"
+# This message is sent when the selected boundary instersects an existing portal.
+intersects_existing_portal: "§cThe portal instersects another portal!"
+
+# This message is sent when a portal is activated, but the target is already connected to another portal.
+target_already_connected: "§6The target portal is already connected to another portal!"
+# This message is sent when a portal is activated, but the player has no permission to use it.
+source_use_restricted: "§cYou have no permission to use this portal!"
+# This message is sent when a portal is activated, but the player has no permission to use the target portal.
+target_use_restricted: "§cYou have no permission to use the target portal!"
