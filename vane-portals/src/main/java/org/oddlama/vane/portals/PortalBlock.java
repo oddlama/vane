@@ -56,6 +56,9 @@ import org.jetbrains.annotations.Nullable;
 import org.oddlama.vane.core.module.Module;
 
 public class PortalBlock {
+	private UUID portal_id;
+	private Type type;
+
 	public static enum Type {
 		ORIGIN,
 		CONSOLE,

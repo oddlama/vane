@@ -63,36 +63,33 @@ import org.oddlama.vane.annotation.VaneModule;
 import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.annotation.lang.LangString;
 import org.oddlama.vane.annotation.lang.LangMessage;
+import org.oddlama.vane.annotation.config.ConfigInt;
 import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.util.Message;
 
 public class PortalConstructor extends Listener<Portals> {
-	public static final Material MATERIAL_BUILD_BOUNDARY = Material.OBSIDIAN;
-	// TODO custom origin block?
-	public static final Material MATERIAL_BUILD_ORIGIN = Material.NETHERITE_BLOCK;
+	// TODO test flint and steel to ignite a nether portal. this should be cancelled.
+	// TODO materials group
+	@ConfigMaterial(def = Material.ENCHANTING_TABLE, desc = "The block used to build portal consoles.")
+	public Material config_material_console;
+	@ConfigMaterial(def = Material.OBSIDIAN, desc = "The block used to build a portal boundary.")
+	public Material config_material_boundary;
+	@ConfigMaterial(def = Material.NETHERITE_BLOCK, desc = "The block used to build the portal origin.")
+	public Material config_material_origin;
 
-	// Cross section of portal:
-	//
-	// b1 = leftmost block of portal (bounding box)
-	// b2 = rightmost block of portal (bounding box)
-	// c = console (1 block)
-	// u = maximum distance from console to boundary (blocks in between + 1)
-	// w = maximum width
-	// t = maximum total width
-	//
-	//     u      w      u
-	//   |---|---------|---|
-	//   c   b1       b2   c
-	//
-	// --> PORTAL_AREA_MAX_WIDTH = t - u * 2 - 2;
-	public static final int PORTAL_MAX_WIDTH_IN_CHUNKS = 4; // Minimum is 2, as portals can be built on chunk edges
-	public static final int PORTAL_CONSOLE_MAX_DISTANCE_XZ = 12;
-	public static final int PORTAL_CONSOLE_MAX_DISTANCE_Y = 16;
-	public static final int PORTAL_AREA_FLOODFILL_MAX_STEPS = 1024;
+	@ConfigInt(def = 12, min = 1, desc = "Maximum horizontal distance between a console block and the portal.")
+	public int config_console_max_distance_xz;
+	@ConfigInt(def = 12, min = 1, desc = "Maximum vertical distance between a console block and the portal.")
+	public int config_console_max_distance_y;
 
-	public static final int PORTAL_AREA_MAX_WIDTH = ((PORTAL_MAX_WIDTH_IN_CHUNKS - 1) * 16) - PORTAL_CONSOLE_MAX_DISTANCE_XZ * 2 - 2;
-	public static final int PORTAL_AREA_MAX_HEIGHT = 24;
-	public static final int PORTAL_AREA_MAX_BLOCKS = 64;
+	@ConfigInt(def = 1024, min = 256, desc = "Maximum steps for the floodfill algorithm. This should only be increased if you want really big portals. It's recommended to keep this as low as possible.")
+	public int config_area_floodfill_max_steps = 1024;
+	@ConfigInt(def = 24, min = 8, desc = "Maximum portal area width (bounding box will be measured).")
+	public int config_area_max_width;
+	@ConfigInt(def = 24, min = 8, desc = "Maximum portal area height (bounding box will be measured).")
+	public int config_area_max_height = 24;
+	@ConfigInt(def = 64, min = 8, desc = "Maximum total amount of portal area blocks.")
+	public int config_area_max_blocks = 64;
 
 	@LangString public String lang_select_boundary_now;
 	@LangString public String lang_console_too_far_away;
@@ -120,9 +117,9 @@ public class PortalConstructor extends Listener<Portals> {
 		super(context);
 	}
 
-	public int max_dim_x(Plane plane) { return plane.x() ? PORTAL_AREA_MAX_WIDTH : 1; }
-	public int max_dim_y(Plane plane) { return plane.y() ? PORTAL_AREA_MAX_HEIGHT : 1; }
-	public int max_dim_z(Plane plane) { return plane.z() ? PORTAL_AREA_MAX_WIDTH : 1; }
+	public int max_dim_x(Plane plane) { return plane.x() ? config_area_max_width  : 1; }
+	public int max_dim_y(Plane plane) { return plane.y() ? config_area_max_height : 1; }
+	public int max_dim_z(Plane plane) { return plane.z() ? config_area_max_width  : 1; }
 
 	private void remember_new_console(final Player player, final Block console_block) {
 		// Add console_block as pending console
@@ -136,9 +133,9 @@ public class PortalConstructor extends Listener<Portals> {
 		}
 
 		for (final var block : boundary.all_blocks()) {
-			if (Math.abs(console.getX() - block.getX()) <= PORTAL_CONSOLE_MAX_DISTANCE_XZ &&
-			    Math.abs(console.getY() - block.getY()) <= PORTAL_CONSOLE_MAX_DISTANCE_Y &&
-			    Math.abs(console.getZ() - block.getZ()) <= PORTAL_CONSOLE_MAX_DISTANCE_XZ) {
+			if (Math.abs(console.getX() - block.getX()) <= config_console_max_distance_xz &&
+			    Math.abs(console.getY() - block.getY()) <= config_console_max_distance_y &&
+			    Math.abs(console.getZ() - block.getZ()) <= config_console_max_distance_xz) {
 				return true;
 			}
 		}
@@ -168,7 +165,7 @@ public class PortalConstructor extends Listener<Portals> {
 			case TOO_MANY_PORTAL_AREA_BLOCKS:
 				player.sendMessage(lang_too_many_portal_area_blocks.format(
 					boundary.portal_area_blocks().size(),
-					PORTAL_AREA_MAX_BLOCKS));
+					config_area_max_blocks));
 				return null;
 			case PORTAL_AREA_OBSTRUCTED:       player.sendMessage(lang_portal_area_obstructed);       return null;
 		}
@@ -286,7 +283,7 @@ public class PortalConstructor extends Listener<Portals> {
 
 		final var block = event.getClickedBlock();
 		final var type = block.getType();
-		if (type != MATERIAL_BUILD_BOUNDARY || type != Portals.MATERIAL_CONSOLE) {
+		if (type != config_build_material_boundary || type != Portals.MATERIAL_CONSOLE) {
 			return;
 		}
 

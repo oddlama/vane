@@ -6,6 +6,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.NamespacedKey;
 import static org.oddlama.vane.util.Util.namespaced_key;
+import java.util.Set;
 import org.bukkit.Chunk;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -64,14 +65,11 @@ import org.oddlama.vane.annotation.persistent.Persistent;
 
 @VaneModule(name = "portals", bstats = 8642, config_version = 1, lang_version = 1, storage_version = 1)
 public class Portals extends Module<Portals> {
-	public static final Material MATERIAL_CONSOLE = Material.ENCHANTING_TABLE;
-	public static final Material MATERIAL_PORTAL = Material.END_GATEWAY;
-
 	//@ConfigMaterialMapMapMap(name = "styles")
 	//public Map<String, Map<String, Map<String, Material>>> config_styles;
 
 	@Persistent
-	public Map<Long, Map<Long, UUID>> storage_portal_blocks_in_chunk = new HashMap<>();
+	public Map<Long, Map<Long, PortalBlock>> storage_portal_blocks_in_chunk = new HashMap<>();
 	@Persistent
 	public Map<Long, List<UUID>> storage_portals_in_chunk = new HashMap<>();
 	@Persistent
@@ -79,6 +77,9 @@ public class Portals extends Module<Portals> {
 
 	// All loaded styles
 	public Map<NamespacedKey, Style> styles = new HashMap<>();
+	// Sets for all possible materials for a specific portal block type
+	public Set<Material> portal_area_materials;
+	public Set<Material> portal_console_materials;
 
 	public Portals() {
 		new PortalActivator(this);
@@ -93,6 +94,14 @@ public class Portals extends Module<Portals> {
 		final var default_style = Style.default_style();
 		styles.put(default_style.key(), default_style);
 		// TODO configured styles
+
+		// TODO acquire from styles
+		portal_area_materials.add(Material.END_GATEWAY);
+		portal_console_materials.add(Material.ENCHANTING_TABLE);
+	}
+
+	public Portal portal_for(final PortalBlock block) {
+		return storage_portals.get(block.portal_id);
 	}
 
 	public Portal portal_for(final Block block) {
@@ -134,10 +143,10 @@ public class Portals extends Module<Portals> {
 
 		// Find adjacent console blocks in full 3x3x3 cube, which will make this block a controlling block
 		for (final var adj : adjacent_blocks_3d(block)) {
-			if (adj.getType() == MATERIAL_CONSOLE) {
-				final var portal = portal_for(block);
-				if (portal != null) {
-					return portal;
+			if (portal_console_materials.contains(adj.getType())) {
+				final var portal_block = portal_block_for(block);
+				if (portal_block != null && portal_block.type() == PortalBlock.Type.CONSOLE) {
+					return portal_for(portal_block);
 				}
 			}
 		}
