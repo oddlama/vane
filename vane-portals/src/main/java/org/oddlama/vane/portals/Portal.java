@@ -126,10 +126,15 @@ public class Portal {
 	}
 
 	public Orientation orientation() {
-		return Orientation.POSITIVE_X;
+		return orientation;
 	}
 
 	public Location spawn() {
-		return null;
+		return spawn;
+	}
+
+	@Override
+	public String toString() {
+		return "Portal{id = " + id + ", name = " + name + "}";
 	}
 }
