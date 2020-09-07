@@ -70,14 +70,15 @@ public class Portals extends Module<Portals> {
 	//@ConfigMaterialMapMapMap(name = "styles")
 	//public Map<String, Map<String, Map<String, Material>>> config_styles;
 
-	public Map<NamespacedKey, Style> styles = new HashMap<>();
+	@Persistent
+	public Map<Long, Map<Long, UUID>> storage_portal_blocks_in_chunk = new HashMap<>();
+	@Persistent
+	public Map<Long, List<UUID>> storage_portals_in_chunk = new HashMap<>();
+	@Persistent
+	public Map<UUID, Portal> storage_portals = new HashMap<>();
 
-	@Persistent
-	public Map<Long, Map<Long, UUID>> storage_portal_blocks_in_chunk;
-	@Persistent
-	public Map<Long, List<UUID>> storage_portals_in_chunk;
-	@Persistent
-	public Map<UUID, Portal> storage_portals;
+	// All loaded styles
+	public Map<NamespacedKey, Style> styles = new HashMap<>();
 
 	public Portals() {
 		new PortalActivator(this);

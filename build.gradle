@@ -64,6 +64,6 @@ configure(subprojects.findAll {it.name != 'vane-annotations'}) {
 
 configure(subprojects.findAll {it.name != 'vane-annotations' && it.name != 'vane-core'}) {
 	dependencies {
-		implementation project(':vane-core');
+		implementation project(path: ':vane-core', configuration: 'shadow');
 	}
 }

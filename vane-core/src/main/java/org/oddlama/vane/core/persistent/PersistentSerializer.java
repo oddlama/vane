@@ -1,5 +1,7 @@
 package org.oddlama.vane.core.persistent;
 
+import static org.oddlama.vane.util.Util.namespaced_key;
+
 import java.lang.reflect.Type;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Field;
@@ -28,26 +30,38 @@ public class PersistentSerializer {
 		R apply(T1 t1) throws IOException;
 	}
 
+	private static Object serialize_namespaced_key(@NotNull final Object o) throws IOException {
+		return ((NamespacedKey)o).toString();
+	}
+
+	private static NamespacedKey deserialize_namespaced_key(@NotNull final Object o) throws IOException {
+		final var s = ((String)o).split(":");
+		if (s.length != 2) {
+			throw new IOException("Invalid namespaced key '" + s + "'");
+		}
+		return namespaced_key(s[0], s[1]);
+	}
+
 	private static Object serialize_location(@NotNull final Object o) throws IOException {
 		final var location = (Location)o;
 		final var json = new JSONObject();
-		json.put("world_id", primitive_to_json(UUID.class,   location.getWorld().getUID()));
-		json.put("x",        primitive_to_json(double.class, location.getX()));
-		json.put("y",        primitive_to_json(double.class, location.getY()));
-		json.put("z",        primitive_to_json(double.class, location.getZ()));
-		json.put("pitch",    primitive_to_json(float.class, location.getPitch()));
-		json.put("yaw",      primitive_to_json(float.class, location.getYaw()));
+		json.put("world_id", to_json(UUID.class,   location.getWorld().getUID()));
+		json.put("x",        to_json(double.class, location.getX()));
+		json.put("y",        to_json(double.class, location.getY()));
+		json.put("z",        to_json(double.class, location.getZ()));
+		json.put("pitch",    to_json(float.class, location.getPitch()));
+		json.put("yaw",      to_json(float.class, location.getYaw()));
 		return json;
 	}
 
 	private static Location deserialize_location(@NotNull final Object o) throws IOException {
 		final var json = (JSONObject)o;
-		final var world_id = primitive_from_json(UUID.class,   json.get("world_id"));
-		final var x        = primitive_from_json(double.class, json.get("x"));
-		final var y        = primitive_from_json(double.class, json.get("y"));
-		final var z        = primitive_from_json(double.class, json.get("z"));
-		final var pitch    = primitive_from_json(float.class, json.get("pitch"));
-		final var yaw      = primitive_from_json(float.class, json.get("yaw"));
+		final var world_id = from_json(UUID.class,   json.get("world_id"));
+		final var x        = from_json(double.class, json.get("x"));
+		final var y        = from_json(double.class, json.get("y"));
+		final var z        = from_json(double.class, json.get("z"));
+		final var pitch    = from_json(float.class, json.get("pitch"));
+		final var yaw      = from_json(float.class, json.get("yaw"));
 		return new Location(Bukkit.getWorld(world_id), x, y, z, yaw, pitch);
 	}
 
@@ -92,6 +106,8 @@ public class PersistentSerializer {
 		deserializers.put(UUID.class,   x -> UUID.fromString((String)x));
 
 		// Bukkit types
+		serializers.put(NamespacedKey.class,   PersistentSerializer::serialize_namespaced_key);
+		deserializers.put(NamespacedKey.class, PersistentSerializer::deserialize_namespaced_key);
 		serializers.put(Location.class,   PersistentSerializer::serialize_location);
 		deserializers.put(Location.class, PersistentSerializer::deserialize_location);
 	}
@@ -100,7 +116,7 @@ public class PersistentSerializer {
 		return to_json(field.getGenericType(), value);
 	}
 
-	public static Object primitive_to_json(final Class<?> cls, final Object value) throws IOException {
+	public static Object to_json(final Class<?> cls, final Object value) throws IOException {
 		final var serializer = serializers.get(cls);
 		if (serializer == null) {
 			throw new IOException("Cannot serialize " + cls + ". This is a bug.");
@@ -121,7 +137,7 @@ public class PersistentSerializer {
 				final var V = type_args[1];
 				final var json = new JSONObject();
 				for (final var e : ((Map<?,?>)value).entrySet()) {
-					json.put((String)primitive_to_json(K, e.getKey()), to_json(V, e.getValue()));
+					json.put((String)to_json(K, e.getKey()), to_json(V, e.getValue()));
 				}
 				return json;
 			} else if (base_type.equals(Set.class)) {
@@ -142,7 +158,7 @@ public class PersistentSerializer {
 				throw new IOException("Cannot serialize " + type + ". This is a bug.");
 			}
 		} else {
-			return primitive_to_json((Class<?>)type, value);
+			return to_json((Class<?>)type, value);
 		}
 	}
 
@@ -151,7 +167,7 @@ public class PersistentSerializer {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static<U> U primitive_from_json(final Class<U> cls, final Object value) throws IOException {
+	public static<U> U from_json(final Class<U> cls, final Object value) throws IOException {
 		final var deserializer = deserializers.get(cls);
 		if (deserializer == null) {
 			throw new IOException("Cannot deserialize " + cls + ". This is a bug.");
@@ -172,7 +188,7 @@ public class PersistentSerializer {
 				final var V = type_args[1];
 				final var value = new HashMap<Object, Object>();
 				for (final var key : ((JSONObject)json).keySet()) {
-					value.put(primitive_from_json(K, key), from_json(V, ((JSONObject)json).get(key)));
+					value.put(from_json(K, key), from_json(V, ((JSONObject)json).get(key)));
 				}
 				return value;
 			} else if (base_type.equals(Set.class)) {
@@ -193,7 +209,7 @@ public class PersistentSerializer {
 				throw new IOException("Cannot deserialize " + type + ". This is a bug.");
 			}
 		} else {
-			return primitive_from_json((Class<?>)type, json);
+			return from_json((Class<?>)type, json);
 		}
 	}
 }
