@@ -18,11 +18,13 @@ import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.oddlama.vane.core.module.Context;
+import org.oddlama.vane.core.functional.Consumer1;
 
 public class Menu {
 	protected final MenuManager manager;
 	protected Inventory inventory = null;
 	private final Set<MenuWidget> widgets = new HashSet<>();
+	private Consumer1<Player> on_close = null;
 
 	protected Menu(final Context<?> context) {
 		this.manager = context.get_module().core.menu_manager;
@@ -79,11 +81,16 @@ public class Menu {
 		return true;
 	}
 
-	public void on_closed(final Player player) {}
-	// TODO menu.on_close(lambda);
+	public Menu on_close(final Consumer1<Player> on_close) {
+		this.on_close = on_close;
+		return this;
+	}
+
 	public final void closed(final Player player) {
 		inventory.clear();
-		on_closed(player);
+		if (on_close != null) {
+			on_close.apply(player);
+		}
 		manager.remove(player, this);
 	}
 
@@ -112,7 +119,6 @@ public class Menu {
 			case SUCCESS:       player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK,       SoundCategory.MASTER, 1.0f, 1.0f); break;
 			case ERROR:         player.playSound(player.getLocation(), Sound.BLOCK_FIRE_EXTINGUISH, SoundCategory.MASTER, 1.0f, 1.0f); break;
 			case INVALID_CLICK: player.playSound(player.getLocation(), Sound.BLOCK_FIRE_EXTINGUISH, SoundCategory.MASTER, 1.0f, 3.0f); break;
-			// TODO better sounds?
 		}
 	}
 

@@ -26,7 +26,6 @@ public class MenuItem implements MenuWidget {
 	}
 
 	public boolean update(final Menu menu) {
-		System.out.println("updated " + this);
 		menu.inventory().setItem(slot(), item);
 		return false;
 	}
