@@ -122,7 +122,7 @@ public class WorldRebuild extends Listener<Admin> {
 			state.update(true, false);
 
 			// Play sound
-			block.getWorld().playSound(block.getLocation(), block.getSoundGroup().getPlaceSound(), SoundCategory.BLOCKS, 1.0f, 1.0f);
+			block.getWorld().playSound(block.getLocation(), block.getSoundGroup().getPlaceSound(), SoundCategory.BLOCKS, 1.0f, 0.8f);
 		}
 
 		public void finish_now() {
