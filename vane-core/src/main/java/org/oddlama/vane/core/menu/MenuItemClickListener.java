@@ -6,27 +6,19 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.inventory.ItemStack;
 import org.oddlama.vane.core.menu.Menu.ClickResult;
-import org.oddlama.vane.core.functional.Function5;
+import org.oddlama.vane.core.functional.Function4;
 
-public class MenuItem implements MenuWidget {
+public class MenuItemClickListener implements MenuWidget {
 	private int slot;
-	private Function5<Player, Menu, MenuItem, ClickType, InventoryAction, ClickResult> on_click;
-	private ItemStack item;
+	private Function4<Player, Menu, ClickType, InventoryAction, ClickResult> on_click;
 
-	public MenuItem(int slot, final ItemStack item) { this(slot, item, null); }
-	public MenuItem(int slot, final ItemStack item, final Function5<Player, Menu, MenuItem, ClickType, InventoryAction, ClickResult> on_click) {
+	public MenuItemClickListener(int slot, final Function4<Player, Menu, ClickType, InventoryAction, ClickResult> on_click) {
 		this.slot = slot;
 		this.on_click = on_click;
-		this.item = item;
 	}
 
 	public int slot() { return slot; }
-	public ItemStack item(final Menu menu) {
-		return menu.inventory().getItem(slot);
-	}
-
 	public void update(final Menu menu) {
-		menu.inventory().setItem(slot(), item);
 	}
 
 	public ClickResult click(final Player player, final Menu menu, final ItemStack item, int slot, final ClickType type, final InventoryAction action) {
@@ -35,7 +27,7 @@ public class MenuItem implements MenuWidget {
 		}
 
 		if (on_click != null) {
-			return on_click.apply(player, menu, this, type, action);
+			return on_click.apply(player, menu, type, action);
 		} else {
 			return ClickResult.IGNORE;
 		}

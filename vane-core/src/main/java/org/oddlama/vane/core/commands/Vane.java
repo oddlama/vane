@@ -27,6 +27,15 @@ public class Vane extends Command<Core> {
 		super(context);
 
 		// Add help
+		params().fixed("m").ignore_case().exec_player((org.bukkit.entity.Player player) -> {
+			org.oddlama.vane.core.menu.MenuFactory.anvil_string_input_menu("TAITLE", new org.bukkit.inventory.ItemStack(Material.ENDER_PEARL), (p, m, s) -> {
+				p.closeInventory(InventoryCloseEvent.CloseReason.PLUGIN);
+				p.sendMessage("" + p);
+				p.sendMessage("" + m);
+				p.sendMessage("" + s);
+				return org.oddlama.vane.core.menu.Menu.ClickResult.SUCCESS;
+			});
+		});
 		params().fixed("help").ignore_case().exec(this::print_help);
 
 		// Command parameters

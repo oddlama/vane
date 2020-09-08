@@ -157,4 +157,15 @@ public class ItemUtil {
 			return compare_enchantments(a, b);
 		}
 	}
+
+	public static String name_of(final ItemStack item) {
+		if (item == null || !item.hasItemMeta()) {
+			return "";
+		}
+		final var meta = item.getItemMeta();
+		if (!meta.hasDisplayName()) {
+			return "";
+		}
+		return meta.getDisplayName();
+	}
 }

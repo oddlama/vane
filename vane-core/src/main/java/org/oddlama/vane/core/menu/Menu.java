@@ -71,6 +71,22 @@ public class Menu {
 		}
 	}
 
+	public static boolean is_normal_click(ClickType type, InventoryAction action) {
+		if (type != ClickType.LEFT) {
+			return false;
+		}
+
+		switch (action) {
+			case PICKUP_ALL:
+			case PICKUP_HALF:
+			case PICKUP_ONE:
+			case PICKUP_SOME:
+				return true;
+		}
+
+		return false;
+	}
+
 	public static enum ClickResult {
 		SUCCESS(1),
 		ERROR(2),
