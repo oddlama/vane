@@ -18,6 +18,7 @@ import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.event.EventPriority;
@@ -30,7 +31,6 @@ import org.oddlama.vane.core.module.Context;
 public class MenuManager extends Listener<Core> {
 	private final HashMap<UUID, Menu> open_menus = new HashMap<>();
 	private final HashMap<Inventory, Menu> menus = new HashMap<>();
-	//TODO private final HashMap<Inventory, List<UUID>> menu_viewers = new HashMap<>();
 
 	public MenuManager(Context<Core> context) {
 		super(context);
@@ -53,7 +53,6 @@ public class MenuManager extends Listener<Core> {
 		System.out.println("add menu " + menu + " for player " + player);
 		open_menus.put(player.getUniqueId(), menu);
 		menus.put(menu.inventory(), menu);
-		//TODO menu_viewers.put(menu.inventory(), player.getUniqueId());
 	}
 
 	public void remove(final Player player, final Menu menu) {
@@ -66,7 +65,6 @@ public class MenuManager extends Listener<Core> {
 		if (orphaned) {
 			System.out.println("menu is now orphaned, removing references.");
 			menus.remove(menu.inventory());
-			//TODO menu_viewers.remove(menu.inventory());
 		}
 	}
 
@@ -87,7 +85,8 @@ public class MenuManager extends Listener<Core> {
 		final var menu = menu_for(player, event.getView());
 		if (menu != null) {
 			event.setCancelled(true);
-			menu.click(player, event.getCurrentItem(), event.getRawSlot(), event.getClick(), event.getAction());
+			final var slot = event.getClickedInventory() == menu.inventory() ? event.getSlot() : -1;
+			menu.click(player, event.getCurrentItem(), slot, event.getClick(), event.getAction());
 		}
 	}
 
@@ -105,14 +104,14 @@ public class MenuManager extends Listener<Core> {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.MONITOR)
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void on_inventory_close(final InventoryCloseEvent event) {
-		final var closer = event.getPlayer();
-		if (!(closer instanceof Player)) {
+		final var human = event.getPlayer();
+		if (!(human instanceof Player)) {
 			return;
 		}
 
-		final var player = (Player)closer;
+		final var player = (Player)human;
 		final var menu = menu_for(player, event.getView());
 		if (menu != null) {
 			menu.closed(player);

@@ -52,8 +52,11 @@ public class Menu {
 
 	public void open(final Player player) {
 		update_widgets(true);
-		manager.schedule_next_tick(() -> { player.openInventory(inventory); });
 		manager.add(player, this);
+		/*TODO*/for (var i : inventory().getContents()) {
+		/*TODO*/	System.out.println("0: " + i);
+		/*TODO*/}
+		manager.schedule_next_tick(() -> { player.openInventory(inventory); });
 	}
 
 	public boolean close(final Player player, final InventoryCloseEvent.Reason reason) {
