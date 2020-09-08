@@ -31,7 +31,7 @@ public class Vane extends Command<Core> {
 			p.sendMessage("" + s);
 			return org.oddlama.vane.core.menu.Menu.ClickResult.SUCCESS;
 		});
-		player.openInventory(menu.inventory());
+		menu.open(player);
 	}
 	public Vane(Context<Core> context) {
 		super(context);

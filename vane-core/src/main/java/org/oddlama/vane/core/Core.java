@@ -71,7 +71,7 @@ public class Core extends Module<Core> {
 
 		// Components
 		new org.oddlama.vane.core.commands.Vane(this);
-		new MenuManager(this);
+		menu_manager = new MenuManager(this);
 		new CommandHider(this);
 	}
 

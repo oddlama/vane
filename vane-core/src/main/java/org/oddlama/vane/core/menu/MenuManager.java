@@ -50,18 +50,21 @@ public class MenuManager extends Listener<Core> {
 	}
 
 	public void add(final Player player, final Menu menu) {
+		System.out.println("add menu " + menu + " for player " + player);
 		open_menus.put(player.getUniqueId(), menu);
 		menus.put(menu.inventory(), menu);
 		//TODO menu_viewers.put(menu.inventory(), player.getUniqueId());
 	}
 
 	public void remove(final Player player, final Menu menu) {
+		System.out.println("remove menu " + menu + " for player " + player);
 		open_menus.remove(player.getUniqueId());
 		final var orphaned = open_menus.values().stream()
 			.allMatch(m -> m != menu);
 
 		// Remove orphaned menus from other maps
 		if (orphaned) {
+			System.out.println("menu is now orphaned, removing references.");
 			menus.remove(menu.inventory());
 			//TODO menu_viewers.remove(menu.inventory());
 		}
