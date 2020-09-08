@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.NamespacedKey;
 import static org.oddlama.vane.util.Util.namespaced_key;
 import java.util.Set;
+import java.util.HashSet;
 import org.bukkit.Chunk;
 import org.bukkit.event.EventHandler;
 import org.jetbrains.annotations.NotNull;
@@ -79,9 +80,9 @@ public class Portals extends Module<Portals> {
 	// All loaded styles
 	public Map<NamespacedKey, Style> styles = new HashMap<>();
 	// Sets for all possible materials for a specific portal block type
-	public Set<Material> portal_area_materials;
-	public Set<Material> portal_console_materials;
-	public Set<Material> portal_boundary_materials;
+	public Set<Material> portal_area_materials = new HashSet<>();
+	public Set<Material> portal_console_materials = new HashSet<>();
+	public Set<Material> portal_boundary_materials = new HashSet<>();
 
 	public Portals() {
 		new PortalActivator(this);
@@ -98,8 +99,11 @@ public class Portals extends Module<Portals> {
 		// TODO configured styles
 
 		// TODO acquire from styles
+		portal_area_materials.clear();
 		portal_area_materials.add(Material.END_GATEWAY);
+		portal_console_materials.clear();
 		portal_console_materials.add(Material.ENCHANTING_TABLE);
+		portal_boundary_materials.clear();
 		portal_boundary_materials.add(Material.OBSIDIAN);
 	}
 
