@@ -13,6 +13,7 @@ import org.bukkit.Effect;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.scheduler.BukkitTask;
+import org.bukkit.SoundCategory;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
