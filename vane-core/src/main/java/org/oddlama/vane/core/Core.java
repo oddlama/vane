@@ -22,6 +22,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
+import org.oddlama.vane.core.menu.MenuManager;
 import org.oddlama.vane.annotation.VaneModule;
 import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.annotation.lang.LangString;
@@ -62,12 +63,15 @@ public class Core extends Module<Core> {
 	// Vane global command catch-all permission
 	public Permission permission_command_catchall = new Permission("vane.*.commands.*", "Allow access to all vane commands (ONLY FOR ADMINS!)", PermissionDefault.FALSE);
 
+	public MenuManager menu_manager;
+
 	public Core() {
 		// Create global command catch-all permission
 		register_permission(permission_command_catchall);
 
 		// Components
 		new org.oddlama.vane.core.commands.Vane(this);
+		new MenuManager(this);
 		new CommandHider(this);
 	}
 

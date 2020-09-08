@@ -25,8 +25,9 @@ public class MenuItem implements MenuWidget {
 		return menu.inventory().getItem(slot);
 	}
 
-	public void update(final Menu menu) {
+	public boolean update(final Menu menu) {
 		menu.inventory().setItem(slot(), item);
+		return false;
 	}
 
 	public ClickResult click(final Player player, final Menu menu, final ItemStack item, int slot, final ClickType type, final InventoryAction action) {

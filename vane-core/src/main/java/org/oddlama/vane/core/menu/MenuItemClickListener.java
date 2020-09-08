@@ -18,7 +18,8 @@ public class MenuItemClickListener implements MenuWidget {
 	}
 
 	public int slot() { return slot; }
-	public void update(final Menu menu) {
+	public boolean update(final Menu menu) {
+		return false;
 	}
 
 	public ClickResult click(final Player player, final Menu menu, final ItemStack item, int slot, final ClickType type, final InventoryAction action) {

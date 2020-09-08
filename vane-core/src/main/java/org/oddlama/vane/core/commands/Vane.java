@@ -23,19 +23,21 @@ public class Vane extends Command<Core> {
 	@LangString
 	private String lang_resource_pack_generate_fail;
 
+	private void test(final org.bukkit.entity.Player player) {
+		final var menu = org.oddlama.vane.core.menu.MenuFactory.anvil_string_input_menu(get_module(), "TAITLE", new org.bukkit.inventory.ItemStack(org.bukkit.Material.ENDER_PEARL), (p, m, s) -> {
+			p.closeInventory(org.bukkit.event.inventory.InventoryCloseEvent.Reason.PLUGIN);
+			p.sendMessage("" + p);
+			p.sendMessage("" + m);
+			p.sendMessage("" + s);
+			return org.oddlama.vane.core.menu.Menu.ClickResult.SUCCESS;
+		});
+		player.openInventory(menu.inventory());
+	}
 	public Vane(Context<Core> context) {
 		super(context);
 
 		// Add help
-		params().fixed("m").ignore_case().exec_player((org.bukkit.entity.Player player) -> {
-			org.oddlama.vane.core.menu.MenuFactory.anvil_string_input_menu("TAITLE", new org.bukkit.inventory.ItemStack(Material.ENDER_PEARL), (p, m, s) -> {
-				p.closeInventory(InventoryCloseEvent.CloseReason.PLUGIN);
-				p.sendMessage("" + p);
-				p.sendMessage("" + m);
-				p.sendMessage("" + s);
-				return org.oddlama.vane.core.menu.Menu.ClickResult.SUCCESS;
-			});
-		});
+		params().fixed("m").ignore_case().exec_player(this::test);
 		params().fixed("help").ignore_case().exec(this::print_help);
 
 		// Command parameters
