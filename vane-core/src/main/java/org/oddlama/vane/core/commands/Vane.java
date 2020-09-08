@@ -24,14 +24,13 @@ public class Vane extends Command<Core> {
 	private String lang_resource_pack_generate_fail;
 
 	private void test(final org.bukkit.entity.Player player) {
-		final var menu = org.oddlama.vane.core.menu.MenuFactory.anvil_string_input_menu(get_module(), "TAITLE", new org.bukkit.inventory.ItemStack(org.bukkit.Material.ENDER_PEARL), (p, m, s) -> {
-			p.closeInventory(org.bukkit.event.inventory.InventoryCloseEvent.Reason.PLUGIN);
+		org.oddlama.vane.core.menu.MenuFactory.anvil_string_input_menu(get_module(), player, "TAITLE", new org.bukkit.inventory.ItemStack(org.bukkit.Material.ENDER_PEARL), (p, m, s) -> {
+			m.close(p, org.bukkit.event.inventory.InventoryCloseEvent.Reason.PLUGIN);
 			p.sendMessage("" + p);
 			p.sendMessage("" + m);
 			p.sendMessage("" + s);
 			return org.oddlama.vane.core.menu.Menu.ClickResult.SUCCESS;
-		});
-		menu.open(player);
+		}).open(player);
 	}
 	public Vane(Context<Core> context) {
 		super(context);

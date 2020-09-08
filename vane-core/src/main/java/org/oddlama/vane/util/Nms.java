@@ -12,6 +12,7 @@ import net.minecraft.server.v1_16_R2.Item;
 import net.minecraft.server.v1_16_R2.ItemStack;
 import net.minecraft.server.v1_16_R2.MinecraftKey;
 import net.minecraft.server.v1_16_R2.Clearable;
+import net.minecraft.server.v1_16_R2.WorldServer;
 import net.minecraft.server.v1_16_R2.BlockPosition;
 
 import org.bukkit.Material;
@@ -20,6 +21,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.craftbukkit.v1_16_R2.CraftServer;
 import org.bukkit.craftbukkit.v1_16_R2.block.CraftBlock;
 import org.bukkit.craftbukkit.v1_16_R2.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_16_R2.CraftWorld;
 import org.bukkit.craftbukkit.v1_16_R2.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.v1_16_R2.util.CraftNamespacedKey;
 import org.bukkit.enchantments.EnchantmentTarget;
@@ -83,6 +85,10 @@ public class Nms {
 		return ((CraftPlayer)player).getHandle();
 	}
 
+	public static WorldServer world_handle(org.bukkit.World world) {
+		return ((CraftWorld)world).getHandle();
+	}
+
 	public static DedicatedServer server_handle() {
 		final var bukkit_server = Bukkit.getServer();
 		return ((CraftServer)bukkit_server).getServer();
@@ -114,7 +120,7 @@ public class Nms {
 	}
 
 	public static void set_air_no_drops(final org.bukkit.block.Block block) {
-		final var tileentity = ((CraftBlock)block).getCraftWorld().getHandle().getTileEntity(new BlockPosition(block.getX(), block.getY(), block.getZ()));
+		final var tileentity = world_handle(block.getWorld()).getTileEntity(new BlockPosition(block.getX(), block.getY(), block.getZ()));
 		Clearable.a(tileentity);
 		block.setType(Material.AIR, false);
 	}

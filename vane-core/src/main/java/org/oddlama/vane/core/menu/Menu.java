@@ -20,9 +20,13 @@ import org.bukkit.inventory.ItemStack;
 import org.oddlama.vane.core.module.Context;
 
 public class Menu {
-	private final MenuManager manager;
-	private final Inventory inventory;
+	protected final MenuManager manager;
+	protected Inventory inventory = null;
 	private final Set<MenuWidget> widgets = new HashSet<>();
+
+	protected Menu(final Context<?> context) {
+		this.manager = context.get_module().core.menu_manager;
+	}
 
 	public Menu(final Context<?> context, final Inventory inventory) {
 		this.manager = context.get_module().core.menu_manager;
@@ -50,13 +54,14 @@ public class Menu {
 		}
 	}
 
-	public void open(final Player player) {
+	public void open_window(final Player player) {
+		player.openInventory(inventory);
+	}
+
+	public final void open(final Player player) {
 		update_widgets(true);
 		manager.add(player, this);
-		/*TODO*/for (var i : inventory().getContents()) {
-		/*TODO*/	System.out.println("0: " + i);
-		/*TODO*/}
-		manager.schedule_next_tick(() -> { player.openInventory(inventory); });
+		manager.schedule_next_tick(() -> { open_window(player); });
 	}
 
 	public boolean close(final Player player, final InventoryCloseEvent.Reason reason) {
@@ -75,7 +80,9 @@ public class Menu {
 	}
 
 	public void on_closed(final Player player) {}
+	// TODO menu.on_close(lambda);
 	public final void closed(final Player player) {
+		inventory.clear();
 		on_closed(player);
 		manager.remove(player, this);
 	}
@@ -86,7 +93,7 @@ public class Menu {
 
 	public final void click(final Player player, final ItemStack item, int slot, final ClickType type, final InventoryAction action) {
 		// Ignore unknown click actions
-		if (action == InventoryAction.NOTHING || action == InventoryAction.UNKNOWN) {
+		if (action == InventoryAction.UNKNOWN) {
 			return;
 		}
 
@@ -115,6 +122,7 @@ public class Menu {
 		}
 
 		switch (action) {
+			case NOTHING:
 			case PICKUP_ALL:
 			case PICKUP_HALF:
 			case PICKUP_ONE:
