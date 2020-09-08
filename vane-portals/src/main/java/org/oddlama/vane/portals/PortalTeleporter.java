@@ -100,6 +100,7 @@ public class PortalTeleporter extends Listener<Portals> {
 		if (!entities_portalling.containsKey(player_id)) {
 			// Check if we walked into a portal
 			final var block = event.getTo().getBlock();
+			// TODO get from != get to block pos to speed things up.
 			if (get_module().portal_area_materials.contains(block.getType())) {
 				return;
 			}

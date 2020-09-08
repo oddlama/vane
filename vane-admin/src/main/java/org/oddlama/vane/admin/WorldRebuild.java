@@ -121,7 +121,7 @@ public class WorldRebuild extends Listener<Admin> {
 			state.update(true, false);
 
 			// Play sound
-			state.getWorld().playEffect(state.getLocation(), Effect.STEP_SOUND, state.getType());
+			block.getWorld().playSound(block.getLocation(), block.getSoundGroup().getPlaceSound(), SoundCategory.BLOCKS, 1.0f, 1.0f);
 		}
 
 		public void finish_now() {
