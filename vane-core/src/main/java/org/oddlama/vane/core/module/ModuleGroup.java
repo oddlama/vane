@@ -12,7 +12,6 @@ public class ModuleGroup<T extends Module<T>> extends ModuleContext<T> {
 	private boolean config_enabled;
 	private String config_enabled_desc;
 
-	// Having the annotation desc = "" will cause this method to be called instead.
 	public String config_enabled_desc() {
 		return config_enabled_desc;
 	}

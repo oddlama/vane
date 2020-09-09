@@ -12,5 +12,4 @@ import org.bukkit.Material;
 public @interface ConfigItemStackDef {
 	Material type();
 	int amount() default 1;
-	boolean client_side_translation() default true;
 }

@@ -24,7 +24,7 @@ public class ConfigStringListMapField extends ConfigField<Map<String, List<Strin
 		this.annotation = annotation;
 	}
 
-	private void append_string_list_map_defintion(StringBuilder builder, String indent, String prefix) {
+	private void append_string_list_map_definition(StringBuilder builder, String indent, String prefix) {
 		def().forEach((k, list) -> {
 			builder.append(indent);
 			builder.append(prefix);
@@ -61,13 +61,13 @@ public class ConfigStringListMapField extends ConfigField<Map<String, List<Strin
 		// Default
 		builder.append(indent);
 		builder.append("# Default:\n");
-		append_string_list_map_defintion(builder, indent, "# ");
+		append_string_list_map_definition(builder, indent, "# ");
 
 		// Definition
 		builder.append(indent);
 		builder.append(basename());
 		builder.append(":\n");
-		append_string_list_map_defintion(builder, indent, "");
+		append_string_list_map_definition(builder, indent, "");
 	}
 
 	@Override

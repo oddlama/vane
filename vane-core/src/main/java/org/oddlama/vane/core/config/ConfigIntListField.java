@@ -22,7 +22,7 @@ public class ConfigIntListField extends ConfigField<List<Integer>> {
 		this.annotation = annotation;
 	}
 
-	private void append_int_list_defintion(StringBuilder builder, String indent, String prefix) {
+	private void append_int_list_definition(StringBuilder builder, String indent, String prefix) {
 		append_list_definition(builder, indent, prefix, def(), (b, i) -> b.append(i));
 	}
 
@@ -44,13 +44,13 @@ public class ConfigIntListField extends ConfigField<List<Integer>> {
 		// Default
 		builder.append(indent);
 		builder.append("# Default:\n");
-		append_int_list_defintion(builder, indent, "# ");
+		append_int_list_definition(builder, indent, "# ");
 
 		// Definition
 		builder.append(indent);
 		builder.append(basename());
 		builder.append(":\n");
-		append_int_list_defintion(builder, indent, "");
+		append_int_list_definition(builder, indent, "");
 	}
 
 	@Override

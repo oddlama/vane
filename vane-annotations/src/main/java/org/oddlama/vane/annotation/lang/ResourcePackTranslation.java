@@ -8,6 +8,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface ResourcePackTranslation {
-	String namespace();
-	String key() default ""; // A empty ("") key will cause *_translation_key() to be called insted.
+	String namespace() default "";  // May be overridden by *_translation_namespace()
+	String key() default ""; // May be overridden by *_translation_key()
 }

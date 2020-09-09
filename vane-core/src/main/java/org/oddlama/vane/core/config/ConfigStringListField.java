@@ -20,7 +20,7 @@ public class ConfigStringListField extends ConfigField<List<String>> {
 		this.annotation = annotation;
 	}
 
-	private void append_string_list_defintion(StringBuilder builder, String indent, String prefix) {
+	private void append_string_list_definition(StringBuilder builder, String indent, String prefix) {
 		append_list_definition(builder, indent, prefix, def(), (b, s) -> {
 				b.append("\"");
 				b.append(escape_yaml(s));
@@ -45,13 +45,13 @@ public class ConfigStringListField extends ConfigField<List<String>> {
 		// Default
 		builder.append(indent);
 		builder.append("# Default:\n");
-		append_string_list_defintion(builder, indent, "# ");
+		append_string_list_definition(builder, indent, "# ");
 
 		// Definition
 		builder.append(indent);
 		builder.append(basename());
 		builder.append(":\n");
-		append_string_list_defintion(builder, indent, "");
+		append_string_list_definition(builder, indent, "");
 	}
 
 	@Override

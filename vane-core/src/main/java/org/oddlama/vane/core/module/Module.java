@@ -44,6 +44,7 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 	public VaneModule annotation = getClass().getAnnotation(VaneModule.class);
 	public Core core;
 	public Logger log = getLogger();
+	private String namespace;
 
 	// Managers
 	public ConfigManager config_manager = new ConfigManager(this);
@@ -111,6 +112,8 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 	private Metrics metrics;
 
 	public Module() {
+		this.namespace = getName().replaceAll("[^a-zA-Z0-9_]", "_");
+
 		// Get core plugin reference, important for inherited configuration
 		// and shared state between vane modules
 		if (this.getName().equals("vane-core")) {
@@ -122,6 +125,13 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 		// Create per module command catch-all permission
 		permission_command_catchall_module = new Permission("vane." + get_name() + ".commands.*", "Allow access to all vane-" + get_name() + " commands", PermissionDefault.FALSE);
 		register_permission(permission_command_catchall_module);
+	}
+
+	/**
+	 * The namespace used in resource packs
+	 */
+	public final String namespace() {
+		return namespace;
 	}
 
 	@Override

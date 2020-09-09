@@ -22,7 +22,7 @@ public class ConfigDoubleListField extends ConfigField<List<Double>> {
 		this.annotation = annotation;
 	}
 
-	private void append_double_list_defintion(StringBuilder builder, String indent, String prefix) {
+	private void append_double_list_definition(StringBuilder builder, String indent, String prefix) {
 		append_list_definition(builder, indent, prefix, def(), (b, d) -> b.append(d));
 	}
 
@@ -44,13 +44,13 @@ public class ConfigDoubleListField extends ConfigField<List<Double>> {
 		// Default
 		builder.append(indent);
 		builder.append("# Default:\n");
-		append_double_list_defintion(builder, indent, "# ");
+		append_double_list_definition(builder, indent, "# ");
 
 		// Definition
 		builder.append(indent);
 		builder.append(basename());
 		builder.append(":\n");
-		append_double_list_defintion(builder, indent, "");
+		append_double_list_definition(builder, indent, "");
 	}
 
 	@Override

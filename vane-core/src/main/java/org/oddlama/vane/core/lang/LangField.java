@@ -59,7 +59,15 @@ public abstract class LangField<T> {
 			return null;
 		}
 
-		return resource_pack_translation_annotation.namespace();
+		// Resolve dynamic overrides
+		try {
+			return (String)owner.getClass().getMethod(field.getName() + "_translation_namespace").invoke(owner);
+		} catch (NoSuchMethodException e) {
+			// Ignore, field wasn't overridden
+			return resource_pack_translation_annotation.namespace();
+		} catch (InvocationTargetException | IllegalAccessException e) {
+			throw new RuntimeException("Could not call " + owner.getClass().getName() + "." + field.getName() + "_translation_namespace() to override resource pack translation namespace", e);
+		}
 	}
 
 	public String resource_pack_translation_key() {
@@ -74,7 +82,7 @@ public abstract class LangField<T> {
 			// Ignore, field wasn't overridden
 			return resource_pack_translation_annotation.key();
 		} catch (InvocationTargetException | IllegalAccessException e) {
-			throw new RuntimeException("Could not call " + owner.getClass().getName() + "." + field.getName() + "_desc() to override description value", e);
+			throw new RuntimeException("Could not call " + owner.getClass().getName() + "." + field.getName() + "_translation_key() to override resource pack translation key", e);
 		}
 	}
 }

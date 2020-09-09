@@ -24,7 +24,7 @@ public class ConfigMaterialSetField extends ConfigField<Set<Material>> {
 		this.annotation = annotation;
 	}
 
-	private void append_material_set_defintion(StringBuilder builder, String indent, String prefix) {
+	private void append_material_set_definition(StringBuilder builder, String indent, String prefix) {
 		append_list_definition(builder, indent, prefix, def(), (b, m) -> {
 				b.append("\"");
 				b.append(escape_yaml(m.getKey().getNamespace()));
@@ -51,13 +51,13 @@ public class ConfigMaterialSetField extends ConfigField<Set<Material>> {
 		// Default
 		builder.append(indent);
 		builder.append("# Default:\n");
-		append_material_set_defintion(builder, indent, "# ");
+		append_material_set_definition(builder, indent, "# ");
 
 		// Definition
 		builder.append(indent);
 		builder.append(basename());
 		builder.append(":\n");
-		append_material_set_defintion(builder, indent, "");
+		append_material_set_definition(builder, indent, "");
 	}
 
 	@Override

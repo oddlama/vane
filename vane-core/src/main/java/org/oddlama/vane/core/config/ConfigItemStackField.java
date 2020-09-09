@@ -1,5 +1,6 @@
 package org.oddlama.vane.core.config;
 
+import static org.oddlama.vane.util.ItemUtil.translate_item;
 import static org.oddlama.vane.util.MaterialUtil.material_from;
 import static org.oddlama.vane.util.Util.namespaced_key;
 
@@ -28,7 +29,7 @@ public class ConfigItemStackField extends ConfigField<ItemStack> {
 		this.annotation = annotation;
 	}
 
-	private void append_item_stack_defintion(StringBuilder builder, String indent, String prefix) {
+	private void append_item_stack_definition(StringBuilder builder, String indent, String prefix) {
 		final var item = def();
 
 		// Material
@@ -66,13 +67,13 @@ public class ConfigItemStackField extends ConfigField<ItemStack> {
 		// Default
 		builder.append(indent);
 		builder.append("# Default:\n");
-		append_item_stack_defintion(builder, indent, "# ");
+		append_item_stack_definition(builder, indent, "# ");
 
 		// Definition
 		builder.append(indent);
 		builder.append(basename());
 		builder.append(":\n");
-		append_item_stack_defintion(builder, indent, "");
+		append_item_stack_definition(builder, indent, "");
 	}
 
 	@Override
@@ -134,9 +135,10 @@ public class ConfigItemStackField extends ConfigField<ItemStack> {
 
 		final var split = material_str.split(":");
 		final var material = material_from(namespaced_key(split[0], split[1]));
+		final var item = new ItemStack(material, amount);
 
 		try {
-			field.set(owner, new ItemStack(material, amount));
+			field.set(owner, item);
 		} catch (IllegalAccessException e) {
 			throw new RuntimeException("Invalid field access on '" + field.getName() + "'. This is a bug.");
 		}

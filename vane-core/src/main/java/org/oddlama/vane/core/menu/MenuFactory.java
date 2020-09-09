@@ -130,7 +130,7 @@ public class MenuFactory {
 		}));
 
 		// Accept item
-		item_chooser_menu.add(new MenuItem(2, item_chooser_menu.manager().item_chooser_accept.clone(), (p, menu, self) -> {
+		item_chooser_menu.add(new MenuItem(2, item_chooser_menu.manager().item_chooser_accept.item(), (p, menu, self) -> {
 			final ItemStack item;
 			if (selected_item.original_selected == no_item) {
 				if (allow_nothing) {
@@ -148,7 +148,7 @@ public class MenuFactory {
 		}));
 
 		// Cancel item
-		item_chooser_menu.add(new MenuItem(6, item_chooser_menu.manager().item_chooser_cancel, (p, menu, self) -> {
+		item_chooser_menu.add(new MenuItem(6, item_chooser_menu.manager().item_chooser_cancel.item(), (p, menu, self) -> {
 			menu.close(p);
 			on_cancel.apply(p);
 			return ClickResult.SUCCESS;
