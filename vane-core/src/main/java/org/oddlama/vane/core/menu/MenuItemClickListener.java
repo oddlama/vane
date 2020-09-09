@@ -7,11 +7,20 @@ import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.inventory.ItemStack;
 import org.oddlama.vane.core.menu.Menu.ClickResult;
 import org.oddlama.vane.core.functional.Function5;
+import org.oddlama.vane.core.functional.Function3;
 
 public class MenuItemClickListener implements MenuWidget {
 	private int slot;
 	private Function5<Player, Menu, ItemStack, ClickType, InventoryAction, ClickResult> on_click;
 
+	public MenuItemClickListener(int slot, final Function3<Player, Menu, ItemStack, ClickResult> on_click) {
+		this(slot, (player, menu, item, type, action) -> {
+			if (!Menu.is_normal_click(type, action)) {
+				return ClickResult.INVALID_CLICK;
+			}
+			return on_click.apply(player, menu, item);
+		});
+	}
 	public MenuItemClickListener(int slot, final Function5<Player, Menu, ItemStack, ClickType, InventoryAction, ClickResult> on_click) {
 		this.slot = slot;
 		this.on_click = on_click;

@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Level;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Inventory;
@@ -32,8 +33,12 @@ public class MenuManager extends Listener<Core> {
 	private final HashMap<UUID, Menu> open_menus = new HashMap<>();
 	private final HashMap<Inventory, Menu> menus = new HashMap<>();
 
+	//TODO @ConfigItemStack(def = @ConfigItemStackDefinition(type = Material.LIME_TERRACOTTA, amount = 1, client_side_translation = true))
+	public ItemStack item_chooser_accept = new ItemStack(Material.LIME_TERRACOTTA);
+	public ItemStack item_chooser_cancel = new ItemStack(Material.RED_TERRACOTTA);
+
 	public MenuManager(Context<Core> context) {
-		super(context);
+		super(context.namespace("menus"));
 	}
 
 	public Menu menu_for(final Player player, final InventoryView view) {

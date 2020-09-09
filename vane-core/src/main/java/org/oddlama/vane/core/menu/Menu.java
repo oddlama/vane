@@ -35,6 +35,7 @@ public class Menu {
 		this.inventory = inventory;
 	}
 
+	public MenuManager manager() { return manager; }
 	public Inventory inventory() { return inventory; }
 
 	public void add(final MenuWidget widget) {
@@ -45,7 +46,8 @@ public class Menu {
 		return widgets.remove(widget);
 	}
 
-	public void update_widgets(boolean force_update) {
+	public void update() { update(false); }
+	public void update(boolean force_update) {
 		int updated = widgets.stream()
 			.mapToInt(w -> w.update(this) ? 1 : 0)
 			.sum();
@@ -61,9 +63,13 @@ public class Menu {
 	}
 
 	public final void open(final Player player) {
-		update_widgets(true);
+		update(true);
 		manager.add(player, this);
 		manager.schedule_next_tick(() -> { open_window(player); });
+	}
+
+	public boolean close(final Player player) {
+		return close(player, InventoryCloseEvent.Reason.PLUGIN);
 	}
 
 	public boolean close(final Player player, final InventoryCloseEvent.Reason reason) {

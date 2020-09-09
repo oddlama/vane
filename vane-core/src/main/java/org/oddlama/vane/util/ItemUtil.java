@@ -1,9 +1,11 @@
 package org.oddlama.vane.util;
 
 import static org.oddlama.vane.util.Nms.creative_tab_id;
+import net.md_5.bungee.api.chat.BaseComponent;
 import static org.oddlama.vane.util.Nms.item_handle;
 import static org.oddlama.vane.util.Nms.player_handle;
 
+import java.util.List;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.UUID;
@@ -32,6 +34,25 @@ public class ItemUtil {
 		}
 
 		handle.damage(amount, player_handle(player), x -> {});
+	}
+
+	public static String name_of(final ItemStack item) {
+		if (item == null || !item.hasItemMeta()) {
+			return "";
+		}
+		final var meta = item.getItemMeta();
+		if (!meta.hasDisplayName()) {
+			return "";
+		}
+		return meta.getDisplayName();
+	}
+
+	public static ItemStack translate_item(final ItemStack item, final String translation_key_name, final String translation_key_lore) {
+		return null;
+	}
+
+	public static ItemStack item_name(final ItemStack item, final BaseComponent[] name, final List<BaseComponent[]> lore) {
+		return null;
 	}
 
 	public static int compare_enchantments(final ItemStack item_a, final ItemStack item_b) {
@@ -156,16 +177,5 @@ public class ItemUtil {
 			// By enchantments
 			return compare_enchantments(a, b);
 		}
-	}
-
-	public static String name_of(final ItemStack item) {
-		if (item == null || !item.hasItemMeta()) {
-			return "";
-		}
-		final var meta = item.getItemMeta();
-		if (!meta.hasDisplayName()) {
-			return "";
-		}
-		return meta.getDisplayName();
 	}
 }
