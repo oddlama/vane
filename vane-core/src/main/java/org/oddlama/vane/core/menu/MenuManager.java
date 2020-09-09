@@ -28,14 +28,17 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.oddlama.vane.core.Core;
 import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.module.Context;
+import org.oddlama.vane.annotation.config.ConfigItemStack;
+import org.oddlama.vane.annotation.config.ConfigItemStackDef;
 
 public class MenuManager extends Listener<Core> {
 	private final HashMap<UUID, Menu> open_menus = new HashMap<>();
 	private final HashMap<Inventory, Menu> menus = new HashMap<>();
 
-	//TODO @ConfigItemStack(def = @ConfigItemStackDefinition(type = Material.LIME_TERRACOTTA, amount = 1, client_side_translation = true))
-	public ItemStack item_chooser_accept = new ItemStack(Material.LIME_TERRACOTTA);
-	public ItemStack item_chooser_cancel = new ItemStack(Material.RED_TERRACOTTA);
+	@ConfigItemStack(def = @ConfigItemStackDef(type = Material.LIME_TERRACOTTA), desc = "Menu item used to confirm item selection.")
+	public ItemStack item_chooser_accept;
+	@ConfigItemStack(def = @ConfigItemStackDef(type = Material.RED_TERRACOTTA), desc = "Menu item used to cancel item selection.")
+	public ItemStack item_chooser_cancel;
 
 	public MenuManager(Context<Core> context) {
 		super(context.namespace("menus"));

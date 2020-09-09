@@ -41,7 +41,7 @@ public class MenuFactory {
 		final var confirmation_menu = new Menu(context, Bukkit.createInventory(null, columns, title));
 		final var confirm_index = (int)(Math.random() * columns);
 
-		for (int i = 0; i < 9; ++i) {
+		for (int i = 0; i < columns; ++i) {
 			if (i == confirm_index) {
 				confirmation_menu.add(new MenuItem(i, item_confirm, (player, menu, self) -> {
 					menu.close(player);
@@ -57,6 +57,9 @@ public class MenuFactory {
 			}
 		}
 
+		// On close call cancel
+		confirmation_menu.on_close(on_cancel);
+
 		return confirmation_menu;
 	}
 
@@ -64,10 +67,9 @@ public class MenuFactory {
 		return item_chooser(context, player, title, initial_item, allow_nothing, on_confirm, on_cancel, i -> i);
 	}
 
-	// TODO cancel on close
 	public static Menu item_chooser(final Context<?> context, final Player player, final String title, @Nullable final ItemStack initial_item, boolean allow_nothing, final Consumer2<Player, ItemStack> on_confirm, final Consumer1<Player> on_cancel, final Function1<ItemStack, ItemStack> on_select_item) {
 		final Function1<ItemStack, ItemStack> set_item_name = (item) -> {
-			return translate_item(item, "", "");
+			return translate_item(item, "vane.menu.item_chooser.selected.name", "vane.menu.item_chooser.selected.desc");
 		};
 
 		final var no_item = set_item_name.apply(new ItemStack(Material.BARRIER));
@@ -151,6 +153,9 @@ public class MenuFactory {
 			on_cancel.apply(p);
 			return ClickResult.SUCCESS;
 		}));
+
+		// On close call cancel
+		item_chooser_menu.on_close(on_cancel);
 
 		return item_chooser_menu;
 	}

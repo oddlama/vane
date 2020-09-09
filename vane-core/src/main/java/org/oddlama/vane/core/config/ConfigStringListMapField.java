@@ -25,14 +25,14 @@ public class ConfigStringListMapField extends ConfigField<Map<String, List<Strin
 	}
 
 	private void append_string_list_map_defintion(StringBuilder builder, String indent, String prefix) {
-		Arrays.stream(annotation.def()).forEach(map_entry -> {
+		def().forEach((k, list) -> {
 			builder.append(indent);
 			builder.append(prefix);
 			builder.append("  ");
-			builder.append(map_entry.key());
+			builder.append(k);
 			builder.append(":\n");
 
-			Arrays.stream(map_entry.list()).forEach(s -> {
+			list.forEach(s -> {
 				builder.append(indent);
 				builder.append(prefix);
 				builder.append("    - ");

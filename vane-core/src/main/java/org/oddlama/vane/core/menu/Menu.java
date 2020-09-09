@@ -93,10 +93,10 @@ public class Menu {
 	}
 
 	public final void closed(final Player player) {
-		inventory.clear();
 		if (on_close != null) {
 			on_close.apply(player);
 		}
+		inventory.clear();
 		manager.remove(player, this);
 	}
 

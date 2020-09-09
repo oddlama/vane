@@ -43,7 +43,7 @@ public class ConfigIntField extends ConfigField<Integer> {
 			throw new YamlLoadException("Invalid type for yaml path '" + yaml_path() + "', expected int");
 		}
 
-		var val = yaml.getInt(yaml_path());
+		final var val = yaml.getInt(yaml_path());
 		if (annotation.min() != Integer.MIN_VALUE && val < annotation.min()) {
 			throw new YamlLoadException("Configuration '" + yaml_path() + "' has an invalid value: Value must be >= " + annotation.min());
 		}
