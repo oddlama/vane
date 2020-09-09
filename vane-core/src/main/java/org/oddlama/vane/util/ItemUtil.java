@@ -1,10 +1,12 @@
 package org.oddlama.vane.util;
 
+import net.md_5.bungee.api.chat.TranslatableComponent;
 import static org.oddlama.vane.util.Nms.creative_tab_id;
 import net.md_5.bungee.api.chat.BaseComponent;
 import static org.oddlama.vane.util.Nms.item_handle;
 import static org.oddlama.vane.util.Nms.player_handle;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Comparator;
 import java.util.Map;
@@ -48,11 +50,19 @@ public class ItemUtil {
 	}
 
 	public static ItemStack translate_item(final ItemStack item, final String translation_key_name, final String translation_key_lore) {
-		return null;
+		final var name = new TranslatableComponent(translation_key_name);
+		name.setItalic(false);
+		final var lore = new TranslatableComponent(translation_key_lore);
+		name.setItalic(false);
+		return name_item(item, new BaseComponent[] { name }, Arrays.<BaseComponent[]>asList(new BaseComponent[] { lore }));
 	}
 
-	public static ItemStack item_name(final ItemStack item, final BaseComponent[] name, final List<BaseComponent[]> lore) {
-		return null;
+	public static ItemStack name_item(final ItemStack item, final BaseComponent[] name, final List<BaseComponent[]> lore) {
+		final var meta = item.getItemMeta();
+		meta.setDisplayNameComponent(name);
+		meta.setLoreComponents(lore);
+		item.setItemMeta(meta);
+		return item;
 	}
 
 	public static int compare_enchantments(final ItemStack item_a, final ItemStack item_b) {

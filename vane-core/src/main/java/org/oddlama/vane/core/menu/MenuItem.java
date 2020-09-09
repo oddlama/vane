@@ -17,7 +17,7 @@ public class MenuItem implements MenuWidget {
 	public MenuItem(int slot, final ItemStack item) { this(slot, item, (Function5<Player, Menu, MenuItem, ClickType, InventoryAction, ClickResult>)null); }
 	public MenuItem(int slot, final ItemStack item, final Function3<Player, Menu, MenuItem, ClickResult> on_click) {
 		this(slot, item, (player, menu, self, type, action) -> {
-			if (!Menu.is_normal_click(type, action)) {
+			if (!Menu.is_left_click(type, action)) {
 				return ClickResult.INVALID_CLICK;
 			}
 			return on_click.apply(player, menu, self);
@@ -26,7 +26,7 @@ public class MenuItem implements MenuWidget {
 	public MenuItem(int slot, final ItemStack item, final Function5<Player, Menu, MenuItem, ClickType, InventoryAction, ClickResult> on_click) {
 		this.slot = slot;
 		this.on_click = on_click;
-		this.item = item;
+		item(item);
 	}
 
 	public int slot() { return slot; }

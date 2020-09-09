@@ -128,21 +128,12 @@ public class Menu {
 		}
 	}
 
-	public static boolean is_normal_click(ClickType type, InventoryAction action) {
-		if (type != ClickType.LEFT) {
-			return false;
-		}
+	public static boolean is_left_or_right_click(ClickType type, InventoryAction action) {
+		return type == ClickType.LEFT || type == ClickType.RIGHT;
+	}
 
-		switch (action) {
-			case NOTHING:
-			case PICKUP_ALL:
-			case PICKUP_HALF:
-			case PICKUP_ONE:
-			case PICKUP_SOME:
-				return true;
-		}
-
-		return false;
+	public static boolean is_left_click(ClickType type, InventoryAction action) {
+		return type == ClickType.LEFT;
 	}
 
 	public static enum ClickResult {

@@ -23,10 +23,17 @@ public class Vane extends Command<Core> {
 	@LangString
 	private String lang_resource_pack_generate_fail;
 
+	private void test(final org.bukkit.entity.Player player) {
+		org.oddlama.vane.core.menu.MenuFactory.item_chooser(get_module(), player, "TAITLE", new org.bukkit.inventory.ItemStack(org.bukkit.Material.ENDER_PEARL), true,
+			(p, i) -> { p.sendMessage("" + i); },
+			(p) -> { p.sendMessage("canzl"); }
+		).open(player);
+	}
 	public Vane(Context<Core> context) {
 		super(context);
 
 		// Add help
+		params().fixed("m").ignore_case().exec_player(this::test);
 		params().fixed("help").ignore_case().exec(this::print_help);
 
 		// Command parameters

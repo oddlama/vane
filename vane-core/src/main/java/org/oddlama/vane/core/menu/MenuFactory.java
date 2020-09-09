@@ -27,7 +27,7 @@ import org.oddlama.vane.core.module.Context;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 
 public class MenuFactory {
-	public static Menu anvil_string_input_menu(final Context<?> context, final Player player, final String title, final ItemStack input_item, final Function3<Player, Menu, String, ClickResult> on_click) {
+	public static Menu anvil_string_input(final Context<?> context, final Player player, final String title, final ItemStack input_item, final Function3<Player, Menu, String, ClickResult> on_click) {
 		final var anvil = new AnvilMenu(context, player, title);
 		anvil.add(new MenuItem(0, input_item));
 		anvil.add(new MenuItemClickListener(2, (p, menu, item) -> {
@@ -60,6 +60,11 @@ public class MenuFactory {
 		return confirmation_menu;
 	}
 
+	public static Menu item_chooser(final Context<?> context, final Player player, final String title, @Nullable final ItemStack initial_item, boolean allow_nothing, final Consumer2<Player, ItemStack> on_confirm, final Consumer1<Player> on_cancel) {
+		return item_chooser(context, player, title, initial_item, allow_nothing, on_confirm, on_cancel, i -> i);
+	}
+
+	// TODO cancel on close
 	public static Menu item_chooser(final Context<?> context, final Player player, final String title, @Nullable final ItemStack initial_item, boolean allow_nothing, final Consumer2<Player, ItemStack> on_confirm, final Consumer1<Player> on_cancel, final Function1<ItemStack, ItemStack> on_select_item) {
 		final Function1<ItemStack, ItemStack> set_item_name = (item) -> {
 			return translate_item(item, "", "");
@@ -76,7 +81,7 @@ public class MenuFactory {
 		final var columns = 9;
 		final var item_chooser_menu = new Menu(context, Bukkit.createInventory(null, columns, title));
 		final var selected_item = new MenuItem(4, default_item, (p, menu, self, type, action) -> {
-			if (!Menu.is_normal_click(type, action)) {
+			if (!Menu.is_left_or_right_click(type, action)) {
 				return ClickResult.INVALID_CLICK;
 			}
 
@@ -91,10 +96,11 @@ public class MenuFactory {
 			return ClickResult.SUCCESS;
 		}) {
 			public ItemStack original_selected = null;
+
 			@Override
 			public void item(final ItemStack item) {
 				this.original_selected = item;
-				super.item(set_item_name.apply(item));
+				super.item(set_item_name.apply(item.clone()));
 			}
 		};
 		selected_item.original_selected = default_item;

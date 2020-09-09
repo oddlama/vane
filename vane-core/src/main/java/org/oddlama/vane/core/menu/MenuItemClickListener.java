@@ -15,7 +15,7 @@ public class MenuItemClickListener implements MenuWidget {
 
 	public MenuItemClickListener(int slot, final Function3<Player, Menu, ItemStack, ClickResult> on_click) {
 		this(slot, (player, menu, item, type, action) -> {
-			if (!Menu.is_normal_click(type, action)) {
+			if (!Menu.is_left_click(type, action)) {
 				return ClickResult.INVALID_CLICK;
 			}
 			return on_click.apply(player, menu, item);
