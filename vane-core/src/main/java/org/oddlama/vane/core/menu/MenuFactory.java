@@ -60,42 +60,49 @@ public class MenuFactory {
 		return confirmation_menu;
 	}
 
-	public static Menu item_chooser(final Context<?> context, final Player player, final String title, @Nullable final ItemStack initial_item, boolean allow_nothing, final Consumer2<Player, ItemStack> on_confirm, final Function2<Player, Menu, ClickResult> on_cancel, final Function1<ItemStack, ItemStack> on_select_item) {
+	public static Menu item_chooser(final Context<?> context, final Player player, final String title, @Nullable final ItemStack initial_item, boolean allow_nothing, final Consumer2<Player, ItemStack> on_confirm, final Consumer1<Player> on_cancel, final Function1<ItemStack, ItemStack> on_select_item) {
 		final Function1<ItemStack, ItemStack> set_item_name = (item) -> {
 			return translate_item(item, "", "");
 		};
 
 		final var no_item = set_item_name.apply(new ItemStack(Material.BARRIER));
+		final ItemStack default_item;
 		if (initial_item == null) {
-			initial_item = no_item;
+			default_item = no_item;
+		} else {
+			default_item = initial_item;
 		}
 
 		final var columns = 9;
 		final var item_chooser_menu = new Menu(context, Bukkit.createInventory(null, columns, title));
-		final var selected_item = new MenuItem(4, initial_item, (p, menu, self, type, action) -> {
+		final var selected_item = new MenuItem(4, default_item, (p, menu, self, type, action) -> {
 			if (!Menu.is_normal_click(type, action)) {
 				return ClickResult.INVALID_CLICK;
 			}
 
 			if (allow_nothing && type == ClickType.RIGHT) {
 				// Clear selection
-				selected_item.item(no_item);
+				self.item(no_item);
 			} else {
 				// Reset selection
-				selected_item.item(initial_item);
+				self.item(default_item);
 			}
 			menu.update();
+			return ClickResult.SUCCESS;
 		}) {
 			public ItemStack original_selected = null;
 			@Override
 			public void item(final ItemStack item) {
 				this.original_selected = item;
-				super.item(set_item_name(item));
+				super.item(set_item_name.apply(item));
 			}
 		};
-		selected_item.original_selected = initial_item;
+		selected_item.original_selected = default_item;
 
+		// Selected item
 		item_chooser_menu.add(selected_item);
+
+		// Inventory listener
 		item_chooser_menu.add(new MenuItemClickListener(-1, (p, menu, item) -> {
 			// Called when any item in inventory is clicked
 			if (item == null) {
@@ -103,7 +110,7 @@ public class MenuFactory {
 			}
 
 			// Call on_select and check if the resulting item is valid
-			item = on_select_item(item);
+			item = on_select_item.apply(item);
 			if (item == null) {
 				return ClickResult.ERROR;
 			}
@@ -114,8 +121,9 @@ public class MenuFactory {
 			return ClickResult.SUCCESS;
 		}));
 
-		item_chooser_menu.add(new MenuItem(2, menu.manager().item_chooser_accept.clone(), (p, menu, self) -> {
-			final var item;
+		// Accept item
+		item_chooser_menu.add(new MenuItem(2, item_chooser_menu.manager().item_chooser_accept.clone(), (p, menu, self) -> {
+			final ItemStack item;
 			if (selected_item.original_selected == no_item) {
 				if (allow_nothing) {
 					item = null;
@@ -127,13 +135,15 @@ public class MenuFactory {
 			}
 
 			menu.close(p);
-			on_confirm.accept(item);
+			on_confirm.apply(p, item);
 			return ClickResult.SUCCESS;
 		}));
 
-		item_chooser_menu.add(new MenuItem(6, menu.manager().item_chooser_cancel, (p, menu, self) -> {
+		// Cancel item
+		item_chooser_menu.add(new MenuItem(6, item_chooser_menu.manager().item_chooser_cancel, (p, menu, self) -> {
 			menu.close(p);
-			on_cancel.accept(p);
+			on_cancel.apply(p);
+			return ClickResult.SUCCESS;
 		}));
 
 		return item_chooser_menu;

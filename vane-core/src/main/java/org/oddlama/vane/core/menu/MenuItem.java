@@ -14,7 +14,7 @@ public class MenuItem implements MenuWidget {
 	private Function5<Player, Menu, MenuItem, ClickType, InventoryAction, ClickResult> on_click;
 	private ItemStack item;
 
-	public MenuItem(int slot, final ItemStack item) { this(slot, item, null); }
+	public MenuItem(int slot, final ItemStack item) { this(slot, item, (Function5<Player, Menu, MenuItem, ClickType, InventoryAction, ClickResult>)null); }
 	public MenuItem(int slot, final ItemStack item, final Function3<Player, Menu, MenuItem, ClickResult> on_click) {
 		this(slot, item, (player, menu, self, type, action) -> {
 			if (!Menu.is_normal_click(type, action)) {
@@ -34,8 +34,12 @@ public class MenuItem implements MenuWidget {
 		return menu.inventory().getItem(slot);
 	}
 
+	public void item(final ItemStack item) {
+		this.item = item;
+	}
+
 	public boolean update(final Menu menu) {
-		final var cur = item();
+		final var cur = item(menu);
 		if (cur != item) {
 			menu.inventory().setItem(slot(), item);
 			return true;
