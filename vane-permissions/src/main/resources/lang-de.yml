@@ -19,6 +19,7 @@ version: 1
 resource_pack_lang_code: 'de_de'
 
 command_permission:
+  list_empty: "§b∅"
   list_header_groups: "Registrierte Gruppen:"
   list_header_permissions: "Registrierte Berechtigungen:\nFormat: <permission> (<default>): <description>"
   list_header_player_groups: "Berechtigungsgruppen für §b{0}§r:"

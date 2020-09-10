@@ -10,8 +10,8 @@ import org.oddlama.vane.annotation.config.ConfigLong;
 import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.lang.TranslatedMessage;
-import org.oddlama.vane.annotation.lang.LangString;
-import org.oddlama.vane.core.lang.TranslatedString;
+import org.oddlama.vane.annotation.lang.LangMessage;
+import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.ModuleGroup;
 
@@ -19,16 +19,16 @@ public class AutostopGroup extends ModuleGroup<Admin> {
 	@ConfigLong(def = 20 * 60, min = 0, desc = "Delay in seconds after which to stop the server.")
 	public long config_delay;
 
-	@LangString
-	public TranslatedString lang_aborted;
+	@LangMessage
+	public TranslatedMessage lang_aborted;
 	@LangMessage
 	public TranslatedMessage lang_scheduled;
 	@LangMessage
 	public TranslatedMessage lang_status;
-	@LangString
-	public TranslatedString lang_status_not_scheduled;
-	@LangString
-	public TranslatedString lang_shutdown;
+	@LangMessage
+	public TranslatedMessage lang_status_not_scheduled;
+	@LangMessage
+	public TranslatedMessage lang_shutdown;
 
 	// Variables
 	public BukkitTask task = null;
@@ -48,7 +48,7 @@ public class AutostopGroup extends ModuleGroup<Admin> {
 	public void abort() { abort(null); }
 	public void abort(CommandSender sender) {
 		if (task == null) {
-			send_message(sender, lang_status_not_scheduled);
+			lang_status_not_scheduled.send(sender);
 			return;
 		}
 
@@ -56,7 +56,7 @@ public class AutostopGroup extends ModuleGroup<Admin> {
 		task = null;
 		start_time = -1;
 
-		send_message(sender, lang_aborted);
+		lang_aborted.send(sender);
 	}
 
 	public void schedule() { schedule(null); }
@@ -68,27 +68,20 @@ public class AutostopGroup extends ModuleGroup<Admin> {
 
 		start_time = System.currentTimeMillis();
 		task = schedule_task(() -> {
-			send_message(null, lang_shutdown);
+			lang_shutdown.send(null);
 			get_module().getServer().shutdown();
 		}, ms_to_ticks(delay));
 
-		send_message(sender, lang_scheduled.format(format_time(delay)));
+		lang_scheduled.send(sender, format_time(delay));
 	}
 
 	public void status(CommandSender sender) {
 		if (task == null) {
-			send_message(sender, lang_status_not_scheduled);
+			lang_status_not_scheduled.send(sender);
 			return;
 		}
 
-		send_message(sender, lang_status.format(format_time(remaining())));
-	}
-
-	private<T> void send_message(CommandSender sender, T message) {
-		if (sender != null && sender != get_module().getServer().getConsoleSender()) {
-			sender.sendMessage(message);
-		}
-		get_module().log.info(message);
+		lang_status.send(sender, format_time(remaining()));
 	}
 
 	@Override

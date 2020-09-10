@@ -57,16 +57,16 @@ public class Enchant extends Command<Enchantments> {
 
 	private void enchant_current_item(Player player, Enchantment enchantment, Integer level) {
 		if (level < enchantment.getStartLevel()) {
-			player.sendMessage(lang_level_too_low.format(level, enchantment.getStartLevel()));
+			lang_level_too_low.send(player, level, enchantment.getStartLevel());
 			return;
 		} else if (level > enchantment.getMaxLevel()) {
-			player.sendMessage(lang_level_too_high.format(level, enchantment.getMaxLevel()));
+			lang_level_too_high.send(player, level, enchantment.getMaxLevel());
 			return;
 		}
 
 		final var item_stack = player.getEquipment().getItemInMainHand();
 		if (item_stack.getType() == Material.AIR) {
-			player.sendMessage(lang_invalid_enchantment.format(enchantment.getKey().toString(), item_stack.getType().getKey().toString()));
+			lang_invalid_enchantment.send(player, enchantment.getKey().toString(), item_stack.getType().getKey().toString());
 			return;
 		}
 
@@ -86,7 +86,7 @@ public class Enchant extends Command<Enchantments> {
 
 			get_module().update_enchanted_item(item_stack);
 		} catch (Exception e) {
-			player.sendMessage(lang_invalid_enchantment.format(enchantment.getKey().toString(), item_stack.getType().getKey().toString()));
+			lang_invalid_enchantment.send(player, enchantment.getKey().toString(), item_stack.getType().getKey().toString());
 			return;
 		}
 	}

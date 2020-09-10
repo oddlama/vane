@@ -10,8 +10,8 @@ import org.bukkit.permissions.PermissionDefault;
 import org.oddlama.vane.annotation.command.Aliases;
 import org.oddlama.vane.annotation.command.Name;
 import org.oddlama.vane.annotation.lang.LangMessage;
-import org.oddlama.vane.annotation.lang.LangString;
-import org.oddlama.vane.core.lang.TranslatedString;
+import org.oddlama.vane.annotation.lang.LangMessage;
+import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.command.Command;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.permissions.Permissions;
@@ -20,17 +20,19 @@ import org.oddlama.vane.permissions.Permissions;
 @Name("permission")
 @Aliases({"perm"})
 public class Permission extends Command<Permissions> {
-	@LangString  private TranslatedString  lang_list_header_groups;
-	@LangString  private TranslatedString  lang_list_header_permissions;
+	@LangMessage private TranslatedMessage lang_list_empty;
+	@LangMessage private TranslatedMessage lang_list_header_groups;
+	@LangMessage private TranslatedMessage lang_list_header_permissions;
 	@LangMessage private TranslatedMessage lang_list_header_player_groups;
 	@LangMessage private TranslatedMessage lang_list_header_player_permissions;
 	@LangMessage private TranslatedMessage lang_list_header_group_permissions;
-	@LangString  private TranslatedString  lang_list_player_offline;
+	@LangMessage private TranslatedMessage lang_list_player_offline;
 	@LangMessage private TranslatedMessage lang_list_group;
 	@LangMessage private TranslatedMessage lang_list_permission;
 	@LangMessage private TranslatedMessage lang_group_assigned;
 	@LangMessage private TranslatedMessage lang_group_removed;
 	@LangMessage private TranslatedMessage lang_group_already_assigned;
+	@LangMessage private TranslatedMessage lang_group_not_assigned;
 	@LangMessage private TranslatedMessage lang_group_not_assigned;
 
 	public Permission(Context<Permissions> context) {
@@ -91,38 +93,38 @@ public class Permission extends Command<Permissions> {
 	}
 
 	private void list_groups(CommandSender sender) {
-		sender.sendMessage(lang_list_header_groups.clone());
+		lang_list_header_groups.send(sender);
 		get_module().permission_groups.keySet()
 			.stream()
 			.sorted((a, b) -> a.compareTo(b))
 			.forEach(group -> {
-				sender.sendMessage(lang_list_group.format(group));
+				lang_list_group.send(sender, group);
 			});
 	}
 
 	private void list_permissions(CommandSender sender) {
-		sender.sendMessage(lang_list_header_permissions.clone());
+		lang_list_header_permissions.send(sender);
 		get_module().getServer().getPluginManager().getPermissions().stream()
 			.sorted((a, b) -> a.getName().compareTo(b.getName()))
 			.forEach(perm -> {
-				sender.sendMessage(lang_list_permission.format(
+				lang_list_permission.send(sender,
 							perm.getName(),
 							permission_default_value_color_code(perm.getDefault()),
 							perm.getDefault().toString().toLowerCase(),
-							perm.getDescription()));
+							perm.getDescription());
 			});
 	}
 
 	private void list_permissions_for_player(CommandSender sender, OfflinePlayer offline_player) {
-		sender.sendMessage(lang_list_header_player_permissions.format(offline_player.getName()));
+		lang_list_header_player_permissions.send(sender, offline_player.getName());
 		var player = offline_player.getPlayer();
 		if (player == null) {
 			// Player is offline, show configured permissions only.
 			// Information from other plugins might be missing.
-			sender.sendMessage(lang_list_player_offline.clone());
+			lang_list_player_offline.send(sender);
 			final var groups = get_module().storage_player_groups.get(offline_player.getUniqueId());
 			if (groups == null) {
-				sender.sendMessage("§b∅");
+				lang_list_empty.send(sender);
 			} else {
 				for (var group : groups) {
 					list_permissions_for_group_no_header(sender, group);
@@ -131,7 +133,7 @@ public class Permission extends Command<Permissions> {
 		} else {
 			var effective_permissions = player.getEffectivePermissions();
 			if (effective_permissions.isEmpty()) {
-				sender.sendMessage("§b∅");
+				lang_list_empty.send(sender);
 			} else {
 				player.getEffectivePermissions()
 					.stream()
@@ -142,11 +144,11 @@ public class Permission extends Command<Permissions> {
 							get_module().log.warning("Encountered unregistered permission '" + att.getPermission() + "'");
 							return;
 						}
-						sender.sendMessage(lang_list_permission.format(
+						lang_list_permission.send(sender,
 									perm.getName(),
 									permission_value_color_code(att.getValue()),
 									String.valueOf(att.getValue()),
-									perm.getDescription()));
+									perm.getDescription());
 					});
 			}
 		}
@@ -157,34 +159,34 @@ public class Permission extends Command<Permissions> {
 			var perm = get_module().getServer().getPluginManager().getPermission(p);
 			if (perm == null) {
 				get_module().log.warning("Use of unregistered permission '" + p + "' might have unintended effects.");
-				sender.sendMessage(lang_list_permission.format(
+				lang_list_permission.send(sender,
 							p,
 							permission_value_color_code(true),
 							String.valueOf(true),
-							""));
+							"");
 			} else {
-				sender.sendMessage(lang_list_permission.format(
+				lang_list_permission.send(sender,
 							perm.getName(),
 							permission_value_color_code(true),
 							String.valueOf(true),
-							perm.getDescription()));
+							perm.getDescription());
 			}
 		}
 	}
 
 	private void list_permissions_for_group(CommandSender sender, String group) {
-		sender.sendMessage(lang_list_header_group_permissions.format(group));
+		lang_list_header_group_permissions.send(sender, group);
 		list_permissions_for_group_no_header(sender, group);
 	}
 
 	private void list_groups_for_player(CommandSender sender, OfflinePlayer offline_player) {
 		var set = get_module().storage_player_groups.get(offline_player.getUniqueId());
 		if (set == null) {
-			sender.sendMessage("§b∅");
+			lang_list_empty.send(sender);
 		} else {
-			sender.sendMessage(lang_list_header_player_permissions.format(offline_player.getName()));
+			lang_list_header_player_permissions.send(sender, offline_player.getName());
 			for (var group : set) {
-				sender.sendMessage(lang_list_group.format(group));
+				lang_list_group.send(sender, group);
 			}
 		}
 	}
@@ -207,10 +209,10 @@ public class Permission extends Command<Permissions> {
 		var added = set.add(group);
 
 		if (added) {
-			sender.sendMessage(lang_group_assigned.format(group, player.getName()));
+			lang_group_assigned.send(sender, group, player.getName());
 			save_and_recalculate(player);
 		} else {
-			sender.sendMessage(lang_group_already_assigned.format(group, player.getName()));
+			lang_group_already_assigned.send(sender, group, player.getName());
 		}
 	}
 
@@ -222,10 +224,10 @@ public class Permission extends Command<Permissions> {
 		}
 
 		if (removed) {
-			sender.sendMessage(lang_group_removed.format(group, player.getName()));
+			lang_group_removed.send(sender, group, player.getName());
 			save_and_recalculate(player);
 		} else {
-			sender.sendMessage(lang_group_not_assigned.format(group, player.getName()));
+			lang_group_not_assigned.send(sender, group, player.getName());
 		}
 	}
 }

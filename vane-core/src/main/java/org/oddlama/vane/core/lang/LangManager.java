@@ -17,14 +17,11 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.core.lang.TranslatedMessage;
-import org.oddlama.vane.annotation.lang.LangString;
-import org.oddlama.vane.core.lang.TranslatedString;
 import org.oddlama.vane.annotation.lang.LangVersion;
 import org.oddlama.vane.core.ResourcePackGenerator;
 import org.oddlama.vane.core.YamlLoadException;
 import org.oddlama.vane.core.lang.LangField;
 import org.oddlama.vane.core.lang.LangMessageField;
-import org.oddlama.vane.core.lang.LangStringField;
 import org.oddlama.vane.core.lang.LangVersionField;
 import org.oddlama.vane.core.module.Module;
 
@@ -75,9 +72,7 @@ public class LangManager {
 		final var atype = annotation.annotationType();
 
 		// Return correct wrapper object
-		if (atype.equals(LangString.class)) {
-			return new LangStringField(owner, field, map_name, (LangString)annotation);
-		} else if (atype.equals(LangMessage.class)) {
+		if (atype.equals(LangMessage.class)) {
 			return new LangMessageField(owner, field, map_name, (LangMessage)annotation);
 		} else if (atype.equals(LangVersion.class)) {
 			if (owner != module) {

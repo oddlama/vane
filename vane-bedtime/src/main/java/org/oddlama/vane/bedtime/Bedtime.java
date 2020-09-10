@@ -20,8 +20,8 @@ import org.oddlama.vane.annotation.config.ConfigDouble;
 import org.oddlama.vane.annotation.config.ConfigLong;
 import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.core.lang.TranslatedMessage;
-import org.oddlama.vane.annotation.lang.LangString;
-import org.oddlama.vane.core.lang.TranslatedString;
+import org.oddlama.vane.annotation.lang.LangMessage;
+import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Module;
 
 import org.oddlama.vane.util.Nms;
@@ -44,8 +44,8 @@ public class Bedtime extends Module<Bedtime> {
 	private TranslatedMessage lang_player_bed_enter;
 	@LangMessage
 	private TranslatedMessage lang_player_bed_leave;
-	@LangString
-	private TranslatedString lang_sleep_success;
+	@LangMessage
+	private TranslatedMessage lang_sleep_success;
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void on_player_bed_enter(PlayerBedEnterEvent event) {

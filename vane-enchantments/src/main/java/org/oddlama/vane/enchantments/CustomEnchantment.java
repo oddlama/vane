@@ -20,8 +20,8 @@ import org.jetbrains.annotations.NotNull;
 
 import org.oddlama.vane.annotation.enchantment.Rarity;
 import org.oddlama.vane.annotation.enchantment.VaneEnchantment;
-import org.oddlama.vane.annotation.lang.LangString;
-import org.oddlama.vane.core.lang.TranslatedString;
+import org.oddlama.vane.annotation.lang.LangMessage;
+import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.Module;
@@ -40,8 +40,8 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 	private final Set<Enchantment> supersedes = new HashSet<>();
 
 	// Language
-	@LangString
-	public TranslatedString lang_name;
+	@LangMessage
+	public TranslatedMessage lang_name;
 
 	public CustomEnchantment(Context<T> context) {
 		super(null);

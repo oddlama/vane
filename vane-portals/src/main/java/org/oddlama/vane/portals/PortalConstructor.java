@@ -61,8 +61,8 @@ import org.bukkit.permissions.PermissionDefault;
 
 import org.oddlama.vane.annotation.VaneModule;
 import org.oddlama.vane.core.module.Module;
-import org.oddlama.vane.annotation.lang.LangString;
-import org.oddlama.vane.core.lang.TranslatedString;
+import org.oddlama.vane.annotation.lang.LangMessage;
+import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.annotation.config.ConfigInt;
@@ -94,25 +94,25 @@ public class PortalConstructor extends Listener<Portals> {
 	@ConfigInt(def = 64, min = 8, desc = "Maximum total amount of portal area blocks.")
 	public int config_area_max_blocks = 64;
 
-	@LangString public TranslatedString lang_select_boundary_now;
-	@LangString public TranslatedString lang_console_too_far_away;
-	@LangString public TranslatedString lang_created_and_linked;
-	@LangString public TranslatedString lang_console_linked;
+	@LangMessage public TranslatedMessage lang_select_boundary_now;
+	@LangMessage public TranslatedMessage lang_console_too_far_away;
+	@LangMessage public TranslatedMessage lang_created_and_linked;
+	@LangMessage public TranslatedMessage lang_console_linked;
 
-	@LangString public TranslatedString lang_no_boundary_found;
-	@LangString public TranslatedString lang_no_origin;
-	@LangString public TranslatedString lang_multiple_origins;
-	@LangString public TranslatedString lang_no_portal_block_above_origin;
+	@LangMessage public TranslatedMessage lang_no_boundary_found;
+	@LangMessage public TranslatedMessage lang_no_origin;
+	@LangMessage public TranslatedMessage lang_multiple_origins;
+	@LangMessage public TranslatedMessage lang_no_portal_block_above_origin;
 	@LangMessage public TranslatedMessage lang_too_large;
 	@LangMessage public TranslatedMessage lang_too_small_spawn;
 	@LangMessage public TranslatedMessage lang_too_many_portal_area_blocks;
-	@LangString public TranslatedString lang_portal_area_obstructed;
-	@LangString public TranslatedString lang_build_restricted;
-	@LangString public TranslatedString lang_intersects_existing_portal;
+	@LangMessage public TranslatedMessage lang_portal_area_obstructed;
+	@LangMessage public TranslatedMessage lang_build_restricted;
+	@LangMessage public TranslatedMessage lang_intersects_existing_portal;
 
-	@LangString public TranslatedString lang_target_already_connected;
-	@LangString public TranslatedString lang_source_use_restricted;
-	@LangString public TranslatedString lang_target_use_restricted;
+	@LangMessage public TranslatedMessage lang_target_already_connected;
+	@LangMessage public TranslatedMessage lang_source_use_restricted;
+	@LangMessage public TranslatedMessage lang_target_use_restricted;
 
 	private HashMap<UUID, Block> pending_console = new HashMap<>();
 
@@ -127,7 +127,7 @@ public class PortalConstructor extends Listener<Portals> {
 	private void remember_new_console(final Player player, final Block console_block) {
 		// Add console_block as pending console
 		pending_console.put(player.getUniqueId(), console_block);
-		player.sendMessage(lang_select_boundary_now.clone());
+		lang_select_boundary_now.send(player);
 	}
 
 	private boolean can_link_console(final PortalBoundary boundary, final Block console) {
@@ -149,32 +149,32 @@ public class PortalConstructor extends Listener<Portals> {
 	private PortalBoundary find_boundary(final Player player, final Block block) {
 		final var boundary = PortalBoundary.search_at(this, block);
 		if (boundary == null) {
-			player.sendMessage(lang_no_boundary_found.clone());
+			lang_no_boundary_found.send(player);
 			return null;
 		}
 
 		// Check for error
 		switch (boundary.error_state()) {
 			case NONE: /* Boundary is fine */ break;
-			case NO_ORIGIN:                    player.sendMessage(lang_no_origin.clone());                    return null;
-			case MULTIPLE_ORIGINS:             player.sendMessage(lang_multiple_origins.clone());             return null;
-			case NO_PORTAL_BLOCK_ABOVE_ORIGIN: player.sendMessage(lang_no_portal_block_above_origin.clone()); return null;
-			case TOO_LARGE_X:                  player.sendMessage(lang_too_large.format("x"));        return null;
-			case TOO_LARGE_Y:                  player.sendMessage(lang_too_large.format("y"));        return null;
-			case TOO_LARGE_Z:                  player.sendMessage(lang_too_large.format("z"));        return null;
-			case TOO_SMALL_SPAWN_X:            player.sendMessage(lang_too_small_spawn.format("x"));  return null;
-			case TOO_SMALL_SPAWN_Y:            player.sendMessage(lang_too_small_spawn.format("y"));  return null;
-			case TOO_SMALL_SPAWN_Z:            player.sendMessage(lang_too_small_spawn.format("z"));  return null;
+			case NO_ORIGIN:                    lang_no_origin.send(player);                    return null;
+			case MULTIPLE_ORIGINS:             lang_multiple_origins.send(player);             return null;
+			case NO_PORTAL_BLOCK_ABOVE_ORIGIN: lang_no_portal_block_above_origin.send(player); return null;
+			case TOO_LARGE_X:                  lang_too_large.send(player, "x");               return null;
+			case TOO_LARGE_Y:                  lang_too_large.send(player, "y");               return null;
+			case TOO_LARGE_Z:                  lang_too_large.send(player, "z");               return null;
+			case TOO_SMALL_SPAWN_X:            lang_too_small_spawn.send(player, "x");         return null;
+			case TOO_SMALL_SPAWN_Y:            lang_too_small_spawn.send(player, "y");         return null;
+			case TOO_SMALL_SPAWN_Z:            lang_too_small_spawn.send(player, "z");         return null;
 			case TOO_MANY_PORTAL_AREA_BLOCKS:
-				player.sendMessage(lang_too_many_portal_area_blocks.format(
+				lang_too_many_portal_area_blocks.send(player,
 					boundary.portal_area_blocks().size(),
 					config_area_max_blocks));
 				return null;
-			case PORTAL_AREA_OBSTRUCTED:       player.sendMessage(lang_portal_area_obstructed.clone());       return null;
+			case PORTAL_AREA_OBSTRUCTED:       lang_portal_area_obstructed.send(player);       return null;
 		}
 
 		if (boundary.intersects_existing_portal(this)) {
-			player.sendMessage(lang_intersects_existing_portal.clone());
+			lang_intersects_existing_portal.send(player);
 			return null;
 		}
 
@@ -182,7 +182,7 @@ public class PortalConstructor extends Listener<Portals> {
 		final var event = new PortalSelectBoundaryEvent(player, boundary);
 		get_module().getServer().getPluginManager().callEvent(event);
 		if (event.isCancelled()) {
-			player.sendMessage(lang_build_restricted.clone());
+			lang_build_restricted.send(player);
 			return null;
 		}
 
@@ -203,7 +203,7 @@ public class PortalConstructor extends Listener<Portals> {
 
 		// Check console distance
 		if (!can_link_console(test_boundary, console)) {
-			player.sendMessage(lang_console_too_far_away.clone());
+			lang_console_too_far_away.send(player);
 			return true;
 		}
 
@@ -222,7 +222,7 @@ public class PortalConstructor extends Listener<Portals> {
 
 		//	// Check console distance
 		//	if (!can_link_console(boundary, console)) {
-		//		player.sendMessage(lang_console_too_far_away.clone());
+		//		lang_console_too_far_away.send(player);
 		//		return ClickResult.ERROR;
 		//	}
 
@@ -243,7 +243,7 @@ public class PortalConstructor extends Listener<Portals> {
 		//			portal.getStyle().getStyle().create(portal, portalPortalBlock);
 		//	}
 
-		//	player.sendMessage(lang_created_and_linked.clone());
+		//	lang_created_and_linked.send(player);
 		//	return ClickResult.SUCCESS;
 		//}).open();
 

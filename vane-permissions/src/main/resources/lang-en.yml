@@ -19,6 +19,8 @@ version: 1
 resource_pack_lang_code: 'en_us'
 
 command_permission:
+  # This message is used to represent the empty list
+  list_empty: "§b∅"
   # This message is sent as a first header line for group list output
   list_header_groups: "Listing all registered groups:"
   # This message is sent as a first header line for permission list output

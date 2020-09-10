@@ -16,8 +16,8 @@ import org.bukkit.plugin.Plugin;
 import org.oddlama.vane.annotation.command.Aliases;
 import org.oddlama.vane.annotation.command.Name;
 import org.oddlama.vane.annotation.command.VaneCommand;
-import org.oddlama.vane.annotation.lang.LangString;
-import org.oddlama.vane.core.lang.TranslatedString;
+import org.oddlama.vane.annotation.lang.LangMessage;
+import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.command.params.AnyParam;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.Module;
@@ -50,7 +50,7 @@ public abstract class Command<T extends Module<T>> extends ModuleComponent<T> {
 		public boolean execute(CommandSender sender, String alias, String[] args) {
 			// Pre check permission
 			if (!sender.hasPermission(Command.this.permission)) {
-				sender.sendMessage(get_module().core.lang_command_permission_denied.clone());
+				get_module().core.lang_command_permission_denied.send(sender);
 				return true;
 			}
 
@@ -81,12 +81,12 @@ public abstract class Command<T extends Module<T>> extends ModuleComponent<T> {
 	}
 
 	// Language
-	@LangString
-	public TranslatedString lang_usage;
-	@LangString
-	public TranslatedString lang_description;
-	@LangString
-	public TranslatedString lang_help;
+	@LangMessage
+	public TranslatedMessage lang_usage;
+	@LangMessage
+	public TranslatedMessage lang_description;
+	@LangMessage
+	public TranslatedMessage lang_help;
 
 	// Variables
 	private String name;
@@ -158,8 +158,8 @@ public abstract class Command<T extends Module<T>> extends ModuleComponent<T> {
 	}
 
 	public void print_help(CommandSender sender) {
-		// TODO test space necessary
-		sender.sendMessage(new TextComponent("§7/§3" + name + " "), lang_usage.clone());
-		sender.sendMessage(lang_help.clone());
+		// TODO test space necessary, TODO all usage need %1$s
+		lang_usage.send(sender, "§7/§3" + name);
+		lang_help.send(sender);
 	}
 }

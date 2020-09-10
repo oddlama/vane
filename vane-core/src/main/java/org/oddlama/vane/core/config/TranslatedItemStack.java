@@ -20,8 +20,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.oddlama.vane.core.module.ModuleComponent;
 import org.oddlama.vane.annotation.config.ConfigInt;
 import org.oddlama.vane.annotation.config.ConfigMaterial;
-import org.oddlama.vane.annotation.lang.LangString;
-import org.oddlama.vane.core.lang.TranslatedString;
+import org.oddlama.vane.annotation.lang.LangMessage;
+import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.annotation.config.ConfigItemStack;
 import org.oddlama.vane.annotation.config.ConfigItemStackDef;
 import org.oddlama.vane.core.YamlLoadException;
@@ -36,11 +36,11 @@ public class TranslatedItemStack<T extends Module<T>> extends ModuleComponent<T>
 	@ConfigInt(def = 1, min = 0, desc = "")
 	public int config_amount;
 
-	@LangString
-	public TranslatedString lang_name;
+	@LangMessage
+	public TranslatedMessage lang_name;
 
-	@LangString
-	public TranslatedString lang_lore;
+	@LangMessage
+	public TranslatedMessage lang_lore;
 
 	public TranslatedItemStack(Context<T> context, Material def_material, int def_amount, String desc) {
 		super(null);

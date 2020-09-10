@@ -9,8 +9,8 @@ import org.bukkit.permissions.PermissionDefault;
 
 import org.oddlama.vane.annotation.config.ConfigBoolean;
 import org.oddlama.vane.annotation.config.ConfigString;
-import org.oddlama.vane.annotation.lang.LangString;
-import org.oddlama.vane.core.lang.TranslatedString;
+import org.oddlama.vane.annotation.lang.LangMessage;
+import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.module.Context;
 
@@ -22,10 +22,10 @@ public class ResourcePackDistributor extends Listener<Admin> {
 	@ConfigBoolean(def = true, desc = "Kick players if they deny to use the specified resource pack (if set). Individual players can be exempt from this rule by giving them the permission 'vane.admin.resource_pack.bypass'.")
 	public boolean config_force;
 
-	@LangString
-	public TranslatedString lang_declined;
-	@LangString
-	public TranslatedString lang_download_failed;
+	@LangMessage
+	public TranslatedMessage lang_declined;
+	@LangMessage
+	public TranslatedMessage lang_download_failed;
 
 	// The permission to bypass the resource pack
 	private Permission bypass_permission;

@@ -14,8 +14,8 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 
-import org.oddlama.vane.annotation.lang.LangString;
-import org.oddlama.vane.core.lang.TranslatedString;
+import org.oddlama.vane.annotation.lang.LangMessage;
+import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.ResourcePackGenerator;
 import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.core.module.ModuleComponent;
@@ -31,8 +31,8 @@ public class CustomItemVariant<T extends Module<T>, V extends CustomItem<T, V>, 
 	private Map<NamespacedKey, Recipe> recipes = new HashMap<>();
 
 	// Language
-	@LangString
-	public TranslatedString lang_name;
+	@LangMessage
+	public TranslatedMessage lang_name;
 
 	public CustomItemVariant(CustomItem<T, V> parent, U variant) {
 		super(null);
@@ -79,7 +79,7 @@ public class CustomItemVariant<T extends Module<T>, V extends CustomItem<T, V>, 
 	 * Returns the display name for this item variant.
 	 */
 	public BaseComponent display_name() {
-		final var display_name = lang_name.clone();
+		final var display_name = lang_name.format();
 		display_name.setItalic(false);
 		return display_name;
 	}

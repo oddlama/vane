@@ -26,8 +26,8 @@ import org.oddlama.vane.core.menu.MenuManager;
 import org.oddlama.vane.annotation.VaneModule;
 import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.core.lang.TranslatedMessage;
-import org.oddlama.vane.annotation.lang.LangString;
-import org.oddlama.vane.core.lang.TranslatedString;
+import org.oddlama.vane.annotation.lang.LangMessage;
+import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.item.CustomItem;
 import org.oddlama.vane.core.module.Module;
 
@@ -48,10 +48,10 @@ public class Core extends Module<Core> {
 		return ITEM_DATA_BASE_OFFSET + section * ITEM_DATA_SECTION_SIZE + item_id * ITEM_VARIANT_SECTION_SIZE + variant_id;
 	}
 
-	@LangString
-	public TranslatedString lang_command_not_a_player;
-	@LangString
-	public TranslatedString lang_command_permission_denied;
+	@LangMessage
+	public TranslatedMessage lang_command_not_a_player;
+	@LangMessage
+	public TranslatedMessage lang_command_permission_denied;
 
 	@LangMessage
 	public TranslatedMessage lang_invalid_time_format;

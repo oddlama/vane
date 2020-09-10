@@ -5,8 +5,8 @@ import org.bukkit.command.CommandSender;
 import org.oddlama.vane.annotation.command.Name;
 import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.core.lang.TranslatedMessage;
-import org.oddlama.vane.annotation.lang.LangString;
-import org.oddlama.vane.core.lang.TranslatedString;
+import org.oddlama.vane.annotation.lang.LangMessage;
+import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.Core;
 import org.oddlama.vane.core.command.Command;
 import org.oddlama.vane.core.module.Context;
@@ -20,10 +20,10 @@ public class Vane extends Command<Core> {
 	@LangMessage
 	private TranslatedMessage lang_reload_fail;
 
-	@LangString
-	private TranslatedString lang_resource_pack_generate_success;
-	@LangString
-	private TranslatedString lang_resource_pack_generate_fail;
+	@LangMessage
+	private TranslatedMessage lang_resource_pack_generate_success;
+	@LangMessage
+	private TranslatedMessage lang_resource_pack_generate_fail;
 
 	private void test(final org.bukkit.entity.Player player) {
 		org.oddlama.vane.core.menu.MenuFactory.item_chooser(get_module(), player, "TAITLE", new org.bukkit.inventory.ItemStack(org.bukkit.Material.ENDER_PEARL), true,
@@ -48,9 +48,9 @@ public class Vane extends Command<Core> {
 
 	private void reload_module(CommandSender sender, Module<?> module) {
 		if (module.reload_configuration()) {
-			sender.sendMessage(lang_reload_success.format("vane-" + module.get_name()));
+			lang_reload_success.send(sender, "vane-" + module.get_name());
 		} else {
-			sender.sendMessage(lang_reload_fail.format("vane-" + module.get_name(), "invalid configuration"));
+			lang_reload_fail.send(sender, "vane-" + module.get_name(), "invalid configuration");
 		}
 	}
 
@@ -62,9 +62,9 @@ public class Vane extends Command<Core> {
 
 	private void generate_resource_pack(CommandSender sender) {
 		if (get_module().generate_resource_pack()) {
-			sender.sendMessage(lang_resource_pack_generate_success.clone());
+			lang_resource_pack_generate_success.send(sender);
 		} else {
-			sender.sendMessage(lang_resource_pack_generate_fail.clone());
+			lang_resource_pack_generate_fail.send(sender);
 		}
 	}
 }
