@@ -36,6 +36,10 @@ public class MenuFactory {
 		for (int i = 0; i < columns; ++i) {
 			if (i == confirm_index) {
 				confirmation_menu.add(new MenuItem(i, item_confirm, (player, menu, self) -> {
+					// Remove on_close listener if it points to on_cancel.
+					if (menu.get_on_close() == on_cancel) {
+						menu.on_close(null);
+					}
 					menu.close(player);
 					on_confirm.apply(player);
 					return ClickResult.SUCCESS;
@@ -135,6 +139,11 @@ public class MenuFactory {
 				}
 			} else {
 				item = selected_item.original_selected;
+			}
+
+			// Remove on_close listener if it points to on_cancel.
+			if (menu.get_on_close() == on_cancel) {
+				menu.on_close(null);
 			}
 
 			menu.close(p);
