@@ -1,6 +1,5 @@
 package org.oddlama.vane.bedtime;
 
-import static org.oddlama.vane.util.WorldUtil.broadcast;
 import static org.oddlama.vane.util.WorldUtil.change_time_smoothly;
 
 import java.util.HashMap;
@@ -69,7 +68,7 @@ public class Bedtime extends Module<Bedtime> {
 					world.setThundering(false);
 
 					// Send message
-					broadcast(world, lang_sleep_success);
+					lang_sleep_success.broadcast_world(world);
 
 					// Clear sleepers
 					reset_sleepers(world);
@@ -125,7 +124,7 @@ public class Bedtime extends Module<Bedtime> {
 
 		// Broadcast sleeping message
 		var percent = get_percentage_sleeping(world);
-		broadcast(world, lang_player_bed_enter.format(player.getName(), 100.0 * percent));
+		lang_player_bed_enter.broadcast_world(world, player.getName(), 100.0 * percent);
 	}
 
 	private void remove_sleeping(Player player) {
@@ -142,7 +141,7 @@ public class Bedtime extends Module<Bedtime> {
 		if (sleepers.remove(player.getUniqueId())) {
 			// Broadcast sleeping message
 			var percent = get_percentage_sleeping(world);
-			broadcast(world, lang_player_bed_leave.format(player.getName(), 100.0 * percent));
+			lang_player_bed_leave.broadcast_world(world, player.getName(), 100.0 * percent);
 		}
 	}
 

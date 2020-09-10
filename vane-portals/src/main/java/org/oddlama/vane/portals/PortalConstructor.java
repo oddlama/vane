@@ -166,9 +166,7 @@ public class PortalConstructor extends Listener<Portals> {
 			case TOO_SMALL_SPAWN_Y:            lang_too_small_spawn.send(player, "y");         return null;
 			case TOO_SMALL_SPAWN_Z:            lang_too_small_spawn.send(player, "z");         return null;
 			case TOO_MANY_PORTAL_AREA_BLOCKS:
-				lang_too_many_portal_area_blocks.send(player,
-					boundary.portal_area_blocks().size(),
-					config_area_max_blocks));
+				lang_too_many_portal_area_blocks.send(player, boundary.portal_area_blocks().size(), config_area_max_blocks);
 				return null;
 			case PORTAL_AREA_OBSTRUCTED:       lang_portal_area_obstructed.send(player);       return null;
 		}

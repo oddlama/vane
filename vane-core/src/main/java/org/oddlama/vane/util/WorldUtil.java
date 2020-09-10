@@ -8,12 +8,6 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
 
 public class WorldUtil {
-	public static void broadcast(World world, String message) {
-		for (var player : world.getPlayers()) {
-			player.sendMessage(message);
-		}
-	}
-
 	private static final HashMap<UUID, BukkitTask> running_time_change_tasks = new HashMap<>();
 	public static boolean change_time_smoothly(final World world, final Plugin plugin, final long world_ticks, final long interpolation_ticks) {
 		synchronized (running_time_change_tasks) {

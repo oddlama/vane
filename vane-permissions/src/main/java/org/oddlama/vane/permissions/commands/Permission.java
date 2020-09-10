@@ -33,7 +33,6 @@ public class Permission extends Command<Permissions> {
 	@LangMessage private TranslatedMessage lang_group_removed;
 	@LangMessage private TranslatedMessage lang_group_already_assigned;
 	@LangMessage private TranslatedMessage lang_group_not_assigned;
-	@LangMessage private TranslatedMessage lang_group_not_assigned;
 
 	public Permission(Context<Permissions> context) {
 		super(context);

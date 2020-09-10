@@ -162,7 +162,7 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 	 * uses clientside translation keys and supports chat formatting.
 	 */
 	public BaseComponent display_name(int level) {
-        final var display_name = lang_name.clone();
+        final var display_name = lang_name.format();
 		display_name.setItalic(false);
 		apply_display_format(display_name);
 

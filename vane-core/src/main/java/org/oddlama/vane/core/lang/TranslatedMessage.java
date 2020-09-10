@@ -25,7 +25,22 @@ public class TranslatedMessage {
 		return new TranslatableComponent(key, args);
 	}
 
-	public void broadcast(final World world, Object... args) {
+	public void broadcast_server_players(Object... args) {
+		final var component = format(args);
+		for (var player : Bukkit.getOnlinePlayers()) {
+			player.sendMessage(component);
+		}
+	}
+
+	public void broadcast_server(Object... args) {
+		final var component = format(args);
+		for (var player : Bukkit.getOnlinePlayers()) {
+			player.sendMessage(component);
+		}
+		Bukkit.getLogger().info("[broadcast] " + str(args));
+	}
+
+	public void broadcast_world(final World world, Object... args) {
 		final var component = format(args);
 		for (var player : world.getPlayers()) {
 			player.sendMessage(component);

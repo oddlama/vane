@@ -1,6 +1,5 @@
 package org.oddlama.vane.admin;
 
-import static org.oddlama.vane.util.WorldUtil.broadcast;
 import static org.oddlama.vane.util.Nms.set_air_no_drops;
 
 import java.util.List;
@@ -133,7 +132,7 @@ public class HazardProtection extends Listener<Admin> {
 			return;
 		}
 
-		broadcast(world, lang_wither_spawn_prohibited.format(world.getName()));
+		lang_wither_spawn_prohibited.broadcast_world(world, world.getName());
 		event.setCancelled(true);
 	}
 }
