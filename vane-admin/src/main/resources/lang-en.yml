@@ -64,16 +64,6 @@ hazard_protection:
   # %0$s: world name
   wither_spawn_prohibited: "§7The wither may not spawn in this world!"
 
-resource_pack:
-  # This kick message is used when a mandatory resource pack was declined by a player.
-  declined: "You need to accept the resource pack to play on this server.\n\
-    It is needed for localization and textures."
-  # This kick message is used when a mandatory resource pack failed to download for  player.
-  download_failed: "Your resource pack download seems to have failed.\n\
-    You have been disconnected to prevent display errors.\n\
-    \n\
-    Please try again."
-
 command_gamemode:
   # This message is sent when the gamemode of a player is changed by the gamemode command.
   # %0$s: Player name

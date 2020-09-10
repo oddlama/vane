@@ -34,3 +34,11 @@ command_vane:
   description: "Verwaltet Vane plugins."
   help: "§areload §7[§bmodule§7]:§r Läd alle oder das gegebene Vane-Modul erneut.\n\
     §agenerate_resource_pack§7:§r Erstellt das Vane Resource Pack."
+
+resource_pack:
+  declined: "Du musst das Ressourcenpaket akzeptieren um auf diesem Server zu spielen.\n\
+    Es wird für Übersetzungen und Texturen benötigt."
+  download_failed: "Es gab einen Fehler beim Herunterladen des Ressourcenpakets.\n\
+    Deine Verbindung wurdest unterbrochen um Anzeigefehlern vorzubeugen.\n\
+    \n\
+    Bitte versuche es erneut."
