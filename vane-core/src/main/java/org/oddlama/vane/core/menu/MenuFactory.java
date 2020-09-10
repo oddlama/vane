@@ -54,11 +54,11 @@ public class MenuFactory {
 		return confirmation_menu;
 	}
 
-	public static Menu item_chooser(final Context<?> context, final Player player, final String title, @Nullable final ItemStack initial_item, boolean allow_nothing, final Consumer2<Player, ItemStack> on_confirm, final Consumer1<Player> on_cancel) {
-		return item_chooser(context, player, title, initial_item, allow_nothing, on_confirm, on_cancel, i -> i);
+	public static Menu item_selector(final Context<?> context, final Player player, final String title, @Nullable final ItemStack initial_item, boolean allow_nothing, final Consumer2<Player, ItemStack> on_confirm, final Consumer1<Player> on_cancel) {
+		return item_selector(context, player, title, initial_item, allow_nothing, on_confirm, on_cancel, i -> i);
 	}
 
-	public static Menu item_chooser(final Context<?> context, final Player player, final String title, @Nullable final ItemStack initial_item, boolean allow_nothing, final Consumer2<Player, ItemStack> on_confirm, final Consumer1<Player> on_cancel, final Function1<ItemStack, ItemStack> on_select_item) {
+	public static Menu item_selector(final Context<?> context, final Player player, final String title, @Nullable final ItemStack initial_item, boolean allow_nothing, final Consumer2<Player, ItemStack> on_confirm, final Consumer1<Player> on_cancel, final Function1<ItemStack, ItemStack> on_select_item) {
 		final Function1<ItemStack, ItemStack> set_item_name = (item) -> {
 			// TODO big nope. have the default no_item defined properly as config. Use the proper methods of that thing.
 			return item;
@@ -73,7 +73,7 @@ public class MenuFactory {
 		}
 
 		final var columns = 9;
-		final var item_chooser_menu = new Menu(context, Bukkit.createInventory(null, columns, title));
+		final var item_selector_menu = new Menu(context, Bukkit.createInventory(null, columns, title));
 		final var selected_item = new MenuItem(4, default_item, (p, menu, self, type, action) -> {
 			if (!Menu.is_left_or_right_click(type, action)) {
 				return ClickResult.INVALID_CLICK;
@@ -100,10 +100,10 @@ public class MenuFactory {
 		selected_item.original_selected = default_item;
 
 		// Selected item
-		item_chooser_menu.add(selected_item);
+		item_selector_menu.add(selected_item);
 
 		// Inventory listener
-		item_chooser_menu.add(new MenuItemClickListener(-1, (p, menu, item) -> {
+		item_selector_menu.add(new MenuItemClickListener(-1, (p, menu, item) -> {
 			// Called when any item in inventory is clicked
 			if (item == null) {
 				return ClickResult.IGNORE;
@@ -122,7 +122,7 @@ public class MenuFactory {
 		}));
 
 		// Accept item
-		item_chooser_menu.add(new MenuItem(2, item_chooser_menu.manager().item_chooser_accept.item(), (p, menu, self) -> {
+		item_selector_menu.add(new MenuItem(2, item_selector_menu.manager().item_selector_accept.item(), (p, menu, self) -> {
 			final ItemStack item;
 			if (selected_item.original_selected == no_item) {
 				if (allow_nothing) {
@@ -140,15 +140,15 @@ public class MenuFactory {
 		}));
 
 		// Cancel item
-		item_chooser_menu.add(new MenuItem(6, item_chooser_menu.manager().item_chooser_cancel.item(), (p, menu, self) -> {
+		item_selector_menu.add(new MenuItem(6, item_selector_menu.manager().item_selector_cancel.item(), (p, menu, self) -> {
 			menu.close(p);
 			on_cancel.apply(p);
 			return ClickResult.SUCCESS;
 		}));
 
 		// On close call cancel
-		item_chooser_menu.on_close(on_cancel);
+		item_selector_menu.on_close(on_cancel);
 
-		return item_chooser_menu;
+		return item_selector_menu;
 	}
 }

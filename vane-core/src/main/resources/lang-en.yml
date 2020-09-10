@@ -54,3 +54,9 @@ resource_pack:
     You have been disconnected to prevent display errors.\n\
     \n\
     Please try again."
+
+menus:
+  item_selector:
+    accept:
+      name: ""
+      lore: ""
