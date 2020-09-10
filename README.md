@@ -124,3 +124,5 @@ to `libs/`. This is required so the compiler can find minecraft-native symbols.
 ### 3rd-party software
 
 TODO include licenses
+- protocollib wrappers
+- shadowed things

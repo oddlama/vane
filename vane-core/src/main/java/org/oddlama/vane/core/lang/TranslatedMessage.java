@@ -61,4 +61,15 @@ public class TranslatedMessage {
 			sender.sendMessage(format(args));
 		}
 	}
+
+	public void send_and_log(final CommandSender sender, Object... args) {
+		module.log.info(str(args));
+
+		// Also send to sender if it's not the console
+		if (sender == null || sender == module.getServer().getConsoleSender()) {
+			return;
+		} else {
+			sender.sendMessage(format(args));
+		}
+	}
 }

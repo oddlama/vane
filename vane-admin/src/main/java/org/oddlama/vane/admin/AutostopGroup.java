@@ -56,7 +56,7 @@ public class AutostopGroup extends ModuleGroup<Admin> {
 		task = null;
 		start_time = -1;
 
-		lang_aborted.send(sender);
+		lang_aborted.send_and_log(sender);
 	}
 
 	public void schedule() { schedule(null); }
@@ -68,11 +68,11 @@ public class AutostopGroup extends ModuleGroup<Admin> {
 
 		start_time = System.currentTimeMillis();
 		task = schedule_task(() -> {
-			lang_shutdown.send(null);
+			lang_shutdown.send_and_log(null);
 			get_module().getServer().shutdown();
 		}, ms_to_ticks(delay));
 
-		lang_scheduled.send(sender, format_time(delay));
+		lang_scheduled.send_and_log(sender, format_time(delay));
 	}
 
 	public void status(CommandSender sender) {
