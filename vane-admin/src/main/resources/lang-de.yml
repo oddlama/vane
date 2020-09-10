@@ -31,7 +31,7 @@ autostop:
   shutdown: "§dAutostop initiiert!"
 
   command_autostop:
-    usage: "§7<§aabort§7|§aschedule§7|§astatus§7>"
+    usage: "%1$s §7<§aabort§7|§aschedule§7|§astatus§7>"
     description: "Verwaltet Autostop."
     help: "§aabort§7:§r Bricht den geplaten Autostop ab.\n\
       §aschedule §7[§bdelay§7]:§r Plant Autostop sofort, ohne Beachtung der Spieleranzahl. Akzeptiert ein delay als Ersatz des konfigurierten Werts.\n\
@@ -42,26 +42,26 @@ hazard_protection:
 
 command_gamemode:
   set: "§7Gamemode von §b%0$s§7 wurde auf §a%1$s§7 gesetzt."
-  usage: "§bgamemode §7[§bplayer§7]"
+  usage: "%1$s §bgamemode §7[§bplayer§7]"
   description: "Setzt den Gamemode des aktuellen oder gegebenen Spielers."
   help: "Setzt den Gamemode des aktuellen oder gegebenen Spielers."
 
 command_setspawn:
-  usage: ""
+  usage: "%1$s"
   description: "Setzt den globalen Spawn auf deine aktuelle Position."
   help: "Setzt den globalen Spawn auf deine aktuelle Position."
 
 command_spawn:
-  usage: ""
+  usage: "%1$s"
   description: "Teleportiert dich zum Spawn."
   help: "Teleportiert dich zum Spawn."
 
 command_time:
-  usage: "§btime §7[§bworld§7]"
+  usage: "%1$s §btime §7[§bworld§7]"
   description: "Setzt die Zeit der aktuellen oder gegebenen Welt."
   help: "Setzt die Zeit der aktuellen oder gegebenen Welt."
 
 command_weather:
-  usage: "§bweather §7[§bworld§7]"
+  usage: "%1$s §bweather §7[§bworld§7]"
   description: "Setzt das Wetter der aktuellen oder gegebenen Welt."
   help: "Setzt das Wetter der aktuellen oder gegebenen Welt."

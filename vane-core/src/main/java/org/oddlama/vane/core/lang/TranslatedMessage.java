@@ -3,15 +3,17 @@ package org.oddlama.vane.core.lang;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TranslatableComponent;
 
-import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
+import org.oddlama.vane.core.module.Module;
 
 public class TranslatedMessage {
+	private Module<?> module;
 	private String key;
 	private String default_translation;
 
-	public TranslatedMessage(final String key, final String default_translation) {
+	public TranslatedMessage(final Module<?> module, final String key, final String default_translation) {
+		this.module = module;
 		this.key = key;
 		this.default_translation = default_translation;
 	}
@@ -27,17 +29,18 @@ public class TranslatedMessage {
 
 	public void broadcast_server_players(Object... args) {
 		final var component = format(args);
-		for (var player : Bukkit.getOnlinePlayers()) {
+		for (var player : module.getServer().getOnlinePlayers()) {
 			player.sendMessage(component);
 		}
 	}
 
 	public void broadcast_server(Object... args) {
 		final var component = format(args);
-		for (var player : Bukkit.getOnlinePlayers()) {
+		for (var player : module.getServer().getOnlinePlayers()) {
 			player.sendMessage(component);
+			module.log.warning(component.toString());
 		}
-		Bukkit.getLogger().info("[broadcast] " + str(args));
+		module.log.info("[broadcast] " + str(args));
 	}
 
 	public void broadcast_world(final World world, Object... args) {
@@ -48,8 +51,8 @@ public class TranslatedMessage {
 	}
 
 	public void send(final CommandSender sender, Object... args) {
-		if (sender == null || sender == Bukkit.getConsoleSender()) {
-			Bukkit.getLogger().info(str(args));
+		if (sender == null || sender == module.getServer().getConsoleSender()) {
+			module.log.info(str(args));
 		} else {
 			sender.sendMessage(format(args));
 		}

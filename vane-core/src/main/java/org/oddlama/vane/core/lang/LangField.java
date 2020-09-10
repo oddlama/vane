@@ -7,16 +7,23 @@ import java.util.function.Function;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import org.oddlama.vane.core.YamlLoadException;
+import org.oddlama.vane.core.module.Module;
 
 public abstract class LangField<T> {
+	private Module<?> module;
 	protected Object owner;
 	protected Field field;
 	protected String name;
+	private final String namespace;
+	private final String key;
 
-	public LangField(Object owner, Field field, Function<String, String> map_name) {
+	public LangField(Module<?> module, Object owner, Field field, Function<String, String> map_name) {
+		this.module = module;
 		this.owner = owner;
 		this.field = field;
 		this.name = map_name.apply(field.getName().substring("lang_".length()));
+		this.namespace = module.namespace();
+		this.key = namespace + "." + yaml_path();
 
 		field.setAccessible(true);
 	}
@@ -35,9 +42,9 @@ public abstract class LangField<T> {
 		}
 	}
 
-	public String key(final String namespace) {
-		return namespace + "." + yaml_path();
-	}
+	public Module<?> module() { return module; }
+	public String namespace() { return namespace; }
+	public String key() { return key; }
 
 	public abstract void check_loadable(YamlConfiguration yaml) throws YamlLoadException;
 	public abstract void load(final String namespace, final YamlConfiguration yaml);

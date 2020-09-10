@@ -73,7 +73,7 @@ public class LangManager {
 
 		// Return correct wrapper object
 		if (atype.equals(LangMessage.class)) {
-			return new LangMessageField(owner, field, map_name, (LangMessage)annotation);
+			return new LangMessageField(module, owner, field, map_name, (LangMessage)annotation);
 		} else if (atype.equals(LangVersion.class)) {
 			if (owner != module) {
 				throw new RuntimeException("@LangVersion can only be used inside the main module. This is a bug.");
@@ -81,7 +81,7 @@ public class LangManager {
 			if (field_version != null) {
 				throw new RuntimeException("There must be exactly one @LangVersion field! (found multiple). This is a bug.");
 			}
-			return field_version = new LangVersionField(owner, field, map_name, (LangVersion)annotation);
+			return field_version = new LangVersionField(module, owner, field, map_name, (LangVersion)annotation);
 		} else {
 			throw new RuntimeException("Missing LangField handler for @" + atype.getName() + ". This is a bug.");
 		}
@@ -172,8 +172,7 @@ public class LangManager {
 		for (var f : lang_fields) {
 			final var str = f.str(yaml);
 			if (str != null) {
-				pack.translations(module.namespace(), lang_code)
-					.put(f.key(module.namespace()), str);
+				pack.translations(f.namespace(), lang_code).put(f.key(), str);
 			}
 		}
 	}

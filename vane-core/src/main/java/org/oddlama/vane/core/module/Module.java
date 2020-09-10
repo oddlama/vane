@@ -41,10 +41,10 @@ import org.oddlama.vane.core.lang.LangManager;
 import org.oddlama.vane.core.persistent.PersistentStorageManager;
 
 public abstract class Module<T extends Module<T>> extends JavaPlugin implements Context<T>, org.bukkit.event.Listener {
-	public VaneModule annotation = getClass().getAnnotation(VaneModule.class);
+	public final VaneModule annotation = getClass().getAnnotation(VaneModule.class);
 	public Core core;
 	public Logger log = getLogger();
-	private String namespace;
+	private final String namespace = "vane_" + annotation.name().replaceAll("[^a-zA-Z0-9_]", "_");
 
 	// Managers
 	public ConfigManager config_manager = new ConfigManager(this);
@@ -112,8 +112,6 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 	private Metrics metrics;
 
 	public Module() {
-		this.namespace = getName().replaceAll("[^a-zA-Z0-9_]", "_");
-
 		// Get core plugin reference, important for inherited configuration
 		// and shared state between vane modules
 		if (this.getName().equals("vane-core")) {

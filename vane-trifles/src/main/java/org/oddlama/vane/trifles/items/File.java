@@ -47,6 +47,7 @@ import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.trifles.Trifles;
 import org.oddlama.vane.util.BlockUtil;
 
+// TODO custom item + custom item in crafting is currently producing the base item. This should be overwritten for tool-base items.
 @VaneItem(name = "file")
 public class File extends CustomItem<Trifles, File> {
 	public static enum Variant implements ItemVariantEnum {

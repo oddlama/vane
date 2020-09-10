@@ -32,7 +32,7 @@ command_permission:
   group_removed: "§b%1$s§r wurde von §a%0$s§r entfernt"
   group_already_assigned: "§6Gruppe bereits zugewiesen"
   group_not_assigned: "§6Gruppe nicht zugewiesen"
-  usage: "§7<§alist§7|§aadd§7|§aremove§7>"
+  usage: "%1$s §7<§alist§7|§aadd§7|§aremove§7>"
   description: "Verwaltet Spielerberechtigungen."
   help: "§alist §7<§agroups§7|§apermissions§7>:§r Listet alle verfügbaren Berechtigungen oder Berechtigungsgruppen.\n\
     §aadd §bplayer §bgroup§7:§r Fügt einen Spieler zu einer Berechtigungsgruppe hinzu.\n\

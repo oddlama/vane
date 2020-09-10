@@ -75,6 +75,6 @@ command_enchant:
   # %0$s: Enchantment
   # %1$s: Item in hand
   invalid_enchantment: "§cerror: §b%0$s§6 cannot be applied to §a%1$s"
-  usage: "§benchantment §7[§blevel§7]"
+  usage: "%1$s §benchantment §7[§blevel§7]"
   description: "Enchants the item in your hand."
   help: "Enchants the item in your hand."

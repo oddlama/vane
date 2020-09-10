@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.util.function.Function;
 
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.oddlama.vane.core.module.Module;
 
 import org.oddlama.vane.annotation.lang.LangVersion;
 import org.oddlama.vane.core.YamlLoadException;
@@ -11,8 +12,8 @@ import org.oddlama.vane.core.YamlLoadException;
 public class LangVersionField extends LangField<Long> {
 	public LangVersion annotation;
 
-	public LangVersionField(Object owner, Field field, Function<String, String> map_name, LangVersion annotation) {
-		super(owner, field, map_name);
+	public LangVersionField(Module<?> module, Object owner, Field field, Function<String, String> map_name, LangVersion annotation) {
+		super(module, owner, field, map_name);
 		this.annotation = annotation;
 	}
 

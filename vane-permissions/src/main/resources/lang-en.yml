@@ -61,7 +61,7 @@ command_permission:
   # %0$s: Group name
   # %1$s: Player name
   group_not_assigned: "§6Group not assigned"
-  usage: "§7<§alist§7|§aadd§7|§aremove§7>"
+  usage: "%1$s §7<§alist§7|§aadd§7|§aremove§7>"
   description: "Manages player permissions."
   help: "§alist §7<§agroups§7|§apermissions§7>:§r Lists all available permissions or permission groups.\n\
     §aadd §bplayer §bgroup§7:§r Adds the player to the given permission group.\n\

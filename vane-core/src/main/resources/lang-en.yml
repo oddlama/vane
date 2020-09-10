@@ -41,7 +41,7 @@ command_vane:
   resource_pack_generate_success: "§aResource pack generated successfully"
   # This message is sent when the resource_pack could not be generated.
   resource_pack_generate_fail: "§cAn error has occurred while generating the resource pack"
-  usage: "§7<§areload§7|§agenerate_resource_pack§7>"
+  usage: "%1$s §7<§areload§7|§agenerate_resource_pack§7>"
   description: "Manages vane plugins."
   help: "§areload §7[§bmodule§7]:§r Reloads all or the given vane module.\n\
     §agenerate_resource_pack§7:§r generates the vane resource pack."
