@@ -20,19 +20,24 @@ public class LangVersionField extends LangField<Long> {
 	public void check_loadable(YamlConfiguration yaml) throws YamlLoadException {
 		check_yaml_path(yaml);
 
-		if (!(yaml.get(get_yaml_path()) instanceof Number)) {
-			throw new YamlLoadException("Invalid type for yaml path '" + get_yaml_path() + "', expected long");
+		if (!(yaml.get(yaml_path()) instanceof Number)) {
+			throw new YamlLoadException("Invalid type for yaml path '" + yaml_path() + "', expected long");
 		}
 
-		var val = yaml.getLong(get_yaml_path());
+		var val = yaml.getLong(yaml_path());
 		if (val < 1) {
-			throw new YamlLoadException("Entry '" + get_yaml_path() + "' has an invalid value: Value must be >= 1");
+			throw new YamlLoadException("Entry '" + yaml_path() + "' has an invalid value: Value must be >= 1");
 		}
 	}
 
-	public void load(YamlConfiguration yaml) {
+	@Override
+	public String str(final YamlConfiguration yaml) {
+		return null;
+	}
+
+	public void load(final String namespace, final YamlConfiguration yaml) {
 		try {
-			field.setLong(owner, yaml.getLong(get_yaml_path()));
+			field.setLong(owner, yaml.getLong(yaml_path()));
 		} catch (IllegalAccessException e) {
 			throw new RuntimeException("Invalid field access on '" + field.getName() + "'. This is a bug.");
 		}

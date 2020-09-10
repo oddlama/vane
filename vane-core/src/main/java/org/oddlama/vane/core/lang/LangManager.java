@@ -31,9 +31,6 @@ public class LangManager {
 	private List<LangField<?>> lang_fields = new ArrayList<>();
 	LangVersionField field_version;
 
-	// Maps namespace -> yaml_path -> translation_key in resource pack
-	private Map<String, Map<String, String>> resource_pack_translations = new HashMap<>();
-
 	public LangManager(Module<?> module) {
 		this.module = module;
 		compile(module, s -> s);
@@ -160,7 +157,7 @@ public class LangManager {
 			}
 
 			for (var f : lang_fields) {
-				f.load(yaml);
+				f.load(module.namespace(), yaml);
 			}
 		} catch (YamlLoadException e) {
 			module.log.log(Level.SEVERE, "error while loading '" + file.getName() + "'", e);
@@ -176,9 +173,10 @@ public class LangManager {
 			throw new RuntimeException("Missing yaml key: resource_pack_lang_code");
 		}
 		for (var f : lang_fields) {
-			if (f.has_resource_pack_translation()) {
-				pack.translations(f.resource_pack_translation_namespace(), lang_code)
-					.put(f.resource_pack_translation_key(), yaml.getString(f.get_yaml_path()));
+			final var str = f.str(yaml);
+			if (str != null) {
+				pack.translations(module.namespace(), lang_code)
+					.put(f.key(module.namespace()), str);
 			}
 		}
 	}

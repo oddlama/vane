@@ -15,7 +15,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 
 import org.oddlama.vane.annotation.lang.LangString;
-import org.oddlama.vane.annotation.lang.ResourcePackTranslation;
 import org.oddlama.vane.core.ResourcePackGenerator;
 import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.core.module.ModuleComponent;
@@ -32,8 +31,7 @@ public class CustomItemVariant<T extends Module<T>, V extends CustomItem<T, V>, 
 
 	// Language
 	@LangString
-	@ResourcePackTranslation(namespace = "vane") // key is set by #lang_name_translation_key()
-	public String lang_name;
+	public TranslatedString lang_name;
 
 	public CustomItemVariant(CustomItem<T, V> parent, U variant) {
 		super(null);
@@ -62,10 +60,6 @@ public class CustomItemVariant<T extends Module<T>, V extends CustomItem<T, V>, 
 	 */
 	public void register_recipes() {}
 
-	public final String lang_name_translation_key() {
-		return "item.vane." + variant_name;
-	}
-
 	/**
 	 * Returns the base material. Override if needed.
 	 */
@@ -84,7 +78,7 @@ public class CustomItemVariant<T extends Module<T>, V extends CustomItem<T, V>, 
 	 * Returns the display name for this item variant.
 	 */
 	public BaseComponent display_name() {
-		final var display_name = new TranslatableComponent(lang_name_translation_key());
+		final var display_name = lang_name.clone();
 		display_name.setItalic(false);
 		return display_name;
 	}

@@ -38,11 +38,9 @@ public class TranslatedItemStack<T extends Module<T>> extends ModuleComponent<T>
 	public int config_amount;
 
 	@LangString
-	@ResourcePackTranslation // namespace and key is set by #lang_name_translation_{namespace,key}()
 	public String lang_name;
 
 	@LangString
-	@ResourcePackTranslation // namespace and key is set by #lang_lore_translation_{namespace,key}()
 	public String lang_lore;
 
 	public TranslatedItemStack(Context<T> context, Material def_material, int def_amount, String desc) {

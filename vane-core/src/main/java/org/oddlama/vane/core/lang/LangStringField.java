@@ -20,14 +20,20 @@ public class LangStringField extends LangField<String> {
 	public void check_loadable(YamlConfiguration yaml) throws YamlLoadException {
 		check_yaml_path(yaml);
 
-		if (!yaml.isString(get_yaml_path())) {
-			throw new YamlLoadException("Invalid type for yaml path '" + get_yaml_path() + "', expected string");
+		if (!yaml.isString(yaml_path())) {
+			throw new YamlLoadException("Invalid type for yaml path '" + yaml_path() + "', expected string");
 		}
 	}
 
-	public void load(YamlConfiguration yaml) {
+	@Override
+	public String str(final YamlConfiguration yaml) {
+		return yaml.getString(yaml_path());
+	}
+
+	@Override
+	public void load(final String namespace, final YamlConfiguration yaml) {
 		try {
-			field.set(owner, yaml.getString(get_yaml_path()));
+			field.set(owner, str(yaml));
 		} catch (IllegalAccessException e) {
 			throw new RuntimeException("Invalid field access on '" + field.getName() + "'. This is a bug.");
 		}

@@ -1,4 +1,4 @@
-package org.oddlama.vane.util;
+package org.oddlama.vane.core.lang;
 
 import java.text.MessageFormat;
 

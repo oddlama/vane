@@ -36,8 +36,8 @@ public class MenuManager extends Listener<Core> {
 	private final HashMap<UUID, Menu> open_menus = new HashMap<>();
 	private final HashMap<Inventory, Menu> menus = new HashMap<>();
 
-	public TranslatedItemStack<?> item_chooser_accept = new TranslatedItemStack<>(get_context(), "vane", Material.LIME_TERRACOTTA, 1, "Menu item used to confirm item selection.");
-	public TranslatedItemStack<?> item_chooser_cancel = new TranslatedItemStack<>(get_context(), "vane", Material.RED_TERRACOTTA,  1, "Menu item used to cancel item selection.");
+	public TranslatedItemStack<?> item_chooser_accept = new TranslatedItemStack<>(get_context(), Material.LIME_TERRACOTTA, 1, "Menu item used to confirm item selection.");
+	public TranslatedItemStack<?> item_chooser_cancel = new TranslatedItemStack<>(get_context(), Material.RED_TERRACOTTA,  1, "Menu item used to cancel item selection.");
 
 	public MenuManager(Context<Core> context) {
 		super(context.namespace("menus"));

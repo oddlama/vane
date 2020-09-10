@@ -6,20 +6,17 @@ import java.util.function.Function;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import org.oddlama.vane.annotation.lang.ResourcePackTranslation;
 import org.oddlama.vane.core.YamlLoadException;
 
 public abstract class LangField<T> {
 	protected Object owner;
 	protected Field field;
 	protected String name;
-	private ResourcePackTranslation resource_pack_translation_annotation;
 
 	public LangField(Object owner, Field field, Function<String, String> map_name) {
 		this.owner = owner;
 		this.field = field;
 		this.name = map_name.apply(field.getName().substring("lang_".length()));
-		this.resource_pack_translation_annotation = field.getAnnotation(ResourcePackTranslation.class);
 
 		field.setAccessible(true);
 	}
@@ -28,7 +25,7 @@ public abstract class LangField<T> {
 		return name;
 	}
 
-	public String get_yaml_path() {
+	public String yaml_path() {
 		return name;
 	}
 
@@ -38,8 +35,13 @@ public abstract class LangField<T> {
 		}
 	}
 
+	public String key(final String namespace) {
+		return namespace + "." + yaml_path();
+	}
+
 	public abstract void check_loadable(YamlConfiguration yaml) throws YamlLoadException;
-	public abstract void load(YamlConfiguration yaml);
+	public abstract void load(final String namespace, final YamlConfiguration yaml);
+	public abstract String str(final YamlConfiguration yaml);
 
 	@SuppressWarnings("unchecked")
 	public T get() {
@@ -47,42 +49,6 @@ public abstract class LangField<T> {
 			return (T)field.get(owner);
 		} catch (IllegalAccessException e) {
 			throw new RuntimeException("Invalid field access on '" + field.getName() + "'. This is a bug.");
-		}
-	}
-
-	public boolean has_resource_pack_translation() {
-		return resource_pack_translation_annotation != null;
-	}
-
-	public String resource_pack_translation_namespace() {
-		if (resource_pack_translation_annotation == null) {
-			return null;
-		}
-
-		// Resolve dynamic overrides
-		try {
-			return (String)owner.getClass().getMethod(field.getName() + "_translation_namespace").invoke(owner);
-		} catch (NoSuchMethodException e) {
-			// Ignore, field wasn't overridden
-			return resource_pack_translation_annotation.namespace();
-		} catch (InvocationTargetException | IllegalAccessException e) {
-			throw new RuntimeException("Could not call " + owner.getClass().getName() + "." + field.getName() + "_translation_namespace() to override resource pack translation namespace", e);
-		}
-	}
-
-	public String resource_pack_translation_key() {
-		if (resource_pack_translation_annotation == null) {
-			return null;
-		}
-
-		// Resolve dynamic overrides
-		try {
-			return (String)owner.getClass().getMethod(field.getName() + "_translation_key").invoke(owner);
-		} catch (NoSuchMethodException e) {
-			// Ignore, field wasn't overridden
-			return resource_pack_translation_annotation.key();
-		} catch (InvocationTargetException | IllegalAccessException e) {
-			throw new RuntimeException("Could not call " + owner.getClass().getName() + "." + field.getName() + "_translation_key() to override resource pack translation key", e);
 		}
 	}
 }

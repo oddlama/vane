@@ -31,7 +31,6 @@ import javax.tools.Diagnostic;
     "org.oddlama.vane.annotation.lang.LangMessage",
     "org.oddlama.vane.annotation.lang.LangString",
     "org.oddlama.vane.annotation.lang.LangVersion",
-    "org.oddlama.vane.annotation.lang.ResourcePackTranslation",
 })
 @SupportedSourceVersion(SourceVersion.RELEASE_11)
 public class ConfigAndLangProcessor extends AbstractProcessor {
@@ -61,8 +60,8 @@ public class ConfigAndLangProcessor extends AbstractProcessor {
 		map.put("org.oddlama.vane.annotation.config.ConfigStringList", "java.util.List<java.lang.String>");
 		map.put("org.oddlama.vane.annotation.config.ConfigStringListMap", "java.util.Map<java.lang.String,java.util.List<java.lang.String>>");
 		map.put("org.oddlama.vane.annotation.config.ConfigVersion", "long");
-		map.put("org.oddlama.vane.annotation.lang.LangMessage", "org.oddlama.vane.util.Message");
-		map.put("org.oddlama.vane.annotation.lang.LangString", "java.lang.String");
+		map.put("org.oddlama.vane.annotation.lang.LangMessage", "org.oddlama.vane.core.lang.TranslatedMessage");
+		map.put("org.oddlama.vane.annotation.lang.LangString", "org.oddlama.vane.core.lang.TranslatedString");
 		map.put("org.oddlama.vane.annotation.lang.LangVersion", "long");
 		field_type_mapping = Collections.unmodifiableMap(map);
 	}
@@ -71,20 +70,6 @@ public class ConfigAndLangProcessor extends AbstractProcessor {
 		var type = ((VariableElement)element).asType().toString();
 		var required_type = field_type_mapping.get(annotation.asType().toString());
 		if (required_type == null) {
-			if (annotation.asType().toString().equals("org.oddlama.vane.annotation.lang.ResourcePackTranslation")) {
-				boolean has_lang_annotation = false;
-				for (var a : element.getAnnotationMirrors()) {
-					if (a.getAnnotationType().toString().startsWith("org.oddlama.vane.annotation.lang.Lang")) {
-						has_lang_annotation = true;
-						break;
-					}
-				}
-				if (!has_lang_annotation) {
-					processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, element.asType().toString()
-							+ ": @" + annotation.getSimpleName() + " requires a @Lang* annotation");
-				}
-				return;
-			}
 			processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, element.asType().toString()
 					+ ": @" + annotation.getSimpleName() + " has no required_type mapping! This is a bug.");
 		} else {
