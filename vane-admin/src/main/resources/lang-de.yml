@@ -18,13 +18,13 @@ version: 1
 # language code (ISO 639) and the country code (ISO 3166).
 resource_pack_lang_code: 'de_de'
 
-player_chat_format: "%1$s%2$s§7:§r %3$s"
-player_join: "§6%1$s§e hat den Server betreten"
-player_kick: "§6%1$s§e wurde vom Server geworfen"
-player_quit: "§6%1$s§e hat den Server verlassen"
+player_chat_format: "§7%1$s: %2$s"
+player_join: "§e%1$s hat den Server betreten"
+player_kick: "§e%1$s wurde vom Server geworfen"
+player_quit: "§e%1$s hat den Server verlassen"
 
 autostop:
-  aborted: "§7Autostop §dabgebrochen§7"
+  aborted: "§7Autostop §dabgebrochen"
   scheduled: "§dAutostop geplant in §b%1$s"
   status: "§7Autostop in §b%1$s"
   status_not_scheduled: "§dAutostop nicht geplant"

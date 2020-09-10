@@ -18,11 +18,8 @@ public class TranslatedItemStack<T extends Module<T>> extends ModuleComponent<T>
 	@ConfigInt(def = 1, min = 0, desc = "")
 	public int config_amount;
 
-	@LangMessage
-	public TranslatedMessage lang_name;
-
-	@LangMessage
-	public TranslatedMessage lang_lore;
+	@LangMessage public TranslatedMessage lang_name;
+	@LangMessage public TranslatedMessage lang_lore;
 
 	public TranslatedItemStack(Context<T> context, Material def_material, int def_amount, String desc) {
 		super(null);

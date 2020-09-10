@@ -79,12 +79,9 @@ public abstract class Command<T extends Module<T>> extends ModuleComponent<T> {
 	}
 
 	// Language
-	@LangMessage
-	public TranslatedMessage lang_usage;
-	@LangMessage
-	public TranslatedMessage lang_description;
-	@LangMessage
-	public TranslatedMessage lang_help;
+	@LangMessage public TranslatedMessage lang_usage;
+	@LangMessage public TranslatedMessage lang_description;
+	@LangMessage public TranslatedMessage lang_help;
 
 	// Variables
 	private String name;

@@ -15,12 +15,9 @@ import org.oddlama.vane.enchantments.Enchantments;
 
 @Name("enchant")
 public class Enchant extends Command<Enchantments> {
-	@LangMessage
-	private TranslatedMessage lang_level_too_low;
-	@LangMessage
-	private TranslatedMessage lang_level_too_high;
-	@LangMessage
-	private TranslatedMessage lang_invalid_enchantment;
+	@LangMessage private TranslatedMessage lang_level_too_low;
+	@LangMessage private TranslatedMessage lang_level_too_high;
+	@LangMessage private TranslatedMessage lang_invalid_enchantment;
 
 	public Enchant(Context<Enchantments> context) {
 		super(context);

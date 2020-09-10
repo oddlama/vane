@@ -15,8 +15,7 @@ import org.oddlama.vane.core.module.Context;
 @Name("gamemode")
 @Aliases({"gm"})
 public class Gamemode extends Command<Admin> {
-	@LangMessage
-	private TranslatedMessage lang_set;
+	@LangMessage private TranslatedMessage lang_set;
 
 	public Gamemode(Context<Admin> context) {
 		super(context);

@@ -103,13 +103,11 @@ To install vane, begin by downloading and placing all desired module jars into t
 4. Copy the resource pack to a publicly accessible webserver and configure the related section in `plugins/vane-core/config.yml`.
 5. Either restart the server again, or type `/vane reload` to apply the changes.
 
-You are done! Enjoy playing!
+Enjoy playing!
 
 > [as of 1.16.2] Beware that the minecraft client currently has issues with webservers that serve resource packs via https and don't allow ssl3.
 > This protocol is considered insecure and therefore should NOT be used. To workaround this issue, you should host the file in a http context.
 > Using http is not a security issue, as the file will be verified via its sha1 sum by the client.
-
-Thats it!
 
 ### Building from source
 
@@ -123,9 +121,9 @@ to `libs/`. This is required so the compiler can find minecraft-native symbols.
 
 ### FAQ
 
-**Q: Can I run vane alongside other plugins?**
+#### Q: Can I run vane alongside other plugins?
 
-A: Yes, for the most part. Almost all 3rd party plugins should work without any issues. Where you might begin
+**A:** Yes, for the most part. Almost all 3rd party plugins should work without any issues. Where you might begin
 to see problems is when the other plugin also makes use of a custom resource pack,
 especially if it also modifies items and/or uses the `custom_model_data` tag in incompatible ways.
 

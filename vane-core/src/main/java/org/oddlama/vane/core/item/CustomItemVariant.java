@@ -30,8 +30,7 @@ public class CustomItemVariant<T extends Module<T>, V extends CustomItem<T, V>, 
 	private Map<NamespacedKey, Recipe> recipes = new HashMap<>();
 
 	// Language
-	@LangMessage
-	public TranslatedMessage lang_name;
+	@LangMessage public TranslatedMessage lang_name;
 
 	public CustomItemVariant(CustomItem<T, V> parent, U variant) {
 		super(null);

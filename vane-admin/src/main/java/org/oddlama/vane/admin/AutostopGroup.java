@@ -16,16 +16,11 @@ public class AutostopGroup extends ModuleGroup<Admin> {
 	@ConfigLong(def = 20 * 60, min = 0, desc = "Delay in seconds after which to stop the server.")
 	public long config_delay;
 
-	@LangMessage
-	public TranslatedMessage lang_aborted;
-	@LangMessage
-	public TranslatedMessage lang_scheduled;
-	@LangMessage
-	public TranslatedMessage lang_status;
-	@LangMessage
-	public TranslatedMessage lang_status_not_scheduled;
-	@LangMessage
-	public TranslatedMessage lang_shutdown;
+	@LangMessage public TranslatedMessage lang_aborted;
+	@LangMessage public TranslatedMessage lang_scheduled;
+	@LangMessage public TranslatedMessage lang_status;
+	@LangMessage public TranslatedMessage lang_status_not_scheduled;
+	@LangMessage public TranslatedMessage lang_shutdown;
 
 	// Variables
 	public BukkitTask task = null;

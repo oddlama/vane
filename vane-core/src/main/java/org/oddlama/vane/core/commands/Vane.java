@@ -12,15 +12,11 @@ import org.oddlama.vane.core.module.Module;
 
 @Name("vane")
 public class Vane extends Command<Core> {
-	@LangMessage
-	private TranslatedMessage lang_reload_success;
-	@LangMessage
-	private TranslatedMessage lang_reload_fail;
+	@LangMessage private TranslatedMessage lang_reload_success;
+	@LangMessage private TranslatedMessage lang_reload_fail;
 
-	@LangMessage
-	private TranslatedMessage lang_resource_pack_generate_success;
-	@LangMessage
-	private TranslatedMessage lang_resource_pack_generate_fail;
+	@LangMessage private TranslatedMessage lang_resource_pack_generate_success;
+	@LangMessage private TranslatedMessage lang_resource_pack_generate_fail;
 
 	private void test(final org.bukkit.entity.Player player) {
 		org.oddlama.vane.core.menu.MenuFactory.item_chooser(get_module(), player, "TAITLE", new org.bukkit.inventory.ItemStack(org.bukkit.Material.ENDER_PEARL), true,

@@ -40,8 +40,7 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 	private final Set<Enchantment> supersedes = new HashSet<>();
 
 	// Language
-	@LangMessage
-	public TranslatedMessage lang_name;
+	@LangMessage public TranslatedMessage lang_name;
 
 	public CustomEnchantment(Context<T> context) {
 		super(null);

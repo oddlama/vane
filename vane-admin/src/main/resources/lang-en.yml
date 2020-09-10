@@ -19,22 +19,21 @@ version: 1
 resource_pack_lang_code: 'en_us'
 
 # This is the format for player chat messages
-# %1$s: color tag based on permission level
-# %2$s: player name
-# %3$s: message
-player_chat_format: "%1$s%2$s§7:§r %3$s"
+# %1$s: player name
+# %2$s: message
+player_chat_format: "§7%1$s: %2$s"
 
 # This message is sent when a player joins the server
 # %1$s: player name
-player_join: "§6%1$s§e has joined the server"
+player_join: "§e%1$s has joined the server"
 
 # This message is sent when a player is kicked from the server
 # %1$s: player name
-player_kick: "§6%1$s§e was kicked from the server"
+player_kick: "§e%1$s was kicked from the server"
 
 # This message is sent when a player leaves the server
 # %1$s: player name
-player_quit: "§6%1$s§e has left the server"
+player_quit: "§e%1$s has left the server"
 
 autostop:
   # This message is sent when autostop is aborted, due to an administrative command

@@ -36,12 +36,9 @@ public class Bedtime extends Module<Bedtime> {
 	long config_interpolation_ticks;
 
 	// Language
-	@LangMessage
-	private TranslatedMessage lang_player_bed_enter;
-	@LangMessage
-	private TranslatedMessage lang_player_bed_leave;
-	@LangMessage
-	private TranslatedMessage lang_sleep_success;
+	@LangMessage private TranslatedMessage lang_player_bed_enter;
+	@LangMessage private TranslatedMessage lang_player_bed_leave;
+	@LangMessage private TranslatedMessage lang_sleep_success;
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void on_player_bed_enter(PlayerBedEnterEvent event) {

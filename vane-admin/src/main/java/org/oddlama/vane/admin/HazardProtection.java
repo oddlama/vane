@@ -36,8 +36,7 @@ public class HazardProtection extends Listener<Admin> {
 	@ConfigBoolean(def = true, desc = "Disables fire from lightning.")
 	private boolean config_disable_lightning_fire;
 
-	@LangMessage
-	private TranslatedMessage lang_wither_spawn_prohibited;
+	@LangMessage private TranslatedMessage lang_wither_spawn_prohibited;
 
 	public HazardProtection(Context<Admin> context) {
 		super(context.group("hazard_protection", "Enable hazard protection. The options below allow more fine-grained control over the hazards to protect from."));

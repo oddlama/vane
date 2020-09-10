@@ -45,13 +45,10 @@ public class Core extends Module<Core> {
 		return ITEM_DATA_BASE_OFFSET + section * ITEM_DATA_SECTION_SIZE + item_id * ITEM_VARIANT_SECTION_SIZE + variant_id;
 	}
 
-	@LangMessage
-	public TranslatedMessage lang_command_not_a_player;
-	@LangMessage
-	public TranslatedMessage lang_command_permission_denied;
+	@LangMessage public TranslatedMessage lang_command_not_a_player;
+	@LangMessage public TranslatedMessage lang_command_permission_denied;
 
-	@LangMessage
-	public TranslatedMessage lang_invalid_time_format;
+	@LangMessage public TranslatedMessage lang_invalid_time_format;
 
 	// Module registry
 	private SortedSet<Module<?>> vane_modules = new TreeSet<>((a, b) -> a.get_name().compareTo(b.get_name()));

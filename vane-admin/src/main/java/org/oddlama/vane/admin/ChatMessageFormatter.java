@@ -14,15 +14,10 @@ import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Context;
 
 public class ChatMessageFormatter extends Listener<Admin> {
-	// Language
-	@LangMessage
-	private TranslatedMessage lang_player_chat_format;
-	@LangMessage
-	private TranslatedMessage lang_player_join;
-	@LangMessage
-	private TranslatedMessage lang_player_kick;
-	@LangMessage
-	private TranslatedMessage lang_player_quit;
+	@LangMessage private TranslatedMessage lang_player_chat_format;
+	@LangMessage private TranslatedMessage lang_player_join;
+	@LangMessage private TranslatedMessage lang_player_kick;
+	@LangMessage private TranslatedMessage lang_player_quit;
 
 	public ChatMessageFormatter(Context<Admin> context) {
 		super(context);
@@ -35,14 +30,14 @@ public class ChatMessageFormatter extends Listener<Admin> {
 		final var color = "§b";
 		event.setCancelled(true);
 
-		lang_player_chat_format.broadcast_server_players(color, event.getPlayer().getDisplayName(), CraftChatMessage.fromString(event.getMessage()));
-		System.out.println("[chat] " + lang_player_chat_format.format(color, event.getPlayer().getDisplayName(), event.getMessage()));
+		lang_player_chat_format.broadcast_server_players(color + event.getPlayer().getDisplayName(), CraftChatMessage.fromString(event.getMessage()));
+		System.out.println("[chat] " + lang_player_chat_format.str(color + event.getPlayer().getDisplayName(), event.getMessage()));
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void on_player_join(final PlayerJoinEvent event) {
 		event.setJoinMessage(null);
-		lang_player_join.broadcast_server(event.getPlayer().getPlayerListName());
+		lang_player_join.broadcast_server("§6" + event.getPlayer().getPlayerListName());
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -50,12 +45,12 @@ public class ChatMessageFormatter extends Listener<Admin> {
 		// Bug in Spigot, doesn't actually do anything.
 		// https://hub.spigotmc.org/jira/browse/SPIGOT-3034
 		event.setLeaveMessage("");
-		lang_player_kick.broadcast_server(event.getPlayer().getPlayerListName());
+		lang_player_kick.broadcast_server("§6" + event.getPlayer().getPlayerListName());
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void on_player_quit(final PlayerQuitEvent event) {
 		event.setQuitMessage(null);
-		lang_player_quit.broadcast_server(event.getPlayer().getPlayerListName());
+		lang_player_quit.broadcast_server("§6" + event.getPlayer().getPlayerListName());
 	}
 }
