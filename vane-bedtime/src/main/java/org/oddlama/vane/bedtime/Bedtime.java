@@ -19,10 +19,7 @@ import org.oddlama.vane.annotation.config.ConfigDouble;
 import org.oddlama.vane.annotation.config.ConfigLong;
 import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.core.lang.TranslatedMessage;
-import org.oddlama.vane.annotation.lang.LangMessage;
-import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Module;
-
 import org.oddlama.vane.util.Nms;
 
 @VaneModule(name = "bedtime", bstats = 8639, config_version = 1, lang_version = 1, storage_version = 1)

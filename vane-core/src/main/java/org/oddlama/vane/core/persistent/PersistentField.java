@@ -1,10 +1,10 @@
 package org.oddlama.vane.core.persistent;
 
-import org.json.JSONObject;
-import java.lang.reflect.Field;
 import java.io.IOException;
-import java.util.Map;
+import java.lang.reflect.Field;
 import java.util.function.Function;
+
+import org.json.JSONObject;
 
 public class PersistentField {
 	private Object owner;

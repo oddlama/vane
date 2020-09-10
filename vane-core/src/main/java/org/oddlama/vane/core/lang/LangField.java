@@ -1,7 +1,6 @@
 package org.oddlama.vane.core.lang;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.util.function.Function;
 
 import org.bukkit.configuration.file.YamlConfiguration;

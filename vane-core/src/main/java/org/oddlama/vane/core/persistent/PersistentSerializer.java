@@ -3,30 +3,31 @@ package org.oddlama.vane.core.persistent;
 import static org.oddlama.vane.util.MaterialUtil.material_from;
 import static org.oddlama.vane.util.Util.namespaced_key;
 
-import java.lang.reflect.Type;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Field;
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
+import java.util.ArrayList;
 import java.util.Base64;
-import java.util.Set;
-import java.util.List;
-import java.util.Collection;
-import java.util.UUID;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 import java.util.function.Function;
-import org.bukkit.Location;
+
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.Material;
-import org.json.JSONObject;
-import org.json.JSONArray;
 
 import org.jetbrains.annotations.NotNull;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class PersistentSerializer {
 	@FunctionalInterface

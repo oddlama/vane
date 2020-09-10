@@ -4,10 +4,10 @@ import java.lang.reflect.Field;
 import java.util.function.Function;
 
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.oddlama.vane.core.module.Module;
 
 import org.oddlama.vane.annotation.lang.LangVersion;
 import org.oddlama.vane.core.YamlLoadException;
+import org.oddlama.vane.core.module.Module;
 
 public class LangVersionField extends LangField<Long> {
 	public LangVersion annotation;

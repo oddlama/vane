@@ -2,8 +2,6 @@ package org.oddlama.vane.core.command;
 
 import static org.oddlama.vane.util.Util.prepend;
 
-import net.md_5.bungee.api.chat.TextComponent;
-
 import java.util.Collections;
 import java.util.List;
 
@@ -17,8 +15,8 @@ import org.oddlama.vane.annotation.command.Aliases;
 import org.oddlama.vane.annotation.command.Name;
 import org.oddlama.vane.annotation.command.VaneCommand;
 import org.oddlama.vane.annotation.lang.LangMessage;
-import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.command.params.AnyParam;
+import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.core.module.ModuleComponent;

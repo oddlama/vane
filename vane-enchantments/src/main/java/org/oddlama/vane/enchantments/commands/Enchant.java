@@ -8,11 +8,10 @@ import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 
 import org.oddlama.vane.annotation.command.Name;
 import org.oddlama.vane.annotation.lang.LangMessage;
-import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.command.Command;
+import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.enchantments.Enchantments;
-
 
 @Name("enchant")
 public class Enchant extends Command<Enchantments> {

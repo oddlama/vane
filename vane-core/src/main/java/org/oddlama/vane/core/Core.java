@@ -22,15 +22,12 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
-import org.oddlama.vane.core.menu.MenuManager;
 import org.oddlama.vane.annotation.VaneModule;
 import org.oddlama.vane.annotation.lang.LangMessage;
-import org.oddlama.vane.core.lang.TranslatedMessage;
-import org.oddlama.vane.annotation.lang.LangMessage;
-import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.item.CustomItem;
+import org.oddlama.vane.core.lang.TranslatedMessage;
+import org.oddlama.vane.core.menu.MenuManager;
 import org.oddlama.vane.core.module.Module;
-
 
 @VaneModule(name = "core", bstats = 8637, config_version = 1, lang_version = 1, storage_version = 1)
 public class Core extends Module<Core> {

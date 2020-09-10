@@ -1,20 +1,17 @@
 package org.oddlama.vane.admin;
 
+import org.bukkit.craftbukkit.v1_16_R2.util.CraftChatMessage;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
-import org.bukkit.event.player.PlayerResourcePackStatusEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import org.bukkit.craftbukkit.v1_16_R2.util.CraftChatMessage;
 import org.oddlama.vane.annotation.lang.LangMessage;
-import org.oddlama.vane.core.lang.TranslatedMessage;
-import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.Listener;
+import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Context;
-
 
 public class ChatMessageFormatter extends Listener<Admin> {
 	// Language

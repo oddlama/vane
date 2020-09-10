@@ -1,38 +1,17 @@
 package org.oddlama.vane.core.menu;
 
 import static org.oddlama.vane.util.Nms.player_handle;
-import static org.oddlama.vane.util.Nms.world_handle;
 
+import net.minecraft.server.v1_16_R2.BlockPosition;
 import net.minecraft.server.v1_16_R2.ChatMessage;
-import net.minecraft.server.v1_16_R2.ContainerAccess;
-import net.minecraft.server.v1_16_R2.ContainerAnvil;
-import net.minecraft.server.v1_16_R2.BlockPosition;
-import org.bukkit.craftbukkit.v1_16_R2.CraftWorld;
-import org.bukkit.craftbukkit.v1_16_R2.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_16_R2.event.CraftEventFactory;
-import net.minecraft.server.v1_16_R2.BlockPosition;
-import net.minecraft.server.v1_16_R2.ChatComponentText;
 import net.minecraft.server.v1_16_R2.ContainerAccess;
 import net.minecraft.server.v1_16_R2.ContainerAnvil;
 import net.minecraft.server.v1_16_R2.EntityHuman;
 import net.minecraft.server.v1_16_R2.EntityPlayer;
 import net.minecraft.server.v1_16_R2.PacketPlayOutOpenWindow;
-import net.minecraft.server.v1_16_R2.PacketPlayOutCloseWindow;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-import org.bukkit.Bukkit;
-import org.bukkit.Effect;
 import org.bukkit.entity.Player;
-import org.bukkit.Sound;
-import org.bukkit.SoundCategory;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.InventoryAction;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
+
 import org.oddlama.vane.core.module.Context;
 
 public class AnvilMenu extends Menu {

@@ -3,26 +3,19 @@ package org.oddlama.vane.core.persistent;
 import static org.reflections.ReflectionUtils.getAllFields;
 
 import java.io.File;
-import org.json.JSONObject;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.io.ObjectInputStream;
-import java.nio.file.Files;
-import com.google.gson.Gson;
-import com.google.common.reflect.TypeToken;
-import java.io.ObjectOutputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
+
+import org.json.JSONObject;
 
 import org.oddlama.vane.annotation.persistent.Persistent;
 import org.oddlama.vane.core.module.Module;

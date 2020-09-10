@@ -1,10 +1,8 @@
 package org.oddlama.vane.portals.event;
-import org.oddlama.vane.portals.PortalBoundary;
-
 import org.bukkit.entity.Player;
-import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.Event;
+
+import org.oddlama.vane.portals.PortalBoundary;
 
 public class PortalSelectBoundaryEvent extends PortalEvent {
 	private static final HandlerList handlers = new HandlerList();

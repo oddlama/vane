@@ -1,9 +1,10 @@
 package org.oddlama.vane.admin;
 
+import org.bukkit.Location;
+
 import org.oddlama.vane.annotation.VaneModule;
 import org.oddlama.vane.annotation.persistent.Persistent;
 import org.oddlama.vane.core.module.Module;
-import org.bukkit.Location;
 
 @VaneModule(name = "admin", bstats = 8638, config_version = 1, lang_version = 1, storage_version = 1)
 public class Admin extends Module<Admin> {

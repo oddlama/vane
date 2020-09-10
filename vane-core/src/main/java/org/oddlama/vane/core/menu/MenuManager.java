@@ -1,36 +1,23 @@
 package org.oddlama.vane.core.menu;
 
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
-import java.util.logging.Level;
+
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryView;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
 
 import org.oddlama.vane.core.Core;
 import org.oddlama.vane.core.Listener;
-import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.config.TranslatedItemStack;
-import org.oddlama.vane.annotation.config.ConfigItemStack;
-import org.oddlama.vane.annotation.config.ConfigItemStackDef;
+import org.oddlama.vane.core.module.Context;
 
 public class MenuManager extends Listener<Core> {
 	private final HashMap<UUID, Menu> open_menus = new HashMap<>();

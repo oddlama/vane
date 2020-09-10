@@ -1,13 +1,13 @@
 package org.oddlama.vane.core.menu;
 
 import org.bukkit.entity.Player;
-import org.bukkit.Material;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.inventory.ItemStack;
-import org.oddlama.vane.core.menu.Menu.ClickResult;
-import org.oddlama.vane.core.functional.Function5;
+
 import org.oddlama.vane.core.functional.Function3;
+import org.oddlama.vane.core.functional.Function5;
+import org.oddlama.vane.core.menu.Menu.ClickResult;
 
 public class MenuItem implements MenuWidget {
 	private int slot;

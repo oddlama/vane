@@ -1,17 +1,17 @@
 package org.oddlama.vane.util;
 
-import net.md_5.bungee.api.chat.TranslatableComponent;
 import static org.oddlama.vane.util.Nms.creative_tab_id;
-import net.md_5.bungee.api.chat.BaseComponent;
 import static org.oddlama.vane.util.Nms.item_handle;
 import static org.oddlama.vane.util.Nms.player_handle;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import net.md_5.bungee.api.chat.BaseComponent;
 
 import net.minecraft.server.v1_16_R2.Item;
 

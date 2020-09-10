@@ -2,6 +2,8 @@ package org.oddlama.vane.util;
 
 import java.util.logging.Level;
 
+import net.minecraft.server.v1_16_R2.BlockPosition;
+import net.minecraft.server.v1_16_R2.Clearable;
 import net.minecraft.server.v1_16_R2.CreativeModeTab;
 import net.minecraft.server.v1_16_R2.DedicatedServer;
 import net.minecraft.server.v1_16_R2.Enchantment;
@@ -11,17 +13,14 @@ import net.minecraft.server.v1_16_R2.IRegistry;
 import net.minecraft.server.v1_16_R2.Item;
 import net.minecraft.server.v1_16_R2.ItemStack;
 import net.minecraft.server.v1_16_R2.MinecraftKey;
-import net.minecraft.server.v1_16_R2.Clearable;
 import net.minecraft.server.v1_16_R2.WorldServer;
-import net.minecraft.server.v1_16_R2.BlockPosition;
 
-import org.bukkit.Material;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.craftbukkit.v1_16_R2.CraftServer;
-import org.bukkit.craftbukkit.v1_16_R2.block.CraftBlock;
-import org.bukkit.craftbukkit.v1_16_R2.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_16_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_16_R2.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_16_R2.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.v1_16_R2.util.CraftNamespacedKey;
 import org.bukkit.enchantments.EnchantmentTarget;

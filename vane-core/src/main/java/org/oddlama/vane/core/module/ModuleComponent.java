@@ -1,10 +1,10 @@
 package org.oddlama.vane.core.module;
 
 import java.io.IOException;
-import java.util.Map;
 import java.util.function.Consumer;
 
 import org.bukkit.scheduler.BukkitTask;
+
 import org.json.JSONObject;
 
 import org.oddlama.vane.core.ResourcePackGenerator;

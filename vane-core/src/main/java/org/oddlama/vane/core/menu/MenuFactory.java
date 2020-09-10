@@ -1,30 +1,21 @@
 package org.oddlama.vane.core.menu;
 
-import static org.oddlama.vane.util.ItemUtil.name_item;
 import static org.oddlama.vane.util.ItemUtil.name_of;
 
-import net.md_5.bungee.api.chat.BaseComponent;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.function.Consumer;
-import java.util.function.Function;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.event.inventory.InventoryType;
-import org.oddlama.vane.core.menu.Menu.ClickResult;
+
+import org.jetbrains.annotations.Nullable;
+
 import org.oddlama.vane.core.functional.Consumer1;
 import org.oddlama.vane.core.functional.Consumer2;
-import org.oddlama.vane.core.functional.Function2;
 import org.oddlama.vane.core.functional.Function1;
-import org.jetbrains.annotations.Nullable;
 import org.oddlama.vane.core.functional.Function3;
+import org.oddlama.vane.core.menu.Menu.ClickResult;
 import org.oddlama.vane.core.module.Context;
-import org.bukkit.event.inventory.InventoryCloseEvent;
 
 public class MenuFactory {
 	public static Menu anvil_string_input(final Context<?> context, final Player player, final String title, final ItemStack input_item, final Function3<Player, Menu, String, ClickResult> on_click) {

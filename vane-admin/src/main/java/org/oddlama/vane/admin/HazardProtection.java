@@ -1,17 +1,7 @@
 package org.oddlama.vane.admin;
 
-import static org.oddlama.vane.util.Nms.set_air_no_drops;
-
 import java.util.List;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Collections;
 
-import org.bukkit.Material;
-import org.bukkit.Effect;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
-import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -20,16 +10,13 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityBreakDoorEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
-import org.bukkit.util.Vector;
 
 import org.oddlama.vane.annotation.config.ConfigBoolean;
 import org.oddlama.vane.annotation.config.ConfigStringList;
 import org.oddlama.vane.annotation.lang.LangMessage;
-import org.oddlama.vane.core.lang.TranslatedMessage;
-import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.Listener;
+import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Context;
-
 
 public class HazardProtection extends Listener<Admin> {
 	private WorldRebuild world_rebuild;
