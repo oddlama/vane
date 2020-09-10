@@ -1,5 +1,6 @@
 package org.oddlama.vane.core.lang;
 
+import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TranslatableComponent;
 
@@ -42,7 +43,6 @@ public class TranslatedMessage {
 		final var component = format(args);
 		for (var player : module.getServer().getOnlinePlayers()) {
 			player.sendMessage(component);
-			module.log.warning(net.md_5.bungee.chat.ComponentSerializer.toString(new BaseComponent[] {component }));
 		}
 		module.log.info("[broadcast] " + str(args));
 	}

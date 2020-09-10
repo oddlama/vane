@@ -22,13 +22,11 @@ public class ResourcePackDistributor extends Listener<Core> {
 	@ConfigBoolean(def = true, desc = "Kick players if they deny to use the specified resource pack (if set). Individual players can be exempt from this rule by giving them the permission 'vane.core.resource_pack.bypass'.")
 	public boolean config_force;
 
-	@LangMessage
-	public TranslatedMessage lang_declined;
-	@LangMessage
-	public TranslatedMessage lang_download_failed;
+	@LangMessage public TranslatedMessage lang_declined;
+	@LangMessage public TranslatedMessage lang_download_failed;
 
 	// The permission to bypass the resource pack
-	private Permission bypass_permission;
+	public final Permission bypass_permission;
 
 	public ResourcePackDistributor(Context<Core> context) {
 		super(context.group("resource_pack", "Enable resource pack distribution."));
