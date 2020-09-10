@@ -8,6 +8,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.core.YamlLoadException;
 import org.oddlama.vane.core.lang.TranslatedMessage;
+import org.oddlama.vane.core.ResourcePackGenerator;
 import org.oddlama.vane.core.module.Module;
 
 public class LangMessageField extends LangField<TranslatedMessage> {
@@ -19,7 +20,7 @@ public class LangMessageField extends LangField<TranslatedMessage> {
 	}
 
 	@Override
-	public void check_loadable(YamlConfiguration yaml) throws YamlLoadException {
+	public void check_loadable(final YamlConfiguration yaml) throws YamlLoadException {
 		check_yaml_path(yaml);
 
 		if (!yaml.isString(yaml_path())) {
@@ -27,18 +28,23 @@ public class LangMessageField extends LangField<TranslatedMessage> {
 		}
 	}
 
-	@Override
-	public String str(final YamlConfiguration yaml) {
+	private String from_yaml(final YamlConfiguration yaml) {
 		return yaml.getString(yaml_path());
 	}
 
 	@Override
 	public void load(final String namespace, final YamlConfiguration yaml) {
 		try {
-			field.set(owner, new TranslatedMessage(module(), key(), str(yaml)));
+			field.set(owner, new TranslatedMessage(module(), key(), from_yaml(yaml)));
 		} catch (IllegalAccessException e) {
 			throw new RuntimeException("Invalid field access on '" + field.getName() + "'. This is a bug.");
 		}
+	}
+
+	@Override
+	public void add_translations(final ResourcePackGenerator pack, final YamlConfiguration yaml, String lang_code) throws YamlLoadException {
+		check_loadable(yaml);
+		pack.translations(namespace(), lang_code).put(key(), from_yaml(yaml));
 	}
 }
 

@@ -8,7 +8,9 @@ import org.bukkit.inventory.ItemStack;
 import org.oddlama.vane.annotation.config.ConfigInt;
 import org.oddlama.vane.annotation.config.ConfigMaterial;
 import org.oddlama.vane.annotation.lang.LangMessage;
+import org.oddlama.vane.annotation.lang.LangMessageArray;
 import org.oddlama.vane.core.lang.TranslatedMessage;
+import org.oddlama.vane.core.lang.TranslatedMessageArray;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.core.module.ModuleComponent;
@@ -19,8 +21,10 @@ public class TranslatedItemStack<T extends Module<T>> extends ModuleComponent<T>
 	@ConfigMaterial(def = Material.BARRIER, desc = "The item stack material.")
 	public Material config_material;
 
-	@LangMessage public TranslatedMessage lang_name;
-	@LangMessage public TranslatedMessage lang_lore;
+	@LangMessage
+	public TranslatedMessage lang_name;
+	@LangMessageArray
+	public TranslatedMessageArray lang_lore;
 
 	private Material def_material;
 	private int def_amount;

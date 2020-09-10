@@ -14,11 +14,13 @@ import java.util.stream.Collectors;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import org.oddlama.vane.annotation.lang.LangMessage;
+import org.oddlama.vane.annotation.lang.LangMessageArray;
 import org.oddlama.vane.annotation.lang.LangVersion;
 import org.oddlama.vane.core.ResourcePackGenerator;
 import org.oddlama.vane.core.YamlLoadException;
 import org.oddlama.vane.core.lang.LangField;
 import org.oddlama.vane.core.lang.LangMessageField;
+import org.oddlama.vane.core.lang.LangMessageArrayField;
 import org.oddlama.vane.core.lang.LangVersionField;
 import org.oddlama.vane.core.module.Module;
 
@@ -71,6 +73,8 @@ public class LangManager {
 		// Return correct wrapper object
 		if (atype.equals(LangMessage.class)) {
 			return new LangMessageField(module, owner, field, map_name, (LangMessage)annotation);
+		} else if (atype.equals(LangMessageArray.class)) {
+			return new LangMessageArrayField(module, owner, field, map_name, (LangMessageArray)annotation);
 		} else if (atype.equals(LangVersion.class)) {
 			if (owner != module) {
 				throw new RuntimeException("@LangVersion can only be used inside the main module. This is a bug.");
@@ -167,9 +171,10 @@ public class LangManager {
 			throw new RuntimeException("Missing yaml key: resource_pack_lang_code");
 		}
 		for (var f : lang_fields) {
-			final var str = f.str(yaml);
-			if (str != null) {
-				pack.translations(f.namespace(), lang_code).put(f.key(), str);
+			try {
+				f.add_translations(pack, yaml, lang_code);
+			} catch (YamlLoadException e) {
+				throw new RuntimeException("Could not load translations, see below for error details.", e);
 			}
 		}
 	}

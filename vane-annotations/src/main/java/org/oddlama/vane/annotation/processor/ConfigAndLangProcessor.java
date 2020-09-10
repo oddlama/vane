@@ -29,6 +29,7 @@ import javax.tools.Diagnostic;
     "org.oddlama.vane.annotation.config.ConfigStringListMap",
     "org.oddlama.vane.annotation.config.ConfigVersion",
     "org.oddlama.vane.annotation.lang.LangMessage",
+    "org.oddlama.vane.annotation.lang.LangMessageArray",
     "org.oddlama.vane.annotation.lang.LangVersion",
 })
 @SupportedSourceVersion(SourceVersion.RELEASE_11)
@@ -60,6 +61,7 @@ public class ConfigAndLangProcessor extends AbstractProcessor {
 		map.put("org.oddlama.vane.annotation.config.ConfigStringListMap", "java.util.Map<java.lang.String,java.util.List<java.lang.String>>");
 		map.put("org.oddlama.vane.annotation.config.ConfigVersion", "long");
 		map.put("org.oddlama.vane.annotation.lang.LangMessage", "org.oddlama.vane.core.lang.TranslatedMessage");
+		map.put("org.oddlama.vane.annotation.lang.LangMessageArray", "org.oddlama.vane.core.lang.TranslatedMessageArray");
 		map.put("org.oddlama.vane.annotation.lang.LangVersion", "long");
 		field_type_mapping = Collections.unmodifiableMap(map);
 	}

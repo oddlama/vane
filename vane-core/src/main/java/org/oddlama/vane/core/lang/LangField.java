@@ -5,6 +5,7 @@ import java.util.function.Function;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import org.oddlama.vane.core.ResourcePackGenerator;
 import org.oddlama.vane.core.YamlLoadException;
 import org.oddlama.vane.core.module.Module;
 
@@ -47,7 +48,7 @@ public abstract class LangField<T> {
 
 	public abstract void check_loadable(YamlConfiguration yaml) throws YamlLoadException;
 	public abstract void load(final String namespace, final YamlConfiguration yaml);
-	public abstract String str(final YamlConfiguration yaml);
+	public abstract void add_translations(final ResourcePackGenerator pack, final YamlConfiguration yaml, String lang_code) throws YamlLoadException;
 
 	@SuppressWarnings("unchecked")
 	public T get() {

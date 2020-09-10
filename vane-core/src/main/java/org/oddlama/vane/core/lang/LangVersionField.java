@@ -5,6 +5,7 @@ import java.util.function.Function;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import org.oddlama.vane.core.ResourcePackGenerator;
 import org.oddlama.vane.annotation.lang.LangVersion;
 import org.oddlama.vane.core.YamlLoadException;
 import org.oddlama.vane.core.module.Module;
@@ -32,10 +33,6 @@ public class LangVersionField extends LangField<Long> {
 	}
 
 	@Override
-	public String str(final YamlConfiguration yaml) {
-		return null;
-	}
-
 	public void load(final String namespace, final YamlConfiguration yaml) {
 		try {
 			field.setLong(owner, yaml.getLong(yaml_path()));
@@ -43,5 +40,8 @@ public class LangVersionField extends LangField<Long> {
 			throw new RuntimeException("Invalid field access on '" + field.getName() + "'. This is a bug.");
 		}
 	}
+
+	@Override
+	public void add_translations(final ResourcePackGenerator pack, final YamlConfiguration yaml, String lang_code) throws YamlLoadException { }
 }
 

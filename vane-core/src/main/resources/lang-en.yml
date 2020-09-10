@@ -59,10 +59,12 @@ menus:
   item_selector:
     accept:
       name: "§a§lAccept"
-      lore: "§bChoose§7 the currently selected item."
+      lore: ["§bChoose§7 the currently selected item."]
     cancel:
       name: "§c§lCancel"
-      lore: "§6Abort§7 item selection."
+      lore: ["§6Abort§7 item selection."]
     selected:
       name: "§d§lSelected Item"
-      lore: "§bLeft-click§7 to reset changes.\n§bRight-click§7 to clear (if allowed)."
+      lore:
+        - "§bLeft-click§7 to reset changes."
+        - "§bRight-click§7 to clear (if allowed)."

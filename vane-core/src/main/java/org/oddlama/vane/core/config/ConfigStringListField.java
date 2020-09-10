@@ -62,7 +62,7 @@ public class ConfigStringListField extends ConfigField<List<String>> {
 			throw new YamlLoadException("Invalid type for yaml path '" + yaml_path() + "', expected list");
 		}
 
-		for (var obj : yaml.getList(yaml_path())) {
+		for (final var obj : yaml.getList(yaml_path())) {
 			if (!(obj instanceof String)) {
 				throw new YamlLoadException("Invalid type for yaml path '" + yaml_path() + "', expected string");
 			}
