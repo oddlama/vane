@@ -18,6 +18,6 @@ version: 1
 # language code (ISO 639) and the country code (ISO 3166).
 resource_pack_lang_code: 'de_de'
 
-player_bed_enter: "§6{0}§e schläft jetzt (§6{1}%§e)"
-player_bed_leave: "§6{0}§e fühlt sich ausgeschlafen (§6{1}%§e)"
+player_bed_enter: "§6%0$s§e schläft jetzt (§6%1$5.2f%%§e)"
+player_bed_leave: "§6%0$s§e fühlt sich ausgeschlafen (§6%1$5.2f%%§e)"
 sleep_success: "§ePlopp. Sonne."

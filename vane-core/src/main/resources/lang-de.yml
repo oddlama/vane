@@ -23,11 +23,11 @@ resource_pack_lang_code: 'de_de'
 command_not_a_player: "§cerror:§6 Befehl muss von einem Spieler ausgeführt werden!"
 command_permission_denied: "§cerror:§6 Fehlende Berechtigung!"
 
-invalid_time_format: "§cerror:§6 Ungültige Zeit: {0}"
+invalid_time_format: "§cerror:§6 Ungültige Zeit: %0$s"
 
 command_vane:
-  reload_success: "§b{0}: §areload erfolgreich"
-  reload_fail: "§b{0}: §creload fehlgeschlagen: §6{1}"
+  reload_success: "§b%0$s: §areload erfolgreich"
+  reload_fail: "§b%0$s: §creload fehlgeschlagen: §6%1$s"
   resource_pack_generate_success: "§aResource Pack wurde erfolgreich erstellt"
   resource_pack_generate_fail: "§cBeim Erstellen des Resource Pack ist ein Fehler aufgetreten"
   usage: "§7<§areload§7|§agenerate_resource_pack§7>"

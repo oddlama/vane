@@ -64,17 +64,17 @@ enchantment_wings:
 
 command_enchant:
   # This message is sent when an enchantment level is given that is too low for the chosen enchantment.
-  # {0}: Given level
-  # {1}: Minimum level
-  level_too_low: "§cerror:§6 level §b{0}§6 is too low, must be at least §a{1}"
+  # %0$s: Given level
+  # %1$s: Minimum level
+  level_too_low: "§cerror:§6 level §b%0$s§6 is too low, must be at least §a%1$s"
   # This message is sent when an enchantment level is given that is too high for the chosen enchantment.
-  # {0}: Given level
-  # {1}: Maximum level
-  level_too_high: "§cerror:§6 level §b{0}§6 is too high, must be at most §a{1}"
+  # %0$s: Given level
+  # %1$s: Maximum level
+  level_too_high: "§cerror:§6 level §b%0$s§6 is too high, must be at most §a%1$s"
   # This message is sent when the selected enchantment cannot be applied to the item in hand.
-  # {0}: Enchantment
-  # {1}: Item in hand
-  invalid_enchantment: "§cerror: §b{0}§6 cannot be applied to §a{1}"
+  # %0$s: Enchantment
+  # %1$s: Item in hand
+  invalid_enchantment: "§cerror: §b%0$s§6 cannot be applied to §a%1$s"
   usage: "§benchantment §7[§blevel§7]"
   description: "Enchants the item in your hand."
   help: "Enchants the item in your hand."

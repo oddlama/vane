@@ -26,17 +26,17 @@ command_not_a_player: "§cerror:§6 command must be executed by a player!"
 command_permission_denied: "§cerror:§6 permission denied!"
 
 # This message is sent when an invalid time format is encountered.
-# {0}: format error message
-invalid_time_format: "§cerror:§6 invalid time: {0}"
+# %0$s: format error message
+invalid_time_format: "§cerror:§6 invalid time: %0$s"
 
 command_vane:
   # This message is sent when a module has been successfully reloaded.
-  # {0}: module
-  reload_success: "§b{0}: §areload successful"
+  # %0$s: module
+  reload_success: "§b%0$s: §areload successful"
   # This message is sent when a module failed to reload.
-  # {0}: module
-  # {1}: failure reason
-  reload_fail: "§b{0}: §creload failed: §6{1}"
+  # %0$s: module
+  # %1$s: failure reason
+  reload_fail: "§b%0$s: §creload failed: §6%1$s"
   # This message is sent when the resource_pack has been successfully generated.
   resource_pack_generate_success: "§aResource pack generated successfully"
   # This message is sent when the resource_pack could not be generated.
