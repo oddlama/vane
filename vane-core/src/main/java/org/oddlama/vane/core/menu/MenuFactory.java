@@ -1,6 +1,7 @@
 package org.oddlama.vane.core.menu;
 
 import static org.oddlama.vane.util.ItemUtil.name_of;
+import static org.oddlama.vane.util.ItemUtil.name_item;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -42,7 +43,9 @@ public class MenuFactory {
 			} else {
 				confirmation_menu.add(new MenuItem(i, item_cancel, (player, menu, self) -> {
 					menu.close(player);
-					on_cancel.apply(player);
+					if (menu.get_on_close() != on_cancel) {
+						on_cancel.apply(player);
+					}
 					return ClickResult.SUCCESS;
 				}));
 			}
@@ -59,9 +62,9 @@ public class MenuFactory {
 	}
 
 	public static Menu item_selector(final Context<?> context, final Player player, final String title, @Nullable final ItemStack initial_item, boolean allow_nothing, final Consumer2<Player, ItemStack> on_confirm, final Consumer1<Player> on_cancel, final Function1<ItemStack, ItemStack> on_select_item) {
+		final var menu_manager = context.get_module().core.menu_manager;
 		final Function1<ItemStack, ItemStack> set_item_name = (item) -> {
-			// TODO big nope. have the default no_item defined properly as config. Use the proper methods of that thing.
-			return item;
+			return name_item(item, menu_manager.item_selector_selected.lang_name.format(), menu_manager.item_selector_selected.lang_lore.format());
 		};
 
 		final var no_item = set_item_name.apply(new ItemStack(Material.BARRIER));
@@ -122,7 +125,7 @@ public class MenuFactory {
 		}));
 
 		// Accept item
-		item_selector_menu.add(new MenuItem(2, item_selector_menu.manager().item_selector_accept.item(), (p, menu, self) -> {
+		item_selector_menu.add(new MenuItem(2, menu_manager.item_selector_accept.item(), (p, menu, self) -> {
 			final ItemStack item;
 			if (selected_item.original_selected == no_item) {
 				if (allow_nothing) {
@@ -140,9 +143,11 @@ public class MenuFactory {
 		}));
 
 		// Cancel item
-		item_selector_menu.add(new MenuItem(6, item_selector_menu.manager().item_selector_cancel.item(), (p, menu, self) -> {
+		item_selector_menu.add(new MenuItem(6, menu_manager.item_selector_cancel.item(), (p, menu, self) -> {
 			menu.close(p);
-			on_cancel.apply(p);
+			if (menu.get_on_close() != on_cancel) {
+				on_cancel.apply(player);
+			}
 			return ClickResult.SUCCESS;
 		}));
 

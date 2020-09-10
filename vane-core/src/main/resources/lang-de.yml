@@ -38,7 +38,7 @@ command_vane:
 resource_pack:
   declined: "Du musst das Ressourcenpaket akzeptieren um auf diesem Server zu spielen.\n\
     Es wird für Übersetzungen und Texturen benötigt."
-  download_failed: "Es gab einen Fehler beim Herunterladen des Ressourcenpakets.\n\
+  download_failed: "§cEs gab einen Fehler beim Herunterladen des Ressourcenpakets.§r\n\
     Deine Verbindung wurdest unterbrochen um Anzeigefehlern vorzubeugen.\n\
     \n\
-    Bitte versuche es erneut."
+    §dBitte versuche es erneut."

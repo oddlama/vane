@@ -50,13 +50,19 @@ resource_pack:
   declined: "You need to accept the resource pack to play on this server.\n\
     It is needed for localization and textures."
   # This kick message is used when a mandatory resource pack failed to download for  player.
-  download_failed: "Your resource pack download seems to have failed.\n\
+  download_failed: "§cYour resource pack download seems to have failed.§r\n\
     You have been disconnected to prevent display errors.\n\
     \n\
-    Please try again."
+    §dPlease try again."
 
 menus:
   item_selector:
     accept:
-      name: "§bSelected Item"
-      lore: "§aLeft-click§7 to reset changes.\n§aRight-click§7 to clear."
+      name: "§a§lAccept"
+      lore: "§bChoose§7 the currently selected item."
+    cancel:
+      name: "§c§lCancel"
+      lore: "§6Abort§7 item selection."
+    selected:
+      name: "§d§lSelected Item"
+      lore: "§bLeft-click§7 to reset changes.\n§bRight-click§7 to clear (if allowed)."

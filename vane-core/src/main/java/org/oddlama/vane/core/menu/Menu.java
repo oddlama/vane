@@ -83,6 +83,10 @@ public class Menu {
 		return true;
 	}
 
+	public Consumer1<Player> get_on_close() {
+		return on_close;
+	}
+
 	public Menu on_close(final Consumer1<Player> on_close) {
 		this.on_close = on_close;
 		return this;
