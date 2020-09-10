@@ -58,5 +58,5 @@ resource_pack:
 menus:
   item_selector:
     accept:
-      name: ""
-      lore: ""
+      name: "§bSelected Item"
+      lore: "§aLeft-click§7 to reset changes.\n§aRight-click§7 to clear."

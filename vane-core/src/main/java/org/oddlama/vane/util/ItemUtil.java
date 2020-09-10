@@ -50,6 +50,8 @@ public class ItemUtil {
 	}
 
 	public static ItemStack name_item(final ItemStack item, final BaseComponent name, final BaseComponent lore) {
+		name.setItalic(false);
+		lore.setItalic(false);
 		return name_item(item, new BaseComponent[] { name }, Arrays.<BaseComponent[]>asList(new BaseComponent[] { lore }));
 	}
 
