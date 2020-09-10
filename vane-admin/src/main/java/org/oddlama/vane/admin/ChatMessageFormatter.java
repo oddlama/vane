@@ -1,5 +1,10 @@
 package org.oddlama.vane.admin;
 
+import net.md_5.bungee.chat.ComponentSerializer;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.chat.BaseComponent;
+
 import org.bukkit.craftbukkit.v1_16_R2.util.CraftChatMessage;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -30,8 +35,14 @@ public class ChatMessageFormatter extends Listener<Admin> {
 		final var color = "§b";
 		event.setCancelled(true);
 
-		lang_player_chat_format.broadcast_server_players(color + event.getPlayer().getDisplayName(), CraftChatMessage.fromString(event.getMessage()));
-		// TODO wroooooong CraftChatMessage gives IChatBaseComponent
+		// Convert IChatBaseComponent[] -> BaseComponent[]
+		final var components = CraftChatMessage.fromString(event.getMessage());
+		final var chat = new TextComponent();
+		for (int i = 0; i < components.length; ++i) {
+			chat.addExtra(ComponentSerializer.parse(CraftChatMessage.toJSON(components[i]))[0]);
+		}
+
+		lang_player_chat_format.broadcast_server_players(color + event.getPlayer().getDisplayName(), chat);
 		System.out.println("[chat] " + lang_player_chat_format.str(color + event.getPlayer().getDisplayName(), event.getMessage()));
 	}
 
