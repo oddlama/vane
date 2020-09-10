@@ -10,11 +10,15 @@ import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
+
+import org.apache.commons.lang.WordUtils;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -46,10 +50,12 @@ import org.oddlama.vane.core.config.ConfigStringField;
 import org.oddlama.vane.core.config.ConfigStringListField;
 import org.oddlama.vane.core.config.ConfigStringListMapField;
 import org.oddlama.vane.core.config.ConfigVersionField;
+import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.Module;
 
 public class ConfigManager {
 	private List<ConfigField<?>> config_fields = new ArrayList<>();
+	private Map<String, String> section_descriptions = new HashMap<>();
 	ConfigVersionField field_version;
 	Module<?> module;
 
@@ -159,6 +165,10 @@ public class ConfigManager {
 		return true;
 	}
 
+	public void add_section_description(String yaml_path, String description) {
+		section_descriptions.put(yaml_path, description);
+	}
+
 	@SuppressWarnings("unchecked")
 	public void compile(Object owner, Function<String, String> map_name) {
 		// Compile all annotated fields
@@ -193,9 +203,35 @@ public class ConfigManager {
 				final var last_indent_level = last_field.group_count();
 				final var new_indent_level = f.group_count();
 				final var common_indent_level = ConfigField.common_group_count(last_field, f);
+
+				// Build full common section path
+				var section_path = "";
+				for (int i = 0; i < common_indent_level; ++i) {
+					section_path = Context.append_yaml_path(section_path, f.components()[i], ".");
+				}
+
+				// For each unopened section
 				for (int i = common_indent_level; i < new_indent_level; ++i) {
 					indent = indent_str(i);
-					builder.append(indent + f.components()[i] + ":\n");
+
+					// Get full section path
+					section_path = Context.append_yaml_path(section_path, f.components()[i], ".");
+
+					// Append section description, if given.
+					final var section_desc = section_descriptions.get(section_path);
+					if (section_desc != null) {
+						final var description_wrapped = WordUtils.wrap(section_desc, Math.max(60, 80 - indent.length()), "\n" + indent + "# ", false);
+						builder.append(indent);
+						builder.append("# ");
+						builder.append(description_wrapped);
+						builder.append("\n");
+					}
+
+					// Append section
+					final var section_name = f.components()[i];
+					builder.append(indent);
+					builder.append(section_name);
+					builder.append(":\n");
 				}
 
 				indent = indent_str(new_indent_level);

@@ -23,7 +23,17 @@ public interface Context<T extends Module<T>> {
 
 	/** create a subcontext namespace */
 	default public ModuleContext<T> namespace(String name) {
-		return new ModuleContext<T>(this, name);
+		return new ModuleContext<T>(this, name, null, ".");
+	}
+
+	/** create a subcontext namespace */
+	default public ModuleContext<T> namespace(String name, String description) {
+		return new ModuleContext<T>(this, name, description, ".");
+	}
+
+	/** create a subcontext namespace */
+	default public ModuleContext<T> namespace(String name, String description, String separator) {
+		return new ModuleContext<T>(this, name, description, separator);
 	}
 
 	/** create a subcontext group */

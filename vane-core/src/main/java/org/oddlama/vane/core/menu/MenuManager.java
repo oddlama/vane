@@ -23,11 +23,18 @@ public class MenuManager extends Listener<Core> {
 	private final HashMap<UUID, Menu> open_menus = new HashMap<>();
 	private final HashMap<Inventory, Menu> menus = new HashMap<>();
 
-	public TranslatedItemStack<?> item_chooser_accept = new TranslatedItemStack<>(get_context(), Material.LIME_TERRACOTTA, 1, "Menu item used to confirm item selection.");
-	public TranslatedItemStack<?> item_chooser_cancel = new TranslatedItemStack<>(get_context(), Material.RED_TERRACOTTA,  1, "Menu item used to cancel item selection.");
+	public TranslatedItemStack<?> item_chooser_accept;
+	public TranslatedItemStack<?> item_chooser_cancel;
+	public TranslatedItemStack<?> item_chooser_selected;
 
 	public MenuManager(Context<Core> context) {
 		super(context.namespace("menus"));
+
+		final var ctx = get_context();
+		final var ctx_item_chooser = ctx.namespace("item_chooser", "Menu configuration for item chooser menus.");
+        item_chooser_accept   = new TranslatedItemStack<>(ctx_item_chooser, "accept", Material.LIME_TERRACOTTA, 1, "Menu item used to confirm item selection.");
+        item_chooser_cancel   = new TranslatedItemStack<>(ctx_item_chooser, "cancel", Material.RED_TERRACOTTA, 1, "Menu item used to cancel item selection.");
+        item_chooser_selected = new TranslatedItemStack<>(ctx_item_chooser, "selected", Material.BARRIER, 1, "Represents the selected item. Left-clicking will reset the selection to the initial value, and right-clicking will clear the selected item. The given stack is used as the 'empty', cleared item.");
 	}
 
 	public Menu menu_for(final Player player, final InventoryView view) {

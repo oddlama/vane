@@ -118,7 +118,7 @@ public abstract class ConfigField<T> implements Comparable<ConfigField<?>> {
 	}
 
 	protected void append_description(StringBuilder builder, String indent) {
-		final var description_wrapped = indent + "# " + WordUtils.wrap(description, 80, "\n" + indent + "# ", false);
+		final var description_wrapped = indent + "# " + WordUtils.wrap(description, Math.max(60, 80 - indent.length()), "\n" + indent + "# ", false);
 		builder.append(description_wrapped);
 		builder.append("\n");
 	}

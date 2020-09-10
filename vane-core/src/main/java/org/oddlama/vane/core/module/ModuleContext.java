@@ -17,15 +17,19 @@ public class ModuleContext<T extends Module<T>> implements Context<T> {
 	protected String name;
 	private List<Context<T>> subcontexts = new ArrayList<>();
 	private List<ModuleComponent<T>> components = new ArrayList<>();
+	private String description;
+	private String separator;
 
-	public ModuleContext(Context<T> context, String name) {
-		this(context, name, true);
+	public ModuleContext(Context<T> context, String name, String description, String separator) {
+		this(context, name, description, separator, true);
 	}
 
-	public ModuleContext(Context<T> context, String name, boolean compile_self) {
+	public ModuleContext(Context<T> context, String name, String description, String separator, boolean compile_self) {
 		this.context = context;
 		this.module = context.get_module();
 		this.name = name;
+		this.description = description;
+		this.separator = separator;
 
 		if (compile_self) {
 			compile_self();
@@ -34,11 +38,11 @@ public class ModuleContext<T extends Module<T>> implements Context<T> {
 
 	@Override
 	public String yaml_path() {
-		return Context.append_yaml_path(context.yaml_path(), name, "_");
+		return Context.append_yaml_path(context.yaml_path(), name, separator);
 	}
 
 	public String variable_yaml_path(String variable) {
-		return Context.append_yaml_path(yaml_path(), variable, "_");
+		return Context.append_yaml_path(yaml_path(), variable, separator);
 	}
 
 	@Override
@@ -49,6 +53,9 @@ public class ModuleContext<T extends Module<T>> implements Context<T> {
 	private void compile_component(Object component) {
 		module.lang_manager.compile(component, this::variable_yaml_path);
 		module.config_manager.compile(component, this::variable_yaml_path);
+		if (description != null) {
+			module.config_manager.add_section_description(yaml_path(), description);
+		}
 		module.persistent_storage_manager.compile(component, this::variable_yaml_path);
 	}
 

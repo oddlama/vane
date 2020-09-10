@@ -21,7 +21,7 @@ public class ModuleGroup<T extends Module<T>> extends ModuleContext<T> {
 	}
 
 	public ModuleGroup(Context<T> context, String group, String description, boolean compile_self) {
-		super(context, group, false);
+		super(context, group, null, ".", false);
 		this.config_enabled_desc = description;
 
 		if (compile_self) {
@@ -32,16 +32,6 @@ public class ModuleGroup<T extends Module<T>> extends ModuleContext<T> {
 	@Override
 	public boolean enabled() {
 		return config_enabled;
-	}
-
-	@Override
-	public String yaml_path() {
-		return Context.append_yaml_path(context.yaml_path(), name, ".");
-	}
-
-	@Override
-	public String variable_yaml_path(String variable) {
-		return Context.append_yaml_path(yaml_path(), variable, ".");
 	}
 
 	@Override

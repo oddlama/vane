@@ -153,7 +153,6 @@ public abstract class Command<T extends Module<T>> extends ModuleComponent<T> {
 	}
 
 	public void print_help(CommandSender sender) {
-		// TODO test space necessary, TODO all usage need %1$s
 		lang_usage.send(sender, "§7/§3" + name);
 		lang_help.send(sender);
 	}
