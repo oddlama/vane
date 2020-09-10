@@ -64,7 +64,7 @@ public class AutostopGroup extends ModuleGroup<Admin> {
 			get_module().getServer().shutdown();
 		}, ms_to_ticks(delay));
 
-		lang_scheduled.send_and_log(sender, format_time(delay));
+		lang_scheduled.send_and_log(sender, "§b" + format_time(delay));
 	}
 
 	public void status(CommandSender sender) {
@@ -73,7 +73,7 @@ public class AutostopGroup extends ModuleGroup<Admin> {
 			return;
 		}
 
-		lang_status.send(sender, format_time(remaining()));
+		lang_status.send(sender, "§b" + format_time(remaining()));
 	}
 
 	@Override

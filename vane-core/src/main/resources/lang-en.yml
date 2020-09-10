@@ -32,11 +32,10 @@ invalid_time_format: "§cerror:§6 invalid time: %1$s"
 command_vane:
   # This message is sent when a module has been successfully reloaded.
   # %1$s: module
-  reload_success: "§b%1$s: §areload successful"
+  reload_success: "%1$s§7: §areload successful"
   # This message is sent when a module failed to reload.
   # %1$s: module
-  # %2$s: failure reason
-  reload_fail: "§b%1$s: §creload failed: §6%2$s"
+  reload_fail: "%1$s§7: §creload failed"
   # This message is sent when the resource_pack has been successfully generated.
   resource_pack_generate_success: "§aResource pack generated successfully"
   # This message is sent when the resource_pack could not be generated.

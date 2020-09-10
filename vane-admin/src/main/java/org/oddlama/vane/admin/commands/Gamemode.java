@@ -46,6 +46,6 @@ public class Gamemode extends Command<Admin> {
 
 	private void set_gamemode(CommandSender sender, GameMode mode, Player player) {
 		player.setGameMode(mode);
-		lang_set.send(sender, player.getDisplayName(), mode.name());
+		lang_set.send(sender, "§b" + player.getDisplayName(), "§a" + mode.name());
 	}
 }

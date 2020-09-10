@@ -85,6 +85,10 @@ public class Bedtime extends Module<Bedtime> {
 		remove_sleeping(event.getPlayer());
 	}
 
+	private static String percentage_str(double percentage) {
+		return String.format("%5.2f", 100.0 * percentage);
+	}
+
 	private long get_amount_sleeping(final World world) {
 		return world.getPlayers().stream()
 			.filter(p -> p.getGameMode() != GameMode.SPECTATOR)
@@ -118,7 +122,7 @@ public class Bedtime extends Module<Bedtime> {
 
 		// Broadcast sleeping message
 		var percent = get_percentage_sleeping(world);
-		lang_player_bed_enter.broadcast_world(world, player.getName(), 100.0 * percent);
+		lang_player_bed_enter.broadcast_world(world, "§6" + player.getName(), "§6" + percentage_str(percent));
 	}
 
 	private void remove_sleeping(Player player) {
@@ -135,7 +139,7 @@ public class Bedtime extends Module<Bedtime> {
 		if (sleepers.remove(player.getUniqueId())) {
 			// Broadcast sleeping message
 			var percent = get_percentage_sleeping(world);
-			lang_player_bed_leave.broadcast_world(world, player.getName(), 100.0 * percent);
+			lang_player_bed_leave.broadcast_world(world, "§6" + player.getName(), "§6" + percentage_str(percent));
 		}
 	}
 

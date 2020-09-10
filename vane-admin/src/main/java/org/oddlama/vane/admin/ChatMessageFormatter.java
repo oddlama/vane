@@ -31,6 +31,7 @@ public class ChatMessageFormatter extends Listener<Admin> {
 		event.setCancelled(true);
 
 		lang_player_chat_format.broadcast_server_players(color + event.getPlayer().getDisplayName(), CraftChatMessage.fromString(event.getMessage()));
+		// TODO wroooooong CraftChatMessage gives IChatBaseComponent
 		System.out.println("[chat] " + lang_player_chat_format.str(color + event.getPlayer().getDisplayName(), event.getMessage()));
 	}
 

@@ -41,9 +41,9 @@ public class Vane extends Command<Core> {
 
 	private void reload_module(CommandSender sender, Module<?> module) {
 		if (module.reload_configuration()) {
-			lang_reload_success.send(sender, "vane-" + module.get_name());
+			lang_reload_success.send(sender, "§bvane-" + module.get_name());
 		} else {
-			lang_reload_fail.send(sender, "vane-" + module.get_name(), "invalid configuration");
+			lang_reload_fail.send(sender, "§bvane-" + module.get_name());
 		}
 	}
 

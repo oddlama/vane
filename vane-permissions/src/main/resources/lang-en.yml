@@ -27,39 +27,39 @@ command_permission:
   list_header_permissions: "Listing all registered permissions:\nFormat: <permission> (<default>): <description>"
   # This message is sent as a first header line for player group list output
   # %1$s: Player name
-  list_header_player_groups: "Listing all groups for §b%1$s§r:"
+  list_header_player_groups: "Listing all groups for %1$s:"
   # This message is sent as a first header line for player permission list output
   # %1$s: Player name
-  list_header_player_permissions: "Listing all permissions for §b%1$s§r:\nFormat: <permission> (<default>): <description>"
+  list_header_player_permissions: "Listing all permissions for %1$s:\nFormat: <permission> (<default>): <description>"
   # This message is sent as a first header line for group permission list output
   # %1$s: Group name
-  list_header_group_permissions: "Listing all permissions for §b%1$s§r:\nFormat: <permission> (<default>): <description>"
+  list_header_group_permissions: "Listing all permissions for %1$s:\nFormat: <permission> (<default>): <description>"
   # This message is sent when permissions are queried on an offline player
   list_player_offline: "§6The requested player is offline. Only configured permissions will be shown. Permissions from other permission management plugins might be missing."
   # This message is sent for each group when a list of all groups is requested.
   # %1$s: Group name
-  list_group: " §7- §b%1$s"
+  list_group: "§7 - %1$s"
   # This message is sent for each permission when a list of all permissions is requested.
   # %1$s: Permission name
   # %2$s: Permission value color code
   # %3$s: Permission value
   # %4$s: Permission description
-  list_permission: " §7- §d%1$s §7(%2$s%3$s§7): %4$s"
+  list_permission: "§7 - %1$s§7 (%2$s%3$s§7): %4$s"
   # This message is sent when a group is added to a player.
-  # %1$s: Group name
-  # %2$s: Player name
-  group_assigned: "§b%2$s§r was assigned to §a%1$s"
+  # %1$s: Player name
+  # %2$s: Group name
+  group_assigned: "%1$s was assigned to %2$s"
   # This message is sent when a group is removed from a player.
-  # %1$s: Group name
-  # %2$s: Player name
-  group_removed: "§b%2$s§r was removed from §a%1$s"
+  # %1$s: Player name
+  # %2$s: Group name
+  group_removed: "%1$s was removed from %2$s"
   # This message is sent when a group is added to a player, but it is already assigned.
-  # %1$s: Group name
-  # %2$s: Player name
+  # %1$s: Player name
+  # %2$s: Group name
   group_already_assigned: "§6Group already assigned"
   # This message is sent when a group is removed from a player, but it wasn't assigned.
-  # %1$s: Group name
-  # %2$s: Player name
+  # %1$s: Player name
+  # %2$s: Group name
   group_not_assigned: "§6Group not assigned"
   usage: "%1$s §7<§alist§7|§aadd§7|§aremove§7>"
   description: "Manages player permissions."

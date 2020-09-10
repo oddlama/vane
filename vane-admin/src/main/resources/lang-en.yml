@@ -21,19 +21,19 @@ resource_pack_lang_code: 'en_us'
 # This is the format for player chat messages
 # %1$s: player name
 # %2$s: message
-player_chat_format: "§7%1$s: %2$s"
+player_chat_format: "%1$s§7: %2$s"
 
 # This message is sent when a player joins the server
 # %1$s: player name
-player_join: "§e%1$s has joined the server"
+player_join: "%1$s§e has joined the server"
 
 # This message is sent when a player is kicked from the server
 # %1$s: player name
-player_kick: "§e%1$s was kicked from the server"
+player_kick: "%1$s§e was kicked from the server"
 
 # This message is sent when a player leaves the server
 # %1$s: player name
-player_quit: "§e%1$s has left the server"
+player_quit: "%1$s§e has left the server"
 
 autostop:
   # This message is sent when autostop is aborted, due to an administrative command
@@ -42,10 +42,10 @@ autostop:
   # This message is sent when autostop is scheduled, due to an administrative command
   # or the last player leaving the server.
   # %1$s: Time until stop
-  scheduled: "§dAutostop scheduled in §b%1$s"
+  scheduled: "§dAutostop scheduled in %1$s"
   # This message is sent when autostop status is requested and autostop is already scheduled.
   # %1$s: Time until stop
-  status: "§7Autostop in §b%1$s"
+  status: "§7Autostop in %1$s"
   # This message is sent when autostop status is requested but autostop is not scheduled.
   status_not_scheduled: "§dAutostop not scheduled"
   # This message is sent when the actual autostop is performed.
@@ -67,7 +67,7 @@ command_gamemode:
   # This message is sent when the gamemode of a player is changed by the gamemode command.
   # %1$s: Player name
   # %2$s: Gamemode name
-  set: "§7Gamemode of §b%1$s§7 was set to §a%2$s"
+  set: "§7Gamemode of %1$s§7 was set to %2$s"
   usage: "%1$s §bgamemode §7[§bplayer§7]"
   description: "§bgamemode §7[§bplayer§7]"
   help: "Sets the gamemode of a player."

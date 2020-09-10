@@ -95,7 +95,7 @@ public class Permission extends Command<Permissions> {
 			.stream()
 			.sorted((a, b) -> a.compareTo(b))
 			.forEach(group -> {
-				lang_list_group.send(sender, group);
+				lang_list_group.send(sender, "§b" + group);
 			});
 	}
 
@@ -105,15 +105,15 @@ public class Permission extends Command<Permissions> {
 			.sorted((a, b) -> a.getName().compareTo(b.getName()))
 			.forEach(perm -> {
 				lang_list_permission.send(sender,
-							perm.getName(),
-							permission_default_value_color_code(perm.getDefault()),
-							perm.getDefault().toString().toLowerCase(),
+							"§d" + perm.getName(),
+							permission_default_value_color_code(perm.getDefault())
+								+ perm.getDefault().toString().toLowerCase(),
 							perm.getDescription());
 			});
 	}
 
 	private void list_permissions_for_player(CommandSender sender, OfflinePlayer offline_player) {
-		lang_list_header_player_permissions.send(sender, offline_player.getName());
+		lang_list_header_player_permissions.send(sender, "§b" + offline_player.getName());
 		var player = offline_player.getPlayer();
 		if (player == null) {
 			// Player is offline, show configured permissions only.
@@ -142,9 +142,9 @@ public class Permission extends Command<Permissions> {
 							return;
 						}
 						lang_list_permission.send(sender,
-									perm.getName(),
-									permission_value_color_code(att.getValue()),
-									String.valueOf(att.getValue()),
+									"§d" + perm.getName(),
+									permission_value_color_code(att.getValue())
+										+ String.valueOf(att.getValue()),
 									perm.getDescription());
 					});
 			}
@@ -157,22 +157,22 @@ public class Permission extends Command<Permissions> {
 			if (perm == null) {
 				get_module().log.warning("Use of unregistered permission '" + p + "' might have unintended effects.");
 				lang_list_permission.send(sender,
-							p,
-							permission_value_color_code(true),
-							String.valueOf(true),
+							"§d" + p,
+							permission_value_color_code(true)
+								+ String.valueOf(true),
 							"");
 			} else {
 				lang_list_permission.send(sender,
-							perm.getName(),
-							permission_value_color_code(true),
-							String.valueOf(true),
+							"§d" + perm.getName(),
+							permission_value_color_code(true)
+								+ String.valueOf(true),
 							perm.getDescription());
 			}
 		}
 	}
 
 	private void list_permissions_for_group(CommandSender sender, String group) {
-		lang_list_header_group_permissions.send(sender, group);
+		lang_list_header_group_permissions.send(sender, "§b" + group);
 		list_permissions_for_group_no_header(sender, group);
 	}
 
@@ -181,7 +181,7 @@ public class Permission extends Command<Permissions> {
 		if (set == null) {
 			lang_list_empty.send(sender);
 		} else {
-			lang_list_header_player_permissions.send(sender, offline_player.getName());
+			lang_list_header_player_groups.send(sender, "§b" + offline_player.getName());
 			for (var group : set) {
 				lang_list_group.send(sender, group);
 			}
@@ -206,10 +206,10 @@ public class Permission extends Command<Permissions> {
 		var added = set.add(group);
 
 		if (added) {
-			lang_group_assigned.send(sender, group, player.getName());
+			lang_group_assigned.send(sender, "§b" + player.getName(), "§a" + group);
 			save_and_recalculate(player);
 		} else {
-			lang_group_already_assigned.send(sender, group, player.getName());
+			lang_group_already_assigned.send(sender, "§b" + player.getName(), "§a" + group);
 		}
 	}
 
@@ -221,10 +221,10 @@ public class Permission extends Command<Permissions> {
 		}
 
 		if (removed) {
-			lang_group_removed.send(sender, group, player.getName());
+			lang_group_removed.send(sender, "§b" + player.getName(), "§a" + group);
 			save_and_recalculate(player);
 		} else {
-			lang_group_not_assigned.send(sender, group, player.getName());
+			lang_group_not_assigned.send(sender, "§b" + player.getName(), "§a" + group);
 		}
 	}
 }

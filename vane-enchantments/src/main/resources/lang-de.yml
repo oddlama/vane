@@ -42,8 +42,8 @@ enchantment_wings:
   name: "Flügel"
 
 command_enchant:
-  level_too_low: "§cerror:§6 Level §b%1$s§6 ist zu niedrig, Mindestlevel ist §a%2$s"
-  level_too_high: "§cerror:§6 Level §b%1$s§6 is zu hoch, Maximallevel ist §a%2$s"
-  invalid_enchantment: "§cerror: §a%2$s kann nicht mit §b%1$s§6 verzaubert werden"
+  level_too_low: "§cerror:§6 Level %1$s§6 ist zu niedrig, benötigt mindestens Level %2$s"
+  level_too_high: "§cerror:§6 Level %1$s§6 is zu hoch, benötigt maximal Level %2$s"
+  invalid_enchantment: "§cerror: %2$s§c kann nicht mit %1$s§6 verzaubert werden"
   usage: "%1$s Verzaubert das Item in deiner Hand."
   help: "Verzaubert das Item in deiner Hand."

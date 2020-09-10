@@ -20,14 +20,14 @@ resource_pack_lang_code: 'en_us'
 
 # This message is broadcast in the world, when a player enters the bed.
 # %1$s: player name
-# %2$f: percentage of sleeping players
-player_bed_enter: "§6%1$s§e is now sleeping (§6%2$5.2f%%§e)"
+# %2$s: percentage of sleeping players
+player_bed_enter: "%1$s§e is now sleeping (%2$s%%§e)"
 
 # This message is broadcast in the world, when a player leaves the bed early,
 # before time was advanced.
 # %1$s: player name
-# %2$f: percentage of sleeping players
-player_bed_leave: "§6%1$s§e feels rested (§6%2$5.2f%%§e)"
+# %2$s: percentage of sleeping players
+player_bed_leave: "%1$s§e feels rested (%2$s%%§e)"
 
 # Message sent when enough players were sleeping and time was advanced.
 sleep_success: "§eSun go brrrr"
