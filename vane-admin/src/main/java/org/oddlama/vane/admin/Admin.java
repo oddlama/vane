@@ -25,7 +25,6 @@ public class Admin extends Module<Admin> {
 
 		new WorldProtection(this);
 		new HazardProtection(this);
-		new ResourcePackDistributor(this);
 		new ChatMessageFormatter(this);
 	}
 }

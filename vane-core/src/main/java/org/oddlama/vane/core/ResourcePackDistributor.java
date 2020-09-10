@@ -1,4 +1,4 @@
-package org.oddlama.vane.admin;
+package org.oddlama.vane.core;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -14,12 +14,12 @@ import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.module.Context;
 
-public class ResourcePackDistributor extends Listener<Admin> {
+public class ResourcePackDistributor extends Listener<Core> {
 	@ConfigString(def = "https://your-server.tld/path/to/pack.zip", desc = "URL to an resource pack. Will request players to use the specified resource pack.")
 	public String config_url;
 	@ConfigString(def = "", desc = "Resource pack SHA-1 sum. Required to verify resource pack integrity.")
 	public String config_sha1;
-	@ConfigBoolean(def = true, desc = "Kick players if they deny to use the specified resource pack (if set). Individual players can be exempt from this rule by giving them the permission 'vane.admin.resource_pack.bypass'.")
+	@ConfigBoolean(def = true, desc = "Kick players if they deny to use the specified resource pack (if set). Individual players can be exempt from this rule by giving them the permission 'vane.core.resource_pack.bypass'.")
 	public boolean config_force;
 
 	@LangMessage
@@ -30,7 +30,7 @@ public class ResourcePackDistributor extends Listener<Admin> {
 	// The permission to bypass the resource pack
 	private Permission bypass_permission;
 
-	public ResourcePackDistributor(Context<Admin> context) {
+	public ResourcePackDistributor(Context<Core> context) {
 		super(context.group("resource_pack", "Enable resource pack distribution."));
 
 		// Register bypass permission
@@ -72,11 +72,11 @@ public class ResourcePackDistributor extends Listener<Admin> {
 
 		switch (event.getStatus()) {
 			case DECLINED:
-				event.getPlayer().kickPlayer(lang_declined);
+				event.getPlayer().kickPlayer(lang_declined.str());
 				break;
 
 			case FAILED_DOWNLOAD:
-				event.getPlayer().kickPlayer(lang_download_failed);
+				event.getPlayer().kickPlayer(lang_download_failed.str());
 				break;
 		}
 	}
