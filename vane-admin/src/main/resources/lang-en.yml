@@ -30,7 +30,7 @@ player_join: "§6%0$s§e has joined the server"
 
 # This message is sent when a player is kicked from the server
 # %0$s: player name
-player_kick: "§6%0$s§e was §lkicked§r§e from the server"
+player_kick: "§6%0$s§e was kicked from the server"
 
 # This message is sent when a player leaves the server
 # %0$s: player name

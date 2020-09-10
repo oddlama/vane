@@ -20,7 +20,7 @@ resource_pack_lang_code: 'de_de'
 
 player_chat_format: "%0$s%1$s§7:§r %2$s"
 player_join: "§6%0$s§e hat den Server betreten"
-player_kick: "§6%0$s§e wurde vom Server §lgekicked"
+player_kick: "§6%0$s§e wurde vom Server geworfen"
 player_quit: "§6%0$s§e hat den Server verlassen"
 
 autostop:
