@@ -15,7 +15,6 @@ import org.oddlama.vane.core.lang.TranslatedString;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.ModuleGroup;
 
-
 public class AutostopGroup extends ModuleGroup<Admin> {
 	@ConfigLong(def = 20 * 60, min = 0, desc = "Delay in seconds after which to stop the server.")
 	public long config_delay;
@@ -85,7 +84,7 @@ public class AutostopGroup extends ModuleGroup<Admin> {
 		send_message(sender, lang_status.format(format_time(remaining())));
 	}
 
-	private void send_message(CommandSender sender, String message) {
+	private<T> void send_message(CommandSender sender, T message) {
 		if (sender != null && sender != get_module().getServer().getConsoleSender()) {
 			sender.sendMessage(message);
 		}

@@ -35,7 +35,7 @@ public class LangMessageField extends LangField<TranslatedMessage> {
 	@Override
 	public void load(final String namespace, final YamlConfiguration yaml) {
 		try {
-			field.set(owner, new Message(str(yaml)));
+			field.set(owner, new TranslatedMessage(key(namespace), str(yaml)));
 		} catch (IllegalAccessException e) {
 			throw new RuntimeException("Invalid field access on '" + field.getName() + "'. This is a bug.");
 		}

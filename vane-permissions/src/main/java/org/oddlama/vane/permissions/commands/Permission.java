@@ -91,7 +91,7 @@ public class Permission extends Command<Permissions> {
 	}
 
 	private void list_groups(CommandSender sender) {
-		sender.sendMessage(lang_list_header_groups);
+		sender.sendMessage(lang_list_header_groups.clone());
 		get_module().permission_groups.keySet()
 			.stream()
 			.sorted((a, b) -> a.compareTo(b))
@@ -101,7 +101,7 @@ public class Permission extends Command<Permissions> {
 	}
 
 	private void list_permissions(CommandSender sender) {
-		sender.sendMessage(lang_list_header_permissions);
+		sender.sendMessage(lang_list_header_permissions.clone());
 		get_module().getServer().getPluginManager().getPermissions().stream()
 			.sorted((a, b) -> a.getName().compareTo(b.getName()))
 			.forEach(perm -> {
@@ -119,7 +119,7 @@ public class Permission extends Command<Permissions> {
 		if (player == null) {
 			// Player is offline, show configured permissions only.
 			// Information from other plugins might be missing.
-			sender.sendMessage(lang_list_player_offline);
+			sender.sendMessage(lang_list_player_offline.clone());
 			final var groups = get_module().storage_player_groups.get(offline_player.getUniqueId());
 			if (groups == null) {
 				sender.sendMessage("§b∅");

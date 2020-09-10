@@ -30,6 +30,7 @@ If you don't want a certain feature, simply disable it.
 #### Administrative and 'meta' features
 
 - [x] Full localization support, currently provides english (default) and german.
+- [x] Automatically generated resource pack will provide client side translations
 - [x] Builtin lightweight permissions plugin (permission groups, group inheritance, live editing).
       For better control, all default permissions are revoked and need to be added explicitly.
 - [x] The server can be automatically stopped after a specified duration without players. Using this together with **(TODO insert waterfall plugin)** will allow you to save server resources while nobody is online.
@@ -40,7 +41,6 @@ If you don't want a certain feature, simply disable it.
 - [x] Stylish world rebuilding after explosion hazards.
 - [x] Whitelist for worlds in which the Wither may be spawned
 - [x] Players without any permissions cannot alter the world (just look, no touch!)
-- [x] Client side translations for custom items and enchantments
 
 #### Custom enchantments
 
@@ -95,9 +95,21 @@ and therefore not well suited for giving out valuable traits (like *Angel* or *U
 
 **This plugin requires Java 11!**
 
-Simply download and place all desired module jars into your plugin directory.
-Start the server once to generate configuration files, edit them to your preference
-and you are good to go!
+To install vane, begin by downloading and placing all desired module jars into the `plugins/` directory.
+
+1. Start the server to generate configuration files, and edit them to your preference.
+2. Either restart the server, or type `/vane reload` to apply the changes.
+3. Execute `/vane generate_resource_pack`. This will place the required resource pack in the server's working directory.
+4. Copy the resource pack to a publicly accessible webserver and configure the related section in `plugins/vane-core/config.yml`.
+5. Either restart the server again, or type `/vane reload` to apply the changes.
+
+You are done! Enjoy playing!
+
+> [as of 1.16.2] Beware that the minecraft client currently has issues with webservers that serve resource packs via https and don't allow ssl3.
+> This protocol is considered insecure and therefore should NOT be used. To workaround this issue, you should host the file in a http context. This is not a security issue,
+> as the file will be verified via its sha1 sum by the client.
+
+Thats it!
 
 ### Building from source
 

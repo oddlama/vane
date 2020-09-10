@@ -45,7 +45,7 @@ public interface Param {
 
 	default public boolean require_player(CommandSender sender) {
 		if (!(sender instanceof Player)) {
-			sender.sendMessage(get_command().get_module().core.lang_command_not_a_player);
+			sender.sendMessage(get_command().get_module().core.lang_command_not_a_player.clone());
 			return false;
 		}
 

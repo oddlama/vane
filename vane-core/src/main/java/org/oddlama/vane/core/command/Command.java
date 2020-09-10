@@ -2,6 +2,8 @@ package org.oddlama.vane.core.command;
 
 import static org.oddlama.vane.util.Util.prepend;
 
+import net.md_5.bungee.api.chat.TextComponent;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -31,12 +33,12 @@ public abstract class Command<T extends Module<T>> extends ModuleComponent<T> {
 
 		@Override
 		public String getUsage() {
-			return Command.this.lang_usage;
+			return Command.this.lang_usage.str();
 		}
 
 		@Override
 		public String getDescription() {
-			return Command.this.lang_description;
+			return Command.this.lang_description.str();
 		}
 
 		@Override
@@ -48,7 +50,7 @@ public abstract class Command<T extends Module<T>> extends ModuleComponent<T> {
 		public boolean execute(CommandSender sender, String alias, String[] args) {
 			// Pre check permission
 			if (!sender.hasPermission(Command.this.permission)) {
-				sender.sendMessage(get_module().core.lang_command_permission_denied);
+				sender.sendMessage(get_module().core.lang_command_permission_denied.clone());
 				return true;
 			}
 
@@ -156,7 +158,8 @@ public abstract class Command<T extends Module<T>> extends ModuleComponent<T> {
 	}
 
 	public void print_help(CommandSender sender) {
-		sender.sendMessage("§7/§3" + name + " " + lang_usage);
-		sender.sendMessage(lang_help);
+		// TODO test space necessary
+		sender.sendMessage(new TextComponent("§7/§3" + name + " "), lang_usage.clone());
+		sender.sendMessage(lang_help.clone());
 	}
 }

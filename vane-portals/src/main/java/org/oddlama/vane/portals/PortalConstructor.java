@@ -127,7 +127,7 @@ public class PortalConstructor extends Listener<Portals> {
 	private void remember_new_console(final Player player, final Block console_block) {
 		// Add console_block as pending console
 		pending_console.put(player.getUniqueId(), console_block);
-		player.sendMessage(lang_select_boundary_now);
+		player.sendMessage(lang_select_boundary_now.clone());
 	}
 
 	private boolean can_link_console(final PortalBoundary boundary, final Block console) {
@@ -149,16 +149,16 @@ public class PortalConstructor extends Listener<Portals> {
 	private PortalBoundary find_boundary(final Player player, final Block block) {
 		final var boundary = PortalBoundary.search_at(this, block);
 		if (boundary == null) {
-			player.sendMessage(lang_no_boundary_found);
+			player.sendMessage(lang_no_boundary_found.clone());
 			return null;
 		}
 
 		// Check for error
 		switch (boundary.error_state()) {
 			case NONE: /* Boundary is fine */ break;
-			case NO_ORIGIN:                    player.sendMessage(lang_no_origin);                    return null;
-			case MULTIPLE_ORIGINS:             player.sendMessage(lang_multiple_origins);             return null;
-			case NO_PORTAL_BLOCK_ABOVE_ORIGIN: player.sendMessage(lang_no_portal_block_above_origin); return null;
+			case NO_ORIGIN:                    player.sendMessage(lang_no_origin.clone());                    return null;
+			case MULTIPLE_ORIGINS:             player.sendMessage(lang_multiple_origins.clone());             return null;
+			case NO_PORTAL_BLOCK_ABOVE_ORIGIN: player.sendMessage(lang_no_portal_block_above_origin.clone()); return null;
 			case TOO_LARGE_X:                  player.sendMessage(lang_too_large.format("x"));        return null;
 			case TOO_LARGE_Y:                  player.sendMessage(lang_too_large.format("y"));        return null;
 			case TOO_LARGE_Z:                  player.sendMessage(lang_too_large.format("z"));        return null;
@@ -170,11 +170,11 @@ public class PortalConstructor extends Listener<Portals> {
 					boundary.portal_area_blocks().size(),
 					config_area_max_blocks));
 				return null;
-			case PORTAL_AREA_OBSTRUCTED:       player.sendMessage(lang_portal_area_obstructed);       return null;
+			case PORTAL_AREA_OBSTRUCTED:       player.sendMessage(lang_portal_area_obstructed.clone());       return null;
 		}
 
 		if (boundary.intersects_existing_portal(this)) {
-			player.sendMessage(lang_intersects_existing_portal);
+			player.sendMessage(lang_intersects_existing_portal.clone());
 			return null;
 		}
 
@@ -182,7 +182,7 @@ public class PortalConstructor extends Listener<Portals> {
 		final var event = new PortalSelectBoundaryEvent(player, boundary);
 		get_module().getServer().getPluginManager().callEvent(event);
 		if (event.isCancelled()) {
-			player.sendMessage(lang_build_restricted);
+			player.sendMessage(lang_build_restricted.clone());
 			return null;
 		}
 
@@ -203,7 +203,7 @@ public class PortalConstructor extends Listener<Portals> {
 
 		// Check console distance
 		if (!can_link_console(test_boundary, console)) {
-			player.sendMessage(lang_console_too_far_away);
+			player.sendMessage(lang_console_too_far_away.clone());
 			return true;
 		}
 
@@ -222,7 +222,7 @@ public class PortalConstructor extends Listener<Portals> {
 
 		//	// Check console distance
 		//	if (!can_link_console(boundary, console)) {
-		//		player.sendMessage(lang_console_too_far_away);
+		//		player.sendMessage(lang_console_too_far_away.clone());
 		//		return ClickResult.ERROR;
 		//	}
 
@@ -243,7 +243,7 @@ public class PortalConstructor extends Listener<Portals> {
 		//			portal.getStyle().getStyle().create(portal, portalPortalBlock);
 		//	}
 
-		//	player.sendMessage(lang_created_and_linked);
+		//	player.sendMessage(lang_created_and_linked.clone());
 		//	return ClickResult.SUCCESS;
 		//}).open();
 

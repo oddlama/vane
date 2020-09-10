@@ -62,9 +62,9 @@ public class Vane extends Command<Core> {
 
 	private void generate_resource_pack(CommandSender sender) {
 		if (get_module().generate_resource_pack()) {
-			sender.sendMessage(lang_resource_pack_generate_success);
+			sender.sendMessage(lang_resource_pack_generate_success.clone());
 		} else {
-			sender.sendMessage(lang_resource_pack_generate_fail);
+			sender.sendMessage(lang_resource_pack_generate_fail.clone());
 		}
 	}
 }
