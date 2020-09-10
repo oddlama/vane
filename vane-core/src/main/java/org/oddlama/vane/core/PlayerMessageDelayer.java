@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.UUID;
+import java.lang.reflect.InvocationTargetException;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -12,14 +14,20 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerResourcePackStatusEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
-import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.event.player.PlayerJoinEvent;
+
+import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.events.ListenerPriority;
+import com.comphenix.protocol.events.PacketContainer;
+import com.comphenix.protocol.events.PacketAdapter;
+import com.comphenix.protocol.events.PacketEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerResourcePackStatusEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
+import org.oddlama.vane.packet.WrapperPlayServerChat;
 import org.oddlama.vane.annotation.config.ConfigBoolean;
 import org.oddlama.vane.annotation.config.ConfigString;
 import org.oddlama.vane.annotation.lang.LangMessage;
@@ -28,8 +36,8 @@ import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.module.Context;
 
 public class PlayerMessageDelayer extends Listener<Core> {
-	//private Adapter adapter;
-	private final Map<UUID, List<BaseComponent[]>> queued_messages = new HashMap<>();
+	private Adapter adapter;
+	private final Map<UUID, List<PacketContainer>> message_queues = new HashMap<>();
 
 	public PlayerMessageDelayer(Context<Core> context) {
 		super(context.group("message_delaying", "Enable delaying messages to players until their resource pack is fully loaded. This prevents display of untranslated chat messages."));
@@ -37,21 +45,21 @@ public class PlayerMessageDelayer extends Listener<Core> {
 
 	@Override
 	protected void on_enable() {
-		//adapter = new Adapter();
-		//get_module().protocol_manager.addPacketListener(adapter);
+		adapter = new Adapter();
+		get_module().protocol_manager.addPacketListener(adapter);
 	}
 
 	@Override
 	protected void on_disable() {
-		//get_module().protocol_manager.removePacketListener(adapter);
+		get_module().protocol_manager.removePacketListener(adapter);
 	}
 
 	private void start_queueing(UUID uuid) {
-		queued_messages.put(uuid, new ArrayList<BaseComponent[]>());
+		message_queues.put(uuid, new ArrayList<PacketContainer>());
 	}
 
-	private void stop_queueing(UUID uuid) {
-		queued_messages.remove(uuid);
+	private List<PacketContainer> stop_queueing(UUID uuid) {
+		return message_queues.remove(uuid);
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -81,50 +89,38 @@ public class PlayerMessageDelayer extends Listener<Core> {
 			return;
 		}
 
-		stop_queueing(event.getPlayer().getUniqueId());
-		// Send delayed messages, which would otherwise be messages would show
-		// TODO
+		// Send delayed messages, which would otherwise be displayed in untranslated form
+		// as the resource pack is only now fully loaded
+		final var player = event.getPlayer();
+		final var queue = stop_queueing(player.getUniqueId());
+		for (final var packet : queue) {
+			try {
+				get_module().protocol_manager.sendServerPacket(player, packet);
+			} catch (InvocationTargetException e) {
+				get_module().log.log(Level.WARNING, "Could not send queued message packet " + packet, e);
+			}
+		}
 	}
 
-//	public class Adapter extends PacketAdapter {
-//		public Adapter() {
-//			super(TabCompletionRestricter.this.get_module(), ListenerPriority.HIGHEST, new PacketType[] {PacketType.Play.Server.TAB_COMPLETE});
-//		}
-//
-//		@Override
-//		public void onPacketSending(final PacketEvent event) {
-//			if (event.getPacketType() != PacketType.Play.Server.TAB_COMPLETE) {
-//				return;
-//			}
-//
-//			final var packet = new WrapperPlayServerTabComplete(event.getPacket());
-//			final var suggestions = packet.getSuggestions();
-//			final var suggestion_list = suggestions.getList();
-//			if (suggestion_list.isEmpty() || !suggestion_list.get(0).getText().startsWith("/")) {
-//				return;
-//			}
-//
-//			final var player = event.getPlayer();
-//			final var allowed_completions = new ArrayList<String>();
-//			for (var command : TabCompletionRestricter.this.get_module().getServer().getCommandMap().getKnownCommands().values()) {
-//				if (command.testPermissionSilent(player)) {
-//					allowed_completions.addAll(command.getAliases());
-//					allowed_completions.add(command.getName());
-//				}
-//			}
-//
-//			/* filter existing completions based on allowed completions */
-//			final var new_suggestion_list = new ArrayList<Suggestion>();
-//			for (var suggestion : suggestion_list) {
-//				var completion = suggestion.getText();
-//				if (allowed_completions.contains(completion.substring(1, completion.length()))) {
-//					new_suggestion_list.add(suggestion);
-//				}
-//			}
-//
-//			suggestion_list.clear();
-//			suggestion_list.addAll(new_suggestion_list);
-//			packet.setSuggestions(suggestions);
-//		}
-//	}
+	public class Adapter extends PacketAdapter {
+		public Adapter() {
+			super(PlayerMessageDelayer.this.get_module(), ListenerPriority.HIGHEST, new PacketType[] {PacketType.Play.Server.CHAT});
+		}
+
+		@Override
+		public void onPacketSending(final PacketEvent event) {
+			if (event.getPacketType() != PacketType.Play.Server.CHAT) {
+				return;
+			}
+
+			final var queue = message_queues.get(event.getPlayer().getUniqueId());
+			if (queue == null) {
+				return;
+			}
+
+			final var packet = new WrapperPlayServerChat(event.getPacket());
+			queue.add(packet.getHandle().deepClone());
+			event.setCancelled(true);
+		}
+	}
 }

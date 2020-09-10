@@ -106,8 +106,8 @@ To install vane, begin by downloading and placing all desired module jars into t
 You are done! Enjoy playing!
 
 > [as of 1.16.2] Beware that the minecraft client currently has issues with webservers that serve resource packs via https and don't allow ssl3.
-> This protocol is considered insecure and therefore should NOT be used. To workaround this issue, you should host the file in a http context. This is not a security issue,
-> as the file will be verified via its sha1 sum by the client.
+> This protocol is considered insecure and therefore should NOT be used. To workaround this issue, you should host the file in a http context.
+> Using http is not a security issue, as the file will be verified via its sha1 sum by the client.
 
 Thats it!
 

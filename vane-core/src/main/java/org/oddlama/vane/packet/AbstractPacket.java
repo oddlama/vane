@@ -34,7 +34,7 @@ public abstract class AbstractPacket {
 
 	/**
 	 * Constructs a new strongly typed wrapper for the given packet.
-	 * 
+	 *
 	 * @param handle - handle to the raw packet data.
 	 * @param type - the packet type.
 	 */
@@ -51,7 +51,7 @@ public abstract class AbstractPacket {
 
 	/**
 	 * Retrieve a handle to the raw packet data.
-	 * 
+	 *
 	 * @return Raw packet data.
 	 */
 	public PacketContainer getHandle() {
@@ -60,7 +60,7 @@ public abstract class AbstractPacket {
 
 	/**
 	 * Send the current packet to the given receiver.
-	 * 
+	 *
 	 * @param receiver - the receiver.
 	 * @throws RuntimeException If the packet cannot be sent.
 	 */
@@ -82,7 +82,7 @@ public abstract class AbstractPacket {
 
 	/**
 	 * Simulate receiving the current packet from the given sender.
-	 * 
+	 *
 	 * @param sender - the sender.
 	 * @throws RuntimeException If the packet cannot be received.
 	 * @deprecated Misspelled. recieve to receive
@@ -100,7 +100,7 @@ public abstract class AbstractPacket {
 
 	/**
 	 * Simulate receiving the current packet from the given sender.
-	 * 
+	 *
 	 * @param sender - the sender.
 	 * @throws RuntimeException if the packet cannot be received.
 	 */
