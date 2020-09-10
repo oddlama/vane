@@ -20,7 +20,11 @@ public class TranslatedMessage {
 
 	public String key() { return key; }
 	public String str(Object... args) {
-		return String.format(default_translation, args);
+		try {
+			return String.format(default_translation, args);
+		} catch (Exception e) {
+			throw new RuntimeException("Error while formatting message '" + key() + "'", e);
+		}
 	}
 
 	public TranslatableComponent format(Object... args) {
@@ -38,7 +42,7 @@ public class TranslatedMessage {
 		final var component = format(args);
 		for (var player : module.getServer().getOnlinePlayers()) {
 			player.sendMessage(component);
-			module.log.warning(component.toString());
+			module.log.warning(net.md_5.bungee.chat.ComponentSerializer.toString(new BaseComponent[] {component }));
 		}
 		module.log.info("[broadcast] " + str(args));
 	}

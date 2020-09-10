@@ -38,7 +38,7 @@ public class ChatMessageFormatter extends Listener<Admin> {
 		event.setCancelled(true);
 
 		lang_player_chat_format.broadcast_server_players(color, event.getPlayer().getDisplayName(), CraftChatMessage.fromString(event.getMessage()));
-		lang_player_chat_format.send(null, color, event.getPlayer().getDisplayName(), event.getMessage());
+		System.out.println("[chat] " + lang_player_chat_format.format(color, event.getPlayer().getDisplayName(), event.getMessage()));
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)

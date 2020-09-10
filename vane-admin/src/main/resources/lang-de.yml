@@ -18,15 +18,15 @@ version: 1
 # language code (ISO 639) and the country code (ISO 3166).
 resource_pack_lang_code: 'de_de'
 
-player_chat_format: "%0$s%1$s§7:§r %2$s"
-player_join: "§6%0$s§e hat den Server betreten"
-player_kick: "§6%0$s§e wurde vom Server geworfen"
-player_quit: "§6%0$s§e hat den Server verlassen"
+player_chat_format: "%1$s%2$s§7:§r %3$s"
+player_join: "§6%1$s§e hat den Server betreten"
+player_kick: "§6%1$s§e wurde vom Server geworfen"
+player_quit: "§6%1$s§e hat den Server verlassen"
 
 autostop:
   aborted: "§7Autostop §dabgebrochen§7"
-  scheduled: "§dAutostop geplant in §b%0$s"
-  status: "§7Autostop in §b%0$s"
+  scheduled: "§dAutostop geplant in §b%1$s"
+  status: "§7Autostop in §b%1$s"
   status_not_scheduled: "§dAutostop nicht geplant"
   shutdown: "§dAutostop initiiert!"
 
@@ -41,7 +41,7 @@ hazard_protection:
   wither_spawn_prohibited: "§7Der Wither kann in dieser Welt nicht spawnen!"
 
 command_gamemode:
-  set: "§7Gamemode von §b%0$s§7 wurde auf §a%1$s§7 gesetzt."
+  set: "§7Gamemode von §b%1$s§7 wurde auf §a%2$s§7 gesetzt."
   usage: "%1$s §bgamemode §7[§bplayer§7]"
   description: "Setzt den Gamemode des aktuellen oder gegebenen Spielers."
   help: "Setzt den Gamemode des aktuellen oder gegebenen Spielers."

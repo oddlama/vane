@@ -33,7 +33,7 @@ public abstract class Command<T extends Module<T>> extends ModuleComponent<T> {
 
 		@Override
 		public String getUsage() {
-			return Command.this.lang_usage.str();
+			return Command.this.lang_usage.str("§7/§3" + name);
 		}
 
 		@Override

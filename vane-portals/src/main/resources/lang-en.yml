@@ -38,15 +38,15 @@ multiple_origins: "§cThe portal cannot have multiple origin blocks!"
 # This message is sent when the selected vertical portal boundary has no portal area above the origin block
 no_portal_block_above_origin: "§cThe origin block needs portal area above!"
 # This message is sent when the selected portal boundary is too large in a given direction.
-# %0$s: The direction (x,y,z)
-too_large: "§cThe portal is too large in %0$s direction!"
+# %1$s: The direction (x,y,z)
+too_large: "§cThe portal is too large in %1$s direction!"
 # This message is sent when the selected portal boundary is too small in a given direction.
-# %0$s: The direction (x,y,z)
-too_small_spawn: "§cThe spawn area is too small in %0$s direction!"
+# %1$s: The direction (x,y,z)
+too_small_spawn: "§cThe spawn area is too small in %1$s direction!"
 # This message is sent when the selected portal boundary contains too many portal area blocks.
-# %0$s: Current amount of blocks
-# %1$s: Maximum allowed amount of blocks
-too_many_portal_area_blocks: "§cThe portal area is too large! %0$s/%1$s blocks"
+# %1$s: Current amount of blocks
+# %2$s: Maximum allowed amount of blocks
+too_many_portal_area_blocks: "§cThe portal area is too large! %1$s/%2$s blocks"
 # This message is sent when a portal boundary is selected but
 # a part of the area is obstructed.
 portal_area_obstructed: "§cThe portal area is obstructed!"

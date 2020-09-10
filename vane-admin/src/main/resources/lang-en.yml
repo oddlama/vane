@@ -19,22 +19,22 @@ version: 1
 resource_pack_lang_code: 'en_us'
 
 # This is the format for player chat messages
-# %0$s: color tag based on permission level
-# %1$s: player name
-# %2$s: message
-player_chat_format: "%0$s%1$s§7:§r %2$s"
+# %1$s: color tag based on permission level
+# %2$s: player name
+# %3$s: message
+player_chat_format: "%1$s%2$s§7:§r %3$s"
 
 # This message is sent when a player joins the server
-# %0$s: player name
-player_join: "§6%0$s§e has joined the server"
+# %1$s: player name
+player_join: "§6%1$s§e has joined the server"
 
 # This message is sent when a player is kicked from the server
-# %0$s: player name
-player_kick: "§6%0$s§e was kicked from the server"
+# %1$s: player name
+player_kick: "§6%1$s§e was kicked from the server"
 
 # This message is sent when a player leaves the server
-# %0$s: player name
-player_quit: "§6%0$s§e has left the server"
+# %1$s: player name
+player_quit: "§6%1$s§e has left the server"
 
 autostop:
   # This message is sent when autostop is aborted, due to an administrative command
@@ -42,11 +42,11 @@ autostop:
   aborted: "§dAutostop aborted"
   # This message is sent when autostop is scheduled, due to an administrative command
   # or the last player leaving the server.
-  # %0$s: Time until stop
-  scheduled: "§dAutostop scheduled in §b%0$s"
+  # %1$s: Time until stop
+  scheduled: "§dAutostop scheduled in §b%1$s"
   # This message is sent when autostop status is requested and autostop is already scheduled.
-  # %0$s: Time until stop
-  status: "§7Autostop in §b%0$s"
+  # %1$s: Time until stop
+  status: "§7Autostop in §b%1$s"
   # This message is sent when autostop status is requested but autostop is not scheduled.
   status_not_scheduled: "§dAutostop not scheduled"
   # This message is sent when the actual autostop is performed.
@@ -61,14 +61,14 @@ autostop:
 
 hazard_protection:
   # This message is sent when the wither has been prevented from spawning in a non-whitelisted world
-  # %0$s: world name
+  # %1$s: world name
   wither_spawn_prohibited: "§7The wither may not spawn in this world!"
 
 command_gamemode:
   # This message is sent when the gamemode of a player is changed by the gamemode command.
-  # %0$s: Player name
-  # %1$s: Gamemode name
-  set: "§7Gamemode of §b%0$s§7 was set to §a%1$s"
+  # %1$s: Player name
+  # %2$s: Gamemode name
+  set: "§7Gamemode of §b%1$s§7 was set to §a%2$s"
   usage: "%1$s §bgamemode §7[§bplayer§7]"
   description: "§bgamemode §7[§bplayer§7]"
   help: "Sets the gamemode of a player."
