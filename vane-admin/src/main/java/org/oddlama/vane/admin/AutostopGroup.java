@@ -8,25 +8,28 @@ import org.bukkit.scheduler.BukkitTask;
 
 import org.oddlama.vane.annotation.config.ConfigLong;
 import org.oddlama.vane.annotation.lang.LangMessage;
+import org.oddlama.vane.core.lang.TranslatedMessage;
+import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.annotation.lang.LangString;
+import org.oddlama.vane.core.lang.TranslatedString;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.ModuleGroup;
-import org.oddlama.vane.util.Message;
+
 
 public class AutostopGroup extends ModuleGroup<Admin> {
 	@ConfigLong(def = 20 * 60, min = 0, desc = "Delay in seconds after which to stop the server.")
 	public long config_delay;
 
 	@LangString
-	public String lang_aborted;
+	public TranslatedString lang_aborted;
 	@LangMessage
-	public Message lang_scheduled;
+	public TranslatedMessage lang_scheduled;
 	@LangMessage
-	public Message lang_status;
+	public TranslatedMessage lang_status;
 	@LangString
-	public String lang_status_not_scheduled;
+	public TranslatedString lang_status_not_scheduled;
 	@LangString
-	public String lang_shutdown;
+	public TranslatedString lang_shutdown;
 
 	// Variables
 	public BukkitTask task = null;

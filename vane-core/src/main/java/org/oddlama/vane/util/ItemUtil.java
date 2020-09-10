@@ -49,11 +49,7 @@ public class ItemUtil {
 		return meta.getDisplayName();
 	}
 
-	public static ItemStack translate_item(final ItemStack item, final String translation_key_name, final String translation_key_lore) {
-		final var name = new TranslatableComponent(translation_key_name);
-		name.setItalic(false);
-		final var lore = new TranslatableComponent(translation_key_lore);
-		name.setItalic(false);
+	public static ItemStack name_item(final ItemStack item, final BaseComponent name, final BaseComponent lore) {
 		return name_item(item, new BaseComponent[] { name }, Arrays.<BaseComponent[]>asList(new BaseComponent[] { lore }));
 	}
 

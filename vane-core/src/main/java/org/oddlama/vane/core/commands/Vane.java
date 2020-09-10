@@ -4,24 +4,26 @@ import org.bukkit.command.CommandSender;
 
 import org.oddlama.vane.annotation.command.Name;
 import org.oddlama.vane.annotation.lang.LangMessage;
+import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.annotation.lang.LangString;
+import org.oddlama.vane.core.lang.TranslatedString;
 import org.oddlama.vane.core.Core;
 import org.oddlama.vane.core.command.Command;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.Module;
-import org.oddlama.vane.util.Message;
+
 
 @Name("vane")
 public class Vane extends Command<Core> {
 	@LangMessage
-	private Message lang_reload_success;
+	private TranslatedMessage lang_reload_success;
 	@LangMessage
-	private Message lang_reload_fail;
+	private TranslatedMessage lang_reload_fail;
 
 	@LangString
-	private String lang_resource_pack_generate_success;
+	private TranslatedString lang_resource_pack_generate_success;
 	@LangString
-	private String lang_resource_pack_generate_fail;
+	private TranslatedString lang_resource_pack_generate_fail;
 
 	private void test(final org.bukkit.entity.Player player) {
 		org.oddlama.vane.core.menu.MenuFactory.item_chooser(get_module(), player, "TAITLE", new org.bukkit.inventory.ItemStack(org.bukkit.Material.ENDER_PEARL), true,

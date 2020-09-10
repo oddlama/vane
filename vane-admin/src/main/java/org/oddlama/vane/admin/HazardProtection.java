@@ -26,9 +26,11 @@ import org.bukkit.util.Vector;
 import org.oddlama.vane.annotation.config.ConfigBoolean;
 import org.oddlama.vane.annotation.config.ConfigStringList;
 import org.oddlama.vane.annotation.lang.LangMessage;
+import org.oddlama.vane.core.lang.TranslatedMessage;
+import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.module.Context;
-import org.oddlama.vane.util.Message;
+
 
 public class HazardProtection extends Listener<Admin> {
 	private WorldRebuild world_rebuild;
@@ -49,7 +51,7 @@ public class HazardProtection extends Listener<Admin> {
 	private boolean config_disable_lightning_fire;
 
 	@LangMessage
-	private Message lang_wither_spawn_prohibited;
+	private TranslatedMessage lang_wither_spawn_prohibited;
 
 	public HazardProtection(Context<Admin> context) {
 		super(context.group("hazard_protection", "Enable hazard protection. The options below allow more fine-grained control over the hazards to protect from."));

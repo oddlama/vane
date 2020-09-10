@@ -1,6 +1,6 @@
 package org.oddlama.vane.core.menu;
 
-import static org.oddlama.vane.util.ItemUtil.translate_item;
+import static org.oddlama.vane.util.ItemUtil.name_item;
 import static org.oddlama.vane.util.ItemUtil.name_of;
 
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -70,7 +70,7 @@ public class MenuFactory {
 	public static Menu item_chooser(final Context<?> context, final Player player, final String title, @Nullable final ItemStack initial_item, boolean allow_nothing, final Consumer2<Player, ItemStack> on_confirm, final Consumer1<Player> on_cancel, final Function1<ItemStack, ItemStack> on_select_item) {
 		final Function1<ItemStack, ItemStack> set_item_name = (item) -> {
 			// TODO big nope. have the default no_item defined properly as config. Use the proper methods of that thing.
-			return translate_item(item, "vane.menu.item_chooser.selected.name", "vane.menu.item_chooser.selected.desc");
+			return name_item(item, "vane.menu.item_chooser.selected.name", "vane.menu.item_chooser.selected.desc");
 		};
 
 		final var no_item = set_item_name.apply(new ItemStack(Material.BARRIER));

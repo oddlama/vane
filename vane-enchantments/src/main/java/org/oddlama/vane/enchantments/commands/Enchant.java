@@ -8,19 +8,20 @@ import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 
 import org.oddlama.vane.annotation.command.Name;
 import org.oddlama.vane.annotation.lang.LangMessage;
+import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.command.Command;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.enchantments.Enchantments;
-import org.oddlama.vane.util.Message;
+
 
 @Name("enchant")
 public class Enchant extends Command<Enchantments> {
 	@LangMessage
-	private Message lang_level_too_low;
+	private TranslatedMessage lang_level_too_low;
 	@LangMessage
-	private Message lang_level_too_high;
+	private TranslatedMessage lang_level_too_high;
 	@LangMessage
-	private Message lang_invalid_enchantment;
+	private TranslatedMessage lang_invalid_enchantment;
 
 	public Enchant(Context<Enchantments> context) {
 		super(context);

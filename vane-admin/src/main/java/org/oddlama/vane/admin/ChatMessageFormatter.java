@@ -8,20 +8,22 @@ import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import org.oddlama.vane.annotation.lang.LangMessage;
+import org.oddlama.vane.core.lang.TranslatedMessage;
+import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.module.Context;
-import org.oddlama.vane.util.Message;
+
 
 public class ChatMessageFormatter extends Listener<Admin> {
 	// Language
 	@LangMessage
-	private Message lang_player_chat_format;
+	private TranslatedMessage lang_player_chat_format;
 	@LangMessage
-	private Message lang_player_join;
+	private TranslatedMessage lang_player_join;
 	@LangMessage
-	private Message lang_player_kick;
+	private TranslatedMessage lang_player_kick;
 	@LangMessage
-	private Message lang_player_quit;
+	private TranslatedMessage lang_player_quit;
 
 	public ChatMessageFormatter(Context<Admin> context) {
 		super(context);

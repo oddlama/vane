@@ -1,6 +1,5 @@
 package org.oddlama.vane.core.config;
 
-import static org.oddlama.vane.util.ItemUtil.translate_item;
 import static org.oddlama.vane.util.MaterialUtil.material_from;
 import static org.oddlama.vane.util.Util.namespaced_key;
 

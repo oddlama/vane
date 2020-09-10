@@ -62,11 +62,13 @@ import org.bukkit.permissions.PermissionDefault;
 import org.oddlama.vane.annotation.VaneModule;
 import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.annotation.lang.LangString;
+import org.oddlama.vane.core.lang.TranslatedString;
 import org.oddlama.vane.annotation.lang.LangMessage;
+import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.annotation.config.ConfigInt;
 import org.oddlama.vane.annotation.config.ConfigMaterial;
 import org.oddlama.vane.core.Listener;
-import org.oddlama.vane.util.Message;
+
 
 public class PortalConstructor extends Listener<Portals> {
 	// TODO test flint and steel to ignite a nether portal. this should be cancelled.
@@ -92,25 +94,25 @@ public class PortalConstructor extends Listener<Portals> {
 	@ConfigInt(def = 64, min = 8, desc = "Maximum total amount of portal area blocks.")
 	public int config_area_max_blocks = 64;
 
-	@LangString public String lang_select_boundary_now;
-	@LangString public String lang_console_too_far_away;
-	@LangString public String lang_created_and_linked;
-	@LangString public String lang_console_linked;
+	@LangString public TranslatedString lang_select_boundary_now;
+	@LangString public TranslatedString lang_console_too_far_away;
+	@LangString public TranslatedString lang_created_and_linked;
+	@LangString public TranslatedString lang_console_linked;
 
-	@LangString public String lang_no_boundary_found;
-	@LangString public String lang_no_origin;
-	@LangString public String lang_multiple_origins;
-	@LangString public String lang_no_portal_block_above_origin;
-	@LangMessage public Message lang_too_large;
-	@LangMessage public Message lang_too_small_spawn;
-	@LangMessage public Message lang_too_many_portal_area_blocks;
-	@LangString public String lang_portal_area_obstructed;
-	@LangString public String lang_build_restricted;
-	@LangString public String lang_intersects_existing_portal;
+	@LangString public TranslatedString lang_no_boundary_found;
+	@LangString public TranslatedString lang_no_origin;
+	@LangString public TranslatedString lang_multiple_origins;
+	@LangString public TranslatedString lang_no_portal_block_above_origin;
+	@LangMessage public TranslatedMessage lang_too_large;
+	@LangMessage public TranslatedMessage lang_too_small_spawn;
+	@LangMessage public TranslatedMessage lang_too_many_portal_area_blocks;
+	@LangString public TranslatedString lang_portal_area_obstructed;
+	@LangString public TranslatedString lang_build_restricted;
+	@LangString public TranslatedString lang_intersects_existing_portal;
 
-	@LangString public String lang_target_already_connected;
-	@LangString public String lang_source_use_restricted;
-	@LangString public String lang_target_use_restricted;
+	@LangString public TranslatedString lang_target_already_connected;
+	@LangString public TranslatedString lang_source_use_restricted;
+	@LangString public TranslatedString lang_target_use_restricted;
 
 	private HashMap<UUID, Block> pending_console = new HashMap<>();
 

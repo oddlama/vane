@@ -27,9 +27,11 @@ import org.bukkit.util.Vector;
 import org.oddlama.vane.annotation.config.ConfigLong;
 import org.oddlama.vane.annotation.config.ConfigDouble;
 import org.oddlama.vane.annotation.lang.LangMessage;
+import org.oddlama.vane.core.lang.TranslatedMessage;
+import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.module.Context;
-import org.oddlama.vane.util.Message;
+
 
 public class WorldRebuild extends Listener<Admin> {
 	@ConfigLong(def = 2000, min = 0, desc = "Delay in milliseconds until the world will be rebuilt.")

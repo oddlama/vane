@@ -15,6 +15,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 
 import org.oddlama.vane.annotation.lang.LangString;
+import org.oddlama.vane.core.lang.TranslatedString;
 import org.oddlama.vane.core.ResourcePackGenerator;
 import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.core.module.ModuleComponent;

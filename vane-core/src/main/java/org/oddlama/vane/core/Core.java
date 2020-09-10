@@ -25,10 +25,12 @@ import org.bukkit.permissions.PermissionDefault;
 import org.oddlama.vane.core.menu.MenuManager;
 import org.oddlama.vane.annotation.VaneModule;
 import org.oddlama.vane.annotation.lang.LangMessage;
+import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.annotation.lang.LangString;
+import org.oddlama.vane.core.lang.TranslatedString;
 import org.oddlama.vane.core.item.CustomItem;
 import org.oddlama.vane.core.module.Module;
-import org.oddlama.vane.util.Message;
+
 
 @VaneModule(name = "core", bstats = 8637, config_version = 1, lang_version = 1, storage_version = 1)
 public class Core extends Module<Core> {
@@ -47,12 +49,12 @@ public class Core extends Module<Core> {
 	}
 
 	@LangString
-	public String lang_command_not_a_player;
+	public TranslatedString lang_command_not_a_player;
 	@LangString
-	public String lang_command_permission_denied;
+	public TranslatedString lang_command_permission_denied;
 
 	@LangMessage
-	public Message lang_invalid_time_format;
+	public TranslatedMessage lang_invalid_time_format;
 
 	// Module registry
 	private SortedSet<Module<?>> vane_modules = new TreeSet<>((a, b) -> a.get_name().compareTo(b.get_name()));

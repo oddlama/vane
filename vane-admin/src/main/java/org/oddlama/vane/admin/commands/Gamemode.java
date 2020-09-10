@@ -8,15 +8,17 @@ import org.oddlama.vane.admin.Admin;
 import org.oddlama.vane.annotation.command.Aliases;
 import org.oddlama.vane.annotation.command.Name;
 import org.oddlama.vane.annotation.lang.LangMessage;
+import org.oddlama.vane.core.lang.TranslatedMessage;
+import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.command.Command;
 import org.oddlama.vane.core.module.Context;
-import org.oddlama.vane.util.Message;
+
 
 @Name("gamemode")
 @Aliases({"gm"})
 public class Gamemode extends Command<Admin> {
 	@LangMessage
-	private Message lang_set;
+	private TranslatedMessage lang_set;
 
 	public Gamemode(Context<Admin> context) {
 		super(context);

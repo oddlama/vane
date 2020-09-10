@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import org.oddlama.vane.annotation.enchantment.Rarity;
 import org.oddlama.vane.annotation.enchantment.VaneEnchantment;
 import org.oddlama.vane.annotation.lang.LangString;
-import org.oddlama.vane.annotation.lang.ResourcePackTranslation;
+import org.oddlama.vane.core.lang.TranslatedString;
 import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.Module;
@@ -41,8 +41,7 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 
 	// Language
 	@LangString
-	@ResourcePackTranslation(namespace = "vane") // key is set by #lang_name_translation_key()
-	public String lang_name;
+	public TranslatedString lang_name;
 
 	public CustomEnchantment(Context<T> context) {
 		super(null);
@@ -74,10 +73,6 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 	 * May be overridden to reigster superseding enchantments.
 	 */
 	public void register_superseding() { }
-
-	public final String lang_name_translation_key() {
-		return native_wrapper.g();
-	}
 
 	/**
 	 * Calls register_superseding() on all custom enchantment instances.
@@ -167,7 +162,7 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 	 * uses clientside translation keys and supports chat formatting.
 	 */
 	public BaseComponent display_name(int level) {
-        final var display_name = new TranslatableComponent(native_wrapper.g());
+        final var display_name = lang_name.clone();
 		display_name.setItalic(false);
 		apply_display_format(display_name);
 

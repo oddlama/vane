@@ -6,9 +6,10 @@ import java.util.function.Function;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import org.oddlama.vane.annotation.lang.LangString;
+import org.oddlama.vane.core.lang.TranslatedString;
 import org.oddlama.vane.core.YamlLoadException;
 
-public class LangStringField extends LangField<String> {
+public class LangStringField extends LangField<TranslatedString> {
 	public LangString annotation;
 
 	public LangStringField(Object owner, Field field, Function<String, String> map_name, LangString annotation) {

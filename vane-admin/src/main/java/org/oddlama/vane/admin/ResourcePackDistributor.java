@@ -10,6 +10,7 @@ import org.bukkit.permissions.PermissionDefault;
 import org.oddlama.vane.annotation.config.ConfigBoolean;
 import org.oddlama.vane.annotation.config.ConfigString;
 import org.oddlama.vane.annotation.lang.LangString;
+import org.oddlama.vane.core.lang.TranslatedString;
 import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.module.Context;
 
@@ -22,9 +23,9 @@ public class ResourcePackDistributor extends Listener<Admin> {
 	public boolean config_force;
 
 	@LangString
-	public String lang_declined;
+	public TranslatedString lang_declined;
 	@LangString
-	public String lang_download_failed;
+	public TranslatedString lang_download_failed;
 
 	// The permission to bypass the resource pack
 	private Permission bypass_permission;

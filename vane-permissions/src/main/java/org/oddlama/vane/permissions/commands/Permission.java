@@ -11,26 +11,27 @@ import org.oddlama.vane.annotation.command.Aliases;
 import org.oddlama.vane.annotation.command.Name;
 import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.annotation.lang.LangString;
+import org.oddlama.vane.core.lang.TranslatedString;
 import org.oddlama.vane.core.command.Command;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.permissions.Permissions;
-import org.oddlama.vane.util.Message;
+
 
 @Name("permission")
 @Aliases({"perm"})
 public class Permission extends Command<Permissions> {
-	@LangString  private String  lang_list_header_groups;
-	@LangString  private String  lang_list_header_permissions;
-	@LangMessage private Message lang_list_header_player_groups;
-	@LangMessage private Message lang_list_header_player_permissions;
-	@LangMessage private Message lang_list_header_group_permissions;
-	@LangString  private String  lang_list_player_offline;
-	@LangMessage private Message lang_list_group;
-	@LangMessage private Message lang_list_permission;
-	@LangMessage private Message lang_group_assigned;
-	@LangMessage private Message lang_group_removed;
-	@LangMessage private Message lang_group_already_assigned;
-	@LangMessage private Message lang_group_not_assigned;
+	@LangString  private TranslatedString  lang_list_header_groups;
+	@LangString  private TranslatedString  lang_list_header_permissions;
+	@LangMessage private TranslatedMessage lang_list_header_player_groups;
+	@LangMessage private TranslatedMessage lang_list_header_player_permissions;
+	@LangMessage private TranslatedMessage lang_list_header_group_permissions;
+	@LangString  private TranslatedString  lang_list_player_offline;
+	@LangMessage private TranslatedMessage lang_list_group;
+	@LangMessage private TranslatedMessage lang_list_permission;
+	@LangMessage private TranslatedMessage lang_group_assigned;
+	@LangMessage private TranslatedMessage lang_group_removed;
+	@LangMessage private TranslatedMessage lang_group_already_assigned;
+	@LangMessage private TranslatedMessage lang_group_not_assigned;
 
 	public Permission(Context<Permissions> context) {
 		super(context);

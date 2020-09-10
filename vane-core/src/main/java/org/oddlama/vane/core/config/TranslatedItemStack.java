@@ -1,6 +1,5 @@
 package org.oddlama.vane.core.config;
 
-import static org.oddlama.vane.util.ItemUtil.translate_item;
 import static org.oddlama.vane.util.MaterialUtil.material_from;
 import static org.oddlama.vane.util.Util.namespaced_key;
 
@@ -22,7 +21,7 @@ import org.oddlama.vane.core.module.ModuleComponent;
 import org.oddlama.vane.annotation.config.ConfigInt;
 import org.oddlama.vane.annotation.config.ConfigMaterial;
 import org.oddlama.vane.annotation.lang.LangString;
-import org.oddlama.vane.annotation.lang.ResourcePackTranslation;
+import org.oddlama.vane.core.lang.TranslatedString;
 import org.oddlama.vane.annotation.config.ConfigItemStack;
 import org.oddlama.vane.annotation.config.ConfigItemStackDef;
 import org.oddlama.vane.core.YamlLoadException;
@@ -38,10 +37,10 @@ public class TranslatedItemStack<T extends Module<T>> extends ModuleComponent<T>
 	public int config_amount;
 
 	@LangString
-	public String lang_name;
+	public TranslatedString lang_name;
 
 	@LangString
-	public String lang_lore;
+	public TranslatedString lang_lore;
 
 	public TranslatedItemStack(Context<T> context, Material def_material, int def_amount, String desc) {
 		super(null);
@@ -49,7 +48,7 @@ public class TranslatedItemStack<T extends Module<T>> extends ModuleComponent<T>
 
 	public ItemStack item() {
 		return new ItemStack(config_material, config_amount);
-		// TODO return translate_item(new ItemStack(config_material, config_amount), "item." + lang_name_translation_namespace() + "." + lang_name_translation_key());
+		// TODO return name_item(new ItemStack(config_material, config_amount), lang_name, lang_lore);
 	}
 
 	@Override
