@@ -55,10 +55,12 @@ public class PlayerMessageDelayer extends Listener<Core> {
 	}
 
 	private void start_queueing(UUID uuid) {
+		System.out.println("begin queueing messages for player " + uuid);
 		message_queues.put(uuid, new ArrayList<PacketContainer>());
 	}
 
 	private List<PacketContainer> stop_queueing(UUID uuid) {
+		System.out.println("stop queueing messages for player " + uuid);
 		return message_queues.remove(uuid);
 	}
 
@@ -95,6 +97,7 @@ public class PlayerMessageDelayer extends Listener<Core> {
 		final var queue = stop_queueing(player.getUniqueId());
 		for (final var packet : queue) {
 			try {
+				System.out.println("relay packet " + packet);
 				get_module().protocol_manager.sendServerPacket(player, packet);
 			} catch (InvocationTargetException e) {
 				get_module().log.log(Level.WARNING, "Could not send queued message packet " + packet, e);
@@ -109,6 +112,7 @@ public class PlayerMessageDelayer extends Listener<Core> {
 
 		@Override
 		public void onPacketSending(final PacketEvent event) {
+			System.out.println("onPacketSending " + event.getPacketType());
 			if (event.getPacketType() != PacketType.Play.Server.CHAT) {
 				return;
 			}

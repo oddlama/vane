@@ -119,7 +119,20 @@ to `libs/`. This is required so the compiler can find minecraft-native symbols.
 
 1. Copy `cache/patched_{version}.jar` from a paper server to `libs/` (create folder if necessary).
 2. Execute `./gradlew build`
-3. Resulting jar files will be in `target/'.
+3. Resulting jar files will be in `target/`.
+
+### FAQ
+
+**Q: Can I run vane alongside other plugins?**
+
+A: Yes, for the most part. Almost all 3rd party plugins should work without any issues. Where you might begin
+to see problems is when the other plugin also makes use of a custom resource pack,
+especially if it also modifies items and/or uses the `custom_model_data` tag in incompatible ways.
+
+In the best case you can simply merge merge both resource packs before serving it.
+The worst case would be an incompatibility caused e.g. by the other plugin's registered listeners.
+Vane always tries to be as conservative as possible regarding these things and shouldn't cause
+issues in other plugins, but badly written 3rd-party plugins could theoretically break logic in vane.
 
 ### 3rd-party software
 
