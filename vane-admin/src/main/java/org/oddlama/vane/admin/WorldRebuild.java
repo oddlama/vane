@@ -5,6 +5,7 @@ import static org.oddlama.vane.util.Nms.set_air_no_drops;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import static org.oddlama.vane.util.Util.ms_to_ticks;
 
 import org.bukkit.Material;
 import org.bukkit.SoundCategory;
@@ -21,9 +22,9 @@ import org.oddlama.vane.core.module.Context;
 public class WorldRebuild extends Listener<Admin> {
 	@ConfigLong(def = 2000, min = 0, desc = "Delay in milliseconds until the world will be rebuilt.")
 	private long config_delay;
-	@ConfigDouble(def = 1.5, min = 1.0, desc = "Rebuild speed gain factor. The delay until the next block will be: current_delay / speed_gain.")
-	private double config_speed_gain;
-	@ConfigLong(def = 50, min = 0, desc = "Minimum delay in milliseconds between rebuilding two blocks. Anything <= 50 milliseconds will be one tick.")
+	@ConfigDouble(def = 0.175, min = 0.0, desc = "Determines rebuild speed. Higher falloff means faster transition to quicker rebuild. After n blocks, the delay until the next block will be d_n = delay * exp(-x * delay_falloff). For example 0.0 will result in same delay for every block.")
+	private double config_delay_falloff;
+	@ConfigLong(def = 50, min = 50, desc = "Minimum delay in milliseconds between rebuilding two blocks. Anything <= 50 milliseconds will be one tick.")
 	private long config_min_delay;
 
 	public WorldRebuild(Context<Admin> context) {
@@ -60,7 +61,7 @@ public class WorldRebuild extends Listener<Admin> {
 	public class Rebuilder implements Runnable {
 		private List<BlockState> states;
 		private BukkitTask task = null;
-		private long delay = 0;
+		private long amount_rebuild = 0;
 
 		public Rebuilder(final List<BlockState> _states) {
 			this.states = _states;
@@ -82,8 +83,7 @@ public class WorldRebuild extends Listener<Admin> {
 			this.states.sort(new RebuildComparator(center));
 
 			// Initialize delay
-			delay = config_delay;
-			task = get_module().schedule_task(this, delay / 50);
+			task = get_module().schedule_task(this, ms_to_ticks(config_delay));
 		}
 
 		private void finish() {
@@ -97,6 +97,7 @@ public class WorldRebuild extends Listener<Admin> {
 
 		private void rebuild_block(final BlockState state) {
 			final var block = state.getBlock();
+			++amount_rebuild;
 
 			// Break any block that isn't air first
 			if (block.getType() != Material.AIR) {
@@ -133,8 +134,8 @@ public class WorldRebuild extends Listener<Admin> {
 				rebuild_next_block();
 
 				// Adjust delay
-				delay = Math.max(config_min_delay, (int)(delay / config_speed_gain));
-				WorldRebuild.this.get_module().schedule_task(this, delay / 50);
+				final var delay = ms_to_ticks(Math.max(config_min_delay, (int)(config_delay * Math.exp(-amount_rebuild * config_delay_falloff))));
+				WorldRebuild.this.get_module().schedule_task(this, delay);
 			}
 		}
 	}
