@@ -19,6 +19,7 @@ import java.util.UUID;
 import java.util.function.Function;
 
 import org.bukkit.Bukkit;
+import org.bukkit.block.Block;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -68,6 +69,25 @@ public class PersistentSerializer {
 		final var pitch    = from_json(float.class, json.get("pitch"));
 		final var yaw      = from_json(float.class, json.get("yaw"));
 		return new Location(Bukkit.getWorld(world_id), x, y, z, yaw, pitch);
+	}
+
+	private static Object serialize_block(@NotNull final Object o) throws IOException {
+		final var block = (Block)o;
+		final var json = new JSONObject();
+		json.put("world_id", to_json(UUID.class, block.getWorld().getUID()));
+		json.put("x",        to_json(int.class,  block.getX()));
+		json.put("y",        to_json(int.class,  block.getY()));
+		json.put("z",        to_json(int.class,  block.getZ()));
+		return json;
+	}
+
+	private static Block deserialize_block(@NotNull final Object o) throws IOException {
+		final var json = (JSONObject)o;
+		final var world_id = from_json(UUID.class, json.get("world_id"));
+		final var x        = (int)from_json(int.class, json.get("x"));
+		final var y        = (int)from_json(int.class, json.get("y"));
+		final var z        = (int)from_json(int.class, json.get("z"));
+		return Bukkit.getWorld(world_id).getBlockAt(x, y, z);
 	}
 
 	private static Object serialize_material(@NotNull final Object o) throws IOException {
@@ -129,12 +149,14 @@ public class PersistentSerializer {
 		// Bukkit types
 		serializers.put(NamespacedKey.class,   PersistentSerializer::serialize_namespaced_key);
 		deserializers.put(NamespacedKey.class, PersistentSerializer::deserialize_namespaced_key);
-		serializers.put(Location.class,   PersistentSerializer::serialize_location);
-		deserializers.put(Location.class, PersistentSerializer::deserialize_location);
-		serializers.put(Material.class,   PersistentSerializer::serialize_material);
-		deserializers.put(Material.class, PersistentSerializer::deserialize_material);
-		serializers.put(ItemStack.class,   PersistentSerializer::serialize_item_stack);
-		deserializers.put(ItemStack.class, PersistentSerializer::deserialize_item_stack);
+		serializers.put(Location.class,        PersistentSerializer::serialize_location);
+		deserializers.put(Location.class,      PersistentSerializer::deserialize_location);
+		serializers.put(Block.class,           PersistentSerializer::serialize_block);
+		deserializers.put(Block.class,         PersistentSerializer::deserialize_block);
+		serializers.put(Material.class,        PersistentSerializer::serialize_material);
+		deserializers.put(Material.class,      PersistentSerializer::deserialize_material);
+		serializers.put(ItemStack.class,       PersistentSerializer::serialize_item_stack);
+		deserializers.put(ItemStack.class,     PersistentSerializer::deserialize_item_stack);
 	}
 
 	public static Object to_json(final Field field, final Object value) throws IOException {

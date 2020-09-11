@@ -263,7 +263,7 @@ public class PortalBoundary {
 		var air = start_air;
 		while (true) {
 			air = air.getRelative(-mod_x, 0, -mod_z);
-			if (air.getType() != Material.AIR) {
+			if (air.getType() != portal_constructor.config_material_portal_area) {
 				break;
 			}
 
@@ -273,12 +273,13 @@ public class PortalBoundary {
 			}
 
 			Block above1 = air.getRelative(0, 1, 0);
-			if (above1.getType() != Material.AIR) {
+			if (above1.getType() != portal_constructor.config_material_portal_area) {
 				break;
 			}
 
 			Block above2 = air.getRelative(0, 2, 0);
-			if (above2.getType() != Material.AIR) {
+			// TODO allow 1x3 portals with small spawn.
+			if (above2.getType() != portal_constructor.config_material_portal_area) {
 				break;
 			}
 
@@ -385,7 +386,7 @@ public class PortalBoundary {
 
 		// Check area obstruction
 		for (final var block : boundary.portal_area_blocks) {
-			if (block.getType() != Material.AIR) {
+			if (block.getType() != portal_constructor.config_material_portal_area) {
 				boundary.error_state = ErrorState.PORTAL_AREA_OBSTRUCTED;
 				return boundary;
 			}

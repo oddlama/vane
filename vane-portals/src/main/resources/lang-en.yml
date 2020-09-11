@@ -24,8 +24,8 @@ select_boundary_now: "§6Click the portal boundary now"
 # This message is sent when the selected portal boundary is too far away from
 # the console block.
 console_too_far_away: "§cThe console is too far away from the portal"
-# This message is sent when the portal has been created successfully.
-created_and_linked: "§aPortal created"
+# This message is sent when the portal has been constructed successfully.
+constructed_successfully: "§aPortal created"
 # This message is sent when a console has successfully been linked.
 console_linked: "§aConsole linked"
 
@@ -61,3 +61,5 @@ target_already_connected: "§6The target portal is already connected to another 
 source_use_restricted: "§cYou have no permission to use this portal!"
 # This message is sent when a portal is activated, but the player has no permission to use the target portal.
 target_use_restricted: "§cYou have no permission to use the target portal!"
+
+menu_title_enter_portal_name: "TODO title"

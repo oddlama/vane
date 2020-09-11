@@ -23,12 +23,14 @@ public class Portal {
 		final var portal = (Portal)o;
 		final var json = new JSONObject();
 		json.put("id",            to_json(UUID.class,          portal.id));
-		json.put("name",          to_json(String.class,        portal.name));
 		json.put("orientation",   to_json(Orientation.class,   portal.orientation));
-		json.put("style",         to_json(NamespacedKey.class, portal.style));
 		json.put("spawn",         to_json(Location.class,      portal.spawn));
+
+		json.put("name",          to_json(String.class,        portal.name));
+		json.put("style",         to_json(NamespacedKey.class, portal.style));
 		json.put("icon",          to_json(ItemStack.class,     portal.icon));
 		json.put("visibility",    to_json(Visibility.class,    portal.visibility));
+
 		json.put("target_id",     to_json(UUID.class,          portal.target_id));
 		json.put("target_locked", to_json(boolean.class,       portal.target_locked));
 		return json;
@@ -38,12 +40,14 @@ public class Portal {
 		final var json = (JSONObject)o;
 		final var portal = new Portal();
 		portal.id            = from_json(UUID.class,          json.get("id"));
-		portal.name          = from_json(String.class,        json.get("name"));
 		portal.orientation   = from_json(Orientation.class,   json.get("orientation"));
-		portal.style         = from_json(NamespacedKey.class, json.get("style"));
 		portal.spawn         = from_json(Location.class,      json.get("spawn"));
+
+		portal.name          = from_json(String.class,        json.get("name"));
+		portal.style         = from_json(NamespacedKey.class, json.get("style"));
 		portal.icon          = from_json(ItemStack.class,     json.get("icon"));
 		portal.visibility    = from_json(Visibility.class,    json.get("visibility"));
+
 		portal.target_id     = from_json(UUID.class,          json.get("target_id"));
 		portal.target_locked = from_json(boolean.class,       json.get("target_locked"));
 		return portal;
@@ -56,17 +60,23 @@ public class Portal {
 	}
 
 	private UUID id;
-	private String name;
 	private Orientation orientation;
-	private NamespacedKey style;
 	private Location spawn;
-	private ItemStack icon;
-	private Visibility visibility;
 
-	private UUID target_id;
-	private boolean target_locked;
+	private String name = "Portal";
+	private NamespacedKey style = Style.default_style().key();
+	private ItemStack icon = null;
+	private Visibility visibility = Visibility.PRIVATE;
 
-	private Portal() {
+	private UUID target_id = null;
+	private boolean target_locked = false;
+
+	private Portal() {}
+
+	public Portal(final Orientation orientation, final Location spawn) {
+		this.id = UUID.randomUUID();
+		this.orientation = orientation;
+		this.spawn = spawn.clone();
 	}
 
 	public boolean activate(@Nullable final Player player) {
@@ -91,13 +101,8 @@ public class Portal {
 		return true;
 	}
 
-	public PortalBlock block(final Block block) {
-		// TODO
-		return null;
-	}
-
-	public boolean open_console(final Player player, final Block console_block) {
-		final var console = block(console_block);
+	public boolean open_console(final Portals portals, final Player player, final Block console_block) {
+		final var console = portals.portal_block_for(console_block);
 		if (console == null || console.type() != PortalBlock.Type.CONSOLE) {
 			return false;
 		}
@@ -114,13 +119,17 @@ public class Portal {
 		return null;
 	}
 
-	public Orientation orientation() {
-		return orientation;
-	}
-
-	public Location spawn() {
-		return spawn;
-	}
+	public UUID id() { return id; }
+	public Orientation orientation() { return orientation; }
+	public Location spawn() { return spawn.clone(); }
+	public String name() { return name; }
+	public void name(String name) { this.name = name; }
+	public ItemStack icon() { return icon.clone(); }
+	public void icon(ItemStack icon) { this.icon = icon; }
+	public Visibility visibility() { return visibility; }
+	public void visibility(Visibility visibility) { this.visibility = visibility; }
+	public UUID target_id() { return target_id; }
+	public boolean target_locked() { return target_locked; }
 
 	@Override
 	public String toString() {

@@ -29,12 +29,12 @@ public class Portals extends Module<Portals> {
 	//@ConfigMaterialMapMapMap(name = "styles")
 	//public Map<String, Map<String, Map<String, Material>>> config_styles;
 
+	// Primary storage for all portals (portal_id → portal)
 	@Persistent
-	public Map<Long, Map<Long, PortalBlock>> storage_portal_blocks_in_chunk = new HashMap<>();
+	private Map<UUID, Portal> storage_portals = new HashMap<>();
+	// Primary storage for all portal blocks (world_id → chunk key → block key → portal block)
 	@Persistent
-	public Map<Long, List<UUID>> storage_portals_in_chunk = new HashMap<>();
-	@Persistent
-	public Map<UUID, Portal> storage_portals = new HashMap<>();
+	private Map<UUID, Map<Long, Map<Long, PortalBlock>>> storage_portal_blocks_in_chunk_in_world = new HashMap<>();
 
 	// All loaded styles
 	public Map<NamespacedKey, Style> styles = new HashMap<>();
@@ -66,9 +66,38 @@ public class Portals extends Module<Portals> {
 		portal_boundary_materials.add(Material.OBSIDIAN);
 	}
 
-	public PortalBlock portal_block_for(final Block block) {
+	public void add_portal(final Portal portal) {
+		storage_portals.put(portal.id(), portal);
+	}
+
+	public void add_portal_block(final UUID portal_id, final PortalBlock portal_block) {
+		final var block = portal_block.block();
+		final var world_id = block.getWorld().getUID();
+		var portal_blocks_in_chunk = storage_portal_blocks_in_chunk_in_world.get(world_id);
+		if (portal_blocks_in_chunk == null) {
+			portal_blocks_in_chunk = new HashMap<Long, Map<Long, PortalBlock>>();
+			storage_portal_blocks_in_chunk_in_world.put(world_id, portal_blocks_in_chunk);
+		}
+
 		final var chunk_key = Chunk.getChunkKey(block.getX(), block.getZ());
-		final var block_to_portal = storage_portal_blocks_in_chunk.get(chunk_key);
+		var block_to_portal = portal_blocks_in_chunk.get(chunk_key);
+		if (block_to_portal == null) {
+			block_to_portal = new HashMap<Long, PortalBlock>();
+			portal_blocks_in_chunk.put(chunk_key, block_to_portal);
+		}
+
+		final var block_key = block.getBlockKey();
+		block_to_portal.put(block_key, portal_block);
+	}
+
+	public PortalBlock portal_block_for(final Block block) {
+		final var portal_blocks_in_chunk = storage_portal_blocks_in_chunk_in_world.get(block.getWorld().getUID());
+		if (portal_blocks_in_chunk == null) {
+			return null;
+		}
+
+		final var chunk_key = Chunk.getChunkKey(block.getX(), block.getZ());
+		final var block_to_portal = portal_blocks_in_chunk.get(chunk_key);
 		if (block_to_portal == null) {
 			return null;
 		}
@@ -93,8 +122,13 @@ public class Portals extends Module<Portals> {
 	}
 
 	public boolean is_portal_block(final Block block) {
+		final var portal_blocks_in_chunk = storage_portal_blocks_in_chunk_in_world.get(block.getWorld().getUID());
+		if (portal_blocks_in_chunk == null) {
+			return false;
+		}
+
 		final var chunk_key = Chunk.getChunkKey(block.getX(), block.getZ());
-		final var block_to_portal = storage_portal_blocks_in_chunk.get(chunk_key);
+		final var block_to_portal = portal_blocks_in_chunk.get(chunk_key);
 		if (block_to_portal == null) {
 			return false;
 		}

@@ -38,7 +38,7 @@ public class PortalActivator extends Listener<Portals> {
 		}
 
 		final var player = event.getPlayer();
-		if (get_module().portal_for(portal_block).open_console(player, block)) {
+		if (get_module().portal_for(portal_block).open_console(get_module(), player, block)) {
 			swing_arm(player, event.getHand());
 			event.setUseInteractedBlock(Event.Result.DENY);
 			event.setUseItemInHand(Event.Result.DENY);
