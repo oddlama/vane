@@ -57,6 +57,10 @@ public class LangMessageArrayField extends LangField<TranslatedMessageArray> {
 	public void add_translations(final ResourcePackGenerator pack, final YamlConfiguration yaml, String lang_code) throws YamlLoadException {
 		check_loadable(yaml);
 		final var list = from_yaml(yaml);
+		final var loaded_size = get().size();
+		if (list.size() != loaded_size) {
+			throw new YamlLoadException("All translation lists for message arrays must have the exact same size. The loaded language file has " + loaded_size + " entries, while the currently processed file has " + list.size());
+		}
 		for (int i = 0; i < list.size(); ++i) {
 			pack.translations(namespace(), lang_code).put(key() + "." + i, list.get(i));
 		}

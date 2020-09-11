@@ -39,6 +39,20 @@ resource_pack:
   declined: "Du musst das Ressourcenpaket akzeptieren um auf diesem Server zu spielen.\n\
     Es wird für Übersetzungen und Texturen benötigt."
   download_failed: "§cEs gab einen Fehler beim Herunterladen des Ressourcenpakets.§r\n\
-    Deine Verbindung wurdest unterbrochen um Anzeigefehlern vorzubeugen.\n\
+    §7(Deine Verbindung wurde unterbrochen, um Anzeigefehler zu vermeiden)\n\
     \n\
     §dBitte versuche es erneut."
+
+menus:
+  item_selector:
+    accept:
+      name: "§a§lAccept"
+      lore: ["§bChoose§7 the currently selected item."]
+    cancel:
+      name: "§c§lCancel"
+      lore: ["§6Abort§7 item selection."]
+    selected:
+      name: "§d§lSelected Item"
+      lore:
+        - "§bLeft-click§7 to reset changes."
+        - "§bRight-click§7 to clear (if allowed)."

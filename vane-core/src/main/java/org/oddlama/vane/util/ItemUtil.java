@@ -6,6 +6,7 @@ import static org.oddlama.vane.util.Nms.player_handle;
 
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.stream.Collectors;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -53,6 +54,17 @@ public class ItemUtil {
 		name.setItalic(false);
 		lore.setItalic(false);
 		return name_item(item, new BaseComponent[] { name }, Arrays.<BaseComponent[]>asList(new BaseComponent[] { lore }));
+	}
+
+	public static ItemStack name_item(final ItemStack item, final BaseComponent name, final List<BaseComponent> lore) {
+		name.setItalic(false);
+		final var list = lore.stream()
+			.map(x -> {
+				x.setItalic(false);
+				return new BaseComponent[] { x };
+			})
+			.collect(Collectors.toList());
+		return name_item(item, new BaseComponent[] { name }, list);
 	}
 
 	public static ItemStack name_item(final ItemStack item, final BaseComponent[] name, final List<BaseComponent[]> lore) {

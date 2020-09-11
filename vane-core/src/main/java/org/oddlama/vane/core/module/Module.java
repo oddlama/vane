@@ -205,7 +205,7 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 			try {
 				lang_manager.generate_resource_pack(pack, yaml);
 			} catch (Exception e) {
-				log.severe("Error while generating language for '" + lang_file + "'");
+				log.severe("Error while generating language for '" + lang_file + "' of module " + get_name());
 				throw e;
 			}
 		});
@@ -236,14 +236,14 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 			resource_version = YamlConfiguration.loadConfiguration(reader)
 			                       .getLong("version", -1);
 		} catch (IOException e) {
-			log.log(Level.SEVERE, "Error while updating lang file '" + file + "'", e);
+			log.log(Level.SEVERE, "Error while updating lang file '" + file + "' of module " + get_name(), e);
 		}
 
 		if (resource_version > file_version) {
 			try {
 				Files.copy(getResource(lang_file), file.toPath(), StandardCopyOption.REPLACE_EXISTING);
 			} catch (IOException e) {
-				log.log(Level.SEVERE, "Error while copying lang file '" + file + "'", e);
+				log.log(Level.SEVERE, "Error while copying lang file '" + file + "' of module " + get_name(), e);
 			}
 		}
 	}
@@ -266,7 +266,7 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 		// Generate new file if not existing
 		final var file = new File(getDataFolder(), "lang-" + lang_code + ".yml");
 		if (!file.exists()) {
-			log.severe("Missing language file '" + file.getName() + "'");
+			log.severe("Missing language file '" + file.getName() + "' for module " + get_name());
 			return false;
 		}
 

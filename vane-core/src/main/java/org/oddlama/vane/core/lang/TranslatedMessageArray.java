@@ -1,5 +1,6 @@
 package org.oddlama.vane.core.lang;
 
+import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TranslatableComponent;
 import java.util.List;
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ public class TranslatedMessageArray {
 		this.default_translation = default_translation;
 	}
 
+	public int size() { return default_translation.size(); }
 	public String key() { return key; }
 	public List<String> str(Object... args) {
 		try {
@@ -33,49 +35,11 @@ public class TranslatedMessageArray {
 		}
 	}
 
-	public TranslatableComponent[] format(Object... args) {
-		final var arr = new TranslatableComponent[default_translation.length];
-		return new TranslatableComponent(key, args);
-	}
-
-	public void broadcast_server_players(Object... args) {
-		final var component = format(args);
-		for (var player : module.getServer().getOnlinePlayers()) {
-			player.sendMessage(component);
+	public List<BaseComponent> format(Object... args) {
+		final var arr = new ArrayList<BaseComponent>();
+		for (int i = 0; i < default_translation.size(); ++i) {
+			arr.add(new TranslatableComponent(key + "." + i, args));
 		}
-	}
-
-	public void broadcast_server(Object... args) {
-		final var component = format(args);
-		for (var player : module.getServer().getOnlinePlayers()) {
-			player.sendMessage(component);
-		}
-		module.log.info("[broadcast] " + str(args));
-	}
-
-	public void broadcast_world(final World world, Object... args) {
-		final var component = format(args);
-		for (var player : world.getPlayers()) {
-			player.sendMessage(component);
-		}
-	}
-
-	public void send(final CommandSender sender, Object... args) {
-		if (sender == null || sender == module.getServer().getConsoleSender()) {
-			module.log.info(str(args));
-		} else {
-			sender.sendMessage(format(args));
-		}
-	}
-
-	public void send_and_log(final CommandSender sender, Object... args) {
-		module.log.info(str(args));
-
-		// Also send to sender if it's not the console
-		if (sender == null || sender == module.getServer().getConsoleSender()) {
-			return;
-		} else {
-			sender.sendMessage(format(args));
-		}
+		return arr;
 	}
 }

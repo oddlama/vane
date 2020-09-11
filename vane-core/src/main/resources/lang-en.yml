@@ -51,7 +51,7 @@ resource_pack:
     It is needed for localization and textures."
   # This kick message is used when a mandatory resource pack failed to download for  player.
   download_failed: "§cYour resource pack download seems to have failed.§r\n\
-    You have been disconnected to prevent display errors.\n\
+    §7(You have been disconnected to prevent display errors)\n\
     \n\
     §dPlease try again."
 

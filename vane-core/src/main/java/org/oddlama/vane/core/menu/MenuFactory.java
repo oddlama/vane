@@ -104,7 +104,6 @@ public class MenuFactory {
 				super.item(set_item_name.apply(item.clone()));
 			}
 		};
-		selected_item.original_selected = default_item;
 
 		// Selected item
 		item_selector_menu.add(selected_item);
