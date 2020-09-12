@@ -108,7 +108,11 @@ public class Portals extends Module<Portals> {
 		storage_portals.put(portal.id(), portal);
 	}
 
-	public void add_portal_block(final UUID portal_id, final PortalBlock portal_block) {
+	public void add_portal_block(final Portal portal, final PortalBlock portal_block) {
+		// Add to portal
+		portal.blocks().add(portal_block);
+
+		// Add to acceleration structure
 		final var block = portal_block.block();
 		final var world_id = block.getWorld().getUID();
 		var portal_blocks_in_chunk = storage_portal_blocks_in_chunk_in_world.get(world_id);
@@ -125,25 +129,7 @@ public class Portals extends Module<Portals> {
 		}
 
 		final var block_key = block.getBlockKey();
-		block_to_portal_block.put(block_key, portal_block.lookup(portal_id));
-	}
-
-	public List<PortalBlock> blocks_for(final UUID portal_id, Predicate<PortalBlock> predicate) {
-		final var blocks = new ArrayList<PortalBlock>();
-
-		storage_portal_blocks_in_chunk_in_world.values()
-			.forEach(portal_blocks_in_chunk -> {
-				portal_blocks_in_chunk.values()
-					.forEach(block_to_portal_block -> {
-						block_to_portal_block.values()
-							.stream()
-							.filter(pb -> pb.portal_id().equals(portal_id))
-							.filter(predicate)
-							.forEachOrdered(blocks::add);
-					});
-			});
-
-		return blocks;
+		block_to_portal_block.put(block_key, portal_block.lookup(portal.id()));
 	}
 
 	public PortalBlockLookup portal_block_for(final Block block) {
@@ -164,7 +150,7 @@ public class Portals extends Module<Portals> {
 		return block_to_portal_block.get(block_key);
 	}
 
-	public Portal portal_for(@NotNull final PortalBlock block) {
+	public Portal portal_for(@NotNull final PortalBlockLookup block) {
 		return storage_portals.get(block.portal_id());
 	}
 

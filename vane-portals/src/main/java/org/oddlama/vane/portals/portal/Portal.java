@@ -7,6 +7,8 @@ import static org.oddlama.vane.core.persistent.PersistentSerializer.to_json;
 
 import java.io.IOException;
 import java.util.UUID;
+import java.util.List;
+import java.util.ArrayList;
 
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
@@ -28,7 +30,9 @@ public class Portal {
 		json.put("id",            to_json(UUID.class,              portal.id));
 		json.put("orientation",   to_json(Orientation.class,       portal.orientation));
 		json.put("spawn",         to_json(Location.class,          portal.spawn));
-		json.put("blocks",        to_json(List<PortalBlock>.class, portal.blocks));
+		try {
+			json.put("blocks",    to_json(Portal.class.getDeclaredField("blocks"), portal.blocks));
+		} catch (NoSuchFieldException e) { throw new RuntimeException("Invalid field. This is a bug.", e); }
 
 		json.put("name",          to_json(String.class,            portal.name));
 		json.put("style",         to_json(NamespacedKey.class,     portal.style));
@@ -40,13 +44,16 @@ public class Portal {
 		return json;
 	}
 
+	@SuppressWarnings("unchecked")
 	public static Portal deserialize(@NotNull final Object o) throws IOException {
 		final var json = (JSONObject)o;
 		final var portal = new Portal();
 		portal.id            = from_json(UUID.class,              json.get("id"));
 		portal.orientation   = from_json(Orientation.class,       json.get("orientation"));
 		portal.spawn         = from_json(Location.class,          json.get("spawn"));
-		portal.blocks        = from_json(List<PortalBlock>.class, json.get("blocks"));
+		try {
+			portal.blocks    = (List<PortalBlock>)from_json(Portal.class.getDeclaredField("blocks"), json.get("blocks"));
+		} catch (NoSuchFieldException e) { throw new RuntimeException("Invalid field. This is a bug.", e); }
 
 		portal.name          = from_json(String.class,            json.get("name"));
 		portal.style         = from_json(NamespacedKey.class,     json.get("style"));
@@ -79,6 +86,19 @@ public class Portal {
 		this.spawn = spawn.clone();
 	}
 
+	public UUID id() { return id; }
+	public Orientation orientation() { return orientation; }
+	public Location spawn() { return spawn.clone(); }
+	public List<PortalBlock> blocks() { return blocks; }
+	public String name() { return name; }
+	public void name(String name) { this.name = name; }
+	public ItemStack icon() { return icon.clone(); }
+	public void icon(ItemStack icon) { this.icon = icon; }
+	public Visibility visibility() { return visibility; }
+	public void visibility(Visibility visibility) { this.visibility = visibility; }
+	public UUID target_id() { return target_id; }
+	public boolean target_locked() { return target_locked; }
+
 	public boolean activate(final Portals portals, @Nullable final Player player) {
 		// TODO send event check cancelled
 		System.out.println("activate");
@@ -104,7 +124,7 @@ public class Portal {
 	public void update_blocks(final Portals portals) {
 		final var cur_style = portals.style(style);
 		final var active = portals.is_activated(this);
-		for (final var portal_block : portals.blocks_for(id(), x -> true)) {
+		for (final var portal_block : blocks) {
 			portal_block.block().setType(cur_style.material(portal_block.type(), active));
 			if (portal_block.type() == PortalBlock.Type.CONSOLE) {
 				portals.update_console(this, portal_block, active);
@@ -129,17 +149,6 @@ public class Portal {
 		return null;
 	}
 
-	public UUID id() { return id; }
-	public Orientation orientation() { return orientation; }
-	public Location spawn() { return spawn.clone(); }
-	public String name() { return name; }
-	public void name(String name) { this.name = name; }
-	public ItemStack icon() { return icon.clone(); }
-	public void icon(ItemStack icon) { this.icon = icon; }
-	public Visibility visibility() { return visibility; }
-	public void visibility(Visibility visibility) { this.visibility = visibility; }
-	public UUID target_id() { return target_id; }
-	public boolean target_locked() { return target_locked; }
 
 	@Override
 	public String toString() {

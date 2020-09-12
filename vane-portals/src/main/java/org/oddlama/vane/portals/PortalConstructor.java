@@ -113,8 +113,8 @@ public class PortalConstructor extends Listener<Portals> {
 
 	private boolean can_link_console(final Player player, final Portal portal, final Block console, boolean check_only) {
 		// Gather all portal blocks that arent consoles
-		final var blocks = get_module().blocks_for(portal.id(), pb -> pb.type() != PortalBlock.Type.CONSOLE)
-			.stream()
+		final var blocks = portal.blocks().stream()
+			.filter(pb -> pb.type() != PortalBlock.Type.CONSOLE)
 			.map(pb -> pb.block())
 			.collect(Collectors.toList());
 		return can_link_console(player, blocks, console, check_only);
@@ -166,7 +166,7 @@ public class PortalConstructor extends Listener<Portals> {
 		}
 
 		// Add portal block
-		get_module().add_portal_block(portal.id(), create_portal_block(portal.id(), console));
+		get_module().add_portal_block(portal, create_portal_block(console));
 
 		// Update block blocks
 		portal.update_blocks(get_module());
@@ -236,7 +236,7 @@ public class PortalConstructor extends Listener<Portals> {
 		return boundary;
 	}
 
-	private PortalBlock create_portal_block(final UUID player_id, final Block block) {
+	private PortalBlock create_portal_block(final Block block) {
 		final PortalBlock.Type type;
 		final var mat = block.getType();
 		if (mat == config_material_console) {
@@ -251,7 +251,7 @@ public class PortalConstructor extends Listener<Portals> {
 			get_module().log.warning("Invalid block type '" + mat + "' encounterd in portal block creation. Assuming boundary.");
 			type = PortalBlock.Type.BOUNDARY;
 		}
-		return new PortalBlock(player_id, block, type);
+		return new PortalBlock(block, type);
 	}
 
 	private boolean construct_portal(Player player, final Block console, final Block boundary_block) {
@@ -279,7 +279,7 @@ public class PortalConstructor extends Listener<Portals> {
 
 			// Add portal blocks
 			for (final var block : boundary.all_blocks()) {
-				get_module().add_portal_block(portal.id(), create_portal_block(portal.id(), block));
+				get_module().add_portal_block(portal, create_portal_block(block));
 			}
 
 			// Link console

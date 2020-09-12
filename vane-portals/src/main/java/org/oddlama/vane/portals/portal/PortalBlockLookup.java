@@ -32,13 +32,13 @@ public class PortalBlockLookup {
 	}
 
 	private UUID portal_id;
-	private Type type;
+	private PortalBlock.Type type;
 
-	public PortalBlockLookup(final UUID portal_id, final Type type) {
+	public PortalBlockLookup(final UUID portal_id, final PortalBlock.Type type) {
 		this.portal_id = portal_id;
 		this.type = type;
 	}
 
 	public UUID portal_id() { return portal_id; }
-	public Type type() { return type; }
+	public PortalBlock.Type type() { return type; }
 }
