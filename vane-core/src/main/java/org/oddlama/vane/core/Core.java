@@ -3,6 +3,11 @@ package org.oddlama.vane.core;
 import static org.oddlama.vane.core.item.CustomItem.is_custom_item;
 import static org.oddlama.vane.util.MaterialUtil.is_tillable;
 
+import org.oddlama.vane.core.material.HeadMaterialLibrary;
+import java.nio.charset.StandardCharsets;
+import org.bukkit.craftbukkit.libs.org.apache.commons.io.IOUtils;
+
+import java.io.IOException;
 import java.io.File;
 import java.util.Collections;
 import java.util.SortedSet;
@@ -64,6 +69,14 @@ public class Core extends Module<Core> {
 	public Core() {
 		// Create global command catch-all permission
 		register_permission(permission_command_catchall);
+
+		// Load head material library
+		try {
+			HeadMaterialLibrary.load(IOUtils.toString(getResource("head_library.json"), StandardCharsets.UTF_8));
+		} catch (IOException e) {
+			log.log(Level.SEVERE, "Error while loading head_library.json! Shutting down.", e);
+			getServer().shutdown();
+		}
 
 		// Components
 		new org.oddlama.vane.core.commands.Vane(this);

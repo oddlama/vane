@@ -5,7 +5,12 @@ import static org.oddlama.vane.util.Nms.item_handle;
 import static org.oddlama.vane.util.Nms.player_handle;
 
 import java.util.Arrays;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 import java.util.Comparator;
+import com.destroystokyo.paper.profile.ProfileProperty;
 import java.util.stream.Collectors;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +28,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 
 public class ItemUtil {
+	private static final UUID SKULL_OWNER = UUID.fromString("00000000-0000-0000-0000-000000000000");
+
 	public static final UUID MODIFIER_UUID_GENERIC_ATTACK_DAMAGE = UUID.fromString("CB3F55D3-645C-4F38-A497-9C13A33DB5CF");
 	public static final UUID MODIFIER_UUID_GENERIC_ATTACK_SPEED = UUID.fromString("FA233E1C-4180-4865-B01B-BCCE9785ACA3");
 
@@ -197,5 +204,17 @@ public class ItemUtil {
 			// By enchantments
 			return compare_enchantments(a, b);
 		}
+	}
+
+	public static ItemStack skull_with_texture(final String name, final String base64_texture) {
+		final var profile = Bukkit.createProfile(SKULL_OWNER);
+		profile.setProperty(new ProfileProperty("textures", base64_texture));
+
+		final var item = new ItemStack(Material.PLAYER_HEAD);
+		final var meta = (SkullMeta)item.getItemMeta();
+		meta.setDisplayName(name);
+		meta.setPlayerProfile(profile);
+		item.setItemMeta(meta);
+		return item;
 	}
 }
