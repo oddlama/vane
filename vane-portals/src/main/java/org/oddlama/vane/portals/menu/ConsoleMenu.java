@@ -1,5 +1,6 @@
 package org.oddlama.vane.portals.menu;
 
+import static org.oddlama.vane.util.Util.namespaced_key;
 import static org.oddlama.vane.util.ItemUtil.name_item;
 import static org.oddlama.vane.util.ItemUtil.name_of;
 
@@ -64,7 +65,7 @@ public class ConsoleMenu extends ModuleComponent<Portals> {
         item_select_target        = new TranslatedItemStack<>(ctx, "select_target",        Material.COMPASS, 1, "Used to enter portal target selection.");
         item_select_target_locked = new TranslatedItemStack<>(ctx, "select_target_locked", Material.FIREWORK_STAR, 1, "Used to show portal target selection when the target is locked.");
         item_unlink_console       = new TranslatedItemStack<>(ctx, "unlink_console",       Material.CHAIN, 1, "Used to unlink the current console.");
-        item_destroy_portal       = new TranslatedItemStack<>(ctx, "destroy_portal",       Material.TNT, 1, "Used to destroy the portal.");
+        item_destroy_portal       = new TranslatedItemStack<>(ctx, "destroy_portal",       namespaced_key("vane", "decoration_tnt_1"), 1, "Used to destroy the portal.");
 	}
 
 	public Menu create(final Portal portal, final Player player, final Block console) {

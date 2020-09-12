@@ -67,6 +67,7 @@ for j in tqdm(jsons):
 
     o = {}
     o["id"] = ident
+    o["name"] = name
     o["category"] = category
     o["tags"] = tags
     o["texture"] = j["texture"]

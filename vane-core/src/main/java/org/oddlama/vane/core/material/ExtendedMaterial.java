@@ -44,14 +44,6 @@ public class ExtendedMaterial {
 		return from(material.getKey());
 	}
 
-	public static ExtendedMaterial from(final String key) {
-		final var split = key.split(":");
-		if (split.length != 2) {
-			throw new RuntimeException("Invalid extended material key: '" + key + "' is not a valid namespaced key");
-		}
-		return from(namespaced_key(split[0], split[1]));
-	}
-
 	public ItemStack item(int amount) {
 		if (material == null) {
 			final var item = head_material.item();

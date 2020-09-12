@@ -26,6 +26,7 @@ If you don't want a certain feature, simply disable it.
 - [x] Store XP in bottles
 - [x] Limit anvil repair cost to remove 'too-expensive'
 - [x] All recipes will be unlocked automatically when joining the server
+- [ ] Access to gigantic head library (>30000 heads) for decoration purposes, including in-game menu to search and acquire heads by category, tags or name.
 
 #### Administrative and 'meta' features
 

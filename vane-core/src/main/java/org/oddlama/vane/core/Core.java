@@ -71,6 +71,7 @@ public class Core extends Module<Core> {
 		register_permission(permission_command_catchall);
 
 		// Load head material library
+		log.info("Loading head library...");
 		try {
 			HeadMaterialLibrary.load(IOUtils.toString(getResource("head_library.json"), StandardCharsets.UTF_8));
 		} catch (IOException e) {
