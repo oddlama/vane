@@ -32,8 +32,12 @@ public class Style {
 		}
 	}
 
+	public static NamespacedKey default_style_key() {
+		return namespaced_key("vane_portals", "style_default");
+	}
+
 	public static Style default_style() {
-		final var style = new Style(namespaced_key("vane", "default"));
+		final var style = new Style(default_style_key());
 		style.inactive_materials.put(PortalBlock.Type.ORIGIN,   Material.OBSIDIAN);
 		style.inactive_materials.put(PortalBlock.Type.CONSOLE,  Material.ENCHANTING_TABLE);
 		style.inactive_materials.put(PortalBlock.Type.BOUNDARY, Material.OBSIDIAN);

@@ -55,8 +55,8 @@ public class PersistentSerializer {
 		json.put("x",        to_json(double.class, location.getX()));
 		json.put("y",        to_json(double.class, location.getY()));
 		json.put("z",        to_json(double.class, location.getZ()));
-		json.put("pitch",    to_json(float.class, location.getPitch()));
-		json.put("yaw",      to_json(float.class, location.getYaw()));
+		json.put("pitch",    to_json(float.class,  location.getPitch()));
+		json.put("yaw",      to_json(float.class,  location.getYaw()));
 		return json;
 	}
 
@@ -66,8 +66,8 @@ public class PersistentSerializer {
 		final var x        = from_json(double.class, json.get("x"));
 		final var y        = from_json(double.class, json.get("y"));
 		final var z        = from_json(double.class, json.get("z"));
-		final var pitch    = from_json(float.class, json.get("pitch"));
-		final var yaw      = from_json(float.class, json.get("yaw"));
+		final var pitch    = from_json(float.class,  json.get("pitch"));
+		final var yaw      = from_json(float.class,  json.get("yaw"));
 		return new Location(Bukkit.getWorld(world_id), x, y, z, yaw, pitch);
 	}
 
@@ -84,9 +84,9 @@ public class PersistentSerializer {
 	private static Block deserialize_block(@NotNull final Object o) throws IOException {
 		final var json = (JSONObject)o;
 		final var world_id = from_json(UUID.class, json.get("world_id"));
-		final var x        = (int)from_json(int.class, json.get("x"));
-		final var y        = (int)from_json(int.class, json.get("y"));
-		final var z        = (int)from_json(int.class, json.get("z"));
+		final var x        = from_json(int.class,  json.get("x"));
+		final var y        = from_json(int.class,  json.get("y"));
+		final var z        = from_json(int.class,  json.get("z"));
 		return Bukkit.getWorld(world_id).getBlockAt(x, y, z);
 	}
 

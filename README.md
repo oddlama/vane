@@ -133,6 +133,12 @@ The worst case would be an incompatibility caused e.g. by the other plugin's reg
 Vane always tries to be as conservative as possible regarding these things and shouldn't cause
 issues in other plugins, but badly written 3rd-party plugins could theoretically break logic in vane.
 
+#### Q: Is a SQL database (like MySQL, PostgreSQL, ...) required?
+
+**A:** No, vane doesn't use SQL as a persistent storage, as it is simply not
+designed to be used on large networks with tens of thousands of players.
+For smaller survival servers, using SQL would be a waste of resources and processing time.
+
 ### 3rd-party software
 
 TODO include licenses

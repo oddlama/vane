@@ -5,7 +5,7 @@ import static org.oddlama.vane.util.PlayerUtil.swing_arm;
 import java.util.HashMap;
 import java.util.UUID;
 import java.util.List;
-import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -112,8 +112,11 @@ public class PortalConstructor extends Listener<Portals> {
 	}
 
 	private boolean can_link_console(final Player player, final Portal portal, final Block console, boolean check_only) {
-		final var blocks = new ArrayList<Block>();
-		// TODO gather all portal blocks that arent consoles.
+		// Gather all portal blocks that arent consoles
+		final var blocks = get_module().blocks_for(portal.id(), pb -> pb.type() != PortalBlock.Type.CONSOLE)
+			.stream()
+			.map(pb -> pb.block())
+			.collect(Collectors.toList());
 		return can_link_console(player, blocks, console, check_only);
 	}
 
@@ -166,7 +169,7 @@ public class PortalConstructor extends Listener<Portals> {
 		get_module().add_portal_block(portal.id(), create_portal_block(portal.id(), console));
 
 		// Update block blocks
-		portal.update_blocks();
+		portal.update_blocks(get_module());
 
 		// TODO sound and effect
 		return true;
@@ -286,7 +289,7 @@ public class PortalConstructor extends Listener<Portals> {
 			get_module().save_persistent_storage();
 
 			// Update portal blocks once
-			portal.update_blocks();
+			portal.update_blocks(get_module());
 
 			// Create dynmap marker
 			//PortalLayer.createMarker(portal);

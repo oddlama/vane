@@ -25,43 +25,46 @@ public class Portal {
 	public static Object serialize(@NotNull final Object o) throws IOException {
 		final var portal = (Portal)o;
 		final var json = new JSONObject();
-		json.put("id",            to_json(UUID.class,          portal.id));
-		json.put("orientation",   to_json(Orientation.class,   portal.orientation));
-		json.put("spawn",         to_json(Location.class,      portal.spawn));
+		json.put("id",            to_json(UUID.class,              portal.id));
+		json.put("orientation",   to_json(Orientation.class,       portal.orientation));
+		json.put("spawn",         to_json(Location.class,          portal.spawn));
+		json.put("blocks",        to_json(List<PortalBlock>.class, portal.blocks));
 
-		json.put("name",          to_json(String.class,        portal.name));
-		json.put("style",         to_json(NamespacedKey.class, portal.style));
-		json.put("icon",          to_json(ItemStack.class,     portal.icon));
-		json.put("visibility",    to_json(Visibility.class,    portal.visibility));
+		json.put("name",          to_json(String.class,            portal.name));
+		json.put("style",         to_json(NamespacedKey.class,     portal.style));
+		json.put("icon",          to_json(ItemStack.class,         portal.icon));
+		json.put("visibility",    to_json(Visibility.class,        portal.visibility));
 
-		json.put("target_id",     to_json(UUID.class,          portal.target_id));
-		json.put("target_locked", to_json(boolean.class,       portal.target_locked));
+		json.put("target_id",     to_json(UUID.class,              portal.target_id));
+		json.put("target_locked", to_json(boolean.class,           portal.target_locked));
 		return json;
 	}
 
 	public static Portal deserialize(@NotNull final Object o) throws IOException {
 		final var json = (JSONObject)o;
 		final var portal = new Portal();
-		portal.id            = from_json(UUID.class,          json.get("id"));
-		portal.orientation   = from_json(Orientation.class,   json.get("orientation"));
-		portal.spawn         = from_json(Location.class,      json.get("spawn"));
+		portal.id            = from_json(UUID.class,              json.get("id"));
+		portal.orientation   = from_json(Orientation.class,       json.get("orientation"));
+		portal.spawn         = from_json(Location.class,          json.get("spawn"));
+		portal.blocks        = from_json(List<PortalBlock>.class, json.get("blocks"));
 
-		portal.name          = from_json(String.class,        json.get("name"));
-		portal.style         = from_json(NamespacedKey.class, json.get("style"));
-		portal.icon          = from_json(ItemStack.class,     json.get("icon"));
-		portal.visibility    = from_json(Visibility.class,    json.get("visibility"));
+		portal.name          = from_json(String.class,            json.get("name"));
+		portal.style         = from_json(NamespacedKey.class,     json.get("style"));
+		portal.icon          = from_json(ItemStack.class,         json.get("icon"));
+		portal.visibility    = from_json(Visibility.class,        json.get("visibility"));
 
-		portal.target_id     = from_json(UUID.class,          json.get("target_id"));
-		portal.target_locked = from_json(boolean.class,       json.get("target_locked"));
+		portal.target_id     = from_json(UUID.class,              json.get("target_id"));
+		portal.target_locked = from_json(boolean.class,           json.get("target_locked"));
 		return portal;
 	}
 
 	private UUID id;
 	private Orientation orientation;
 	private Location spawn;
+	private List<PortalBlock> blocks = new ArrayList<>();
 
 	private String name = "Portal";
-	private NamespacedKey style = Style.default_style().key();
+	private NamespacedKey style = Style.default_style_key();
 	private ItemStack icon = null;
 	private Visibility visibility = Visibility.PRIVATE;
 
@@ -76,24 +79,37 @@ public class Portal {
 		this.spawn = spawn.clone();
 	}
 
-	public boolean activate(@Nullable final Player player) {
+	public boolean activate(final Portals portals, @Nullable final Player player) {
 		// TODO send event check cancelled
 		System.out.println("activate");
 
+		// Update blocks
+		update_blocks(portals);
+
 		// TODO sound
 		return true;
 	}
 
-	public boolean deactivate(@Nullable final Player player) {
+	public boolean deactivate(final Portals portals, @Nullable final Player player) {
 		// TODO send event check cancelled
 		System.out.println("deactivate");
 
+		// Update blocks
+		update_blocks(portals);
+
 		// TODO sound
 		return true;
 	}
 
-	public void update_blocks() {
-		// TODO
+	public void update_blocks(final Portals portals) {
+		final var cur_style = portals.style(style);
+		final var active = portals.is_activated(this);
+		for (final var portal_block : portals.blocks_for(id(), x -> true)) {
+			portal_block.block().setType(cur_style.material(portal_block.type(), active));
+			if (portal_block.type() == PortalBlock.Type.CONSOLE) {
+				portals.update_console(this, portal_block, active);
+			}
+		}
 	}
 
 	public boolean open_console(final Portals portals, final Player player, final Block console_block) {

@@ -7,7 +7,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.ArrayList;
 import java.util.UUID;
+import java.util.function.Predicate;
 import org.oddlama.vane.core.persistent.PersistentSerializer;
 
 
@@ -15,6 +17,7 @@ import org.oddlama.vane.portals.portal.Orientation;
 import org.oddlama.vane.portals.portal.Plane;
 import org.oddlama.vane.portals.portal.PortalBoundary;
 import org.oddlama.vane.portals.portal.PortalBlock;
+import org.oddlama.vane.portals.portal.PortalBlockLookup;
 import org.oddlama.vane.portals.portal.Style;
 import org.oddlama.vane.portals.portal.Portal;
 import org.bukkit.Chunk;
@@ -36,14 +39,16 @@ import org.oddlama.vane.core.module.Module;
 public class Portals extends Module<Portals> {
 	// Add (de-)serializers
 	static {
-		PersistentSerializer.serializers.put(PortalBlock.class,         PortalBlock::serialize);
-		PersistentSerializer.deserializers.put(PortalBlock.class,       PortalBlock::deserialize);
 		PersistentSerializer.serializers.put(Portal.class,              Portal::serialize);
 		PersistentSerializer.deserializers.put(Portal.class,            Portal::deserialize);
 		PersistentSerializer.serializers.put(Portal.Visibility.class,   x -> ((Portal.Visibility)x).name());
 		PersistentSerializer.deserializers.put(Portal.Visibility.class, x -> Portal.Visibility.valueOf((String)x));
+		PersistentSerializer.serializers.put(PortalBlock.class,         PortalBlock::serialize);
+		PersistentSerializer.deserializers.put(PortalBlock.class,       PortalBlock::deserialize);
 		PersistentSerializer.serializers.put(PortalBlock.Type.class,    x -> ((PortalBlock.Type)x).name());
 		PersistentSerializer.deserializers.put(PortalBlock.Type.class,  x -> PortalBlock.Type.valueOf((String)x));
+		PersistentSerializer.serializers.put(PortalBlockLookup.class,   PortalBlockLookup::serialize);
+		PersistentSerializer.deserializers.put(PortalBlockLookup.class, PortalBlockLookup::deserialize);
 		PersistentSerializer.serializers.put(Orientation.class,         x -> ((Orientation)x).name());
 		PersistentSerializer.deserializers.put(Orientation.class,       x -> Orientation.valueOf((String)x));
 	}
@@ -57,7 +62,7 @@ public class Portals extends Module<Portals> {
 	private Map<UUID, Portal> storage_portals = new HashMap<>();
 	// Primary storage for all portal blocks (world_id → chunk key → block key → portal block)
 	@Persistent
-	private Map<UUID, Map<Long, Map<Long, PortalBlock>>> storage_portal_blocks_in_chunk_in_world = new HashMap<>();
+	private Map<UUID, Map<Long, Map<Long, PortalBlockLookup>>> storage_portal_blocks_in_chunk_in_world = new HashMap<>();
 
 	// All loaded styles
 	public Map<NamespacedKey, Style> styles = new HashMap<>();
@@ -89,6 +94,16 @@ public class Portals extends Module<Portals> {
 		portal_boundary_materials.add(Material.OBSIDIAN);
 	}
 
+	public Style style(final NamespacedKey key) {
+		final var s = styles.get(key);
+		if (s == null) {
+			log.warning("Encountered invalid style " + key + ", falling back to default style.");
+			return styles.get(Style.default_style_key());
+		} else {
+			return s;
+		}
+	}
+
 	public void add_portal(final Portal portal) {
 		storage_portals.put(portal.id(), portal);
 	}
@@ -98,22 +113,40 @@ public class Portals extends Module<Portals> {
 		final var world_id = block.getWorld().getUID();
 		var portal_blocks_in_chunk = storage_portal_blocks_in_chunk_in_world.get(world_id);
 		if (portal_blocks_in_chunk == null) {
-			portal_blocks_in_chunk = new HashMap<Long, Map<Long, PortalBlock>>();
+			portal_blocks_in_chunk = new HashMap<Long, Map<Long, PortalBlockLookup>>();
 			storage_portal_blocks_in_chunk_in_world.put(world_id, portal_blocks_in_chunk);
 		}
 
 		final var chunk_key = Chunk.getChunkKey(block.getX(), block.getZ());
 		var block_to_portal_block = portal_blocks_in_chunk.get(chunk_key);
 		if (block_to_portal_block == null) {
-			block_to_portal_block = new HashMap<Long, PortalBlock>();
+			block_to_portal_block = new HashMap<Long, PortalBlockLookup>();
 			portal_blocks_in_chunk.put(chunk_key, block_to_portal_block);
 		}
 
 		final var block_key = block.getBlockKey();
-		block_to_portal_block.put(block_key, portal_block);
+		block_to_portal_block.put(block_key, portal_block.lookup(portal_id));
 	}
 
-	public PortalBlock portal_block_for(final Block block) {
+	public List<PortalBlock> blocks_for(final UUID portal_id, Predicate<PortalBlock> predicate) {
+		final var blocks = new ArrayList<PortalBlock>();
+
+		storage_portal_blocks_in_chunk_in_world.values()
+			.forEach(portal_blocks_in_chunk -> {
+				portal_blocks_in_chunk.values()
+					.forEach(block_to_portal_block -> {
+						block_to_portal_block.values()
+							.stream()
+							.filter(pb -> pb.portal_id().equals(portal_id))
+							.filter(predicate)
+							.forEachOrdered(blocks::add);
+					});
+			});
+
+		return blocks;
+	}
+
+	public PortalBlockLookup portal_block_for(final Block block) {
 		final var portal_blocks_in_chunk = storage_portal_blocks_in_chunk_in_world.get(block.getWorld().getUID());
 		if (portal_blocks_in_chunk == null) {
 			return null;
@@ -179,6 +212,15 @@ public class Portals extends Module<Portals> {
 		}
 
 		return null;
+	}
+
+	public boolean is_activated(final Portal portal) {
+		// TODO
+		return false;
+	}
+
+	public void update_console(final Portal portal, final PortalBlock console, boolean active) {
+		// TODO
 	}
 
 	private void disable_consoles_in_chunk(final Chunk chunk) {

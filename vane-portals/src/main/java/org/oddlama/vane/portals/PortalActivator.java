@@ -84,13 +84,13 @@ public class PortalActivator extends Listener<Portals> {
 		final var player = event.getPlayer();
 		if (lever.isPowered()) {
 			// Lever is being switched off → deactivate
-			if (!portal.deactivate(player)) {
+			if (!portal.deactivate(get_module(), player)) {
 				event.setUseInteractedBlock(Event.Result.DENY);
 				event.setUseItemInHand(Event.Result.DENY);
 			}
 		} else {
 			// Lever is being switched on → activate
-			if (!portal.activate(player)) {
+			if (!portal.activate(get_module(), player)) {
 				event.setUseInteractedBlock(Event.Result.DENY);
 				event.setUseItemInHand(Event.Result.DENY);
 			}
@@ -110,6 +110,6 @@ public class PortalActivator extends Listener<Portals> {
 		}
 
 		// TODO setting for "keep on while pulse active" and "toggle on falling/rising edge"
-		portal.activate(null);
+		portal.activate(get_module(), null);
     }
 }
