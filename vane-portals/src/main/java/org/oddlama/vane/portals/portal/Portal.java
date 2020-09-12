@@ -132,15 +132,15 @@ public class Portal {
 		}
 	}
 
-	public boolean open_console(final Portals portals, final Player player, final Block console_block) {
+	public boolean open_console(final Portals portals, final Player player, final Block console) {
 		// Call event
-		final var event = new PortalOpenConsoleEvent(player, console_block, id());
+		final var event = new PortalOpenConsoleEvent(player, console, id());
 		portals.getServer().getPluginManager().callEvent(event);
 		if (event.isCancelled()) {
 			return false;
 		}
 
-		//new ConsoleMenu(player, portal, console).open();
+		portals.menus.console_menu.create(this, player, console).open(player);
 		return true;
 	}
 

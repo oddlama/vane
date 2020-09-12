@@ -46,6 +46,22 @@ public class PortalBlock {
 		return new PortalBlockLookup(portal_id, type);
 	}
 
+	@Override
+	public int hashCode() {
+		return block.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object other) {
+		if (other == null || !(other instanceof PortalBlock)) {
+			return false;
+		}
+
+		final var po = (PortalBlock)other;
+		// Only block is compared, as the same block can only have one functions.
+		return block.equals(po.block);
+	}
+
 	public static enum Type {
 		ORIGIN,
 		CONSOLE,

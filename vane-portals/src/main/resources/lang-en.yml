@@ -71,3 +71,27 @@ source_use_restricted: "§cYou have no permission to use this portal!"
 target_use_restricted: "§cYou have no permission to use the target portal!"
 
 menu_title_enter_portal_name: "TODO title"
+
+menus:
+    console:
+        title: "§8§lPortal: %1$s"
+        settings:
+          name: "§b§lSettings"
+          lore: []
+        select_target:
+          name: "§d§lSelect Target"
+          lore:
+            - ""
+            - "§7Current: %1$s"
+        select_target_locked:
+          name: "§d§lSelect Target"
+          lore:
+            - ""
+            - "§7Current: %1$s"
+            - "§8Target selection is currently §6§lLOCKED§r§8!"
+        unlink_console:
+          name: "§c§lUnlink Console"
+          lore: []
+        destroy_portal:
+          name: "§c§lDestroy Portal"
+          lore: []

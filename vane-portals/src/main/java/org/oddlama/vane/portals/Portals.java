@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 import java.util.function.Predicate;
 import org.oddlama.vane.core.persistent.PersistentSerializer;
-
+import org.oddlama.vane.portals.menu.PortalMenuGroup;
 
 import org.oddlama.vane.portals.portal.Orientation;
 import org.oddlama.vane.portals.portal.Plane;
@@ -71,7 +71,10 @@ public class Portals extends Module<Portals> {
 	public Set<Material> portal_console_materials = new HashSet<>();
 	public Set<Material> portal_boundary_materials = new HashSet<>();
 
+	public PortalMenuGroup menus;
+
 	public Portals() {
+		menus = new PortalMenuGroup(this);
 		new PortalActivator(this);
 		new PortalBlockProtector(this);
 		new PortalConstructor(this);
@@ -106,6 +109,14 @@ public class Portals extends Module<Portals> {
 
 	public void add_portal(final Portal portal) {
 		storage_portals.put(portal.id(), portal);
+	}
+
+	public void remove_portal_block(final Portal portal, final PortalBlock portal_block) {
+		// Remove from portal
+		portal.blocks().remove(portal_block);
+
+		// Remove from acceleration structure
+		// TODO
 	}
 
 	public void add_portal_block(final Portal portal, final PortalBlock portal_block) {

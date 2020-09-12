@@ -32,8 +32,8 @@ public class MenuManager extends Listener<Core> {
 
 		final var ctx = get_context();
 		final var ctx_item_selector = ctx.namespace("item_selector", "Menu configuration for item selector menus.");
-        item_selector_accept   = new TranslatedItemStack<>(ctx_item_selector, "accept", Material.LIME_TERRACOTTA, 1, "Menu item used to confirm item selection.");
-        item_selector_cancel   = new TranslatedItemStack<>(ctx_item_selector, "cancel", Material.RED_TERRACOTTA, 1, "Menu item used to cancel item selection.");
+        item_selector_accept   = new TranslatedItemStack<>(ctx_item_selector, "accept", Material.LIME_TERRACOTTA, 1, "Used to confirm item selection.");
+        item_selector_cancel   = new TranslatedItemStack<>(ctx_item_selector, "cancel", Material.RED_TERRACOTTA, 1, "Used to cancel item selection.");
         item_selector_selected = new TranslatedItemStack<>(ctx_item_selector, "selected", Material.BARRIER, 1, "Represents the selected item. Left-clicking will reset the selection to the initial value, and right-clicking will clear the selected item. The given stack is used as the 'empty', cleared item.");
 	}
 

@@ -27,14 +27,14 @@ public class PortalActivator extends Listener<Portals> {
 		super(context);
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
 	public void on_player_interact_console(final PlayerInteractEvent event) {
 		if (!event.hasBlock() || event.getAction() != Action.RIGHT_CLICK_BLOCK) {
 			return;
 		}
 
 		final var block = event.getClickedBlock();
-		if (get_module().portal_console_materials.contains(block.getType())) {
+		if (!get_module().portal_console_materials.contains(block.getType())) {
 			return;
 		}
 
@@ -45,7 +45,8 @@ public class PortalActivator extends Listener<Portals> {
 		}
 
 		final var player = event.getPlayer();
-		if (get_module().portal_for(portal_block).open_console(get_module(), player, block)) {
+		final var portal = get_module().portal_for(portal_block);
+		if (portal.open_console(get_module(), player, block)) {
 			swing_arm(player, event.getHand());
 			event.setUseInteractedBlock(Event.Result.DENY);
 			event.setUseItemInHand(Event.Result.DENY);
