@@ -1,4 +1,6 @@
-package org.oddlama.vane.portals;
+package org.oddlama.vane.portals.portal;
+import org.oddlama.vane.portals.PortalConstructor;
+import org.oddlama.vane.portals.Portals;
 
 import java.io.IOException;
 import static org.oddlama.vane.core.persistent.PersistentSerializer.from_json;

@@ -21,8 +21,14 @@ resource_pack_lang_code: 'en_us'
 # This message is sent when a new portal console has been selected
 # and the player may now select a boundary block to construct a portal.
 select_boundary_now: "§6Click the portal boundary now"
-# This message is sent when the selected portal boundary is too far away from
-# the console block.
+# This message is sent when the selected console block is not of the correct
+# type anymore. This can happen when a player replaces the console block
+# while it is selected as a pending console.
+console_invalid_type: "§cThe console block has an invalid block type!"
+# This message is sent when the selected console is in a another world than the portal boundary.
+console_different_world: "§cThe console must be in the same world as the portal"
+# This message is sent when the selected portal console is too far away from
+# the portal boundary.
 console_too_far_away: "§cThe console is too far away from the portal"
 # This message is sent when the portal has been constructed successfully.
 constructed_successfully: "§aPortal created"
@@ -52,6 +58,8 @@ too_many_portal_area_blocks: "§cThe portal area is too large! %1$s§6/%2$s§c b
 portal_area_obstructed: "§cThe portal area is obstructed!"
 # This message is sent when a player has no permission to build a portal in the area.
 build_restricted: "§cYou have no permission to build a portal here!"
+# This message is sent when a player has no permission to link a console to a portal.
+link_restricted: "§cYou have no permission to link a console to this portal!"
 # This message is sent when the selected boundary instersects an existing portal.
 intersects_existing_portal: "§cThe portal instersects another portal!"
 

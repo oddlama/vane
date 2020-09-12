@@ -121,7 +121,6 @@ public class MenuFactory {
 				return ClickResult.ERROR;
 			}
 
-			// TODO serializable to bytes
 			selected_item.item(item.clone());
 			menu.update();
 			return ClickResult.SUCCESS;

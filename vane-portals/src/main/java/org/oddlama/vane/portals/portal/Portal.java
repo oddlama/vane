@@ -1,6 +1,8 @@
-package org.oddlama.vane.portals;
+package org.oddlama.vane.portals.portal;
 
 import static org.oddlama.vane.core.persistent.PersistentSerializer.from_json;
+import org.oddlama.vane.portals.PortalConstructor;
+import org.oddlama.vane.portals.Portals;
 import static org.oddlama.vane.core.persistent.PersistentSerializer.to_json;
 
 import java.io.IOException;
@@ -15,6 +17,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import org.oddlama.vane.portals.event.PortalOpenConsoleEvent;
 import org.oddlama.vane.core.persistent.PersistentSerializer;
 import org.oddlama.vane.external.json.JSONObject;
 
@@ -95,20 +98,17 @@ public class Portal {
 		return true;
 	}
 
-	public boolean link_console(final Player player, final Block console, final Block boundary) {
-		// TODO send separate?? event check cancelled
-		System.out.println("link");
-		return true;
+	public void update_blocks() {
+		// TODO
 	}
 
 	public boolean open_console(final Portals portals, final Player player, final Block console_block) {
-		final var console = portals.portal_block_for(console_block);
-		if (console == null || console.type() != PortalBlock.Type.CONSOLE) {
+		// Call event
+		final var event = new PortalOpenConsoleEvent(player, console_block, id());
+		portals.getServer().getPluginManager().callEvent(event);
+		if (event.isCancelled()) {
 			return false;
 		}
-
-		System.out.println("open console");
-		// TODO send separate?? event check cancelled
 
 		//new ConsoleMenu(player, portal, console).open();
 		return true;

@@ -1,4 +1,4 @@
-package org.oddlama.vane.portals;
+package org.oddlama.vane.portals.portal;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -10,6 +10,8 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.libs.org.apache.commons.lang3.tuple.Pair;
+import org.oddlama.vane.portals.PortalConstructor;
+import org.oddlama.vane.portals.Portals;
 
 public class PortalBoundary {
 	public static enum ErrorState {
@@ -48,7 +50,7 @@ public class PortalBoundary {
 		return boundary_blocks;
 	}
 
-	// Returns all portal area blocks (air inside)
+	// Returns all portal area blocks
 	public Set<Block> portal_area_blocks() {
 		return portal_area_blocks;
 	}
@@ -230,8 +232,9 @@ public class PortalBoundary {
 			}
 		}
 
-		if (boundary_blocks < 2)
+		if (boundary_blocks < 2) {
 			return null;
+		}
 
 		// Identify areas
 		final var areas = new Block[2];
@@ -267,18 +270,17 @@ public class PortalBoundary {
 				break;
 			}
 
-			Block boundary = air.getRelative(0, -1, 0);
+			final var boundary = air.getRelative(0, -1, 0);
 			if (boundary.getType() != portal_constructor.config_material_boundary) {
 				break;
 			}
 
-			Block above1 = air.getRelative(0, 1, 0);
+			final var above1 = air.getRelative(0, 1, 0);
 			if (above1.getType() != portal_constructor.config_material_portal_area) {
 				break;
 			}
 
-			Block above2 = air.getRelative(0, 2, 0);
-			// TODO allow 1x3 portals with small spawn.
+			final var above2 = air.getRelative(0, 2, 0);
 			if (above2.getType() != portal_constructor.config_material_portal_area) {
 				break;
 			}
@@ -558,15 +560,17 @@ public class PortalBoundary {
 			// Find matching pairs to positive axis side
 			add3_air_stacks(portal_constructor, air_above_origin, air_above_with_boundary_below, true, mod_x, mod_z);
 
-			// Must be at least two blocks to be valid
-			if (air_above_with_boundary_below.size() < 2) {
-				boundary.error_state = boundary.plane() == Plane.XY ? ErrorState.TOO_SMALL_SPAWN_X : ErrorState.TOO_SMALL_SPAWN_Z;
+			// Must be at least 1x3 area of portal blocks to be valid
+			if (air_above_with_boundary_below.size() < 1) {
+				boundary.error_state = boundary.plane().x() ? ErrorState.TOO_SMALL_SPAWN_X : ErrorState.TOO_SMALL_SPAWN_Z;
 				return boundary;
 			}
 
 			// Spawn location is middle of air blocks
 			final var small_coord_end = air_above_with_boundary_below.get(0);
 			final var large_coord_end = air_above_with_boundary_below.get(air_above_with_boundary_below.size() - 1);
+			// TODO test 1x3
+			// TODO is this correct? +0.5 seems odd.
 			final var middle_x = 0.5 + small_coord_end.getX() / 2.0 + large_coord_end.getX() / 2.0;
 			final var middle_z = 0.5 + small_coord_end.getZ() / 2.0 + large_coord_end.getZ() / 2.0;
 			boundary.spawn = new Location(air_above_origin.getWorld(), middle_x, air_above_origin.getY() + 0.05, middle_z);

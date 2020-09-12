@@ -1,10 +1,12 @@
-package org.oddlama.vane.portals;
+package org.oddlama.vane.portals.portal;
 
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.util.Vector;
 
 import org.oddlama.vane.core.persistent.PersistentSerializer;
+import org.oddlama.vane.portals.PortalConstructor;
+import org.oddlama.vane.portals.Portals;
 
 public enum Orientation {
 	POSITIVE_X(Plane.YZ, new Vector(1, 0, 0)),

@@ -1,4 +1,4 @@
-package org.oddlama.vane.portals;
+package org.oddlama.vane.portals.portal;
 
 public enum Plane {
 	XY(true, true, false),

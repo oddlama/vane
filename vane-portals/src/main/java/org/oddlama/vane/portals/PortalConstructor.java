@@ -4,6 +4,8 @@ import static org.oddlama.vane.util.PlayerUtil.swing_arm;
 
 import java.util.HashMap;
 import java.util.UUID;
+import java.util.List;
+import java.util.ArrayList;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -24,7 +26,15 @@ import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.menu.MenuFactory;
 import org.oddlama.vane.core.menu.Menu.ClickResult;
-import org.oddlama.vane.portals.event.PortalSelectBoundaryEvent;
+import org.oddlama.vane.portals.event.PortalConstructEvent;
+import org.oddlama.vane.portals.event.PortalLinkConsoleEvent;
+
+import org.oddlama.vane.portals.portal.Orientation;
+import org.oddlama.vane.portals.portal.Plane;
+import org.oddlama.vane.portals.portal.PortalBoundary;
+import org.oddlama.vane.portals.portal.PortalBlock;
+import org.oddlama.vane.portals.portal.Style;
+import org.oddlama.vane.portals.portal.Portal;
 
 public class PortalConstructor extends Listener<Portals> {
 	// TODO test flint and steel to ignite a nether portal. this should be cancelled.
@@ -53,6 +63,8 @@ public class PortalConstructor extends Listener<Portals> {
 	public int config_area_max_blocks = 64;
 
 	@LangMessage public TranslatedMessage lang_select_boundary_now;
+	@LangMessage public TranslatedMessage lang_console_invalid_type;
+	@LangMessage public TranslatedMessage lang_console_different_world;
 	@LangMessage public TranslatedMessage lang_console_too_far_away;
 	@LangMessage public TranslatedMessage lang_constructed_successfully;
 	@LangMessage public TranslatedMessage lang_console_linked;
@@ -66,6 +78,7 @@ public class PortalConstructor extends Listener<Portals> {
 	@LangMessage public TranslatedMessage lang_too_many_portal_area_blocks;
 	@LangMessage public TranslatedMessage lang_portal_area_obstructed;
 	@LangMessage public TranslatedMessage lang_build_restricted;
+	@LangMessage public TranslatedMessage lang_link_restricted;
 	@LangMessage public TranslatedMessage lang_intersects_existing_portal;
 
 	@LangMessage public TranslatedMessage lang_target_already_connected;
@@ -94,20 +107,69 @@ public class PortalConstructor extends Listener<Portals> {
 		return changed;
 	}
 
-	private boolean can_link_console(final PortalBoundary boundary, final Block console) {
-		if (!console.getWorld().equals(boundary.origin_block().getWorld())) {
+	private boolean can_link_console(final Player player, final PortalBoundary boundary, final Block console, boolean check_only) {
+		return can_link_console(player, boundary.all_blocks(), console, check_only);
+	}
+
+	private boolean can_link_console(final Player player, final Portal portal, final Block console, boolean check_only) {
+		final var blocks = new ArrayList<Block>();
+		// TODO gather all portal blocks that arent consoles.
+		return can_link_console(player, blocks, console, check_only);
+	}
+
+	private boolean can_link_console(final Player player, final List<Block> blocks, final Block console, boolean check_only) {
+		// Check console block type
+		if (console.getType() != config_material_console) {
+			lang_console_invalid_type.send(player);
 			return false;
 		}
 
-		for (final var block : boundary.all_blocks()) {
+		// Check world
+		if (!console.getWorld().equals(blocks.get(0).getWorld())) {
+			lang_console_different_world.send(player);
+			return false;
+		}
+
+		// Check distance
+		boolean found_valid_block = false;
+		for (final var block : blocks) {
 			if (Math.abs(console.getX() - block.getX()) <= config_console_max_distance_xz &&
 			    Math.abs(console.getY() - block.getY()) <= config_console_max_distance_y &&
 			    Math.abs(console.getZ() - block.getZ()) <= config_console_max_distance_xz) {
-				return true;
+				found_valid_block = true;
+				break;
 			}
 		}
 
-		return false;
+		if (!found_valid_block) {
+			lang_console_too_far_away.send(player);
+			return false;
+		}
+
+		// Call event
+		final var event = new PortalLinkConsoleEvent(player, blocks, check_only);
+		get_module().getServer().getPluginManager().callEvent(event);
+		if (event.isCancelled()) {
+			lang_link_restricted.send(player);
+			return false;
+		}
+
+		return true;
+	}
+
+	private boolean link_console(final Player player, final Block console, final Portal portal) {
+		if (!can_link_console(player, portal, console, false)) {
+			return false;
+		}
+
+		// Add portal block
+		get_module().add_portal_block(portal.id(), create_portal_block(portal.id(), console));
+
+		// Update block blocks
+		portal.update_blocks();
+
+		// TODO sound and effect
+		return true;
 	}
 
 	private PortalBoundary find_boundary(final Player player, final Block block) {
@@ -140,18 +202,10 @@ public class PortalConstructor extends Listener<Portals> {
 			return null;
 		}
 
-		// Check portal select boundary event
-		final var event = new PortalSelectBoundaryEvent(player, boundary);
-		get_module().getServer().getPluginManager().callEvent(event);
-		if (event.isCancelled()) {
-			lang_build_restricted.send(player);
-			return null;
-		}
-
 		return boundary;
 	}
 
-	private PortalBoundary check_construction_conditions(final Player player, final Block console, final Block boundary_block) {
+	private PortalBoundary check_construction_conditions(final Player player, final Block console, final Block boundary_block, boolean check_only) {
 		if (get_module().is_portal_block(boundary_block)) {
 			get_module().log.severe("construct_portal() was called on a boundary that already belongs to a portal! This is a bug.");
 			return null;
@@ -163,9 +217,16 @@ public class PortalConstructor extends Listener<Portals> {
 			return null;
 		}
 
-		// Check console distance
-		if (!can_link_console(boundary, console)) {
-			lang_console_too_far_away.send(player);
+		// Check portal construct event
+		final var event = new PortalConstructEvent(player, boundary, check_only);
+		get_module().getServer().getPluginManager().callEvent(event);
+		if (event.isCancelled()) {
+			lang_build_restricted.send(player);
+			return null;
+		}
+
+		// Check console distance and build permission
+		if (!can_link_console(player, boundary, console, true)) {
 			return null;
 		}
 
@@ -190,8 +251,8 @@ public class PortalConstructor extends Listener<Portals> {
 		return new PortalBlock(player_id, block, type);
 	}
 
-	private boolean construct_portal(final Player player, final Block console, final Block boundary_block) {
-		if (check_construction_conditions(player, console, boundary_block) == null) {
+	private boolean construct_portal(Player player, final Block console, final Block boundary_block) {
+		if (check_construction_conditions(player, console, boundary_block, true) == null) {
 			return false;
 		}
 
@@ -200,7 +261,7 @@ public class PortalConstructor extends Listener<Portals> {
 			menu.close(p);
 
 			// Re-check conditions, as someone could have changed blocks. This prevents this race condition.
-			final var boundary = check_construction_conditions(player, console, boundary_block);
+			final var boundary = check_construction_conditions(p, console, boundary_block, false);
 			if (boundary == null) {
 				return ClickResult.ERROR;
 			}
@@ -218,22 +279,19 @@ public class PortalConstructor extends Listener<Portals> {
 				get_module().add_portal_block(portal.id(), create_portal_block(portal.id(), block));
 			}
 
+			// Link console
+			link_console(p, console, portal);
+
+			// Save storage now
 			get_module().save_persistent_storage();
 
-			// Link console
+			// Update portal blocks once
+			portal.update_blocks();
 
-			//PortalBlock.createAllFromBoundary(portal.getId(), boundary);
-
-			//// Create dynmap marker
+			// Create dynmap marker
 			//PortalLayer.createMarker(portal);
 
-			//// Link console
-			//new PortalBlock(portal.getId(), console, PortalBlock.Type.CONSOLE).create();
-
-			//// Transmute blocks
-			//for (PortalBlock portalPortalBlock : PortalBlock.queryAllByPortalId(portal.getId()))
-			//	portal.getStyle().getStyle().create(portal, portalPortalBlock);
-
+			// TODO sound + effect (instead of message?)
 			lang_constructed_successfully.send(player);
 			return ClickResult.SUCCESS;
 		}).open(player);
@@ -295,8 +353,11 @@ public class PortalConstructor extends Listener<Portals> {
 				swing_arm(player, event.getHand());
 			}
 		} else {
-			if (portal.link_console(player, console, block)) {
+			if (link_console(player, console, portal)) {
 				swing_arm(player, event.getHand());
+
+				// Save storage now
+				get_module().save_persistent_storage();
 			}
 		}
 

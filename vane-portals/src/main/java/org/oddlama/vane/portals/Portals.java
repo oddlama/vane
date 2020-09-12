@@ -9,6 +9,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+
+import org.oddlama.vane.portals.portal.Orientation;
+import org.oddlama.vane.portals.portal.Plane;
+import org.oddlama.vane.portals.portal.PortalBoundary;
+import org.oddlama.vane.portals.portal.PortalBlock;
+import org.oddlama.vane.portals.portal.Style;
+import org.oddlama.vane.portals.portal.Portal;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -26,6 +33,7 @@ import org.oddlama.vane.core.module.Module;
 
 @VaneModule(name = "portals", bstats = 8642, config_version = 1, lang_version = 1, storage_version = 1)
 public class Portals extends Module<Portals> {
+	// TODO materials
 	//@ConfigMaterialMapMapMap(name = "styles")
 	//public Map<String, Map<String, Map<String, Material>>> config_styles;
 
@@ -80,14 +88,14 @@ public class Portals extends Module<Portals> {
 		}
 
 		final var chunk_key = Chunk.getChunkKey(block.getX(), block.getZ());
-		var block_to_portal = portal_blocks_in_chunk.get(chunk_key);
-		if (block_to_portal == null) {
-			block_to_portal = new HashMap<Long, PortalBlock>();
-			portal_blocks_in_chunk.put(chunk_key, block_to_portal);
+		var block_to_portal_block = portal_blocks_in_chunk.get(chunk_key);
+		if (block_to_portal_block == null) {
+			block_to_portal_block = new HashMap<Long, PortalBlock>();
+			portal_blocks_in_chunk.put(chunk_key, block_to_portal_block);
 		}
 
 		final var block_key = block.getBlockKey();
-		block_to_portal.put(block_key, portal_block);
+		block_to_portal_block.put(block_key, portal_block);
 	}
 
 	public PortalBlock portal_block_for(final Block block) {
@@ -97,15 +105,15 @@ public class Portals extends Module<Portals> {
 		}
 
 		final var chunk_key = Chunk.getChunkKey(block.getX(), block.getZ());
-		final var block_to_portal = portal_blocks_in_chunk.get(chunk_key);
-		if (block_to_portal == null) {
+		final var block_to_portal_block = portal_blocks_in_chunk.get(chunk_key);
+		if (block_to_portal_block == null) {
 			return null;
 		}
 
 		// getBlockKey stores more information than the location in the chunk,
 		// but this is okay here as we only need a unique key for every block in the chunk.
 		final var block_key = block.getBlockKey();
-		return block_to_portal.get(block_key);
+		return block_to_portal_block.get(block_key);
 	}
 
 	public Portal portal_for(@NotNull final PortalBlock block) {
@@ -128,15 +136,15 @@ public class Portals extends Module<Portals> {
 		}
 
 		final var chunk_key = Chunk.getChunkKey(block.getX(), block.getZ());
-		final var block_to_portal = portal_blocks_in_chunk.get(chunk_key);
-		if (block_to_portal == null) {
+		final var block_to_portal_block = portal_blocks_in_chunk.get(chunk_key);
+		if (block_to_portal_block == null) {
 			return false;
 		}
 
 		// getBlockKey stores more information than the location in the chunk,
 		// but this is okay here as we only need a unique key for every block in the chunk.
 		final var block_key = block.getBlockKey();
-		return block_to_portal.containsKey(block_key);
+		return block_to_portal_block.containsKey(block_key);
 	}
 
 	public Portal controlled_portal(final Block block) {
