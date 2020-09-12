@@ -16,27 +16,21 @@ import org.oddlama.vane.core.persistent.PersistentSerializer;
 import org.oddlama.vane.external.json.JSONObject;
 
 public class PortalBlock {
-	private static Object serialize(@NotNull final Object o) throws IOException {
+	public static Object serialize(@NotNull final Object o) throws IOException {
 		final var portal_block = (PortalBlock)o;
 		final var json = new JSONObject();
-		json.put("portal_id", to_json(UUID.class,   portal_block.portal_id));
-		json.put("block",     to_json(Block.class,  portal_block.block));
-		json.put("type",      to_json(String.class, portal_block.type.name()));
+		json.put("portal_id", to_json(UUID.class,             portal_block.portal_id));
+		json.put("block",     to_json(Block.class,            portal_block.block));
+		json.put("type",      to_json(PortalBlock.Type.class, portal_block.type));
 		return json;
 	}
 
-	private static PortalBlock deserialize(@NotNull final Object o) throws IOException {
+	public static PortalBlock deserialize(@NotNull final Object o) throws IOException {
 		final var json = (JSONObject)o;
-		final var portal_id = from_json(UUID.class,  json.get("portal_id"));
-		final var block     = from_json(Block.class, json.get("block"));
-		final var type      = Type.valueOf(from_json(String.class, json.get("type")));
+		final var portal_id = from_json(UUID.class,             json.get("portal_id"));
+		final var block     = from_json(Block.class,            json.get("block"));
+		final var type      = from_json(PortalBlock.Type.class, json.get("type"));
 		return new PortalBlock(portal_id, block, type);
-	}
-
-	// Add (de-)serializer
-	static {
-		PersistentSerializer.serializers.put(PortalBlock.class,   PortalBlock::serialize);
-		PersistentSerializer.deserializers.put(PortalBlock.class, PortalBlock::deserialize);
 	}
 
 	private UUID portal_id;

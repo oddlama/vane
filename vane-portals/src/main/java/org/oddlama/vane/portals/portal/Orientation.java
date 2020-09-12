@@ -16,12 +16,6 @@ public enum Orientation {
 	POSITIVE_Z(Plane.XY, new Vector(0, 0, 1)),
 	NEGATIVE_Z(Plane.XY, new Vector(0, 0, -1));
 
-	// Add (de-)serializer
-	static {
-		PersistentSerializer.serializers.put(Orientation.class,   x -> ((Orientation)x).name());
-		PersistentSerializer.deserializers.put(Orientation.class, x -> Orientation.valueOf((String)x));
-	}
-
 	private Plane plane;
 	private Vector vector;
 	private Orientation(Plane plane, Vector vector) {

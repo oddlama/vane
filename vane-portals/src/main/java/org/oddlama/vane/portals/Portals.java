@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import org.oddlama.vane.core.persistent.PersistentSerializer;
 
 
 import org.oddlama.vane.portals.portal.Orientation;
@@ -33,6 +34,20 @@ import org.oddlama.vane.core.module.Module;
 
 @VaneModule(name = "portals", bstats = 8642, config_version = 1, lang_version = 1, storage_version = 1)
 public class Portals extends Module<Portals> {
+	// Add (de-)serializers
+	static {
+		PersistentSerializer.serializers.put(PortalBlock.class,         PortalBlock::serialize);
+		PersistentSerializer.deserializers.put(PortalBlock.class,       PortalBlock::deserialize);
+		PersistentSerializer.serializers.put(Portal.class,              Portal::serialize);
+		PersistentSerializer.deserializers.put(Portal.class,            Portal::deserialize);
+		PersistentSerializer.serializers.put(Portal.Visibility.class,   x -> ((Portal.Visibility)x).name());
+		PersistentSerializer.deserializers.put(Portal.Visibility.class, x -> Portal.Visibility.valueOf((String)x));
+		PersistentSerializer.serializers.put(PortalBlock.Type.class,    x -> ((PortalBlock.Type)x).name());
+		PersistentSerializer.deserializers.put(PortalBlock.Type.class,  x -> PortalBlock.Type.valueOf((String)x));
+		PersistentSerializer.serializers.put(Orientation.class,         x -> ((Orientation)x).name());
+		PersistentSerializer.deserializers.put(Orientation.class,       x -> Orientation.valueOf((String)x));
+	}
+
 	// TODO materials
 	//@ConfigMaterialMapMapMap(name = "styles")
 	//public Map<String, Map<String, Map<String, Material>>> config_styles;

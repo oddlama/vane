@@ -22,7 +22,7 @@ import org.oddlama.vane.core.persistent.PersistentSerializer;
 import org.oddlama.vane.external.json.JSONObject;
 
 public class Portal {
-	private static Object serialize(@NotNull final Object o) throws IOException {
+	public static Object serialize(@NotNull final Object o) throws IOException {
 		final var portal = (Portal)o;
 		final var json = new JSONObject();
 		json.put("id",            to_json(UUID.class,          portal.id));
@@ -39,7 +39,7 @@ public class Portal {
 		return json;
 	}
 
-	private static Portal deserialize(@NotNull final Object o) throws IOException {
+	public static Portal deserialize(@NotNull final Object o) throws IOException {
 		final var json = (JSONObject)o;
 		final var portal = new Portal();
 		portal.id            = from_json(UUID.class,          json.get("id"));
@@ -54,12 +54,6 @@ public class Portal {
 		portal.target_id     = from_json(UUID.class,          json.get("target_id"));
 		portal.target_locked = from_json(boolean.class,       json.get("target_locked"));
 		return portal;
-	}
-
-	// Add (de-)serializer
-	static {
-		PersistentSerializer.serializers.put(Portal.class,   Portal::serialize);
-		PersistentSerializer.deserializers.put(Portal.class, Portal::deserialize);
 	}
 
 	private UUID id;
@@ -140,12 +134,6 @@ public class Portal {
 		PUBLIC,
 		GROUP,
 		PRIVATE;
-
-		// Add (de-)serializer
-		static {
-			PersistentSerializer.serializers.put(Visibility.class,   x -> ((Visibility)x).name());
-			PersistentSerializer.deserializers.put(Visibility.class, x -> Visibility.valueOf((String)x));
-		}
 
 		public Visibility next() {
 			final var next = (ordinal() + 1) % values().length;
