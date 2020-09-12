@@ -73,6 +73,9 @@ public class Portals extends Module<Portals> {
 
 	public PortalMenuGroup menus;
 
+	// Track console items
+	private final HashMap<Block, FloatingItem> console_floating_items = new HashMap<>();
+
 	public Portals() {
 		menus = new PortalMenuGroup(this);
 		new PortalActivator(this);
@@ -217,6 +220,11 @@ public class Portals extends Module<Portals> {
 	}
 
 	public void update_console(final Portal portal, final PortalBlock console, boolean active) {
+		final var console_item = console_floating_items.get(console.block());
+		FloatingItem floatingItem = new FloatingItem(console.getWorld(), console.getX() + 0.5, console.getY() + 1.2, console.getZ() + 0.5);
+		floatingItem.setItemStack(((CraftItemStack)Portals.getConsoleItem(portal, null, false, console)).getHandle());
+		Entities.spawn(console.getWorld(), floatingItem);
+		consoleItems.put(console, floatingItem);
 		// TODO
 	}
 
