@@ -18,6 +18,7 @@ import javax.tools.Diagnostic;
     "org.oddlama.vane.annotation.config.ConfigBoolean",
     "org.oddlama.vane.annotation.config.ConfigDouble",
     "org.oddlama.vane.annotation.config.ConfigDoubleList",
+    "org.oddlama.vane.annotation.config.ConfigExtendedMaterial",
     "org.oddlama.vane.annotation.config.ConfigInt",
     "org.oddlama.vane.annotation.config.ConfigIntList",
     "org.oddlama.vane.annotation.config.ConfigItemStack",
@@ -50,6 +51,7 @@ public class ConfigAndLangProcessor extends AbstractProcessor {
 		map.put("org.oddlama.vane.annotation.config.ConfigBoolean", "boolean");
 		map.put("org.oddlama.vane.annotation.config.ConfigDouble", "double");
 		map.put("org.oddlama.vane.annotation.config.ConfigDoubleList", "java.util.List<java.lang.Double>");
+		map.put("org.oddlama.vane.annotation.config.ConfigExtendedMaterial", "org.oddlama.vane.core.material.ExtendedMaterial");
 		map.put("org.oddlama.vane.annotation.config.ConfigInt", "int");
 		map.put("org.oddlama.vane.annotation.config.ConfigIntList", "java.util.List<java.lang.Integer>");
 		map.put("org.oddlama.vane.annotation.config.ConfigItemStack", "org.bukkit.inventory.ItemStack");

@@ -29,6 +29,7 @@ import org.oddlama.vane.annotation.config.ConfigInt;
 import org.oddlama.vane.annotation.config.ConfigIntList;
 import org.oddlama.vane.annotation.config.ConfigItemStack;
 import org.oddlama.vane.annotation.config.ConfigLong;
+import org.oddlama.vane.annotation.config.ConfigExtendedMaterial;
 import org.oddlama.vane.annotation.config.ConfigMaterial;
 import org.oddlama.vane.annotation.config.ConfigMaterialSet;
 import org.oddlama.vane.annotation.config.ConfigString;
@@ -45,6 +46,7 @@ import org.oddlama.vane.core.config.ConfigIntListField;
 import org.oddlama.vane.core.config.ConfigItemStackField;
 import org.oddlama.vane.core.config.ConfigLongField;
 import org.oddlama.vane.core.config.ConfigMaterialField;
+import org.oddlama.vane.core.config.ConfigExtendedMaterialField;
 import org.oddlama.vane.core.config.ConfigMaterialSetField;
 import org.oddlama.vane.core.config.ConfigStringField;
 import org.oddlama.vane.core.config.ConfigStringListField;
@@ -107,6 +109,8 @@ public class ConfigManager {
 			return new ConfigDoubleField(owner, field, map_name, (ConfigDouble)annotation);
 		} else if (atype.equals(ConfigDoubleList.class)) {
 			return new ConfigDoubleListField(owner, field, map_name, (ConfigDoubleList)annotation);
+		} else if (atype.equals(ConfigExtendedMaterial.class)) {
+			return new ConfigExtendedMaterialField(owner, field, map_name, (ConfigExtendedMaterial)annotation);
 		} else if (atype.equals(ConfigInt.class)) {
 			return new ConfigIntField(owner, field, map_name, (ConfigInt)annotation);
 		} else if (atype.equals(ConfigIntList.class)) {
