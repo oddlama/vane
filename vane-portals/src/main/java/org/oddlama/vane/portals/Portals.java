@@ -166,16 +166,50 @@ public class Portals extends Module<Portals> {
 	}
 
 	public void remove_portal(final Portal portal) {
-		// TODO deactivate
+		// Deactivate portal if needed
+		final var connected = connected_portal(portal);
+		if (connected != null) {
+			disconnect_portals(portal, connected);
+		}
+
+		// Remove portal from storage
 		storage_portals.remove(portal.id());
 
-		// TODO replace target id everywhere,
-		// and update all changed portals that are loaded in next tick
-		// i.e. update_if_loaded() function.
+		// Remove portal blocks from acceleration structure
+		portal.blocks().forEach(this::remove_portal_block_from_acceleration_structure);
+
+		// Replace references to the portal everywhere
+		// and update all changed portal consoles.
+		for (final var other : storage_portals.values()) {
+			if (other.target_id() == portal.id()) {
+				other.target_id(null);
+				other.blocks().stream()
+					.filter(pb -> pb.type() == PortalBlock.Type.CONSOLE)
+					.filter(pb -> console_floating_items.containsKey(pb.block()))
+					.forEach(pb -> update_console_item(other, pb.block(), is_activated(other)));
+			}
+		}
 	}
 
 	public void add_portal(final Portal portal) {
 		storage_portals.put(portal.id(), portal);
+	}
+
+	public void remove_portal_block_from_acceleration_structure(final PortalBlock portal_block) {
+		final var block = portal_block.block();
+		final var portal_blocks_in_chunk = storage_portal_blocks_in_chunk_in_world.get(block.getWorld().getUID());
+		if (portal_blocks_in_chunk == null) {
+			return;
+		}
+
+		final var chunk_key = block.getChunk().getChunkKey();
+		final var block_to_portal_block = portal_blocks_in_chunk.get(chunk_key);
+		if (block_to_portal_block == null) {
+			return;
+		}
+
+		final var block_key = block.getBlockKey();
+		block_to_portal_block.remove(block_key);
 	}
 
 	public void remove_portal_block(final Portal portal, final PortalBlock portal_block) {
@@ -183,7 +217,7 @@ public class Portals extends Module<Portals> {
 		portal.blocks().remove(portal_block);
 
 		// Remove from acceleration structure
-		// TODO
+		remove_portal_block_from_acceleration_structure(portal_block);
 	}
 
 	public void add_portal_block(final Portal portal, final PortalBlock portal_block) {
@@ -389,8 +423,7 @@ public class Portals extends Module<Portals> {
 	}
 
 	public boolean is_activated(final Portal portal) {
-		// TODO
-		return false;
+		return connected_portals.containsKey(portal.id());
 	}
 
 	public Portal connected_portal(final Portal portal) {

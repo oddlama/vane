@@ -92,13 +92,15 @@ public class Portal {
 	public Location spawn() { return spawn.location().clone(); }
 	public List<PortalBlock> blocks() { return blocks; }
 	public String name() { return name; }
-	public void name(String name) { this.name = name; }
+	public void name(final String name) { this.name = name; }
 	public ItemStack icon() { return icon == null ? null : icon.clone(); }
-	public void icon(ItemStack icon) { this.icon = icon; }
+	public void icon(final ItemStack icon) { this.icon = icon; }
 	public Visibility visibility() { return visibility; }
-	public void visibility(Visibility visibility) { this.visibility = visibility; }
+	public void visibility(final Visibility visibility) { this.visibility = visibility; }
 	public UUID target_id() { return target_id; }
+	public void target_id(final UUID target_id) { this.target_id = target_id; }
 	public boolean target_locked() { return target_locked; }
+	public void target_locked(boolean target_locked) { this.target_locked = target_locked; }
 
 	public @Nullable Portal target(final Portals portals) {
 		return portals.portal_for(target_id());
