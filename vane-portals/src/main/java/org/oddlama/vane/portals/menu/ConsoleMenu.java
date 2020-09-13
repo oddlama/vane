@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 
 import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.core.config.TranslatedItemStack;
+import org.bukkit.inventory.ItemStack;
 import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.menu.Menu.ClickResult;
 import org.oddlama.vane.core.menu.Menu;
@@ -99,16 +100,23 @@ public class ConsoleMenu extends ModuleComponent<Portals> {
 	}
 
 	private MenuWidget menu_item_select_target(final Portal portal) {
-		if (portal.target_locked()) {
-			return new MenuItem(4, item_select_target_locked.item(), (player, menu, self) -> {
+		return new MenuItem(4, null, (player, menu, self) -> {
+			if (portal.target_locked()) {
 				return ClickResult.ERROR;
-			});
-		} else {
-			return new MenuItem(4, item_select_target.item(), (player, menu, self) -> {
+			} else {
 				menu.close(player);
 				return ClickResult.SUCCESS;
-			});
-		}
+			}
+		}) {
+			@Override
+			public void item(final ItemStack item) {
+				if (portal.target_locked()) {
+					super.item(item_select_target_locked.item());
+				} else {
+					super.item(item_select_target.item());
+				}
+			}
+		};
 	}
 
 	private MenuWidget menu_item_unlink_console(final Portal portal, final Block console) {
