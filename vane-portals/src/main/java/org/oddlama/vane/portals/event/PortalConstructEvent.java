@@ -2,12 +2,7 @@ package org.oddlama.vane.portals.event;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 
-import org.oddlama.vane.portals.portal.Orientation;
-import org.oddlama.vane.portals.portal.Plane;
 import org.oddlama.vane.portals.portal.PortalBoundary;
-import org.oddlama.vane.portals.portal.PortalBlock;
-import org.oddlama.vane.portals.portal.Style;
-import org.oddlama.vane.portals.portal.Portal;
 
 public class PortalConstructEvent extends PortalEvent {
 	private static final HandlerList handlers = new HandlerList();

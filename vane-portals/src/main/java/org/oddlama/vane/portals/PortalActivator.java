@@ -12,15 +12,9 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-import org.oddlama.vane.portals.portal.Orientation;
-import org.oddlama.vane.portals.portal.Plane;
-import org.oddlama.vane.portals.portal.PortalBoundary;
-import org.oddlama.vane.portals.portal.PortalBlock;
-import org.oddlama.vane.portals.portal.Style;
-import org.oddlama.vane.portals.portal.Portal;
-
 import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.module.Context;
+import org.oddlama.vane.portals.portal.PortalBlock;
 
 public class PortalActivator extends Listener<Portals> {
 	public PortalActivator(Context<Portals> context) {

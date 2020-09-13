@@ -1,25 +1,9 @@
 package org.oddlama.vane.util;
 
-import static org.oddlama.vane.util.Nms.creative_tab_id;
-import static org.oddlama.vane.util.Nms.item_handle;
-import static org.oddlama.vane.util.Nms.player_handle;
-
-import java.util.Arrays;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.SkullMeta;
-import java.util.Comparator;
-import com.destroystokyo.paper.profile.ProfileProperty;
-import java.util.stream.Collectors;
-import java.util.List;
-import java.util.Map;
 import java.util.UUID;
+
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 
 public class LazyLocation {
 	private UUID world_id = null;

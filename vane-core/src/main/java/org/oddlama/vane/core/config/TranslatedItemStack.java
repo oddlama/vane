@@ -1,18 +1,18 @@
 package org.oddlama.vane.core.config;
 
 import static org.oddlama.vane.util.ItemUtil.name_item;
-import org.oddlama.vane.core.material.ExtendedMaterial;
 
-import org.bukkit.NamespacedKey;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 
-import org.oddlama.vane.annotation.config.ConfigInt;
 import org.oddlama.vane.annotation.config.ConfigExtendedMaterial;
+import org.oddlama.vane.annotation.config.ConfigInt;
 import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.annotation.lang.LangMessageArray;
 import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.lang.TranslatedMessageArray;
+import org.oddlama.vane.core.material.ExtendedMaterial;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.core.module.ModuleComponent;

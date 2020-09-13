@@ -5,13 +5,6 @@ import java.util.UUID;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
-
-import org.oddlama.vane.portals.portal.Orientation;
-import org.oddlama.vane.portals.portal.Plane;
-import org.oddlama.vane.portals.portal.PortalBoundary;
-import org.oddlama.vane.portals.portal.PortalBlock;
-import org.oddlama.vane.portals.portal.Style;
-import org.oddlama.vane.portals.portal.Portal;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityPortalEvent;

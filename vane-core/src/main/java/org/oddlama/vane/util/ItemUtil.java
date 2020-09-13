@@ -5,27 +5,26 @@ import static org.oddlama.vane.util.Nms.item_handle;
 import static org.oddlama.vane.util.Nms.player_handle;
 
 import java.util.Arrays;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.SkullMeta;
 import java.util.Comparator;
-import com.destroystokyo.paper.profile.ProfileProperty;
-import java.util.stream.Collectors;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import com.destroystokyo.paper.profile.ProfileProperty;
+
 import net.md_5.bungee.api.chat.BaseComponent;
 
 import net.minecraft.server.v1_16_R2.Item;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_16_R2.enchantments.CraftEnchantment;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 
 public class ItemUtil {
 	private static final UUID SKULL_OWNER = UUID.fromString("00000000-0000-0000-0000-000000000000");

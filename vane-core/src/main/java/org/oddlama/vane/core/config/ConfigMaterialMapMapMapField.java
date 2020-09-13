@@ -5,21 +5,19 @@ import static org.oddlama.vane.util.Util.namespaced_key;
 
 import java.lang.StringBuilder;
 import java.lang.reflect.Field;
-import java.util.stream.Collectors;
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Map;
 import java.util.HashMap;
-import java.util.Set;
+import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import org.oddlama.vane.annotation.config.ConfigMaterialMapEntry;
+import org.oddlama.vane.annotation.config.ConfigMaterialMapMapEntry;
 import org.oddlama.vane.annotation.config.ConfigMaterialMapMapMap;
 import org.oddlama.vane.annotation.config.ConfigMaterialMapMapMapEntry;
-import org.oddlama.vane.annotation.config.ConfigMaterialMapMapEntry;
-import org.oddlama.vane.annotation.config.ConfigMaterialMapEntry;
 import org.oddlama.vane.core.YamlLoadException;
 
 public class ConfigMaterialMapMapMapField extends ConfigField<Map<String, Map<String, Map<String, Material>>>> {

@@ -19,8 +19,8 @@ import org.oddlama.vane.annotation.lang.LangVersion;
 import org.oddlama.vane.core.ResourcePackGenerator;
 import org.oddlama.vane.core.YamlLoadException;
 import org.oddlama.vane.core.lang.LangField;
-import org.oddlama.vane.core.lang.LangMessageField;
 import org.oddlama.vane.core.lang.LangMessageArrayField;
+import org.oddlama.vane.core.lang.LangMessageField;
 import org.oddlama.vane.core.lang.LangVersionField;
 import org.oddlama.vane.core.module.Module;
 

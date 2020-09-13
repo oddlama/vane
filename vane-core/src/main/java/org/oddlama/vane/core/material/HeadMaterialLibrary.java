@@ -1,18 +1,13 @@
 package org.oddlama.vane.core.material;
 
-import static org.oddlama.vane.util.ItemUtil.skull_with_texture;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.SkullMeta;
-import java.util.List;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Map;
 import java.util.HashMap;
-import org.json.JSONArray;
+import java.util.List;
+import java.util.Map;
+
 import org.bukkit.NamespacedKey;
+
+import org.json.JSONArray;
 
 public class HeadMaterialLibrary {
 	private static final Map<NamespacedKey, HeadMaterial> registry = new HashMap<>();

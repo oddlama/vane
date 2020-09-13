@@ -9,13 +9,6 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 
-
-import org.oddlama.vane.portals.portal.Orientation;
-import org.oddlama.vane.portals.portal.Plane;
-import org.oddlama.vane.portals.portal.PortalBoundary;
-import org.oddlama.vane.portals.portal.PortalBlock;
-import org.oddlama.vane.portals.portal.Style;
-import org.oddlama.vane.portals.portal.Portal;
 import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.module.Context;
 

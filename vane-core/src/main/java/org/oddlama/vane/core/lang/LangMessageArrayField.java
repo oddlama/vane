@@ -1,9 +1,9 @@
 package org.oddlama.vane.core.lang;
 
 import java.lang.reflect.Field;
-import java.util.function.Function;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Function;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 

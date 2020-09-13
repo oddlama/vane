@@ -1,12 +1,10 @@
 package org.oddlama.vane.core.lang;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TranslatableComponent;
-import java.util.List;
-import java.util.ArrayList;
-
-import org.bukkit.World;
-import org.bukkit.command.CommandSender;
 
 import org.oddlama.vane.core.module.Module;
 

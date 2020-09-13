@@ -1,7 +1,7 @@
 package org.oddlama.vane.core.menu;
 
-import static org.oddlama.vane.util.ItemUtil.name_of;
 import static org.oddlama.vane.util.ItemUtil.name_item;
+import static org.oddlama.vane.util.ItemUtil.name_of;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;

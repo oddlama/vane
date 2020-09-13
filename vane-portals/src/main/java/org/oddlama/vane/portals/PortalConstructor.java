@@ -3,8 +3,8 @@ package org.oddlama.vane.portals;
 import static org.oddlama.vane.util.PlayerUtil.swing_arm;
 
 import java.util.HashMap;
-import java.util.UUID;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.bukkit.Material;
@@ -23,18 +23,16 @@ import org.oddlama.vane.annotation.config.ConfigMaterial;
 import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.lang.TranslatedMessage;
-import org.oddlama.vane.core.module.Context;
-import org.oddlama.vane.core.menu.MenuFactory;
 import org.oddlama.vane.core.menu.Menu.ClickResult;
+import org.oddlama.vane.core.menu.MenuFactory;
+import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.portals.event.PortalConstructEvent;
 import org.oddlama.vane.portals.event.PortalLinkConsoleEvent;
-
 import org.oddlama.vane.portals.portal.Orientation;
 import org.oddlama.vane.portals.portal.Plane;
-import org.oddlama.vane.portals.portal.PortalBoundary;
-import org.oddlama.vane.portals.portal.PortalBlock;
-import org.oddlama.vane.portals.portal.Style;
 import org.oddlama.vane.portals.portal.Portal;
+import org.oddlama.vane.portals.portal.PortalBlock;
+import org.oddlama.vane.portals.portal.PortalBoundary;
 
 public class PortalConstructor extends Listener<Portals> {
 	// TODO materials group

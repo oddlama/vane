@@ -1,19 +1,10 @@
 package org.oddlama.vane.core.material;
 
-import static org.oddlama.vane.util.ItemUtil.skull_with_texture;
 import static org.oddlama.vane.util.MaterialUtil.material_from;
-import static org.oddlama.vane.util.Util.namespaced_key;
 
-import java.util.List;
-import java.util.ArrayList;
-import org.bukkit.NamespacedKey;
-
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.SkullMeta;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 public class ExtendedMaterial {
 	private NamespacedKey key;

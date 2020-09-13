@@ -3,12 +3,9 @@ package org.oddlama.vane.core;
 import static org.oddlama.vane.core.item.CustomItem.is_custom_item;
 import static org.oddlama.vane.util.MaterialUtil.is_tillable;
 
-import org.oddlama.vane.core.material.HeadMaterialLibrary;
-import java.nio.charset.StandardCharsets;
-import org.bukkit.craftbukkit.libs.org.apache.commons.io.IOUtils;
-
-import java.io.IOException;
 import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -17,6 +14,7 @@ import java.util.logging.Level;
 import com.destroystokyo.paper.MaterialTags;
 
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.libs.org.apache.commons.io.IOUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -31,6 +29,7 @@ import org.oddlama.vane.annotation.VaneModule;
 import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.core.item.CustomItem;
 import org.oddlama.vane.core.lang.TranslatedMessage;
+import org.oddlama.vane.core.material.HeadMaterialLibrary;
 import org.oddlama.vane.core.menu.MenuManager;
 import org.oddlama.vane.core.module.Module;
 

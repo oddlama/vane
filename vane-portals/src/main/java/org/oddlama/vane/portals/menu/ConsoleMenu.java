@@ -1,52 +1,23 @@
 package org.oddlama.vane.portals.menu;
 
 import static org.oddlama.vane.util.Util.namespaced_key;
-import static org.oddlama.vane.util.ItemUtil.name_item;
-import static org.oddlama.vane.util.ItemUtil.name_of;
 
-import java.util.Collections;
-import java.util.List;
-import org.bukkit.block.Block;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.oddlama.vane.core.config.TranslatedItemStack;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockPistonExtendEvent;
-import org.bukkit.event.block.BlockPistonRetractEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.EntityChangeBlockEvent;
-import org.bukkit.event.entity.EntityExplodeEvent;
-import org.bukkit.event.inventory.ClickType;
-import org.oddlama.vane.portals.Portals;
-import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.Nullable;
-import org.oddlama.vane.annotation.config.ConfigInt;
-import org.oddlama.vane.annotation.config.ConfigMaterial;
+
 import org.oddlama.vane.annotation.lang.LangMessage;
-import org.oddlama.vane.core.Listener;
-import org.oddlama.vane.core.functional.Consumer1;
-import org.oddlama.vane.core.functional.Consumer2;
-import org.oddlama.vane.core.functional.Function1;
-import org.oddlama.vane.core.functional.Function3;
+import org.oddlama.vane.core.config.TranslatedItemStack;
 import org.oddlama.vane.core.lang.TranslatedMessage;
+import org.oddlama.vane.core.menu.Menu.ClickResult;
 import org.oddlama.vane.core.menu.Menu;
 import org.oddlama.vane.core.menu.MenuItem;
 import org.oddlama.vane.core.menu.MenuWidget;
-import org.oddlama.vane.core.menu.Menu.ClickResult;
-import org.oddlama.vane.core.menu.MenuFactory;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.ModuleComponent;
-import org.oddlama.vane.portals.event.PortalConstructEvent;
-import org.oddlama.vane.portals.event.PortalLinkConsoleEvent;
-import org.oddlama.vane.portals.portal.Orientation;
-import org.oddlama.vane.portals.portal.Plane;
+import org.oddlama.vane.portals.Portals;
 import org.oddlama.vane.portals.portal.Portal;
-import org.oddlama.vane.portals.portal.PortalBlock;
-import org.oddlama.vane.portals.portal.PortalBoundary;
-import org.oddlama.vane.portals.portal.Style;
 
 public class ConsoleMenu extends ModuleComponent<Portals> {
 	@LangMessage public TranslatedMessage lang_title;

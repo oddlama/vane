@@ -1,17 +1,14 @@
 package org.oddlama.vane.portals.portal;
 
 import static org.oddlama.vane.core.persistent.PersistentSerializer.from_json;
-import org.oddlama.vane.portals.PortalConstructor;
-import org.oddlama.vane.portals.Portals;
 import static org.oddlama.vane.core.persistent.PersistentSerializer.to_json;
 
 import java.io.IOException;
-import java.util.UUID;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.Location;
-import org.oddlama.vane.util.LazyLocation;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -20,9 +17,10 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import org.oddlama.vane.portals.event.PortalOpenConsoleEvent;
-import org.oddlama.vane.core.persistent.PersistentSerializer;
 import org.oddlama.vane.external.json.JSONObject;
+import org.oddlama.vane.portals.Portals;
+import org.oddlama.vane.portals.event.PortalOpenConsoleEvent;
+import org.oddlama.vane.util.LazyLocation;
 
 public class Portal {
 	public static Object serialize(@NotNull final Object o) throws IOException {

@@ -1,27 +1,28 @@
 package org.oddlama.vane.util;
 
 import java.util.Map;
-import com.mojang.datafixers.types.Type;
-import com.mojang.datafixers.DataFixUtils;
 import java.util.logging.Level;
+
+import com.mojang.datafixers.DataFixUtils;
+import com.mojang.datafixers.types.Type;
 
 import net.minecraft.server.v1_16_R2.BlockPosition;
 import net.minecraft.server.v1_16_R2.Clearable;
 import net.minecraft.server.v1_16_R2.CreativeModeTab;
+import net.minecraft.server.v1_16_R2.DataConverterRegistry;
+import net.minecraft.server.v1_16_R2.DataConverterTypes;
 import net.minecraft.server.v1_16_R2.DedicatedServer;
-import net.minecraft.server.v1_16_R2.Entity;
-import net.minecraft.server.v1_16_R2.EntityTypes;
 import net.minecraft.server.v1_16_R2.Enchantment;
 import net.minecraft.server.v1_16_R2.EnchantmentSlotType;
+import net.minecraft.server.v1_16_R2.Entity;
 import net.minecraft.server.v1_16_R2.EntityPlayer;
+import net.minecraft.server.v1_16_R2.EntityTypes;
 import net.minecraft.server.v1_16_R2.IRegistry;
 import net.minecraft.server.v1_16_R2.Item;
 import net.minecraft.server.v1_16_R2.ItemStack;
 import net.minecraft.server.v1_16_R2.MinecraftKey;
-import net.minecraft.server.v1_16_R2.DataConverterRegistry;
-import net.minecraft.server.v1_16_R2.DataConverterTypes;
-import net.minecraft.server.v1_16_R2.WorldServer;
 import net.minecraft.server.v1_16_R2.SharedConstants;
+import net.minecraft.server.v1_16_R2.WorldServer;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -116,13 +117,14 @@ public class Nms {
 		// Get the datafixer
 		final var world_version = SharedConstants.getGameVersion().getWorldVersion();
 		final var world_version_key = DataFixUtils.makeKey(world_version);
-		final var data_fixer = (Map<Object,Type<?>>)DataConverterRegistry.a()
+		final var data_types = DataConverterRegistry.a()
 			.getSchema(world_version_key)
 			.findChoiceType(DataConverterTypes.ENTITY)
 			.types();
+		final var data_types_map = (Map<Object,Type<?>>)data_types;
 		// Inject the new custom entity (this registers the key/id with the server,
 		// so it will be available in vanilla constructs like the /summon command)
-		data_fixer.put("minecraft:" + s, data_fixer.get(base_entity_type.toString()));
+		data_types_map.put("minecraft:" + s, data_types_map.get(base_entity_type.toString()));
 		// Store new type in registry
 		IRegistry.a(IRegistry.ENTITY_TYPE, s, builder.a(s));
 	}

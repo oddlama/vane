@@ -7,11 +7,10 @@ import java.util.Set;
 import java.util.Stack;
 
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.libs.org.apache.commons.lang3.tuple.Pair;
+
 import org.oddlama.vane.portals.PortalConstructor;
-import org.oddlama.vane.portals.Portals;
 
 public class PortalBoundary {
 	public static enum ErrorState {

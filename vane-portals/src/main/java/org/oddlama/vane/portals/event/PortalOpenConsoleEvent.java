@@ -1,18 +1,10 @@
 package org.oddlama.vane.portals.event;
 
-import org.bukkit.entity.Player;
-import java.util.List;
 import java.util.UUID;
-import org.bukkit.event.HandlerList;
 
 import org.bukkit.block.Block;
-
-import org.oddlama.vane.portals.portal.Orientation;
-import org.oddlama.vane.portals.portal.Plane;
-import org.oddlama.vane.portals.portal.PortalBoundary;
-import org.oddlama.vane.portals.portal.PortalBlock;
-import org.oddlama.vane.portals.portal.Style;
-import org.oddlama.vane.portals.portal.Portal;
+import org.bukkit.entity.Player;
+import org.bukkit.event.HandlerList;
 
 public class PortalOpenConsoleEvent extends PortalEvent {
 	private static final HandlerList handlers = new HandlerList();

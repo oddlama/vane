@@ -1,78 +1,59 @@
 package org.oddlama.vane.portals;
 
 import static org.oddlama.vane.util.BlockUtil.adjacent_blocks_3d;
-import static org.oddlama.vane.util.Util.ms_to_ticks;
 import static org.oddlama.vane.util.BlockUtil.unpack;
 import static org.oddlama.vane.util.ItemUtil.name_item;
-import static org.oddlama.vane.util.Util.namespaced_key;
-import net.md_5.bungee.api.chat.BaseComponent;
+import static org.oddlama.vane.util.Nms.item_handle;
 import static org.oddlama.vane.util.Nms.register_entity;
 import static org.oddlama.vane.util.Nms.spawn;
-import org.bukkit.scheduler.BukkitTask;
-import static org.oddlama.vane.util.Nms.item_handle;
+import static org.oddlama.vane.util.Util.ms_to_ticks;
+import static org.oddlama.vane.util.Util.namespaced_key;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Consumer;
-import org.oddlama.vane.annotation.config.ConfigLong;
+import java.util.UUID;
+
+import net.md_5.bungee.api.chat.BaseComponent;
+
 import net.minecraft.server.v1_16_R2.EntityTypes;
 import net.minecraft.server.v1_16_R2.EnumCreatureType;
-import java.util.ArrayList;
-import org.oddlama.vane.annotation.config.ConfigInt;
-import org.oddlama.vane.annotation.config.ConfigMaterial;
-import org.oddlama.vane.annotation.lang.LangMessage;
-import org.oddlama.vane.core.Listener;
-import org.oddlama.vane.core.lang.TranslatedMessage;
-import org.oddlama.vane.core.module.Context;
-import org.oddlama.vane.core.menu.MenuFactory;
-import org.oddlama.vane.core.menu.Menu.ClickResult;
-import org.oddlama.vane.core.material.ExtendedMaterial;
-import org.oddlama.vane.portals.event.PortalConstructEvent;
-import org.oddlama.vane.portals.event.PortalLinkConsoleEvent;
 
-import org.oddlama.vane.core.functional.Consumer2;
-import org.oddlama.vane.portals.portal.Orientation;
-import org.oddlama.vane.portals.portal.Plane;
-import org.oddlama.vane.portals.portal.PortalBoundary;
-import org.oddlama.vane.portals.portal.PortalBlock;
-import org.oddlama.vane.portals.portal.Style;
-import org.oddlama.vane.portals.portal.Portal;
-import java.util.UUID;
-import java.util.function.Predicate;
-import org.oddlama.vane.core.persistent.PersistentSerializer;
-import org.oddlama.vane.portals.menu.PortalMenuGroup;
-import org.oddlama.vane.annotation.config.ConfigMaterialMapMapMap;
-import org.oddlama.vane.annotation.config.ConfigMaterialMapMapMapEntry;
-import org.oddlama.vane.annotation.config.ConfigMaterialMapMapEntry;
-import org.oddlama.vane.annotation.config.ConfigMaterialMapEntry;
-
-import org.oddlama.vane.portals.portal.Orientation;
-import org.oddlama.vane.portals.portal.Plane;
-import org.oddlama.vane.portals.portal.PortalBoundary;
-import org.oddlama.vane.portals.portal.PortalBlock;
-import org.oddlama.vane.portals.portal.PortalBlockLookup;
-import org.oddlama.vane.portals.portal.Style;
-import org.oddlama.vane.portals.portal.Portal;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.Nullable;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitTask;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import org.oddlama.vane.annotation.VaneModule;
+import org.oddlama.vane.annotation.config.ConfigLong;
+import org.oddlama.vane.annotation.config.ConfigMaterialMapEntry;
+import org.oddlama.vane.annotation.config.ConfigMaterialMapMapEntry;
+import org.oddlama.vane.annotation.config.ConfigMaterialMapMapMap;
+import org.oddlama.vane.annotation.config.ConfigMaterialMapMapMapEntry;
+import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.annotation.persistent.Persistent;
+import org.oddlama.vane.core.functional.Consumer2;
+import org.oddlama.vane.core.lang.TranslatedMessage;
+import org.oddlama.vane.core.material.ExtendedMaterial;
 import org.oddlama.vane.core.module.Module;
+import org.oddlama.vane.core.persistent.PersistentSerializer;
 import org.oddlama.vane.portals.entity.FloatingItem;
+import org.oddlama.vane.portals.menu.PortalMenuGroup;
+import org.oddlama.vane.portals.portal.Orientation;
+import org.oddlama.vane.portals.portal.Portal;
+import org.oddlama.vane.portals.portal.PortalBlock;
+import org.oddlama.vane.portals.portal.PortalBlockLookup;
+import org.oddlama.vane.portals.portal.Style;
 
 @VaneModule(name = "portals", bstats = 8642, config_version = 1, lang_version = 1, storage_version = 1)
 public class Portals extends Module<Portals> {
@@ -92,6 +73,8 @@ public class Portals extends Module<Portals> {
 		PersistentSerializer.deserializers.put(Orientation.class,       x -> Orientation.valueOf((String)x));
 	}
 
+	// TODO better default styles
+	// TODO style per portal or per player a list of styles? idk. global? how to delete?
 	@ConfigMaterialMapMapMap(def = {
 		@ConfigMaterialMapMapMapEntry(key = "vane_portals:portal_style_default", value = {
 			@ConfigMaterialMapMapEntry(key = "active", value = {

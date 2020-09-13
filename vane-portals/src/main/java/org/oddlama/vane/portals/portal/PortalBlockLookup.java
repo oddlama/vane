@@ -1,18 +1,12 @@
 package org.oddlama.vane.portals.portal;
-import org.oddlama.vane.portals.PortalConstructor;
-import org.oddlama.vane.portals.Portals;
-
-import java.io.IOException;
 import static org.oddlama.vane.core.persistent.PersistentSerializer.from_json;
 import static org.oddlama.vane.core.persistent.PersistentSerializer.to_json;
 
+import java.io.IOException;
 import java.util.UUID;
 
-import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import org.oddlama.vane.core.persistent.PersistentSerializer;
 import org.oddlama.vane.external.json.JSONObject;
 
 public class PortalBlockLookup {
