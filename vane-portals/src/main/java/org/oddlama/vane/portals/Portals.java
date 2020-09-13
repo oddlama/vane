@@ -1,8 +1,12 @@
 package org.oddlama.vane.portals;
 
 import static org.oddlama.vane.util.BlockUtil.adjacent_blocks_3d;
+import static org.oddlama.vane.util.ItemUtil.name_item;
+import static org.oddlama.vane.util.Util.namespaced_key;
+import net.md_5.bungee.api.chat.BaseComponent;
 import static org.oddlama.vane.util.Nms.register_entity;
 import static org.oddlama.vane.util.Nms.spawn;
+import static org.oddlama.vane.util.Nms.item_handle;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -12,6 +16,24 @@ import java.util.Set;
 import net.minecraft.server.v1_16_R2.EntityTypes;
 import net.minecraft.server.v1_16_R2.EnumCreatureType;
 import java.util.ArrayList;
+import org.oddlama.vane.annotation.config.ConfigInt;
+import org.oddlama.vane.annotation.config.ConfigMaterial;
+import org.oddlama.vane.annotation.lang.LangMessage;
+import org.oddlama.vane.core.Listener;
+import org.oddlama.vane.core.lang.TranslatedMessage;
+import org.oddlama.vane.core.module.Context;
+import org.oddlama.vane.core.menu.MenuFactory;
+import org.oddlama.vane.core.menu.Menu.ClickResult;
+import org.oddlama.vane.core.material.ExtendedMaterial;
+import org.oddlama.vane.portals.event.PortalConstructEvent;
+import org.oddlama.vane.portals.event.PortalLinkConsoleEvent;
+
+import org.oddlama.vane.portals.portal.Orientation;
+import org.oddlama.vane.portals.portal.Plane;
+import org.oddlama.vane.portals.portal.PortalBoundary;
+import org.oddlama.vane.portals.portal.PortalBlock;
+import org.oddlama.vane.portals.portal.Style;
+import org.oddlama.vane.portals.portal.Portal;
 import java.util.UUID;
 import java.util.function.Predicate;
 import org.oddlama.vane.core.persistent.PersistentSerializer;
@@ -26,6 +48,8 @@ import org.oddlama.vane.portals.portal.Style;
 import org.oddlama.vane.portals.portal.Portal;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.Nullable;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
@@ -61,6 +85,10 @@ public class Portals extends Module<Portals> {
 	// TODO materials
 	//@ConfigMaterialMapMapMap(name = "styles")
 	//public Map<String, Map<String, Map<String, Material>>> config_styles;
+
+	@LangMessage public TranslatedMessage lang_console_display_active;
+	@LangMessage public TranslatedMessage lang_console_display_inactive;
+	@LangMessage public TranslatedMessage lang_console_no_target;
 
 	// Primary storage for all portals (portal_id → portal)
 	@Persistent
@@ -181,6 +209,10 @@ public class Portals extends Module<Portals> {
 		return storage_portals.get(block.portal_id());
 	}
 
+	public Portal portal_for(@Nullable final UUID uuid) {
+		return storage_portals.get(uuid);
+	}
+
 	public Portal portal_for(final Block block) {
 		final var portal_block = portal_block_for(block);
 		if (portal_block == null) {
@@ -232,14 +264,48 @@ public class Portals extends Module<Portals> {
 		return false;
 	}
 
+	private ItemStack make_console_item(final Portal portal, boolean active) {
+		final var target = portal.target(this);
+		ItemStack item = null;
+
+		// Try to use target portal's block
+		if (target != null) {
+			item = target.icon();
+		}
+
+		// Fallback item
+		if (item == null) {
+			item = ExtendedMaterial.from(namespaced_key("vane", "decoration_end_portal_orb")).item();
+		}
+
+		final var target_name = target == null ? lang_console_no_target.str() : target.name();
+		final BaseComponent display_name;
+		if (active) {
+			display_name = lang_console_display_active.format("§5" + target_name);
+		} else {
+			display_name = lang_console_display_inactive.format("§7" + target_name);
+		}
+
+		return name_item(item, display_name);
+	}
+
 	public void update_console(final Portal portal, final PortalBlock console, boolean active) {
 		final var block = console.block();
-		final var console_item = console_floating_items.get(console.block());
-		final var item = new FloatingItem(block.getWorld(), block.getX() + 0.5, block.getY() + 1.2, block.getZ() + 0.5);
-		// TODO item.setItemStack(((CraftItemStack)Portals.getConsoleItem(portal, null, false, console)).getHandle());
-		spawn(block.getWorld(), item);
-		console_floating_items.put(block, item);
-		// TODO
+		var console_item = console_floating_items.get(console.block());
+		final boolean is_new;
+		if (console_item == null) {
+			console_item = new FloatingItem(block.getWorld(), block.getX() + 0.5, block.getY() + 1.2, block.getZ() + 0.5);
+			is_new = true;
+		} else {
+			is_new = false;
+		}
+
+		console_item.setItemStack(item_handle(make_console_item(portal, active)));
+
+		if (is_new) {
+			console_floating_items.put(block, console_item);
+			spawn(block.getWorld(), console_item);
+		}
 	}
 
 	private void disable_consoles_in_chunk(final Chunk chunk) {

@@ -92,12 +92,16 @@ public class Portal {
 	public List<PortalBlock> blocks() { return blocks; }
 	public String name() { return name; }
 	public void name(String name) { this.name = name; }
-	public ItemStack icon() { return icon.clone(); }
+	public ItemStack icon() { return icon == null ? null : icon.clone(); }
 	public void icon(ItemStack icon) { this.icon = icon; }
 	public Visibility visibility() { return visibility; }
 	public void visibility(Visibility visibility) { this.visibility = visibility; }
 	public UUID target_id() { return target_id; }
 	public boolean target_locked() { return target_locked; }
+
+	public @Nullable Portal target(final Portals portals) {
+		return portals.portal_for(target_id());
+	}
 
 	public boolean activate(final Portals portals, @Nullable final Player player) {
 		// TODO send event check cancelled
@@ -142,11 +146,6 @@ public class Portal {
 
 		portals.menus.console_menu.create(this, player, console).open(player);
 		return true;
-	}
-
-	public @Nullable Portal target() {
-		// TODO
-		return null;
 	}
 
 

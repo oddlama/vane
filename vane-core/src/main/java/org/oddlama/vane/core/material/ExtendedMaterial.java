@@ -44,6 +44,7 @@ public class ExtendedMaterial {
 		return from(material.getKey());
 	}
 
+	public ItemStack item() { return item(1); }
 	public ItemStack item(int amount) {
 		if (material == null) {
 			final var item = head_material.item();

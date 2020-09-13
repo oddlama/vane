@@ -72,6 +72,10 @@ target_use_restricted: "§cYou have no permission to use the target portal!"
 
 menu_title_enter_portal_name: "TODO title"
 
+console_display_active: "§6§l>§r %1$s §6§l<"
+console_display_inactive: "§8§l>§r %1$s §8§l<"
+console_no_target: "§k?"
+
 menus:
     console:
         title: "§8§lPortal: %1$s"

@@ -57,6 +57,11 @@ public class ItemUtil {
 		return meta.getDisplayName();
 	}
 
+	public static ItemStack name_item(final ItemStack item, final BaseComponent name) {
+		name.setItalic(false);
+		return name_item(item, new BaseComponent[] { name }, (List<BaseComponent[]>)null);
+	}
+
 	public static ItemStack name_item(final ItemStack item, final BaseComponent name, final BaseComponent lore) {
 		name.setItalic(false);
 		lore.setItalic(false);
@@ -77,7 +82,9 @@ public class ItemUtil {
 	public static ItemStack name_item(final ItemStack item, final BaseComponent[] name, final List<BaseComponent[]> lore) {
 		final var meta = item.getItemMeta();
 		meta.setDisplayNameComponent(name);
-		meta.setLoreComponents(lore);
+		if (lore != null) {
+			meta.setLoreComponents(lore);
+		}
 		item.setItemMeta(meta);
 		return item;
 	}

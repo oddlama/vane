@@ -72,7 +72,7 @@ public class PortalTeleporter extends Listener<Portals> {
 				return;
 			}
 
-			final var target = portal.target();
+			final var target = portal.target(get_module());
 			if (target == null) {
 				return;
 			}

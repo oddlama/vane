@@ -70,6 +70,14 @@ public class Nms {
 	}
 
 	public static ItemStack item_handle(org.bukkit.inventory.ItemStack item_stack) {
+		if (item_stack == null) {
+			return null;
+		}
+
+		if (!(item_stack instanceof CraftItemStack)) {
+			return CraftItemStack.asNMSCopy(item_stack);
+		}
+
 		try {
 			final var handle = CraftItemStack.class.getDeclaredField("handle");
 			handle.setAccessible(true);
