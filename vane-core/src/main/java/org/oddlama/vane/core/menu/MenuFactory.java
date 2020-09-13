@@ -89,12 +89,11 @@ public class MenuFactory {
 
 			if (allow_nothing && type == ClickType.RIGHT) {
 				// Clear selection
-				self.item(no_item);
+				self.update_item(menu, no_item);
 			} else {
 				// Reset selection
-				self.item(default_item);
+				self.update_item(menu, default_item);
 			}
-			menu.update();
 			return ClickResult.SUCCESS;
 		}) {
 			public ItemStack original_selected = null;

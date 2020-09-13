@@ -178,6 +178,16 @@ public class Portal {
 		GROUP,
 		PRIVATE;
 
+		public Visibility prev() {
+			final int prev;
+			if (ordinal() == 0) {
+				prev = values().length - 1;
+			} else {
+				prev = ordinal() - 1;
+			}
+			return values()[prev];
+		}
+
 		public Visibility next() {
 			final var next = (ordinal() + 1) % values().length;
 			return values()[next];

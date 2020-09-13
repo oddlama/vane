@@ -38,6 +38,11 @@ public class MenuItem implements MenuWidget {
 		this.item = item;
 	}
 
+	public void update_item(final Menu menu, final ItemStack item) {
+		this.item(item);
+		menu.update();
+	}
+
 	public boolean update(final Menu menu) {
 		final var cur = item(menu);
 		if (cur != item) {

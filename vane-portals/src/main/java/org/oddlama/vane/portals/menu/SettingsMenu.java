@@ -4,6 +4,7 @@ import static org.oddlama.vane.util.Util.namespaced_key;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -103,11 +104,15 @@ public class SettingsMenu extends ModuleComponent<Portals> {
 	}
 
 	private MenuWidget menu_item_visibility(final Portal portal) {
-		return new MenuItem(5, null, (player, menu, self) -> {
-			portal.visibility(portal.visibility().next());
+		return new MenuItem(5, null, (player, menu, self, type, action) -> {
+			if (!Menu.is_left_or_right_click(type, action)) {
+				return ClickResult.INVALID_CLICK;
+			}
+
+			portal.visibility(type == ClickType.RIGHT ? portal.visibility().prev() : portal.visibility().next());
 			get_module().update_portal_visibility(portal);
 			mark_persistent_storage_dirty();
-			menu.update();
+			self.update_item(menu, null);
 			return ClickResult.SUCCESS;
 		}) {
 			@Override
@@ -125,7 +130,7 @@ public class SettingsMenu extends ModuleComponent<Portals> {
 		return new MenuItem(6, null, (player, menu, self) -> {
 			portal.target_locked(!portal.target_locked());
 			mark_persistent_storage_dirty();
-			menu.update();
+			self.update_item(menu, null);
 			return ClickResult.SUCCESS;
 		}) {
 			@Override
