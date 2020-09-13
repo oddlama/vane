@@ -589,8 +589,7 @@ public class Portals extends Module<Portals> {
 		for (final var active_console : console_floating_items.keySet()) {
 			final var portal_block = portal_block_for(active_console);
 			final var other = portal_for(portal_block);
-			if (portal == other || Objects.equals(other.target_id(), portal.id())) {
-				System.out.println("update " + other.name());
+			if (Objects.equals(other.target_id(), portal.id())) {
 				update_console_item(other, active_console);
 			}
 		}
