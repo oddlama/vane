@@ -135,8 +135,7 @@ public class Portals extends Module<Portals> {
 
 	@SuppressWarnings("unchecked")
 	private void register_entities() {
-		// Register entity
-		register_entity(namespace(), "floating_item", EntityTypes.Builder.a(FloatingItem::new, EnumCreatureType.MISC).a(0.0f, 0.0f));
+		register_entity(NamespacedKey.minecraft("item"), namespace(), "floating_item", EntityTypes.Builder.a(FloatingItem::new, EnumCreatureType.MISC).a(0.0f, 0.0f));
 	}
 
 	@Override

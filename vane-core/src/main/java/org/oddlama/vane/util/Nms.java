@@ -1,5 +1,8 @@
 package org.oddlama.vane.util;
 
+import java.util.Map;
+import com.mojang.datafixers.types.Type;
+import com.mojang.datafixers.DataFixUtils;
 import java.util.logging.Level;
 
 import net.minecraft.server.v1_16_R2.BlockPosition;
@@ -15,7 +18,10 @@ import net.minecraft.server.v1_16_R2.IRegistry;
 import net.minecraft.server.v1_16_R2.Item;
 import net.minecraft.server.v1_16_R2.ItemStack;
 import net.minecraft.server.v1_16_R2.MinecraftKey;
+import net.minecraft.server.v1_16_R2.DataConverterRegistry;
+import net.minecraft.server.v1_16_R2.DataConverterTypes;
 import net.minecraft.server.v1_16_R2.WorldServer;
+import net.minecraft.server.v1_16_R2.SharedConstants;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -103,8 +109,21 @@ public class Nms {
 		return ((CraftServer)bukkit_server).getServer();
 	}
 
-	public static void register_entity(final String pseudo_namespace, final String key, final EntityTypes.Builder<?> builder) {
+	@SuppressWarnings("unchecked")
+	public static void register_entity(final NamespacedKey base_entity_type, final String pseudo_namespace, final String key, final EntityTypes.Builder<?> builder) {
 		final var s = pseudo_namespace + "_" + key;
+		// From: https://papermc.io/forums/t/register-and-spawn-a-custom-entity-on-1-13-x/293
+		// Get the datafixer
+		final var world_version = SharedConstants.getGameVersion().getWorldVersion();
+		final var world_version_key = DataFixUtils.makeKey(world_version);
+		final var data_fixer = (Map<Object,Type<?>>)DataConverterRegistry.a()
+			.getSchema(world_version_key)
+			.findChoiceType(DataConverterTypes.ENTITY)
+			.types();
+		// Inject the new custom entity (this registers the key/id with the server,
+		// so it will be available in vanilla constructs like the /summon command)
+		data_fixer.put("minecraft:" + s, data_fixer.get(base_entity_type.toString()));
+		// Store new type in registry
 		IRegistry.a(IRegistry.ENTITY_TYPE, s, builder.a(s));
 	}
 
