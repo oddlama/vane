@@ -136,7 +136,7 @@ public class Portal {
 		final var cur_style = portals.style(style);
 		final var active = portals.is_activated(this);
 		for (final var portal_block : blocks) {
-			portal_block.block().setType(cur_style.material(portal_block.type(), active));
+			portal_block.block().setType(cur_style.material(active, portal_block.type()));
 			if (portal_block.type() == PortalBlock.Type.CONSOLE) {
 				portals.update_console_item(this, portal_block.block(), active);
 			}

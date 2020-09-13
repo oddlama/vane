@@ -123,6 +123,7 @@ public class Portals extends Module<Portals> {
 		})
 	}, desc = "Portal style definitions. Must provide a material for each portal block type and activation state. The default style may be overridden.")
 	public Map<String, Map<String, Map<String, Material>>> config_styles;
+
 	@ConfigLong(def = 15000, min = 1000, max = 120000, desc = "Delay in milliseconds after which two connected portals will automatically be disabled.")
 	public long config_deactivation_delay;
 
@@ -144,8 +145,6 @@ public class Portals extends Module<Portals> {
 	public Set<Material> portal_console_materials = new HashSet<>();
 	public Set<Material> portal_boundary_materials = new HashSet<>();
 
-	public PortalMenuGroup menus;
-
 	// Track console items
 	private final Map<Block, FloatingItem> console_floating_items = new HashMap<>();
 	// Connected portals (always stores both directions!)
@@ -154,6 +153,8 @@ public class Portals extends Module<Portals> {
 	private final Map<Long, Integer> chunk_ticket_count = new HashMap<>();
 	// Disable tasks for portals
 	private final Map<UUID, BukkitTask> disable_tasks = new HashMap<>();
+
+	public PortalMenuGroup menus;
 
 	public Portals() {
 		register_entities();
@@ -173,18 +174,53 @@ public class Portals extends Module<Portals> {
 	@Override
 	public void on_config_change() {
 		styles.clear();
-		final var default_style = Style.default_style();
-		// TODO only if not overridden
-		styles.put(default_style.key(), default_style);
-		// TODO configured styles
 
-		// TODO acquire from styles
+		config_styles.forEach((style_key, v1) -> {
+			final var split = style_key.split(":");
+			if (split.length != 2) {
+				throw new RuntimeException("Invalid style key: '" + style_key + "' is not a valid namespaced key");
+			}
+
+			final var style = new Style(namespaced_key(split[0], split[1]));
+			v1.forEach((is_active, v2) -> {
+				final boolean active;
+				switch (is_active) {
+					case "active": active = true; break;
+					case "inactive": active = false; break;
+					default: throw new RuntimeException("Invalid active state, must be either 'active' or 'inactive'");
+				}
+
+				v2.forEach((portal_block_type, material) -> {
+					final var type = PortalBlock.Type.valueOf(portal_block_type.toUpperCase());
+					if (type == null) {
+						throw new RuntimeException("Invalid portal block type: '" + portal_block_type + "'");
+					}
+					style.set_material(active, type, material);
+				});
+			});
+
+			// Check validity and add to map.
+			style.check_valid();
+			styles.put(style.key(), style);
+		});
+
+		if (!styles.containsKey(Style.default_style_key())) {
+			// Add default style if it wasn't overridden
+			final var default_style = Style.default_style();
+			styles.put(default_style.key(), default_style);
+		}
+
 		portal_area_materials.clear();
-		portal_area_materials.add(Material.END_GATEWAY);
 		portal_console_materials.clear();
-		portal_console_materials.add(Material.ENCHANTING_TABLE);
 		portal_boundary_materials.clear();
-		portal_boundary_materials.add(Material.OBSIDIAN);
+		// Acquire material sets from styles. These will
+		// be used to accelerate checking in events.
+		for (final var style : styles.values()) {
+			portal_area_materials.add(style.material(true, PortalBlock.Type.PORTAL));
+			portal_boundary_materials.add(style.material(true, PortalBlock.Type.ORIGIN));
+			portal_boundary_materials.add(style.material(true, PortalBlock.Type.BOUNDARY));
+			portal_console_materials.add(style.material(true, PortalBlock.Type.CONSOLE));
+		}
 	}
 
 	public Style style(final NamespacedKey key) {

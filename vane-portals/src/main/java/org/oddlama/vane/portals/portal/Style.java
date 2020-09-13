@@ -16,7 +16,7 @@ public class Style {
 	private Map<PortalBlock.Type, Material> active_materials = new HashMap<>();
 	private Map<PortalBlock.Type, Material> inactive_materials = new HashMap<>();
 
-	private Style(final NamespacedKey key) {
+	public Style(final NamespacedKey key) {
 		this.key = key;
 	}
 
@@ -24,7 +24,7 @@ public class Style {
 		return key;
 	}
 
-	public Material material(PortalBlock.Type type, boolean active) {
+	public Material material(boolean active, PortalBlock.Type type) {
 		if (active) {
 			return active_materials.get(type);
 		} else {
@@ -36,16 +36,42 @@ public class Style {
 		return namespaced_key("vane_portals", "portal_style_default");
 	}
 
+	public void set_material(boolean active, PortalBlock.Type type, Material material) {
+		final Map<PortalBlock.Type, Material> map;
+		if (active) {
+			map = active_materials;
+		} else {
+			map = inactive_materials;
+		}
+
+		if (map.containsKey(type)) {
+			throw new RuntimeException("Invalid style definition! PortalBlock.Type." + type + " was specified multiple times.");
+		}
+		map.put(type, material);
+	}
+
+	public void check_valid() {
+		// Checks if every key is set
+		for (final var type : PortalBlock.Type.values()) {
+			if (!active_materials.containsKey(type)) {
+				throw new RuntimeException("Invalid style definition! Active state for PortalBlock.Type." + type + " was not specified!");
+			}
+			if (!inactive_materials.containsKey(type)) {
+				throw new RuntimeException("Invalid style definition! Inactive state for PortalBlock.Type." + type + " was not specified!");
+			}
+		}
+	}
+
 	public static Style default_style() {
 		final var style = new Style(default_style_key());
-		style.active_materials.put(PortalBlock.Type.BOUNDARY, Material.OBSIDIAN);
-		style.active_materials.put(PortalBlock.Type.CONSOLE,  Material.ENCHANTING_TABLE);
-		style.active_materials.put(PortalBlock.Type.ORIGIN,   Material.OBSIDIAN);
-		style.active_materials.put(PortalBlock.Type.PORTAL,   Material.END_GATEWAY);
-		style.inactive_materials.put(PortalBlock.Type.BOUNDARY, Material.OBSIDIAN);
-		style.inactive_materials.put(PortalBlock.Type.CONSOLE,  Material.ENCHANTING_TABLE);
-		style.inactive_materials.put(PortalBlock.Type.ORIGIN,   Material.OBSIDIAN);
-		style.inactive_materials.put(PortalBlock.Type.PORTAL,   Material.AIR);
+		style.set_material(true, PortalBlock.Type.BOUNDARY, Material.OBSIDIAN);
+		style.set_material(true, PortalBlock.Type.CONSOLE,  Material.ENCHANTING_TABLE);
+		style.set_material(true, PortalBlock.Type.ORIGIN,   Material.OBSIDIAN);
+		style.set_material(true, PortalBlock.Type.PORTAL,   Material.END_GATEWAY);
+		style.set_material(false, PortalBlock.Type.BOUNDARY, Material.OBSIDIAN);
+		style.set_material(false, PortalBlock.Type.CONSOLE,  Material.ENCHANTING_TABLE);
+		style.set_material(false, PortalBlock.Type.ORIGIN,   Material.OBSIDIAN);
+		style.set_material(false, PortalBlock.Type.PORTAL,   Material.AIR);
 		return style;
 	}
 }
