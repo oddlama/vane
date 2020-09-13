@@ -49,8 +49,8 @@ public class SettingsMenu extends ModuleComponent<Portals> {
         item_visibility_public  = new TranslatedItemStack<>(ctx, "visibility_public",  Material.ENDER_EYE,                                  1, "Used to TODO.");
         item_visibility_group   = new TranslatedItemStack<>(ctx, "visibility_group",   Material.ENDER_PEARL,                                1, "Used to TODO.");
         item_visibility_private = new TranslatedItemStack<>(ctx, "visibility_private", Material.FIREWORK_STAR,                              1, "Used to TODO.");
-        item_target_lock_on     = new TranslatedItemStack<>(ctx, "target_lock_on",     namespaced_key("vane", "decoration_tnt_1"),          1, "Used to TODO.");
-        item_target_lock_off    = new TranslatedItemStack<>(ctx, "target_lock_off",    namespaced_key("vane", "decoration_tnt_1"),          1, "Used to TODO.");
+        item_target_lock_on     = new TranslatedItemStack<>(ctx, "target_lock_on",     Material.SLIME_BALL,                                 1, "Used to TODO.");
+        item_target_lock_off    = new TranslatedItemStack<>(ctx, "target_lock_off",    Material.SNOWBALL,                                   1, "Used to TODO.");
         item_back               = new TranslatedItemStack<>(ctx, "back",               Material.PRISMARINE_SHARD,                           1, "Used to TODO.");
 	}
 
@@ -104,7 +104,6 @@ public class SettingsMenu extends ModuleComponent<Portals> {
 
 	private MenuWidget menu_item_visibility(final Portal portal) {
 		return new MenuItem(5, null, (player, menu, self) -> {
-			menu.close(player);
 			portal.visibility(portal.visibility().next());
 			get_module().update_portal_visibility(portal);
 			mark_persistent_storage_dirty();
@@ -124,7 +123,6 @@ public class SettingsMenu extends ModuleComponent<Portals> {
 
 	private MenuWidget menu_item_target_lock(final Portal portal) {
 		return new MenuItem(6, null, (player, menu, self) -> {
-			menu.close(player);
 			portal.target_locked(!portal.target_locked());
 			mark_persistent_storage_dirty();
 			menu.update();
