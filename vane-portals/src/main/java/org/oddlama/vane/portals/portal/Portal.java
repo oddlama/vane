@@ -106,24 +106,28 @@ public class Portal {
 
 	public boolean activate(final Portals portals, @Nullable final Player player) {
 		// TODO send event check cancelled
-		System.out.println("activate");
-
-		// Update blocks
-		update_blocks(portals);
-
-		// TODO sound
+		portals.connect_portals(this, target(portals));
 		return true;
 	}
 
 	public boolean deactivate(final Portals portals, @Nullable final Player player) {
 		// TODO send event check cancelled
-		System.out.println("deactivate");
+		portals.disconnect_portals(this, target(portals));
+		return true;
+	}
 
+	public void on_connect(final Portals portals, final Portal target) {
 		// Update blocks
 		update_blocks(portals);
 
 		// TODO sound
-		return true;
+	}
+
+	public void on_disconnect(final Portals portals, final Portal target) {
+		// Update blocks
+		update_blocks(portals);
+
+		// TODO sound
 	}
 
 	public void update_blocks(final Portals portals) {

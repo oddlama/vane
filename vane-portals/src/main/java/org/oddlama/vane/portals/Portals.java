@@ -1,12 +1,14 @@
 package org.oddlama.vane.portals;
 
 import static org.oddlama.vane.util.BlockUtil.adjacent_blocks_3d;
+import static org.oddlama.vane.util.Util.ms_to_ticks;
 import static org.oddlama.vane.util.BlockUtil.unpack;
 import static org.oddlama.vane.util.ItemUtil.name_item;
 import static org.oddlama.vane.util.Util.namespaced_key;
 import net.md_5.bungee.api.chat.BaseComponent;
 import static org.oddlama.vane.util.Nms.register_entity;
 import static org.oddlama.vane.util.Nms.spawn;
+import org.bukkit.scheduler.BukkitTask;
 import static org.oddlama.vane.util.Nms.item_handle;
 
 import java.util.HashMap;
@@ -15,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
+import org.oddlama.vane.annotation.config.ConfigLong;
 import net.minecraft.server.v1_16_R2.EntityTypes;
 import net.minecraft.server.v1_16_R2.EnumCreatureType;
 import java.util.ArrayList;
@@ -88,6 +91,8 @@ public class Portals extends Module<Portals> {
 	// TODO materials
 	//@ConfigMaterialMapMapMap(name = "styles")
 	//public Map<String, Map<String, Map<String, Material>>> config_styles;
+	@ConfigLong(def = 15000, min = 1000, max = 120000, desc = "Delay in milliseconds after which two connected portals will automatically be disabled.")
+	public long config_deactivation_delay;
 
 	@LangMessage public TranslatedMessage lang_console_display_active;
 	@LangMessage public TranslatedMessage lang_console_display_inactive;
@@ -110,7 +115,13 @@ public class Portals extends Module<Portals> {
 	public PortalMenuGroup menus;
 
 	// Track console items
-	private final HashMap<Block, FloatingItem> console_floating_items = new HashMap<>();
+	private final Map<Block, FloatingItem> console_floating_items = new HashMap<>();
+	// Connected portals (always stores both directions!)
+	private final Map<UUID, UUID> connected_portals = new HashMap<>();
+	// Unloading ticket counter per chunk
+	private final Map<Long, Integer> chunk_ticket_count = new HashMap<>();
+	// Disable tasks for portals
+	private final Map<UUID, BukkitTask> disable_tasks = new HashMap<>();
 
 	public Portals() {
 		register_entities();
@@ -155,6 +166,7 @@ public class Portals extends Module<Portals> {
 	}
 
 	public void remove_portal(final Portal portal) {
+		// TODO deactivate
 		storage_portals.remove(portal.id());
 
 		// TODO replace target id everywhere,
@@ -270,16 +282,135 @@ public class Portals extends Module<Portals> {
 		return null;
 	}
 
+	public Set<Chunk> chunks_for(final Portal portal) {
+		final var set = new HashSet<Chunk>();
+		for (final var pb : portal.blocks()) {
+			set.add(pb.block().getChunk());
+		}
+		return set;
+	}
+
+	public void load_portal_chunks(final Portal portal) {
+		// Load chunks and adds a ticket so they get loaded and are kept loaded
+		for (final var chunk : chunks_for(portal)) {
+			final var chunk_key = chunk.getChunkKey();
+			final var ticket_counter = chunk_ticket_count.get(chunk_key);
+			if (ticket_counter == null) {
+				chunk.addPluginChunkTicket(this);
+				chunk_ticket_count.put(chunk_key, 1);
+			} else {
+				chunk_ticket_count.put(chunk_key, ticket_counter + 1);
+			}
+		}
+	}
+
+	public void allow_unload_portal_chunks(final Portal portal) {
+		// Removes the ticket so chunks can be unloaded again
+		for (final var chunk : chunks_for(portal)) {
+			final var chunk_key = chunk.getChunkKey();
+			final var ticket_counter = chunk_ticket_count.get(chunk_key);
+			if (ticket_counter == null) {
+				continue;
+			} else if (ticket_counter > 1) {
+				chunk_ticket_count.put(chunk_key, ticket_counter - 1);
+			} else if (ticket_counter == 1) {
+				chunk.removePluginChunkTicket(this);
+				chunk_ticket_count.remove(chunk_key);
+			}
+		}
+	}
+
+	public void connect_portals(final Portal src, final Portal dst) {
+		// Load chunks
+		load_portal_chunks(src);
+		load_portal_chunks(dst);
+
+		// Add to map
+		connected_portals.put(src.id(), dst.id());
+		connected_portals.put(dst.id(), src.id());
+
+		// Activate both
+		src.on_connect(this, dst);
+		dst.on_connect(this, src);
+
+		// Schedule automatic disable
+		start_disable_task(src, dst);
+	}
+
+	public void disconnect_portals(final Portal src, final Portal dst) {
+		// Allow unloading chunks again
+		allow_unload_portal_chunks(src);
+		allow_unload_portal_chunks(dst);
+
+		// Remove from map
+		connected_portals.remove(src.id());
+		connected_portals.remove(dst.id());
+
+		// Deactivate both
+		src.on_disconnect(this, dst);
+		dst.on_disconnect(this, src);
+
+		// Remove automatic disable task if existing
+		stop_disable_task(src, dst);
+	}
+
+	private void start_disable_task(final Portal portal, final Portal target) {
+		stop_disable_task(portal, target);
+		final var task = schedule_task(new PortalDisableRunnable(portal, target), ms_to_ticks(config_deactivation_delay));
+		disable_tasks.put(portal.id(), task);
+		disable_tasks.put(target.id(), task);
+	}
+
+	private void stop_disable_task(final Portal portal, final Portal target) {
+		final var task1 = disable_tasks.remove(portal.id());
+		final var task2 = disable_tasks.remove(target.id());
+		if (task1 != null) {
+			task1.cancel();
+		}
+		if (task2 != null && task2 != task1) {
+			task2.cancel();
+		}
+	}
+
+	@Override
+	public void on_disable() {
+		// Remove all console items, and all chunk tickets
+		chunk_ticket_count.clear();
+		for (final var world : getServer().getWorlds()) {
+			for (final var chunk : world.getLoadedChunks()) {
+				// Remove console item
+				for_each_console_block_in_chunk(chunk, (block, console) -> remove_console_item(block));
+				// Allow chunk unloading
+				chunk.removePluginChunkTicket(this);
+			}
+		}
+
+		super.on_disable();
+	}
+
 	public boolean is_activated(final Portal portal) {
 		// TODO
 		return false;
 	}
 
+	public Portal connected_portal(final Portal portal) {
+		final var connected_id = connected_portals.get(portal.id());
+		if (connected_id == null) {
+			return null;
+		}
+		return portal_for(connected_id);
+	}
+
 	private ItemStack make_console_item(final Portal portal, boolean active) {
-		final var target = portal.target(this);
-		ItemStack item = null;
+		final Portal target;
+		if (active) {
+			target = connected_portal(portal);
+		} else {
+			target = portal.target(this);
+		}
 
 		// Try to use target portal's block
+		ItemStack item = null;
 		if (target != null) {
 			item = target.icon();
 		}
@@ -365,18 +496,18 @@ public class Portals extends Module<Portals> {
 		});
 	}
 
-	private static class PortalDisableRunnable implements Runnable {
-		private UUID src_id;
-		private UUID dst_id;
+	private class PortalDisableRunnable implements Runnable {
+		private Portal src;
+		private Portal dst;
 
-		public PortalDisableRunnable(UUID src_id, UUID dst_id) {
-			this.src_id = src_id;
-			this.dst_id = dst_id;
+		public PortalDisableRunnable(final Portal src, final Portal dst) {
+			this.src = src;
+			this.dst = dst;
 		}
 
 		@Override
 		public void run() {
-			// TODO
+			Portals.this.disconnect_portals(src, dst);
 		}
 	}
 }

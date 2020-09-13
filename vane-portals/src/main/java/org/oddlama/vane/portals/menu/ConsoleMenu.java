@@ -75,6 +75,7 @@ public class ConsoleMenu extends ModuleComponent<Portals> {
 
 		console_menu.add(menu_item_select_target(portal));
 
+		// TODO style
 		console_menu.add(menu_item_settings());
 		console_menu.add(menu_item_unlink_console());
 		console_menu.add(menu_item_destroy_portal());
