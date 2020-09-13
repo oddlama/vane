@@ -25,7 +25,7 @@ public class Setspawn extends Command<Admin> {
 
 		// Save location in storage
 		get_module().storage_spawn_location = new LazyLocation(loc.clone());
-		save_persistent_storage();
+		mark_persistent_storage_dirty();
 
 		player.sendMessage("§aSpawn §7set!");
 	}

@@ -189,7 +189,7 @@ public class Permission extends Command<Permissions> {
 	}
 
 	private void save_and_recalculate(OfflinePlayer player) {
-		get_module().save_persistent_storage();
+		get_module().mark_persistent_storage_dirty();
 
 		// Recalculate permissions if player is currently online
 		if (player.isOnline()) {

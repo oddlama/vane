@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.Objects;
 import java.util.UUID;
 
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -270,18 +271,21 @@ public class Portals extends Module<Portals> {
 		// Replace references to the portal everywhere
 		// and update all changed portal consoles.
 		for (final var other : storage_portals.values()) {
-			if (other.target_id() == portal.id()) {
+			if (Objects.equals(other.target_id(), portal.id())) {
 				other.target_id(null);
 				other.blocks().stream()
 					.filter(pb -> pb.type() == PortalBlock.Type.CONSOLE)
 					.filter(pb -> console_floating_items.containsKey(pb.block()))
-					.forEach(pb -> update_console_item(other, pb.block(), is_activated(other)));
+					.forEach(pb -> update_console_item(other, pb.block()));
 			}
 		}
+
+		mark_persistent_storage_dirty();
 	}
 
 	public void add_portal(final Portal portal) {
 		storage_portals.put(portal.id(), portal);
+		mark_persistent_storage_dirty();
 	}
 
 	public void remove_portal_block(final PortalBlock portal_block) {
@@ -317,6 +321,7 @@ public class Portals extends Module<Portals> {
 
 		final var block_key = block.getBlockKey();
 		block_to_portal_block.remove(block_key);
+		mark_persistent_storage_dirty();
 	}
 
 	public void remove_portal_block(final Portal portal, final PortalBlock portal_block) {
@@ -349,6 +354,7 @@ public class Portals extends Module<Portals> {
 
 		final var block_key = block.getBlockKey();
 		block_to_portal_block.put(block_key, portal_block.lookup(portal.id()));
+		mark_persistent_storage_dirty();
 	}
 
 	public PortalBlockLookup portal_block_for(final Block block) {
@@ -579,7 +585,23 @@ public class Portals extends Module<Portals> {
 		return name_item(item, display_name);
 	}
 
-	public void update_console_item(final Portal portal, final Block block, boolean active) {
+	public void update_portal_icon(final Portal portal) {
+		for (final var active_console : console_floating_items.keySet()) {
+			final var portal_block = portal_block_for(active_console);
+			final var other = portal_for(portal_block);
+			if (portal == other || Objects.equals(other.target_id(), portal.id())) {
+				update_console_item(other, active_console);
+			}
+		}
+	}
+
+	public void update_portal_visibility(final Portal portal) {
+		// Replace references to the portal everywhere, if visibility
+		// has changed.
+		// TODO needs group access
+	}
+
+	public void update_console_item(final Portal portal, final Block block) {
 		var console_item = console_floating_items.get(block);
 		final boolean is_new;
 		if (console_item == null) {
@@ -589,6 +611,7 @@ public class Portals extends Module<Portals> {
 			is_new = false;
 		}
 
+		final var active = is_activated(portal);
 		console_item.setItemStack(item_handle(make_console_item(portal, active)));
 
 		if (is_new) {
@@ -639,8 +662,7 @@ public class Portals extends Module<Portals> {
 		// Enable all consoles in this chunk
 		for_each_console_block_in_chunk(chunk, (block, console) -> {
 			final var portal = portal_for(console.portal_id());
-			final var active = is_activated(portal);
-			update_console_item(portal, block, active);
+			update_console_item(portal, block);
 		});
 	}
 

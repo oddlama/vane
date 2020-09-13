@@ -63,6 +63,10 @@ public interface Context<T extends Module<T>> {
 	default public void on_config_change() {}
 	default public void on_generate_resource_pack(final ResourcePackGenerator pack) throws IOException {}
 
+	default public BukkitTask schedule_task_timer(Runnable task, long delay_ticks, long period_ticks) {
+		return get_module().getServer().getScheduler().runTaskTimer(get_module(), task, delay_ticks, period_ticks);
+	}
+
 	default public BukkitTask schedule_task(Runnable task, long delay_ticks) {
 		return get_module().getServer().getScheduler().runTaskLater(get_module(), task, delay_ticks);
 	}
@@ -82,7 +86,7 @@ public interface Context<T extends Module<T>> {
 		return variable_yaml_path(field.substring("storage_".length()));
 	}
 
-	default public void save_persistent_storage() {
-		get_module().save_persistent_storage();
+	default public void mark_persistent_storage_dirty() {
+		get_module().mark_persistent_storage_dirty();
 	}
 }

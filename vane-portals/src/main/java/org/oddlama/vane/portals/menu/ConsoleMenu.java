@@ -70,7 +70,7 @@ public class ConsoleMenu extends ModuleComponent<Portals> {
 		final var settings_event = new PortalChangeSettingsEvent(player, portal, true);
 		get_module().getServer().getPluginManager().callEvent(settings_event);
 		if (!settings_event.isCancelled()) {
-			console_menu.add(menu_item_settings());
+			console_menu.add(menu_item_settings(portal));
 		}
 
 		// Check if unlink would be allowed
@@ -90,10 +90,10 @@ public class ConsoleMenu extends ModuleComponent<Portals> {
 		return console_menu;
 	}
 
-	private MenuWidget menu_item_settings() {
-			// TODO style
+	private MenuWidget menu_item_settings(final Portal portal) {
 		return new MenuItem(0, item_settings.item(), (player, menu, self) -> {
 			menu.close(player);
+			get_module().menus.settings_menu.create(portal, player, menu).open(player);
 			return ClickResult.SUCCESS;
 		});
 	}

@@ -5,14 +5,16 @@ import org.oddlama.vane.core.module.ModuleComponent;
 import org.oddlama.vane.portals.Portals;
 
 public class PortalMenuGroup extends ModuleComponent<Portals> {
-	public ConsoleMenu console_menu;
 	public EnterNameMenu enter_name_menu;
+	public ConsoleMenu console_menu;
+	public SettingsMenu settings_menu;
 
 	public PortalMenuGroup(Context<Portals> context) {
 		super(context.namespace("menus"));
 
-		console_menu = new ConsoleMenu(get_context());
 		enter_name_menu = new EnterNameMenu(get_context());
+		console_menu = new ConsoleMenu(get_context());
+		settings_menu = new SettingsMenu(get_context());
 	}
 
 	@Override public void on_enable() {}

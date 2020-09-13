@@ -45,6 +45,10 @@ public abstract class ModuleComponent<T extends Module<T>> {
 	protected void on_config_change() {}
 	protected void on_generate_resource_pack(final ResourcePackGenerator pack) throws IOException {}
 
+	public final BukkitTask schedule_task_timer(Runnable task, long delay_ticks, long period_ticks) {
+		return context.schedule_task_timer(task, delay_ticks, period_ticks);
+	}
+
 	public final BukkitTask schedule_task(Runnable task, long delay_ticks) {
 		return context.schedule_task(task, delay_ticks);
 	}
@@ -61,8 +65,7 @@ public abstract class ModuleComponent<T extends Module<T>> {
 		return context.storage_path_of(field);
 	}
 
-
-	public final void save_persistent_storage() {
-		context.save_persistent_storage();
+	public final void mark_persistent_storage_dirty() {
+		context.mark_persistent_storage_dirty();
 	}
 }

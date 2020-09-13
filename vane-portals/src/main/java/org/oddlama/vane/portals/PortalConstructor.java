@@ -326,9 +326,6 @@ public class PortalConstructor extends Listener<Portals> {
 			// Link console
 			link_console(p, console, portal);
 
-			// Save storage now
-			get_module().save_persistent_storage();
-
 			// Update portal blocks once
 			portal.update_blocks(get_module());
 
@@ -399,9 +396,6 @@ public class PortalConstructor extends Listener<Portals> {
 		} else {
 			if (link_console(player, console, portal)) {
 				swing_arm(player, event.getHand());
-
-				// Save storage now
-				get_module().save_persistent_storage();
 			}
 		}
 

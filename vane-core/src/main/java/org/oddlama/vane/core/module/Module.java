@@ -50,6 +50,7 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 	public ConfigManager config_manager = new ConfigManager(this);
 	public LangManager lang_manager = new LangManager(this);
 	public PersistentStorageManager persistent_storage_manager = new PersistentStorageManager(this);
+	private boolean persistent_storage_dirty = false;
 
 	// Per module catch-all permissions
 	public Permission permission_command_catchall_module;
@@ -159,6 +160,14 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 
 		load_persistent_storage();
 		reload_configuration();
+
+		// Schedule persistent storage saving every minute
+		schedule_task_timer(() -> {
+			if (persistent_storage_dirty) {
+				save_persistent_storage();
+				persistent_storage_dirty = false;
+			}
+		}, 60 * 20, 60 * 20);
 	}
 
 	@Override
@@ -318,6 +327,10 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 			log.severe("Invalid persistent storage. Shutting down to prevent further corruption.");
 			getServer().shutdown();
 		}
+	}
+
+	public void mark_persistent_storage_dirty() {
+		persistent_storage_dirty = true;
 	}
 
 	public void save_persistent_storage() {

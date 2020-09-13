@@ -150,7 +150,7 @@ public class Portal {
 		for (final var portal_block : blocks) {
 			portal_block.block().setType(cur_style.material(active, portal_block.type()));
 			if (portal_block.type() == PortalBlock.Type.CONSOLE) {
-				portals.update_console_item(this, portal_block.block(), active);
+				portals.update_console_item(this, portal_block.block());
 			}
 		}
 	}

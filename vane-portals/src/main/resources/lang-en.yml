@@ -81,6 +81,36 @@ destroy_restricted: "§cYou have no permission to destroy this portal!"
 menus:
   enter_name:
     title: "§8§lEnter Portal Name"
+  settings:
+    title: "§8§lSettings: %1$s"
+    select_icon_title: "§8§lSelect Icon"
+    rename:
+      name: "§b§lRename"
+      lore: []
+    select_icon:
+      name: "§b§lSelect Icon"
+      lore: []
+    select_style:
+      name: "§b§lSelect Style"
+      lore: []
+    visibility_public:
+      name: "§b§lToggle Visibility"
+      lore: ["", "§bCurrent: §a§lPublic§r"]
+    visibility_group:
+      name: "§b§lToggle Visibility"
+      lore: ["", "§bCurrent: §e§lGroup§r"]
+    visibility_private:
+      name: "§b§lToggle Visibility"
+      lore: ["", "§bCurrent: §c§lPrivate§r"]
+    target_lock_on:
+      name: "§b§lToggle Target Lock"
+      lore: ["", "§bCurrent: §c§lLocked§r"]
+    target_lock_off:
+      name: "§b§lToggle Target Lock"
+      lore: ["", "§bCurrent: §c§lUnlocked§r"]
+    back:
+      name: "§6↩ §lBack"
+      lore: []
   console:
     title: "§8§lPortal: %1$s"
     settings:
