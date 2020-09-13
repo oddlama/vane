@@ -75,7 +75,7 @@ and therefore not well suited for giving out valuable traits (like *Angel* or *U
 - [ ] Build portals of arbitrary shape and orientation to get around easily (even horizontal!)
 - [ ] Integrates with regions to control portal connection access
 - [x] Correctly retains velocity of players, so you can fly through it
-- [ ] Apply different styles so your portal fits your building style
+- [x] Apply different styles to portals so they fit your building style
 - [ ] Dynmap integration shows icons for global portals
 
 #### Regions

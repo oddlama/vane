@@ -40,8 +40,16 @@ public class PortalConstructor extends Listener<Portals> {
 	// TODO materials group
 	@ConfigMaterial(def = Material.ENCHANTING_TABLE, desc = "The block used to build portal consoles.")
 	public Material config_material_console;
-	@ConfigMaterial(def = Material.OBSIDIAN, desc = "The block used to build a portal boundary.")
-	public Material config_material_boundary;
+	@ConfigMaterial(def = Material.OBSIDIAN, desc = "The block used to build the portal boundary. Variation 1.")
+	public Material config_material_boundary_1;
+	@ConfigMaterial(def = Material.OBSIDIAN, desc = "The block used to build the portal boundary. Variation 2.")
+	public Material config_material_boundary_2;
+	@ConfigMaterial(def = Material.OBSIDIAN, desc = "The block used to build the portal boundary. Variation 3.")
+	public Material config_material_boundary_3;
+	@ConfigMaterial(def = Material.OBSIDIAN, desc = "The block used to build the portal boundary. Variation 4.")
+	public Material config_material_boundary_4;
+	@ConfigMaterial(def = Material.OBSIDIAN, desc = "The block used to build the portal boundary. Variation 5.")
+	public Material config_material_boundary_5;
 	@ConfigMaterial(def = Material.NETHERITE_BLOCK, desc = "The block used to build the portal origin.")
 	public Material config_material_origin;
 	@ConfigMaterial(def = Material.AIR, desc = "The block used to build the portal area.")
@@ -207,6 +215,20 @@ public class PortalConstructor extends Listener<Portals> {
 		return boundary;
 	}
 
+	public boolean is_type_part_of_boundary(final Material material) {
+		return material == config_material_boundary_1
+			|| material == config_material_boundary_2
+			|| material == config_material_boundary_3
+			|| material == config_material_boundary_4
+			|| material == config_material_boundary_5
+			;
+	}
+
+	public boolean is_type_part_of_boundary_or_origin(final Material material) {
+		return material == config_material_origin
+			|| is_type_part_of_boundary(material);
+	}
+
 	private PortalBoundary check_construction_conditions(final Player player, final Block console, final Block boundary_block, boolean check_only) {
 		if (get_module().is_portal_block(boundary_block)) {
 			get_module().log.severe("construct_portal() was called on a boundary that already belongs to a portal! This is a bug.");
@@ -240,15 +262,23 @@ public class PortalConstructor extends Listener<Portals> {
 		final var mat = block.getType();
 		if (mat == config_material_console) {
 			type = PortalBlock.Type.CONSOLE;
-		} else if (mat == config_material_boundary) {
-			type = PortalBlock.Type.BOUNDARY;
+		} else if (mat == config_material_boundary_1) {
+			type = PortalBlock.Type.BOUNDARY_1;
+		} else if (mat == config_material_boundary_2) {
+			type = PortalBlock.Type.BOUNDARY_2;
+		} else if (mat == config_material_boundary_3) {
+			type = PortalBlock.Type.BOUNDARY_3;
+		} else if (mat == config_material_boundary_4) {
+			type = PortalBlock.Type.BOUNDARY_4;
+		} else if (mat == config_material_boundary_5) {
+			type = PortalBlock.Type.BOUNDARY_5;
 		} else if (mat == config_material_origin) {
 			type = PortalBlock.Type.ORIGIN;
 		} else if (mat == config_material_portal_area) {
 			type = PortalBlock.Type.PORTAL;
 		} else {
-			get_module().log.warning("Invalid block type '" + mat + "' encounterd in portal block creation. Assuming boundary.");
-			type = PortalBlock.Type.BOUNDARY;
+			get_module().log.warning("Invalid block type '" + mat + "' encounterd in portal block creation. Assuming boundary variant 1.");
+			type = PortalBlock.Type.BOUNDARY_1;
 		}
 		return new PortalBlock(block, type);
 	}

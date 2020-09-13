@@ -95,13 +95,21 @@ public class Portals extends Module<Portals> {
 	@ConfigMaterialMapMapMap(def = {
 		@ConfigMaterialMapMapMapEntry(key = "vane_portals:portal_style_default", value = {
 			@ConfigMaterialMapMapEntry(key = "active", value = {
-				@ConfigMaterialMapEntry(key = "boundary", value = Material.OBSIDIAN),
+				@ConfigMaterialMapEntry(key = "boundary_1", value = Material.OBSIDIAN),
+				@ConfigMaterialMapEntry(key = "boundary_2", value = Material.OBSIDIAN),
+				@ConfigMaterialMapEntry(key = "boundary_3", value = Material.OBSIDIAN),
+				@ConfigMaterialMapEntry(key = "boundary_4", value = Material.OBSIDIAN),
+				@ConfigMaterialMapEntry(key = "boundary_5", value = Material.OBSIDIAN),
 				@ConfigMaterialMapEntry(key = "console", value = Material.ENCHANTING_TABLE),
 				@ConfigMaterialMapEntry(key = "origin", value = Material.OBSIDIAN),
 				@ConfigMaterialMapEntry(key = "portal", value = Material.END_GATEWAY),
 			}),
 			@ConfigMaterialMapMapEntry(key = "inactive", value = {
-				@ConfigMaterialMapEntry(key = "boundary", value = Material.OBSIDIAN),
+				@ConfigMaterialMapEntry(key = "boundary_1", value = Material.OBSIDIAN),
+				@ConfigMaterialMapEntry(key = "boundary_2", value = Material.OBSIDIAN),
+				@ConfigMaterialMapEntry(key = "boundary_3", value = Material.OBSIDIAN),
+				@ConfigMaterialMapEntry(key = "boundary_4", value = Material.OBSIDIAN),
+				@ConfigMaterialMapEntry(key = "boundary_5", value = Material.OBSIDIAN),
 				@ConfigMaterialMapEntry(key = "console", value = Material.ENCHANTING_TABLE),
 				@ConfigMaterialMapEntry(key = "origin", value = Material.OBSIDIAN),
 				@ConfigMaterialMapEntry(key = "portal", value = Material.AIR),
@@ -109,13 +117,21 @@ public class Portals extends Module<Portals> {
 		}),
 		@ConfigMaterialMapMapMapEntry(key = "vane_portals:portal_style_aqua", value = {
 			@ConfigMaterialMapMapEntry(key = "active", value = {
-				@ConfigMaterialMapEntry(key = "boundary", value = Material.DARK_PRISMARINE),
+				@ConfigMaterialMapEntry(key = "boundary_1", value = Material.DARK_PRISMARINE),
+				@ConfigMaterialMapEntry(key = "boundary_2", value = Material.DARK_PRISMARINE),
+				@ConfigMaterialMapEntry(key = "boundary_3", value = Material.DARK_PRISMARINE),
+				@ConfigMaterialMapEntry(key = "boundary_4", value = Material.DARK_PRISMARINE),
+				@ConfigMaterialMapEntry(key = "boundary_5", value = Material.DARK_PRISMARINE),
 				@ConfigMaterialMapEntry(key = "console", value = Material.ENCHANTING_TABLE),
 				@ConfigMaterialMapEntry(key = "origin", value = Material.OBSIDIAN),
 				@ConfigMaterialMapEntry(key = "portal", value = Material.END_GATEWAY),
 			}),
 			@ConfigMaterialMapMapEntry(key = "inactive", value = {
-				@ConfigMaterialMapEntry(key = "boundary", value = Material.DARK_PRISMARINE),
+				@ConfigMaterialMapEntry(key = "boundary_1", value = Material.DARK_PRISMARINE),
+				@ConfigMaterialMapEntry(key = "boundary_2", value = Material.DARK_PRISMARINE),
+				@ConfigMaterialMapEntry(key = "boundary_3", value = Material.DARK_PRISMARINE),
+				@ConfigMaterialMapEntry(key = "boundary_4", value = Material.DARK_PRISMARINE),
+				@ConfigMaterialMapEntry(key = "boundary_5", value = Material.DARK_PRISMARINE),
 				@ConfigMaterialMapEntry(key = "console", value = Material.ENCHANTING_TABLE),
 				@ConfigMaterialMapEntry(key = "origin", value = Material.OBSIDIAN),
 				@ConfigMaterialMapEntry(key = "portal", value = Material.AIR),
@@ -218,7 +234,11 @@ public class Portals extends Module<Portals> {
 		for (final var style : styles.values()) {
 			portal_area_materials.add(style.material(true, PortalBlock.Type.PORTAL));
 			portal_boundary_materials.add(style.material(true, PortalBlock.Type.ORIGIN));
-			portal_boundary_materials.add(style.material(true, PortalBlock.Type.BOUNDARY));
+			portal_boundary_materials.add(style.material(true, PortalBlock.Type.BOUNDARY_1));
+			portal_boundary_materials.add(style.material(true, PortalBlock.Type.BOUNDARY_2));
+			portal_boundary_materials.add(style.material(true, PortalBlock.Type.BOUNDARY_3));
+			portal_boundary_materials.add(style.material(true, PortalBlock.Type.BOUNDARY_4));
+			portal_boundary_materials.add(style.material(true, PortalBlock.Type.BOUNDARY_5));
 			portal_console_materials.add(style.material(true, PortalBlock.Type.CONSOLE));
 		}
 	}

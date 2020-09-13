@@ -70,7 +70,11 @@ public class PortalBlock {
 	public static enum Type {
 		ORIGIN,
 		CONSOLE,
-		BOUNDARY,
+		BOUNDARY_1,
+		BOUNDARY_2,
+		BOUNDARY_3,
+		BOUNDARY_4,
+		BOUNDARY_5,
 		PORTAL;
 	}
 }
