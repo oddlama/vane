@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 import org.bukkit.Location;
+import org.oddlama.vane.util.LazyLocation;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -29,7 +30,7 @@ public class Portal {
 		final var json = new JSONObject();
 		json.put("id",            to_json(UUID.class,              portal.id));
 		json.put("orientation",   to_json(Orientation.class,       portal.orientation));
-		json.put("spawn",         to_json(Location.class,          portal.spawn));
+		json.put("spawn",         to_json(LazyLocation.class,      portal.spawn));
 		try {
 			json.put("blocks",    to_json(Portal.class.getDeclaredField("blocks"), portal.blocks));
 		} catch (NoSuchFieldException e) { throw new RuntimeException("Invalid field. This is a bug.", e); }
@@ -50,7 +51,7 @@ public class Portal {
 		final var portal = new Portal();
 		portal.id            = from_json(UUID.class,              json.get("id"));
 		portal.orientation   = from_json(Orientation.class,       json.get("orientation"));
-		portal.spawn         = from_json(Location.class,          json.get("spawn"));
+		portal.spawn         = from_json(LazyLocation.class,      json.get("spawn"));
 		try {
 			portal.blocks    = (List<PortalBlock>)from_json(Portal.class.getDeclaredField("blocks"), json.get("blocks"));
 		} catch (NoSuchFieldException e) { throw new RuntimeException("Invalid field. This is a bug.", e); }
@@ -67,7 +68,7 @@ public class Portal {
 
 	private UUID id;
 	private Orientation orientation;
-	private Location spawn;
+	private LazyLocation spawn;
 	private List<PortalBlock> blocks = new ArrayList<>();
 
 	private String name = "Portal";
@@ -83,12 +84,12 @@ public class Portal {
 	public Portal(final Orientation orientation, final Location spawn) {
 		this.id = UUID.randomUUID();
 		this.orientation = orientation;
-		this.spawn = spawn.clone();
+		this.spawn = new LazyLocation(spawn.clone());
 	}
 
 	public UUID id() { return id; }
 	public Orientation orientation() { return orientation; }
-	public Location spawn() { return spawn.clone(); }
+	public Location spawn() { return spawn.location().clone(); }
 	public List<PortalBlock> blocks() { return blocks; }
 	public String name() { return name; }
 	public void name(String name) { this.name = name; }
@@ -131,7 +132,7 @@ public class Portal {
 		for (final var portal_block : blocks) {
 			portal_block.block().setType(cur_style.material(portal_block.type(), active));
 			if (portal_block.type() == PortalBlock.Type.CONSOLE) {
-				portals.update_console(this, portal_block, active);
+				portals.update_console_item(this, portal_block.block(), active);
 			}
 		}
 	}

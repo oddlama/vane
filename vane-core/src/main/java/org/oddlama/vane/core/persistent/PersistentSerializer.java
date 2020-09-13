@@ -19,6 +19,8 @@ import java.util.UUID;
 import java.util.function.Function;
 
 import org.bukkit.Bukkit;
+import org.oddlama.vane.util.LazyLocation;
+import org.oddlama.vane.util.LazyBlock;
 import org.bukkit.block.Block;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -48,10 +50,11 @@ public class PersistentSerializer {
 		return namespaced_key(s[0], s[1]);
 	}
 
-	private static Object serialize_location(@NotNull final Object o) throws IOException {
-		final var location = (Location)o;
+	private static Object serialize_lazy_location(@NotNull final Object o) throws IOException {
+		final var lazy_location = (LazyLocation)o;
+		final var location = lazy_location.location();
 		final var json = new JSONObject();
-		json.put("world_id", to_json(UUID.class,   location.getWorld().getUID()));
+		json.put("world_id", to_json(UUID.class,   lazy_location.world_id()));
 		json.put("x",        to_json(double.class, location.getX()));
 		json.put("y",        to_json(double.class, location.getY()));
 		json.put("z",        to_json(double.class, location.getZ()));
@@ -60,7 +63,7 @@ public class PersistentSerializer {
 		return json;
 	}
 
-	private static Location deserialize_location(@NotNull final Object o) throws IOException {
+	private static LazyLocation deserialize_lazy_location(@NotNull final Object o) throws IOException {
 		final var json = (JSONObject)o;
 		final var world_id = from_json(UUID.class,   json.get("world_id"));
 		final var x        = from_json(double.class, json.get("x"));
@@ -68,26 +71,26 @@ public class PersistentSerializer {
 		final var z        = from_json(double.class, json.get("z"));
 		final var pitch    = from_json(float.class,  json.get("pitch"));
 		final var yaw      = from_json(float.class,  json.get("yaw"));
-		return new Location(Bukkit.getWorld(world_id), x, y, z, yaw, pitch);
+		return new LazyLocation(world_id, x, y, z, yaw, pitch);
 	}
 
-	private static Object serialize_block(@NotNull final Object o) throws IOException {
-		final var block = (Block)o;
+	private static Object serialize_lazy_block(@NotNull final Object o) throws IOException {
+		final var lazy_block = (LazyBlock)o;
 		final var json = new JSONObject();
-		json.put("world_id", to_json(UUID.class, block.getWorld().getUID()));
-		json.put("x",        to_json(int.class,  block.getX()));
-		json.put("y",        to_json(int.class,  block.getY()));
-		json.put("z",        to_json(int.class,  block.getZ()));
+		json.put("world_id", to_json(UUID.class, lazy_block.world_id()));
+		json.put("x",        to_json(int.class,  lazy_block.x()));
+		json.put("y",        to_json(int.class,  lazy_block.y()));
+		json.put("z",        to_json(int.class,  lazy_block.z()));
 		return json;
 	}
 
-	private static Block deserialize_block(@NotNull final Object o) throws IOException {
+	private static LazyBlock deserialize_lazy_block(@NotNull final Object o) throws IOException {
 		final var json = (JSONObject)o;
 		final var world_id = from_json(UUID.class, json.get("world_id"));
 		final var x        = from_json(int.class,  json.get("x"));
 		final var y        = from_json(int.class,  json.get("y"));
 		final var z        = from_json(int.class,  json.get("z"));
-		return Bukkit.getWorld(world_id).getBlockAt(x, y, z);
+		return new LazyBlock(world_id, x, y, z);
 	}
 
 	private static Object serialize_material(@NotNull final Object o) throws IOException {
@@ -149,10 +152,10 @@ public class PersistentSerializer {
 		// Bukkit types
 		serializers.put(NamespacedKey.class,   PersistentSerializer::serialize_namespaced_key);
 		deserializers.put(NamespacedKey.class, PersistentSerializer::deserialize_namespaced_key);
-		serializers.put(Location.class,        PersistentSerializer::serialize_location);
-		deserializers.put(Location.class,      PersistentSerializer::deserialize_location);
-		serializers.put(Block.class,           PersistentSerializer::serialize_block);
-		deserializers.put(Block.class,         PersistentSerializer::deserialize_block);
+		serializers.put(LazyLocation.class,    PersistentSerializer::serialize_lazy_location);
+		deserializers.put(LazyLocation.class,  PersistentSerializer::deserialize_lazy_location);
+		serializers.put(LazyBlock.class,       PersistentSerializer::serialize_lazy_block);
+		deserializers.put(LazyBlock.class,     PersistentSerializer::deserialize_lazy_block);
 		serializers.put(Material.class,        PersistentSerializer::serialize_material);
 		deserializers.put(Material.class,      PersistentSerializer::deserialize_material);
 		serializers.put(ItemStack.class,       PersistentSerializer::serialize_item_stack);

@@ -1,6 +1,7 @@
 package org.oddlama.vane.portals;
 
 import static org.oddlama.vane.util.BlockUtil.adjacent_blocks_3d;
+import static org.oddlama.vane.util.BlockUtil.unpack;
 import static org.oddlama.vane.util.ItemUtil.name_item;
 import static org.oddlama.vane.util.Util.namespaced_key;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -13,6 +14,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
 import net.minecraft.server.v1_16_R2.EntityTypes;
 import net.minecraft.server.v1_16_R2.EnumCreatureType;
 import java.util.ArrayList;
@@ -28,6 +30,7 @@ import org.oddlama.vane.core.material.ExtendedMaterial;
 import org.oddlama.vane.portals.event.PortalConstructEvent;
 import org.oddlama.vane.portals.event.PortalLinkConsoleEvent;
 
+import org.oddlama.vane.core.functional.Consumer2;
 import org.oddlama.vane.portals.portal.Orientation;
 import org.oddlama.vane.portals.portal.Plane;
 import org.oddlama.vane.portals.portal.PortalBoundary;
@@ -151,6 +154,14 @@ public class Portals extends Module<Portals> {
 		}
 	}
 
+	public void remove_portal(final Portal portal) {
+		storage_portals.remove(portal.id());
+
+		// TODO replace target id everywhere,
+		// and update all changed portals that are loaded in next tick
+		// i.e. update_if_loaded() function.
+	}
+
 	public void add_portal(final Portal portal) {
 		storage_portals.put(portal.id(), portal);
 	}
@@ -176,7 +187,7 @@ public class Portals extends Module<Portals> {
 			storage_portal_blocks_in_chunk_in_world.put(world_id, portal_blocks_in_chunk);
 		}
 
-		final var chunk_key = Chunk.getChunkKey(block.getX(), block.getZ());
+		final var chunk_key = block.getChunk().getChunkKey();
 		var block_to_portal_block = portal_blocks_in_chunk.get(chunk_key);
 		if (block_to_portal_block == null) {
 			block_to_portal_block = new HashMap<Long, PortalBlockLookup>();
@@ -193,7 +204,7 @@ public class Portals extends Module<Portals> {
 			return null;
 		}
 
-		final var chunk_key = Chunk.getChunkKey(block.getX(), block.getZ());
+		final var chunk_key = block.getChunk().getChunkKey();
 		final var block_to_portal_block = portal_blocks_in_chunk.get(chunk_key);
 		if (block_to_portal_block == null) {
 			return null;
@@ -228,7 +239,7 @@ public class Portals extends Module<Portals> {
 			return false;
 		}
 
-		final var chunk_key = Chunk.getChunkKey(block.getX(), block.getZ());
+		final var chunk_key = block.getChunk().getChunkKey();
 		final var block_to_portal_block = portal_blocks_in_chunk.get(chunk_key);
 		if (block_to_portal_block == null) {
 			return false;
@@ -289,9 +300,8 @@ public class Portals extends Module<Portals> {
 		return name_item(item, display_name);
 	}
 
-	public void update_console(final Portal portal, final PortalBlock console, boolean active) {
-		final var block = console.block();
-		var console_item = console_floating_items.get(console.block());
+	public void update_console_item(final Portal portal, final Block block, boolean active) {
+		var console_item = console_floating_items.get(block);
 		final boolean is_new;
 		if (console_item == null) {
 			console_item = new FloatingItem(block.getWorld(), block.getX() + 0.5, block.getY() + 1.2, block.getZ() + 0.5);
@@ -308,22 +318,51 @@ public class Portals extends Module<Portals> {
 		}
 	}
 
-	private void disable_consoles_in_chunk(final Chunk chunk) {
-		// TODO
+	public void remove_console_item(final Block block) {
+		final var console_item = console_floating_items.remove(block);
+		if (console_item != null) {
+			console_item.die();
+		}
 	}
 
-	private void enable_consoles_in_chunk(final Chunk chunk) {
-		// TODO
+	private void for_each_console_block_in_chunk(final Chunk chunk, final Consumer2<Block, PortalBlockLookup> consumer) {
+		final var portal_blocks_in_chunk = storage_portal_blocks_in_chunk_in_world.get(chunk.getWorld().getUID());
+		if (portal_blocks_in_chunk == null) {
+			return;
+		}
+
+		final var chunk_key = chunk.getChunkKey();
+		final var block_to_portal_block = portal_blocks_in_chunk.get(chunk_key);
+		if (block_to_portal_block == null) {
+			return;
+		}
+
+		block_to_portal_block.forEach((k, v) -> {
+			if (v.type() == PortalBlock.Type.CONSOLE) {
+				final var block = unpack(chunk, k);
+				consumer.apply(block, v);
+			}
+		});
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void on_monitor_chunk_unload(final ChunkUnloadEvent event) {
-		disable_consoles_in_chunk(event.getChunk());
+		final var chunk = event.getChunk();
+
+		// Disable all consoles in this chunk
+		for_each_console_block_in_chunk(chunk, (block, console) -> remove_console_item(block));
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void on_monitor_chunk_load(final ChunkLoadEvent event) {
-		enable_consoles_in_chunk(event.getChunk());
+		final var chunk = event.getChunk();
+
+		// Enable all consoles in this chunk
+		for_each_console_block_in_chunk(chunk, (block, console) -> {
+			final var portal = portal_for(console.portal_id());
+			final var active = is_activated(portal);
+			update_console_item(portal, block, active);
+		});
 	}
 
 	private static class PortalDisableRunnable implements Runnable {

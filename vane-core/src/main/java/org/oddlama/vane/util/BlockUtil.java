@@ -4,6 +4,7 @@ import static org.oddlama.vane.util.MaterialUtil.is_replaceable_grass;
 import static org.oddlama.vane.util.MaterialUtil.is_tillable;
 
 import java.util.ArrayList;
+import org.bukkit.Chunk;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -76,6 +77,13 @@ public class BlockUtil {
 
 	public static @NotNull Block relative(@NotNull final Block block, @NotNull final Vector relative) {
 		return block.getRelative(relative.getBlockX(), relative.getBlockY(), relative.getBlockZ());
+	}
+
+	public static Block unpack(final Chunk chunk, long block_key) {
+		int x = (int)((block_key << 37) >> 37) & 0x0f;
+		int y = (int)(block_key >>> 54)        & 0xff;
+		int z = (int)((block_key << 10) >> 37) & 0x0f;
+		return chunk.getBlock(x, y, z);
 	}
 
 	public static Block next_tillable_block(final Block root_block, int radius, boolean careless) {

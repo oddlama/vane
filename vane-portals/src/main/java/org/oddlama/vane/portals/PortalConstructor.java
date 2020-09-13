@@ -37,7 +37,6 @@ import org.oddlama.vane.portals.portal.Style;
 import org.oddlama.vane.portals.portal.Portal;
 
 public class PortalConstructor extends Listener<Portals> {
-	// TODO test flint and steel to ignite a nether portal. this should be cancelled.
 	// TODO materials group
 	@ConfigMaterial(def = Material.ENCHANTING_TABLE, desc = "The block used to build portal consoles.")
 	public Material config_material_console;
