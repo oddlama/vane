@@ -20,7 +20,7 @@ public class ConfigStringListMapField extends ConfigField<Map<String, List<Strin
 	public ConfigStringListMap annotation;
 
 	public ConfigStringListMapField(Object owner, Field field, Function<String, String> map_name, ConfigStringListMap annotation) {
-		super(owner, field, map_name, "map of string lists", annotation.desc());
+		super(owner, field, map_name, "map of string to string list", annotation.desc());
 		this.annotation = annotation;
 	}
 
@@ -29,7 +29,7 @@ public class ConfigStringListMapField extends ConfigField<Map<String, List<Strin
 			builder.append(indent);
 			builder.append(prefix);
 			builder.append("  ");
-			builder.append(k);
+			builder.append(escape_yaml(k));
 			builder.append(":\n");
 
 			list.forEach(s -> {
@@ -94,11 +94,11 @@ public class ConfigStringListMapField extends ConfigField<Map<String, List<Strin
 
 	public void load(YamlConfiguration yaml) {
 		final var map = new HashMap<String, List<String>>();
-		for (var list_key : yaml.getConfigurationSection(yaml_path()).getKeys(false)) {
+		for (final var list_key : yaml.getConfigurationSection(yaml_path()).getKeys(false)) {
 			final var list_path = yaml_path() + "." + list_key;
 			final var list = new ArrayList<String>();
 			map.put(list_key, list);
-			for (var obj : yaml.getList(list_path)) {
+			for (final var obj : yaml.getList(list_path)) {
 				list.add((String)obj);
 			}
 		}
@@ -110,4 +110,3 @@ public class ConfigStringListMapField extends ConfigField<Map<String, List<Strin
 		}
 	}
 }
-

@@ -44,6 +44,10 @@ import java.util.UUID;
 import java.util.function.Predicate;
 import org.oddlama.vane.core.persistent.PersistentSerializer;
 import org.oddlama.vane.portals.menu.PortalMenuGroup;
+import org.oddlama.vane.annotation.config.ConfigMaterialMapMapMap;
+import org.oddlama.vane.annotation.config.ConfigMaterialMapMapMapEntry;
+import org.oddlama.vane.annotation.config.ConfigMaterialMapMapEntry;
+import org.oddlama.vane.annotation.config.ConfigMaterialMapEntry;
 
 import org.oddlama.vane.portals.portal.Orientation;
 import org.oddlama.vane.portals.portal.Plane;
@@ -88,9 +92,37 @@ public class Portals extends Module<Portals> {
 		PersistentSerializer.deserializers.put(Orientation.class,       x -> Orientation.valueOf((String)x));
 	}
 
-	// TODO materials
-	//@ConfigMaterialMapMapMap(name = "styles")
-	//public Map<String, Map<String, Map<String, Material>>> config_styles;
+	@ConfigMaterialMapMapMap(def = {
+		@ConfigMaterialMapMapMapEntry(key = "vane_portals:portal_style_default", value = {
+			@ConfigMaterialMapMapEntry(key = "active", value = {
+				@ConfigMaterialMapEntry(key = "boundary", value = Material.OBSIDIAN),
+				@ConfigMaterialMapEntry(key = "console", value = Material.ENCHANTING_TABLE),
+				@ConfigMaterialMapEntry(key = "origin", value = Material.OBSIDIAN),
+				@ConfigMaterialMapEntry(key = "portal", value = Material.END_GATEWAY),
+			}),
+			@ConfigMaterialMapMapEntry(key = "inactive", value = {
+				@ConfigMaterialMapEntry(key = "boundary", value = Material.OBSIDIAN),
+				@ConfigMaterialMapEntry(key = "console", value = Material.ENCHANTING_TABLE),
+				@ConfigMaterialMapEntry(key = "origin", value = Material.OBSIDIAN),
+				@ConfigMaterialMapEntry(key = "portal", value = Material.AIR),
+			})
+		}),
+		@ConfigMaterialMapMapMapEntry(key = "vane_portals:portal_style_aqua", value = {
+			@ConfigMaterialMapMapEntry(key = "active", value = {
+				@ConfigMaterialMapEntry(key = "boundary", value = Material.DARK_PRISMARINE),
+				@ConfigMaterialMapEntry(key = "console", value = Material.ENCHANTING_TABLE),
+				@ConfigMaterialMapEntry(key = "origin", value = Material.OBSIDIAN),
+				@ConfigMaterialMapEntry(key = "portal", value = Material.END_GATEWAY),
+			}),
+			@ConfigMaterialMapMapEntry(key = "inactive", value = {
+				@ConfigMaterialMapEntry(key = "boundary", value = Material.DARK_PRISMARINE),
+				@ConfigMaterialMapEntry(key = "console", value = Material.ENCHANTING_TABLE),
+				@ConfigMaterialMapEntry(key = "origin", value = Material.OBSIDIAN),
+				@ConfigMaterialMapEntry(key = "portal", value = Material.AIR),
+			})
+		})
+	}, desc = "Portal style definitions. Must provide a material for each portal block type and activation state. The default style may be overridden.")
+	public Map<String, Map<String, Map<String, Material>>> config_styles;
 	@ConfigLong(def = 15000, min = 1000, max = 120000, desc = "Delay in milliseconds after which two connected portals will automatically be disabled.")
 	public long config_deactivation_delay;
 
@@ -142,6 +174,7 @@ public class Portals extends Module<Portals> {
 	public void on_config_change() {
 		styles.clear();
 		final var default_style = Style.default_style();
+		// TODO only if not overridden
 		styles.put(default_style.key(), default_style);
 		// TODO configured styles
 
