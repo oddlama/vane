@@ -1,12 +1,16 @@
 package org.oddlama.vane.portals;
 
 import static org.oddlama.vane.util.BlockUtil.adjacent_blocks_3d;
+import static org.oddlama.vane.util.Nms.register_entity;
+import static org.oddlama.vane.util.Nms.spawn;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import net.minecraft.server.v1_16_R2.EntityTypes;
+import net.minecraft.server.v1_16_R2.EnumCreatureType;
 import java.util.ArrayList;
 import java.util.UUID;
 import java.util.function.Predicate;
@@ -34,6 +38,7 @@ import org.jetbrains.annotations.NotNull;
 import org.oddlama.vane.annotation.VaneModule;
 import org.oddlama.vane.annotation.persistent.Persistent;
 import org.oddlama.vane.core.module.Module;
+import org.oddlama.vane.portals.entity.FloatingItem;
 
 @VaneModule(name = "portals", bstats = 8642, config_version = 1, lang_version = 1, storage_version = 1)
 public class Portals extends Module<Portals> {
@@ -77,11 +82,19 @@ public class Portals extends Module<Portals> {
 	private final HashMap<Block, FloatingItem> console_floating_items = new HashMap<>();
 
 	public Portals() {
+		register_entities();
+
 		menus = new PortalMenuGroup(this);
 		new PortalActivator(this);
 		new PortalBlockProtector(this);
 		new PortalConstructor(this);
 		new PortalTeleporter(this);
+	}
+
+	@SuppressWarnings("unchecked")
+	private void register_entities() {
+		// Register entity
+		register_entity(namespace(), "floating_item", EntityTypes.Builder.a(FloatingItem::new, EnumCreatureType.MISC).a(0.0f, 0.0f));
 	}
 
 	@Override
@@ -220,11 +233,12 @@ public class Portals extends Module<Portals> {
 	}
 
 	public void update_console(final Portal portal, final PortalBlock console, boolean active) {
+		final var block = console.block();
 		final var console_item = console_floating_items.get(console.block());
-		FloatingItem floatingItem = new FloatingItem(console.getWorld(), console.getX() + 0.5, console.getY() + 1.2, console.getZ() + 0.5);
-		floatingItem.setItemStack(((CraftItemStack)Portals.getConsoleItem(portal, null, false, console)).getHandle());
-		Entities.spawn(console.getWorld(), floatingItem);
-		consoleItems.put(console, floatingItem);
+		final var item = new FloatingItem(block.getWorld(), block.getX() + 0.5, block.getY() + 1.2, block.getZ() + 0.5);
+		// TODO item.setItemStack(((CraftItemStack)Portals.getConsoleItem(portal, null, false, console)).getHandle());
+		spawn(block.getWorld(), item);
+		console_floating_items.put(block, item);
 		// TODO
 	}
 

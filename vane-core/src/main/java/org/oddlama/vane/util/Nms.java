@@ -6,6 +6,8 @@ import net.minecraft.server.v1_16_R2.BlockPosition;
 import net.minecraft.server.v1_16_R2.Clearable;
 import net.minecraft.server.v1_16_R2.CreativeModeTab;
 import net.minecraft.server.v1_16_R2.DedicatedServer;
+import net.minecraft.server.v1_16_R2.Entity;
+import net.minecraft.server.v1_16_R2.EntityTypes;
 import net.minecraft.server.v1_16_R2.Enchantment;
 import net.minecraft.server.v1_16_R2.EnchantmentSlotType;
 import net.minecraft.server.v1_16_R2.EntityPlayer;
@@ -91,6 +93,15 @@ public class Nms {
 	public static DedicatedServer server_handle() {
 		final var bukkit_server = Bukkit.getServer();
 		return ((CraftServer)bukkit_server).getServer();
+	}
+
+	public static void register_entity(final String pseudo_namespace, final String key, final EntityTypes.Builder<?> builder) {
+		final var s = pseudo_namespace + "_" + key;
+		IRegistry.a(IRegistry.ENTITY_TYPE, s, builder.a(s));
+	}
+
+	public static void spawn(org.bukkit.World world, Entity entity) {
+		world_handle(world).addEntity(entity);
 	}
 
 	public static int unlock_all_recipes(final org.bukkit.entity.Player player) {
