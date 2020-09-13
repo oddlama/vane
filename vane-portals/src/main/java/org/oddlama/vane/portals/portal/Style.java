@@ -62,18 +62,18 @@ public class Style {
 	public static Style default_style() {
 		final var style = new Style(default_style_key());
 		style.set_material(true, PortalBlock.Type.BOUNDARY_1,  Material.OBSIDIAN);
-		style.set_material(true, PortalBlock.Type.BOUNDARY_2,  Material.OBSIDIAN);
-		style.set_material(true, PortalBlock.Type.BOUNDARY_3,  Material.OBSIDIAN);
-		style.set_material(true, PortalBlock.Type.BOUNDARY_4,  Material.OBSIDIAN);
-		style.set_material(true, PortalBlock.Type.BOUNDARY_5,  Material.OBSIDIAN);
+		style.set_material(true, PortalBlock.Type.BOUNDARY_2,  Material.CRYING_OBSIDIAN);
+		style.set_material(true, PortalBlock.Type.BOUNDARY_3,  Material.GOLD_BLOCK);
+		style.set_material(true, PortalBlock.Type.BOUNDARY_4,  Material.GILDED_BLACKSTONE);
+		style.set_material(true, PortalBlock.Type.BOUNDARY_5,  Material.EMERALD_BLOCK);
 		style.set_material(true, PortalBlock.Type.CONSOLE,     Material.ENCHANTING_TABLE);
 		style.set_material(true, PortalBlock.Type.ORIGIN,      Material.OBSIDIAN);
 		style.set_material(true, PortalBlock.Type.PORTAL,      Material.END_GATEWAY);
 		style.set_material(false, PortalBlock.Type.BOUNDARY_1, Material.OBSIDIAN);
-		style.set_material(false, PortalBlock.Type.BOUNDARY_2, Material.OBSIDIAN);
-		style.set_material(false, PortalBlock.Type.BOUNDARY_3, Material.OBSIDIAN);
-		style.set_material(false, PortalBlock.Type.BOUNDARY_4, Material.OBSIDIAN);
-		style.set_material(false, PortalBlock.Type.BOUNDARY_5, Material.OBSIDIAN);
+		style.set_material(false, PortalBlock.Type.BOUNDARY_2, Material.CRYING_OBSIDIAN);
+		style.set_material(false, PortalBlock.Type.BOUNDARY_3, Material.GOLD_BLOCK);
+		style.set_material(false, PortalBlock.Type.BOUNDARY_4, Material.GILDED_BLACKSTONE);
+		style.set_material(false, PortalBlock.Type.BOUNDARY_5, Material.EMERALD_BLOCK);
 		style.set_material(false, PortalBlock.Type.CONSOLE,    Material.ENCHANTING_TABLE);
 		style.set_material(false, PortalBlock.Type.ORIGIN,     Material.OBSIDIAN);
 		style.set_material(false, PortalBlock.Type.PORTAL,     Material.AIR);

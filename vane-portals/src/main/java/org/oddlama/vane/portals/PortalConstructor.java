@@ -42,13 +42,13 @@ public class PortalConstructor extends Listener<Portals> {
 	public Material config_material_console;
 	@ConfigMaterial(def = Material.OBSIDIAN, desc = "The block used to build the portal boundary. Variation 1.")
 	public Material config_material_boundary_1;
-	@ConfigMaterial(def = Material.OBSIDIAN, desc = "The block used to build the portal boundary. Variation 2.")
+	@ConfigMaterial(def = Material.CRYING_OBSIDIAN, desc = "The block used to build the portal boundary. Variation 2.")
 	public Material config_material_boundary_2;
-	@ConfigMaterial(def = Material.OBSIDIAN, desc = "The block used to build the portal boundary. Variation 3.")
+	@ConfigMaterial(def = Material.GOLD_BLOCK, desc = "The block used to build the portal boundary. Variation 3.")
 	public Material config_material_boundary_3;
-	@ConfigMaterial(def = Material.OBSIDIAN, desc = "The block used to build the portal boundary. Variation 4.")
+	@ConfigMaterial(def = Material.GILDED_BLACKSTONE, desc = "The block used to build the portal boundary. Variation 4.")
 	public Material config_material_boundary_4;
-	@ConfigMaterial(def = Material.OBSIDIAN, desc = "The block used to build the portal boundary. Variation 5.")
+	@ConfigMaterial(def = Material.EMERALD_BLOCK, desc = "The block used to build the portal boundary. Variation 5.")
 	public Material config_material_boundary_5;
 	@ConfigMaterial(def = Material.NETHERITE_BLOCK, desc = "The block used to build the portal origin.")
 	public Material config_material_origin;

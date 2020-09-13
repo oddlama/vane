@@ -157,6 +157,7 @@ public class Portals extends Module<Portals> {
 	private final Map<UUID, BukkitTask> disable_tasks = new HashMap<>();
 
 	public PortalMenuGroup menus;
+	public PortalConstructor constructor;
 
 	public Portals() {
 		register_entities();
@@ -164,7 +165,7 @@ public class Portals extends Module<Portals> {
 		menus = new PortalMenuGroup(this);
 		new PortalActivator(this);
 		new PortalBlockProtector(this);
-		new PortalConstructor(this);
+		constructor = new PortalConstructor(this);
 		new PortalTeleporter(this);
 	}
 
@@ -259,8 +260,8 @@ public class Portals extends Module<Portals> {
 			return;
 		}
 
-		// Remove portal blocks from acceleration structure
-		portal.blocks().forEach(this::remove_portal_block_from_acceleration_structure);
+		// Remove portal blocks
+		portal.blocks().forEach(this::remove_portal_block);
 
 		// Replace references to the portal everywhere
 		// and update all changed portal consoles.
@@ -279,7 +280,25 @@ public class Portals extends Module<Portals> {
 		storage_portals.put(portal.id(), portal);
 	}
 
-	public void remove_portal_block_from_acceleration_structure(final PortalBlock portal_block) {
+	public void remove_portal_block(final PortalBlock portal_block) {
+		// Restore original block
+		switch (portal_block.type()) {
+			case ORIGIN:     portal_block.block().setType(constructor.config_material_console);     break;
+			case CONSOLE:    portal_block.block().setType(constructor.config_material_origin);      break;
+			case BOUNDARY_1: portal_block.block().setType(constructor.config_material_boundary_1);  break;
+			case BOUNDARY_2: portal_block.block().setType(constructor.config_material_boundary_2);  break;
+			case BOUNDARY_3: portal_block.block().setType(constructor.config_material_boundary_3);  break;
+			case BOUNDARY_4: portal_block.block().setType(constructor.config_material_boundary_4);  break;
+			case BOUNDARY_5: portal_block.block().setType(constructor.config_material_boundary_5);  break;
+			case PORTAL:     portal_block.block().setType(constructor.config_material_portal_area); break;
+		}
+
+		// Remove console item if block is a console
+		if (portal_block.type() == PortalBlock.Type.CONSOLE) {
+			remove_console_item(portal_block.block());
+		}
+
+		// Remove from acceleration structure
 		final var block = portal_block.block();
 		final var portal_blocks_in_chunk = storage_portal_blocks_in_chunk_in_world.get(block.getWorld().getUID());
 		if (portal_blocks_in_chunk == null) {
@@ -300,12 +319,8 @@ public class Portals extends Module<Portals> {
 		// Remove from portal
 		portal.blocks().remove(portal_block);
 
-		if (portal_block.type() == PortalBlock.Type.CONSOLE) {
-			remove_console_item(portal_block.block());
-		}
-
 		// Remove from acceleration structure
-		remove_portal_block_from_acceleration_structure(portal_block);
+		remove_portal_block(portal_block);
 	}
 
 	public void add_portal_block(final Portal portal, final PortalBlock portal_block) {
