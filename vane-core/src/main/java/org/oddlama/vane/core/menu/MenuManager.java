@@ -45,7 +45,7 @@ public class MenuManager extends Listener<Core> {
 		final var menu = menus.get(inventory);
 		if (open_menus.get(player.getUniqueId()) != menu) {
 			get_module().log.warning("Menu inconsistency: entity " + player + " accessed a menu that isn't registered to it");
-			return null;
+			return menu;
 		}
 		return menu;
 	}

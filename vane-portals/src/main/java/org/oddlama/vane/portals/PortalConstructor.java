@@ -3,6 +3,8 @@ package org.oddlama.vane.portals;
 import static org.oddlama.vane.util.PlayerUtil.swing_arm;
 
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -92,10 +94,26 @@ public class PortalConstructor extends Listener<Portals> {
 
 	@LangMessage public TranslatedMessage lang_menu_title_enter_portal_name;
 
+	private Set<Material> portal_boundary_materials_including_build_materials = new HashSet<>();
+
 	private HashMap<UUID, Block> pending_console = new HashMap<>();
 
 	public PortalConstructor(Context<Portals> context) {
 		super(context);
+	}
+
+	@Override
+	public void on_config_change() {
+		portal_boundary_materials_including_build_materials.clear();
+		portal_boundary_materials_including_build_materials.addAll(get_module().portal_boundary_materials);
+
+		// Also add build materials
+		portal_boundary_materials_including_build_materials.add(config_material_boundary_1);
+		portal_boundary_materials_including_build_materials.add(config_material_boundary_2);
+		portal_boundary_materials_including_build_materials.add(config_material_boundary_3);
+		portal_boundary_materials_including_build_materials.add(config_material_boundary_4);
+		portal_boundary_materials_including_build_materials.add(config_material_boundary_5);
+		portal_boundary_materials_including_build_materials.add(config_material_origin);
 	}
 
 	public int max_dim_x(Plane plane) { return plane.x() ? config_area_max_width  : 1; }
@@ -366,7 +384,7 @@ public class PortalConstructor extends Listener<Portals> {
 
 		final var block = event.getClickedBlock();
 		final var type = block.getType();
-		if (!get_module().portal_boundary_materials.contains(type)) {
+		if (!portal_boundary_materials_including_build_materials.contains(type)) {
 			return;
 		}
 

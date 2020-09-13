@@ -100,19 +100,33 @@ public class Portal {
 	public boolean target_locked() { return target_locked; }
 	public void target_locked(boolean target_locked) { this.target_locked = target_locked; }
 
+	public PortalBlock portal_block_for(final Block block) {
+		for (final var pb : blocks()) {
+			if (pb.block().equals(block)) {
+				return pb;
+			}
+		}
+		return null;
+	}
+
 	public @Nullable Portal target(final Portals portals) {
 		return portals.portal_for(target_id());
 	}
 
 	public boolean activate(final Portals portals, @Nullable final Player player) {
+		final var target = target(portals);
+		if (target == null) {
+			return false;
+		}
+
 		// TODO send event check cancelled
-		portals.connect_portals(this, target(portals));
+		portals.connect_portals(this, target);
 		return true;
 	}
 
 	public boolean deactivate(final Portals portals, @Nullable final Player player) {
 		// TODO send event check cancelled
-		portals.disconnect_portals(this, target(portals));
+		portals.disconnect_portals(this);
 		return true;
 	}
 

@@ -216,12 +216,19 @@ public class Portals extends Module<Portals> {
 		// be used to accelerate checking in events.
 		for (final var style : styles.values()) {
 			portal_area_materials.add(style.material(true, PortalBlock.Type.PORTAL));
+			portal_boundary_materials.add(style.material(false, PortalBlock.Type.ORIGIN));
+			portal_boundary_materials.add(style.material(false, PortalBlock.Type.BOUNDARY_1));
+			portal_boundary_materials.add(style.material(false, PortalBlock.Type.BOUNDARY_2));
+			portal_boundary_materials.add(style.material(false, PortalBlock.Type.BOUNDARY_3));
+			portal_boundary_materials.add(style.material(false, PortalBlock.Type.BOUNDARY_4));
+			portal_boundary_materials.add(style.material(false, PortalBlock.Type.BOUNDARY_5));
 			portal_boundary_materials.add(style.material(true, PortalBlock.Type.ORIGIN));
 			portal_boundary_materials.add(style.material(true, PortalBlock.Type.BOUNDARY_1));
 			portal_boundary_materials.add(style.material(true, PortalBlock.Type.BOUNDARY_2));
 			portal_boundary_materials.add(style.material(true, PortalBlock.Type.BOUNDARY_3));
 			portal_boundary_materials.add(style.material(true, PortalBlock.Type.BOUNDARY_4));
 			portal_boundary_materials.add(style.material(true, PortalBlock.Type.BOUNDARY_5));
+			portal_console_materials.add(style.material(false, PortalBlock.Type.CONSOLE));
 			portal_console_materials.add(style.material(true, PortalBlock.Type.CONSOLE));
 		}
 	}
@@ -244,7 +251,10 @@ public class Portals extends Module<Portals> {
 		}
 
 		// Remove portal from storage
-		storage_portals.remove(portal.id());
+		if (storage_portals.remove(portal.id()) == null) {
+			// Was already removed
+			return;
+		}
 
 		// Remove portal blocks from acceleration structure
 		portal.blocks().forEach(this::remove_portal_block_from_acceleration_structure);
@@ -286,6 +296,10 @@ public class Portals extends Module<Portals> {
 	public void remove_portal_block(final Portal portal, final PortalBlock portal_block) {
 		// Remove from portal
 		portal.blocks().remove(portal_block);
+
+		if (portal_block.type() == PortalBlock.Type.CONSOLE) {
+			remove_console_item(portal_block.block());
+		}
 
 		// Remove from acceleration structure
 		remove_portal_block_from_acceleration_structure(portal_block);
@@ -388,6 +402,10 @@ public class Portals extends Module<Portals> {
 	}
 
 	public Set<Chunk> chunks_for(final Portal portal) {
+		if (portal == null) {
+			return new HashSet<Chunk>();
+		}
+
 		final var set = new HashSet<Chunk>();
 		for (final var pb : portal.blocks()) {
 			set.add(pb.block().getChunk());
@@ -440,6 +458,10 @@ public class Portals extends Module<Portals> {
 
 		// Schedule automatic disable
 		start_disable_task(src, dst);
+	}
+
+	public void disconnect_portals(final Portal src) {
+		disconnect_portals(src, portal_for(connected_portals.get(src.id())));
 	}
 
 	public void disconnect_portals(final Portal src, final Portal dst) {

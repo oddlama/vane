@@ -12,6 +12,7 @@ import org.oddlama.vane.core.config.TranslatedItemStack;
 import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.menu.Menu.ClickResult;
 import org.oddlama.vane.core.menu.Menu;
+import org.oddlama.vane.core.menu.MenuFactory;
 import org.oddlama.vane.core.menu.MenuItem;
 import org.oddlama.vane.core.menu.MenuWidget;
 import org.oddlama.vane.core.module.Context;
@@ -21,22 +22,32 @@ import org.oddlama.vane.portals.portal.Portal;
 
 public class ConsoleMenu extends ModuleComponent<Portals> {
 	@LangMessage public TranslatedMessage lang_title;
+	@LangMessage public TranslatedMessage lang_unlink_console_confirm_title;
+	@LangMessage public TranslatedMessage lang_destroy_portal_confirm_title;
 
 	public TranslatedItemStack<?> item_settings;
 	public TranslatedItemStack<?> item_select_target;
 	public TranslatedItemStack<?> item_select_target_locked;
 	public TranslatedItemStack<?> item_unlink_console;
+	public TranslatedItemStack<?> item_unlink_console_confirm_accept;
+	public TranslatedItemStack<?> item_unlink_console_confirm_cancel;
 	public TranslatedItemStack<?> item_destroy_portal;
+	public TranslatedItemStack<?> item_destroy_portal_confirm_accept;
+	public TranslatedItemStack<?> item_destroy_portal_confirm_cancel;
 
 	public ConsoleMenu(Context<Portals> context) {
 		super(context.namespace("console"));
 
 		final var ctx = get_context();
-        item_settings             = new TranslatedItemStack<>(ctx, "settings",             Material.ENDER_PEARL, 1, "Used to enter portal settings.");
-        item_select_target        = new TranslatedItemStack<>(ctx, "select_target",        Material.COMPASS, 1, "Used to enter portal target selection.");
-        item_select_target_locked = new TranslatedItemStack<>(ctx, "select_target_locked", Material.FIREWORK_STAR, 1, "Used to show portal target selection when the target is locked.");
-        item_unlink_console       = new TranslatedItemStack<>(ctx, "unlink_console",       Material.CHAIN, 1, "Used to unlink the current console.");
-        item_destroy_portal       = new TranslatedItemStack<>(ctx, "destroy_portal",       namespaced_key("vane", "decoration_tnt_1"), 1, "Used to destroy the portal.");
+        item_settings                      = new TranslatedItemStack<>(ctx, "settings",                      Material.ENDER_PEARL,                       1, "Used to enter portal settings.");
+        item_select_target                 = new TranslatedItemStack<>(ctx, "select_target",                 Material.COMPASS,                           1, "Used to enter portal target selection.");
+        item_select_target_locked          = new TranslatedItemStack<>(ctx, "select_target_locked",          Material.FIREWORK_STAR,                     1, "Used to show portal target selection when the target is locked.");
+        item_unlink_console                = new TranslatedItemStack<>(ctx, "unlink_console",                namespaced_key("vane", "decoration_tnt_1"), 1, "Used to unlink the current console.");
+        item_unlink_console_confirm_accept = new TranslatedItemStack<>(ctx, "unlink_console_confirm_accept", namespaced_key("vane", "decoration_tnt_1"), 1, "Used to confirm unlinking the current console.");
+        item_unlink_console_confirm_cancel = new TranslatedItemStack<>(ctx, "unlink_console_confirm_cancel", Material.PRISMARINE_SHARD,                  1, "Used to cancel unlinking the current console.");
+        item_destroy_portal                = new TranslatedItemStack<>(ctx, "destroy_portal",                Material.TNT,                               1, "Used to destroy the portal.");
+        item_destroy_portal_confirm_accept = new TranslatedItemStack<>(ctx, "destroy_portal_confirm_accept", Material.TNT,                               1, "Used to confirm destroying the portal.");
+        item_destroy_portal_confirm_cancel = new TranslatedItemStack<>(ctx, "destroy_portal_confirm_cancel", Material.PRISMARINE_SHARD,                  1, "Used to cancel destroying the portal.");
 	}
 
 	public Menu create(final Portal portal, final Player player, final Block console) {
@@ -48,8 +59,8 @@ public class ConsoleMenu extends ModuleComponent<Portals> {
 
 		// TODO style
 		console_menu.add(menu_item_settings());
-		console_menu.add(menu_item_unlink_console());
-		console_menu.add(menu_item_destroy_portal());
+		console_menu.add(menu_item_unlink_console(portal, console));
+		console_menu.add(menu_item_destroy_portal(portal));
 
 		return console_menu;
 	}
@@ -74,16 +85,38 @@ public class ConsoleMenu extends ModuleComponent<Portals> {
 		}
 	}
 
-	private MenuWidget menu_item_unlink_console() {
+	private MenuWidget menu_item_unlink_console(final Portal portal, final Block console) {
 		return new MenuItem(7, item_unlink_console.item(), (player, menu, self) -> {
 			menu.close(player);
+			MenuFactory.confirm(get_context(), lang_unlink_console_confirm_title.str(),
+				item_unlink_console_confirm_accept.item(), (player2) -> {
+					// TODO permission check
+					final var portal_block = portal.portal_block_for(console);
+					if (portal_block == null) {
+						// Console was likely already removed by another player
+						return;
+					}
+
+					get_module().remove_portal_block(portal, portal_block);
+				}, item_unlink_console_confirm_cancel.item(), (player2) -> {
+					menu.open(player2);
+				})
+			.open(player);
 			return ClickResult.SUCCESS;
 		});
 	}
 
-	private MenuWidget menu_item_destroy_portal() {
+	private MenuWidget menu_item_destroy_portal(final Portal portal) {
 		return new MenuItem(8, item_destroy_portal.item(), (player, menu, self) -> {
 			menu.close(player);
+			MenuFactory.confirm(get_context(), lang_destroy_portal_confirm_title.str(),
+				item_destroy_portal_confirm_accept.item(), (player2) -> {
+					// TODO permission check
+					get_module().remove_portal(portal);
+				}, item_destroy_portal_confirm_cancel.item(), (player2) -> {
+					menu.open(player2);
+				})
+			.open(player);
 			return ClickResult.SUCCESS;
 		});
 	}

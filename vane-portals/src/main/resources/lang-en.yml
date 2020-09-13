@@ -97,6 +97,20 @@ menus:
         unlink_console:
           name: "§c§lUnlink Console"
           lore: []
+        unlink_console_confirm_title: "§c§lUnlink Console"
+        unlink_console_confirm_accept:
+          name: "§c§lUNLINK CONSOLE"
+          lore: []
+        unlink_console_confirm_cancel:
+          name: "§a§lCancel"
+          lore: []
         destroy_portal:
           name: "§c§lDestroy Portal"
+          lore: []
+        destroy_portal_confirm_title: "§c§lDestroy Portal"
+        destroy_portal_confirm_accept:
+          name: "§c§lDESTROY PORTAL"
+          lore: []
+        destroy_portal_confirm_cancel:
+          name: "§a§lCancel"
           lore: []

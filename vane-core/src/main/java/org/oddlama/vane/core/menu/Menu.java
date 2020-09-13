@@ -60,8 +60,10 @@ public class Menu {
 
 	public final void open(final Player player) {
 		update(true);
-		manager.add(player, this);
-		manager.schedule_next_tick(() -> { open_window(player); });
+		manager.schedule_next_tick(() -> {
+			manager.add(player, this);
+			open_window(player);
+		});
 	}
 
 	public boolean close(final Player player) {
