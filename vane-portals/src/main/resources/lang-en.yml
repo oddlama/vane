@@ -77,6 +77,9 @@ console_display_active: "§6§l>§r %1$s §6§l<§r"
 console_display_inactive: "§8§l>§r %1$s §8§l<§r"
 console_no_target: "§k?"
 
+unlink_restricted: "§cYou have no permission to unlink a console from this portal!"
+destroy_restricted: "§cYou have no permission to destroy this portal!"
+
 menus:
     console:
         title: "§8§lPortal: %1$s"

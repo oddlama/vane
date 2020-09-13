@@ -130,6 +130,9 @@ public class Portals extends Module<Portals> {
 	@LangMessage public TranslatedMessage lang_console_display_inactive;
 	@LangMessage public TranslatedMessage lang_console_no_target;
 
+	@LangMessage public TranslatedMessage lang_unlink_restricted;
+	@LangMessage public TranslatedMessage lang_destroy_restricted;
+
 	// Primary storage for all portals (portal_id → portal)
 	@Persistent
 	private Map<UUID, Portal> storage_portals = new HashMap<>();

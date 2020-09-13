@@ -19,6 +19,10 @@ import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.ModuleComponent;
 import org.oddlama.vane.portals.Portals;
 import org.oddlama.vane.portals.portal.Portal;
+import org.oddlama.vane.portals.event.PortalChangeSettingsEvent;
+import org.oddlama.vane.portals.event.PortalDestroyEvent;
+import org.oddlama.vane.portals.event.PortalUnlinkConsoleEvent;
+import org.oddlama.vane.portals.event.PortalSelectTargetEvent;
 
 public class ConsoleMenu extends ModuleComponent<Portals> {
 	@LangMessage public TranslatedMessage lang_title;
@@ -55,17 +59,39 @@ public class ConsoleMenu extends ModuleComponent<Portals> {
 		final var title = lang_title.str("§5§l" + portal.name());
 		final var console_menu = new Menu(get_context(), Bukkit.createInventory(null, columns, title));
 
-		console_menu.add(menu_item_select_target(portal));
+		// Check if target selection would be allowed
+		final var select_target_event = new PortalSelectTargetEvent(player, portal, true);
+		get_module().getServer().getPluginManager().callEvent(select_target_event);
+		if (!select_target_event.isCancelled()) {
+			console_menu.add(menu_item_select_target(portal));
+		}
 
-		// TODO style
-		console_menu.add(menu_item_settings());
-		console_menu.add(menu_item_unlink_console(portal, console));
-		console_menu.add(menu_item_destroy_portal(portal));
+		// Check if settings would be allowed
+		final var settings_event = new PortalChangeSettingsEvent(player, portal, true);
+		get_module().getServer().getPluginManager().callEvent(settings_event);
+		if (!settings_event.isCancelled()) {
+			console_menu.add(menu_item_settings());
+		}
+
+		// Check if unlink would be allowed
+		final var unlink_event = new PortalUnlinkConsoleEvent(player, portal, true);
+		get_module().getServer().getPluginManager().callEvent(unlink_event);
+		if (!unlink_event.isCancelled()) {
+			console_menu.add(menu_item_unlink_console(portal, console));
+		}
+
+		// Check if destroy would be allowed
+		final var destroy_event = new PortalDestroyEvent(player, portal, true);
+		get_module().getServer().getPluginManager().callEvent(destroy_event);
+		if (!destroy_event.isCancelled()) {
+			console_menu.add(menu_item_destroy_portal(portal));
+		}
 
 		return console_menu;
 	}
 
 	private MenuWidget menu_item_settings() {
+			// TODO style
 		return new MenuItem(0, item_settings.item(), (player, menu, self) -> {
 			menu.close(player);
 			return ClickResult.SUCCESS;
@@ -90,7 +116,14 @@ public class ConsoleMenu extends ModuleComponent<Portals> {
 			menu.close(player);
 			MenuFactory.confirm(get_context(), lang_unlink_console_confirm_title.str(),
 				item_unlink_console_confirm_accept.item(), (player2) -> {
-					// TODO permission check
+					// Call event
+					final var event = new PortalUnlinkConsoleEvent(player2, portal, false);
+					get_module().getServer().getPluginManager().callEvent(event);
+					if (event.isCancelled()) {
+						get_module().lang_unlink_restricted.send(player2);
+						return;
+					}
+
 					final var portal_block = portal.portal_block_for(console);
 					if (portal_block == null) {
 						// Console was likely already removed by another player
@@ -111,7 +144,14 @@ public class ConsoleMenu extends ModuleComponent<Portals> {
 			menu.close(player);
 			MenuFactory.confirm(get_context(), lang_destroy_portal_confirm_title.str(),
 				item_destroy_portal_confirm_accept.item(), (player2) -> {
-					// TODO permission check
+					// Call event
+					final var event = new PortalDestroyEvent(player2, portal, false);
+					get_module().getServer().getPluginManager().callEvent(event);
+					if (event.isCancelled()) {
+						get_module().lang_destroy_restricted.send(player2);
+						return;
+					}
+
 					get_module().remove_portal(portal);
 				}, item_destroy_portal_confirm_cancel.item(), (player2) -> {
 					menu.open(player2);
