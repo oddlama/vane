@@ -6,11 +6,13 @@ import org.oddlama.vane.portals.Portals;
 
 public class PortalMenuGroup extends ModuleComponent<Portals> {
 	public ConsoleMenu console_menu;
+	public EnterNameMenu enter_name_menu;
 
 	public PortalMenuGroup(Context<Portals> context) {
 		super(context.namespace("menus"));
 
 		console_menu = new ConsoleMenu(get_context());
+		enter_name_menu = new EnterNameMenu(get_context());
 	}
 
 	@Override public void on_enable() {}

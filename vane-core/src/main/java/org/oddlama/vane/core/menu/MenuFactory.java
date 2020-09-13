@@ -19,7 +19,8 @@ import org.oddlama.vane.core.menu.Menu.ClickResult;
 import org.oddlama.vane.core.module.Context;
 
 public class MenuFactory {
-	public static Menu anvil_string_input(final Context<?> context, final Player player, final String title, final ItemStack input_item, final Function3<Player, Menu, String, ClickResult> on_click) {
+	public static Menu anvil_string_input(final Context<?> context, final Player player, final String title, final ItemStack input_item, final String default_name, final Function3<Player, Menu, String, ClickResult> on_click) {
+
 		final var anvil = new AnvilMenu(context, player, title);
 		anvil.add(new MenuItem(0, input_item));
 		anvil.add(new MenuItemClickListener(2, (p, menu, item) -> {

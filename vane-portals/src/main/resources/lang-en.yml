@@ -70,8 +70,6 @@ source_use_restricted: "§cYou have no permission to use this portal!"
 # This message is sent when a portal is activated, but the player has no permission to use the target portal.
 target_use_restricted: "§cYou have no permission to use the target portal!"
 
-menu_title_enter_portal_name: "TODO title"
-
 # HINT: The trailing §r's are important, otherwise the label will have empty space to the right
 console_display_active: "§6§l>§r %1$s §6§l<§r"
 console_display_inactive: "§8§l>§r %1$s §8§l<§r"
@@ -81,39 +79,41 @@ unlink_restricted: "§cYou have no permission to unlink a console from this port
 destroy_restricted: "§cYou have no permission to destroy this portal!"
 
 menus:
-    console:
-        title: "§8§lPortal: %1$s"
-        settings:
-          name: "§b§lSettings"
-          lore: []
-        select_target:
-          name: "§d§lSelect Target"
-          lore:
-            - ""
-            - "§7Current: %1$s"
-        select_target_locked:
-          name: "§d§lSelect Target"
-          lore:
-            - ""
-            - "§7Current: %1$s"
-            - "§8Target selection is currently §6§lLOCKED§r§8!"
-        unlink_console:
-          name: "§c§lUnlink Console"
-          lore: []
-        unlink_console_confirm_title: "§c§lUnlink Console"
-        unlink_console_confirm_accept:
-          name: "§c§lUNLINK CONSOLE"
-          lore: []
-        unlink_console_confirm_cancel:
-          name: "§a§lCancel"
-          lore: []
-        destroy_portal:
-          name: "§c§lDestroy Portal"
-          lore: []
-        destroy_portal_confirm_title: "§c§lDestroy Portal"
-        destroy_portal_confirm_accept:
-          name: "§c§lDESTROY PORTAL"
-          lore: []
-        destroy_portal_confirm_cancel:
-          name: "§a§lCancel"
-          lore: []
+  enter_name:
+    title: "§8§lEnter Portal Name"
+  console:
+    title: "§8§lPortal: %1$s"
+    settings:
+      name: "§b§lSettings"
+      lore: []
+    select_target:
+      name: "§d§lSelect Target"
+      lore:
+        - ""
+        - "§7Current: %1$s"
+    select_target_locked:
+      name: "§d§lSelect Target"
+      lore:
+        - ""
+        - "§7Current: %1$s"
+        - "§8Target selection is currently §6§lLOCKED§r§8!"
+    unlink_console:
+      name: "§c§lUnlink Console"
+      lore: []
+    unlink_console_confirm_title: "§c§lUnlink Console"
+    unlink_console_confirm_accept:
+      name: "§c§lUNLINK CONSOLE"
+      lore: []
+    unlink_console_confirm_cancel:
+      name: "§a§lCancel"
+      lore: []
+    destroy_portal:
+      name: "§c§lDestroy Portal"
+      lore: []
+    destroy_portal_confirm_title: "§c§lDestroy Portal"
+    destroy_portal_confirm_accept:
+      name: "§c§lDESTROY PORTAL"
+      lore: []
+    destroy_portal_confirm_cancel:
+      name: "§a§lCancel"
+      lore: []

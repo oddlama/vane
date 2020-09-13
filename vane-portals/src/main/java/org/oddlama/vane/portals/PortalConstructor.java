@@ -92,8 +92,6 @@ public class PortalConstructor extends Listener<Portals> {
 	@LangMessage public TranslatedMessage lang_source_use_restricted;
 	@LangMessage public TranslatedMessage lang_target_use_restricted;
 
-	@LangMessage public TranslatedMessage lang_menu_title_enter_portal_name;
-
 	private Set<Material> portal_boundary_materials_including_build_materials = new HashSet<>();
 
 	private HashMap<UUID, Block> pending_console = new HashMap<>();
@@ -305,9 +303,7 @@ public class PortalConstructor extends Listener<Portals> {
 		}
 
 		// Show name chooser
-		MenuFactory.anvil_string_input(get_context(), player, lang_menu_title_enter_portal_name.str(), new ItemStack(Material.ENDER_PEARL), (p, menu, name) -> {
-			menu.close(p);
-
+		get_module().menus.enter_name_menu.create(player, (p, name) -> {
 			// Re-check conditions, as someone could have changed blocks. This prevents this race condition.
 			final var boundary = check_construction_conditions(p, console, boundary_block, false);
 			if (boundary == null) {
