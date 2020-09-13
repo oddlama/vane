@@ -35,6 +35,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import org.oddlama.vane.annotation.VaneModule;
+import org.oddlama.vane.annotation.config.ConfigExtendedMaterial;
 import org.oddlama.vane.annotation.config.ConfigLong;
 import org.oddlama.vane.annotation.config.ConfigMaterialMapEntry;
 import org.oddlama.vane.annotation.config.ConfigMaterialMapMapEntry;
@@ -125,6 +126,9 @@ public class Portals extends Module<Portals> {
 
 	@ConfigLong(def = 15000, min = 1000, max = 120000, desc = "Delay in milliseconds after which two connected portals will automatically be disabled.")
 	public long config_deactivation_delay;
+
+	@ConfigExtendedMaterial(def = "vane:decoration_end_portal_orb", desc = "The default portal icon. Also accepts heads from the head library.")
+	public ExtendedMaterial config_default_icon;
 
 	@LangMessage public TranslatedMessage lang_console_display_active;
 	@LangMessage public TranslatedMessage lang_console_display_inactive;
@@ -283,8 +287,8 @@ public class Portals extends Module<Portals> {
 	public void remove_portal_block(final PortalBlock portal_block) {
 		// Restore original block
 		switch (portal_block.type()) {
-			case ORIGIN:     portal_block.block().setType(constructor.config_material_console);     break;
-			case CONSOLE:    portal_block.block().setType(constructor.config_material_origin);      break;
+			case ORIGIN:     portal_block.block().setType(constructor.config_material_origin);      break;
+			case CONSOLE:    portal_block.block().setType(constructor.config_material_console);     break;
 			case BOUNDARY_1: portal_block.block().setType(constructor.config_material_boundary_1);  break;
 			case BOUNDARY_2: portal_block.block().setType(constructor.config_material_boundary_2);  break;
 			case BOUNDARY_3: portal_block.block().setType(constructor.config_material_boundary_3);  break;
@@ -561,7 +565,7 @@ public class Portals extends Module<Portals> {
 
 		// Fallback item
 		if (item == null) {
-			item = ExtendedMaterial.from(namespaced_key("vane", "decoration_end_portal_orb")).item();
+			item = config_default_icon.item();
 		}
 
 		final var target_name = target == null ? lang_console_no_target.str() : target.name();
