@@ -43,6 +43,8 @@ no_origin: "§cThe portal has no origin block!"
 multiple_origins: "§cThe portal cannot have multiple origin blocks!"
 # This message is sent when the selected vertical portal boundary has no portal area above the origin block
 no_portal_block_above_origin: "§cThe origin block needs portal area above!"
+# This message is sent when the selected vertical portal boundary has not enough portal area above the origin block
+not_enough_portal_blocks_above_origin: "§cThe origin block needs at least 3 portal area blocks above!"
 # This message is sent when the selected portal boundary is too large in a given direction.
 # %1$s: The direction (x,y,z)
 too_large: "§cThe portal is too large in %1$s§c direction!"

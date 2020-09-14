@@ -80,6 +80,7 @@ public class PortalConstructor extends Listener<Portals> {
 	@LangMessage public TranslatedMessage lang_no_origin;
 	@LangMessage public TranslatedMessage lang_multiple_origins;
 	@LangMessage public TranslatedMessage lang_no_portal_block_above_origin;
+	@LangMessage public TranslatedMessage lang_not_enough_portal_blocks_above_origin;
 	@LangMessage public TranslatedMessage lang_too_large;
 	@LangMessage public TranslatedMessage lang_too_small_spawn;
 	@LangMessage public TranslatedMessage lang_too_many_portal_area_blocks;
@@ -206,19 +207,20 @@ public class PortalConstructor extends Listener<Portals> {
 		// Check for error
 		switch (boundary.error_state()) {
 			case NONE: /* Boundary is fine */ break;
-			case NO_ORIGIN:                    lang_no_origin.send(player);                    return null;
-			case MULTIPLE_ORIGINS:             lang_multiple_origins.send(player);             return null;
-			case NO_PORTAL_BLOCK_ABOVE_ORIGIN: lang_no_portal_block_above_origin.send(player); return null;
-			case TOO_LARGE_X:                  lang_too_large.send(player, "§6x");             return null;
-			case TOO_LARGE_Y:                  lang_too_large.send(player, "§6y");             return null;
-			case TOO_LARGE_Z:                  lang_too_large.send(player, "§6z");             return null;
-			case TOO_SMALL_SPAWN_X:            lang_too_small_spawn.send(player, "§6x");       return null;
-			case TOO_SMALL_SPAWN_Y:            lang_too_small_spawn.send(player, "§6y");       return null;
-			case TOO_SMALL_SPAWN_Z:            lang_too_small_spawn.send(player, "§6z");       return null;
+			case NO_ORIGIN:                             lang_no_origin.send(player);                             return null;
+			case MULTIPLE_ORIGINS:                      lang_multiple_origins.send(player);                      return null;
+			case NO_PORTAL_BLOCK_ABOVE_ORIGIN:          lang_no_portal_block_above_origin.send(player);          return null;
+			case NOT_ENOUGH_PORTAL_BLOCKS_ABOVE_ORIGIN: lang_not_enough_portal_blocks_above_origin.send(player); return null;
+			case TOO_LARGE_X:                           lang_too_large.send(player, "§6x");                      return null;
+			case TOO_LARGE_Y:                           lang_too_large.send(player, "§6y");                      return null;
+			case TOO_LARGE_Z:                           lang_too_large.send(player, "§6z");                      return null;
+			case TOO_SMALL_SPAWN_X:                     lang_too_small_spawn.send(player, "§6x");                return null;
+			case TOO_SMALL_SPAWN_Y:                     lang_too_small_spawn.send(player, "§6y");                return null;
+			case TOO_SMALL_SPAWN_Z:                     lang_too_small_spawn.send(player, "§6z");                return null;
+			case PORTAL_AREA_OBSTRUCTED:                lang_portal_area_obstructed.send(player);                return null;
 			case TOO_MANY_PORTAL_AREA_BLOCKS:
 				lang_too_many_portal_area_blocks.send(player, "§6" + boundary.portal_area_blocks().size(), "§6" + config_area_max_blocks);
 				return null;
-			case PORTAL_AREA_OBSTRUCTED:       lang_portal_area_obstructed.send(player);       return null;
 		}
 
 		if (boundary.intersects_existing_portal(this)) {

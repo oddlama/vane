@@ -105,7 +105,7 @@ public class ConsoleMenu extends ModuleComponent<Portals> {
 				return ClickResult.ERROR;
 			} else {
 				menu.close(player);
-				// TODO
+				// TODO target sel
 				return ClickResult.SUCCESS;
 			}
 		}) {

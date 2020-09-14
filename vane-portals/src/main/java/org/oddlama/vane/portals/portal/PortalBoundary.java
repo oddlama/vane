@@ -24,6 +24,7 @@ public class PortalBoundary {
 		TOO_LARGE_Y,
 		TOO_LARGE_Z,
 		NO_PORTAL_BLOCK_ABOVE_ORIGIN,
+		NOT_ENOUGH_PORTAL_BLOCKS_ABOVE_ORIGIN,
 		TOO_MANY_PORTAL_AREA_BLOCKS,
 		PORTAL_AREA_OBSTRUCTED;
 	}
@@ -541,7 +542,7 @@ public class PortalBoundary {
 			// Find air (above) boundary (below) combinations at origin block, determine middle, check if minimum size rectangle is part of the block list
 
 			// The block above the origin block must be part of the portal
-			Block air_above_origin = boundary.origin_block().getRelative(0, 1, 0);
+			final var air_above_origin = boundary.origin_block().getRelative(0, 1, 0);
 			if (!boundary.portal_area_blocks().contains(air_above_origin)) {
 				boundary.error_state = ErrorState.NO_PORTAL_BLOCK_ABOVE_ORIGIN;
 				return boundary;
@@ -549,6 +550,14 @@ public class PortalBoundary {
 
 			final var air_above_with_boundary_below = new ArrayList<Block>();
 			air_above_with_boundary_below.add(air_above_origin);
+
+			// Check for at least 1x3 air blocks above the origin
+			final var air_above_origin2 = boundary.origin_block().getRelative(0, 2, 0);
+			final var air_above_origin3 = boundary.origin_block().getRelative(0, 3, 0);
+			if (!boundary.portal_area_blocks().contains(air_above_origin2) || !boundary.portal_area_blocks().contains(air_above_origin3)) {
+				boundary.error_state = ErrorState.NOT_ENOUGH_PORTAL_BLOCKS_ABOVE_ORIGIN;
+				return boundary;
+			}
 
 			int mod_x = boundary.plane().x() ? 1 : 0;
 			int mod_z = boundary.plane().z() ? 1 : 0;
@@ -568,10 +577,8 @@ public class PortalBoundary {
 			// Spawn location is middle of air blocks
 			final var small_coord_end = air_above_with_boundary_below.get(0);
 			final var large_coord_end = air_above_with_boundary_below.get(air_above_with_boundary_below.size() - 1);
-			// TODO test 1x3
-			// TODO is this correct? +0.5 seems odd.
-			final var middle_x = 0.5 + small_coord_end.getX() / 2.0 + large_coord_end.getX() / 2.0;
-			final var middle_z = 0.5 + small_coord_end.getZ() / 2.0 + large_coord_end.getZ() / 2.0;
+			final var middle_x = 0.5 + (small_coord_end.getX() + large_coord_end.getX()) / 2.0;
+			final var middle_z = 0.5 + (small_coord_end.getZ() + large_coord_end.getZ()) / 2.0;
 			boundary.spawn = new Location(air_above_origin.getWorld(), middle_x, air_above_origin.getY() + 0.05, middle_z);
 		}
 
