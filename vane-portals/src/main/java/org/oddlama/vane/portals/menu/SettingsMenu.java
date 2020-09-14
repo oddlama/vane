@@ -73,6 +73,7 @@ public class SettingsMenu extends ModuleComponent<Portals> {
 	private MenuWidget menu_item_rename(final Portal portal, final Menu previous) {
 		return new MenuItem(0, item_rename.item(), (player, menu, self) -> {
 			menu.close(player);
+			// TODO
 			// Open new menu because of changed title
 			get_module().menus.settings_menu.create(portal, player, previous).open(player);
 			return ClickResult.SUCCESS;
@@ -112,7 +113,7 @@ public class SettingsMenu extends ModuleComponent<Portals> {
 			portal.visibility(type == ClickType.RIGHT ? portal.visibility().prev() : portal.visibility().next());
 			get_module().update_portal_visibility(portal);
 			mark_persistent_storage_dirty();
-			self.update_item(menu, null);
+			menu.update();
 			return ClickResult.SUCCESS;
 		}) {
 			@Override
@@ -130,7 +131,7 @@ public class SettingsMenu extends ModuleComponent<Portals> {
 		return new MenuItem(6, null, (player, menu, self) -> {
 			portal.target_locked(!portal.target_locked());
 			mark_persistent_storage_dirty();
-			self.update_item(menu, null);
+			menu.update();
 			return ClickResult.SUCCESS;
 		}) {
 			@Override

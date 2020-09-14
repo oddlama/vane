@@ -116,12 +116,12 @@ public class MenuFactory {
 			}
 
 			// Call on_select and check if the resulting item is valid
-			item = on_select_item.apply(item);
+			item = on_select_item.apply(item.clone());
 			if (item == null) {
 				return ClickResult.ERROR;
 			}
 
-			selected_item.item(item.clone());
+			selected_item.item(item);
 			menu.update();
 			return ClickResult.SUCCESS;
 		}));

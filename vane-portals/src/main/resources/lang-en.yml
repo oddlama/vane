@@ -111,6 +111,84 @@ menus:
     back:
       name: "§6↩ §lBack"
       lore: []
+  style:
+    title: "§8§lStyle for: %1$s"
+    select_block_console_active_title:       "Select active console block."
+    select_block_origin_active_title:        "Select active origin block."
+    select_block_portal_active_title:        "Select active portal area block."
+    select_block_boundardy_1_active_title:   "Select active boundary variant 1 block."
+    select_block_boundardy_2_active_title:   "Select active boundary variant 2 block."
+    select_block_boundardy_3_active_title:   "Select active boundary variant 3 block."
+    select_block_boundardy_4_active_title:   "Select active boundary variant 4 block."
+    select_block_boundardy_5_active_title:   "Select active boundary variant 5 block."
+    select_block_console_inactive_title:     "Select inactive console block."
+    select_block_origin_inactive_title:      "Select inactive origin block."
+    select_block_portal_inactive_title:      "Select inactive portal area block."
+    select_block_boundardy_1_inactive_title: "Select inactive boundary variant 1 block."
+    select_block_boundardy_2_inactive_title: "Select inactive boundary variant 2 block."
+    select_block_boundardy_3_inactive_title: "Select inactive boundary variant 3 block."
+    select_block_boundardy_4_inactive_title: "Select inactive boundary variant 4 block."
+    select_block_boundardy_5_inactive_title: "Select inactive boundary variant 5 block."
+    block_console_active:
+      name: "§b§lConsole §a(active)"
+      lore: []
+    block_origin_active:
+      name: "§b§lOrigin §a(active)"
+      lore: []
+    block_portal_active:
+      name: "§b§lPortal area §a(active)"
+      lore: []
+    block_boundardy_1_active:
+      name: "§b§lBoundary §a(active)"
+      lore: ["", "§aVariant 1"]
+    block_boundardy_2_active:
+      name: "§b§lBoundary §a(active)"
+      lore: ["", "§aVariant 2"]
+    block_boundardy_3_active:
+      name: "§b§lBoundary §a(active)"
+      lore: ["", "§aVariant 3"]
+    block_boundardy_4_active:
+      name: "§b§lBoundary §a(active)"
+      lore: ["", "§aVariant 4"]
+    block_boundardy_5_active:
+      name: "§b§lBoundary §a(active)"
+      lore: ["", "§aVariant 5"]
+    block_console_inactive:
+      name: "§b§lConsole §e(inactive)"
+      lore: []
+    block_origin_inactive:
+      name: "§b§lOrigin §e(inactive)"
+      lore: []
+    block_portal_inactive:
+      name: "§b§lPortal area §e(inactive)"
+      lore: []
+    block_boundardy_1_inactive:
+      name: "§b§lBoundary §e(inactive)"
+      lore: ["", "§aVariant 1"]
+    block_boundardy_2_inactive:
+      name: "§b§lBoundary §e(inactive)"
+      lore: ["", "§aVariant 2"]
+    block_boundardy_3_inactive:
+      name: "§b§lBoundary §e(inactive)"
+      lore: ["", "§aVariant 3"]
+    block_boundardy_4_inactive:
+      name: "§b§lBoundary §e(inactive)"
+      lore: ["", "§aVariant 4"]
+    block_boundardy_5_inactive:
+      name: "§b§lBoundary §e(inactive)"
+      lore: ["", "§aVariant 5"]
+    accept:
+      name: "§a§lApply Style"
+      lore: []
+    reset:
+      name: "§6§lReset Changes"
+      lore: []
+    select_defined:
+      name: "§b§lSelect Defined Style"
+      lore: []
+    cancel:
+      name: "§6↩ §lDiscard Changes"
+      lore: []
   console:
     title: "§8§lPortal: %1$s"
     settings:

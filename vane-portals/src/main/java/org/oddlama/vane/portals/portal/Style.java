@@ -75,6 +75,10 @@ public class Style {
 	}
 
 	public void set_material(boolean active, PortalBlock.Type type, Material material) {
+		set_material(active, type, material, false);
+	}
+
+	public void set_material(boolean active, PortalBlock.Type type, Material material, boolean overwrite) {
 		final Map<PortalBlock.Type, Material> map;
 		if (active) {
 			map = active_materials;
@@ -82,7 +86,7 @@ public class Style {
 			map = inactive_materials;
 		}
 
-		if (map.containsKey(type)) {
+		if (!overwrite && map.containsKey(type)) {
 			throw new RuntimeException("Invalid style definition! PortalBlock.Type." + type + " was specified multiple times.");
 		}
 		map.put(type, material);
@@ -119,5 +123,12 @@ public class Style {
 		style.set_material(false, PortalBlock.Type.ORIGIN,     Material.OBSIDIAN);
 		style.set_material(false, PortalBlock.Type.PORTAL,     Material.AIR);
 		return style;
+	}
+
+	public Style copy(final NamespacedKey new_key) {
+		final var copy = new Style(new_key);
+		copy.active_materials = new HashMap<>(active_materials);
+		copy.inactive_materials = new HashMap<>(inactive_materials);
+		return copy;
 	}
 }

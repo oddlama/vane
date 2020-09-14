@@ -49,6 +49,10 @@ public class TranslatedItemStack<T extends Module<T>> extends ModuleComponent<T>
 		return name_item(config_material.item(config_amount), lang_name.format(), lang_lore.format());
 	}
 
+	public ItemStack item(final ItemStack alternative) {
+		return name_item(alternative, lang_name.format(), lang_lore.format());
+	}
+
 	public ExtendedMaterial config_material_def() {
 		return def_material;
 	}

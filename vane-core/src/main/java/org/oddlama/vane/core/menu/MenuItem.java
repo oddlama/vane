@@ -13,6 +13,7 @@ public class MenuItem implements MenuWidget {
 	private int slot;
 	private Function5<Player, Menu, MenuItem, ClickType, InventoryAction, ClickResult> on_click;
 	private ItemStack item;
+	private boolean auto_update;
 
 	public MenuItem(int slot, final ItemStack item) { this(slot, item, (Function5<Player, Menu, MenuItem, ClickType, InventoryAction, ClickResult>)null); }
 	public MenuItem(int slot, final ItemStack item, final Function3<Player, Menu, MenuItem, ClickResult> on_click) {
@@ -26,6 +27,7 @@ public class MenuItem implements MenuWidget {
 	public MenuItem(int slot, final ItemStack item, final Function5<Player, Menu, MenuItem, ClickType, InventoryAction, ClickResult> on_click) {
 		this.slot = slot;
 		this.on_click = on_click;
+		auto_update = item == null;
 		item(item);
 	}
 
@@ -44,6 +46,10 @@ public class MenuItem implements MenuWidget {
 	}
 
 	public boolean update(final Menu menu) {
+		if (auto_update) {
+			this.item((ItemStack)null);
+		}
+
 		final var cur = item(menu);
 		if (cur != item) {
 			menu.inventory().setItem(slot(), item);

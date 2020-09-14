@@ -101,6 +101,16 @@ public class Portal {
 	public List<PortalBlock> blocks() { return blocks; }
 	public String name() { return name; }
 	public void name(final String name) { this.name = name; }
+	public NamespacedKey style() {
+		return style_override == null ? style : null;
+	}
+	public void style(final Style style) {
+		if (style.key() == null) {
+			this.style_override = style;
+		} else {
+			this.style = style.key();
+		}
+	}
 	public ItemStack icon() { return icon == null ? null : icon.clone(); }
 	public void icon(final ItemStack icon) { this.icon = icon; }
 	public Visibility visibility() { return visibility; }
@@ -183,6 +193,12 @@ public class Portal {
 		return true;
 	}
 
+	public Style copy_style(final Portals portals, final NamespacedKey new_key) {
+		if (style_override == null) {
+			return portals.style(style).copy(new_key);
+		}
+		return style_override.copy(new_key);
+	}
 
 	@Override
 	public String toString() {
