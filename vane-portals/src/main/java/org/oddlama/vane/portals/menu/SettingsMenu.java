@@ -67,15 +67,29 @@ public class SettingsMenu extends ModuleComponent<Portals> {
 		settings_menu.add(menu_item_target_lock(portal));
 		settings_menu.add(menu_item_back(previous));
 
+		settings_menu.on_natural_close(player2 -> previous.open(player2));
 		return settings_menu;
 	}
 
 	private MenuWidget menu_item_rename(final Portal portal, final Menu previous) {
 		return new MenuItem(0, item_rename.item(), (player, menu, self) -> {
 			menu.close(player);
-			// TODO
-			// Open new menu because of changed title
-			get_module().menus.settings_menu.create(portal, player, previous).open(player);
+
+			get_module().menus.enter_name_menu.create(player, portal.name(), (player2, name) -> {
+				portal.name(name);
+
+				// Update portal icons to reflect new name
+				get_module().update_portal_icon(portal);
+				mark_persistent_storage_dirty();
+
+				// Open new menu because of possibly changed title
+				get_module().menus.settings_menu.create(portal, player2, previous).open(player2);
+				return ClickResult.SUCCESS;
+			}).on_natural_close(player2 -> {
+				// Open new menu because of possibly changed title
+				get_module().menus.settings_menu.create(portal, player2, previous).open(player2);
+			}).open(player);
+
 			return ClickResult.SUCCESS;
 		});
 	}

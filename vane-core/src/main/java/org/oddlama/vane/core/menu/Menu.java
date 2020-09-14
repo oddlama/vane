@@ -14,13 +14,15 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import org.oddlama.vane.core.functional.Consumer1;
+import org.oddlama.vane.core.functional.Consumer2;
 import org.oddlama.vane.core.module.Context;
 
 public class Menu {
 	protected final MenuManager manager;
 	protected Inventory inventory = null;
 	private final Set<MenuWidget> widgets = new HashSet<>();
-	private Consumer1<Player> on_close = null;
+	private Consumer2<Player, InventoryCloseEvent.Reason> on_close = null;
+	private Consumer1<Player> on_natural_close = null;
 
 	protected Menu(final Context<?> context) {
 		this.manager = context.get_module().core.menu_manager;
@@ -85,18 +87,31 @@ public class Menu {
 		return true;
 	}
 
-	public Consumer1<Player> get_on_close() {
+	public Consumer2<Player, InventoryCloseEvent.Reason> get_on_close() {
 		return on_close;
 	}
 
-	public Menu on_close(final Consumer1<Player> on_close) {
+	public Menu on_close(final Consumer2<Player, InventoryCloseEvent.Reason> on_close) {
 		this.on_close = on_close;
 		return this;
 	}
 
-	public final void closed(final Player player) {
-		if (on_close != null) {
-			on_close.apply(player);
+	public Consumer1<Player> get_on_natural_close() {
+		return on_natural_close;
+	}
+
+	public Menu on_natural_close(final Consumer1<Player> on_natural_close) {
+		this.on_natural_close = on_natural_close;
+		return this;
+	}
+
+	public final void closed(final Player player, final InventoryCloseEvent.Reason reason) {
+		if (reason == InventoryCloseEvent.Reason.PLAYER && on_natural_close != null) {
+			on_natural_close.apply(player);
+		} else {
+			if (on_close != null) {
+				on_close.apply(player, reason);
+			}
 		}
 		inventory.clear();
 		manager.remove(player, this);

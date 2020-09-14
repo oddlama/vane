@@ -66,8 +66,8 @@ public class PortalConstructor extends Listener<Portals> {
 	public int config_area_max_width;
 	@ConfigInt(def = 24, min = 8, desc = "Maximum portal area height (bounding box will be measured).")
 	public int config_area_max_height = 24;
-	@ConfigInt(def = 64, min = 8, desc = "Maximum total amount of portal area blocks.")
-	public int config_area_max_blocks = 64;
+	@ConfigInt(def = 128, min = 8, desc = "Maximum total amount of portal area blocks.")
+	public int config_area_max_blocks = 128;
 
 	@LangMessage public TranslatedMessage lang_select_boundary_now;
 	@LangMessage public TranslatedMessage lang_console_invalid_type;

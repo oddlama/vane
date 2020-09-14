@@ -37,7 +37,11 @@ public class EnterNameMenu extends ModuleComponent<Portals> {
 	}
 
 	public Menu create(final Player player, final Function2<Player, String, ClickResult> on_click) {
-		return MenuFactory.anvil_string_input(get_context(), player, lang_title.str(), new ItemStack(config_material), "", (p, menu, name) -> {
+		return create(player, "Name", on_click);
+	}
+
+	public Menu create(final Player player, final String default_name, final Function2<Player, String, ClickResult> on_click) {
+		return MenuFactory.anvil_string_input(get_context(), player, lang_title.str(), new ItemStack(config_material), default_name, (p, menu, name) -> {
 			menu.close(p);
 			return on_click.apply(p, name);
 		});

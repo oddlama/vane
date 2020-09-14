@@ -130,6 +130,7 @@ public class StyleMenu extends ModuleComponent<Portals> {
 		style_menu.add(menu_item_select_defined(portal, style_container));
 		style_menu.add(menu_item_cancel(previous));
 
+		style_menu.on_natural_close(player2 -> previous.open(player2));
 		return style_menu;
 	}
 

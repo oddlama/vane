@@ -43,11 +43,12 @@ public class MenuManager extends Listener<Core> {
 
 	public Menu menu_for(final Player player, final Inventory inventory) {
 		final var menu = menus.get(inventory);
-		if (open_menus.get(player.getUniqueId()) != menu) {
-			get_module().log.warning("Menu inconsistency: entity " + player + " accessed a menu that isn't registered to it");
+		final var open = open_menus.get(player.getUniqueId());
+		if (open != menu && menu != null) {
+			get_module().log.warning("Menu inconsistency: entity " + player + " accessed a menu '" + open_menus.get(player.getUniqueId()) + "' that isn't registered to it. The registered menu is '" + menu + "'");
 			return menu;
 		}
-		return menu;
+		return menu == null ? open : menu;
 	}
 
 	public void add(final Player player, final Menu menu) {
@@ -112,13 +113,13 @@ public class MenuManager extends Listener<Core> {
 		final var player = (Player)human;
 		final var menu = menu_for(player, event.getView());
 		if (menu != null) {
-			menu.closed(player);
+			menu.closed(player, event.getReason());
 		}
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void on_prepare_anvil_event(final PrepareAnvilEvent event) {
-		final var menu = menu_for((Player)event.getView().getPlayer(), event.getView());
+		final var menu = menus.get(event.getView().getTopInventory());
 		if (menu != null) {
 			event.getInventory().setRepairCost(0);
 		}
