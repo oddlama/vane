@@ -44,7 +44,7 @@ public class ConsoleMenu extends ModuleComponent<Portals> {
 		super(context.namespace("console"));
 
 		final var ctx = get_context();
-        item_settings                      = new TranslatedItemStack<>(ctx, "settings",                      Material.ENDER_PEARL,                       1, "Used to enter portal settings.");
+        item_settings                      = new TranslatedItemStack<>(ctx, "settings",                      Material.WRITABLE_BOOK,                     1, "Used to enter portal settings.");
         item_select_target                 = new TranslatedItemStack<>(ctx, "select_target",                 Material.COMPASS,                           1, "Used to enter portal target selection.");
         item_select_target_locked          = new TranslatedItemStack<>(ctx, "select_target_locked",          Material.FIREWORK_STAR,                     1, "Used to show portal target selection when the target is locked.");
         item_unlink_console                = new TranslatedItemStack<>(ctx, "unlink_console",                namespaced_key("vane", "decoration_tnt_1"), 1, "Used to unlink the current console.");

@@ -164,9 +164,8 @@ public class MenuFactory {
 			return ClickResult.SUCCESS;
 		}));
 
-		// On close call cancel
-		final Consumer2<Player, InventoryCloseEvent.Reason> cancel_wrapper = (player2, reason) -> { on_cancel.apply(player2); };
-		item_selector_menu.on_close(cancel_wrapper);
+		// On natural close call cancel
+		item_selector_menu.on_natural_close(on_cancel);
 
 		return item_selector_menu;
 	}
