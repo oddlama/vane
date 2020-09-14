@@ -74,7 +74,7 @@ public class MenuFactory {
 
 		final var no_item = set_item_name.apply(new ItemStack(Material.BARRIER));
 		final ItemStack default_item;
-		if (initial_item == null) {
+		if (initial_item == null || initial_item.getType() == Material.AIR) {
 			default_item = no_item;
 		} else {
 			default_item = initial_item;

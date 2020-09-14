@@ -44,15 +44,15 @@ public class SettingsMenu extends ModuleComponent<Portals> {
 		super(context.namespace("settings"));
 
 		final var ctx = get_context();
-        item_rename             = new TranslatedItemStack<>(ctx, "rename",             Material.WRITABLE_BOOK,                              1, "Used to TODO.");
-        item_select_icon        = new TranslatedItemStack<>(ctx, "select_icon",        namespaced_key("vane", "decoration_end_portal_orb"), 1, "Used to TODO.");
-        item_select_style       = new TranslatedItemStack<>(ctx, "select_style",       Material.ITEM_FRAME,                                 1, "Used to TODO.");
-        item_visibility_public  = new TranslatedItemStack<>(ctx, "visibility_public",  Material.ENDER_EYE,                                  1, "Used to TODO.");
-        item_visibility_group   = new TranslatedItemStack<>(ctx, "visibility_group",   Material.ENDER_PEARL,                                1, "Used to TODO.");
-        item_visibility_private = new TranslatedItemStack<>(ctx, "visibility_private", Material.FIREWORK_STAR,                              1, "Used to TODO.");
-        item_target_lock_on     = new TranslatedItemStack<>(ctx, "target_lock_on",     Material.SLIME_BALL,                                 1, "Used to TODO.");
-        item_target_lock_off    = new TranslatedItemStack<>(ctx, "target_lock_off",    Material.SNOWBALL,                                   1, "Used to TODO.");
-        item_back               = new TranslatedItemStack<>(ctx, "back",               Material.PRISMARINE_SHARD,                           1, "Used to TODO.");
+        item_rename             = new TranslatedItemStack<>(ctx, "rename",             Material.WRITABLE_BOOK,                              1, "Used to rename the portal.");
+        item_select_icon        = new TranslatedItemStack<>(ctx, "select_icon",        namespaced_key("vane", "decoration_end_portal_orb"), 1, "Used to select the portal's icon.");
+        item_select_style       = new TranslatedItemStack<>(ctx, "select_style",       Material.ITEM_FRAME,                                 1, "Used to change the portal style.");
+        item_visibility_public  = new TranslatedItemStack<>(ctx, "visibility_public",  Material.ENDER_EYE,                                  1, "Used to change and indicate public visibility.");
+        item_visibility_group   = new TranslatedItemStack<>(ctx, "visibility_group",   Material.ENDER_PEARL,                                1, "Used to change and indicate group visibility.");
+        item_visibility_private = new TranslatedItemStack<>(ctx, "visibility_private", Material.FIREWORK_STAR,                              1, "Used to change and indicate private visibility.");
+        item_target_lock_on     = new TranslatedItemStack<>(ctx, "target_lock_on",     Material.SLIME_BALL,                                 1, "Used to toggle and indicate enabled target lock.");
+        item_target_lock_off    = new TranslatedItemStack<>(ctx, "target_lock_off",    Material.SNOWBALL,                                   1, "Used to toggle and indicate disabled target lock.");
+        item_back               = new TranslatedItemStack<>(ctx, "back",               Material.PRISMARINE_SHARD,                           1, "Used to go back to the previous menu.");
 	}
 
 	public Menu create(final Portal portal, final Player player, final Menu previous) {
@@ -99,7 +99,7 @@ public class SettingsMenu extends ModuleComponent<Portals> {
 	private MenuWidget menu_item_select_style(final Portal portal) {
 		return new MenuItem(2, item_select_style.item(), (player, menu, self) -> {
 			menu.close(player);
-			// TODO
+			get_module().menus.style_menu.create(portal, player, menu).open(player);
 			return ClickResult.SUCCESS;
 		});
 	}

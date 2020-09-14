@@ -28,9 +28,10 @@ import org.oddlama.vane.portals.event.PortalChangeSettingsEvent;
 import org.oddlama.vane.portals.event.PortalDestroyEvent;
 import org.oddlama.vane.portals.event.PortalUnlinkConsoleEvent;
 import org.oddlama.vane.portals.event.PortalSelectTargetEvent;
+import org.oddlama.vane.core.functional.Function2;
 
 public class StyleMenu extends ModuleComponent<Portals> {
-	private static final int columns = 3 * 9;
+	private static final int columns = 9;
 
 	@LangMessage public TranslatedMessage lang_title;
 	@LangMessage public TranslatedMessage lang_select_block_console_active_title;
@@ -78,7 +79,7 @@ public class StyleMenu extends ModuleComponent<Portals> {
 		final var ctx = get_context();
 		item_block_console_active       = new TranslatedItemStack<>(ctx, "block_console_active",       Material.BARRIER, 1, "Used to select active console block.");
 		item_block_origin_active        = new TranslatedItemStack<>(ctx, "block_origin_active",        Material.BARRIER, 1, "Used to select active origin block.");
-		item_block_portal_active        = new TranslatedItemStack<>(ctx, "block_portal_active",        Material.BARRIER, 1, "Used to select active portal area block.");
+		item_block_portal_active        = new TranslatedItemStack<>(ctx, "block_portal_active",        Material.BARRIER, 1, "Used to select active portal area block. Defaults to end gateway if unset.");
 		item_block_boundardy_1_active   = new TranslatedItemStack<>(ctx, "block_boundardy_1_active",   Material.BARRIER, 1, "Used to select active boundary variant 1 block.");
 		item_block_boundardy_2_active   = new TranslatedItemStack<>(ctx, "block_boundardy_2_active",   Material.BARRIER, 1, "Used to select active boundary variant 2 block.");
 		item_block_boundardy_3_active   = new TranslatedItemStack<>(ctx, "block_boundardy_3_active",   Material.BARRIER, 1, "Used to select active boundary variant 3 block.");
@@ -101,7 +102,7 @@ public class StyleMenu extends ModuleComponent<Portals> {
 
 	public Menu create(final Portal portal, final Player player, final Menu previous) {
 		final var title = lang_title.str("§5§l" + portal.name());
-		final var style_menu = new Menu(get_context(), Bukkit.createInventory(null, columns, title));
+		final var style_menu = new Menu(get_context(), Bukkit.createInventory(null, 3 * columns, title));
 
 		final var style_container = new StyleContainer();
 		style_container.defined_style = portal.style();
@@ -117,7 +118,7 @@ public class StyleMenu extends ModuleComponent<Portals> {
 		style_menu.add(menu_item_block_selector(portal, style_container, 0 * columns + 8, item_block_boundardy_5_inactive, lang_select_block_boundardy_5_inactive_title.str(), PortalBlock.Type.BOUNDARY_5, false));
 		style_menu.add(menu_item_block_selector(portal, style_container, 1 * columns + 0, item_block_console_active,       lang_select_block_console_active_title.str(),       PortalBlock.Type.CONSOLE,    true));
 		style_menu.add(menu_item_block_selector(portal, style_container, 1 * columns + 1, item_block_origin_active,        lang_select_block_origin_active_title.str(),        PortalBlock.Type.ORIGIN,     true));
-		style_menu.add(menu_item_block_selector(portal, style_container, 1 * columns + 2, item_block_portal_active,        lang_select_block_portal_active_title.str(),        PortalBlock.Type.PORTAL,     true));
+		//style_menu.add(menu_item_block_selector(portal, style_container, 1 * columns + 2, item_block_portal_active,        lang_select_block_portal_active_title.str(),        PortalBlock.Type.PORTAL,     true));
 		style_menu.add(menu_item_block_selector(portal, style_container, 1 * columns + 4, item_block_boundardy_1_active,   lang_select_block_boundardy_1_active_title.str(),   PortalBlock.Type.BOUNDARY_1, true));
 		style_menu.add(menu_item_block_selector(portal, style_container, 1 * columns + 5, item_block_boundardy_2_active,   lang_select_block_boundardy_2_active_title.str(),   PortalBlock.Type.BOUNDARY_2, true));
 		style_menu.add(menu_item_block_selector(portal, style_container, 1 * columns + 6, item_block_boundardy_3_active,   lang_select_block_boundardy_3_active_title.str(),   PortalBlock.Type.BOUNDARY_3, true));
@@ -132,18 +133,32 @@ public class StyleMenu extends ModuleComponent<Portals> {
 		return style_menu;
 	}
 
+	private static ItemStack item_for_type(final StyleContainer style_container, final boolean active, final PortalBlock.Type type) {
+		if (active && type == PortalBlock.Type.PORTAL) {
+			return new ItemStack(Material.AIR);
+		}
+		return new ItemStack(style_container.style.material(active, type));
+	}
+
 	private MenuWidget menu_item_block_selector(final Portal portal, final StyleContainer style_container, int slot, final TranslatedItemStack<?> t_item, final String title, final PortalBlock.Type type, final boolean active) {
 		return new MenuItem(slot, null, (player, menu, self) -> {
 			menu.close(player);
-			MenuFactory.item_selector(get_context(), player, title, new ItemStack(style_container.style.material(active, type)), false, (player2, item) -> {
+			MenuFactory.item_selector(get_context(), player, title, item_for_type(style_container, active, type), true, (player2, item) -> {
 				style_container.defined_style = null;
-				style_container.style.set_material(active, type, item.getType(), true);
+				if (item == null) {
+					if (active && type == PortalBlock.Type.PORTAL) {
+						style_container.style.set_material(active, type, Material.END_GATEWAY, true);
+					}
+					style_container.style.set_material(active, type, Material.AIR, true);
+				} else {
+					style_container.style.set_material(active, type, item.getType(), true);
+				}
 				menu.open(player2);
 			}, player2 -> {
 				menu.open(player2);
 			}, item -> {
-				// Only allow placeable blocks
-				if (item == null || !item.getType().isBlock()) {
+				// Only allow placeable solid blocks
+				if (item == null || !(item.getType().isBlock() && item.getType().isSolid())) {
 					return null;
 				}
 				// Always select one
@@ -155,7 +170,11 @@ public class StyleMenu extends ModuleComponent<Portals> {
 		}) {
 			@Override
 			public void item(final ItemStack item) {
-				super.item(t_item.item(new ItemStack(style_container.style.material(active, type))));
+				final var stack = item_for_type(style_container, active, type);
+				if (stack.getType() == Material.AIR) {
+					stack.setType(Material.BARRIER);
+				}
+				super.item(t_item.item(stack));
 			}
 		};
 	}
