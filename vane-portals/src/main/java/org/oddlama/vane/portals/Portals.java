@@ -61,6 +61,8 @@ import org.oddlama.vane.portals.portal.Style;
 public class Portals extends Module<Portals> {
 	// Add (de-)serializers
 	static {
+		PersistentSerializer.serializers.put(Orientation.class,         x -> ((Orientation)x).name());
+		PersistentSerializer.deserializers.put(Orientation.class,       x -> Orientation.valueOf((String)x));
 		PersistentSerializer.serializers.put(Portal.class,              Portal::serialize);
 		PersistentSerializer.deserializers.put(Portal.class,            Portal::deserialize);
 		PersistentSerializer.serializers.put(Portal.Visibility.class,   x -> ((Portal.Visibility)x).name());
@@ -71,8 +73,8 @@ public class Portals extends Module<Portals> {
 		PersistentSerializer.deserializers.put(PortalBlock.Type.class,  x -> PortalBlock.Type.valueOf((String)x));
 		PersistentSerializer.serializers.put(PortalBlockLookup.class,   PortalBlockLookup::serialize);
 		PersistentSerializer.deserializers.put(PortalBlockLookup.class, PortalBlockLookup::deserialize);
-		PersistentSerializer.serializers.put(Orientation.class,         x -> ((Orientation)x).name());
-		PersistentSerializer.deserializers.put(Orientation.class,       x -> Orientation.valueOf((String)x));
+		PersistentSerializer.serializers.put(Style.class,               Style::serialize);
+		PersistentSerializer.deserializers.put(Style.class,             Style::deserialize);
 	}
 
 	// TODO better default styles

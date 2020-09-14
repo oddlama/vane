@@ -26,20 +26,21 @@ public class Portal {
 	public static Object serialize(@NotNull final Object o) throws IOException {
 		final var portal = (Portal)o;
 		final var json = new JSONObject();
-		json.put("id",            to_json(UUID.class,              portal.id));
-		json.put("orientation",   to_json(Orientation.class,       portal.orientation));
-		json.put("spawn",         to_json(LazyLocation.class,      portal.spawn));
+		json.put("id",             to_json(UUID.class,              portal.id));
+		json.put("orientation",    to_json(Orientation.class,       portal.orientation));
+		json.put("spawn",          to_json(LazyLocation.class,      portal.spawn));
 		try {
-			json.put("blocks",    to_json(Portal.class.getDeclaredField("blocks"), portal.blocks));
+			json.put("blocks",     to_json(Portal.class.getDeclaredField("blocks"), portal.blocks));
 		} catch (NoSuchFieldException e) { throw new RuntimeException("Invalid field. This is a bug.", e); }
 
-		json.put("name",          to_json(String.class,            portal.name));
-		json.put("style",         to_json(NamespacedKey.class,     portal.style));
-		json.put("icon",          to_json(ItemStack.class,         portal.icon));
-		json.put("visibility",    to_json(Visibility.class,        portal.visibility));
+		json.put("name",           to_json(String.class,            portal.name));
+		json.put("style",          to_json(NamespacedKey.class,     portal.style));
+		json.put("style_override", to_json(Style.class,             portal.style_override));
+		json.put("icon",           to_json(ItemStack.class,         portal.icon));
+		json.put("visibility",     to_json(Visibility.class,        portal.visibility));
 
-		json.put("target_id",     to_json(UUID.class,              portal.target_id));
-		json.put("target_locked", to_json(boolean.class,           portal.target_locked));
+		json.put("target_id",      to_json(UUID.class,              portal.target_id));
+		json.put("target_locked",  to_json(boolean.class,           portal.target_locked));
 		return json;
 	}
 
@@ -47,20 +48,28 @@ public class Portal {
 	public static Portal deserialize(@NotNull final Object o) throws IOException {
 		final var json = (JSONObject)o;
 		final var portal = new Portal();
-		portal.id            = from_json(UUID.class,              json.get("id"));
-		portal.orientation   = from_json(Orientation.class,       json.get("orientation"));
-		portal.spawn         = from_json(LazyLocation.class,      json.get("spawn"));
+		portal.id             = from_json(UUID.class,              json.get("id"));
+		portal.orientation    = from_json(Orientation.class,       json.get("orientation"));
+		portal.spawn          = from_json(LazyLocation.class,      json.get("spawn"));
 		try {
-			portal.blocks    = (List<PortalBlock>)from_json(Portal.class.getDeclaredField("blocks"), json.get("blocks"));
+			portal.blocks     = (List<PortalBlock>)from_json(Portal.class.getDeclaredField("blocks"), json.get("blocks"));
 		} catch (NoSuchFieldException e) { throw new RuntimeException("Invalid field. This is a bug.", e); }
 
-		portal.name          = from_json(String.class,            json.get("name"));
-		portal.style         = from_json(NamespacedKey.class,     json.get("style"));
-		portal.icon          = from_json(ItemStack.class,         json.get("icon"));
-		portal.visibility    = from_json(Visibility.class,        json.get("visibility"));
+		portal.name           = from_json(String.class,            json.get("name"));
+		portal.style          = from_json(NamespacedKey.class,     json.get("style"));
+		portal.style_override = from_json(Style.class,             json.get("style_override"));
+		if (portal.style_override != null) {
+			try {
+				portal.style_override.check_valid();
+			} catch (RuntimeException e) {
+				portal.style_override = null;
+			}
+		}
+		portal.icon           = from_json(ItemStack.class,         json.get("icon"));
+		portal.visibility     = from_json(Visibility.class,        json.get("visibility"));
 
-		portal.target_id     = from_json(UUID.class,              json.get("target_id"));
-		portal.target_locked = from_json(boolean.class,           json.get("target_locked"));
+		portal.target_id      = from_json(UUID.class,              json.get("target_id"));
+		portal.target_locked  = from_json(boolean.class,           json.get("target_locked"));
 		return portal;
 	}
 
@@ -71,6 +80,7 @@ public class Portal {
 
 	private String name = "Portal";
 	private NamespacedKey style = Style.default_style_key();
+	private Style style_override = null;
 	private ItemStack icon = null;
 	private Visibility visibility = Visibility.PRIVATE;
 
@@ -145,7 +155,13 @@ public class Portal {
 	}
 
 	public void update_blocks(final Portals portals) {
-		final var cur_style = portals.style(style);
+		final Style cur_style;
+		if (style_override == null) {
+			cur_style = portals.style(style);
+		} else {
+			cur_style = style_override;
+		}
+
 		final var active = portals.is_activated(this);
 		for (final var portal_block : blocks) {
 			portal_block.block().setType(cur_style.material(active, portal_block.type()));
