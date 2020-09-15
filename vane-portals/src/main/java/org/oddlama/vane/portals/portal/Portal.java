@@ -154,6 +154,7 @@ public class Portal {
 
 	public boolean deactivate(final Portals portals, @Nullable final Player player) {
 		// TODO send event check cancelled
+		// TODO switch of levers
 		portals.disconnect_portals(this);
 		return true;
 	}

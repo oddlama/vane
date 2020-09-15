@@ -501,6 +501,10 @@ public class Portals extends Module<Portals> {
 	}
 
 	public void disconnect_portals(final Portal src, final Portal dst) {
+		if (dst == null) {
+			return;
+		}
+
 		// Allow unloading chunks again
 		allow_unload_portal_chunks(src);
 		allow_unload_portal_chunks(dst);

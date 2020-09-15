@@ -107,7 +107,8 @@ public class MenuFactory {
 			}
 		};
 
-		// Selected item
+		// Selected item, begin with default selected
+		selected_item.item(default_item);
 		item_selector_menu.add(selected_item);
 
 		// Inventory listener
