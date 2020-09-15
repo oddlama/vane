@@ -521,9 +521,11 @@ public class Portals extends Module<Portals> {
 		// Reset target id's if the target portal was private
 		if (dst.visibility() == Portal.Visibility.PRIVATE) {
 			src.target_id(null);
+			mark_persistent_storage_dirty();
 		}
 		if (src.visibility() == Portal.Visibility.PRIVATE) {
 			dst.target_id(null);
+			mark_persistent_storage_dirty();
 		}
 
 		// Remove automatic disable task if existing
@@ -551,7 +553,7 @@ public class Portals extends Module<Portals> {
 	@Override
 	public void on_disable() {
 		// Disable all portals now
-		for (final var id : new ArrayList<>(connected_portals.values())) {
+		for (final var id : new ArrayList<>(connected_portals.keySet())) {
 			disconnect_portals(portal_for(id));
 		}
 

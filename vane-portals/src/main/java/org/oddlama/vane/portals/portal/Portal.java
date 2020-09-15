@@ -24,6 +24,8 @@ import org.jetbrains.annotations.Nullable;
 
 import org.oddlama.vane.external.json.JSONObject;
 import org.oddlama.vane.portals.Portals;
+import org.oddlama.vane.portals.event.PortalActivateEvent;
+import org.oddlama.vane.portals.event.PortalDeactivateEvent;
 import org.oddlama.vane.portals.event.PortalOpenConsoleEvent;
 import org.oddlama.vane.util.LazyLocation;
 
@@ -149,13 +151,25 @@ public class Portal {
 			return false;
 		}
 
-		// TODO send event check cancelled
+		// Call event
+		final var event = new PortalActivateEvent(player, this, target);
+		portals.getServer().getPluginManager().callEvent(event);
+		if (event.isCancelled()) {
+			return false;
+		}
+
 		portals.connect_portals(this, target);
 		return true;
 	}
 
 	public boolean deactivate(final Portals portals, @Nullable final Player player) {
-		// TODO send event check cancelled
+		// Call event
+		final var event = new PortalDeactivateEvent(player, this);
+		portals.getServer().getPluginManager().callEvent(event);
+		if (event.isCancelled()) {
+			return false;
+		}
+
 		// TODO switch of levers
 		portals.disconnect_portals(this);
 		return true;

@@ -172,6 +172,8 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 
 	@Override
 	public void onDisable() {
+		disable();
+
 		// Save persistent storage
 		save_persistent_storage();
 

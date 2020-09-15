@@ -53,6 +53,7 @@ public class PortalTeleporter extends Listener<Portals> {
 		final var player_id = player.getUniqueId();
 		final var block = event.getTo().getBlock();
 
+		System.out.println("player get vel " + player.getVelocity());
 		if (!entities_portalling.containsKey(player_id)) {
 			// Check if we walked into a portal
 			if (!get_module().portal_area_materials.contains(block.getType())) {
@@ -72,7 +73,6 @@ public class PortalTeleporter extends Listener<Portals> {
 			// Put null to signal initiated teleportation
 			entities_portalling.put(player_id, null);
 
-			System.out.println("player get vel " + player.getVelocity());
 			var target_location = target.spawn().clone();
 			final var player_location = player.getLocation();
 			target_location.setPitch(player_location.getPitch());
