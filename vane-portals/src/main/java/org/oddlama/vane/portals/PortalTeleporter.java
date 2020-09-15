@@ -84,7 +84,6 @@ public class PortalTeleporter extends Listener<Portals> {
 
 			// Set new movement location
 			event.setTo(target_location);
-			get_module().log.info("portal player " + player + " from " + portal + " to " + target);
 
 			// Retain velocity
 			player.setVelocity(new_velocity);

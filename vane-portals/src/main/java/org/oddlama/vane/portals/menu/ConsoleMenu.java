@@ -134,7 +134,7 @@ public class ConsoleMenu extends ModuleComponent<Portals> {
 						return item_select_target_portal.alternative(get_module().icon_for(p), "§a§l" + p.name(), "§6" + dist, "§b" + p.spawn().getWorld().getName());
 					},
 					filter,
-					(player2, m, t, type, action) -> {
+					(player2, m, t) -> {
 						m.close(player2);
 						portal.target_id(t.id());
 

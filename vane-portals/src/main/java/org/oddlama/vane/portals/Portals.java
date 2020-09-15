@@ -112,7 +112,7 @@ public class Portals extends Module<Portals> {
 				@ConfigMaterialMapEntry(key = "boundary_4", value = Material.DARK_PRISMARINE),
 				@ConfigMaterialMapEntry(key = "boundary_5", value = Material.DARK_PRISMARINE),
 				@ConfigMaterialMapEntry(key = "console", value = Material.ENCHANTING_TABLE),
-				@ConfigMaterialMapEntry(key = "origin", value = Material.OBSIDIAN),
+				@ConfigMaterialMapEntry(key = "origin", value = Material.DARK_PRISMARINE),
 				@ConfigMaterialMapEntry(key = "portal", value = Material.END_GATEWAY),
 			}),
 			@ConfigMaterialMapMapEntry(key = "inactive", value = {
@@ -122,14 +122,14 @@ public class Portals extends Module<Portals> {
 				@ConfigMaterialMapEntry(key = "boundary_4", value = Material.DARK_PRISMARINE),
 				@ConfigMaterialMapEntry(key = "boundary_5", value = Material.DARK_PRISMARINE),
 				@ConfigMaterialMapEntry(key = "console", value = Material.ENCHANTING_TABLE),
-				@ConfigMaterialMapEntry(key = "origin", value = Material.OBSIDIAN),
+				@ConfigMaterialMapEntry(key = "origin", value = Material.DARK_PRISMARINE),
 				@ConfigMaterialMapEntry(key = "portal", value = Material.AIR),
 			})
 		})
 	}, desc = "Portal style definitions. Must provide a material for each portal block type and activation state. The default style may be overridden.")
 	public Map<String, Map<String, Map<String, Material>>> config_styles;
 
-	@ConfigLong(def = 15000, min = 1000, max = 120000, desc = "Delay in milliseconds after which two connected portals will automatically be disabled.")
+	@ConfigLong(def = 10000, min = 1000, max = 120000, desc = "Delay in milliseconds after which two connected portals will automatically be disabled.")
 	public long config_deactivation_delay;
 
 	@ConfigExtendedMaterial(def = "vane:decoration_end_portal_orb", desc = "The default portal icon. Also accepts heads from the head library.")

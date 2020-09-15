@@ -2,6 +2,7 @@ package org.oddlama.vane.portals.menu;
 
 import static org.oddlama.vane.util.Util.namespaced_key;
 
+import java.util.ArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.ClickType;
@@ -12,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.core.config.TranslatedItemStack;
 import org.oddlama.vane.core.lang.TranslatedMessage;
+import org.oddlama.vane.core.menu.Filter;
 import org.oddlama.vane.core.menu.Menu.ClickResult;
 import org.oddlama.vane.core.menu.Menu;
 import org.oddlama.vane.core.menu.MenuFactory;
@@ -28,6 +30,7 @@ import org.oddlama.vane.portals.event.PortalChangeSettingsEvent;
 import org.oddlama.vane.portals.event.PortalDestroyEvent;
 import org.oddlama.vane.portals.event.PortalUnlinkConsoleEvent;
 import org.oddlama.vane.portals.event.PortalSelectTargetEvent;
+import org.oddlama.vane.core.functional.Function1;
 import org.oddlama.vane.core.functional.Function2;
 
 public class StyleMenu extends ModuleComponent<Portals> {
@@ -50,6 +53,8 @@ public class StyleMenu extends ModuleComponent<Portals> {
 	@LangMessage public TranslatedMessage lang_select_block_boundardy_3_inactive_title;
 	@LangMessage public TranslatedMessage lang_select_block_boundardy_4_inactive_title;
 	@LangMessage public TranslatedMessage lang_select_block_boundardy_5_inactive_title;
+	@LangMessage public TranslatedMessage lang_select_style_title;
+	@LangMessage public TranslatedMessage lang_filter_styles_title;
 
 	private TranslatedItemStack<?> item_block_console_active;
 	private TranslatedItemStack<?> item_block_origin_active;
@@ -71,6 +76,7 @@ public class StyleMenu extends ModuleComponent<Portals> {
 	private TranslatedItemStack<?> item_accept;
 	private TranslatedItemStack<?> item_reset;
 	private TranslatedItemStack<?> item_select_defined;
+	private TranslatedItemStack<?> item_select_style;
 	private TranslatedItemStack<?> item_cancel;
 
 	public StyleMenu(Context<Portals> context) {
@@ -97,6 +103,7 @@ public class StyleMenu extends ModuleComponent<Portals> {
         item_accept         = new TranslatedItemStack<>(ctx, "accept",         Material.LIME_TERRACOTTA, 1, "Used to apply the style.");
         item_reset          = new TranslatedItemStack<>(ctx, "reset",          Material.OBSIDIAN,        1, "Used to reset any changes.");
         item_select_defined = new TranslatedItemStack<>(ctx, "select_defined", Material.ITEM_FRAME,      1, "Used to select a defined style from the configuration.");
+        item_select_style   = new TranslatedItemStack<>(ctx, "select_style",   Material.ITEM_FRAME,      1, "Used to represent a defined style in the selector menu.");
         item_cancel         = new TranslatedItemStack<>(ctx, "cancel",         Material.RED_TERRACOTTA,  1, "Used to abort style selection.");
 	}
 
@@ -201,11 +208,31 @@ public class StyleMenu extends ModuleComponent<Portals> {
 	}
 
 	private MenuWidget menu_item_select_defined(final Portal portal, final StyleContainer style_container) {
+		final Function1<Style, ItemStack> item_for = style -> {
+			final var mat = style.material(false, PortalBlock.Type.BOUNDARY_1);
+			if (mat == null) {
+				return new ItemStack(Material.BARRIER);
+			} else {
+				return new ItemStack(mat);
+			}
+		};
+
 		return new MenuItem(2 * columns + 4, item_select_defined.item(), (player, menu, self) -> {
-			// TODO from generic style selector final var key = ;
-			//style_container.defined_style = key;
-			//style_container.style = get_module().style(key).copy(null);
-			menu.update();
+			menu.close(player);
+			final var all_styles = new ArrayList<>(get_module().styles.values());
+			final var filter = new Filter.StringFilter<Style>((s, str) -> s.key().toString().toLowerCase().contains(str));
+			MenuFactory.generic_selector(get_context(), player, lang_select_style_title.str(), lang_filter_styles_title.str(), all_styles,
+				s -> item_select_style.alternative(item_for.apply(s), s.key().getKey()),
+				filter,
+				(player2, m, t) -> {
+					m.close(player2);
+					style_container.defined_style = t.key();
+					style_container.style = t.copy(null);
+					menu.open(player2);
+					return ClickResult.SUCCESS;
+				}, player2 -> {
+					menu.open(player2);
+				}).open(player);
 			return ClickResult.SUCCESS;
 		});
 	}

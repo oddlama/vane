@@ -159,6 +159,15 @@ public class MenuFactory {
 		return item_selector_menu;
 	}
 
+	public static<T, F extends Filter<T>> Menu generic_selector(final Context<?> context, final Player player, final String title, final String filter_title, final List<T> things, final Function1<T, ItemStack> to_item, final F filter, final Function3<Player, Menu, T, ClickResult> on_click, final Consumer1<Player> on_cancel) {
+		return generic_selector(context, player, title, filter_title, things, to_item, filter, (p, menu, t, type, action) -> {
+			if (!Menu.is_left_click(type, action)) {
+				return ClickResult.INVALID_CLICK;
+			}
+			return on_click.apply(p, menu, t);
+		}, on_cancel);
+	}
+
 	public static<T, F extends Filter<T>> Menu generic_selector(final Context<?> context, final Player player, final String title, final String filter_title, final List<T> things, final Function1<T, ItemStack> to_item, final F filter, final Function5<Player, Menu, T, ClickType, InventoryAction, ClickResult> on_click, final Consumer1<Player> on_cancel) {
 		return GenericSelector.<T, F>create(context, player, title, filter_title, things, to_item, filter, on_click, on_cancel);
 	}
