@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Collection;
 import java.util.Objects;
@@ -501,7 +502,7 @@ public class Portals extends Module<Portals> {
 	}
 
 	public void disconnect_portals(final Portal src, final Portal dst) {
-		if (dst == null) {
+		if (src == null || dst == null) {
 			return;
 		}
 
@@ -549,6 +550,11 @@ public class Portals extends Module<Portals> {
 
 	@Override
 	public void on_disable() {
+		// Disable all portals now
+		for (final var id : new ArrayList<>(connected_portals.values())) {
+			disconnect_portals(portal_for(id));
+		}
+
 		// Remove all console items, and all chunk tickets
 		chunk_ticket_count.clear();
 		for (final var world : getServer().getWorlds()) {

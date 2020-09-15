@@ -72,6 +72,7 @@ public class PortalTeleporter extends Listener<Portals> {
 			// Put null to signal initiated teleportation
 			entities_portalling.put(player_id, null);
 
+			System.out.println("player get vel " + player.getVelocity());
 			var target_location = target.spawn().clone();
 			final var player_location = player.getLocation();
 			target_location.setPitch(player_location.getPitch());
@@ -80,6 +81,7 @@ public class PortalTeleporter extends Listener<Portals> {
 			// Calculate new pitch, yaw and velocity
 			target_location = portal.orientation().apply(target.orientation(), target_location);
 			final var new_velocity = portal.orientation().apply(target.orientation(), player.getVelocity());
+			System.out.println("player new vel " + new_velocity);
 
 			// Set new movement location
 			event.setTo(target_location);
@@ -87,11 +89,6 @@ public class PortalTeleporter extends Listener<Portals> {
 			// Retain velocity
 			player.setVelocity(new_velocity);
 		} else {
-			// We just portalled
-			// TODO ???? if (event.getFrom().getBlock().getType() != PortalsConfiguration.PORTAL_DEFAULT_MATERIAL_PORTAL_AREA_ACTIVATED) {
-			// TODO ???? 	return;
-			// TODO ???? }
-
 			final var loc = entities_portalling.get(player_id);
 			if (loc == null) {
 				// Initial teleport. Remember current location, so we can check
