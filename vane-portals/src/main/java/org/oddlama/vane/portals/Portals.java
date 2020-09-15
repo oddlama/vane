@@ -428,7 +428,7 @@ public class Portals extends Module<Portals> {
 		// Find adjacent console blocks in full 3x3x3 cube, which will make this block a controlling block
 		for (final var adj : adjacent_blocks_3d(block)) {
 			if (portal_console_materials.contains(adj.getType())) {
-				final var portal_block = portal_block_for(block);
+				final var portal_block = portal_block_for(adj);
 				if (portal_block != null && portal_block.type() == PortalBlock.Type.CONSOLE) {
 					return portal_for(portal_block);
 				}
