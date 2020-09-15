@@ -513,6 +513,14 @@ public class Portals extends Module<Portals> {
 		src.on_disconnect(this, dst);
 		dst.on_disconnect(this, src);
 
+		// Reset target id's if the target portal was private
+		if (dst.visibility() == Portal.Visibility.PRIVATE) {
+			src.target_id(null);
+		}
+		if (src.visibility() == Portal.Visibility.PRIVATE) {
+			dst.target_id(null);
+		}
+
 		// Remove automatic disable task if existing
 		stop_disable_task(src, dst);
 	}
