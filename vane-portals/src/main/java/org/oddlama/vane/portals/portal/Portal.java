@@ -22,6 +22,8 @@ import org.bukkit.Material;
 import org.bukkit.util.Vector;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -256,7 +258,8 @@ public class Portal {
 		// Activate all controlling levers
 		set_controlling_levers(true);
 
-		// TODO sound
+		// Play sound
+		spawn().getWorld().playSound(spawn(), Sound.BLOCK_END_PORTAL_SPAWN, SoundCategory.BLOCKS, 0.9f, 0.8f);
 	}
 
 	public void on_disconnect(final Portals portals, final Portal target) {
@@ -266,7 +269,8 @@ public class Portal {
 		// Deactivate all controlling levers
 		set_controlling_levers(false);
 
-		// TODO sound
+		// Play sound
+		spawn().getWorld().playSound(spawn(), Sound.BLOCK_END_PORTAL_FRAME_FILL, SoundCategory.BLOCKS, 1.2f, 0.5f);
 	}
 
 	public void update_blocks(final Portals portals) {

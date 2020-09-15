@@ -22,12 +22,15 @@ import java.util.UUID;
 import net.md_5.bungee.api.chat.BaseComponent;
 
 import net.minecraft.server.v1_16_R2.EntityTypes;
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
 import net.minecraft.server.v1_16_R2.EnumCreatureType;
 
 import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
+import org.bukkit.Particle;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.world.ChunkLoadEvent;
@@ -286,11 +289,17 @@ public class Portals extends Module<Portals> {
 		}
 
 		mark_persistent_storage_dirty();
+
+		// Play sound
+		portal.spawn().getWorld().playSound(portal.spawn(), Sound.ENTITY_ENDER_EYE_DEATH, SoundCategory.BLOCKS, 1.0f, 1.0f);
 	}
 
 	public void add_portal(final Portal portal) {
 		storage_portals.put(portal.id(), portal);
 		mark_persistent_storage_dirty();
+
+		// Play sound
+		portal.spawn().getWorld().playSound(portal.spawn(), Sound.ENTITY_ENDER_EYE_DEATH, SoundCategory.BLOCKS, 1.0f, 2.0f);
 	}
 
 	public Collection<Portal> all_portals() {
@@ -331,6 +340,11 @@ public class Portals extends Module<Portals> {
 		final var block_key = block.getBlockKey();
 		block_to_portal_block.remove(block_key);
 		mark_persistent_storage_dirty();
+
+		// Spawn effect if not portal area
+		if (portal_block.type() != PortalBlock.Type.PORTAL) {
+			portal_block.block().getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE, portal_block.block().getLocation().add(0.5, 0.5, 0.5), 50, 0.0, 0.0, 0.0, 1.0);
+		}
 	}
 
 	public void remove_portal_block(final Portal portal, final PortalBlock portal_block) {
@@ -364,6 +378,11 @@ public class Portals extends Module<Portals> {
 		final var block_key = block.getBlockKey();
 		block_to_portal_block.put(block_key, portal_block.lookup(portal.id()));
 		mark_persistent_storage_dirty();
+
+		// Spawn effect if not portal area
+		if (portal_block.type() != PortalBlock.Type.PORTAL) {
+			portal_block.block().getWorld().spawnParticle(Particle.PORTAL, portal_block.block().getLocation().add(0.5, 0.5, 0.5), 50, 0.0, 0.0, 0.0, 1.0);
+		}
 	}
 
 	public PortalBlockLookup portal_block_for(final Block block) {

@@ -30,8 +30,6 @@ console_different_world: "§cThe console must be in the same world as the portal
 # This message is sent when the selected portal console is too far away from
 # the portal boundary.
 console_too_far_away: "§cThe console is too far away from the portal"
-# This message is sent when the portal has been constructed successfully.
-constructed_successfully: "§aPortal created"
 # This message is sent when a console has successfully been linked.
 console_linked: "§aConsole linked"
 

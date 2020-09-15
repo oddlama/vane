@@ -105,6 +105,7 @@ public class PortalActivator extends Listener<Portals> {
 		}
 
 		// TODO setting for "keep on while pulse active" and "toggle on falling/rising edge"
+		System.out.println("Activate by redstone " + portal.name());
 		portal.activate(get_module(), null);
     }
 }

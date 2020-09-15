@@ -37,7 +37,6 @@ import org.oddlama.vane.portals.portal.PortalBlock;
 import org.oddlama.vane.portals.portal.PortalBoundary;
 
 public class PortalConstructor extends Listener<Portals> {
-	// TODO materials group
 	@ConfigMaterial(def = Material.ENCHANTING_TABLE, desc = "The block used to build portal consoles.")
 	public Material config_material_console;
 	@ConfigMaterial(def = Material.OBSIDIAN, desc = "The block used to build the portal boundary. Variation 1.")
@@ -73,7 +72,6 @@ public class PortalConstructor extends Listener<Portals> {
 	@LangMessage public TranslatedMessage lang_console_invalid_type;
 	@LangMessage public TranslatedMessage lang_console_different_world;
 	@LangMessage public TranslatedMessage lang_console_too_far_away;
-	@LangMessage public TranslatedMessage lang_constructed_successfully;
 	@LangMessage public TranslatedMessage lang_console_linked;
 
 	@LangMessage public TranslatedMessage lang_no_boundary_found;
@@ -192,8 +190,6 @@ public class PortalConstructor extends Listener<Portals> {
 
 		// Update block blocks
 		portal.update_blocks(get_module());
-
-		// TODO sound and effect
 		return true;
 	}
 
@@ -332,10 +328,7 @@ public class PortalConstructor extends Listener<Portals> {
 			portal.update_blocks(get_module());
 
 			// Create dynmap marker
-			//PortalLayer.createMarker(portal);
-
-			// TODO sound + effect (instead of message?)
-			lang_constructed_successfully.send(player);
+			//TODO PortalLayer.createMarker(portal);
 			return ClickResult.SUCCESS;
 		}).open(player);
 
