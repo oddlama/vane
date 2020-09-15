@@ -53,7 +53,6 @@ public class PortalTeleporter extends Listener<Portals> {
 		final var player_id = player.getUniqueId();
 		final var block = event.getTo().getBlock();
 
-		System.out.println("player get vel " + player.getVelocity());
 		if (!entities_portalling.containsKey(player_id)) {
 			// Check if we walked into a portal
 			if (!get_module().portal_area_materials.contains(block.getType())) {
