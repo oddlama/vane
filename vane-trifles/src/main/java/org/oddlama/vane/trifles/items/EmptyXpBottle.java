@@ -11,6 +11,7 @@ import org.bukkit.SoundCategory;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ShapelessRecipe;
 
@@ -55,6 +56,10 @@ public class EmptyXpBottle extends CustomItem<Trifles, EmptyXpBottle> {
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = false) // ignoreCancelled = false to catch right-click-air events
 	public void on_player_right_click(final PlayerInteractEvent event) {
+		if (event.getAction() != Action.RIGHT_CLICK_BLOCK && event.getAction() != Action.RIGHT_CLICK_AIR) {
+			return;
+		}
+
 		// Get item variant
 		final var player = event.getPlayer();
 		final var item = player.getEquipment().getItem(event.getHand());
