@@ -54,5 +54,6 @@ menus:
     selected:
       name: "§d§lSelected Item"
       lore:
+        - ""
         - "§bLeft-click§7 to reset changes."
         - "§bRight-click§7 to clear (if allowed)."

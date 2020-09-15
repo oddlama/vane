@@ -66,6 +66,7 @@ menus:
     selected:
       name: "§d§lSelected Item"
       lore:
+        - ""
         - "§bLeft-click§7 to reset changes."
         - "§bRight-click§7 to clear (if allowed)."
   generic_selector:
@@ -76,7 +77,10 @@ menus:
       lore: []
     filter:
       name: "§b§lFilter"
-      lore: ["§7 Opens the §afilter§7 menu."]
+      lore:
+        - ""
+        - "§7 Opens the §afilter§7 menu."
+        - "§bRight-click§7 to reset filter."
     cancel:
       name: "§c§lCancel"
       lore: ["§6Abort§7 item selection."]

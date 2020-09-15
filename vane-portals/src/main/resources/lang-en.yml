@@ -193,6 +193,8 @@ menus:
       lore: []
   console:
     title: "§8§lPortal: %1$s"
+    select_target_title: "§8§lSelect Target Portal"
+    filter_portals_title: "§8§lFilter Portals"
     settings:
       name: "§b§lSettings"
       lore: []
@@ -201,6 +203,11 @@ menus:
       lore:
         - ""
         - "§7Current: %1$s"
+    select_target_portal:
+      name: "%1$s"
+      lore:
+        - "§7Distance: %2$s§6m"
+        - "§7World: %3$s"
     select_target_locked:
       name: "§d§lSelect Target"
       lore:

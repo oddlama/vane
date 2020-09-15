@@ -32,9 +32,12 @@ public class ConsoleMenu extends ModuleComponent<Portals> {
 	@LangMessage public TranslatedMessage lang_title;
 	@LangMessage public TranslatedMessage lang_unlink_console_confirm_title;
 	@LangMessage public TranslatedMessage lang_destroy_portal_confirm_title;
+	@LangMessage public TranslatedMessage lang_select_target_title;
+	@LangMessage public TranslatedMessage lang_filter_portals_title;
 
 	public TranslatedItemStack<?> item_settings;
 	public TranslatedItemStack<?> item_select_target;
+	public TranslatedItemStack<?> item_select_target_portal;
 	public TranslatedItemStack<?> item_select_target_locked;
 	public TranslatedItemStack<?> item_unlink_console;
 	public TranslatedItemStack<?> item_unlink_console_confirm_accept;
@@ -49,6 +52,7 @@ public class ConsoleMenu extends ModuleComponent<Portals> {
 		final var ctx = get_context();
         item_settings                      = new TranslatedItemStack<>(ctx, "settings",                      Material.WRITABLE_BOOK,                     1, "Used to enter portal settings.");
         item_select_target                 = new TranslatedItemStack<>(ctx, "select_target",                 Material.COMPASS,                           1, "Used to enter portal target selection.");
+        item_select_target_portal          = new TranslatedItemStack<>(ctx, "select_target_portal",          Material.COMPASS,                           1, "Used to represent a portal in the target selection menu.");
         item_select_target_locked          = new TranslatedItemStack<>(ctx, "select_target_locked",          Material.FIREWORK_STAR,                     1, "Used to show portal target selection when the target is locked.");
         item_unlink_console                = new TranslatedItemStack<>(ctx, "unlink_console",                namespaced_key("vane", "decoration_tnt_1"), 1, "Used to unlink the current console.");
         item_unlink_console_confirm_accept = new TranslatedItemStack<>(ctx, "unlink_console_confirm_accept", namespaced_key("vane", "decoration_tnt_1"), 1, "Used to confirm unlinking the current console.");
@@ -124,11 +128,19 @@ public class ConsoleMenu extends ModuleComponent<Portals> {
 					.collect(Collectors.toList());
 
 				final var filter = new Filter.StringFilter<Portal>((p, str) -> p.name().toLowerCase().contains(str));
-				MenuFactory.generic_selector(get_context(), player, "TODO", all_portals,
-					p -> get_module().icon_for(p),
+				MenuFactory.generic_selector(get_context(), player, lang_select_target_title.str(), lang_filter_portals_title.str(), all_portals,
+					p -> {
+						final var dist = p.spawn().toVector().setY(0.0).distance(player.getLocation().toVector().setY(0.0));
+						return item_select_target_portal.alternative(get_module().icon_for(p), "§a§l" + p.name(), "§6" + dist, "§b" + p.spawn().getWorld().getName());
+					},
 					filter,
-					(player2, t, type, action) -> {
+					(player2, m, t, type, action) -> {
+						m.close(player2);
 						portal.target_id(t.id());
+
+						// Update portal block to reflect new target on consoles
+						portal.update_blocks(get_module());
+						mark_persistent_storage_dirty();
 						return ClickResult.SUCCESS;
 					}, player2 -> {
 						menu.open(player2);

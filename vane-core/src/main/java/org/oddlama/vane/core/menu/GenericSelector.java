@@ -12,14 +12,14 @@ import org.bukkit.entity.Player;
 
 import org.oddlama.vane.core.functional.Consumer1;
 import org.oddlama.vane.core.functional.Function1;
-import org.oddlama.vane.core.functional.Function4;
+import org.oddlama.vane.core.functional.Function5;
 import org.oddlama.vane.core.menu.Menu.ClickResult;
 import org.oddlama.vane.core.module.Context;
 
 public class GenericSelector<T, F extends Filter<T>> {
 	private MenuManager menu_manager;
 	private Function1<T, ItemStack> to_item;
-	private Function4<Player, T, ClickType, InventoryAction, ClickResult> on_click;
+	private Function5<Player, Menu, T, ClickType, InventoryAction, ClickResult> on_click;
 
 	private List<T> things;
 	private F filter;
@@ -32,7 +32,7 @@ public class GenericSelector<T, F extends Filter<T>> {
 
 	private GenericSelector() {}
 
-	public static<T, F extends Filter<T>> Menu create(final Context<?> context, final Player player, final String title, final List<T> things, final Function1<T, ItemStack> to_item, final F filter, final Function4<Player, T, ClickType, InventoryAction, ClickResult> on_click, final Consumer1<Player> on_cancel) {
+	public static<T, F extends Filter<T>> Menu create(final Context<?> context, final Player player, final String title, final String filter_title, final List<T> things, final Function1<T, ItemStack> to_item, final F filter, final Function5<Player, Menu, T, ClickType, InventoryAction, ClickResult> on_click, final Consumer1<Player> on_cancel) {
 		final var columns = 9;
 
 		final var generic_selector = new GenericSelector<T, F>();
@@ -63,10 +63,20 @@ public class GenericSelector<T, F extends Filter<T>> {
 		generic_selector_menu.add(new PageSelector<>(generic_selector, generic_selector.page_size + 1, generic_selector.page_size + 8));
 
 		// Filter item
-		generic_selector_menu.add(new MenuItem(generic_selector.page_size + 0, generic_selector.menu_manager.generic_selector_filter.item(), (p, menu, self) -> {
-			menu.close(p);
-			generic_selector.filter.open_filter_settings(context, p, menu);
-			generic_selector.update_filter = true;
+		generic_selector_menu.add(new MenuItem(generic_selector.page_size + 0, generic_selector.menu_manager.generic_selector_filter.item(), (p, menu, self, type, action) -> {
+			if (!Menu.is_left_or_right_click(type, action)) {
+				return ClickResult.INVALID_CLICK;
+			}
+
+			if (type == ClickType.RIGHT) {
+				generic_selector.filter.reset();
+				generic_selector.update_filter = true;
+				menu.update();
+			} else {
+				menu.close(p);
+				generic_selector.filter.open_filter_settings(context, p, filter_title, menu);
+				generic_selector.update_filter = true;
+			}
 			return ClickResult.SUCCESS;
 		}));
 
@@ -185,7 +195,7 @@ public class GenericSelector<T, F extends Filter<T>> {
 			}
 
 			final var idx = generic_selector.page * generic_selector.page_size + (slot - first_slot);
-			return generic_selector.on_click.apply(player, generic_selector.filtered_things.get(idx), type, action);
+			return generic_selector.on_click.apply(player, menu, generic_selector.filtered_things.get(idx), type, action);
 		}
 	}
 }

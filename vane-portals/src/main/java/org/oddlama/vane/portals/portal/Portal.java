@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.bukkit.World;
+import org.bukkit.util.Vector;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
@@ -233,21 +235,23 @@ public class Portal {
 	}
 
 	public static class TargetSelectionComparator implements Comparator<Portal> {
-		private Location from;
+		private World world;
+		private Vector from;
 
 		public TargetSelectionComparator(final Player player) {
-			this.from = player.getLocation();
+			this.world = player.getLocation().getWorld();
+			this.from = player.getLocation().toVector().setY(0.0);
 		}
 
 		@Override
 		public int compare(final Portal a, final Portal b) {
-			boolean a_same_world = from.getWorld().equals(a.spawn().getWorld());
-			boolean b_same_world = from.getWorld().equals(b.spawn().getWorld());
+			boolean a_same_world = world.equals(a.spawn().getWorld());
+			boolean b_same_world = world.equals(b.spawn().getWorld());
 
 			if (a_same_world) {
 				if (b_same_world) {
-					final var a_dist = from.toVector().setY(0.0).distanceSquared(a.spawn().toVector().setY(0.0));
-					final var b_dist = from.toVector().setY(0.0).distanceSquared(b.spawn().toVector().setY(0.0));
+					final var a_dist = from.distanceSquared(a.spawn().toVector().setY(0.0));
+					final var b_dist = from.distanceSquared(b.spawn().toVector().setY(0.0));
 					return Double.compare(a_dist, b_dist);
 				} else {
 					return -1;

@@ -623,7 +623,14 @@ public class Portals extends Module<Portals> {
 	public void update_portal_visibility(final Portal portal) {
 		// Replace references to the portal everywhere, if visibility
 		// has changed.
-		// TODO needs group access
+		if (portal.visibility() != Portal.Visibility.PUBLIC) {
+			for (final var other : storage_portals.values()) {
+				if (Objects.equals(other.target_id(), portal.id())) {
+					other.target_id(null);
+				}
+			}
+			// TODO dont hide for group access
+		}
 	}
 
 	public void update_console_item(final Portal portal, final Block block) {
