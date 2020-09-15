@@ -51,10 +51,10 @@ public class PortalTeleporter extends Listener<Portals> {
 	public void on_player_move(final PlayerMoveEvent event) {
 		final var player = event.getPlayer();
 		final var player_id = player.getUniqueId();
+		final var block = event.getTo().getBlock();
 
 		if (!entities_portalling.containsKey(player_id)) {
 			// Check if we walked into a portal
-			final var block = event.getTo().getBlock();
 			if (!get_module().portal_area_materials.contains(block.getType())) {
 				return;
 			}
@@ -64,7 +64,7 @@ public class PortalTeleporter extends Listener<Portals> {
 				return;
 			}
 
-			final var target = portal.target(get_module());
+			final var target = get_module().connected_portal(portal);
 			if (target == null) {
 				return;
 			}
@@ -97,8 +97,8 @@ public class PortalTeleporter extends Listener<Portals> {
 				// Initial teleport. Remember current location, so we can check
 				// that the entity moved away far enough to allow another teleport
 				entities_portalling.put(player_id, event.getFrom().clone());
-			} else {
-				// At least 2 blocks away → finish portalling.
+			} else if (!get_module().portal_area_materials.contains(block.getType())) {
+				// At least 2 blocks away and outside of portal area → finish portalling.
 				if (event.getFrom().distance(loc) > 2.0) {
 					entities_portalling.remove(player_id);
 				}
