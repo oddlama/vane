@@ -13,6 +13,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.List;
+import java.util.Collection;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -290,6 +292,10 @@ public class Portals extends Module<Portals> {
 		mark_persistent_storage_dirty();
 	}
 
+	public Collection<Portal> all_portals() {
+		return storage_portals.values();
+	}
+
 	public void remove_portal_block(final PortalBlock portal_block) {
 		// Restore original block
 		switch (portal_block.type()) {
@@ -555,6 +561,15 @@ public class Portals extends Module<Portals> {
 			return null;
 		}
 		return portal_for(connected_id);
+	}
+
+	public ItemStack icon_for(final Portal portal) {
+		final var item = portal.icon();
+		if (item == null) {
+			return config_default_icon.item();
+		} else {
+			return item;
+		}
 	}
 
 	private ItemStack make_console_item(final Portal portal, boolean active) {

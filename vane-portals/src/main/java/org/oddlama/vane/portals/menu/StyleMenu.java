@@ -175,7 +175,7 @@ public class StyleMenu extends ModuleComponent<Portals> {
 				if (stack.getType() == Material.AIR) {
 					stack.setType(Material.BARRIER);
 				}
-				super.item(t_item.item(stack));
+				super.item(t_item.alternative(stack));
 			}
 		};
 	}

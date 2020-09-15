@@ -55,23 +55,28 @@ public class SettingsMenu extends ModuleComponent<Portals> {
         item_back               = new TranslatedItemStack<>(ctx, "back",               Material.PRISMARINE_SHARD,                           1, "Used to go back to the previous menu.");
 	}
 
-	public Menu create(final Portal portal, final Player player, final Menu previous) {
+	// HINT: We don't capture the previous menu and open a new one on exit,
+	// to correctly reflect changes done in here. (e.g. menu title due to portal name)
+	public Menu create(final Portal portal, final Player player, final Block console) {
 		final var columns = 9;
 		final var title = lang_title.str("§5§l" + portal.name());
 		final var settings_menu = new Menu(get_context(), Bukkit.createInventory(null, columns, title));
 
-		settings_menu.add(menu_item_rename(portal, previous));
+		settings_menu.add(menu_item_rename(portal, console));
 		settings_menu.add(menu_item_select_icon(portal));
 		settings_menu.add(menu_item_select_style(portal));
 		settings_menu.add(menu_item_visibility(portal));
 		settings_menu.add(menu_item_target_lock(portal));
-		settings_menu.add(menu_item_back(previous));
+		settings_menu.add(menu_item_back(portal, console));
 
-		settings_menu.on_natural_close(player2 -> previous.open(player2));
+		settings_menu.on_natural_close(player2 ->
+			get_module().menus.console_menu
+				.create(portal, player2, console)
+				.open(player2));
 		return settings_menu;
 	}
 
-	private MenuWidget menu_item_rename(final Portal portal, final Menu previous) {
+	private MenuWidget menu_item_rename(final Portal portal, final Block console) {
 		return new MenuItem(0, item_rename.item(), (player, menu, self) -> {
 			menu.close(player);
 
@@ -83,11 +88,11 @@ public class SettingsMenu extends ModuleComponent<Portals> {
 				mark_persistent_storage_dirty();
 
 				// Open new menu because of possibly changed title
-				get_module().menus.settings_menu.create(portal, player2, previous).open(player2);
+				get_module().menus.settings_menu.create(portal, player2, console).open(player2);
 				return ClickResult.SUCCESS;
 			}).on_natural_close(player2 -> {
 				// Open new menu because of possibly changed title
-				get_module().menus.settings_menu.create(portal, player2, previous).open(player2);
+				get_module().menus.settings_menu.create(portal, player2, console).open(player2);
 			}).open(player);
 
 			return ClickResult.SUCCESS;
@@ -159,10 +164,12 @@ public class SettingsMenu extends ModuleComponent<Portals> {
 		};
 	}
 
-	private MenuWidget menu_item_back(final Menu previous) {
+	private MenuWidget menu_item_back(final Portal portal, final Block console) {
 		return new MenuItem(8, item_back.item(), (player, menu, self) -> {
 			menu.close(player);
-			previous.open(player);
+			get_module().menus.console_menu
+				.create(portal, player, console)
+				.open(player);
 			return ClickResult.SUCCESS;
 		});
 	}

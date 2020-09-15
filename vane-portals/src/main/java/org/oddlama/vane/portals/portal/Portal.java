@@ -27,6 +27,7 @@ public class Portal {
 		final var portal = (Portal)o;
 		final var json = new JSONObject();
 		json.put("id",             to_json(UUID.class,              portal.id));
+		json.put("owner",          to_json(UUID.class,              portal.owner));
 		json.put("orientation",    to_json(Orientation.class,       portal.orientation));
 		json.put("spawn",          to_json(LazyLocation.class,      portal.spawn));
 		try {
@@ -49,6 +50,7 @@ public class Portal {
 		final var json = (JSONObject)o;
 		final var portal = new Portal();
 		portal.id             = from_json(UUID.class,              json.get("id"));
+		portal.owner          = from_json(UUID.class,              json.get("owner"));
 		portal.orientation    = from_json(Orientation.class,       json.get("orientation"));
 		portal.spawn          = from_json(LazyLocation.class,      json.get("spawn"));
 		try {
@@ -74,6 +76,7 @@ public class Portal {
 	}
 
 	private UUID id;
+	private UUID owner;
 	private Orientation orientation;
 	private LazyLocation spawn;
 	private List<PortalBlock> blocks = new ArrayList<>();
@@ -89,13 +92,15 @@ public class Portal {
 
 	private Portal() {}
 
-	public Portal(final Orientation orientation, final Location spawn) {
+	public Portal(final UUID owner, final Orientation orientation, final Location spawn) {
 		this.id = UUID.randomUUID();
+		this.owner = owner;
 		this.orientation = orientation;
 		this.spawn = new LazyLocation(spawn.clone());
 	}
 
 	public UUID id() { return id; }
+	public UUID owner() { return owner; }
 	public Orientation orientation() { return orientation; }
 	public Location spawn() { return spawn.location().clone(); }
 	public List<PortalBlock> blocks() { return blocks; }

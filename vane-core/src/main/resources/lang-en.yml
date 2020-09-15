@@ -68,3 +68,15 @@ menus:
       lore:
         - "§bLeft-click§7 to reset changes."
         - "§bRight-click§7 to clear (if allowed)."
+  generic_selector:
+    # The item selecting the n'th page
+    # %1$s: Page number
+    page:
+      name: "§b§lPage %1$s"
+      lore: []
+    filter:
+      name: "§b§lFilter"
+      lore: ["§7 Opens the §afilter§7 menu."]
+    cancel:
+      name: "§c§lCancel"
+      lore: ["§6Abort§7 item selection."]

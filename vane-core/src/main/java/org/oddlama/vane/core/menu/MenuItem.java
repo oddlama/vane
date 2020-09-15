@@ -45,6 +45,7 @@ public class MenuItem implements MenuWidget {
 		menu.update();
 	}
 
+	@Override
 	public boolean update(final Menu menu) {
 		if (auto_update) {
 			this.item((ItemStack)null);
@@ -59,6 +60,7 @@ public class MenuItem implements MenuWidget {
 		}
 	}
 
+	@Override
 	public ClickResult click(final Player player, final Menu menu, final ItemStack item, int slot, final ClickType type, final InventoryAction action) {
 		if (this.slot != slot) {
 			return ClickResult.IGNORE;

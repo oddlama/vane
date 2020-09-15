@@ -45,12 +45,16 @@ public class TranslatedItemStack<T extends Module<T>> extends ModuleComponent<T>
 		this.def_amount = def_amount;
 	}
 
-	public ItemStack item() {
-		return name_item(config_material.item(config_amount), lang_name.format(), lang_lore.format());
+	public ItemStack item(Object... args) {
+		return name_item(config_material.item(config_amount), lang_name.format(args), lang_lore.format(args));
 	}
 
-	public ItemStack item(final ItemStack alternative) {
-		return name_item(alternative, lang_name.format(), lang_lore.format());
+	public ItemStack item_amount(int amount, Object... args) {
+		return name_item(config_material.item(amount), lang_name.format(args), lang_lore.format(args));
+	}
+
+	public ItemStack alternative(final ItemStack alternative, Object... args) {
+		return name_item(alternative, lang_name.format(args), lang_lore.format(args));
 	}
 
 	public ExtendedMaterial config_material_def() {

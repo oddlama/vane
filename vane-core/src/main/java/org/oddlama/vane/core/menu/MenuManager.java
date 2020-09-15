@@ -27,6 +27,10 @@ public class MenuManager extends Listener<Core> {
 	public TranslatedItemStack<?> item_selector_cancel;
 	public TranslatedItemStack<?> item_selector_selected;
 
+	public TranslatedItemStack<?> generic_selector_page;
+	public TranslatedItemStack<?> generic_selector_filter;
+	public TranslatedItemStack<?> generic_selector_cancel;
+
 	public MenuManager(Context<Core> context) {
 		super(context.namespace("menus"));
 
@@ -35,6 +39,10 @@ public class MenuManager extends Listener<Core> {
         item_selector_accept   = new TranslatedItemStack<>(ctx_item_selector, "accept", Material.LIME_TERRACOTTA, 1, "Used to confirm item selection.");
         item_selector_cancel   = new TranslatedItemStack<>(ctx_item_selector, "cancel", Material.RED_TERRACOTTA, 1, "Used to cancel item selection.");
         item_selector_selected = new TranslatedItemStack<>(ctx_item_selector, "selected", Material.BARRIER, 1, "Represents the selected item. Left-clicking will reset the selection to the initial value, and right-clicking will clear the selected item. The given stack is used as the 'empty', cleared item.");
+		final var ctx_generic_selector = ctx.namespace("generic_selector", "Menu configuration for generic selector menus.");
+        generic_selector_page   = new TranslatedItemStack<>(ctx_generic_selector, "page", Material.PAPER, 1, "Used to select pages.");
+        generic_selector_filter = new TranslatedItemStack<>(ctx_generic_selector, "filter", Material.HOPPER, 1, "Used to filter items.");
+        generic_selector_cancel = new TranslatedItemStack<>(ctx_generic_selector, "cancel", Material.PRISMARINE_SHARD, 1, "Used to cancel selection.");
 	}
 
 	public Menu menu_for(final Player player, final InventoryView view) {

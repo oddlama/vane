@@ -3,11 +3,13 @@ package org.oddlama.vane.core.menu;
 import static org.oddlama.vane.util.ItemUtil.name_item;
 import static org.oddlama.vane.util.ItemUtil.name_of;
 
+import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
+import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.inventory.ItemStack;
 
 import org.jetbrains.annotations.Nullable;
@@ -16,6 +18,7 @@ import org.oddlama.vane.core.functional.Consumer1;
 import org.oddlama.vane.core.functional.Consumer2;
 import org.oddlama.vane.core.functional.Function1;
 import org.oddlama.vane.core.functional.Function3;
+import org.oddlama.vane.core.functional.Function4;
 import org.oddlama.vane.core.menu.Menu.ClickResult;
 import org.oddlama.vane.core.module.Context;
 
@@ -35,7 +38,6 @@ public class MenuFactory {
 	}
 
 	public static Menu confirm(final Context<?> context, final String title, final ItemStack item_confirm, final Consumer1<Player> on_confirm, final ItemStack item_cancel, final Consumer1<Player> on_cancel) {
-		final Consumer2<Player, InventoryCloseEvent.Reason> cancel_wrapper = (player, reason) -> { on_cancel.apply(player); };
 		final var columns = 9;
 		final var confirmation_menu = new Menu(context, Bukkit.createInventory(null, columns, title));
 		final var confirm_index = (int)(Math.random() * columns);
@@ -43,10 +45,6 @@ public class MenuFactory {
 		for (int i = 0; i < columns; ++i) {
 			if (i == confirm_index) {
 				confirmation_menu.add(new MenuItem(i, item_confirm, (player, menu, self) -> {
-					// Remove on_close listener if it points to cancel_wrapper.
-					if (menu.get_on_close() == cancel_wrapper) {
-						menu.on_close(null);
-					}
 					menu.close(player);
 					on_confirm.apply(player);
 					return ClickResult.SUCCESS;
@@ -54,16 +52,14 @@ public class MenuFactory {
 			} else {
 				confirmation_menu.add(new MenuItem(i, item_cancel, (player, menu, self) -> {
 					menu.close(player);
-					if (menu.get_on_close() != cancel_wrapper) {
-						on_cancel.apply(player);
-					}
+					on_cancel.apply(player);
 					return ClickResult.SUCCESS;
 				}));
 			}
 		}
 
-		// On close call cancel
-		confirmation_menu.on_close(cancel_wrapper);
+		// On natural close call cancel
+		confirmation_menu.on_natural_close(on_cancel);
 
 		return confirmation_menu;
 	}
@@ -145,11 +141,6 @@ public class MenuFactory {
 				item = selected_item.original_selected;
 			}
 
-			// Remove on_close listener if it points to on_cancel.
-			if (menu.get_on_close() == on_cancel) {
-				menu.on_close(null);
-			}
-
 			menu.close(p);
 			on_confirm.apply(p, item);
 			return ClickResult.SUCCESS;
@@ -158,9 +149,7 @@ public class MenuFactory {
 		// Cancel item
 		item_selector_menu.add(new MenuItem(6, menu_manager.item_selector_cancel.item(), (p, menu, self) -> {
 			menu.close(p);
-			if (menu.get_on_close() != on_cancel) {
-				on_cancel.apply(player);
-			}
+			on_cancel.apply(player);
 			return ClickResult.SUCCESS;
 		}));
 
@@ -168,5 +157,9 @@ public class MenuFactory {
 		item_selector_menu.on_natural_close(on_cancel);
 
 		return item_selector_menu;
+	}
+
+	public static<T, F extends Filter<T>> Menu generic_selector(final Context<?> context, final Player player, final String title, final List<T> things, final Function1<T, ItemStack> to_item, final F filter, final Function4<Player, T, ClickType, InventoryAction, ClickResult> on_click, final Consumer1<Player> on_cancel) {
+		return GenericSelector.<T, F>create(context, player, title, things, to_item, filter, on_click, on_cancel);
 	}
 }

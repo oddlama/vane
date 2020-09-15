@@ -299,7 +299,7 @@ public class PortalConstructor extends Listener<Portals> {
 		return new PortalBlock(block, type);
 	}
 
-	private boolean construct_portal(Player player, final Block console, final Block boundary_block) {
+	private boolean construct_portal(final Player player, final Block console, final Block boundary_block) {
 		if (check_construction_conditions(player, console, boundary_block, true) == null) {
 			return false;
 		}
@@ -316,7 +316,7 @@ public class PortalConstructor extends Listener<Portals> {
 			final var orientation = Orientation.from(boundary.plane(), boundary.origin_block(), console, player.getLocation());
 
 			// Construct portal
-			final var portal = new Portal(orientation, boundary.spawn());
+			final var portal = new Portal(p.getUniqueId(), orientation, boundary.spawn());
 			get_module().add_portal(portal);
 			portal.name(name);
 

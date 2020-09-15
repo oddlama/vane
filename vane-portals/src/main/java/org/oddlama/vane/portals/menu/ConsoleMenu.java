@@ -71,7 +71,8 @@ public class ConsoleMenu extends ModuleComponent<Portals> {
 		final var settings_event = new PortalChangeSettingsEvent(player, portal, true);
 		get_module().getServer().getPluginManager().callEvent(settings_event);
 		if (!settings_event.isCancelled()) {
-			console_menu.add(menu_item_settings(portal));
+			console_menu.add(menu_item_settings(portal, console));
+			// TODO remove all open menus of a portal when it is deleted.
 		}
 
 		// Check if unlink would be allowed
@@ -91,10 +92,10 @@ public class ConsoleMenu extends ModuleComponent<Portals> {
 		return console_menu;
 	}
 
-	private MenuWidget menu_item_settings(final Portal portal) {
+	private MenuWidget menu_item_settings(final Portal portal, final Block console) {
 		return new MenuItem(0, item_settings.item(), (player, menu, self) -> {
 			menu.close(player);
-			get_module().menus.settings_menu.create(portal, player, menu).open(player);
+			get_module().menus.settings_menu.create(portal, player, console).open(player);
 			return ClickResult.SUCCESS;
 		});
 	}
@@ -105,7 +106,30 @@ public class ConsoleMenu extends ModuleComponent<Portals> {
 				return ClickResult.ERROR;
 			} else {
 				menu.close(player);
-				// TODO target sel
+				final var all_portals = get_module().all_portals()
+					.stream()
+					.filter(p -> {
+						switch (p.visibility()) {
+							case PUBLIC:  return true;
+							case GROUP:   return false; // TODO group visibility
+							case PRIVATE: return player.getUniqueId().equals(p.owner());
+						}
+					})
+					.filter(p -> !Objects.equals(p.id(), portal.id()))
+					.sorted()
+					.collect(Collectors.toList());
+
+				final var filter = new Filter<Portal>() {
+				};
+
+				MenuFactory.generic_selector(get_context(), player, "TODO", all_portals,
+					portal -> get_module().icon_for(portal),
+					filter,
+					(player2, t, type, action) -> {
+						menu.open(player2);
+					}, player2 -> {
+						menu.open(player2);
+					});
 				return ClickResult.SUCCESS;
 			}
 		}) {
