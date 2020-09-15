@@ -2,6 +2,8 @@ package org.oddlama.vane.portals.menu;
 
 import static org.oddlama.vane.util.Util.namespaced_key;
 
+import java.util.Objects;
+import java.util.stream.Collectors;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -16,6 +18,7 @@ import org.oddlama.vane.core.menu.Menu;
 import org.oddlama.vane.core.menu.MenuFactory;
 import org.oddlama.vane.core.menu.MenuItem;
 import org.oddlama.vane.core.menu.MenuWidget;
+import org.oddlama.vane.core.menu.Filter;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.ModuleComponent;
 import org.oddlama.vane.portals.Portals;
@@ -114,6 +117,7 @@ public class ConsoleMenu extends ModuleComponent<Portals> {
 							case GROUP:   return false; // TODO group visibility
 							case PRIVATE: return player.getUniqueId().equals(p.owner());
 						}
+						return false;
 					})
 					.filter(p -> !Objects.equals(p.id(), portal.id()))
 					.sorted()
