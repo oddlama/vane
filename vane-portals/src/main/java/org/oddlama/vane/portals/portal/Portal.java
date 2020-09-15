@@ -9,7 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.bukkit.block.EndGateway;
 import org.bukkit.World;
+import org.bukkit.Material;
 import org.bukkit.util.Vector;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
@@ -183,7 +185,13 @@ public class Portal {
 
 		final var active = portals.is_activated(this);
 		for (final var portal_block : blocks) {
-			portal_block.block().setType(cur_style.material(active, portal_block.type()));
+			final var type = cur_style.material(active, portal_block.type());
+			portal_block.block().setType(type);
+			if (type == Material.END_GATEWAY) {
+				// Disable beam
+				final var end_gateway = (EndGateway)portal_block.block().getState(false);
+				end_gateway.setAge(200l);
+			}
 			if (portal_block.type() == PortalBlock.Type.CONSOLE) {
 				portals.update_console_item(this, portal_block.block());
 			}

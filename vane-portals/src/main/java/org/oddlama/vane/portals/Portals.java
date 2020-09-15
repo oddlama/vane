@@ -129,7 +129,7 @@ public class Portals extends Module<Portals> {
 	}, desc = "Portal style definitions. Must provide a material for each portal block type and activation state. The default style may be overridden.")
 	public Map<String, Map<String, Map<String, Material>>> config_styles;
 
-	@ConfigLong(def = 10000, min = 1000, max = 120000, desc = "Delay in milliseconds after which two connected portals will automatically be disabled.")
+	@ConfigLong(def = 10000, min = 1000, max = 110000, desc = "Delay in milliseconds after which two connected portals will automatically be disabled. Purple end-gateway beams do not show up until the maximum value of 110 seconds.")
 	public long config_deactivation_delay;
 
 	@ConfigExtendedMaterial(def = "vane:decoration_end_portal_orb", desc = "The default portal icon. Also accepts heads from the head library.")
