@@ -80,7 +80,6 @@ public class PortalTeleporter extends Listener<Portals> {
 			// Calculate new pitch, yaw and velocity
 			target_location = portal.orientation().apply(target.orientation(), target_location);
 			final var new_velocity = portal.orientation().apply(target.orientation(), player.getVelocity());
-			System.out.println("player new vel " + new_velocity);
 
 			// Set new movement location
 			event.setTo(target_location);

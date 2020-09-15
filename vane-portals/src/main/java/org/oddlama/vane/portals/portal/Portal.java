@@ -1,12 +1,19 @@
 package org.oddlama.vane.portals.portal;
 
+import org.oddlama.vane.util.BlockUtil;
+import static org.oddlama.vane.util.BlockUtil.adjacent_blocks_3d;
 import static org.oddlama.vane.core.persistent.PersistentSerializer.from_json;
 import static org.oddlama.vane.core.persistent.PersistentSerializer.to_json;
 
 import java.io.IOException;
+import org.bukkit.block.BlockFace;
 import java.util.Comparator;
+import org.bukkit.block.data.type.Switch;
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 import org.bukkit.block.EndGateway;
@@ -145,7 +152,71 @@ public class Portal {
 		return portals.portal_for(target_id());
 	}
 
+	private Set<Block> controlling_blocks() {
+		final var controlling_blocks = new HashSet<Block>();
+		for (final var pb : blocks()) {
+			switch (pb.type()) {
+				default:
+					break;
+
+				case ORIGIN:
+				case BOUNDARY_1:
+				case BOUNDARY_2:
+				case BOUNDARY_3:
+				case BOUNDARY_4:
+				case BOUNDARY_5:
+					controlling_blocks.add(pb.block());
+					break;
+
+				case CONSOLE:
+					controlling_blocks.add(pb.block());
+					controlling_blocks.addAll(Arrays.asList(adjacent_blocks_3d(pb.block())));
+					break;
+			}
+		}
+		return controlling_blocks;
+	}
+
+	private void set_controlling_levers(boolean activated) {
+		final var controlling_blocks = controlling_blocks();
+		final var levers = new HashSet<Block>();
+		for (final var b : controlling_blocks()) {
+			for (final var f : BlockUtil.BLOCK_FACES) {
+				final var l = b.getRelative(f);
+				if (l.getType() != Material.LEVER) {
+					continue;
+				}
+
+				final var lever = (Switch)l.getBlockData();
+				final BlockFace attached_face;
+				switch (lever.getAttachedFace()) {
+					default:
+					case WALL:    attached_face = lever.getFacing().getOppositeFace(); break;
+					case CEILING: attached_face = BlockFace.UP; break;
+					case FLOOR:   attached_face = BlockFace.DOWN; break;
+				}
+
+				// Only when attached to a controlling block
+				if (!controlling_blocks.contains(l.getRelative(attached_face))) {
+					continue;
+				}
+
+				levers.add(l);
+			}
+		}
+
+		for (final var l : levers) {
+			final var lever = (Switch)l.getBlockData();
+			lever.setPowered(activated);
+			l.setBlockData(lever);
+		}
+	}
+
 	public boolean activate(final Portals portals, @Nullable final Player player) {
+		if (portals.is_activated(this)) {
+			return false;
+		}
+
 		final var target = target(portals);
 		if (target == null) {
 			return false;
@@ -163,6 +234,10 @@ public class Portal {
 	}
 
 	public boolean deactivate(final Portals portals, @Nullable final Player player) {
+		if (!portals.is_activated(this)) {
+			return false;
+		}
+
 		// Call event
 		final var event = new PortalDeactivateEvent(player, this);
 		portals.getServer().getPluginManager().callEvent(event);
@@ -170,7 +245,6 @@ public class Portal {
 			return false;
 		}
 
-		// TODO switch of levers
 		portals.disconnect_portals(this);
 		return true;
 	}
@@ -179,12 +253,18 @@ public class Portal {
 		// Update blocks
 		update_blocks(portals);
 
+		// Activate all controlling levers
+		set_controlling_levers(true);
+
 		// TODO sound
 	}
 
 	public void on_disconnect(final Portals portals, final Portal target) {
 		// Update blocks
 		update_blocks(portals);
+
+		// Deactivate all controlling levers
+		set_controlling_levers(false);
 
 		// TODO sound
 	}
