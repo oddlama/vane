@@ -120,20 +120,19 @@ public class ConsoleMenu extends ModuleComponent<Portals> {
 						return false;
 					})
 					.filter(p -> !Objects.equals(p.id(), portal.id()))
-					.sorted()
+					.sorted(new Portal.TargetSelectionComparator(player))
 					.collect(Collectors.toList());
 
-				final var filter = new Filter<Portal>() {
-				};
-
+				final var filter = new Filter.StringFilter<Portal>((p, str) -> p.name().toLowerCase().contains(str));
 				MenuFactory.generic_selector(get_context(), player, "TODO", all_portals,
-					portal -> get_module().icon_for(portal),
+					p -> get_module().icon_for(p),
 					filter,
 					(player2, t, type, action) -> {
-						menu.open(player2);
+						portal.target_id(t.id());
+						return ClickResult.SUCCESS;
 					}, player2 -> {
 						menu.open(player2);
-					});
+					}).open(player);
 				return ClickResult.SUCCESS;
 			}
 		}) {

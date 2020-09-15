@@ -65,7 +65,7 @@ public class GenericSelector<T, F extends Filter<T>> {
 		// Filter item
 		generic_selector_menu.add(new MenuItem(generic_selector.page_size + 0, generic_selector.menu_manager.generic_selector_filter.item(), (p, menu, self) -> {
 			menu.close(p);
-			generic_selector.filter.open_filter_settings(p, menu);
+			generic_selector.filter.open_filter_settings(context, p, menu);
 			generic_selector.update_filter = true;
 			return ClickResult.SUCCESS;
 		}));
@@ -98,7 +98,7 @@ public class GenericSelector<T, F extends Filter<T>> {
 			if (this.slot_to - this.slot_from < 3) {
 				throw new IllegalArgumentException("PageSelector needs at least 3 assigned slots!");
 			}
-			if (((this.slot_to - this.slot_from) % 2) == 1) {
+			if (((this.slot_to - this.slot_from) % 2) == 0) {
 				throw new IllegalArgumentException("PageSelector needs an uneven number of assigned slots!");
 			}
 		}

@@ -4,6 +4,7 @@ import static org.oddlama.vane.core.persistent.PersistentSerializer.from_json;
 import static org.oddlama.vane.core.persistent.PersistentSerializer.to_json;
 
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -228,6 +229,36 @@ public class Portal {
 		public Visibility next() {
 			final var next = (ordinal() + 1) % values().length;
 			return values()[next];
+		}
+	}
+
+	public static class TargetSelectionComparator implements Comparator<Portal> {
+		private Location from;
+
+		public TargetSelectionComparator(final Player player) {
+			this.from = player.getLocation();
+		}
+
+		@Override
+		public int compare(final Portal a, final Portal b) {
+			boolean a_same_world = from.getWorld().equals(a.spawn().getWorld());
+			boolean b_same_world = from.getWorld().equals(b.spawn().getWorld());
+
+			if (a_same_world) {
+				if (b_same_world) {
+					final var a_dist = from.toVector().setY(0.0).distanceSquared(a.spawn().toVector().setY(0.0));
+					final var b_dist = from.toVector().setY(0.0).distanceSquared(b.spawn().toVector().setY(0.0));
+					return Double.compare(a_dist, b_dist);
+				} else {
+					return -1;
+				}
+			} else {
+				if (b_same_world) {
+					return 1;
+				} else {
+					return a.name().compareToIgnoreCase(b.name());
+				}
+			}
 		}
 	}
 }
