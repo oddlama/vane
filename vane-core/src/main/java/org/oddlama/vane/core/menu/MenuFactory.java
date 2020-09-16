@@ -12,6 +12,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryAction;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 import org.jetbrains.annotations.Nullable;
@@ -23,7 +24,7 @@ import org.oddlama.vane.core.material.HeadMaterial;
 import org.oddlama.vane.core.material.HeadMaterialLibrary;
 import org.oddlama.vane.core.functional.Function2;
 import org.oddlama.vane.core.functional.Function3;
-import org.oddlama.vane.core.functional.Function5;
+import org.oddlama.vane.core.functional.Function4;
 import org.oddlama.vane.core.menu.Menu.ClickResult;
 import org.oddlama.vane.core.module.Context;
 
@@ -88,12 +89,12 @@ public class MenuFactory {
 
 		final var columns = 9;
 		final var item_selector_menu = new Menu(context, Bukkit.createInventory(null, columns, title));
-		final var selected_item = new MenuItem(4, default_item, (p, menu, self, type, action) -> {
-			if (!Menu.is_left_or_right_click(type, action)) {
+		final var selected_item = new MenuItem(4, default_item, (p, menu, self, event) -> {
+			if (!Menu.is_left_or_right_click(event)) {
 				return ClickResult.INVALID_CLICK;
 			}
 
-			if (allow_nothing && type == ClickType.RIGHT) {
+			if (allow_nothing && event.getClick() == ClickType.RIGHT) {
 				// Clear selection
 				self.update_item(menu, no_item);
 			} else {
@@ -164,28 +165,28 @@ public class MenuFactory {
 	}
 
 	public static<T, F extends Filter<T>> Menu generic_selector(final Context<?> context, final Player player, final String title, final String filter_title, final List<T> things, final Function1<T, ItemStack> to_item, final F filter, final Function3<Player, Menu, T, ClickResult> on_click, final Consumer1<Player> on_cancel) {
-		return generic_selector(context, player, title, filter_title, things, to_item, filter, (p, menu, t, type, action) -> {
-			if (!Menu.is_left_click(type, action)) {
+		return generic_selector(context, player, title, filter_title, things, to_item, filter, (p, menu, t, event) -> {
+			if (!Menu.is_left_click(event)) {
 				return ClickResult.INVALID_CLICK;
 			}
 			return on_click.apply(p, menu, t);
 		}, on_cancel);
 	}
 
-	public static<T, F extends Filter<T>> Menu generic_selector(final Context<?> context, final Player player, final String title, final String filter_title, final List<T> things, final Function1<T, ItemStack> to_item, final F filter, final Function5<Player, Menu, T, ClickType, InventoryAction, ClickResult> on_click, final Consumer1<Player> on_cancel) {
+	public static<T, F extends Filter<T>> Menu generic_selector(final Context<?> context, final Player player, final String title, final String filter_title, final List<T> things, final Function1<T, ItemStack> to_item, final F filter, final Function4<Player, Menu, T, InventoryClickEvent, ClickResult> on_click, final Consumer1<Player> on_cancel) {
 		return GenericSelector.<T, F>create(context, player, title, filter_title, things, to_item, filter, on_click, on_cancel);
 	}
 
 	public static Menu head_selector(final Context<?> context, final Player player, final Function3<Player, Menu, HeadMaterial, ClickResult> on_click, final Consumer1<Player> on_cancel) {
-		return head_selector(context, player, (p, menu, t, type, action) -> {
-			if (!Menu.is_left_click(type, action)) {
+		return head_selector(context, player, (p, menu, t, event) -> {
+			if (!Menu.is_left_click(event)) {
 				return ClickResult.INVALID_CLICK;
 			}
 			return on_click.apply(p, menu, t);
 		}, on_cancel);
 	}
 
-	public static Menu head_selector(final Context<?> context, final Player player, final Function5<Player, Menu, HeadMaterial, ClickType, InventoryAction, ClickResult> on_click, final Consumer1<Player> on_cancel) {
+	public static Menu head_selector(final Context<?> context, final Player player, final Function4<Player, Menu, HeadMaterial, InventoryClickEvent, ClickResult> on_click, final Consumer1<Player> on_cancel) {
 		final var menu_manager = context.get_module().core.menu_manager;
 		final var all_heads = HeadMaterialLibrary.all().stream()
 			.sorted((a, b) -> a.key().toString().compareToIgnoreCase(b.key().toString()))

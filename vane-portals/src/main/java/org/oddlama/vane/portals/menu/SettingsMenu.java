@@ -147,8 +147,8 @@ public class SettingsMenu extends ModuleComponent<Portals> {
 	}
 
 	private MenuWidget menu_item_visibility(final Portal portal) {
-		return new MenuItem(5, null, (player, menu, self, type, action) -> {
-			if (!Menu.is_left_or_right_click(type, action)) {
+		return new MenuItem(5, null, (player, menu, self, event) -> {
+			if (!Menu.is_left_or_right_click(event)) {
 				return ClickResult.INVALID_CLICK;
 			}
 
@@ -159,7 +159,7 @@ public class SettingsMenu extends ModuleComponent<Portals> {
 				return ClickResult.ERROR;
 			}
 
-			portal.visibility(type == ClickType.RIGHT ? portal.visibility().prev() : portal.visibility().next());
+			portal.visibility(event.getClick() == ClickType.RIGHT ? portal.visibility().prev() : portal.visibility().next());
 			get_module().update_portal_visibility(portal);
 			mark_persistent_storage_dirty();
 			menu.update();

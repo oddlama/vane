@@ -112,7 +112,7 @@ public class MenuManager extends Listener<Core> {
 		if (menu != null) {
 			event.setCancelled(true);
 			final var slot = event.getClickedInventory() == menu.inventory() ? event.getSlot() : -1;
-			menu.click(player, event.getCurrentItem(), slot, event.getClick(), event.getAction());
+			menu.click(player, event.getCurrentItem(), slot, event);
 		}
 	}
 

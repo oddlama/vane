@@ -37,6 +37,10 @@ public class PlayerUtil {
 		}
 	}
 
+	public static boolean take_items(final Player player, final EquipmentSlot hand) {
+		return false;
+	}
+
 	public static void give_item(final Player player, final ItemStack item) {
 		give_items(player, new ItemStack[] { item });
 	}

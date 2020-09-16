@@ -1,5 +1,7 @@
 package org.oddlama.vane.trifles.commands;
 
+import static org.oddlama.vane.util.PlayerUtil.take_items;
+import static org.oddlama.vane.util.PlayerUtil.give_item;
 import java.util.ArrayList;
 
 import org.bukkit.command.CommandSender;
@@ -8,6 +10,8 @@ import org.bukkit.Material;
 
 import org.oddlama.vane.annotation.command.Name;
 import org.oddlama.vane.annotation.lang.LangMessage;
+import org.oddlama.vane.annotation.config.ConfigInt;
+import org.oddlama.vane.annotation.config.ConfigMaterial;
 import org.oddlama.vane.trifles.Trifles;
 import org.oddlama.vane.core.command.Command;
 import org.oddlama.vane.core.lang.TranslatedMessage;
@@ -30,6 +34,11 @@ import org.oddlama.vane.core.module.Module;
 
 @Name("heads")
 public class Heads extends Command<Trifles> {
+	@ConfigMaterial(def = Material.SKELETON_SKULL, desc = "Currency material used to buy heads.")
+	public Material config_currency;
+	@ConfigInt(def = 1, min = 0, desc = "Price (in currency) per head. Set to 0 for free heads.")
+	public int config_price_per_head;
+
 	public Heads(Context<Trifles> context) {
 		super(context);
 
@@ -40,8 +49,24 @@ public class Heads extends Command<Trifles> {
 	}
 
 	private void open_head_library(final Player player) {
-		MenuFactory.head_selector(get_context(), player, (player2, m, t) -> {
-			m.close(player2);
+		MenuFactory.head_selector(get_context(), player, (player2, m, t, event) -> {
+			final int amount;
+			switch (type) {
+				default: return ClickResult.INVALID_CLICK;
+				case NUMBER_KEY:  amount = event.getHotbarButton() + 1; break;
+				case LEFT:        amount = 1; break;
+				case RIGHT:       amount = 32; break;
+				case MIDDLE:      amount = 64; break;
+				case SHIFT_LEFT:  amount = 64; break;
+				case SHIFT_RIGHT: amount = 16; break;
+			}
+
+			// Take currency items
+			if (config_price_per_head > 0 && !take_items(player2, new ItemStack(config_currency, config_price_per_head * amount))) {
+				return ClickResult.ERROR;
+			}
+
+			give_item(player2, t.item_amount(amount));
 			return ClickResult.SUCCESS;
 		}, player2 -> { }).open(player);
 	}

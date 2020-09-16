@@ -9,6 +9,7 @@ import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryAction;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -133,23 +134,23 @@ public class Menu {
 		manager.remove(player, this);
 	}
 
-	public ClickResult on_click(final Player player, final ItemStack item, int slot, final ClickType type, final InventoryAction action) {
+	public ClickResult on_click(final Player player, final ItemStack item, int slot, final InventoryClickEvent event) {
 		return ClickResult.IGNORE;
 	}
 
-	public final void click(final Player player, final ItemStack item, int slot, final ClickType type, final InventoryAction action) {
+	public final void click(final Player player, final ItemStack item, int slot, final InventoryClickEvent event) {
 		// Ignore unknown click actions
-		if (action == InventoryAction.UNKNOWN) {
+		if (event.getAction() == InventoryAction.UNKNOWN) {
 			return;
 		}
 
 		// Send event to this menu
 		var result = ClickResult.IGNORE;
-		result = ClickResult.or(result, on_click(player, item, slot, type, action));
+		result = ClickResult.or(result, on_click(player, item, slot, event));
 
 		// Send event to all widgets
 		for (final var widget : widgets) {
-			result = ClickResult.or(result, widget.click(player, this, item, slot, type, action));
+			result = ClickResult.or(result, widget.click(player, this, item, slot, event));
 		}
 
 		switch (result) {
@@ -163,11 +164,13 @@ public class Menu {
 		}
 	}
 
-	public static boolean is_left_or_right_click(ClickType type, InventoryAction action) {
+	public static boolean is_left_or_right_click(final InventoryClickEvent event) {
+		final var type = event.getClick();
 		return type == ClickType.LEFT || type == ClickType.RIGHT;
 	}
 
-	public static boolean is_left_click(ClickType type, InventoryAction action) {
+	public static boolean is_left_click(final InventoryClickEvent event) {
+		final var type = event.getClick();
 		return type == ClickType.LEFT;
 	}
 
