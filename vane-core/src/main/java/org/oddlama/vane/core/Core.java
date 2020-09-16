@@ -226,7 +226,7 @@ public class Core extends Module<Core> {
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void on_block_break(final BlockBreakEvent event) {
 		final var block = event.getBlock();
-		if (block.getType() != Material.PLAYER_HEAD) {
+		if (block.getType() != Material.PLAYER_HEAD && block.getType() != Material.PLAYER_WALL_HEAD) {
 			return;
 		}
 
