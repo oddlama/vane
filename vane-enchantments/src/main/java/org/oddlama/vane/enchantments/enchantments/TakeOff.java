@@ -4,6 +4,10 @@ import static org.oddlama.vane.util.ItemUtil.damage_item;
 import static org.oddlama.vane.util.PlayerUtil.apply_elytra_boost;
 
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
+import org.bukkit.util.Vector;
+
+import org.bukkit.Particle;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -64,5 +68,19 @@ public class TakeOff extends CustomEnchantment<Enchantments> {
 		// Apply boost
 		apply_elytra_boost(player, get_boost_strength(level));
 		damage_item(player, chest, (int)(1.0 + 2.0 * Math.random()));
+
+		// Spawn particles
+		final var loc = player.getLocation();
+		final var vel = player.getVelocity().length();
+		for (int i = 0; i < 16; ++i) {
+			final var rnd = Vector.getRandom()
+				.subtract(new Vector(.5, .5, .5))
+				.normalize()
+				.multiply(.25);
+			final var dir = rnd.clone()
+				.multiply(.5)
+				.subtract(player.getVelocity());
+			loc.getWorld().spawnParticle(Particle.FIREWORKS_SPARK, loc.add(rnd), 0, dir.getX(), dir.getY(), dir.getZ(), vel * ThreadLocalRandom.current().nextDouble(0.4, 0.6));
+		}
 	}
 }

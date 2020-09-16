@@ -69,6 +69,8 @@ and therefore not well suited for giving out valuable traits (like *Angel* or *U
 - [x] The *File* allows you to modify block individual connections of fences, walls, glass panes and blocks alike.
 - [x] The *Empty Experience Bottle* allows you to bottle your experience (right click) for later use. Drinking the full bottle will grant you the stored experience.
       Storing experience will cost a small percentage of the bottled xp. It will also calculate in terms of experience and not levels.
+- [ ] The *Home Portal Scroll* will teleport you to your bed, but it only has a limited amount of uses!
+- [ ] The *Unstable Portal Scroll* will teleport you back to the location where you last used a portal scroll.
 
 #### Portals
 

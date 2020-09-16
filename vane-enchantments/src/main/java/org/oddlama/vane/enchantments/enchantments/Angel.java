@@ -3,6 +3,7 @@ package org.oddlama.vane.enchantments.enchantments;
 import java.util.List;
 
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -61,18 +62,22 @@ public class Angel extends CustomEnchantment<Enchantments> {
 			return;
 		}
 
-		var dir = player.getLocation().getDirection();
+		final var loc = player.getLocation();
+		final var dir = loc.getDirection();
 		if (dir.length() == 0) {
 			return;
 		}
 
 		// Scale the delta dependent on the angle. Higher angle -> less effect
-		var vel = player.getVelocity();
-		var delta = config_acceleration_percentage * (1.0 - dir.angle(vel) / Math.PI);
-		var factor = get_speed(level);
+		final var vel = player.getVelocity();
+		final var delta = config_acceleration_percentage * (1.0 - dir.angle(vel) / Math.PI);
+		final var factor = get_speed(level);
 
 		// Exponential moving average between velocity and target velocity
-		player.setVelocity(vel.multiply(1.0 - delta)
-		                      .add(dir.normalize().multiply(delta * factor)));
+		final var new_vel = vel.multiply(1.0 - delta).add(dir.normalize().multiply(delta * factor));
+		player.setVelocity(new_vel);
+
+		// Spawn particles
+		loc.getWorld().spawnParticle(Particle.FIREWORKS_SPARK, loc, 0, -new_vel.getX(), -new_vel.getY(), -new_vel.getZ(), 0.4);
 	}
 }

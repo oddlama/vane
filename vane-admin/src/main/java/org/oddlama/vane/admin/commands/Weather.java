@@ -17,7 +17,6 @@ public class Weather extends Command<Admin> {
 		clear(false, false),
 		sun(false, false),
 		rain(true, false),
-		storm(true, false),
 		thunder(true, true);
 
 		private boolean is_storm;

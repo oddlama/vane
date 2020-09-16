@@ -5,12 +5,15 @@ import static org.oddlama.vane.util.PlayerUtil.apply_elytra_boost;
 import static org.oddlama.vane.util.Util.ms_to_ticks;
 
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
+import org.bukkit.Particle;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.Vector;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -77,5 +80,19 @@ public class Wings extends CustomEnchantment<Enchantments> {
 		player.setCooldown(Material.ELYTRA, (int)cooldown);
 		apply_elytra_boost(player, get_boost_strength(level));
 		damage_item(player, chest, (int)(1.0 + 2.0 * Math.random()));
+
+		// Spawn particles
+		final var loc = player.getLocation();
+		final var vel = player.getVelocity().length();
+		for (int i = 0; i < 16; ++i) {
+			final var rnd = Vector.getRandom()
+				.subtract(new Vector(.5, .5, .5))
+				.normalize()
+				.multiply(.25);
+			final var dir = rnd.clone()
+				.multiply(.5)
+				.subtract(player.getVelocity());
+			loc.getWorld().spawnParticle(Particle.FIREWORKS_SPARK, loc.add(rnd), 0, dir.getX(), dir.getY(), dir.getZ(), vel * ThreadLocalRandom.current().nextDouble(0.4, 0.6));
+		}
 	}
 }
