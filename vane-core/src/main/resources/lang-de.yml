@@ -44,16 +44,50 @@ resource_pack:
     §dBitte versuche es erneut."
 
 menus:
-  item_selector:
-    accept:
-      name: "§a§lAccept"
-      lore: ["§bChoose§7 the currently selected item."]
-    cancel:
-      name: "§c§lCancel"
-      lore: ["§6Abort§7 item selection."]
-    selected:
-      name: "§d§lSelected Item"
+  head_selector:
+    title: "%1$s §8§lKöpfe"
+    filter_title: "§8§lFiltereinstellungen"
+    select_head:
+      name: "%1$s"
       lore:
         - ""
-        - "§bLeft-click§7 to reset changes."
-        - "§bRight-click§7 to clear (if allowed)."
+        - "§7Kategorie: %2$s"
+        - "§7Tags: %3$s"
+
+  item_selector:
+    accept:
+      name: "§a§lAkzeptieren"
+      lore: ["§bWähle§7 das aktuelle item."]
+
+    cancel:
+      name: "§c§lAbbrechen"
+      lore: ["§7Itemauswahl §6abbrechen§7."]
+
+    selected:
+      name: "§d§lGewähltes Item"
+      lore:
+        - ""
+        - "§bLinks-klick§7 setzt Änderungen zurück."
+        - "§bRechts-klick§7 entfert Auswahl (falls erlaubt)."
+
+  generic_selector:
+    page:
+      name: "§bSeite %1$s"
+      lore: []
+
+    current_page:
+      name: "§aAktuelle Seite %1$s §7/ %2$s"
+      lore:
+        - ""
+        - "§b#Gefilterte Items: %3$s"
+
+    filter:
+      name: "§b§lFilter"
+      lore:
+        - ""
+        - "§bLinks-klick§7 öffnet das Filtermenü."
+        - "§bRechts-klick§7 setzt den Filter zurück."
+
+    cancel:
+      name: "§c§lAbbrechen"
+      lore: ["§7Auswahl §6abbrechen§7."]

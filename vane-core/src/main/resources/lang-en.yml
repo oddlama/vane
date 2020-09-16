@@ -71,7 +71,7 @@ menus:
       lore:
         - ""
         - "§7Category: %2$s"
-        - "§7Tags: "
+        - "§7Tags: %3$s"
 
   # Item selection menu.
   item_selector:
@@ -118,10 +118,10 @@ menus:
       name: "§b§lFilter"
       lore:
         - ""
-        - "§7 Opens the §afilter§7 menu."
+        - "§bLeft-click§7 to open the filter menu."
         - "§bRight-click§7 to reset filter."
 
     # The item used to cancel the selection.
     cancel:
       name: "§c§lCancel"
-      lore: ["§6Abort§7 item selection."]
+      lore: ["§6Abort§7 selection."]
