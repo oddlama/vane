@@ -1,7 +1,7 @@
 package org.oddlama.vane.trifles.commands;
 
 import static org.oddlama.vane.util.PlayerUtil.take_items;
-import static org.oddlama.vane.util.PlayerUtil.give_item;
+import static org.oddlama.vane.util.PlayerUtil.give_items;
 import java.util.ArrayList;
 
 import org.bukkit.command.CommandSender;
@@ -51,7 +51,7 @@ public class Heads extends Command<Trifles> {
 	private void open_head_library(final Player player) {
 		MenuFactory.head_selector(get_context(), player, (player2, m, t, event) -> {
 			final int amount;
-			switch (type) {
+			switch (event.getClick()) {
 				default: return ClickResult.INVALID_CLICK;
 				case NUMBER_KEY:  amount = event.getHotbarButton() + 1; break;
 				case LEFT:        amount = 1; break;
@@ -66,7 +66,7 @@ public class Heads extends Command<Trifles> {
 				return ClickResult.ERROR;
 			}
 
-			give_item(player2, t.item_amount(amount));
+			give_items(player2, t.item(), amount);
 			return ClickResult.SUCCESS;
 		}, player2 -> { }).open(player);
 	}

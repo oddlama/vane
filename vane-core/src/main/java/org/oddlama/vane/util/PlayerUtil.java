@@ -2,6 +2,11 @@ package org.oddlama.vane.util;
 
 import static org.oddlama.vane.util.BlockUtil.drop_naturally;
 
+import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
+
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -37,12 +42,86 @@ public class PlayerUtil {
 		}
 	}
 
-	public static boolean take_items(final Player player, final EquipmentSlot hand) {
-		return false;
+	// ItemStack amounts are discarded, only the mapped value counts.
+	// CAUTION: There must no be duplicate item keys that could stack.
+	public static boolean has_items(final Player player, final Map<ItemStack, Integer> items) {
+		if (player.getGameMode() == GameMode.CREATIVE) {
+			return true;
+		}
+
+		final var inventory = player.getInventory();
+		for (final var e : items.entrySet()) {
+			final var item = e.getKey().clone();
+			item.setAmount(1);
+			final var amount = e.getValue();
+			if (!inventory.containsAtLeast(item, amount)) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+
+	public static boolean take_items(final Player player, final ItemStack item) {
+		final var map = new HashMap<ItemStack, Integer>();
+		map.put(item, item.getAmount());
+		return take_items(player, map);
+	}
+
+	public static boolean take_items(final Player player, final Map<ItemStack, Integer> items) {
+		if (player.getGameMode() == GameMode.CREATIVE) {
+			return true;
+		}
+
+		if (!has_items(player, items)) {
+			return false;
+		}
+
+		final var inventory = player.getInventory();
+		final var stacks = new ArrayList<ItemStack>();
+		for (final var e : items.entrySet()) {
+			stacks.addAll(Arrays.asList(create_lawful_stacks(e.getKey(), e.getValue())));
+		}
+
+		final var leftovers = inventory.removeItem(stacks.toArray(new ItemStack[0]));
+		if (leftovers != null && !leftovers.isEmpty()) {
+			Bukkit.getLogger().warning("[vane] Unexpected leftovers while removing the following items from a player's inventory: " + stacks);
+			for (final var l : leftovers.entrySet()) {
+				Bukkit.getLogger().warning("[vane] Leftover: " + l.getKey() + ", amount: " + l.getValue());
+			}
+			return false;
+		}
+
+		return true;
 	}
 
 	public static void give_item(final Player player, final ItemStack item) {
 		give_items(player, new ItemStack[] { item });
+	}
+
+	// Ignores item.getAmount().
+	public static ItemStack[] create_lawful_stacks(final ItemStack item, int amount) {
+		final var stacks = (item.getMaxStackSize() - 1 + amount) / item.getMaxStackSize();
+		final var leftover = amount % item.getMaxStackSize();
+		if (stacks < 1) {
+			return new ItemStack[] {};
+		}
+
+		final var items = new ItemStack[stacks];
+		for (int i = 0; i < stacks; ++i) {
+			items[i] = item.clone();
+			items[i].setAmount(item.getMaxStackSize());
+		}
+		if (leftover != 0) {
+			items[stacks - 1].setAmount(leftover);
+		}
+
+		return items;
+	}
+
+	public static void give_items(final Player player, final ItemStack item, int amount) {
+		give_items(player, create_lawful_stacks(item, amount));
 	}
 
 	public static void give_items(final Player player, final ItemStack[] items) {
