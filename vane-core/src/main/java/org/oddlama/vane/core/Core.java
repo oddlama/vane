@@ -14,6 +14,8 @@ import java.util.logging.Level;
 import com.destroystokyo.paper.MaterialTags;
 
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Keyed;
 import org.bukkit.craftbukkit.libs.org.apache.commons.io.IOUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -21,6 +23,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.inventory.PrepareSmithingEvent;
+import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
@@ -144,6 +147,39 @@ public class Core extends Module<Core> {
 		final var item = player.getEquipment().getItem(event.getHand());
 		if (is_custom_item(item) && MaterialTags.HOES.isTagged(item)) {
 			event.setCancelled(true);
+		}
+	}
+
+	// Prevent custom items from being used in minecraft's crafting
+	// recipes.
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void on_prepare_item_craft(final PrepareItemCraftEvent event) {
+		final var recipe = event.getRecipe();
+		if (recipe == null) {
+			return;
+		}
+
+		final NamespacedKey key;
+		if (recipe instanceof Keyed) {
+			key = ((Keyed)recipe).getKey();
+		} else {
+			return;
+		}
+
+		// Only cancel minecraft's recipes
+		if (!key.getNamespace().equals("minecraft")) {
+			return;
+		}
+
+		for (final var item : event.getInventory().getMatrix()) {
+			if (item == null) {
+				return;
+			}
+
+			if (is_custom_item(item)) {
+				event.getInventory().setResult(null);
+				return;
+			}
 		}
 	}
 
