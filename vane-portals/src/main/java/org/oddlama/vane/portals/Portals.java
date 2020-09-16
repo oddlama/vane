@@ -84,8 +84,7 @@ public class Portals extends Module<Portals> {
 		PersistentSerializer.deserializers.put(Style.class,             Style::deserialize);
 	}
 
-	// TODO better default styles
-	// TODO style per portal or per player a list of styles? idk. global? how to delete?
+	// TODO better and more default styles
 	@ConfigMaterialMapMapMap(def = {
 		@ConfigMaterialMapMapMapEntry(key = "vane_portals:portal_style_default", value = {
 			@ConfigMaterialMapMapEntry(key = "active", value = {
@@ -112,20 +111,20 @@ public class Portals extends Module<Portals> {
 		@ConfigMaterialMapMapMapEntry(key = "vane_portals:portal_style_aqua", value = {
 			@ConfigMaterialMapMapEntry(key = "active", value = {
 				@ConfigMaterialMapEntry(key = "boundary_1", value = Material.DARK_PRISMARINE),
-				@ConfigMaterialMapEntry(key = "boundary_2", value = Material.DARK_PRISMARINE),
-				@ConfigMaterialMapEntry(key = "boundary_3", value = Material.DARK_PRISMARINE),
-				@ConfigMaterialMapEntry(key = "boundary_4", value = Material.DARK_PRISMARINE),
-				@ConfigMaterialMapEntry(key = "boundary_5", value = Material.DARK_PRISMARINE),
+				@ConfigMaterialMapEntry(key = "boundary_2", value = Material.WARPED_PLANKS),
+				@ConfigMaterialMapEntry(key = "boundary_3", value = Material.PRISMARINE_BRICKS),
+				@ConfigMaterialMapEntry(key = "boundary_4", value = Material.WARPED_WART_BLOCK),
+				@ConfigMaterialMapEntry(key = "boundary_5", value = Material.LIGHT_BLUE_STAINED_GLASS),
 				@ConfigMaterialMapEntry(key = "console", value = Material.ENCHANTING_TABLE),
 				@ConfigMaterialMapEntry(key = "origin", value = Material.DARK_PRISMARINE),
 				@ConfigMaterialMapEntry(key = "portal", value = Material.END_GATEWAY),
 			}),
 			@ConfigMaterialMapMapEntry(key = "inactive", value = {
 				@ConfigMaterialMapEntry(key = "boundary_1", value = Material.DARK_PRISMARINE),
-				@ConfigMaterialMapEntry(key = "boundary_2", value = Material.DARK_PRISMARINE),
-				@ConfigMaterialMapEntry(key = "boundary_3", value = Material.DARK_PRISMARINE),
-				@ConfigMaterialMapEntry(key = "boundary_4", value = Material.DARK_PRISMARINE),
-				@ConfigMaterialMapEntry(key = "boundary_5", value = Material.DARK_PRISMARINE),
+				@ConfigMaterialMapEntry(key = "boundary_2", value = Material.WARPED_PLANKS),
+				@ConfigMaterialMapEntry(key = "boundary_3", value = Material.SEA_LANTERN),
+				@ConfigMaterialMapEntry(key = "boundary_4", value = Material.WARPED_WART_BLOCK),
+				@ConfigMaterialMapEntry(key = "boundary_5", value = Material.LIGHT_BLUE_STAINED_GLASS),
 				@ConfigMaterialMapEntry(key = "console", value = Material.ENCHANTING_TABLE),
 				@ConfigMaterialMapEntry(key = "origin", value = Material.DARK_PRISMARINE),
 				@ConfigMaterialMapEntry(key = "portal", value = Material.AIR),
@@ -671,7 +670,7 @@ public class Portals extends Module<Portals> {
 					other.target_id(null);
 				}
 			}
-			// TODO dont hide for group access
+			// TODO don't hide for group access
 		}
 	}
 
