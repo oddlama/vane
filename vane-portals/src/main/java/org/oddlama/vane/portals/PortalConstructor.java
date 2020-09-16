@@ -83,9 +83,10 @@ public class PortalConstructor extends Listener<Portals> {
 	@LangMessage public TranslatedMessage lang_too_small_spawn;
 	@LangMessage public TranslatedMessage lang_too_many_portal_area_blocks;
 	@LangMessage public TranslatedMessage lang_portal_area_obstructed;
+	@LangMessage public TranslatedMessage lang_intersects_existing_portal;
+
 	@LangMessage public TranslatedMessage lang_build_restricted;
 	@LangMessage public TranslatedMessage lang_link_restricted;
-	@LangMessage public TranslatedMessage lang_intersects_existing_portal;
 
 	@LangMessage public TranslatedMessage lang_target_already_connected;
 	@LangMessage public TranslatedMessage lang_source_use_restricted;

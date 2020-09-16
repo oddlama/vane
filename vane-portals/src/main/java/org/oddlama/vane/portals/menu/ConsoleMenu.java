@@ -165,10 +165,12 @@ public class ConsoleMenu extends ModuleComponent<Portals> {
 		}) {
 			@Override
 			public void item(final ItemStack item) {
+				final var target = portal.target(get_module());
+				final var target_name = "§a" + (target == null ? "None" : target.name());
 				if (portal.target_locked()) {
-					super.item(item_select_target_locked.item());
+					super.item(item_select_target_locked.item(target_name));
 				} else {
-					super.item(item_select_target.item());
+					super.item(item_select_target.item(target_name));
 				}
 			}
 		};
