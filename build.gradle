@@ -49,7 +49,6 @@ subprojects {
 configure(subprojects.findAll {it.name != 'vane-annotations'}) {
 	dependencies {
 		implementation group: 'com.comphenix.protocol', name: 'ProtocolLib', version: '4.6.0-SNAPSHOT';
-		implementation group: 'us.dynmap', name: 'dynmap-api', version: '3.1-SNAPSHOT';
 
 		compileOnly project(':vane-annotations');
 		annotationProcessor project(':vane-annotations');

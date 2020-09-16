@@ -1,10 +1,10 @@
 package org.oddlama.vane.portals;
 
-import org.dynmap.markers.Marker;
-import org.dynmap.markers.MarkerIcon;
-import org.dynmap.markers.MarkerSet;
-import org.dynmap.DynmapAPI;
-import org.dynmap.markers.MarkerAPI;
+import org.oddlama.vane.external.dynmap.markers.Marker;
+import org.oddlama.vane.external.dynmap.markers.MarkerIcon;
+import org.oddlama.vane.external.dynmap.markers.MarkerSet;
+import org.oddlama.vane.external.dynmap.DynmapAPI;
+import org.oddlama.vane.external.dynmap.markers.MarkerAPI;
 
 import static org.oddlama.vane.util.PlayerUtil.swing_arm;
 
@@ -75,6 +75,7 @@ public class PortalDynmapLayer extends ModuleComponent<Portals> {
 			return;
 		}
 
+		get_module().log.info("Enabling dynmap integration");
 		dynmap_enabled = true;
 		create_or_load_layer();
 	}
@@ -84,6 +85,8 @@ public class PortalDynmapLayer extends ModuleComponent<Portals> {
 		if (!dynmap_enabled) {
 			return;
 		}
+
+		get_module().log.info("Disabling dynmap integration");
 		dynmap_enabled = false;
 		dynmap_api = null;
 		marker_api = null;
