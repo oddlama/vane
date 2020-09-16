@@ -60,6 +60,10 @@ portal_area_obstructed: "§cThe portal area is obstructed!"
 build_restricted: "§cYou have no permission to build a portal here!"
 # This message is sent when a player has no permission to link a console to a portal.
 link_restricted: "§cYou have no permission to link a console to this portal!"
+# This message is sent when a player has no permission to change settings of a portal.
+settings_restricted: "§cYou have no permission to change the settings of this portal!"
+# This message is sent when a player has no permission to change settings of a portal.
+select_target_restricted: "§cYou have no permission to select a target for this portal!"
 # This message is sent when the selected boundary instersects an existing portal.
 intersects_existing_portal: "§cThe portal instersects another portal!"
 

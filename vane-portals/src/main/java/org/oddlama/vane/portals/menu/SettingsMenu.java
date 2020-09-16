@@ -81,6 +81,13 @@ public class SettingsMenu extends ModuleComponent<Portals> {
 			menu.close(player);
 
 			get_module().menus.enter_name_menu.create(player, portal.name(), (player2, name) -> {
+				final var settings_event = new PortalChangeSettingsEvent(player2, portal, false);
+				get_module().getServer().getPluginManager().callEvent(settings_event);
+				if (settings_event.isCancelled()) {
+					get_module().lang_settings_restricted.send(player2);
+					return ClickResult.ERROR;
+				}
+
 				portal.name(name);
 
 				// Update portal icons to reflect new name
@@ -103,11 +110,18 @@ public class SettingsMenu extends ModuleComponent<Portals> {
 		return new MenuItem(1, item_select_icon.item(), (player, menu, self) -> {
 			menu.close(player);
 			MenuFactory.item_selector(get_context(), player, lang_select_icon_title.str(), portal.icon(), true, (player2, item) -> {
-				// TODO permission
+				final var settings_event = new PortalChangeSettingsEvent(player2, portal, false);
+				get_module().getServer().getPluginManager().callEvent(settings_event);
+				if (settings_event.isCancelled()) {
+					get_module().lang_settings_restricted.send(player2);
+					return ClickResult.ERROR;
+				}
+
 				portal.icon(item);
 				get_module().update_portal_icon(portal);
 				mark_persistent_storage_dirty();
 				menu.open(player2);
+				return ClickResult.SUCCESS;
 			}, player2 -> {
 				menu.open(player2);
 			}).open(player);
@@ -117,6 +131,13 @@ public class SettingsMenu extends ModuleComponent<Portals> {
 
 	private MenuWidget menu_item_select_style(final Portal portal) {
 		return new MenuItem(2, item_select_style.item(), (player, menu, self) -> {
+			final var settings_event = new PortalChangeSettingsEvent(player, portal, false);
+			get_module().getServer().getPluginManager().callEvent(settings_event);
+			if (settings_event.isCancelled()) {
+				get_module().lang_settings_restricted.send(player);
+				return ClickResult.ERROR;
+			}
+
 			menu.close(player);
 			get_module().menus.style_menu.create(portal, player, menu).open(player);
 			return ClickResult.SUCCESS;
@@ -127,6 +148,13 @@ public class SettingsMenu extends ModuleComponent<Portals> {
 		return new MenuItem(5, null, (player, menu, self, type, action) -> {
 			if (!Menu.is_left_or_right_click(type, action)) {
 				return ClickResult.INVALID_CLICK;
+			}
+
+			final var settings_event = new PortalChangeSettingsEvent(player, portal, false);
+			get_module().getServer().getPluginManager().callEvent(settings_event);
+			if (settings_event.isCancelled()) {
+				get_module().lang_settings_restricted.send(player);
+				return ClickResult.ERROR;
 			}
 
 			portal.visibility(type == ClickType.RIGHT ? portal.visibility().prev() : portal.visibility().next());
@@ -148,6 +176,13 @@ public class SettingsMenu extends ModuleComponent<Portals> {
 
 	private MenuWidget menu_item_target_lock(final Portal portal) {
 		return new MenuItem(6, null, (player, menu, self) -> {
+			final var settings_event = new PortalChangeSettingsEvent(player, portal, false);
+			get_module().getServer().getPluginManager().callEvent(settings_event);
+			if (settings_event.isCancelled()) {
+				get_module().lang_settings_restricted.send(player);
+				return ClickResult.ERROR;
+			}
+
 			portal.target_locked(!portal.target_locked());
 			mark_persistent_storage_dirty();
 			menu.update();

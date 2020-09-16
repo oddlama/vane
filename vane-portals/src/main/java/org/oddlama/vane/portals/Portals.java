@@ -145,6 +145,8 @@ public class Portals extends Module<Portals> {
 
 	@LangMessage public TranslatedMessage lang_unlink_restricted;
 	@LangMessage public TranslatedMessage lang_destroy_restricted;
+	@LangMessage public TranslatedMessage lang_settings_restricted;
+	@LangMessage public TranslatedMessage lang_select_target_restricted;
 
 	// Primary storage for all portals (portal_id → portal)
 	@Persistent

@@ -6,16 +6,19 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.oddlama.vane.portals.portal.Portal;
+import org.jetbrains.annotations.Nullable;
 
 public class PortalSelectTargetEvent extends PortalEvent {
 	private static final HandlerList handlers = new HandlerList();
 	private Player player;
 	private Portal portal;
+	private Portal target;
 	private boolean check_only;
 
-	public PortalSelectTargetEvent(final Player player, final Portal portal, boolean check_only) {
+	public PortalSelectTargetEvent(final Player player, final Portal portal, final Portal target, boolean check_only) {
 		this.player = player;
 		this.portal = portal;
+		this.target = target;
 		this.check_only = check_only;
 	}
 
@@ -25,6 +28,10 @@ public class PortalSelectTargetEvent extends PortalEvent {
 
 	public Portal getPortal() {
 		return portal;
+	}
+
+	public @Nullable Portal getTarget() {
+		return target;
 	}
 
 	public boolean checkOnly() {

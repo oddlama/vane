@@ -68,7 +68,7 @@ public class ConsoleMenu extends ModuleComponent<Portals> {
 		final var console_menu = new Menu(get_context(), Bukkit.createInventory(null, columns, title));
 
 		// Check if target selection would be allowed
-		final var select_target_event = new PortalSelectTargetEvent(player, portal, true);
+		final var select_target_event = new PortalSelectTargetEvent(player, portal, null, true);
 		get_module().getServer().getPluginManager().callEvent(select_target_event);
 		if (!select_target_event.isCancelled()) {
 			console_menu.add(menu_item_select_target(portal));
@@ -101,6 +101,13 @@ public class ConsoleMenu extends ModuleComponent<Portals> {
 
 	private MenuWidget menu_item_settings(final Portal portal, final Block console) {
 		return new MenuItem(0, item_settings.item(), (player, menu, self) -> {
+			final var settings_event = new PortalChangeSettingsEvent(player, portal, false);
+			get_module().getServer().getPluginManager().callEvent(settings_event);
+			if (settings_event.isCancelled()) {
+				get_module().lang_settings_restricted.send(player);
+				return ClickResult.ERROR;
+			}
+
 			menu.close(player);
 			get_module().menus.settings_menu.create(portal, player, console).open(player);
 			return ClickResult.SUCCESS;
@@ -136,6 +143,14 @@ public class ConsoleMenu extends ModuleComponent<Portals> {
 					filter,
 					(player2, m, t) -> {
 						m.close(player2);
+
+						final var select_target_event = new PortalSelectTargetEvent(player, portal, t, false);
+						get_module().getServer().getPluginManager().callEvent(select_target_event);
+						if (select_target_event.isCancelled()) {
+							get_module().lang_select_target_restricted.send(player2);
+							return ClickResult.ERROR;
+						}
+
 						portal.target_id(t.id());
 
 						// Update portal block to reflect new target on consoles
@@ -169,16 +184,17 @@ public class ConsoleMenu extends ModuleComponent<Portals> {
 					get_module().getServer().getPluginManager().callEvent(event);
 					if (event.isCancelled()) {
 						get_module().lang_unlink_restricted.send(player2);
-						return;
+						return ClickResult.ERROR;
 					}
 
 					final var portal_block = portal.portal_block_for(console);
 					if (portal_block == null) {
 						// Console was likely already removed by another player
-						return;
+						return ClickResult.ERROR;
 					}
 
 					get_module().remove_portal_block(portal, portal_block);
+					return ClickResult.SUCCESS;
 				}, item_unlink_console_confirm_cancel.item(), (player2) -> {
 					menu.open(player2);
 				})
@@ -197,10 +213,11 @@ public class ConsoleMenu extends ModuleComponent<Portals> {
 					get_module().getServer().getPluginManager().callEvent(event);
 					if (event.isCancelled()) {
 						get_module().lang_destroy_restricted.send(player2);
-						return;
+						return ClickResult.ERROR;
 					}
 
 					get_module().remove_portal(portal);
+					return ClickResult.SUCCESS;
 				}, item_destroy_portal_confirm_cancel.item(), (player2) -> {
 					menu.open(player2);
 				})

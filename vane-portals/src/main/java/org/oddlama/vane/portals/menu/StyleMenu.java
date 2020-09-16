@@ -162,6 +162,7 @@ public class StyleMenu extends ModuleComponent<Portals> {
 					style_container.style.set_material(active, type, item.getType(), true);
 				}
 				menu.open(player2);
+				return ClickResult.SUCCESS;
 			}, player2 -> {
 				menu.open(player2);
 			}, item -> {
@@ -190,7 +191,13 @@ public class StyleMenu extends ModuleComponent<Portals> {
 	private MenuWidget menu_item_accept(final Portal portal, final StyleContainer style_container, final Menu previous) {
 		return new MenuItem(2 * columns + 0, item_accept.item(), (player, menu, self) -> {
 			menu.close(player);
-			// TODO permission
+
+			final var settings_event = new PortalChangeSettingsEvent(player, portal, false);
+			get_module().getServer().getPluginManager().callEvent(settings_event);
+			if (settings_event.isCancelled()) {
+				return ClickResult.ERROR;
+			}
+
 			portal.style(style_container.style);
 			portal.update_blocks(get_module());
 			mark_persistent_storage_dirty();
