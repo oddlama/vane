@@ -1,12 +1,11 @@
 package org.oddlama.vane.portals.event;
 
-import java.util.List;
-
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
-import org.oddlama.vane.portals.portal.Portal;
+
 import org.jetbrains.annotations.Nullable;
+
+import org.oddlama.vane.portals.portal.Portal;
 
 public class PortalSelectTargetEvent extends PortalEvent {
 	private static final HandlerList handlers = new HandlerList();

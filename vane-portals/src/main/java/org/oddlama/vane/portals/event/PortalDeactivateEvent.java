@@ -1,11 +1,10 @@
 package org.oddlama.vane.portals.event;
 
-import java.util.UUID;
-
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
+
 import org.jetbrains.annotations.Nullable;
+
 import org.oddlama.vane.portals.portal.Portal;
 
 public class PortalDeactivateEvent extends PortalEvent {

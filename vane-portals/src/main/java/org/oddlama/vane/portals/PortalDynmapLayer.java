@@ -1,35 +1,22 @@
 package org.oddlama.vane.portals;
 
-import org.oddlama.vane.external.dynmap.markers.Marker;
-import org.oddlama.vane.external.dynmap.markers.MarkerIcon;
-import org.oddlama.vane.external.dynmap.markers.MarkerSet;
-import org.oddlama.vane.external.dynmap.DynmapAPI;
-import org.oddlama.vane.external.dynmap.markers.MarkerAPI;
-
-import static org.oddlama.vane.util.PlayerUtil.swing_arm;
-
-import java.util.logging.Level;
-import org.bukkit.Material;
-import java.util.UUID;
 import java.util.HashSet;
-import org.oddlama.vane.portals.portal.Portal;
-import org.bukkit.block.BlockFace;
-import org.bukkit.block.data.type.Switch;
-import org.bukkit.event.Event;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockRedstoneEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
+import java.util.UUID;
+import java.util.logging.Level;
 
-import org.oddlama.vane.core.module.ModuleComponent;
-import org.oddlama.vane.annotation.config.ConfigInt;
 import org.oddlama.vane.annotation.config.ConfigBoolean;
+import org.oddlama.vane.annotation.config.ConfigInt;
 import org.oddlama.vane.annotation.config.ConfigString;
 import org.oddlama.vane.annotation.lang.LangMessage;
-import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.lang.TranslatedMessage;
-import org.oddlama.vane.portals.portal.PortalBlock;
+import org.oddlama.vane.core.module.Context;
+import org.oddlama.vane.core.module.ModuleComponent;
+import org.oddlama.vane.external.dynmap.DynmapAPI;
+import org.oddlama.vane.external.dynmap.markers.Marker;
+import org.oddlama.vane.external.dynmap.markers.MarkerAPI;
+import org.oddlama.vane.external.dynmap.markers.MarkerIcon;
+import org.oddlama.vane.external.dynmap.markers.MarkerSet;
+import org.oddlama.vane.portals.portal.Portal;
 
 public class PortalDynmapLayer extends ModuleComponent<Portals> {
 	private static final String LAYER_ID = "vane_portals.portals";

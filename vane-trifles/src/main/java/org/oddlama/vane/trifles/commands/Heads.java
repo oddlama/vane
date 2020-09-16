@@ -1,36 +1,20 @@
 package org.oddlama.vane.trifles.commands;
 
-import static org.oddlama.vane.util.PlayerUtil.take_items;
 import static org.oddlama.vane.util.PlayerUtil.give_items;
-import java.util.ArrayList;
+import static org.oddlama.vane.util.PlayerUtil.take_items;
 
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import org.oddlama.vane.annotation.command.Name;
-import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.annotation.config.ConfigInt;
 import org.oddlama.vane.annotation.config.ConfigMaterial;
-import org.oddlama.vane.trifles.Trifles;
 import org.oddlama.vane.core.command.Command;
-import org.oddlama.vane.core.lang.TranslatedMessage;
-import org.oddlama.vane.core.module.Context;
-import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.menu.Menu.ClickResult;
-import org.oddlama.vane.core.menu.Menu;
 import org.oddlama.vane.core.menu.MenuFactory;
-import org.oddlama.vane.core.menu.MenuItem;
-import org.oddlama.vane.core.menu.MenuWidget;
-import org.oddlama.vane.core.material.HeadMaterial;
-import org.oddlama.vane.core.material.HeadMaterialLibrary;
-import org.oddlama.vane.core.menu.Filter;
 import org.oddlama.vane.core.module.Context;
-import org.oddlama.vane.core.module.ModuleComponent;
-import org.oddlama.vane.annotation.lang.LangMessage;
-import org.oddlama.vane.core.config.TranslatedItemStack;
-import org.bukkit.inventory.ItemStack;
-import org.oddlama.vane.core.module.Module;
+import org.oddlama.vane.trifles.Trifles;
 
 @Name("heads")
 public class Heads extends Command<Trifles> {

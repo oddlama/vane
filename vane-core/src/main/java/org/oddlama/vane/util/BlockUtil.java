@@ -4,7 +4,6 @@ import static org.oddlama.vane.util.MaterialUtil.is_replaceable_grass;
 import static org.oddlama.vane.util.MaterialUtil.is_tillable;
 
 import java.util.ArrayList;
-import org.bukkit.block.Skull;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -15,6 +14,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.Skull;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.BlockVector;

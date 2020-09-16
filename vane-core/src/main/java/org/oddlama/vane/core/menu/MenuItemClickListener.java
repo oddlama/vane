@@ -1,12 +1,10 @@
 package org.oddlama.vane.core.menu;
 
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.InventoryAction;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 import org.oddlama.vane.core.functional.Function3;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.oddlama.vane.core.functional.Function4;
 import org.oddlama.vane.core.menu.Menu.ClickResult;
 

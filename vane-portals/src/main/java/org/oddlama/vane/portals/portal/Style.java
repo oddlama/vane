@@ -2,7 +2,6 @@ package org.oddlama.vane.portals.portal;
 
 import static org.oddlama.vane.core.persistent.PersistentSerializer.from_json;
 import static org.oddlama.vane.core.persistent.PersistentSerializer.to_json;
-
 import static org.oddlama.vane.util.Util.namespaced_key;
 
 import java.io.IOException;
@@ -12,19 +11,9 @@ import java.util.Map;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 
-import org.bukkit.Location;
-import org.bukkit.NamespacedKey;
-import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import org.oddlama.vane.external.json.JSONObject;
-import org.oddlama.vane.portals.Portals;
-import org.oddlama.vane.portals.event.PortalOpenConsoleEvent;
-import org.oddlama.vane.util.LazyLocation;
 
 public class Style {
 	public static Object serialize(@NotNull final Object o) throws IOException {

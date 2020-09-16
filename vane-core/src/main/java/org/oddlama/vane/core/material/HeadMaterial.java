@@ -4,9 +4,9 @@ import static org.oddlama.vane.util.ItemUtil.skull_with_texture;
 import static org.oddlama.vane.util.Util.namespaced_key;
 
 import java.util.ArrayList;
-import java.util.Set;
-import java.util.List;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;

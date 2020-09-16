@@ -14,7 +14,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.inventory.ShapelessRecipe;
 
 import org.oddlama.vane.annotation.config.ConfigInt;
 import org.oddlama.vane.annotation.item.VaneItem;

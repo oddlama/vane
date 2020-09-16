@@ -1,50 +1,17 @@
 package org.oddlama.vane.core.menu;
 
-import static org.oddlama.vane.util.Nms.player_handle;
-
-import net.minecraft.server.v1_16_R2.BlockPosition;
-import net.minecraft.server.v1_16_R2.ChatMessage;
-import net.minecraft.server.v1_16_R2.ContainerAccess;
-import net.minecraft.server.v1_16_R2.ContainerAnvil;
-import java.util.Objects;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
 
-import org.oddlama.vane.annotation.lang.LangMessage;
-import org.oddlama.vane.core.config.TranslatedItemStack;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.oddlama.vane.core.lang.TranslatedMessage;
-import org.oddlama.vane.core.menu.Menu.ClickResult;
-import org.oddlama.vane.core.command.Command;
-import org.oddlama.vane.core.lang.TranslatedMessage;
-import org.oddlama.vane.core.module.Context;
-import org.oddlama.vane.core.lang.TranslatedMessage;
+
+import org.oddlama.vane.core.material.HeadMaterial;
+import org.oddlama.vane.core.menu.Filter;
 import org.oddlama.vane.core.menu.Menu.ClickResult;
 import org.oddlama.vane.core.menu.Menu;
 import org.oddlama.vane.core.menu.MenuFactory;
-import org.oddlama.vane.core.menu.MenuItem;
-import org.oddlama.vane.core.menu.MenuWidget;
-import org.oddlama.vane.core.material.HeadMaterial;
-import org.oddlama.vane.core.material.HeadMaterialLibrary;
-import org.oddlama.vane.core.menu.Filter;
-import org.oddlama.vane.core.module.Context;
-import org.oddlama.vane.core.module.ModuleComponent;
-import org.oddlama.vane.core.module.Context;
-import org.oddlama.vane.core.module.ModuleComponent;
-import net.minecraft.server.v1_16_R2.EntityHuman;
-import net.minecraft.server.v1_16_R2.EntityPlayer;
-import net.minecraft.server.v1_16_R2.PacketPlayOutOpenWindow;
-
-import org.bukkit.entity.Player;
-
-import java.util.List;
-import java.util.Set;
-import java.util.HashSet;
-import org.oddlama.vane.core.functional.Function2;
 import org.oddlama.vane.core.module.Context;
 
 public class HeadFilter implements Filter<HeadMaterial> {

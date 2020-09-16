@@ -4,8 +4,8 @@ import static org.oddlama.vane.util.PlayerUtil.swing_arm;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Set;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -18,7 +18,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.inventory.ItemStack;
 
 import org.oddlama.vane.annotation.config.ConfigInt;
 import org.oddlama.vane.annotation.config.ConfigMaterial;
@@ -26,7 +25,6 @@ import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.menu.Menu.ClickResult;
-import org.oddlama.vane.core.menu.MenuFactory;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.portals.event.PortalConstructEvent;
 import org.oddlama.vane.portals.event.PortalLinkConsoleEvent;

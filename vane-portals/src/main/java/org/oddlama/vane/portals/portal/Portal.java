@@ -1,32 +1,31 @@
 package org.oddlama.vane.portals.portal;
 
-import org.oddlama.vane.util.BlockUtil;
-import static org.oddlama.vane.util.BlockUtil.adjacent_blocks_3d;
 import static org.oddlama.vane.core.persistent.PersistentSerializer.from_json;
 import static org.oddlama.vane.core.persistent.PersistentSerializer.to_json;
+import static org.oddlama.vane.util.BlockUtil.adjacent_blocks_3d;
 
 import java.io.IOException;
-import org.bukkit.block.BlockFace;
-import java.util.Comparator;
-import org.bukkit.block.data.type.Switch;
-import java.util.Arrays;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import org.bukkit.block.EndGateway;
-import org.bukkit.World;
-import org.bukkit.Material;
-import org.bukkit.util.Vector;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
+import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.EndGateway;
+import org.bukkit.block.data.type.Switch;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.Vector;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -36,6 +35,7 @@ import org.oddlama.vane.portals.Portals;
 import org.oddlama.vane.portals.event.PortalActivateEvent;
 import org.oddlama.vane.portals.event.PortalDeactivateEvent;
 import org.oddlama.vane.portals.event.PortalOpenConsoleEvent;
+import org.oddlama.vane.util.BlockUtil;
 import org.oddlama.vane.util.LazyLocation;
 
 public class Portal {

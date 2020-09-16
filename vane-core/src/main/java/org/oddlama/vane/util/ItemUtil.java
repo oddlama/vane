@@ -13,9 +13,9 @@ import java.util.stream.Collectors;
 
 import com.destroystokyo.paper.profile.ProfileProperty;
 
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.ChatColor;
 
 import net.minecraft.server.v1_16_R2.Item;
 

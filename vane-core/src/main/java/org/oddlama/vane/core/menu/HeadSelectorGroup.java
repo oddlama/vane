@@ -1,25 +1,13 @@
 package org.oddlama.vane.core.menu;
 
-import java.util.List;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.oddlama.vane.annotation.lang.LangMessage;
-import org.oddlama.vane.core.lang.TranslatedMessage;
-import org.oddlama.vane.core.config.TranslatedItemStack;
-import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.InventoryAction;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.entity.Player;
 
-import org.oddlama.vane.core.functional.Consumer1;
-import org.oddlama.vane.core.functional.Function1;
-import org.oddlama.vane.core.functional.Function5;
-import org.oddlama.vane.core.menu.Menu.ClickResult;
+import org.oddlama.vane.annotation.lang.LangMessage;
+import org.oddlama.vane.core.Core;
+import org.oddlama.vane.core.config.TranslatedItemStack;
+import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.ModuleComponent;
-import org.oddlama.vane.core.Core;
 
 public class HeadSelectorGroup extends ModuleComponent<Core> {
 	@LangMessage public TranslatedMessage lang_title;

@@ -11,13 +11,13 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
-import org.oddlama.vane.core.functional.Consumer2;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 
 import org.oddlama.vane.core.Core;
 import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.config.TranslatedItemStack;
+import org.oddlama.vane.core.functional.Consumer2;
 import org.oddlama.vane.core.module.Context;
 
 public class MenuManager extends Listener<Core> {

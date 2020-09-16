@@ -2,10 +2,10 @@ package org.oddlama.vane.util;
 
 import static org.oddlama.vane.util.BlockUtil.drop_naturally;
 
-import java.util.Arrays;
 import java.util.ArrayList;
-import java.util.Map;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;

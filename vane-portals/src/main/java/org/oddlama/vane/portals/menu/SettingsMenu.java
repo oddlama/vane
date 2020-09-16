@@ -4,10 +4,10 @@ import static org.oddlama.vane.util.Util.namespaced_key;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
+import org.bukkit.inventory.ItemStack;
 
 import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.core.config.TranslatedItemStack;
@@ -20,11 +20,8 @@ import org.oddlama.vane.core.menu.MenuWidget;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.ModuleComponent;
 import org.oddlama.vane.portals.Portals;
-import org.oddlama.vane.portals.portal.Portal;
 import org.oddlama.vane.portals.event.PortalChangeSettingsEvent;
-import org.oddlama.vane.portals.event.PortalDestroyEvent;
-import org.oddlama.vane.portals.event.PortalUnlinkConsoleEvent;
-import org.oddlama.vane.portals.event.PortalSelectTargetEvent;
+import org.oddlama.vane.portals.portal.Portal;
 
 public class SettingsMenu extends ModuleComponent<Portals> {
 	@LangMessage public TranslatedMessage lang_title;

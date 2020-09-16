@@ -1,31 +1,19 @@
 package org.oddlama.vane.portals.menu;
 
-import static org.oddlama.vane.util.Util.namespaced_key;
-
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import org.oddlama.vane.annotation.config.ConfigMaterial;
 import org.oddlama.vane.annotation.lang.LangMessage;
-import org.oddlama.vane.core.config.TranslatedItemStack;
-import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.functional.Function2;
+import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.menu.Menu.ClickResult;
 import org.oddlama.vane.core.menu.Menu;
 import org.oddlama.vane.core.menu.MenuFactory;
-import org.oddlama.vane.core.menu.MenuItem;
-import org.oddlama.vane.core.menu.MenuWidget;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.ModuleComponent;
 import org.oddlama.vane.portals.Portals;
-import org.oddlama.vane.portals.portal.Portal;
-import org.oddlama.vane.portals.event.PortalChangeSettingsEvent;
-import org.oddlama.vane.annotation.config.ConfigMaterial;
-import org.oddlama.vane.portals.event.PortalDestroyEvent;
-import org.oddlama.vane.portals.event.PortalUnlinkConsoleEvent;
-import org.oddlama.vane.portals.event.PortalSelectTargetEvent;
 
 public class EnterNameMenu extends ModuleComponent<Portals> {
 	@LangMessage public TranslatedMessage lang_title;
