@@ -18,4 +18,222 @@ version: 1
 # language code (ISO 639) and the country code (ISO 3166).
 resource_pack_lang_code: 'de_de'
 
-# TODO
+select_boundary_now: "§6Bitte rechtsklicke jetzt den Portalrahmen"
+console_invalid_type: "§cDie Konsole hat das falsche Material!"
+console_different_world: "§cDie Konsole muss sich in der selben Welt wie das Portal befinden"
+console_too_far_away: "§cDie Konsole ist zu weit vom Portal entfernt"
+console_linked: "§aKonsole verbunden"
+
+no_boundary_found: "§cEs wurde kein Portalrahmen gefunden!"
+no_origin: "§cDas Portal hat keinen Hauptblock!"
+multiple_origins: "§cDas Portal kann nicht mehrere Hauptblöcke haben!"
+no_portal_block_above_origin: "§cÜber dem Hauptblock muss Portalbereich sein!"
+not_enough_portal_blocks_above_origin: "§cÜber dem Hauptblock müssen mindestens 3 Blöcke Portalbereich sein!"
+too_large: "§cDas Portal ist zu groß in %1$s§c-Richtung!"
+too_small_spawn: "§cDer Spawn-Bereich ist zu klein in %1$s§c-Richtung!"
+too_many_portal_area_blocks: "§cDer Portalbereich ist zu groß! %1$s§6/%2$s§c Blöcken"
+portal_area_obstructed: "§cDer Portalbereich ist versperrt!"
+intersects_existing_portal: "§cDer Portalrahmen schneidet ein bereits vorhandenes Portal!"
+
+build_restricted: "§cDu hast keine Berechtigung, hier ein Portal zu bauen!"
+link_restricted: "§cDu hast keine Berechtigung, eine Konsole mit diesem Portal zu verbinden!"
+
+target_already_connected: "§6Das Zielportal ist bereits mit einem anderen Portal verbunden!"
+source_use_restricted: "§cDu hast keine Berechtigung, dieses Portal zu benutzen!"
+target_use_restricted: "§cDu hast keine Berechtigung, das Zielportal zu benutzen!"
+
+console_display_active: "§6§l>§r %1$s §6§l<§r"
+console_display_inactive: "§8§l>§r %1$s §8§l<§r"
+console_no_target: "§k?"
+
+unlink_restricted: "§cDu hast keine Berechtigung, eine Konsole von diesem Portal zu entfernen!"
+destroy_restricted: "§cDu hast keine Berechtigung, dieses Portal zu zerstören!"
+settings_restricted: "§cDu hast keine Berechtigung, die Einstellungen dieses Portals zu verändern!"
+select_target_restricted: "§cDu hast keine Berechtigung, ein Ziel für dieses Portal auszuwählen!"
+
+dynmap:
+  layer_label: "Portale"
+  marker_label: "%1$s"
+
+menus:
+  enter_name:
+    title: "§8§lPortalnamen eingeben"
+
+  settings:
+    title: "§8§lEinstellungen: %1$s"
+    select_icon_title: "§8§lIcon auswählen"
+
+    rename:
+      name: "§b§lUmbenennen"
+      lore: []
+
+    select_icon:
+      name: "§b§lIcon auswählen"
+      lore: []
+
+    select_style:
+      name: "§b§lStil auswählen"
+      lore: []
+
+    visibility_public:
+      name: "§b§lSichtbarkeit umschalten"
+      lore: ["", "§bAktuell: §a§lÖffentlich§r"]
+
+    visibility_group:
+      name: "§b§lSichtbarkeit umschalten"
+      lore: ["", "§bAktuell: §e§lGruppe§r"]
+
+    visibility_private:
+      name: "§b§lSichtbarkeit umschalten"
+      lore: ["", "§bAktuell: §c§lPrivat§r"]
+
+    target_lock_on:
+      name: "§b§lZielsperre umschalten"
+      lore: ["", "§bAktuell: §c§lGesperrt§r"]
+
+    target_lock_off:
+      name: "§b§lZielsperre umschalten"
+      lore: ["", "§bAktuell: §c§lNicht gesperrt§r"]
+
+    back:
+      name: "§6↩ §lZurück"
+      lore: []
+
+  style:
+    title: "§8§lStil für: %1$s"
+    select_block_console_active_title:       "Aktive Konsole auswählen."
+    select_block_origin_active_title:        "Aktiven Hauptblock auswählen."
+    select_block_portal_active_title:        "Aktiven Portalbereich auswählen."
+    select_block_boundardy_1_active_title:   "Aktiven Portalrahmen Variante 1 auswählen."
+    select_block_boundardy_2_active_title:   "Aktiven Portalrahmen Variante 2 auswählen."
+    select_block_boundardy_3_active_title:   "Aktiven Portalrahmen Variante 3 auswählen."
+    select_block_boundardy_4_active_title:   "Aktiven Portalrahmen Variante 4 auswählen."
+    select_block_boundardy_5_active_title:   "Aktiven Portalrahmen Variante 5 auswählen."
+    select_block_console_inactive_title:     "Inaktive Konsole auswählen."
+    select_block_origin_inactive_title:      "Inaktiven Hauptblock auswählen."
+    select_block_portal_inactive_title:      "Inaktiven Portalbereich auswählen."
+    select_block_boundardy_1_inactive_title: "Inaktiven Portalrahmen Variante 1 auswählen."
+    select_block_boundardy_2_inactive_title: "Inaktiven Portalrahmen Variante 2 auswählen."
+    select_block_boundardy_3_inactive_title: "Inaktiven Portalrahmen Variante 3 auswählen."
+    select_block_boundardy_4_inactive_title: "Inaktiven Portalrahmen Variante 4 auswählen."
+    select_block_boundardy_5_inactive_title: "Inaktiven Portalrahmen Variante 5 auswählen."
+
+    block_console_active:
+      name: "§b§lKonsole §a(aktiv)"
+      lore: []
+    block_origin_active:
+      name: "§b§lHauptblock §a(aktiv)"
+      lore: []
+    block_portal_active:
+      name: "§b§lPortalbereich §a(aktiv)"
+      lore: []
+    block_boundardy_1_active:
+      name: "§b§lPortalrahmen §a(aktiv)"
+      lore: ["", "§aVariante 1"]
+    block_boundardy_2_active:
+      name: "§b§lPortalrahmen §a(aktiv)"
+      lore: ["", "§aVariante 2"]
+    block_boundardy_3_active:
+      name: "§b§lPortalrahmen §a(aktiv)"
+      lore: ["", "§aVariante 3"]
+    block_boundardy_4_active:
+      name: "§b§lPortalrahmen §a(aktiv)"
+      lore: ["", "§aVariante 4"]
+    block_boundardy_5_active:
+      name: "§b§lPortalrahmen §a(aktiv)"
+      lore: ["", "§aVariante 5"]
+    block_console_inactive:
+      name: "§b§lKonsole §e(inaktiv)"
+      lore: []
+    block_origin_inactive:
+      name: "§b§lHauptblock §e(inaktiv)"
+      lore: []
+    block_portal_inactive:
+      name: "§b§lPortalbereich §e(inaktiv)"
+      lore: []
+    block_boundardy_1_inactive:
+      name: "§b§lPortalrahmen §e(inaktiv)"
+      lore: ["", "§aVariante 1"]
+    block_boundardy_2_inactive:
+      name: "§b§lPortalrahmen §e(inaktiv)"
+      lore: ["", "§aVariante 2"]
+    block_boundardy_3_inactive:
+      name: "§b§lPortalrahmen §e(inaktiv)"
+      lore: ["", "§aVariante 3"]
+    block_boundardy_4_inactive:
+      name: "§b§lPortalrahmen §e(inaktiv)"
+      lore: ["", "§aVariante 4"]
+    block_boundardy_5_inactive:
+      name: "§b§lPortalrahmen §e(inaktiv)"
+      lore: ["", "§aVariante 5"]
+
+    accept:
+      name: "§a§lStil anwenden"
+      lore: []
+
+    reset:
+      name: "§6§lÄnderungen zurücksetzen"
+      lore: []
+
+    select_style_title: "§8§lStil auswählen"
+    filter_styles_title: "§8§lStile filtern"
+    select_defined:
+      name: "§b§lVordefinierten Stil auswählen"
+      lore: []
+    select_style:
+      name: "%1$s"
+      lore: []
+
+    cancel:
+      name: "§6↩ §lVerwerfen"
+      lore: []
+
+  console:
+    title: "§8§lPortal: %1$s"
+
+    settings:
+      name: "§b§lEinstellungen"
+      lore: []
+
+    select_target:
+      name: "§d§lZiel auswählen"
+      lore:
+        - ""
+        - "§7Aktuell: %1$s"
+    select_target_locked:
+      name: "§d§lZiel auswählen"
+      lore:
+        - ""
+        - "§7Aktuell: %1$s"
+        - "§8Zielauswahl ist aktuell §6§lGESPERRT§r§8!"
+
+    select_target_title: "§8§lZielportal auswählen"
+    filter_portals_title: "§8§lPortale filtern"
+    select_target_portal:
+      name: "%1$s"
+      lore:
+        - ""
+        - "§7Distanz: %2$s§6m"
+        - "§7Welt: %3$s"
+
+    unlink_console:
+      name: "§c§lKonsole Entfernen"
+      lore: []
+    unlink_console_confirm_title: "§c§lKonsole entfernen?"
+    unlink_console_confirm_accept:
+      name: "§c§lKONSOLE ENTFERNEN"
+      lore: []
+    unlink_console_confirm_cancel:
+      name: "§a§lAbbrechen"
+      lore: []
+
+    destroy_portal:
+      name: "§c§lPortal Zerstören"
+      lore: []
+    destroy_portal_confirm_title: "§c§lPortal zerstören?"
+    destroy_portal_confirm_accept:
+      name: "§c§lPORTAL ZERSTÖREN"
+      lore: []
+    destroy_portal_confirm_cancel:
+      name: "§a§lAbbrechen"
+      lore: []

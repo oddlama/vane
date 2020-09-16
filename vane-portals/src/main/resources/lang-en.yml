@@ -20,7 +20,7 @@ resource_pack_lang_code: 'en_us'
 
 # This message is sent when a new portal console has been selected
 # and the player may now select a boundary block to construct a portal.
-select_boundary_now: "§6Click the portal boundary now"
+select_boundary_now: "§6Right-click the portal boundary now"
 # This message is sent when the selected console block is not of the correct
 # type anymore. This can happen when a player replaces the console block
 # while it is selected as a pending console.
@@ -331,7 +331,7 @@ menus:
       name: "§c§lUnlink Console"
       lore: []
     # The title for the unlink confirmation dialog.
-    unlink_console_confirm_title: "§c§lUnlink Console"
+    unlink_console_confirm_title: "§c§lUnlink console?"
     # The item to accept unlinking.
     unlink_console_confirm_accept:
       name: "§c§lUNLINK CONSOLE"
@@ -346,7 +346,7 @@ menus:
       name: "§c§lDestroy Portal"
       lore: []
     # The title for the destroy portal confirmation dialog.
-    destroy_portal_confirm_title: "§c§lDestroy Portal"
+    destroy_portal_confirm_title: "§c§lDestroy portal?"
     # The item to accept destroying.
     destroy_portal_confirm_accept:
       name: "§c§lDESTROY PORTAL"
