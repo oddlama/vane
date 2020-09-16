@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 import com.destroystokyo.paper.profile.ProfileProperty;
 
 import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.TextComponent;
 
 import net.minecraft.server.v1_16_R2.Item;
 
@@ -218,7 +219,9 @@ public class ItemUtil {
 
 		final var item = new ItemStack(Material.PLAYER_HEAD);
 		final var meta = (SkullMeta)item.getItemMeta();
-		meta.setDisplayName(name);
+		final var name_component = new TextComponent(name);
+		name_component.setItalic(false);
+		meta.setDisplayNameComponent(new BaseComponent[] { name_component });
 		meta.setPlayerProfile(profile);
 		item.setItemMeta(meta);
 		return item;
