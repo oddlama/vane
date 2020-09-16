@@ -218,10 +218,6 @@ public class GenericSelector<T, F extends Filter<T>> {
 				return ClickResult.IGNORE;
 			}
 
-			if (!Menu.is_left_click(event)) {
-				return ClickResult.INVALID_CLICK;
-			}
-
 			final var idx = generic_selector.page * generic_selector.page_size + (slot - first_slot);
 			return generic_selector.on_click.apply(player, menu, generic_selector.filtered_things.get(idx), event);
 		}

@@ -4,6 +4,7 @@ import static org.oddlama.vane.util.MaterialUtil.is_replaceable_grass;
 import static org.oddlama.vane.util.MaterialUtil.is_tillable;
 
 import java.util.ArrayList;
+import org.bukkit.block.Skull;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -306,6 +307,17 @@ public class BlockUtil {
 		}
 
 		return ret;
+	}
+
+	public static String texture_from_skull(final Skull skull) {
+		final var profile = skull.getPlayerProfile();
+		for (final var property : profile.getProperties()) {
+			if ("textures".equals(property.getName())) {
+				return property.getValue();
+			}
+		}
+
+		return null;
 	}
 
 	public static class BlockVectorRadiusComparator implements Comparator<BlockVector> {

@@ -14,6 +14,7 @@ public class HeadMaterialLibrary {
 	private static final Map<NamespacedKey, HeadMaterial> registry = new HashMap<>();
 	private static final Map<String, List<HeadMaterial>> categories = new HashMap<>();
 	private static final Map<String, List<HeadMaterial>> tags = new HashMap<>();
+	private static final Map<String, HeadMaterial> by_texture = new HashMap<>();
 
 	public static void load(final String string) {
 		final var json = new JSONArray(string);
@@ -23,6 +24,7 @@ public class HeadMaterialLibrary {
 
 			// Add to registry
 			registry.put(mat.key(), mat);
+			by_texture.put(mat.texture(), mat);
 
 			// Add to category lookup
 			var category = categories.get(mat.category());
@@ -46,6 +48,10 @@ public class HeadMaterialLibrary {
 
 	public static HeadMaterial from(final NamespacedKey key) {
 		return registry.get(key);
+	}
+
+	public static HeadMaterial from_texture(final String base64_texture) {
+		return by_texture.get(base64_texture);
 	}
 
 	public static Collection<HeadMaterial> all() {

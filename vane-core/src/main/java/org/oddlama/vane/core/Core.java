@@ -2,6 +2,8 @@ package org.oddlama.vane.core;
 
 import static org.oddlama.vane.core.item.CustomItem.is_custom_item;
 import static org.oddlama.vane.util.MaterialUtil.is_tillable;
+import static org.oddlama.vane.util.BlockUtil.drop_naturally;
+import static org.oddlama.vane.util.BlockUtil.texture_from_skull;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,12 +17,14 @@ import com.destroystokyo.paper.MaterialTags;
 
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.block.Skull;
 import org.bukkit.Keyed;
 import org.bukkit.craftbukkit.libs.org.apache.commons.io.IOUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.inventory.PrepareSmithingEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
@@ -216,5 +220,29 @@ public class Core extends Module<Core> {
 		// Create new item
 		final var variant_to = item_lookup.custom_item.netherite_conversion_to();
 		event.setResult(CustomItem.modify_variant(item, variant_to));
+	}
+
+	// Restore correct head item from head library when broken
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void on_block_break(final BlockBreakEvent event) {
+		final var block = event.getBlock();
+		if (block.getType() != Material.PLAYER_HEAD) {
+			return;
+		}
+
+		final var skull = (Skull)block.getState();
+		final var texture = texture_from_skull(skull);
+		if (texture == null) {
+			return;
+		}
+
+		final var head_material = HeadMaterialLibrary.from_texture(texture);
+		if (head_material == null) {
+			return;
+		}
+
+		// Set to air and drop item
+		block.setType(Material.AIR);
+		drop_naturally(block, head_material.item());
 	}
 }
