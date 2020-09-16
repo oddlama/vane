@@ -10,6 +10,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityPortalEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
+import com.destroystokyo.paper.event.player.PlayerTeleportEndGatewayEvent;
 
 import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.module.Context;
@@ -43,6 +45,14 @@ public class PortalTeleporter extends Listener<Portals> {
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void on_entity_portal_event(final EntityPortalEvent event) {
 		if (cancel_portal_event(event.getEntity())) {
+			event.setCancelled(true);
+		}
+	}
+
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	public void on_player_teleport_event(final PlayerTeleportEndGatewayEvent event) {
+		final var block = event.getGateway().getBlock();
+		if (get_module().is_portal_block(block)) {
 			event.setCancelled(true);
 		}
 	}
