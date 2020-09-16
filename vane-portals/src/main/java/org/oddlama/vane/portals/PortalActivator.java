@@ -29,12 +29,8 @@ public class PortalActivator extends Listener<Portals> {
 			return;
 		}
 
-		final var block = event.getClickedBlock();
-		if (!get_module().portal_console_materials.contains(block.getType())) {
-			return;
-		}
-
 		// Abort if the table is not a console
+		final var block = event.getClickedBlock();
 		final var portal_block = get_module().portal_block_for(block);
 		if (portal_block == null || portal_block.type() != PortalBlock.Type.CONSOLE) {
 			return;
@@ -75,13 +71,8 @@ public class PortalActivator extends Listener<Portals> {
 			case FLOOR:   attached_face = BlockFace.DOWN; break;
 		}
 
-		// Check if the block could be a portal boundary or console
-		final var base = block.getRelative(attached_face);
-		if (!get_module().portal_boundary_materials.contains(base.getType()) && !get_module().portal_console_materials.contains(base.getType())) {
-			return;
-		}
-
 		// Find controlled portal
+		final var base = block.getRelative(attached_face);
 		final var portal = get_module().controlled_portal(base);
 		if (portal == null) {
 			return;
@@ -129,11 +120,6 @@ public class PortalActivator extends Listener<Portals> {
 		// Get the block it's pointing towards. (Opposite of block's facing for repeaters)
 		final var repeater = (Repeater)block.getBlockData();
 		final var into_block = block.getRelative(repeater.getFacing().getOppositeFace());
-
-		// Check if the block could be a portal boundary or console
-		if (!get_module().portal_boundary_materials.contains(into_block.getType()) && !get_module().portal_console_materials.contains(into_block.getType())) {
-			return;
-		}
 
 		// Find controlled portal
 	    final var portal = get_module().portal_for(into_block);

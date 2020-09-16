@@ -90,7 +90,7 @@ public class PortalConstructor extends Listener<Portals> {
 	@LangMessage public TranslatedMessage lang_source_use_restricted;
 	@LangMessage public TranslatedMessage lang_target_use_restricted;
 
-	private Set<Material> portal_boundary_materials_including_build_materials = new HashSet<>();
+	private Set<Material> portal_boundary_build_materials = new HashSet<>();
 
 	private HashMap<UUID, Block> pending_console = new HashMap<>();
 
@@ -100,16 +100,13 @@ public class PortalConstructor extends Listener<Portals> {
 
 	@Override
 	public void on_config_change() {
-		portal_boundary_materials_including_build_materials.clear();
-		portal_boundary_materials_including_build_materials.addAll(get_module().portal_boundary_materials);
-
-		// Also add build materials
-		portal_boundary_materials_including_build_materials.add(config_material_boundary_1);
-		portal_boundary_materials_including_build_materials.add(config_material_boundary_2);
-		portal_boundary_materials_including_build_materials.add(config_material_boundary_3);
-		portal_boundary_materials_including_build_materials.add(config_material_boundary_4);
-		portal_boundary_materials_including_build_materials.add(config_material_boundary_5);
-		portal_boundary_materials_including_build_materials.add(config_material_origin);
+		portal_boundary_build_materials.clear();
+		portal_boundary_build_materials.add(config_material_boundary_1);
+		portal_boundary_build_materials.add(config_material_boundary_2);
+		portal_boundary_build_materials.add(config_material_boundary_3);
+		portal_boundary_build_materials.add(config_material_boundary_4);
+		portal_boundary_build_materials.add(config_material_boundary_5);
+		portal_boundary_build_materials.add(config_material_origin);
 	}
 
 	public int max_dim_x(Plane plane) { return plane.x() ? config_area_max_width  : 1; }
@@ -367,8 +364,9 @@ public class PortalConstructor extends Listener<Portals> {
 		}
 
 		final var block = event.getClickedBlock();
+		final var portal = get_module().portal_for(block);
 		final var type = block.getType();
-		if (!portal_boundary_materials_including_build_materials.contains(type)) {
+		if (portal == null && !portal_boundary_build_materials.contains(type)) {
 			return;
 		}
 
@@ -379,7 +377,6 @@ public class PortalConstructor extends Listener<Portals> {
 			return;
 		}
 
-		final var portal = get_module().portal_for(block);
 		if (portal == null) {
 			if (construct_portal(player, console, block)) {
 				swing_arm(player, event.getHand());

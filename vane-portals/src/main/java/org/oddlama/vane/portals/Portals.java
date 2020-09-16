@@ -156,10 +156,8 @@ public class Portals extends Module<Portals> {
 
 	// All loaded styles
 	public Map<NamespacedKey, Style> styles = new HashMap<>();
-	// Sets for all possible materials for a specific portal block type
+	// Cache possible area materials. This is fine as only predefined styles can change this.
 	public Set<Material> portal_area_materials = new HashSet<>();
-	public Set<Material> portal_console_materials = new HashSet<>();
-	public Set<Material> portal_boundary_materials = new HashSet<>();
 
 	// Track console items
 	private final Map<Block, FloatingItem> console_floating_items = new HashMap<>();
@@ -230,26 +228,9 @@ public class Portals extends Module<Portals> {
 		}
 
 		portal_area_materials.clear();
-		portal_console_materials.clear();
-		portal_boundary_materials.clear();
-		// Acquire material sets from styles. These will
-		// be used to accelerate checking in events.
+		// Acquire material set from styles. Will be used to accelerate event checking.
 		for (final var style : styles.values()) {
 			portal_area_materials.add(style.material(true, PortalBlock.Type.PORTAL));
-			portal_boundary_materials.add(style.material(false, PortalBlock.Type.ORIGIN));
-			portal_boundary_materials.add(style.material(false, PortalBlock.Type.BOUNDARY_1));
-			portal_boundary_materials.add(style.material(false, PortalBlock.Type.BOUNDARY_2));
-			portal_boundary_materials.add(style.material(false, PortalBlock.Type.BOUNDARY_3));
-			portal_boundary_materials.add(style.material(false, PortalBlock.Type.BOUNDARY_4));
-			portal_boundary_materials.add(style.material(false, PortalBlock.Type.BOUNDARY_5));
-			portal_boundary_materials.add(style.material(true, PortalBlock.Type.ORIGIN));
-			portal_boundary_materials.add(style.material(true, PortalBlock.Type.BOUNDARY_1));
-			portal_boundary_materials.add(style.material(true, PortalBlock.Type.BOUNDARY_2));
-			portal_boundary_materials.add(style.material(true, PortalBlock.Type.BOUNDARY_3));
-			portal_boundary_materials.add(style.material(true, PortalBlock.Type.BOUNDARY_4));
-			portal_boundary_materials.add(style.material(true, PortalBlock.Type.BOUNDARY_5));
-			portal_console_materials.add(style.material(false, PortalBlock.Type.CONSOLE));
-			portal_console_materials.add(style.material(true, PortalBlock.Type.CONSOLE));
 		}
 	}
 
@@ -464,11 +445,9 @@ public class Portals extends Module<Portals> {
 
 		// Find adjacent console blocks in full 3x3x3 cube, which will make this block a controlling block
 		for (final var adj : adjacent_blocks_3d(block)) {
-			if (portal_console_materials.contains(adj.getType())) {
-				final var portal_block = portal_block_for(adj);
-				if (portal_block != null && portal_block.type() == PortalBlock.Type.CONSOLE) {
-					return portal_for(portal_block);
-				}
+			final var portal_block = portal_block_for(adj);
+			if (portal_block != null && portal_block.type() == PortalBlock.Type.CONSOLE) {
+				return portal_for(portal_block);
 			}
 		}
 
