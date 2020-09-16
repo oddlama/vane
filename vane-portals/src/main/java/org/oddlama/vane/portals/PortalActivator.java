@@ -3,8 +3,10 @@ package org.oddlama.vane.portals;
 import static org.oddlama.vane.util.PlayerUtil.swing_arm;
 
 import org.bukkit.Material;
+import org.bukkit.Tag;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.type.Switch;
+import org.bukkit.block.data.type.Repeater;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -48,28 +50,38 @@ public class PortalActivator extends Listener<Portals> {
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-	public void on_player_interact_lever(final PlayerInteractEvent event) {
+	public void on_player_interact_switch(final PlayerInteractEvent event) {
 		if (!event.hasBlock() || event.getAction() != Action.RIGHT_CLICK_BLOCK) {
 			return;
 		}
 
 		final var block = event.getClickedBlock();
-		if (block.getType() != Material.LEVER) {
+		final boolean allow_disable;
+		if (block.getType() == Material.LEVER) {
+			allow_disable = true;
+		} else if (Tag.BUTTONS.isTagged(block.getType())) {
+			allow_disable = false;
+		} else {
 			return;
 		}
 
-		// Get base block the lever is attached to
-		final var lever = (Switch)block.getBlockData();
+		// Get base block the switch is attached to
+		final var bswitch = (Switch)block.getBlockData();
 		final BlockFace attached_face;
-		switch (lever.getAttachedFace()) {
+		switch (bswitch.getAttachedFace()) {
 			default:
-			case WALL:    attached_face = lever.getFacing().getOppositeFace(); break;
+			case WALL:    attached_face = bswitch.getFacing().getOppositeFace(); break;
 			case CEILING: attached_face = BlockFace.UP; break;
 			case FLOOR:   attached_face = BlockFace.DOWN; break;
 		}
 
-		// Find controlled portal
+		// Check if the block could be a portal boundary or console
 		final var base = block.getRelative(attached_face);
+		if (!get_module().portal_boundary_materials.contains(base.getType()) && !get_module().portal_console_materials.contains(base.getType())) {
+			return;
+		}
+
+		// Find controlled portal
 		final var portal = get_module().controlled_portal(base);
 		if (portal == null) {
 			return;
@@ -77,14 +89,14 @@ public class PortalActivator extends Listener<Portals> {
 
 		// Deactivate portal
 		final var player = event.getPlayer();
-		if (lever.isPowered()) {
-			// Lever is being switched off → deactivate
+		if (bswitch.isPowered() && allow_disable) {
+			// Switch is being switched off → deactivate
 			if (!portal.deactivate(get_module(), player)) {
 				event.setUseInteractedBlock(Event.Result.DENY);
 				event.setUseItemInHand(Event.Result.DENY);
 			}
 		} else {
-			// Lever is being switched on → activate
+			// Switch is being switched on → activate
 			if (!portal.activate(get_module(), player)) {
 				event.setUseInteractedBlock(Event.Result.DENY);
 				event.setUseItemInHand(Event.Result.DENY);
@@ -94,18 +106,32 @@ public class PortalActivator extends Listener<Portals> {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void on_block_redstone(final BlockRedstoneEvent event) {
-		// Redstone enable only works on hard-linked get_module().
+		// Only on rising edge.
 	    if (event.getOldCurrent() != 0 || event.getNewCurrent() == 0) {
 		    return;
 		}
 
-	    final var portal = get_module().portal_for(event.getBlock());
+		// Only repeaters
+		final var block = event.getBlock();
+		if (block.getType() != Material.REPEATER) {
+			return;
+		}
+
+		// Get the block it's pointing towards. (event.getBlock()Opposite of facing for repeaters)
+		final var repeater = (Repeater)block.getBlockData();
+		final var into_block = block.getRelative(repeater.getFacing().getOppositeFace());
+
+		// Check if the block could be a portal boundary or console
+		if (!get_module().portal_boundary_materials.contains(into_block.getType()) && !get_module().portal_console_materials.contains(into_block.getType())) {
+			return;
+		}
+
+		// Find controlled portal
+	    final var portal = get_module().portal_for(into_block);
 	    if (portal == null) {
 		    return;
 		}
 
-		// TODO setting for "keep on while pulse active" and "toggle on falling/rising edge"
-		System.out.println("Activate by redstone " + portal.name());
 		portal.activate(get_module(), null);
     }
 }

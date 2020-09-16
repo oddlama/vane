@@ -109,7 +109,7 @@ public class StyleMenu extends ModuleComponent<Portals> {
 
 	public Menu create(final Portal portal, final Player player, final Menu previous) {
 		final var title = lang_title.str("§5§l" + portal.name());
-		final var style_menu = new Menu(get_context(), Bukkit.createInventory(null, 3 * columns, title));
+		final var style_menu = new Menu(get_context(), Bukkit.createInventory(null, 4 * columns, title));
 		style_menu.tag(new PortalMenuTag(portal.id()));
 
 		final var style_container = new StyleContainer();
@@ -190,7 +190,7 @@ public class StyleMenu extends ModuleComponent<Portals> {
 	}
 
 	private MenuWidget menu_item_accept(final Portal portal, final StyleContainer style_container, final Menu previous) {
-		return new MenuItem(2 * columns + 0, item_accept.item(), (player, menu, self) -> {
+		return new MenuItem(3 * columns + 0, item_accept.item(), (player, menu, self) -> {
 			menu.close(player);
 
 			final var settings_event = new PortalChangeSettingsEvent(player, portal, false);
@@ -208,7 +208,7 @@ public class StyleMenu extends ModuleComponent<Portals> {
 	}
 
 	private MenuWidget menu_item_reset(final Portal portal, final StyleContainer style_container) {
-		return new MenuItem(2 * columns + 3, item_reset.item(), (player, menu, self) -> {
+		return new MenuItem(3 * columns + 3, item_reset.item(), (player, menu, self) -> {
 			style_container.style = portal.copy_style(get_module(), null);
 			menu.update();
 			return ClickResult.SUCCESS;
@@ -225,7 +225,7 @@ public class StyleMenu extends ModuleComponent<Portals> {
 			}
 		};
 
-		return new MenuItem(2 * columns + 4, item_select_defined.item(), (player, menu, self) -> {
+		return new MenuItem(3 * columns + 4, item_select_defined.item(), (player, menu, self) -> {
 			menu.close(player);
 			final var all_styles = new ArrayList<>(get_module().styles.values());
 			final var filter = new Filter.StringFilter<Style>((s, str) -> s.key().toString().toLowerCase().contains(str));
@@ -246,7 +246,7 @@ public class StyleMenu extends ModuleComponent<Portals> {
 	}
 
 	private MenuWidget menu_item_cancel(final Menu previous) {
-		return new MenuItem(2 * columns + 8, item_cancel.item(), (player, menu, self) -> {
+		return new MenuItem(3 * columns + 8, item_cancel.item(), (player, menu, self) -> {
 			menu.close(player);
 			previous.open(player);
 			return ClickResult.SUCCESS;
