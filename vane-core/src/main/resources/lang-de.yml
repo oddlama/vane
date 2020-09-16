@@ -82,7 +82,7 @@ menus:
         - "§b#Gefilterte Items: %3$s"
 
     filter:
-      name: "§b§lFilter"
+      name: "§d§lFilter"
       lore:
         - ""
         - "§bLinks-klick§7 öffnet das Filtermenü."

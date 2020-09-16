@@ -115,7 +115,7 @@ menus:
     # The item used to open the filter menu.
     # Right clicking resets the filter.
     filter:
-      name: "§b§lFilter"
+      name: "§d§lFilter"
       lore:
         - ""
         - "§bLeft-click§7 to open the filter menu."

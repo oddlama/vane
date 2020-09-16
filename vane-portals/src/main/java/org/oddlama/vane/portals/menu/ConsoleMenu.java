@@ -138,7 +138,7 @@ public class ConsoleMenu extends ModuleComponent<Portals> {
 				MenuFactory.generic_selector(get_context(), player, lang_select_target_title.str(), lang_filter_portals_title.str(), all_portals,
 					p -> {
 						final var dist = p.spawn().toVector().setY(0.0).distance(player.getLocation().toVector().setY(0.0));
-						return item_select_target_portal.alternative(get_module().icon_for(p), "§a§l" + p.name(), "§6" + dist, "§b" + p.spawn().getWorld().getName());
+						return item_select_target_portal.alternative(get_module().icon_for(p), "§a§l" + p.name(), "§6" + String.format("%.1f", dist), "§b" + p.spawn().getWorld().getName());
 					},
 					filter,
 					(player2, m, t) -> {

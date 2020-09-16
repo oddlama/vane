@@ -101,7 +101,7 @@ public class StyleMenu extends ModuleComponent<Portals> {
 		item_block_boundardy_5_inactive = new TranslatedItemStack<>(ctx, "block_boundardy_5_inactive", Material.BARRIER, 1, "Used to select inactive boundary variant 5 block.");
 
         item_accept         = new TranslatedItemStack<>(ctx, "accept",         Material.LIME_TERRACOTTA, 1, "Used to apply the style.");
-        item_reset          = new TranslatedItemStack<>(ctx, "reset",          Material.OBSIDIAN,        1, "Used to reset any changes.");
+        item_reset          = new TranslatedItemStack<>(ctx, "reset",          Material.MILK_BUCKET,     1, "Used to reset any changes.");
         item_select_defined = new TranslatedItemStack<>(ctx, "select_defined", Material.ITEM_FRAME,      1, "Used to select a defined style from the configuration.");
         item_select_style   = new TranslatedItemStack<>(ctx, "select_style",   Material.ITEM_FRAME,      1, "Used to represent a defined style in the selector menu.");
         item_cancel         = new TranslatedItemStack<>(ctx, "cancel",         Material.RED_TERRACOTTA,  1, "Used to abort style selection.");

@@ -44,7 +44,7 @@ public class SettingsMenu extends ModuleComponent<Portals> {
 		super(context.namespace("settings"));
 
 		final var ctx = get_context();
-        item_rename             = new TranslatedItemStack<>(ctx, "rename",             Material.WRITABLE_BOOK,                              1, "Used to rename the portal.");
+        item_rename             = new TranslatedItemStack<>(ctx, "rename",             Material.NAME_TAG,                                   1, "Used to rename the portal.");
         item_select_icon        = new TranslatedItemStack<>(ctx, "select_icon",        namespaced_key("vane", "decoration_end_portal_orb"), 1, "Used to select the portal's icon.");
         item_select_style       = new TranslatedItemStack<>(ctx, "select_style",       Material.ITEM_FRAME,                                 1, "Used to change the portal's style.");
         item_visibility_public  = new TranslatedItemStack<>(ctx, "visibility_public",  Material.ENDER_EYE,                                  1, "Used to change and indicate public visibility.");

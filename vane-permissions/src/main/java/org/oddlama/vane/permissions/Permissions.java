@@ -42,7 +42,7 @@ public class Permissions extends Module<Permissions> {
 		@ConfigStringListMapEntry(key = "user", list = {
 			"vane.permissions.groups.default",
 			"vane.admin.modify_world",
-			"vane.trifles.command.heads" }),
+			"vane.trifles.commands.heads" }),
 		@ConfigStringListMapEntry(key = "admin", list = {
 			"vane.permissions.groups.user",
 			"vane.*.commands.*" }),

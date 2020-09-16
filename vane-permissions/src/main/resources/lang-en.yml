@@ -41,10 +41,9 @@ command_permission:
   list_group: "§7 - %1$s"
   # This message is sent for each permission when a list of all permissions is requested.
   # %1$s: Permission name
-  # %2$s: Permission value color code
-  # %3$s: Permission value
-  # %4$s: Permission description
-  list_permission: "§7 - %1$s§7 (%2$s%3$s§7): %4$s"
+  # %2$s: Permission value
+  # %3$s: Permission description
+  list_permission: "§7 - %1$s§7 (%2$s§7): %3$s"
   # This message is sent when a group is added to a player.
   # %1$s: Player name
   # %2$s: Group name
