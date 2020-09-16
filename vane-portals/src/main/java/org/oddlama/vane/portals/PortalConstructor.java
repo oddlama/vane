@@ -326,9 +326,6 @@ public class PortalConstructor extends Listener<Portals> {
 
 			// Update portal blocks once
 			portal.update_blocks(get_module());
-
-			// Create dynmap marker
-			//TODO PortalLayer.createMarker(portal);
 			return ClickResult.SUCCESS;
 		}).open(player);
 

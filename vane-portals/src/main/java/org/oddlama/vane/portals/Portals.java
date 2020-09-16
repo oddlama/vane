@@ -173,6 +173,7 @@ public class Portals extends Module<Portals> {
 
 	public PortalMenuGroup menus;
 	public PortalConstructor constructor;
+	public PortalDynmapLayer dynmap_layer;
 
 	public Portals() {
 		register_entities();
@@ -182,6 +183,7 @@ public class Portals extends Module<Portals> {
 		new PortalBlockProtector(this);
 		constructor = new PortalConstructor(this);
 		new PortalTeleporter(this);
+		dynmap_layer = new PortalDynmapLayer(this);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -300,6 +302,9 @@ public class Portals extends Module<Portals> {
 			}
 		});
 
+		// Remove dynmap marker
+		dynmap_layer.remove_marker(portal.id());
+
 		// Play sound
 		portal.spawn().getWorld().playSound(portal.spawn(), Sound.ENTITY_ENDER_EYE_DEATH, SoundCategory.BLOCKS, 1.0f, 1.0f);
 	}
@@ -307,6 +312,9 @@ public class Portals extends Module<Portals> {
 	public void add_portal(final Portal portal) {
 		storage_portals.put(portal.id(), portal);
 		mark_persistent_storage_dirty();
+
+		// Create dynmap marker
+		dynmap_layer.update_marker(portal);
 
 		// Play sound
 		portal.spawn().getWorld().playSound(portal.spawn(), Sound.ENTITY_ENDER_EYE_DEATH, SoundCategory.BLOCKS, 1.0f, 2.0f);
@@ -652,6 +660,9 @@ public class Portals extends Module<Portals> {
 	}
 
 	public void update_portal_icon(final Portal portal) {
+		// Update dynmap marker, as name could have changed
+		dynmap_layer.update_marker(portal);
+
 		for (final var active_console : console_floating_items.keySet()) {
 			final var portal_block = portal_block_for(active_console);
 			final var other = portal_for(portal_block);
@@ -672,6 +683,9 @@ public class Portals extends Module<Portals> {
 			}
 			// TODO don't hide for group access
 		}
+
+		// Update dynmap marker
+		dynmap_layer.update_marker(portal);
 	}
 
 	public void update_console_item(final Portal portal, final Block block) {

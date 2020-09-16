@@ -82,6 +82,13 @@ console_no_target: "§k?"
 unlink_restricted: "§cYou have no permission to unlink a console from this portal!"
 destroy_restricted: "§cYou have no permission to destroy this portal!"
 
+dynmap:
+  # The label for the dynmap layer
+  layer_label: "Portals"
+  # The label for the dynmap markers
+  # %1$s: portal name
+  marker_label: "%1$s"
+
 menus:
   enter_name:
     title: "§8§lEnter Portal Name"
