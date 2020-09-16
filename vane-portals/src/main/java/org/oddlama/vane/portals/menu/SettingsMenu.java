@@ -61,6 +61,7 @@ public class SettingsMenu extends ModuleComponent<Portals> {
 		final var columns = 9;
 		final var title = lang_title.str("§5§l" + portal.name());
 		final var settings_menu = new Menu(get_context(), Bukkit.createInventory(null, columns, title));
+		settings_menu.tag(new PortalMenuTag(portal.id()));
 
 		settings_menu.add(menu_item_rename(portal, console));
 		settings_menu.add(menu_item_select_icon(portal));
@@ -73,6 +74,7 @@ public class SettingsMenu extends ModuleComponent<Portals> {
 			get_module().menus.console_menu
 				.create(portal, player2, console)
 				.open(player2));
+
 		return settings_menu;
 	}
 

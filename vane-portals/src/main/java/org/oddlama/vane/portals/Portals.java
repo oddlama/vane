@@ -57,6 +57,7 @@ import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.core.persistent.PersistentSerializer;
 import org.oddlama.vane.portals.entity.FloatingItem;
 import org.oddlama.vane.portals.menu.PortalMenuGroup;
+import org.oddlama.vane.portals.menu.PortalMenuTag;
 import org.oddlama.vane.portals.portal.Orientation;
 import org.oddlama.vane.portals.portal.Portal;
 import org.oddlama.vane.portals.portal.PortalBlock;
@@ -291,6 +292,14 @@ public class Portals extends Module<Portals> {
 		}
 
 		mark_persistent_storage_dirty();
+
+		// Close all related open menus
+		get_module().core.menu_manager.for_each_open((player, menu) -> {
+			if (menu.tag() instanceof PortalMenuTag
+					&& Objects.equals(((PortalMenuTag)menu.tag()).portal_id(), portal.id())) {
+				menu.close(player);
+			}
+		});
 
 		// Play sound
 		portal.spawn().getWorld().playSound(portal.spawn(), Sound.ENTITY_ENDER_EYE_DEATH, SoundCategory.BLOCKS, 1.0f, 1.0f);

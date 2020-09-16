@@ -66,6 +66,7 @@ public class ConsoleMenu extends ModuleComponent<Portals> {
 		final var columns = 9;
 		final var title = lang_title.str("§5§l" + portal.name());
 		final var console_menu = new Menu(get_context(), Bukkit.createInventory(null, columns, title));
+		console_menu.tag(new PortalMenuTag(portal.id()));
 
 		// Check if target selection would be allowed
 		final var select_target_event = new PortalSelectTargetEvent(player, portal, null, true);
@@ -79,7 +80,6 @@ public class ConsoleMenu extends ModuleComponent<Portals> {
 		get_module().getServer().getPluginManager().callEvent(settings_event);
 		if (!settings_event.isCancelled()) {
 			console_menu.add(menu_item_settings(portal, console));
-			// TODO remove all open menus of a portal when it is deleted.
 		}
 
 		// Check if unlink would be allowed

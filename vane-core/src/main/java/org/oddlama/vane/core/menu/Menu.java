@@ -23,6 +23,7 @@ public class Menu {
 	private final Set<MenuWidget> widgets = new HashSet<>();
 	private Consumer2<Player, InventoryCloseEvent.Reason> on_close = null;
 	private Consumer1<Player> on_natural_close = null;
+	private Object tag = null;
 
 	protected Menu(final Context<?> context) {
 		this.manager = context.get_module().core.menu_manager;
@@ -35,6 +36,8 @@ public class Menu {
 
 	public MenuManager manager() { return manager; }
 	public Inventory inventory() { return inventory; }
+	public Object tag() { return tag; }
+	public void tag(Object tag) { this.tag = tag; }
 
 	public void add(final MenuWidget widget) {
 		widgets.add(widget);

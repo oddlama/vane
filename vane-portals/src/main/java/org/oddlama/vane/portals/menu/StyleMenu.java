@@ -110,6 +110,7 @@ public class StyleMenu extends ModuleComponent<Portals> {
 	public Menu create(final Portal portal, final Player player, final Menu previous) {
 		final var title = lang_title.str("§5§l" + portal.name());
 		final var style_menu = new Menu(get_context(), Bukkit.createInventory(null, 3 * columns, title));
+		style_menu.tag(new PortalMenuTag(portal.id()));
 
 		final var style_container = new StyleContainer();
 		style_container.defined_style = portal.style();

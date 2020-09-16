@@ -11,6 +11,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
+import org.oddlama.vane.core.functional.Consumer2;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 
@@ -72,6 +73,17 @@ public class MenuManager extends Listener<Core> {
 		// Remove orphaned menus from other maps
 		if (orphaned) {
 			menus.remove(menu.inventory());
+		}
+	}
+
+	public void for_each_open(final Consumer2<Player, Menu> functor) {
+		for (final var player : get_module().getServer().getOnlinePlayers()) {
+			final var open = open_menus.get(player.getUniqueId());
+			if (open == null) {
+				continue;
+			}
+
+			functor.apply(player, open);
 		}
 	}
 
