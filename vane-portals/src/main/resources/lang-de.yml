@@ -129,19 +129,19 @@ menus:
       lore: []
     block_boundardy_1_active:
       name: "§b§lPortalrahmen §a(aktiv)"
-      lore: ["", "§aVariante 1"]
+      lore: ["", "§aVariante 1", "§7Baumaterial: %1$s"]
     block_boundardy_2_active:
       name: "§b§lPortalrahmen §a(aktiv)"
-      lore: ["", "§aVariante 2"]
+      lore: ["", "§aVariante 2", "§7Baumaterial: %1$s"]
     block_boundardy_3_active:
       name: "§b§lPortalrahmen §a(aktiv)"
-      lore: ["", "§aVariante 3"]
+      lore: ["", "§aVariante 3", "§7Baumaterial: %1$s"]
     block_boundardy_4_active:
       name: "§b§lPortalrahmen §a(aktiv)"
-      lore: ["", "§aVariante 4"]
+      lore: ["", "§aVariante 4", "§7Baumaterial: %1$s"]
     block_boundardy_5_active:
       name: "§b§lPortalrahmen §a(aktiv)"
-      lore: ["", "§aVariante 5"]
+      lore: ["", "§aVariante 5", "§7Baumaterial: %1$s"]
     block_console_inactive:
       name: "§b§lKonsole §e(inaktiv)"
       lore: []
@@ -153,19 +153,19 @@ menus:
       lore: []
     block_boundardy_1_inactive:
       name: "§b§lPortalrahmen §e(inaktiv)"
-      lore: ["", "§aVariante 1"]
+      lore: ["", "§aVariante 1", "§7Baumaterial: %1$s"]
     block_boundardy_2_inactive:
       name: "§b§lPortalrahmen §e(inaktiv)"
-      lore: ["", "§aVariante 2"]
+      lore: ["", "§aVariante 2", "§7Baumaterial: %1$s"]
     block_boundardy_3_inactive:
       name: "§b§lPortalrahmen §e(inaktiv)"
-      lore: ["", "§aVariante 3"]
+      lore: ["", "§aVariante 3", "§7Baumaterial: %1$s"]
     block_boundardy_4_inactive:
       name: "§b§lPortalrahmen §e(inaktiv)"
-      lore: ["", "§aVariante 4"]
+      lore: ["", "§aVariante 4", "§7Baumaterial: %1$s"]
     block_boundardy_5_inactive:
       name: "§b§lPortalrahmen §e(inaktiv)"
-      lore: ["", "§aVariante 5"]
+      lore: ["", "§aVariante 5", "§7Baumaterial: %1$s"]
 
     accept:
       name: "§a§lStil anwenden"

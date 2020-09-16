@@ -196,69 +196,85 @@ menus:
     select_block_boundardy_5_inactive_title: "Select inactive boundary variant 5 block."
 
     # The item used to represent the selected active console block.
+    # %1$s: Building material
     block_console_active:
       name: "§b§lConsole §a(active)"
       lore: []
     # The item used to represent the selected active origin block.
+    # %1$s: Building material
     block_origin_active:
       name: "§b§lOrigin §a(active)"
       lore: []
     # The item used to represent the selected active portal block.
+    # %1$s: Building material
     block_portal_active:
       name: "§b§lPortal area §a(active)"
       lore: []
     # The item used to represent the selected active boundary variant 1 block.
+    # %1$s: Building material
     block_boundardy_1_active:
       name: "§b§lBoundary §a(active)"
-      lore: ["", "§aVariant 1"]
+      lore: ["", "§aVariant 1", "§7Building material: %1$s"]
     # The item used to represent the selected active boundary variant 2 block.
+    # %1$s: Building material
     block_boundardy_2_active:
       name: "§b§lBoundary §a(active)"
-      lore: ["", "§aVariant 2"]
+      lore: ["", "§aVariant 2", "§7Building material: %1$s"]
     # The item used to represent the selected active boundary variant 3 block.
+    # %1$s: Building material
     block_boundardy_3_active:
       name: "§b§lBoundary §a(active)"
-      lore: ["", "§aVariant 3"]
+      lore: ["", "§aVariant 3", "§7Building material: %1$s"]
     # The item used to represent the selected active boundary variant 4 block.
+    # %1$s: Building material
     block_boundardy_4_active:
       name: "§b§lBoundary §a(active)"
-      lore: ["", "§aVariant 4"]
+      lore: ["", "§aVariant 4", "§7Building material: %1$s"]
     # The item used to represent the selected active boundary variant 5 block.
+    # %1$s: Building material
     block_boundardy_5_active:
       name: "§b§lBoundary §a(active)"
-      lore: ["", "§aVariant 5"]
+      lore: ["", "§aVariant 5", "§7Building material: %1$s"]
     # The item used to represent the selected inactive console block.
+    # %1$s: Building material
     block_console_inactive:
       name: "§b§lConsole §e(inactive)"
       lore: []
     # The item used to represent the selected inactive origin block.
+    # %1$s: Building material
     block_origin_inactive:
       name: "§b§lOrigin §e(inactive)"
       lore: []
     # The item used to represent the selected inactive portal block.
+    # %1$s: Building material
     block_portal_inactive:
       name: "§b§lPortal area §e(inactive)"
       lore: []
     # The item used to represent the selected inactive boundary variant 1 block.
+    # %1$s: Building material
     block_boundardy_1_inactive:
       name: "§b§lBoundary §e(inactive)"
-      lore: ["", "§aVariant 1"]
+      lore: ["", "§aVariant 1", "§7Building material: %1$s"]
     # The item used to represent the selected inactive boundary variant 2 block.
+    # %1$s: Building material
     block_boundardy_2_inactive:
       name: "§b§lBoundary §e(inactive)"
-      lore: ["", "§aVariant 2"]
+      lore: ["", "§aVariant 2", "§7Building material: %1$s"]
     # The item used to represent the selected inactive boundary variant 3 block.
+    # %1$s: Building material
     block_boundardy_3_inactive:
       name: "§b§lBoundary §e(inactive)"
-      lore: ["", "§aVariant 3"]
+      lore: ["", "§aVariant 3", "§7Building material: %1$s"]
     # The item used to represent the selected inactive boundary variant 4 block.
+    # %1$s: Building material
     block_boundardy_4_inactive:
       name: "§b§lBoundary §e(inactive)"
-      lore: ["", "§aVariant 4"]
+      lore: ["", "§aVariant 4", "§7Building material: %1$s"]
     # The item used to represent the selected inactive boundary variant 5 block.
+    # %1$s: Building material
     block_boundardy_5_inactive:
       name: "§b§lBoundary §e(inactive)"
-      lore: ["", "§aVariant 5"]
+      lore: ["", "§aVariant 5", "§7Building material: %1$s"]
 
     # The item used to apply the style to the portal.
     accept:

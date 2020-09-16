@@ -89,13 +89,22 @@ public class PortalActivator extends Listener<Portals> {
 
 		// Deactivate portal
 		final var player = event.getPlayer();
+		final var active = get_module().is_activated(portal);
 		if (bswitch.isPowered() && allow_disable) {
+			if (!active) {
+				return;
+			}
+
 			// Switch is being switched off → deactivate
 			if (!portal.deactivate(get_module(), player)) {
 				event.setUseInteractedBlock(Event.Result.DENY);
 				event.setUseItemInHand(Event.Result.DENY);
 			}
 		} else {
+			if (active) {
+				return;
+			}
+
 			// Switch is being switched on → activate
 			if (!portal.activate(get_module(), player)) {
 				event.setUseInteractedBlock(Event.Result.DENY);

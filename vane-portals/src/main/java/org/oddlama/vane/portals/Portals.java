@@ -111,7 +111,7 @@ public class Portals extends Module<Portals> {
 			@ConfigMaterialMapMapEntry(key = "active", value = {
 				@ConfigMaterialMapEntry(key = "boundary_1", value = Material.DARK_PRISMARINE),
 				@ConfigMaterialMapEntry(key = "boundary_2", value = Material.WARPED_PLANKS),
-				@ConfigMaterialMapEntry(key = "boundary_3", value = Material.PRISMARINE_BRICKS),
+				@ConfigMaterialMapEntry(key = "boundary_3", value = Material.SEA_LANTERN),
 				@ConfigMaterialMapEntry(key = "boundary_4", value = Material.WARPED_WART_BLOCK),
 				@ConfigMaterialMapEntry(key = "boundary_5", value = Material.LIGHT_BLUE_STAINED_GLASS),
 				@ConfigMaterialMapEntry(key = "console", value = Material.ENCHANTING_TABLE),
@@ -121,7 +121,7 @@ public class Portals extends Module<Portals> {
 			@ConfigMaterialMapMapEntry(key = "inactive", value = {
 				@ConfigMaterialMapEntry(key = "boundary_1", value = Material.DARK_PRISMARINE),
 				@ConfigMaterialMapEntry(key = "boundary_2", value = Material.WARPED_PLANKS),
-				@ConfigMaterialMapEntry(key = "boundary_3", value = Material.SEA_LANTERN),
+				@ConfigMaterialMapEntry(key = "boundary_3", value = Material.PRISMARINE_BRICKS),
 				@ConfigMaterialMapEntry(key = "boundary_4", value = Material.WARPED_WART_BLOCK),
 				@ConfigMaterialMapEntry(key = "boundary_5", value = Material.LIGHT_BLUE_STAINED_GLASS),
 				@ConfigMaterialMapEntry(key = "console", value = Material.ENCHANTING_TABLE),
