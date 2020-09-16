@@ -193,7 +193,7 @@ public class MenuFactory {
 
 		final var filter = new HeadFilter();
 		return MenuFactory.generic_selector(context, player,
-			menu_manager.head_selector.lang_title.str("§6§l" + all_heads.size()),
+			menu_manager.head_selector.lang_title.str("§5§l" + all_heads.size()),
 			menu_manager.head_selector.lang_filter_title.str(),
 			all_heads,
 			h -> menu_manager.head_selector.item_select_head.alternative(h.item(), "§a§l" + h.name(), "§6" + h.category(), "§b" + h.tags()),

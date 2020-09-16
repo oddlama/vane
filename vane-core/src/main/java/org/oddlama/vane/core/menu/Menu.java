@@ -25,6 +25,11 @@ public class Menu {
 	private Consumer1<Player> on_natural_close = null;
 	private Object tag = null;
 
+	// A tainted menu will refuse to be opened.
+	// Useful to prevent an invalid menu from reopening
+	// after it's state has been captured.
+	protected boolean tainted = false;
+
 	protected Menu(final Context<?> context) {
 		this.manager = context.get_module().core.menu_manager;
 	}
@@ -37,7 +42,9 @@ public class Menu {
 	public MenuManager manager() { return manager; }
 	public Inventory inventory() { return inventory; }
 	public Object tag() { return tag; }
-	public void tag(Object tag) { this.tag = tag; }
+
+	public Menu tag(Object tag) { this.tag = tag; return this; }
+	public void taint() { this.tainted = true; }
 
 	public void add(final MenuWidget widget) {
 		widgets.add(widget);
@@ -60,10 +67,16 @@ public class Menu {
 	}
 
 	public void open_window(final Player player) {
+		if (tainted) {
+			return;
+		}
 		player.openInventory(inventory);
 	}
 
 	public final void open(final Player player) {
+		if (tainted) {
+			return;
+		}
 		update(true);
 		manager.schedule_next_tick(() -> {
 			manager.add(player, this);

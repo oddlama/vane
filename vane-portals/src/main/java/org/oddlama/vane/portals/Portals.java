@@ -294,10 +294,11 @@ public class Portals extends Module<Portals> {
 
 		mark_persistent_storage_dirty();
 
-		// Close all related open menus
+		// Close and taint all related open menus
 		get_module().core.menu_manager.for_each_open((player, menu) -> {
 			if (menu.tag() instanceof PortalMenuTag
 					&& Objects.equals(((PortalMenuTag)menu.tag()).portal_id(), portal.id())) {
+				menu.taint();
 				menu.close(player);
 			}
 		});

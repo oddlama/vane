@@ -33,6 +33,10 @@ public class AnvilMenu extends Menu {
 
 	@Override
 	public void open_window(final Player player) {
+		if (tainted) {
+			return;
+		}
+
 		if (player_handle(player) != entity) {
 			manager.get_module().log.warning("AnvilMenu.open() was called with a player for whom this inventory wasn't created!");
 		}

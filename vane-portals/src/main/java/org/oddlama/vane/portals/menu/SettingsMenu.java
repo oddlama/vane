@@ -126,7 +126,7 @@ public class SettingsMenu extends ModuleComponent<Portals> {
 				return ClickResult.SUCCESS;
 			}, player2 -> {
 				menu.open(player2);
-			}).open(player);
+			}).tag(new PortalMenuTag(portal.id())).open(player);
 			return ClickResult.SUCCESS;
 		});
 	}

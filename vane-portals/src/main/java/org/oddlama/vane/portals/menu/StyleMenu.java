@@ -174,7 +174,7 @@ public class StyleMenu extends ModuleComponent<Portals> {
 				// Always select one
 				item.setAmount(1);
 				return item;
-			}).open(player);
+			}).tag(new PortalMenuTag(portal.id())).open(player);
 			menu.update();
 			return ClickResult.SUCCESS;
 		}) {
@@ -240,7 +240,7 @@ public class StyleMenu extends ModuleComponent<Portals> {
 					return ClickResult.SUCCESS;
 				}, player2 -> {
 					menu.open(player2);
-				}).open(player);
+				}).tag(new PortalMenuTag(portal.id())).open(player);
 			return ClickResult.SUCCESS;
 		});
 	}

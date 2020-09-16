@@ -159,7 +159,7 @@ public class ConsoleMenu extends ModuleComponent<Portals> {
 						return ClickResult.SUCCESS;
 					}, player2 -> {
 						menu.open(player2);
-					}).open(player);
+					}).tag(new PortalMenuTag(portal.id())).open(player);
 				return ClickResult.SUCCESS;
 			}
 		}) {
@@ -198,7 +198,8 @@ public class ConsoleMenu extends ModuleComponent<Portals> {
 				}, item_unlink_console_confirm_cancel.item(), (player2) -> {
 					menu.open(player2);
 				})
-			.open(player);
+				.tag(new PortalMenuTag(portal.id()))
+				.open(player);
 			return ClickResult.SUCCESS;
 		});
 	}
@@ -221,7 +222,8 @@ public class ConsoleMenu extends ModuleComponent<Portals> {
 				}, item_destroy_portal_confirm_cancel.item(), (player2) -> {
 					menu.open(player2);
 				})
-			.open(player);
+				.tag(new PortalMenuTag(portal.id()))
+				.open(player);
 			return ClickResult.SUCCESS;
 		});
 	}
