@@ -1,5 +1,6 @@
 package org.oddlama.vane.core.material;
 
+import java.util.Collection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -45,5 +46,9 @@ public class HeadMaterialLibrary {
 
 	public static HeadMaterial from(final NamespacedKey key) {
 		return registry.get(key);
+	}
+
+	public static Collection<HeadMaterial> all() {
+		return registry.values();
 	}
 }

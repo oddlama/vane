@@ -117,7 +117,7 @@ public class PortalActivator extends Listener<Portals> {
 			return;
 		}
 
-		// Get the block it's pointing towards. (event.getBlock()Opposite of facing for repeaters)
+		// Get the block it's pointing towards. (Opposite of block's facing for repeaters)
 		final var repeater = (Repeater)block.getBlockData();
 		final var into_block = block.getRelative(repeater.getFacing().getOppositeFace());
 

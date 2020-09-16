@@ -49,6 +49,7 @@ public class GenericSelector<T, F extends Filter<T>> {
 				if (generic_selector.update_filter) {
 					// Filter list before update
 					generic_selector.filtered_things = generic_selector.filter.filter(generic_selector.things);
+					generic_selector.page = 0;
 					generic_selector.last_page = Math.max(0, generic_selector.filtered_things.size() - 1) / generic_selector.page_size;
 					generic_selector.update_filter = false;
 				}
@@ -116,15 +117,25 @@ public class GenericSelector<T, F extends Filter<T>> {
 		@Override
 		public boolean update(final Menu menu) {
 			for (int slot = slot_from; slot < slot_to; ++slot) {
-				final var offset = button_offset(slot - slot_from);
+				final var i = slot - slot_from;
+				final var offset = button_offset(i);
 				final var page = page_for_offset(offset);
-				final var clamped = page != generic_selector.page + offset;
-				if (clamped) {
-					menu.inventory().setItem(slot, null);
+				final var no_op = page == generic_selector.page;
+				final var actual_offset = page - generic_selector.page;
+				final ItemStack item;
+				if (i == (slot_to - slot_from) / 2) {
+					// Current page indicator
+					item = generic_selector.menu_manager.generic_selector_current_page
+						 .item("§6" + String.valueOf(page + 1),
+							   "§6" + generic_selector.last_page + 1,
+							   "§6" + generic_selector.filtered_things.size());
+				} else if (no_op) {
+					item = null;
 				} else {
-					final var item = generic_selector.menu_manager.generic_selector_page.item_amount(offset, String.valueOf(page));
-					menu.inventory().setItem(slot, item);
+					item = generic_selector.menu_manager.generic_selector_page.item_amount(Math.abs(actual_offset), "§6" + String.valueOf(page + 1));
 				}
+
+				menu.inventory().setItem(slot, item);
 			}
 			return true;
 		}
@@ -133,7 +144,7 @@ public class GenericSelector<T, F extends Filter<T>> {
 			if (i <= 0) {
 				// Go back up to BIG_JUMP_SIZE pages
 				return -BIG_JUMP_SIZE;
-			} else if (i >= (slot_to - slot_from)) {
+			} else if (i >= (slot_to - slot_from) - 1) {
 				// Go forward up to BIG_JUMP_SIZE pages
 				return BIG_JUMP_SIZE;
 			} else {
@@ -155,6 +166,10 @@ public class GenericSelector<T, F extends Filter<T>> {
 		@Override
 		public ClickResult click(final Player player, final Menu menu, final ItemStack item, int slot, final ClickType type, final InventoryAction action) {
 			if (slot < slot_from || slot >= slot_to) {
+				return ClickResult.IGNORE;
+			}
+
+			if (menu.inventory().getItem(slot) == null) {
 				return ClickResult.IGNORE;
 			}
 
@@ -191,6 +206,10 @@ public class GenericSelector<T, F extends Filter<T>> {
 		@Override
 		public ClickResult click(final Player player, final Menu menu, final ItemStack item, int slot, final ClickType type, final InventoryAction action) {
 			if (slot < first_slot || slot >= first_slot + generic_selector.page_size) {
+				return ClickResult.IGNORE;
+			}
+
+			if (menu.inventory().getItem(slot) == null) {
 				return ClickResult.IGNORE;
 			}
 

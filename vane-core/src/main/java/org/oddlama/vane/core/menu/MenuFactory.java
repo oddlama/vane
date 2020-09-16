@@ -3,7 +3,9 @@ package org.oddlama.vane.core.menu;
 import static org.oddlama.vane.util.ItemUtil.name_item;
 import static org.oddlama.vane.util.ItemUtil.name_of;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -17,6 +19,8 @@ import org.jetbrains.annotations.Nullable;
 import org.oddlama.vane.core.functional.Consumer1;
 import org.oddlama.vane.core.functional.Consumer2;
 import org.oddlama.vane.core.functional.Function1;
+import org.oddlama.vane.core.material.HeadMaterial;
+import org.oddlama.vane.core.material.HeadMaterialLibrary;
 import org.oddlama.vane.core.functional.Function2;
 import org.oddlama.vane.core.functional.Function3;
 import org.oddlama.vane.core.functional.Function5;
@@ -170,5 +174,31 @@ public class MenuFactory {
 
 	public static<T, F extends Filter<T>> Menu generic_selector(final Context<?> context, final Player player, final String title, final String filter_title, final List<T> things, final Function1<T, ItemStack> to_item, final F filter, final Function5<Player, Menu, T, ClickType, InventoryAction, ClickResult> on_click, final Consumer1<Player> on_cancel) {
 		return GenericSelector.<T, F>create(context, player, title, filter_title, things, to_item, filter, on_click, on_cancel);
+	}
+
+	public static Menu head_selector(final Context<?> context, final Player player, final Function3<Player, Menu, HeadMaterial, ClickResult> on_click, final Consumer1<Player> on_cancel) {
+		return head_selector(context, player, (p, menu, t, type, action) -> {
+			if (!Menu.is_left_click(type, action)) {
+				return ClickResult.INVALID_CLICK;
+			}
+			return on_click.apply(p, menu, t);
+		}, on_cancel);
+	}
+
+	public static Menu head_selector(final Context<?> context, final Player player, final Function5<Player, Menu, HeadMaterial, ClickType, InventoryAction, ClickResult> on_click, final Consumer1<Player> on_cancel) {
+		final var menu_manager = context.get_module().core.menu_manager;
+		final var all_heads = HeadMaterialLibrary.all().stream()
+			.sorted((a, b) -> a.key().toString().compareToIgnoreCase(b.key().toString()))
+			.collect(Collectors.toList());
+
+		final var filter = new HeadFilter();
+		return MenuFactory.generic_selector(context, player,
+			menu_manager.head_selector.lang_title.str("§6§l" + all_heads.size()),
+			menu_manager.head_selector.lang_filter_title.str(),
+			all_heads,
+			h -> menu_manager.head_selector.item_select_head.alternative(h.item(), "§a§l" + h.name(), "§6" + h.category(), "§b" + h.tags()),
+			filter,
+			on_click,
+			on_cancel);
 	}
 }

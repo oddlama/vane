@@ -21,6 +21,7 @@ public class Trifles extends Module<Trifles> {
 		new RecipeUnlock(this);
 		new ChestSorter(this);
 
+		new org.oddlama.vane.trifles.commands.Heads(this);
 		new org.oddlama.vane.trifles.items.Sickle(this);
 		new org.oddlama.vane.trifles.items.File(this);
 		new org.oddlama.vane.trifles.items.EmptyXpBottle(this);

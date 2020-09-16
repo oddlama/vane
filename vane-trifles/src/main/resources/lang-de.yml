@@ -18,6 +18,13 @@ version: 1
 # language code (ISO 639) and the country code (ISO 3166).
 resource_pack_lang_code: 'de_de'
 
+command_heads:
+  title: "%1$s §8§lKöpfe"
+  filter_title: "§3Filtereinstellungen"
+  usage: "%1$s"
+  description: "Kaufe Köpfe zur Dekoration."
+  help: "Führe den Befehl aus um das Köpfe-Menü zu öffnen."
+
 item_xp_bottle:
   small:
     name: "Kleine Erfahrungsflasche"

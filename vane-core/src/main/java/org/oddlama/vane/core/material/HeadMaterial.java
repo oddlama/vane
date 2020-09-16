@@ -4,7 +4,9 @@ import static org.oddlama.vane.util.ItemUtil.skull_with_texture;
 import static org.oddlama.vane.util.Util.namespaced_key;
 
 import java.util.ArrayList;
+import java.util.Set;
 import java.util.List;
+import java.util.HashSet;
 
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
@@ -15,21 +17,21 @@ public class HeadMaterial {
 	private NamespacedKey key;
 	private String name;
 	private String category;
-	private List<String> tags;
+	private Set<String> tags;
 	private String base64_texture;
 
 	public HeadMaterial(final NamespacedKey key, final String name, final String category, final List<String> tags, final String base64_texture) {
 		this.key = key;
 		this.name = name;
 		this.category = category;
-		this.tags = tags;
+		this.tags = new HashSet<>(tags);
 		this.base64_texture = base64_texture;
 	}
 
 	public NamespacedKey key() { return key; }
 	public String name() { return name; }
 	public String category() { return category; }
-	public List<String> tags() { return tags; }
+	public Set<String> tags() { return tags; }
 	public String texture() { return base64_texture; }
 
 	public ItemStack item() {

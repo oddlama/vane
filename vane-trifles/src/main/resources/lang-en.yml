@@ -18,6 +18,11 @@ version: 1
 # language code (ISO 639) and the country code (ISO 3166).
 resource_pack_lang_code: 'en_us'
 
+command_heads:
+  usage: "%1$s"
+  description: "Get heads from the head library."
+  help: "Execute to open the head library."
+
 item_xp_bottle:
   small:
     # The display name of this item variant. Will be packed into a resource pack.
