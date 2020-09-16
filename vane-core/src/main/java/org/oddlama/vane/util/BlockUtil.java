@@ -54,7 +54,8 @@ public class BlockUtil {
 	}
 
 	public static void drop_naturally(Location loc, ItemStack drop) {
-		loc.getWorld().dropItemNaturally(loc, drop);
+		loc.getWorld().dropItem(loc.add(Vector.getRandom().subtract(new Vector(.5, .5, .5)).multiply(0.5)), drop)
+			.setVelocity(Vector.getRandom().add(new Vector(-.5, +.5, -.5)).normalize().multiply(.15));
 	}
 
 	public static List<BlockVector> nearest_blocks_for_radius(int radius) {

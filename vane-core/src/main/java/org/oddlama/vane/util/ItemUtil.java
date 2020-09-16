@@ -15,6 +15,7 @@ import com.destroystokyo.paper.profile.ProfileProperty;
 
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.ChatColor;
 
 import net.minecraft.server.v1_16_R2.Item;
 
@@ -221,6 +222,7 @@ public class ItemUtil {
 		final var meta = (SkullMeta)item.getItemMeta();
 		final var name_component = new TextComponent(name);
 		name_component.setItalic(false);
+		name_component.setColor(ChatColor.YELLOW);
 		meta.setDisplayNameComponent(new BaseComponent[] { name_component });
 		meta.setPlayerProfile(profile);
 		item.setItemMeta(meta);

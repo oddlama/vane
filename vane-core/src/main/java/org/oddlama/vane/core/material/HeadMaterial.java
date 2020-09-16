@@ -35,7 +35,7 @@ public class HeadMaterial {
 	public String texture() { return base64_texture; }
 
 	public ItemStack item() {
-		return skull_with_texture("§e" + name, base64_texture);
+		return skull_with_texture(name, base64_texture);
 	}
 
 	public static HeadMaterial from(final JSONObject json) {
