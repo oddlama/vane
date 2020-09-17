@@ -64,7 +64,6 @@ public class HomeScroll extends CustomItem<Trifles, HomeScroll> {
 
 		@Override
 		public void register_recipes() {
-			final var item = item();
 			final var recipe = new ShapedRecipe(recipe_key(), item())
 				.shape("pip",
 				       "cbe",

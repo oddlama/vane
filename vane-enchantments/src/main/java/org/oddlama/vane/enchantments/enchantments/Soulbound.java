@@ -6,6 +6,14 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
+import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.RecipeChoice.MaterialChoice;
+import org.bukkit.inventory.ShapedRecipe;
+import org.oddlama.vane.core.item.CustomItem;
+import org.oddlama.vane.enchantments.items.AncientTomeOfKnowledge;
+import org.oddlama.vane.enchantments.items.AncientTomeOfTheGods;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -19,6 +27,36 @@ import org.oddlama.vane.enchantments.Enchantments;
 public class Soulbound extends CustomEnchantment<Enchantments> {
 	public Soulbound(Context<Enchantments> context) {
 		super(context);
+	}
+
+	@Override
+	public void register_recipes() {
+		final var ancient_tome_of_the_gods = CustomItem.<AncientTomeOfTheGods.AncientTomeOfTheGodsVariant>variant_of(AncientTomeOfTheGods.class, CustomItem.SingleVariant.SINGLETON).item();
+
+		final var item = ancient_tome_of_the_gods.clone();
+		final var meta = (EnchantmentStorageMeta)item.getItemMeta();
+		meta.addStoredEnchant(bukkit(), 1, false);
+		item.setItemMeta(meta);
+
+		final var curse_of_binding = new ItemStack(Material.ENCHANTED_BOOK);
+		final var curse_meta = (EnchantmentStorageMeta)curse_of_binding.getItemMeta();
+		curse_meta.addStoredEnchant(Enchantment.BINDING_CURSE, 1, false);
+		curse_of_binding.setItemMeta(curse_meta);
+
+		final var recipe = new ShapedRecipe(recipe_key(), item)
+			.shape("cqc",
+				   "obe",
+				   "rgt")
+			.setIngredient('b', ancient_tome_of_the_gods)
+			.setIngredient('c', Material.CHAIN)
+			.setIngredient('q', Material.WRITABLE_BOOK)
+			.setIngredient('o', Material.BONE)
+			.setIngredient('r', curse_of_binding)
+			.setIngredient('g', Material.GHAST_TEAR)
+			.setIngredient('t', Material.TOTEM_OF_UNDYING)
+			.setIngredient('e', Material.ENDER_EYE);
+
+		add_recipe(recipe);
 	}
 
 	@Override

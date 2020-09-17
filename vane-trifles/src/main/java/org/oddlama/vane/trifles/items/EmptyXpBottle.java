@@ -32,8 +32,7 @@ public class EmptyXpBottle extends CustomItem<Trifles, EmptyXpBottle> {
 
 		@Override
 		public void register_recipes() {
-			final var item = item();
-			final var recipe = new ShapelessRecipe(recipe_key(), item)
+			final var recipe = new ShapelessRecipe(recipe_key(), item())
 				.addIngredient(Material.EXPERIENCE_BOTTLE)
 				.addIngredient(Material.GLASS_BOTTLE)
 				.addIngredient(Material.GOLD_NUGGET);

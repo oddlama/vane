@@ -8,6 +8,13 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.util.Vector;
 
+import org.bukkit.Material;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
+import org.bukkit.inventory.RecipeChoice.MaterialChoice;
+import org.bukkit.inventory.ShapedRecipe;
+import org.oddlama.vane.core.item.CustomItem;
+import org.oddlama.vane.enchantments.items.AncientTomeOfKnowledge;
+import org.oddlama.vane.enchantments.items.AncientTomeOfTheGods;
 import org.oddlama.vane.annotation.config.ConfigDouble;
 import org.oddlama.vane.annotation.config.ConfigDoubleList;
 import org.oddlama.vane.annotation.enchantment.Rarity;
@@ -28,6 +35,26 @@ public class GrapplingHook extends CustomEnchantment<Enchantments> {
 
 	public GrapplingHook(Context<Enchantments> context) {
 		super(context);
+	}
+
+	@Override
+	public void register_recipes() {
+		final var ancient_tome_of_knowledge = CustomItem.<AncientTomeOfKnowledge.AncientTomeOfKnowledgeVariant>variant_of(AncientTomeOfKnowledge.class, CustomItem.SingleVariant.SINGLETON).item();
+
+		final var item = ancient_tome_of_knowledge.clone();
+		final var meta = (EnchantmentStorageMeta)item.getItemMeta();
+		meta.addStoredEnchant(bukkit(), 1, false);
+		item.setItemMeta(meta);
+
+		final var recipe = new ShapedRecipe(recipe_key(), item)
+			.shape(" h ",
+				   " l ",
+				   " b ")
+			.setIngredient('b', ancient_tome_of_knowledge)
+			.setIngredient('l', Material.LEAD)
+			.setIngredient('h', Material.TRIPWIRE_HOOK);
+
+		add_recipe(recipe);
 	}
 
 	private double get_strength(int level) {

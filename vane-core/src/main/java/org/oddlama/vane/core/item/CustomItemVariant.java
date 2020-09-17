@@ -49,7 +49,7 @@ public class CustomItemVariant<T extends Module<T>, V extends CustomItem<T, V>, 
 		}
 
 		// Create namespaced_key
-		this.key = namespaced_key("vane", variant_name);
+		this.key = namespaced_key(get_module().namespace(), variant_name);
 
 		// Check for duplicate model data
 		parent.check_valid_model_data(this);
@@ -130,9 +130,9 @@ public class CustomItemVariant<T extends Module<T>, V extends CustomItem<T, V>, 
 	/** Returns a named recipe key */
 	public final NamespacedKey recipe_key(String recipe_name) {
 		if (recipe_name.equals("")) {
-			return namespaced_key("vane", variant_name + "_recipe");
+			return namespaced_key(get_module().namespace(), variant_name + "_recipe");
 		}
-		return namespaced_key("vane", variant_name + "_recipe_" + recipe_name);
+		return namespaced_key(get_module().namespace(), variant_name + "_recipe_" + recipe_name);
 	}
 
 	private final void add_recipe_or_throw(NamespacedKey recipe_key, Recipe recipe) {

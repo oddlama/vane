@@ -9,6 +9,13 @@ import org.bukkit.util.Vector;
 
 import org.bukkit.Particle;
 
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
+import org.bukkit.Material;
+import org.bukkit.inventory.RecipeChoice.MaterialChoice;
+import org.bukkit.inventory.ShapedRecipe;
+import org.oddlama.vane.core.item.CustomItem;
+import org.oddlama.vane.enchantments.items.AncientTomeOfKnowledge;
+import org.oddlama.vane.enchantments.items.AncientTomeOfTheGods;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -32,6 +39,26 @@ public class TakeOff extends CustomEnchantment<Enchantments> {
 
 	public TakeOff(Context<Enchantments> context) {
 		super(context);
+	}
+
+	@Override
+	public void register_recipes() {
+		final var ancient_tome_of_the_gods = CustomItem.<AncientTomeOfTheGods.AncientTomeOfTheGodsVariant>variant_of(AncientTomeOfTheGods.class, CustomItem.SingleVariant.SINGLETON).item();
+
+		final var item = ancient_tome_of_the_gods.clone();
+		final var meta = (EnchantmentStorageMeta)item.getItemMeta();
+		meta.addStoredEnchant(bukkit(), 1, false);
+		item.setItemMeta(meta);
+
+		final var recipe = new ShapedRecipe(recipe_key(), item)
+			.shape("mbm",
+				   "psp")
+			.setIngredient('b', ancient_tome_of_the_gods)
+			.setIngredient('m', Material.PHANTOM_MEMBRANE)
+			.setIngredient('p', Material.STICKY_PISTON)
+			.setIngredient('s', Material.SLIME_BLOCK);
+
+		add_recipe(recipe);
 	}
 
 	@Override

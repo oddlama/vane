@@ -12,9 +12,11 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.inventory.ItemStack;
+import org.oddlama.vane.core.item.ModelDataEnum;
 
 import org.oddlama.vane.annotation.VaneModule;
 import org.oddlama.vane.core.module.Module;
+import org.oddlama.vane.core.Core;
 
 @VaneModule(name = "enchantments", bstats = 8640, config_version = 1, lang_version = 1, storage_version = 1)
 public class Enchantments extends Module<Enchantments> {
@@ -27,6 +29,10 @@ public class Enchantments extends Module<Enchantments> {
 			log.severe("Could not re-enable enchantment registration! Shutting down.");
 			getServer().shutdown();
 		}
+
+		new org.oddlama.vane.enchantments.items.AncientTome(this);
+		new org.oddlama.vane.enchantments.items.AncientTomeOfKnowledge(this);
+		new org.oddlama.vane.enchantments.items.AncientTomeOfTheGods(this);
 
 		new org.oddlama.vane.enchantments.commands.Enchant(this);
 		new org.oddlama.vane.enchantments.enchantments.Angel(this);
@@ -46,6 +52,16 @@ public class Enchantments extends Module<Enchantments> {
 	public void on_load() {
 		// Give custom enchantments a chance to add superseding enchantments
 		CustomEnchantment.call_register_superseding();
+	}
+
+	@Override
+	public Class<? extends ModelDataEnum> model_data_enum() {
+		return org.oddlama.vane.enchantments.items.ModelData.class;
+	}
+
+	@Override
+	public int model_data(int item_id, int variant_id) {
+		return Core.model_data(1, item_id, variant_id);
 	}
 
 	public ItemStack update_enchanted_item(ItemStack item_stack) {

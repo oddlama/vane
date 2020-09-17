@@ -24,7 +24,7 @@ import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.trifles.Trifles;
 
 public class ChestSorter extends Listener<Trifles> {
-	private static final NamespacedKey LAST_SORT_TIME = namespaced_key("vane", "last_sort_time");
+	private static final NamespacedKey LAST_SORT_TIME = namespaced_key("vane_trifles", "last_sort_time");
 
 	@ConfigLong(def = 1000, min = 0, desc = "Chest sorting cooldown in milliseconds.")
 	public long config_cooldown;

@@ -15,6 +15,8 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.Keyed;
+import org.bukkit.inventory.Recipe;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -42,6 +44,9 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 	// Language
 	@LangMessage public TranslatedMessage lang_name;
 
+	// All associated recipes
+	private Map<NamespacedKey, Recipe> recipes = new HashMap<>();
+
 	public CustomEnchantment(Context<T> context) {
 		super(null);
 
@@ -51,7 +56,7 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 		set_context(context);
 
 		// Create namespaced key
-		key = namespaced_key("vane", name);
+		key = namespaced_key(get_module().namespace(), name);
 
 		// Check if instance is already exists
 		if (instances.get(getClass()) != null) {
@@ -257,5 +262,41 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 	 */
 	public boolean can_enchant(@NotNull ItemStack item_stack) {
 		return annotation.target().includes(item_stack);
+	}
+
+	/**
+	 * Override this and add your related recipes here.
+	 */
+	public void register_recipes() {}
+
+	/** Returns the main recipe key */
+	public final NamespacedKey recipe_key() { return recipe_key(""); }
+	/** Returns a named recipe key */
+	public final NamespacedKey recipe_key(String recipe_name) {
+		if (recipe_name.equals("")) {
+			return namespaced_key(get_module().namespace(), "enchantment_" + name + "_recipe");
+		}
+		return namespaced_key(get_module().namespace(), "enchantment_" + name + "_recipe_" + recipe_name);
+	}
+
+	private final void add_recipe_or_throw(NamespacedKey recipe_key, Recipe recipe) {
+		if (recipes.containsKey(recipe_key)) {
+			throw new RuntimeException("A recipe with the same key ('" + recipe_key + "') is already defined!");
+		}
+		recipes.put(recipe_key, recipe);
+	}
+
+	/**
+	 * Adds a related recipe to this item.
+	 * Useful if you need non-standard recipes.
+	 */
+	public final Recipe add_recipe(NamespacedKey recipe_key, Recipe recipe) {
+		add_recipe_or_throw(recipe_key, recipe);
+		return recipe;
+	}
+
+	public final<R extends Recipe & Keyed> Recipe add_recipe(R recipe) {
+		add_recipe_or_throw(((Keyed)recipe).getKey(), recipe);
+		return recipe;
 	}
 }

@@ -6,7 +6,14 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageEvent;
 
+import org.bukkit.Material;
 import org.oddlama.vane.annotation.enchantment.Rarity;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
+import org.bukkit.inventory.RecipeChoice.MaterialChoice;
+import org.bukkit.inventory.ShapedRecipe;
+import org.oddlama.vane.core.item.CustomItem;
+import org.oddlama.vane.enchantments.items.AncientTomeOfKnowledge;
+import org.oddlama.vane.enchantments.items.AncientTomeOfTheGods;
 import org.oddlama.vane.annotation.enchantment.VaneEnchantment;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.enchantments.CustomEnchantment;
@@ -16,6 +23,26 @@ import org.oddlama.vane.enchantments.Enchantments;
 public class HellBent extends CustomEnchantment<Enchantments> {
 	public HellBent(Context<Enchantments> context) {
 		super(context);
+	}
+
+	@Override
+	public void register_recipes() {
+		final var ancient_tome_of_knowledge = CustomItem.<AncientTomeOfKnowledge.AncientTomeOfKnowledgeVariant>variant_of(AncientTomeOfKnowledge.class, CustomItem.SingleVariant.SINGLETON).item();
+
+		final var item = ancient_tome_of_knowledge.clone();
+		final var meta = (EnchantmentStorageMeta)item.getItemMeta();
+		meta.addStoredEnchant(bukkit(), 1, false);
+		item.setItemMeta(meta);
+
+		final var recipe = new ShapedRecipe(recipe_key(), item)
+			.shape(" m ",
+				   " b ",
+				   " t ")
+			.setIngredient('b', ancient_tome_of_knowledge)
+			.setIngredient('t', Material.TURTLE_HELMET)
+			.setIngredient('m', Material.MUSIC_DISC_PIGSTEP);
+
+		add_recipe(recipe);
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)

@@ -1,14 +1,11 @@
-package org.oddlama.vane.trifles.items;
+package org.oddlama.vane.enchantments.items;
 
 import org.oddlama.vane.core.item.ModelDataEnum;
 
 public enum ModelData implements ModelDataEnum {
-	SICKLE(0),
-	FILE(1),
-	EMPTY_XP_BOTTLE(2),
-	XP_BOTTLE(3),
-	HOME_SCROLL(4),
-	UNSTABLE_SCROLL(5),
+	ANCIENT_TOME(0),
+	ANCIENT_TOME_OF_KNOWLEDGE(1),
+	ANCIENT_TOME_OF_THE_GODS(2),
 	;
 
 	private int id = 0;

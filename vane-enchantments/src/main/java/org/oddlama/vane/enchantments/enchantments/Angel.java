@@ -7,6 +7,12 @@ import org.bukkit.Particle;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
+import org.bukkit.inventory.RecipeChoice.MaterialChoice;
+import org.bukkit.inventory.ShapedRecipe;
+import org.oddlama.vane.core.item.CustomItem;
+import org.oddlama.vane.enchantments.items.AncientTomeOfKnowledge;
+import org.oddlama.vane.enchantments.items.AncientTomeOfTheGods;
 import org.bukkit.inventory.ItemStack;
 
 import org.jetbrains.annotations.NotNull;
@@ -33,6 +39,28 @@ public class Angel extends CustomEnchantment<Enchantments> {
 	@Override
 	public void register_superseding() {
 		supersedes(bukkit(Unbreakable.class));
+	}
+
+	@Override
+	public void register_recipes() {
+		final var ancient_tome_of_the_gods = CustomItem.<AncientTomeOfTheGods.AncientTomeOfTheGodsVariant>variant_of(AncientTomeOfTheGods.class, CustomItem.SingleVariant.SINGLETON).item();
+
+		final var item = ancient_tome_of_the_gods.clone();
+		final var meta = (EnchantmentStorageMeta)item.getItemMeta();
+		meta.addStoredEnchant(bukkit(), 1, false);
+		item.setItemMeta(meta);
+
+		final var recipe = new ShapedRecipe(recipe_key(), item)
+			.shape("prp",
+				   "mbm",
+				   "mdm")
+			.setIngredient('b', ancient_tome_of_the_gods)
+			.setIngredient('m', Material.PHANTOM_MEMBRANE)
+			.setIngredient('d', Material.DRAGON_BREATH)
+			.setIngredient('p', Material.PUFFERFISH_BUCKET)
+			.setIngredient('r', Material.FIREWORK_ROCKET);
+
+		add_recipe(recipe);
 	}
 
 	@Override

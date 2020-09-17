@@ -18,26 +18,48 @@ version: 1
 # language code (ISO 639) and the country code (ISO 3166).
 resource_pack_lang_code: 'de_de'
 
+item_ancient_tome:
+  # The display name of this item variant.
+  name: "Antiker Foliant"
+
+item_ancient_tome_of_knowledge:
+  # The display name of this item variant.
+  name: "Antiker Foliant des Wissens"
+
+item_ancient_tome_of_the_gods:
+  # The display name of this item variant.
+  name: "Antiker Foliant der Götter"
+
 enchantment_angel:
   name: "Engel"
+
 enchantment_careless:
   name: "Achtlos"
+
 enchantment_grappling_hook:
   name: "Greifhaken"
+
 enchantment_hell_bent:
   name: "Dickschädel"
+
 enchantment_leafchopper:
   name: "Blattschneider"
+
 enchantment_rake:
   name: "Harke"
+
 enchantment_seeding:
   name: "Saat"
+
 enchantment_soulbound:
   name: "Seelengebunden"
+
 enchantment_take_off:
   name: "Abflug"
+
 enchantment_unbreakable:
   name: "Unzerbrechlich"
+
 enchantment_wings:
   name: "Flügel"
 
