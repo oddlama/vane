@@ -6,6 +6,7 @@ import static org.oddlama.vane.util.ItemUtil.MODIFIER_UUID_GENERIC_ATTACK_DAMAGE
 import static org.oddlama.vane.util.ItemUtil.MODIFIER_UUID_GENERIC_ATTACK_SPEED;
 import static org.oddlama.vane.util.ItemUtil.damage_item;
 import static org.oddlama.vane.util.PlayerUtil.swing_arm;
+import org.bukkit.event.Event;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -378,6 +379,10 @@ public class File extends CustomItem<Trifles, File> {
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void on_player_right_click(final PlayerInteractEvent event) {
 		if (!event.hasBlock() || event.getAction() != Action.RIGHT_CLICK_BLOCK) {
+			return;
+		}
+
+		if (event.useItemInHand() == Event.Result.DENY) {
 			return;
 		}
 

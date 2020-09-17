@@ -6,6 +6,7 @@ import static org.oddlama.vane.util.ItemUtil.MODIFIER_UUID_GENERIC_ATTACK_SPEED;
 import static org.oddlama.vane.util.Util.ms_to_ticks;
 import static org.oddlama.vane.util.ItemUtil.damage_item;
 import static org.oddlama.vane.util.MaterialUtil.is_seeded_plant;
+import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.oddlama.vane.trifles.event.PlayerTeleportScrollEvent;
 import static org.oddlama.vane.util.PlayerUtil.harvest_plant;
@@ -90,9 +91,13 @@ public class HomeScroll extends CustomItem<Trifles, HomeScroll> {
 		super(context, HomeScrollVariant::new);
 	}
 
-	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = false) // ignoreCancelled = false to catch right-click-air events
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = false) // ignoreCancelled = false to catch right-click-air events
 	public void on_player_right_click(final PlayerInteractEvent event) {
 		if (event.getAction() != Action.RIGHT_CLICK_BLOCK && event.getAction() != Action.RIGHT_CLICK_AIR) {
+			return;
+		}
+
+		if (event.useItemInHand() == Event.Result.DENY) {
 			return;
 		}
 
@@ -118,6 +123,7 @@ public class HomeScroll extends CustomItem<Trifles, HomeScroll> {
 					if (block.getType().isInteractable()) {
 						return;
 					}
+					event.setUseInteractedBlock(Event.Result.DENY);
 				}
 				break;
 		}

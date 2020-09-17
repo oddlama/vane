@@ -6,6 +6,7 @@ import static org.oddlama.vane.util.ItemUtil.MODIFIER_UUID_GENERIC_ATTACK_DAMAGE
 import static org.oddlama.vane.util.ItemUtil.MODIFIER_UUID_GENERIC_ATTACK_SPEED;
 import static org.oddlama.vane.util.ItemUtil.damage_item;
 import static org.oddlama.vane.util.MaterialUtil.is_seeded_plant;
+import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import static org.oddlama.vane.util.PlayerUtil.harvest_plant;
 import static org.oddlama.vane.util.PlayerUtil.swing_arm;
@@ -106,6 +107,10 @@ public class UnstableScroll extends CustomItem<Trifles, UnstableScroll> {
 			return;
 		}
 
+		if (event.useItemInHand() == Event.Result.DENY) {
+			return;
+		}
+
 		// Get item variant
 		final var player = event.getPlayer();
 		final var item = player.getEquipment().getItem(event.getHand());
@@ -128,6 +133,7 @@ public class UnstableScroll extends CustomItem<Trifles, UnstableScroll> {
 					if (block.getType().isInteractable()) {
 						return;
 					}
+					event.setUseInteractedBlock(Event.Result.DENY);
 				}
 				break;
 		}

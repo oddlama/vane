@@ -23,9 +23,13 @@ public class PortalActivator extends Listener<Portals> {
 		super(context);
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = false)
 	public void on_player_interact_console(final PlayerInteractEvent event) {
 		if (!event.hasBlock() || event.getAction() != Action.RIGHT_CLICK_BLOCK) {
+			return;
+		}
+
+		if (event.useInteractedBlock() == Event.Result.DENY) {
 			return;
 		}
 
@@ -48,6 +52,10 @@ public class PortalActivator extends Listener<Portals> {
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void on_player_interact_switch(final PlayerInteractEvent event) {
 		if (!event.hasBlock() || event.getAction() != Action.RIGHT_CLICK_BLOCK) {
+			return;
+		}
+
+		if (event.useInteractedBlock() == Event.Result.DENY) {
 			return;
 		}
 

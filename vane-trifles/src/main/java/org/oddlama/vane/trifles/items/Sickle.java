@@ -7,6 +7,7 @@ import static org.oddlama.vane.util.ItemUtil.damage_item;
 import static org.oddlama.vane.util.MaterialUtil.is_seeded_plant;
 import static org.oddlama.vane.util.PlayerUtil.harvest_plant;
 import static org.oddlama.vane.util.PlayerUtil.swing_arm;
+import org.bukkit.event.Event;
 
 import org.bukkit.Material;
 import org.bukkit.Tag;
@@ -162,6 +163,10 @@ public class Sickle extends CustomItem<Trifles, Sickle> {
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void on_player_right_click_plant(final PlayerInteractEvent event) {
 		if (!event.hasBlock() || event.getAction() != Action.RIGHT_CLICK_BLOCK) {
+			return;
+		}
+
+		if (event.useItemInHand() == Event.Result.DENY) {
 			return;
 		}
 
