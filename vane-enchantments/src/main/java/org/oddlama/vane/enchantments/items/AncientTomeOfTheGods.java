@@ -77,7 +77,7 @@ public class AncientTomeOfTheGods extends CustomItem<Enchantments, AncientTomeOf
 
 				add_recipe(recipe);
 
-				final var entry = new LootTableEntry(300, item);
+				final var entry = new LootTableEntry(200, item);
 				for (final var table : new LootTables[] {
 					LootTables.BASTION_TREASURE,
 					LootTables.BURIED_TREASURE,

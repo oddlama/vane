@@ -6,6 +6,8 @@ import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.oddlama.vane.core.LootTable.LootTableEntry;
+import org.bukkit.loot.LootTables;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.RecipeChoice.MaterialChoice;
@@ -46,13 +48,14 @@ public class Angel extends CustomEnchantment<Enchantments> {
 	public void register_recipes() {
 		final var ancient_tome_of_the_gods = CustomItem.<AncientTomeOfTheGods.AncientTomeOfTheGodsVariant>variant_of(AncientTomeOfTheGods.class, BookVariant.ENCHANTED_BOOK).item();
 
+		final var recipe_key = recipe_key();
 		final var item = ancient_tome_of_the_gods.clone();
 		final var meta = (EnchantmentStorageMeta)item.getItemMeta();
 		meta.addStoredEnchant(bukkit(), 1, false);
 		item.setItemMeta(meta);
 		get_module().update_enchanted_item(item);
 
-		final var recipe = new ShapedRecipe(recipe_key(), item)
+		final var recipe = new ShapedRecipe(recipe_key, item)
 			.shape("prp",
 				   "mbm",
 				   "mdm")
@@ -63,6 +66,19 @@ public class Angel extends CustomEnchantment<Enchantments> {
 			.setIngredient('r', Material.FIREWORK_ROCKET);
 
 		add_recipe(recipe);
+
+		// Loot generation
+		final var entry = new LootTableEntry(250, item);
+		for (final var table : new LootTables[] {
+			LootTables.BURIED_TREASURE,
+			LootTables.PILLAGER_OUTPOST,
+			LootTables.RUINED_PORTAL,
+			LootTables.STRONGHOLD_LIBRARY,
+			LootTables.UNDERWATER_RUIN_BIG,
+			LootTables.VILLAGE_TEMPLE,
+		}) {
+			get_module().loot_table(table).put(recipe_key, entry);
+		}
 	}
 
 	@Override
