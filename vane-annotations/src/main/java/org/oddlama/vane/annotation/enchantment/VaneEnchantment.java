@@ -14,6 +14,7 @@ public @interface VaneEnchantment {
 	int max_level() default 1;
 	Rarity rarity() default Rarity.COMMON;
 	boolean treasure() default false;
+	boolean generate_in_treasure() default false;
 	EnchantmentTarget target() default EnchantmentTarget.BREAKABLE;
 	boolean allow_custom() default false;
 }

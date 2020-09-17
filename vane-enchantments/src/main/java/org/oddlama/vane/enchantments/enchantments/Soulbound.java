@@ -64,7 +64,7 @@ public class Soulbound extends CustomEnchantment<Enchantments> {
 		add_recipe(recipe);
 
 		// Loot generation
-		get_module().loot_table(LootTables.BASTION_TREASURE).put(recipe_key, new LootTableEntry(100, item));
+		get_module().loot_table(LootTables.BASTION_TREASURE).put(recipe_key, new LootTableEntry(15, item));
 	}
 
 	@Override

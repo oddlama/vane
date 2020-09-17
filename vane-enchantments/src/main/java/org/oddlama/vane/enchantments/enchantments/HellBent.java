@@ -50,7 +50,7 @@ public class HellBent extends CustomEnchantment<Enchantments> {
 		add_recipe(recipe);
 
 		// Loot generation
-		final var entry = new LootTableEntry(10, item);
+		final var entry = new LootTableEntry(50, item);
 		for (final var table : new LootTables[] {
 			LootTables.BASTION_BRIDGE,
 			LootTables.BASTION_HOGLIN_STABLE,

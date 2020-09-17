@@ -63,6 +63,12 @@ public class NativeEnchantmentWrapper extends Enchantment {
 		return enchantment.is_treasure();
 	}
 
+	// can_generate_in_treasure()
+	@Override
+	public boolean i() {
+		return enchantment.generate_in_treasure();
+	}
+
 	// is_compatible()
 	@Override
 	public boolean a(@NotNull Enchantment other) {

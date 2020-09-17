@@ -58,8 +58,8 @@ public class Unbreakable extends CustomEnchantment<Enchantments> {
 		add_recipe(recipe);
 
 		// Loot generation
-		get_module().loot_table(LootTables.ABANDONED_MINESHAFT).put(recipe_key, new LootTableEntry(85, item));
-		get_module().loot_table(LootTables.BASTION_TREASURE).put(recipe_key, new LootTableEntry(100, item));
+		get_module().loot_table(LootTables.ABANDONED_MINESHAFT).put(recipe_key, new LootTableEntry(120, item));
+		get_module().loot_table(LootTables.BASTION_TREASURE).put(recipe_key, new LootTableEntry(90, item));
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)

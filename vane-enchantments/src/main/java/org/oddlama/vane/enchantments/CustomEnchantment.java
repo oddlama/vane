@@ -221,6 +221,14 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 	}
 
 	/**
+	 * Determines if this enchantment generates on treasure items.
+	 * Always reflects the annotation value {@link VaneEnchantment#generate_in_treasure()}.
+	 */
+	public final boolean generate_in_treasure() {
+		return annotation.generate_in_treasure();
+	}
+
+	/**
 	 * Determines which item types this enchantment can be applied to.
 	 * {@link #can_enchant(ItemStack)} can be used to further limit the applicable items.
 	 * Always reflects the annotation value {@link VaneEnchantment#target()}.

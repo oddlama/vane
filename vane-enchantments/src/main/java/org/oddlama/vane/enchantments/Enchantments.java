@@ -6,6 +6,7 @@ import java.util.Map;
 
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
+import org.bukkit.event.world.LootGenerateEvent;
 
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.EventHandler;
@@ -66,16 +67,28 @@ public class Enchantments extends Module<Enchantments> {
 	}
 
 	public ItemStack update_enchanted_item(ItemStack item_stack) {
-		return update_enchanted_item(item_stack, new HashMap<Enchantment, Integer>());
+		return update_enchanted_item(item_stack, new HashMap<Enchantment, Integer>(), false);
 	}
 
 	public ItemStack update_enchanted_item(ItemStack item_stack, Map<Enchantment, Integer> additional_enchantments) {
+		return update_enchanted_item(item_stack, additional_enchantments, false);
+	}
+
+	public ItemStack update_enchanted_item(ItemStack item_stack, boolean only_if_enchanted) {
+		return update_enchanted_item(item_stack, new HashMap<Enchantment, Integer>(), only_if_enchanted);
+	}
+
+	public ItemStack update_enchanted_item(ItemStack item_stack, Map<Enchantment, Integer> additional_enchantments, boolean only_if_enchanted) {
 		final var enchantments = new HashMap<>(additional_enchantments);
 		final var meta = item_stack.getItemMeta();
 		if (meta instanceof EnchantmentStorageMeta) {
 			enchantments.putAll(((EnchantmentStorageMeta)meta).getStoredEnchants());
 		} else {
 			enchantments.putAll(item_stack.getEnchantments());
+		}
+
+		if (enchantments.isEmpty() && only_if_enchanted) {
+			return item_stack;
 		}
 
 		remove_superseded(item_stack, enchantments);
@@ -159,5 +172,13 @@ public class Enchantments extends Module<Enchantments> {
 	public void on_enchant_item(final EnchantItemEvent event) {
 		final var map = new HashMap<Enchantment, Integer>(event.getEnchantsToAdd());
 		update_enchanted_item(event.getItem(), map);
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void on_loot_generate(final LootGenerateEvent event) {
+		for (final var item : event.getLoot()) {
+			// Update all item lore in case they are enchanted
+			update_enchanted_item(item, true);
+		}
 	}
 }
