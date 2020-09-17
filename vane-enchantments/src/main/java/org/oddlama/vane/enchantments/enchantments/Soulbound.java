@@ -8,6 +8,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.Material;
+import org.oddlama.vane.core.LootTable.LootTableEntry;
+import org.bukkit.loot.LootTables;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.RecipeChoice.MaterialChoice;
 import org.bukkit.inventory.ShapedRecipe;
@@ -34,6 +36,7 @@ public class Soulbound extends CustomEnchantment<Enchantments> {
 	public void register_recipes() {
 		final var ancient_tome_of_the_gods = CustomItem.<AncientTomeOfTheGods.AncientTomeOfTheGodsVariant>variant_of(AncientTomeOfTheGods.class, BookVariant.ENCHANTED_BOOK).item();
 
+		final var recipe_key = recipe_key();
 		final var item = ancient_tome_of_the_gods.clone();
 		final var meta = (EnchantmentStorageMeta)item.getItemMeta();
 		meta.addStoredEnchant(bukkit(), 1, false);
@@ -45,7 +48,7 @@ public class Soulbound extends CustomEnchantment<Enchantments> {
 		curse_meta.addStoredEnchant(Enchantment.BINDING_CURSE, 1, false);
 		curse_of_binding.setItemMeta(curse_meta);
 
-		final var recipe = new ShapedRecipe(recipe_key(), item)
+		final var recipe = new ShapedRecipe(recipe_key, item)
 			.shape("cqc",
 				   "obe",
 				   "rgt")
@@ -59,6 +62,9 @@ public class Soulbound extends CustomEnchantment<Enchantments> {
 			.setIngredient('e', Material.ENDER_EYE);
 
 		add_recipe(recipe);
+
+		// Loot generation
+		get_module().loot_table(LootTables.BASTION_TREASURE).put(recipe_key, new LootTableEntry(100, item));
 	}
 
 	@Override

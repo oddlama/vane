@@ -23,6 +23,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import org.jetbrains.annotations.NotNull;
+import org.oddlama.vane.core.LootTable.LootTableEntry;
+import org.bukkit.loot.LootTables;
 
 import org.oddlama.vane.annotation.config.ConfigDoubleList;
 import org.oddlama.vane.annotation.config.ConfigIntList;
@@ -45,24 +47,41 @@ public class Wings extends CustomEnchantment<Enchantments> {
 
 	@Override
 	public void register_recipes() {
-		final var ancient_tome_of_the_gods = CustomItem.<AncientTomeOfTheGods.AncientTomeOfTheGodsVariant>variant_of(AncientTomeOfTheGods.class, BookVariant.ENCHANTED_BOOK).item();
+		final var ancient_tome_of_knowledge = CustomItem.<AncientTomeOfKnowledge.AncientTomeOfKnowledgeVariant>variant_of(AncientTomeOfKnowledge.class, BookVariant.ENCHANTED_BOOK).item();
 
-		final var item = ancient_tome_of_the_gods.clone();
+		final var recipe_key = recipe_key();
+		final var item = ancient_tome_of_knowledge.clone();
 		final var meta = (EnchantmentStorageMeta)item.getItemMeta();
 		meta.addStoredEnchant(bukkit(), 1, false);
 		item.setItemMeta(meta);
 		get_module().update_enchanted_item(item);
 
-		final var recipe = new ShapedRecipe(recipe_key(), item)
+		final var recipe = new ShapedRecipe(recipe_key, item)
 			.shape("m m",
 				   "dbd",
 			       "r r")
-			.setIngredient('b', ancient_tome_of_the_gods)
+			.setIngredient('b', ancient_tome_of_knowledge)
 			.setIngredient('m', Material.PHANTOM_MEMBRANE)
 			.setIngredient('d', Material.DISPENSER)
 			.setIngredient('r', Material.FIREWORK_ROCKET);
 
 		add_recipe(recipe);
+
+		// Loot generation
+		final var entry = new LootTableEntry(110, item);
+		for (final var table : new LootTables[] {
+			LootTables.BURIED_TREASURE,
+			LootTables.PILLAGER_OUTPOST,
+			LootTables.RUINED_PORTAL,
+			LootTables.SHIPWRECK_TREASURE,
+			LootTables.STRONGHOLD_LIBRARY,
+			LootTables.UNDERWATER_RUIN_BIG,
+			LootTables.UNDERWATER_RUIN_SMALL,
+			LootTables.VILLAGE_TEMPLE,
+			LootTables.WOODLAND_MANSION,
+		}) {
+			get_module().loot_table(table).put(recipe_key, entry);
+		}
 	}
 
 	@Override

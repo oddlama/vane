@@ -4,6 +4,8 @@ import static org.oddlama.vane.util.BlockUtil.relative;
 import static org.oddlama.vane.util.ItemUtil.MODIFIER_UUID_GENERIC_ATTACK_DAMAGE;
 import static org.oddlama.vane.util.ItemUtil.MODIFIER_UUID_GENERIC_ATTACK_SPEED;
 import static org.oddlama.vane.util.Util.ms_to_ticks;
+import org.oddlama.vane.core.LootTable.LootTableEntry;
+import org.bukkit.loot.LootTables;
 import static org.oddlama.vane.util.ItemUtil.damage_item;
 import static org.oddlama.vane.util.MaterialUtil.is_seeded_plant;
 import org.bukkit.event.Event;
@@ -60,8 +62,11 @@ public class AncientTomeOfKnowledge extends CustomItem<Enchantments, AncientTome
 		@Override
 		public void register_recipes() {
 			if (variant() == BookVariant.BOOK) {
+				final var recipe_key = recipe_key();
+				final var item = item();
+
 				final var ancient_tome = CustomItem.<AncientTome.AncientTomeVariant>variant_of(AncientTome.class, variant()).item();
-				final var recipe = new ShapedRecipe(recipe_key(), item())
+				final var recipe = new ShapedRecipe(recipe_key, item)
 					.shape("fb",
 						   "rg")
 					.setIngredient('f', Material.FEATHER)
@@ -70,6 +75,23 @@ public class AncientTomeOfKnowledge extends CustomItem<Enchantments, AncientTome
 					.setIngredient('g', Material.GHAST_TEAR);
 
 				add_recipe(recipe);
+
+				final var entry = new LootTableEntry(40, item);
+				for (final var table : new LootTables[] {
+					LootTables.ABANDONED_MINESHAFT,
+					LootTables.BASTION_TREASURE,
+					LootTables.BURIED_TREASURE,
+					LootTables.DESERT_PYRAMID,
+					LootTables.NETHER_BRIDGE,
+					LootTables.RUINED_PORTAL,
+					LootTables.SHIPWRECK_TREASURE,
+					LootTables.STRONGHOLD_LIBRARY,
+					LootTables.UNDERWATER_RUIN_BIG,
+					LootTables.VILLAGE_TEMPLE,
+					LootTables.WOODLAND_MANSION,
+				}) {
+					get_module().loot_table(table).put(recipe_key, entry);
+				}
 			}
 		}
 

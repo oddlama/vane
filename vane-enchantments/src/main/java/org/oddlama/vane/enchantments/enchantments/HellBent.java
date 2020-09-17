@@ -8,6 +8,8 @@ import org.bukkit.event.entity.EntityDamageEvent;
 
 import org.bukkit.Material;
 import org.oddlama.vane.annotation.enchantment.Rarity;
+import org.oddlama.vane.core.LootTable.LootTableEntry;
+import org.bukkit.loot.LootTables;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.RecipeChoice.MaterialChoice;
 import org.bukkit.inventory.ShapedRecipe;
@@ -30,13 +32,14 @@ public class HellBent extends CustomEnchantment<Enchantments> {
 	public void register_recipes() {
 		final var ancient_tome_of_knowledge = CustomItem.<AncientTomeOfKnowledge.AncientTomeOfKnowledgeVariant>variant_of(AncientTomeOfKnowledge.class, BookVariant.ENCHANTED_BOOK).item();
 
+		final var recipe_key = recipe_key();
 		final var item = ancient_tome_of_knowledge.clone();
 		final var meta = (EnchantmentStorageMeta)item.getItemMeta();
 		meta.addStoredEnchant(bukkit(), 1, false);
 		item.setItemMeta(meta);
 		get_module().update_enchanted_item(item);
 
-		final var recipe = new ShapedRecipe(recipe_key(), item)
+		final var recipe = new ShapedRecipe(recipe_key, item)
 			.shape(" m ",
 				   " b ",
 				   " t ")
@@ -45,6 +48,17 @@ public class HellBent extends CustomEnchantment<Enchantments> {
 			.setIngredient('m', Material.MUSIC_DISC_PIGSTEP);
 
 		add_recipe(recipe);
+
+		// Loot generation
+		final var entry = new LootTableEntry(10, item);
+		for (final var table : new LootTables[] {
+			LootTables.BASTION_BRIDGE,
+			LootTables.BASTION_HOGLIN_STABLE,
+			LootTables.BASTION_OTHER,
+			LootTables.BASTION_TREASURE,
+		}) {
+			get_module().loot_table(table).put(recipe_key, entry);
+		}
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)

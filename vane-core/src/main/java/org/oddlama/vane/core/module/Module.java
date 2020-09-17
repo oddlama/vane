@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -18,8 +20,11 @@ import com.comphenix.protocol.ProtocolManager;
 
 import org.bstats.bukkit.Metrics;
 
+import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.HandlerList;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
@@ -33,6 +38,9 @@ import org.oddlama.vane.annotation.config.ConfigVersion;
 import org.oddlama.vane.annotation.lang.LangVersion;
 import org.oddlama.vane.annotation.persistent.Persistent;
 import org.oddlama.vane.core.Core;
+import org.oddlama.vane.core.LootTable;
+import org.bukkit.loot.LootTables;
+import org.bukkit.event.world.LootGenerateEvent;
 import org.oddlama.vane.core.ResourcePackGenerator;
 import org.oddlama.vane.core.command.Command;
 import org.oddlama.vane.core.config.ConfigManager;
@@ -105,6 +113,9 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 	public void on_disable() {}
 	public void on_config_change() {}
 	public void on_generate_resource_pack() throws IOException {}
+
+	// Loot modification
+	private final Map<NamespacedKey, LootTable> additional_loot_tables = new HashMap<>();
 
 	// ProtocolLib
 	public ProtocolManager protocol_manager;
@@ -405,5 +416,29 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 	 */
 	public int model_data(int item_id, int variant_id) {
 		throw new RuntimeException("A module must override 'model_data(int, int)', if it want's to register custom items!");
+	}
+
+	public LootTable loot_table(final LootTables table) {
+		return loot_table(table.getKey());
+	}
+
+	public LootTable loot_table(final NamespacedKey key) {
+		var additional_loot_table = additional_loot_tables.get(key);
+		if (additional_loot_table == null) {
+			additional_loot_table = new LootTable();
+			additional_loot_tables.put(key, additional_loot_table);
+		}
+		return additional_loot_table;
+	}
+
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	public void on_loot_generate(final LootGenerateEvent event) {
+		final var loot_table = event.getLootTable();
+		final var additional_loot_table = additional_loot_tables.get(loot_table.getKey());
+		if (additional_loot_table == null) {
+			return;
+		}
+
+		additional_loot_table.generate_loot(event.getLoot());
 	}
 }
