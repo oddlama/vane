@@ -24,7 +24,7 @@ public class Setspawn extends Command<Admin> {
 		player.getWorld().setSpawnLocation(loc);
 
 		// Save location in storage
-		get_module().storage_spawn_location = new LazyLocation(loc.clone());
+		get_module().storage_spawn_location = new LazyLocation(loc);
 		mark_persistent_storage_dirty();
 
 		player.sendMessage("§aSpawn §7set!");

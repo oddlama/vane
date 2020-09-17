@@ -31,7 +31,7 @@ public class WorldRebuild extends Listener<Admin> {
 		super(context.group("world_rebuild", "Instead of cancelling explosions, the world will regenerate after a short amount of time."));
 	}
 
-	private ArrayList<Rebuilder> rebuilders = new ArrayList<>();
+	private List<Rebuilder> rebuilders = new ArrayList<>();
 
 	public void rebuild(final List<Block> blocks) {
 		// Store a snapshot of all block states
@@ -52,7 +52,7 @@ public class WorldRebuild extends Listener<Admin> {
 	@Override
 	public void on_disable() {
 		// Finish all pending rebuilds now!
-		for (final var r : rebuilders) {
+		for (final var r : new ArrayList<>(rebuilders)) {
 			r.finish_now();
 		}
 		rebuilders.clear();
