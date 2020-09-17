@@ -50,24 +50,10 @@ import org.oddlama.vane.core.item.ItemVariantEnum;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.util.BlockUtil;
 
-@VaneItem(name = "ancient_tome")
-public class AncientTome extends CustomItem<Enchantments, AncientTome> {
-	public static class AncientTomeVariant extends CustomItemVariant<Enchantments, AncientTome, BookVariant> {
-		public AncientTomeVariant(AncientTome parent, BookVariant variant) {
-			super(parent, variant);
-		}
+public enum BookVariant implements ItemVariantEnum {
+	BOOK,
+	ENCHANTED_BOOK;
 
-		@Override
-		public Material base() {
-			switch (variant()) {
-				default:             throw new RuntimeException("Missing variant case. This is a bug.");
-				case BOOK:           return Material.BOOK;
-				case ENCHANTED_BOOK: return Material.ENCHANTED_BOOK;
-			}
-		}
-	}
-
-	public AncientTome(Context<Enchantments> context) {
-		super(context, BookVariant.class, BookVariant.values(), AncientTomeVariant::new);
-	}
+	@Override public String prefix() { return name().toLowerCase(); }
+	@Override public boolean enabled() { return true; }
 }

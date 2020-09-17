@@ -52,32 +52,38 @@ import org.oddlama.vane.util.BlockUtil;
 
 @VaneItem(name = "ancient_tome_of_knowledge")
 public class AncientTomeOfKnowledge extends CustomItem<Enchantments, AncientTomeOfKnowledge> {
-	public static class AncientTomeOfKnowledgeVariant extends CustomItemVariant<Enchantments, AncientTomeOfKnowledge, SingleVariant> {
-		public AncientTomeOfKnowledgeVariant(AncientTomeOfKnowledge parent, SingleVariant variant) {
+	public static class AncientTomeOfKnowledgeVariant extends CustomItemVariant<Enchantments, AncientTomeOfKnowledge, BookVariant> {
+		public AncientTomeOfKnowledgeVariant(AncientTomeOfKnowledge parent, BookVariant variant) {
 			super(parent, variant);
 		}
 
 		@Override
 		public void register_recipes() {
-			final var ancient_tome = CustomItem.<AncientTome.AncientTomeVariant>variant_of(AncientTome.class, CustomItem.SingleVariant.SINGLETON).item();
-			final var recipe = new ShapedRecipe(recipe_key(), item())
-				.shape("fb",
-				       "rg")
-				.setIngredient('f', Material.FEATHER)
-				.setIngredient('b', ancient_tome)
-				.setIngredient('r', Material.BLAZE_ROD)
-				.setIngredient('g', Material.GHAST_TEAR);
+			if (variant() == BookVariant.BOOK) {
+				final var ancient_tome = CustomItem.<AncientTome.AncientTomeVariant>variant_of(AncientTome.class, variant()).item();
+				final var recipe = new ShapedRecipe(recipe_key(), item())
+					.shape("fb",
+						   "rg")
+					.setIngredient('f', Material.FEATHER)
+					.setIngredient('b', ancient_tome)
+					.setIngredient('r', Material.BLAZE_ROD)
+					.setIngredient('g', Material.GHAST_TEAR);
 
-			add_recipe(recipe);
+				add_recipe(recipe);
+			}
 		}
 
 		@Override
 		public Material base() {
-			return Material.ENCHANTED_BOOK;
+			switch (variant()) {
+				default:             throw new RuntimeException("Missing variant case. This is a bug.");
+				case BOOK:           return Material.BOOK;
+				case ENCHANTED_BOOK: return Material.ENCHANTED_BOOK;
+			}
 		}
 	}
 
 	public AncientTomeOfKnowledge(Context<Enchantments> context) {
-		super(context, AncientTomeOfKnowledgeVariant::new);
+		super(context, BookVariant.class, BookVariant.values(), AncientTomeOfKnowledgeVariant::new);
 	}
 }

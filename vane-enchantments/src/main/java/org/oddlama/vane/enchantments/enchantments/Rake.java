@@ -16,6 +16,7 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.oddlama.vane.core.item.CustomItem;
 import org.oddlama.vane.enchantments.items.AncientTomeOfKnowledge;
 import org.oddlama.vane.enchantments.items.AncientTomeOfTheGods;
+import org.oddlama.vane.enchantments.items.BookVariant;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -37,7 +38,7 @@ public class Rake extends CustomEnchantment<Enchantments> {
 
 	@Override
 	public void register_recipes() {
-		final var ancient_tome_of_knowledge = CustomItem.<AncientTomeOfKnowledge.AncientTomeOfKnowledgeVariant>variant_of(AncientTomeOfKnowledge.class, CustomItem.SingleVariant.SINGLETON).item();
+		final var ancient_tome_of_knowledge = CustomItem.<AncientTomeOfKnowledge.AncientTomeOfKnowledgeVariant>variant_of(AncientTomeOfKnowledge.class, BookVariant.ENCHANTED_BOOK).item();
 
 		final var item = ancient_tome_of_knowledge.clone();
 		final var meta = (EnchantmentStorageMeta)item.getItemMeta();

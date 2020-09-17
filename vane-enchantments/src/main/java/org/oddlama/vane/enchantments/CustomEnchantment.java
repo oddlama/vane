@@ -299,4 +299,15 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 		add_recipe_or_throw(((Keyed)recipe).getKey(), recipe);
 		return recipe;
 	}
+
+	@Override
+	public void on_config_change() {
+		recipes.keySet().forEach(get_module().getServer()::removeRecipe);
+		recipes.clear();
+
+		register_recipes();
+		recipes.values().forEach(get_module().getServer()::addRecipe);
+
+		super.on_config_change();
+	}
 }

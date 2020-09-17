@@ -19,16 +19,31 @@ version: 1
 resource_pack_lang_code: 'de_de'
 
 item_ancient_tome:
-  # The display name of this item variant.
-  name: "Antiker Foliant"
+  book:
+    # The display name of this item variant.
+    name: "Antiker Foliant"
+
+  enchanted_book:
+    # The display name of this item variant.
+    name: "Antiker Foliant"
 
 item_ancient_tome_of_knowledge:
-  # The display name of this item variant.
-  name: "Antiker Foliant des Wissens"
+  book:
+    # The display name of this item variant.
+    name: "Antiker Foliant des Wissens"
+
+  enchanted_book:
+    # The display name of this item variant.
+    name: "Antiker Foliant des Wissens"
 
 item_ancient_tome_of_the_gods:
-  # The display name of this item variant.
-  name: "Antiker Foliant der Götter"
+  book:
+    # The display name of this item variant.
+    name: "Antiker Foliant der Götter"
+
+  enchanted_book:
+    # The display name of this item variant.
+    name: "Antiker Foliant der Götter"
 
 enchantment_angel:
   name: "Engel"

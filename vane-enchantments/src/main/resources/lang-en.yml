@@ -19,20 +19,31 @@ version: 1
 resource_pack_lang_code: 'en_us'
 
 item_ancient_tome:
-  # The display name of this item variant.
-  name: "Ancient Tome"
+  book:
+    # The display name of this item variant.
+    name: "Ancient Tome"
+
+  enchanted_book:
+    # The display name of this item variant.
+    name: "Ancient Tome"
 
 item_ancient_tome_of_knowledge:
-  # The display name of this item variant.
-  name: "Ancient Tome of Knowledge"
+  book:
+    # The display name of this item variant.
+    name: "Ancient Tome of Knowledge"
+
+  enchanted_book:
+    # The display name of this item variant.
+    name: "Ancient Tome of Knowledge"
 
 item_ancient_tome_of_the_gods:
-  # The display name of this item variant.
-  name: "Ancient Tome of The Gods"
+  book:
+    # The display name of this item variant.
+    name: "Ancient Tome of The Gods"
 
-item_ancient_tome:
-  # The display name of this item variant.
-  name: "Ancient Tome"
+  enchanted_book:
+    # The display name of this item variant.
+    name: "Ancient Tome of The Gods"
 
 enchantment_angel:
   # The display name of this enchantment. Will be packed into a resource pack.

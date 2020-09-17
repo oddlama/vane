@@ -16,6 +16,7 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.oddlama.vane.core.item.CustomItem;
 import org.oddlama.vane.enchantments.items.AncientTomeOfKnowledge;
 import org.oddlama.vane.enchantments.items.AncientTomeOfTheGods;
+import org.oddlama.vane.enchantments.items.BookVariant;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -43,7 +44,7 @@ public class TakeOff extends CustomEnchantment<Enchantments> {
 
 	@Override
 	public void register_recipes() {
-		final var ancient_tome_of_the_gods = CustomItem.<AncientTomeOfTheGods.AncientTomeOfTheGodsVariant>variant_of(AncientTomeOfTheGods.class, CustomItem.SingleVariant.SINGLETON).item();
+		final var ancient_tome_of_the_gods = CustomItem.<AncientTomeOfTheGods.AncientTomeOfTheGodsVariant>variant_of(AncientTomeOfTheGods.class, BookVariant.ENCHANTED_BOOK).item();
 
 		final var item = ancient_tome_of_the_gods.clone();
 		final var meta = (EnchantmentStorageMeta)item.getItemMeta();

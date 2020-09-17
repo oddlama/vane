@@ -15,6 +15,7 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.oddlama.vane.core.item.CustomItem;
 import org.oddlama.vane.enchantments.items.AncientTomeOfKnowledge;
 import org.oddlama.vane.enchantments.items.AncientTomeOfTheGods;
+import org.oddlama.vane.enchantments.items.BookVariant;
 import org.oddlama.vane.annotation.config.ConfigDouble;
 import org.oddlama.vane.annotation.config.ConfigDoubleList;
 import org.oddlama.vane.annotation.enchantment.Rarity;
@@ -39,7 +40,7 @@ public class GrapplingHook extends CustomEnchantment<Enchantments> {
 
 	@Override
 	public void register_recipes() {
-		final var ancient_tome_of_knowledge = CustomItem.<AncientTomeOfKnowledge.AncientTomeOfKnowledgeVariant>variant_of(AncientTomeOfKnowledge.class, CustomItem.SingleVariant.SINGLETON).item();
+		final var ancient_tome_of_knowledge = CustomItem.<AncientTomeOfKnowledge.AncientTomeOfKnowledgeVariant>variant_of(AncientTomeOfKnowledge.class, BookVariant.ENCHANTED_BOOK).item();
 
 		final var item = ancient_tome_of_knowledge.clone();
 		final var meta = (EnchantmentStorageMeta)item.getItemMeta();

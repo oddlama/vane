@@ -52,33 +52,39 @@ import org.oddlama.vane.util.BlockUtil;
 
 @VaneItem(name = "ancient_tome_of_the_gods")
 public class AncientTomeOfTheGods extends CustomItem<Enchantments, AncientTomeOfTheGods> {
-	public static class AncientTomeOfTheGodsVariant extends CustomItemVariant<Enchantments, AncientTomeOfTheGods, SingleVariant> {
-		public AncientTomeOfTheGodsVariant(AncientTomeOfTheGods parent, SingleVariant variant) {
+	public static class AncientTomeOfTheGodsVariant extends CustomItemVariant<Enchantments, AncientTomeOfTheGods, BookVariant> {
+		public AncientTomeOfTheGodsVariant(AncientTomeOfTheGods parent, BookVariant variant) {
 			super(parent, variant);
 		}
 
 		@Override
 		public void register_recipes() {
-			final var ancient_tome_of_knowledge = CustomItem.<AncientTomeOfKnowledge.AncientTomeOfKnowledgeVariant>variant_of(AncientTomeOfKnowledge.class, CustomItem.SingleVariant.SINGLETON).item();
-			final var recipe = new ShapedRecipe(recipe_key(), item())
-				.shape(" s ",
-				       "ebe",
-				       " n ")
-				.setIngredient('b', ancient_tome_of_knowledge)
-				.setIngredient('e', Material.ENCHANTED_BOOK)
-				.setIngredient('s', Material.NETHER_STAR)
-				.setIngredient('n', Material.NAUTILUS_SHELL);
+			if (variant() == BookVariant.BOOK) {
+				final var ancient_tome_of_knowledge = CustomItem.<AncientTomeOfKnowledge.AncientTomeOfKnowledgeVariant>variant_of(AncientTomeOfKnowledge.class, variant()).item();
+				final var recipe = new ShapedRecipe(recipe_key(), item())
+					.shape(" s ",
+						   "ebe",
+						   " n ")
+					.setIngredient('b', ancient_tome_of_knowledge)
+					.setIngredient('e', Material.ENCHANTED_BOOK)
+					.setIngredient('s', Material.NETHER_STAR)
+					.setIngredient('n', Material.NAUTILUS_SHELL);
 
-			add_recipe(recipe);
+				add_recipe(recipe);
+			}
 		}
 
 		@Override
 		public Material base() {
-			return Material.ENCHANTED_BOOK;
+			switch (variant()) {
+				default:             throw new RuntimeException("Missing variant case. This is a bug.");
+				case BOOK:           return Material.BOOK;
+				case ENCHANTED_BOOK: return Material.ENCHANTED_BOOK;
+			}
 		}
 	}
 
 	public AncientTomeOfTheGods(Context<Enchantments> context) {
-		super(context, AncientTomeOfTheGodsVariant::new);
+		super(context, BookVariant.class, BookVariant.values(), AncientTomeOfTheGodsVariant::new);
 	}
 }
