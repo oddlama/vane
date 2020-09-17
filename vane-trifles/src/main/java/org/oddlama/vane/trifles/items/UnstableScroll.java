@@ -164,5 +164,6 @@ public class UnstableScroll extends CustomItem<Trifles, UnstableScroll> {
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void on_player_teleport_scroll(final PlayerTeleportScrollEvent event) {
 		storage_last_scroll_teleport.put(event.getPlayer().getUniqueId(), new LazyLocation(event.getFrom()));
+		mark_persistent_storage_dirty();
 	}
 }

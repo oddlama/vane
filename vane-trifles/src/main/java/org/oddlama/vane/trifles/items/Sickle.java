@@ -11,6 +11,8 @@ import org.bukkit.event.Event;
 
 import org.bukkit.Material;
 import org.bukkit.Tag;
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.event.EventHandler;
@@ -198,6 +200,7 @@ public class Sickle extends CustomItem<Trifles, Sickle> {
 		if (total_harvested > 0) {
 			damage_item(player, item, 1 + (int)(0.25 * total_harvested));
 			swing_arm(player, event.getHand());
+			root_block.getWorld().playSound(root_block.getLocation(), Sound.ITEM_HOE_TILL, SoundCategory.BLOCKS, 1.0f, 2.0f);
 		}
 	}
 }

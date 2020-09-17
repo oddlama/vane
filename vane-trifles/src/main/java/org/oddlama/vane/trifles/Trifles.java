@@ -8,6 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.SoundCategory;
 import org.oddlama.vane.annotation.VaneModule;
+import org.bukkit.Particle;
 import org.oddlama.vane.trifles.event.PlayerTeleportScrollEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.oddlama.vane.core.Core;
@@ -52,6 +53,12 @@ public class Trifles extends Module<Trifles> {
 		// Play sounds
 		from.getWorld().playSound(from, Sound.ITEM_CHORUS_FRUIT_TELEPORT, SoundCategory.PLAYERS, 1.0f, 1.1f);
 		to.getWorld().playSound(to, Sound.BLOCK_END_PORTAL_FRAME_FILL, SoundCategory.PLAYERS, 1.0f, 1.0f);
+
+		// Create particles
+		from.getWorld().spawnParticle(Particle.PORTAL, from.clone().add(0.5, 0.5, 0.5), 50, 0.0, 0.0, 0.0, 1.0);
+		from.getWorld().spawnParticle(Particle.PORTAL, from.clone().add(0.5, 1.5, 0.5), 50, 0.0, 0.0, 0.0, 1.0);
+		to.getWorld().spawnParticle(Particle.PORTAL, to.clone().add(0.5, 0.5, 0.5), 50, 0.0, 0.0, 0.0, 1.0);
+		to.getWorld().spawnParticle(Particle.PORTAL, to.clone().add(0.5, 1.5, 0.5), 50, 0.0, 0.0, 0.0, 1.0);
 		return true;
 	}
 
