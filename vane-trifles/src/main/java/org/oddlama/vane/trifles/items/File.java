@@ -73,13 +73,12 @@ public class File extends CustomItem<Trifles, File> {
 
 		@Override
 		public void register_recipes() {
-			final var recipe_key = recipe_key();
 			if (variant() == Variant.NETHERITE) {
 				// Will be automatically handeled by Core.
 				return;
 			}
 
-			final var recipe = new ShapedRecipe(recipe_key, item())
+			final var recipe = new ShapedRecipe(recipe_key(), item())
 				.shape(" m",
 					   "s ")
 				.setIngredient('s', Material.STICK);
@@ -93,7 +92,7 @@ public class File extends CustomItem<Trifles, File> {
 				case NETHERITE: /* Can't happen */ break;
 			}
 
-			add_recipe(recipe_key, recipe);
+			add_recipe(recipe);
 		}
 
 		@Override

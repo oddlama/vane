@@ -3,10 +3,18 @@ package org.oddlama.vane.trifles;
 import java.util.HashMap;
 import java.util.UUID;
 
+import org.bukkit.Sound;
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
+import org.bukkit.SoundCategory;
 import org.oddlama.vane.annotation.VaneModule;
+import org.oddlama.vane.trifles.event.PlayerTeleportScrollEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.oddlama.vane.core.Core;
 import org.oddlama.vane.core.item.ModelDataEnum;
 import org.oddlama.vane.core.module.Module;
+import org.oddlama.vane.annotation.persistent.Persistent;
+import org.oddlama.vane.core.persistent.PersistentSerializer;
 
 @VaneModule(name = "trifles", bstats = 8644, config_version = 1, lang_version = 1, storage_version = 1)
 public class Trifles extends Module<Trifles> {
@@ -26,6 +34,25 @@ public class Trifles extends Module<Trifles> {
 		new org.oddlama.vane.trifles.items.File(this);
 		new org.oddlama.vane.trifles.items.EmptyXpBottle(this);
 		new org.oddlama.vane.trifles.items.XpBottle(this);
+		new org.oddlama.vane.trifles.items.HomeScroll(this);
+		new org.oddlama.vane.trifles.items.UnstableScroll(this);
+	}
+
+	public boolean teleport_from_scroll(final Player player, final Location from, final Location to) {
+		// Send scroll teleport event
+		final var teleport_scroll_event = new PlayerTeleportScrollEvent(player, from, to);
+		get_module().getServer().getPluginManager().callEvent(teleport_scroll_event);
+		if (teleport_scroll_event.isCancelled()) {
+			return false;
+		}
+
+		// Teleport
+		player.teleport(to, PlayerTeleportEvent.TeleportCause.PLUGIN);
+
+		// Play sounds
+		to.getWorld().playSound(to, Sound.ITEM_CHORUS_FRUIT_TELEPORT, SoundCategory.PLAYERS, 0.4f, 0.5f);
+		from.getWorld().playSound(from, Sound.ITEM_CHORUS_FRUIT_TELEPORT, SoundCategory.PLAYERS, 0.4f, 2.0f);
+		return true;
 	}
 
 	@Override

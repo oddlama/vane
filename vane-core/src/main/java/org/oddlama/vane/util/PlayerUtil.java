@@ -29,7 +29,7 @@ public class PlayerUtil {
 
 		// Set velocity, play sound
 		player.setVelocity(player.getVelocity().add(v));
-		player.getWorld().playSound(player.getLocation(), Sound.ENTITY_ENDER_DRAGON_FLAP, 0.4f, 2.0f);
+		player.getWorld().playSound(player.getLocation(), Sound.ENTITY_ENDER_DRAGON_FLAP, SoundCategory.PLAYERS, 0.4f, 2.0f);
 	}
 
 	public static void remove_one_item_from_hand(final Player player, final EquipmentSlot hand) {

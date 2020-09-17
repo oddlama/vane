@@ -11,7 +11,7 @@ public class LazyLocation {
 
 	public LazyLocation(final Location location) {
 		this.world_id = location.getWorld() == null ? null : location.getWorld().getUID();
-		this.location = location;
+		this.location = location.clone();
 	}
 
 	public LazyLocation(final UUID world_id, double x, double y, double z, float pitch, float yaw) {

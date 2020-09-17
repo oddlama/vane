@@ -32,13 +32,12 @@ public class EmptyXpBottle extends CustomItem<Trifles, EmptyXpBottle> {
 		@Override
 		public void register_recipes() {
 			final var item = item();
-			final var recipe_key = recipe_key();
-			final var recipe = new ShapelessRecipe(recipe_key, item)
+			final var recipe = new ShapelessRecipe(recipe_key(), item)
 				.addIngredient(Material.EXPERIENCE_BOTTLE)
 				.addIngredient(Material.GLASS_BOTTLE)
 				.addIngredient(Material.GOLD_NUGGET);
 
-			add_recipe(recipe_key, recipe);
+			add_recipe(recipe);
 		}
 
 		@Override
@@ -68,7 +67,7 @@ public class EmptyXpBottle extends CustomItem<Trifles, EmptyXpBottle> {
 			return;
 		}
 
-		// Nevera actually use the base item if it's custom!
+		// Never actually use the base item if it's custom!
 		event.setUseItemInHand(Event.Result.DENY);
 
 		switch (event.getAction()) {

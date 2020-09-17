@@ -61,7 +61,7 @@ and therefore not well suited for giving out valuable traits (like *Angel* or *U
 - [x] *Grappling Hook*: Finally put that fishing rod to good use!
 - [x] *Leafchopper*: Remove leaves instantly with your axe. Leaves will drop items as if they decayed naturally.
 - [x] *Angel*: A legendary enchantment to accelerate your elytra while pressing shift! Gives a more natural feeling than using rockets. Elytra go brrrr! (Replaces *Wings*)
-- [x] *Unbreakable*: Well... A legendary enchantment for truly unbreakable items. Extremely rare. (Replaces *Unbreaking* and *Mending*)
+- [x] *Unbreakable*: Well... A legendary enchantment for truly unbreakable items. Extremely expensive. (Replaces *Unbreaking* and *Mending*)
 
 #### Custom items
 
@@ -69,8 +69,8 @@ and therefore not well suited for giving out valuable traits (like *Angel* or *U
 - [x] The *File* allows you to modify block individual connections of fences, walls, glass panes and blocks alike.
 - [x] The *Empty Experience Bottle* allows you to bottle your experience (right click) for later use. Drinking the full bottle will grant you the stored experience.
       Storing experience will cost a small percentage of the bottled xp. It will also calculate in terms of experience and not levels.
-- [ ] The *Home Portal Scroll* will teleport you to your bed, but it only has a limited amount of uses!
-- [ ] The *Unstable Portal Scroll* will teleport you back to the location where you last used a portal scroll.
+- [x] The *Home Portal Scroll* will teleport you to your bed, but it only has a limited amount of uses!
+- [x] The *Unstable Portal Scroll* will teleport you back to the location where you last used a portal scroll.
 
 #### Portals
 

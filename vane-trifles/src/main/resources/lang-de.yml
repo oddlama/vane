@@ -34,6 +34,12 @@ item_xp_bottle:
 item_empty_xp_bottle:
   name: "Leere Erfahrungsflasche"
 
+item_home_scroll:
+  name: "Portalschriftrolle (Heim)"
+
+item_unstable_scroll:
+  name: "Portalschriftrolle (Instabil)"
+
 item_file:
   wooden:
     name: "Holzfeile"

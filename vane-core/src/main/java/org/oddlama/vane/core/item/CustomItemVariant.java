@@ -8,6 +8,7 @@ import java.util.Map;
 
 import net.md_5.bungee.api.chat.BaseComponent;
 
+import org.bukkit.Keyed;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
@@ -147,6 +148,11 @@ public class CustomItemVariant<T extends Module<T>, V extends CustomItem<T, V>, 
 	 */
 	public final Recipe add_recipe(NamespacedKey recipe_key, Recipe recipe) {
 		add_recipe_or_throw(recipe_key, recipe);
+		return recipe;
+	}
+
+	public final<R extends Recipe & Keyed> Recipe add_recipe(R recipe) {
+		add_recipe_or_throw(((Keyed)recipe).getKey(), recipe);
 		return recipe;
 	}
 

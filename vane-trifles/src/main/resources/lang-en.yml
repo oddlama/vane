@@ -25,55 +25,63 @@ command_heads:
 
 item_xp_bottle:
   small:
-    # The display name of this item variant. Will be packed into a resource pack.
+    # The display name of this item variant.
     name: "Small Experience Bottle"
   medium:
-    # The display name of this item variant. Will be packed into a resource pack.
+    # The display name of this item variant.
     name: "Medium Experience Bottle"
   large:
-    # The display name of this item variant. Will be packed into a resource pack.
+    # The display name of this item variant.
     name: "Large Experience Bottle"
 
 item_empty_xp_bottle:
-  # The display name of this item variant. Will be packed into a resource pack.
+  # The display name of this item variant.
   name: "Empty Experience Bottle"
+
+item_home_scroll:
+  # The display name of this item variant.
+  name: "Portal Scroll (Home)"
+
+item_unstable_scroll:
+  # The display name of this item variant.
+  name: "Portal Scroll (Unstable)"
 
 item_file:
   wooden:
-    # The display name of this item variant. Will be packed into a resource pack.
+    # The display name of this item variant.
     name: "Wooden File"
   stone:
-    # The display name of this item variant. Will be packed into a resource pack.
+    # The display name of this item variant.
     name: "Stone File"
   iron:
-    # The display name of this item variant. Will be packed into a resource pack.
+    # The display name of this item variant.
     name: "Iron File"
   golden:
-    # The display name of this item variant. Will be packed into a resource pack.
+    # The display name of this item variant.
     name: "Golden File"
   diamond:
-    # The display name of this item variant. Will be packed into a resource pack.
+    # The display name of this item variant.
     name: "Diamond File"
   netherite:
-    # The display name of this item variant. Will be packed into a resource pack.
+    # The display name of this item variant.
     name: "Netherite File"
 
 item_sickle:
   wooden:
-    # The display name of this item variant. Will be packed into a resource pack.
+    # The display name of this item variant.
     name: "Wooden Sickle"
   stone:
-    # The display name of this item variant. Will be packed into a resource pack.
+    # The display name of this item variant.
     name: "Stone Sickle"
   iron:
-    # The display name of this item variant. Will be packed into a resource pack.
+    # The display name of this item variant.
     name: "Iron Sickle"
   golden:
-    # The display name of this item variant. Will be packed into a resource pack.
+    # The display name of this item variant.
     name: "Golden Sickle"
   diamond:
-    # The display name of this item variant. Will be packed into a resource pack.
+    # The display name of this item variant.
     name: "Diamond Sickle"
   netherite:
-    # The display name of this item variant. Will be packed into a resource pack.
+    # The display name of this item variant.
     name: "Netherite Sickle"
