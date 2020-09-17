@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.md_5.bungee.api.chat.BaseComponent;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.EventHandler;
@@ -65,10 +66,18 @@ public class Enchantments extends Module<Enchantments> {
 	}
 
 	public ItemStack update_enchanted_item(ItemStack item_stack) {
-		return update_enchanted_item(item_stack, item_stack.getEnchantments());
+		return update_enchanted_item(item_stack, new HashMap<Enchantment, Integer>());
 	}
 
-	public ItemStack update_enchanted_item(ItemStack item_stack, Map<Enchantment, Integer> enchantments) {
+	public ItemStack update_enchanted_item(ItemStack item_stack, Map<Enchantment, Integer> additional_enchantments) {
+		final var enchantments = new HashMap<>(additional_enchantments);
+		final var meta = item_stack.getItemMeta();
+		if (meta instanceof EnchantmentStorageMeta) {
+			enchantments.putAll(((EnchantmentStorageMeta)meta).getStoredEnchants());
+		} else {
+			enchantments.putAll(item_stack.getEnchantments());
+		}
+
 		remove_superseded(item_stack, enchantments);
 		update_lore(item_stack, enchantments);
 		return item_stack;
@@ -149,7 +158,6 @@ public class Enchantments extends Module<Enchantments> {
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void on_enchant_item(final EnchantItemEvent event) {
 		final var map = new HashMap<Enchantment, Integer>(event.getEnchantsToAdd());
-		map.putAll(event.getItem().getEnchantments());
 		update_enchanted_item(event.getItem(), map);
 	}
 }
