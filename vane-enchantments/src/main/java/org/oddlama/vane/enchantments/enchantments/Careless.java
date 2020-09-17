@@ -47,6 +47,7 @@ public class Careless extends CustomEnchantment<Enchantments> {
 		final var meta = (EnchantmentStorageMeta)item.getItemMeta();
 		meta.addStoredEnchant(bukkit(), 1, false);
 		item.setItemMeta(meta);
+		get_module().update_enchanted_item(item);
 
 		final var recipe = new ShapedRecipe(recipe_key(), item)
 			.shape("ddd",

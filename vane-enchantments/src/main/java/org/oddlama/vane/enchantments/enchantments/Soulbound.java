@@ -38,6 +38,7 @@ public class Soulbound extends CustomEnchantment<Enchantments> {
 		final var meta = (EnchantmentStorageMeta)item.getItemMeta();
 		meta.addStoredEnchant(bukkit(), 1, false);
 		item.setItemMeta(meta);
+		get_module().update_enchanted_item(item);
 
 		final var curse_of_binding = new ItemStack(Material.ENCHANTED_BOOK);
 		final var curse_meta = (EnchantmentStorageMeta)curse_of_binding.getItemMeta();
