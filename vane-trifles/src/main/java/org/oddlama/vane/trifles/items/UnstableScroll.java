@@ -64,7 +64,7 @@ public class UnstableScroll extends CustomItem<Trifles, UnstableScroll> {
 	private Map<UUID, LazyLocation> storage_last_scroll_teleport = new HashMap<>();
 
 	public static class UnstableScrollVariant extends CustomItemVariant<Trifles, UnstableScroll, SingleVariant> {
-		@ConfigInt(def = 7000, min = 0, desc = "Cooldown in milliseconds until another scroll can be used.")
+		@ConfigInt(def = 6000, min = 0, desc = "Cooldown in milliseconds until another scroll can be used.")
 		private int config_cooldown;
 
 		public UnstableScrollVariant(UnstableScroll parent, SingleVariant variant) {
@@ -122,9 +122,12 @@ public class UnstableScroll extends CustomItem<Trifles, UnstableScroll> {
 			case RIGHT_CLICK_AIR: break;
 			case RIGHT_CLICK_BLOCK:
 				// Require non-cancelled state (so it won't trigger for block-actions like chests)
-				// Second check prevent original item usage (collecting liquids)
+				// But allow if the clicked block can't be interacted with in the first place
 				if (event.useInteractedBlock() != Event.Result.DENY) {
-					return;
+					final var block = event.getClickedBlock();
+					if (block.getType().isInteractable()) {
+						return;
+					}
 				}
 				break;
 		}

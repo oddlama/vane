@@ -50,7 +50,7 @@ public class Trifles extends Module<Trifles> {
 		player.teleport(to, PlayerTeleportEvent.TeleportCause.PLUGIN);
 
 		// Play sounds
-		from.getWorld().playSound(from, Sound.ITEM_CHORUS_FRUIT_TELEPORT, SoundCategory.PLAYERS, .7f, 1.4f);
+		from.getWorld().playSound(from, Sound.ITEM_CHORUS_FRUIT_TELEPORT, SoundCategory.PLAYERS, 1.0f, 1.1f);
 		to.getWorld().playSound(to, Sound.BLOCK_END_PORTAL_FRAME_FILL, SoundCategory.PLAYERS, 1.0f, 1.0f);
 		return true;
 	}

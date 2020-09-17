@@ -54,7 +54,7 @@ import org.oddlama.vane.util.BlockUtil;
 @VaneItem(name = "home_scroll")
 public class HomeScroll extends CustomItem<Trifles, HomeScroll> {
 	public static class HomeScrollVariant extends CustomItemVariant<Trifles, HomeScroll, SingleVariant> {
-		@ConfigInt(def = 5000, min = 0, desc = "Cooldown in milliseconds until another scroll can be used.")
+		@ConfigInt(def = 10000, min = 0, desc = "Cooldown in milliseconds until another scroll can be used.")
 		private int config_cooldown;
 
 		public HomeScrollVariant(HomeScroll parent, SingleVariant variant) {
@@ -112,9 +112,12 @@ public class HomeScroll extends CustomItem<Trifles, HomeScroll> {
 			case RIGHT_CLICK_AIR: break;
 			case RIGHT_CLICK_BLOCK:
 				// Require non-cancelled state (so it won't trigger for block-actions like chests)
-				// Second check prevent original item usage (collecting liquids)
+				// But allow if the clicked block can't be interacted with in the first place
 				if (event.useInteractedBlock() != Event.Result.DENY) {
-					return;
+					final var block = event.getClickedBlock();
+					if (block.getType().isInteractable()) {
+						return;
+					}
 				}
 				break;
 		}

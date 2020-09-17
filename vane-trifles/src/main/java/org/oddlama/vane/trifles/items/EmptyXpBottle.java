@@ -75,7 +75,6 @@ public class EmptyXpBottle extends CustomItem<Trifles, EmptyXpBottle> {
 			case RIGHT_CLICK_AIR: break;
 			case RIGHT_CLICK_BLOCK:
 				// Require non-cancelled state (so it won't trigger for block-actions like chests)
-				// Second check prevent original item usage (collecting liquids)
 				if (event.useInteractedBlock() != Event.Result.DENY) {
 					return;
 				}
