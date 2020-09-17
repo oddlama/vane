@@ -3,6 +3,7 @@ package org.oddlama.vane.trifles.items;
 import static org.oddlama.vane.util.BlockUtil.relative;
 import static org.oddlama.vane.util.ItemUtil.MODIFIER_UUID_GENERIC_ATTACK_DAMAGE;
 import static org.oddlama.vane.util.ItemUtil.MODIFIER_UUID_GENERIC_ATTACK_SPEED;
+import static org.oddlama.vane.util.Util.ms_to_ticks;
 import static org.oddlama.vane.util.ItemUtil.damage_item;
 import static org.oddlama.vane.util.MaterialUtil.is_seeded_plant;
 import org.bukkit.event.player.PlayerTeleportEvent;
@@ -53,6 +54,9 @@ import org.oddlama.vane.util.BlockUtil;
 @VaneItem(name = "home_scroll")
 public class HomeScroll extends CustomItem<Trifles, HomeScroll> {
 	public static class HomeScrollVariant extends CustomItemVariant<Trifles, HomeScroll, SingleVariant> {
+		@ConfigInt(def = 5000, min = 0, desc = "Cooldown in milliseconds until another scroll can be used.")
+		private int config_cooldown;
+
 		public HomeScrollVariant(HomeScroll parent, SingleVariant variant) {
 			super(parent, variant);
 		}
@@ -78,6 +82,8 @@ public class HomeScroll extends CustomItem<Trifles, HomeScroll> {
 		public Material base() {
 			return Material.CARROT_ON_A_STICK;
 		}
+
+		public int cooldown() { return config_cooldown; }
 	}
 
 	public HomeScroll(Context<Trifles> context) {
@@ -118,8 +124,17 @@ public class HomeScroll extends CustomItem<Trifles, HomeScroll> {
 			return;
 		}
 
+		// Check cooldown
+		if (player.getCooldown(variant.base()) > 0) {
+			return;
+		}
+
 		final var current_location = player.getLocation();
 		if (get_module().teleport_from_scroll(player, current_location, to_location)) {
+			// Set cooldown
+			final var cooldown = ms_to_ticks(variant.cooldown());
+			player.setCooldown(variant.base(), (int)cooldown);
+
 			// Damage item
 			damage_item(player, item, 1);
 			swing_arm(player, event.getHand());

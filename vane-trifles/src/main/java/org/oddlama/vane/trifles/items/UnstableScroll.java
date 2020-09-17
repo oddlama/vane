@@ -1,5 +1,6 @@
 package org.oddlama.vane.trifles.items;
 
+import static org.oddlama.vane.util.Util.ms_to_ticks;
 import static org.oddlama.vane.util.BlockUtil.relative;
 import static org.oddlama.vane.util.ItemUtil.MODIFIER_UUID_GENERIC_ATTACK_DAMAGE;
 import static org.oddlama.vane.util.ItemUtil.MODIFIER_UUID_GENERIC_ATTACK_SPEED;
@@ -63,6 +64,9 @@ public class UnstableScroll extends CustomItem<Trifles, UnstableScroll> {
 	private Map<UUID, LazyLocation> storage_last_scroll_teleport = new HashMap<>();
 
 	public static class UnstableScrollVariant extends CustomItemVariant<Trifles, UnstableScroll, SingleVariant> {
+		@ConfigInt(def = 7000, min = 0, desc = "Cooldown in milliseconds until another scroll can be used.")
+		private int config_cooldown;
+
 		public UnstableScrollVariant(UnstableScroll parent, SingleVariant variant) {
 			super(parent, variant);
 		}
@@ -88,6 +92,8 @@ public class UnstableScroll extends CustomItem<Trifles, UnstableScroll> {
 		public Material base() {
 			return Material.CARROT_ON_A_STICK;
 		}
+
+		public int cooldown() { return config_cooldown; }
 	}
 
 	public UnstableScroll(Context<Trifles> context) {
@@ -129,8 +135,17 @@ public class UnstableScroll extends CustomItem<Trifles, UnstableScroll> {
 			return;
 		}
 
+		// Check cooldown
+		if (player.getCooldown(variant.base()) > 0) {
+			return;
+		}
+
 		final var current_location = player.getLocation();
 		if (get_module().teleport_from_scroll(player, current_location, to_location)) {
+			// Set cooldown
+			final var cooldown = ms_to_ticks(variant.cooldown());
+			player.setCooldown(variant.base(), (int)cooldown);
+
 			// Damage item
 			damage_item(player, item, 1);
 			swing_arm(player, event.getHand());
