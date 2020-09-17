@@ -432,7 +432,7 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-	public void on_loot_generate(final LootGenerateEvent event) {
+	public void on_module_loot_generate(final LootGenerateEvent event) {
 		final var loot_table = event.getLootTable();
 		final var additional_loot_table = additional_loot_tables.get(loot_table.getKey());
 		if (additional_loot_table == null) {
