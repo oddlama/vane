@@ -52,8 +52,8 @@ If you don't want a certain feature, simply disable it.
 - [x] Seamless integration of custom enchantments with the vanilla system
 - [x] *Wings*: Occasionally boost your elytra mid-air by sneaking.
 - [x] *Soulbound*: Soulbound items will be kept on death. Also prevents yeeting your best tool out of existence.
-- [x] *Rake*: Tilling farmland again will till the nearest block around it. Use multiple times on the same spot to create a circle.
-- [x] *Careless*: Tilling long grass will remove it and till the block below. Useful in combination with *Rake* to automaticall till grass with long grass on top.
+- [x] *Rake*: Tilling farmland again will till the nearest block around it. Use repeatedly on farmland to create a circle.
+- [x] *Careless*: Tilling long grass will remove it and till the block below. Useful in combination with *Rake* to automatically till grass with long grass on top.
 - [x] *Seeding*: Right click your crops to plant crops of the same type around them. Use multiple times to create a circle.
 - [x] *Take Off*: Double jump to start gliding with your elytra and receive a small boost.
 - [x] *Hell Bent*: Don't hurt your head when flying into a wall. Again.
@@ -148,8 +148,20 @@ issues in other plugins, but badly written 3rd-party plugins could theoretically
 designed to be used on large networks with tens of thousands of players.
 For smaller survival servers, using SQL would be a waste of resources and processing time.
 
-### 3rd-party software
+### Acknowledgements & 3rd-party software
 
-TODO include licenses
-- protocollib wrappers
-- shadowed things
+I would like to thank the following projects and people maintaining them:
+
+- [https://www.spigotmc.org/](Spigot) for the awesome baseline server software.
+- [https://papermc.io/](PaperMC) for the valuable additions missing from Spigot.
+- [https://github.com/dmulloy2/ProtocolLib](ProtocolLib) for the awesome protocol layer library.
+
+#### Included software
+
+The following software packets will be included in the compilation step:
+
+- [https://github.com/dmulloy2/PacketWrapper](PacketWrapper) (LGPL3), only specific parts are included
+- [https://bstats.org/](bStats) (LGPL3), plugin metrics
+- [https://github.com/ronmamo/reflections](ronmamo reflections) (WTFPL), Java reflection helper
+- [https://github.com/stleary/JSON-java](org.json) (MIT), Java json implementation
+- [https://github.com/webbukkit/DynmapCoreAPI](DynmapCoreAPI) (Apache-2.0), dynmap integration
