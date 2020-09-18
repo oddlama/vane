@@ -32,7 +32,6 @@ If you don't want a certain feature, simply disable it.
 - [x] All recipes will be unlocked automatically when joining the server
 - [x] Access to gigantic head library (>30000 heads) for decorative purposes, including in-game menu to search and acquire heads by category, tags or name.
 - [x] Use the *Portal Scrolls* to get home or back to where you last used a scroll!
-
 - [x] The *Sickle* allows you to harvest a small radius of finished crops. Similar to the hand-harvesting addition, this will drop only product and no seeds.
 - [x] The *File* allows you to modify block individual connections of fences, walls, glass panes and blocks alike.
 - [x] The *Empty Experience Bottle* allows you to bottle your experience (right click) for later use. Drinking the full bottle will grant you the stored experience.
