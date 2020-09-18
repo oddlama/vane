@@ -1,3 +1,9 @@
+[Features](#features) \|
+[Installation](#installation) \|
+[FAQ](#faq)
+
+[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
+
 ## About vane
 
 Vane is a group of plugins which provide many
@@ -131,12 +137,12 @@ The configuration will be generated on first start.
 To enable the authentication multiplexing, you need to do the following:
 
 1. Define multiple listeners (distinct ports) for your servers in the proxy's `config.yml`.
-2. Map these ports to multiplexer ids in `plugins/vane-waterfall/config.yml`. The specific multiplexer ids must be >0 but other than that are only important
-   to check player permissions.
+2. Map these ports to multiplexer ids in `plugins/vane-waterfall/config.yml`. The specific multiplexer ids must be >0.
+   Other than that the ids are only important to check player permissions.
 3. Assign the corresponding permission(s) `vane_waterfall.multiplexer.<multiplexer_id>` to the desired group in the proxy's `config.yml`.
 4. Assign the group to a player using the players' **UUID**. *THIS IS IMPORTANT* and won't work with player names.
 
-Optionally you can configure the second configuration section in `plugins/vane-waterfall/config.yml` to allow automatic server start.
+Optionally, you can configure the second configuration section in `plugins/vane-waterfall/config.yml` to allow automatic server start.
 An example is provided in the config file.
 
 ### Building from source
@@ -147,7 +153,7 @@ to `libs/`. This is required so the compiler can find minecraft-native symbols.
 
 1. Copy `cache/patched_{version}.jar` from a paper server to `libs/` (create folder if necessary).
 2. Execute `./gradlew build`
-3. Resulting jar files will be in `target/`.
+3. Resulting jar files will be in `target/` and `target-waterfall/`.
 
 ### FAQ
 
