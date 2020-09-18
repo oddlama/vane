@@ -35,7 +35,9 @@ If you don't want a certain feature, simply disable it.
 - [x] Automatically generated resource pack will provide client side translations
 - [x] Builtin lightweight permissions plugin (permission groups, group inheritance, live editing).
       For better control, all default permissions are revoked and need to be added explicitly.
-- [x] The server can be automatically stopped after a specified duration without players. Using this together with **(TODO insert waterfall plugin)** will allow you to save server resources while nobody is online.
+- [x] The server can be automatically stopped after a specified duration without players.
+      Using this together with **(TODO insert waterfall plugin)** to start the server on demand will
+      allow you to save server resources while nobody is online.
 - [x] Inaccessible commands will not be shown to players (sends "Unknown Command" instead)
 - [x] Slightly colorized chat message format for better readability
 - [x] Convenience commands for time, weather, gamemode, spawn, ...
@@ -49,9 +51,9 @@ If you don't want a certain feature, simply disable it.
 
 - [x] Seamless integration of custom enchantments with the vanilla system
 - [x] *Wings*: Occasionally boost your elytra mid-air by sneaking.
-- [x] *Careless*: Tilling long grass will remove it and till the block below.
 - [x] *Soulbound*: Soulbound items will be kept on death. Also prevents yeeting your best tool out of existence.
-- [x] *Rake*: Tilling farmland again will till the nearest block around it. Use multiple times to slowly create a circle. Works in combination with Careless to till grass with long grass on top.
+- [x] *Rake*: Tilling farmland again will till the nearest block around it. Use multiple times on the same spot to create a circle.
+- [x] *Careless*: Tilling long grass will remove it and till the block below. Useful in combination with *Rake* to automaticall till grass with long grass on top.
 - [x] *Seeding*: Right click your crops to plant crops of the same type around them. Use multiple times to create a circle.
 - [x] *Take Off*: Double jump to start gliding with your elytra and receive a small boost.
 - [x] *Hell Bent*: Don't hurt your head when flying into a wall. Again.
@@ -92,6 +94,7 @@ If you don't want a certain feature, simply disable it.
 
 > **[as of 1.16.2]** Showing enchantment names inside the enchantment table doesn't work due to protocol limitations.
 > Custom enchantments will be shown without any tooltip, and therefore cannot be distinguished from one another.
+
 > **[as of 1.16.2]** Vane technically supports enchantments to be acquired using the enchanting table, but all enchantments from this plugin will be acquired by treasure or crafting.
 > The reason is that adding all these enchantments at high levels would not work out well regarding the relative probability of common and rare enchantments.
 > At the time of writing, there are only 4 rarity categories, and the vanilla rarities cannot be conveniently modified. So as the custom enchantments are
