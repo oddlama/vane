@@ -6,28 +6,21 @@ import static org.oddlama.vane.util.BlockUtil.texture_from_skull;
 import static org.oddlama.vane.util.MaterialUtil.is_tillable;
 import static org.oddlama.vane.util.Util.resolve_skin;
 
-import java.io.File;
-import com.destroystokyo.paper.profile.ProfileProperty;
-import java.io.IOException;
 import java.io.ByteArrayInputStream;
-import org.bukkit.plugin.messaging.PluginMessageListener;
-import org.oddlama.vane.annotation.persistent.Persistent;
 import java.io.DataInputStream;
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.io.File;
 import java.io.IOException;
-import java.util.UUID;
-import java.util.Map;
-import java.util.HashMap;
-import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.UUID;
 import java.util.logging.Level;
 
 import com.destroystokyo.paper.MaterialTags;
+import com.destroystokyo.paper.profile.ProfileProperty;
 
 import org.bukkit.Keyed;
 import org.bukkit.Material;
@@ -43,11 +36,14 @@ import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.inventory.PrepareSmithingEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
+import org.bukkit.plugin.messaging.PluginMessageListener;
 
 import org.oddlama.vane.annotation.VaneModule;
 import org.oddlama.vane.annotation.lang.LangMessage;
+import org.oddlama.vane.annotation.persistent.Persistent;
 import org.oddlama.vane.core.item.CustomItem;
 import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.material.HeadMaterialLibrary;

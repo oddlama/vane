@@ -8,10 +8,10 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
-import net.md_5.bungee.api.scheduler.ScheduledTask;
+
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.scheduler.ScheduledTask;
 
 public class Maintenance {
 	public static long SHUTDOWN_THRESHOLD = 10000l; // MESSAGE_SHUTDOWN if <= 10 seconds

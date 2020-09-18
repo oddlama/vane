@@ -1,12 +1,12 @@
 package org.oddlama.vane.waterfall.commands;
-import org.oddlama.vane.waterfall.Waterfall;
-import net.md_5.bungee.api.chat.TextComponent;
-
 import static org.oddlama.vane.waterfall.Util.parse_time;
 
 import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
+
+import org.oddlama.vane.waterfall.Waterfall;
 
 public class Maintenance extends Command {
 	public static String MESSAGE_INVALID_TIME_FORMAT = "§cInvalid time format §6'%time%'§c!";

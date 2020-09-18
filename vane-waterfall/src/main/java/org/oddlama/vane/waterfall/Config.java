@@ -1,37 +1,15 @@
 package org.oddlama.vane.waterfall;
 
 import java.io.File;
-import java.nio.file.Files;
-import java.util.logging.Logger;
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.Socket;
-import java.net.InetSocketAddress;
-import java.lang.reflect.Field;
-import java.util.Random;
-import java.util.logging.Level;
-import java.io.File;
-import java.io.IOException;
-import java.lang.StringBuilder;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.UUID;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
-import net.md_5.bungee.api.event.ProxyPingEvent;
-import net.md_5.bungee.config.YamlConfiguration;
+import java.util.logging.Level;
+
 import net.md_5.bungee.config.ConfigurationProvider;
+import net.md_5.bungee.config.YamlConfiguration;
 
 public class Config {
 	private final Waterfall plugin;

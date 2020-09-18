@@ -1,34 +1,10 @@
 package org.oddlama.vane.waterfall;
 
-import net.md_5.bungee.api.Favicon;
-import net.md_5.bungee.api.event.PluginMessageEvent;
-import net.md_5.bungee.api.plugin.Listener;
-import net.md_5.bungee.api.plugin.Plugin;
-import net.md_5.bungee.event.EventHandler;
-import net.md_5.bungee.api.ProxyServer;
-import java.util.logging.Logger;
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 import java.io.File;
-import java.net.Socket;
-import java.net.InetSocketAddress;
-import java.lang.reflect.Field;
-import java.util.Random;
-import java.util.UUID;
-import javax.imageio.ImageIO;
-import net.md_5.bungee.api.AbstractReconnectHandler;
-import net.md_5.bungee.api.ServerPing;
+import java.util.List;
+
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.config.ServerInfo;
-import net.md_5.bungee.api.connection.PendingConnection;
-import net.md_5.bungee.api.event.PreLoginEvent;
-import net.md_5.bungee.api.event.ProxyPingEvent;
-import net.md_5.bungee.api.plugin.Listener;
-import net.md_5.bungee.event.EventHandler;
 
 public class ManagedServer {
 	private final String id;

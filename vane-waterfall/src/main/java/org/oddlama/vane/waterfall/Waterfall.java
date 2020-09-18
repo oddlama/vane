@@ -2,56 +2,38 @@ package org.oddlama.vane.waterfall;
 
 import static org.oddlama.vane.waterfall.Util.add_uuid;
 
-import net.md_5.bungee.api.Favicon;
-import net.md_5.bungee.api.event.PluginMessageEvent;
-import net.md_5.bungee.api.plugin.Listener;
-import net.md_5.bungee.api.plugin.Plugin;
-
 import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.util.Set;
-import java.util.HashSet;
-import java.net.URL;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.util.logging.Level;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-import net.md_5.bungee.event.EventHandler;
-import net.md_5.bungee.api.ProxyServer;
-import java.util.logging.Logger;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.URL;
-import java.io.IOException;
-import java.net.Socket;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.net.InetSocketAddress;
-import java.lang.reflect.Field;
-import java.util.Random;
+import java.net.Socket;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.Set;
 import java.util.UUID;
-import java.util.Map;
-import java.util.HashMap;
+import java.util.logging.Level;
 import javax.imageio.ImageIO;
+
 import net.md_5.bungee.api.AbstractReconnectHandler;
+import net.md_5.bungee.api.Favicon;
 import net.md_5.bungee.api.ServerPing;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.PendingConnection;
-import net.md_5.bungee.api.event.LoginEvent;
 import net.md_5.bungee.api.event.PreLoginEvent;
 import net.md_5.bungee.api.event.ProxyPingEvent;
 import net.md_5.bungee.api.plugin.Listener;
+import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.event.EventHandler;
 import net.md_5.bungee.event.EventPriority;
 import net.md_5.bungee.protocol.packet.LoginRequest;
-import net.md_5.bungee.api.scheduler.TaskScheduler;
-import net.md_5.bungee.api.plugin.PluginManager;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class Waterfall extends Plugin implements Listener {
 	public static final String CHANNEL_AUTH_MULTIPLEX = "vane_waterfall:auth_multiplex";

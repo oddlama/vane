@@ -1,39 +1,22 @@
 package org.oddlama.vane.util;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.util.Set;
-import java.util.HashSet;
-import java.net.URL;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
+import java.util.UUID;
 import java.util.logging.Level;
+
+import org.bukkit.Bukkit;
+import org.bukkit.NamespacedKey;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import java.util.logging.Logger;
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.net.URL;
-import java.io.IOException;
-import java.net.Socket;
-import java.net.InetSocketAddress;
-import java.lang.reflect.Field;
-import java.util.Random;
-import java.util.UUID;
-import java.util.Map;
-
-import org.bukkit.NamespacedKey;
-import org.bukkit.Bukkit;
-import java.util.logging.Level;
 
 public class Util {
 	@SuppressWarnings("deprecation")
