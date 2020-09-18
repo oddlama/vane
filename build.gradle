@@ -29,11 +29,16 @@ subprojects {
 	}
 
 	dependencies {
+		compileOnly group: 'org.jetbrains', name: 'annotations', version: '20.0.0';
+		annotationProcessor 'org.jetbrains:annotations:20.0.0';
+	}
+}
+
+configure(subprojects.findAll {it.name != 'vane-waterfall'}) {
+	dependencies {
 		// We need the full implementation with CraftBukkit and NMS to compile.
 		// Simply copy cache/patched_{..}.jar from a paper server into libs/.
 		implementation name: 'patched_1.16.3';
-		compileOnly group: 'org.jetbrains', name: 'annotations', version: '20.0.0';
-		annotationProcessor 'org.jetbrains:annotations:20.0.0';
 	}
 
 	task copyJar(type: Copy) {
@@ -44,7 +49,7 @@ subprojects {
 	build.dependsOn copyJar
 }
 
-configure(subprojects.findAll {it.name != 'vane-annotations'}) {
+configure(subprojects.findAll {it.name != 'vane-annotations' && it.name != 'vane-waterfall'}) {
 	dependencies {
 		implementation group: 'com.comphenix.protocol', name: 'ProtocolLib', version: '4.6.0-SNAPSHOT';
 
@@ -59,7 +64,7 @@ configure(subprojects.findAll {it.name != 'vane-annotations'}) {
 	}
 }
 
-configure(subprojects.findAll {it.name != 'vane-annotations' && it.name != 'vane-core'}) {
+configure(subprojects.findAll {it.name != 'vane-annotations' && it.name != 'vane-core' && it.name != 'vane-waterfall'}) {
 	dependencies {
 		implementation project(path: ':vane-core', configuration: 'shadow');
 	}

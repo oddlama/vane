@@ -1,0 +1,16 @@
+dependencies {
+	implementation group: 'io.github.waterfallmc', name: 'waterfall-api', version: '1.16-R0.4-SNAPSHOT';
+}
+
+processResources {
+	filesMatching("**/bungee.yml") {
+		expand(project.properties)
+	}
+}
+
+task copyJar(type: Copy) {
+	from jar;
+	into "${project.rootProject.projectDir}/target-waterfall";
+}
+
+build.dependsOn copyJar
