@@ -152,16 +152,16 @@ For smaller survival servers, using SQL would be a waste of resources and proces
 
 I would like to thank the following projects and people maintaining them:
 
-- [https://www.spigotmc.org/](Spigot) for the awesome baseline server software.
-- [https://papermc.io/](PaperMC) for the valuable additions missing from Spigot.
-- [https://github.com/dmulloy2/ProtocolLib](ProtocolLib) for the awesome protocol layer library.
+- [Spigot](https://www.spigotmc.org/) for the awesome baseline server software.
+- [PaperMC](https://papermc.io/) for the valuable additions missing from Spigot.
+- [ProtocolLib](https://github.com/dmulloy2/ProtocolLib) for the awesome protocol layer library.
 
 #### Included software
 
 The following software packets will be included in the compilation step:
 
-- [https://github.com/dmulloy2/PacketWrapper](PacketWrapper) (LGPL3), only specific parts are included
-- [https://bstats.org/](bStats) (LGPL3), plugin metrics
-- [https://github.com/ronmamo/reflections](ronmamo reflections) (WTFPL), Java reflection helper
-- [https://github.com/stleary/JSON-java](org.json) (MIT), Java json implementation
-- [https://github.com/webbukkit/DynmapCoreAPI](DynmapCoreAPI) (Apache-2.0), dynmap integration
+- [org.json](https://github.com/stleary/JSON-java) (MIT), Java json implementation
+- [ronmamo reflections](https://github.com/ronmamo/reflections) (WTFPL), Java reflection helper
+- [PacketWrapper](https://github.com/dmulloy2/PacketWrapper) (LGPL3), only specific parts are included
+- [DynmapCoreAPI](https://github.com/webbukkit/DynmapCoreAPI) (Apache-2.0), dynmap integration
+- [bStats](https://bstats.org/) (LGPL3), plugin metrics
