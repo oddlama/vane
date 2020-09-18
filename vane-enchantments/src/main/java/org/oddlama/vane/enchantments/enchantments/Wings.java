@@ -82,6 +82,8 @@ public class Wings extends CustomEnchantment<Enchantments> {
 		}) {
 			get_module().loot_table(table).put(recipe_key, entry);
 		}
+
+		get_module().loot_table(LootTables.BASTION_TREASURE).put(recipe_key, new LootTableEntry(10, item));
 	}
 
 	@Override
