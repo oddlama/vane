@@ -6,7 +6,6 @@ import static org.oddlama.vane.util.ItemUtil.MODIFIER_UUID_GENERIC_ATTACK_DAMAGE
 import static org.oddlama.vane.util.ItemUtil.MODIFIER_UUID_GENERIC_ATTACK_SPEED;
 import static org.oddlama.vane.util.ItemUtil.damage_item;
 import static org.oddlama.vane.util.PlayerUtil.swing_arm;
-import org.bukkit.event.Event;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,6 +28,7 @@ import org.bukkit.block.data.type.Stairs;
 import org.bukkit.block.data.type.Tripwire;
 import org.bukkit.block.data.type.Wall;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;

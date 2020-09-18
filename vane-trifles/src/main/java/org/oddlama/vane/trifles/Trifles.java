@@ -3,19 +3,18 @@ package org.oddlama.vane.trifles;
 import java.util.HashMap;
 import java.util.UUID;
 
-import org.bukkit.Sound;
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
-import org.bukkit.SoundCategory;
-import org.oddlama.vane.annotation.VaneModule;
 import org.bukkit.Particle;
-import org.oddlama.vane.trifles.event.PlayerTeleportScrollEvent;
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
+import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
+
+import org.oddlama.vane.annotation.VaneModule;
 import org.oddlama.vane.core.Core;
 import org.oddlama.vane.core.item.ModelDataEnum;
 import org.oddlama.vane.core.module.Module;
-import org.oddlama.vane.annotation.persistent.Persistent;
-import org.oddlama.vane.core.persistent.PersistentSerializer;
+import org.oddlama.vane.trifles.event.PlayerTeleportScrollEvent;
 
 @VaneModule(name = "trifles", bstats = 8644, config_version = 1, lang_version = 1, storage_version = 1)
 public class Trifles extends Module<Trifles> {

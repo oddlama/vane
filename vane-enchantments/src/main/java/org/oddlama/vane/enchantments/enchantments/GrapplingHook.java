@@ -2,27 +2,25 @@ package org.oddlama.vane.enchantments.enchantments;
 
 import java.util.List;
 
+import org.bukkit.Material;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerFishEvent;
+import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.util.Vector;
 
-import org.bukkit.Material;
-import org.bukkit.inventory.meta.EnchantmentStorageMeta;
-import org.bukkit.inventory.RecipeChoice.MaterialChoice;
-import org.bukkit.inventory.ShapedRecipe;
-import org.oddlama.vane.core.item.CustomItem;
-import org.oddlama.vane.enchantments.items.AncientTomeOfKnowledge;
-import org.oddlama.vane.enchantments.items.AncientTomeOfTheGods;
-import org.oddlama.vane.enchantments.items.BookVariant;
 import org.oddlama.vane.annotation.config.ConfigDouble;
 import org.oddlama.vane.annotation.config.ConfigDoubleList;
 import org.oddlama.vane.annotation.enchantment.Rarity;
 import org.oddlama.vane.annotation.enchantment.VaneEnchantment;
+import org.oddlama.vane.core.item.CustomItem;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.enchantments.CustomEnchantment;
 import org.oddlama.vane.enchantments.Enchantments;
+import org.oddlama.vane.enchantments.items.AncientTomeOfKnowledge;
+import org.oddlama.vane.enchantments.items.BookVariant;
 
 @VaneEnchantment(name = "grappling_hook", max_level = 3, rarity = Rarity.UNCOMMON, treasure = true, target = EnchantmentTarget.FISHING_ROD)
 public class GrapplingHook extends CustomEnchantment<Enchantments> {

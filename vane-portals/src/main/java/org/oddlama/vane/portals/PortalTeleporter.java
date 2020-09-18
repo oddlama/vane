@@ -3,6 +3,8 @@ package org.oddlama.vane.portals;
 import java.util.HashMap;
 import java.util.UUID;
 
+import com.destroystokyo.paper.event.player.PlayerTeleportEndGatewayEvent;
+
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
@@ -10,8 +12,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityPortalEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
-import com.destroystokyo.paper.event.player.PlayerTeleportEndGatewayEvent;
 
 import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.module.Context;

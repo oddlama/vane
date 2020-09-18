@@ -1,7 +1,6 @@
 package org.oddlama.vane.permissions.commands;
 
 import java.util.Collections;
-import java.util.HashSet;
 
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;

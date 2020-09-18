@@ -10,28 +10,26 @@ import static org.oddlama.vane.util.PlayerUtil.swing_arm;
 
 import com.destroystokyo.paper.MaterialTags;
 
+import org.bukkit.Material;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.inventory.meta.EnchantmentStorageMeta;
-import org.bukkit.Material;
-import org.bukkit.inventory.RecipeChoice.MaterialChoice;
-import org.bukkit.inventory.ShapedRecipe;
-import org.oddlama.vane.core.item.CustomItem;
-import org.oddlama.vane.enchantments.items.AncientTomeOfKnowledge;
-import org.oddlama.vane.enchantments.items.AncientTomeOfTheGods;
-import org.oddlama.vane.enchantments.items.BookVariant;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 
 import org.jetbrains.annotations.NotNull;
 
 import org.oddlama.vane.annotation.enchantment.Rarity;
 import org.oddlama.vane.annotation.enchantment.VaneEnchantment;
+import org.oddlama.vane.core.item.CustomItem;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.enchantments.CustomEnchantment;
 import org.oddlama.vane.enchantments.Enchantments;
+import org.oddlama.vane.enchantments.items.AncientTomeOfKnowledge;
+import org.oddlama.vane.enchantments.items.BookVariant;
 
 @VaneEnchantment(name = "seeding", max_level = 4, rarity = Rarity.COMMON, treasure = true, target = EnchantmentTarget.TOOL)
 public class Seeding extends CustomEnchantment<Enchantments> {

@@ -5,35 +5,31 @@ import static org.oddlama.vane.util.PlayerUtil.apply_elytra_boost;
 
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
-import org.bukkit.util.Vector;
 
+import org.bukkit.Material;
 import org.bukkit.Particle;
-
-import org.oddlama.vane.core.LootTable.LootTableEntry;
-import org.bukkit.loot.LootTables;
-import org.bukkit.inventory.meta.EnchantmentStorageMeta;
-import org.bukkit.Material;
-import org.bukkit.inventory.RecipeChoice.MaterialChoice;
-import org.bukkit.inventory.ShapedRecipe;
-import org.oddlama.vane.core.item.CustomItem;
-import org.oddlama.vane.enchantments.items.AncientTomeOfKnowledge;
-import org.oddlama.vane.enchantments.items.AncientTomeOfTheGods;
-import org.oddlama.vane.enchantments.items.BookVariant;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityToggleGlideEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
+import org.bukkit.loot.LootTables;
+import org.bukkit.util.Vector;
 
 import org.jetbrains.annotations.NotNull;
 
 import org.oddlama.vane.annotation.config.ConfigDoubleList;
 import org.oddlama.vane.annotation.enchantment.Rarity;
 import org.oddlama.vane.annotation.enchantment.VaneEnchantment;
+import org.oddlama.vane.core.LootTable.LootTableEntry;
+import org.oddlama.vane.core.item.CustomItem;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.enchantments.CustomEnchantment;
 import org.oddlama.vane.enchantments.Enchantments;
+import org.oddlama.vane.enchantments.items.AncientTomeOfTheGods;
+import org.oddlama.vane.enchantments.items.BookVariant;
 
 @VaneEnchantment(name = "take_off", max_level = 3, rarity = Rarity.UNCOMMON, treasure = true)
 public class TakeOff extends CustomEnchantment<Enchantments> {

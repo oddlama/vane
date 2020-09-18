@@ -7,14 +7,14 @@ import static org.oddlama.vane.util.ItemUtil.damage_item;
 import static org.oddlama.vane.util.MaterialUtil.is_seeded_plant;
 import static org.oddlama.vane.util.PlayerUtil.harvest_plant;
 import static org.oddlama.vane.util.PlayerUtil.swing_arm;
-import org.bukkit.event.Event;
 
 import org.bukkit.Material;
-import org.bukkit.Tag;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
+import org.bukkit.Tag;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;

@@ -2,17 +2,10 @@ package org.oddlama.vane.enchantments.enchantments;
 
 import com.destroystokyo.paper.MaterialTags;
 
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.block.data.type.Leaves;
-import org.bukkit.inventory.meta.EnchantmentStorageMeta;
-import org.bukkit.inventory.RecipeChoice.MaterialChoice;
-import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.Material;
-import org.oddlama.vane.core.item.CustomItem;
-import org.oddlama.vane.enchantments.items.AncientTomeOfKnowledge;
-import org.oddlama.vane.enchantments.items.AncientTomeOfTheGods;
-import org.oddlama.vane.enchantments.items.BookVariant;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -20,14 +13,19 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 
 import org.jetbrains.annotations.NotNull;
 
 import org.oddlama.vane.annotation.enchantment.Rarity;
 import org.oddlama.vane.annotation.enchantment.VaneEnchantment;
+import org.oddlama.vane.core.item.CustomItem;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.enchantments.CustomEnchantment;
 import org.oddlama.vane.enchantments.Enchantments;
+import org.oddlama.vane.enchantments.items.AncientTomeOfKnowledge;
+import org.oddlama.vane.enchantments.items.BookVariant;
 
 @VaneEnchantment(name = "leafchopper", rarity = Rarity.COMMON, treasure = true, target = EnchantmentTarget.TOOL)
 public class Leafchopper extends CustomEnchantment<Enchantments> {

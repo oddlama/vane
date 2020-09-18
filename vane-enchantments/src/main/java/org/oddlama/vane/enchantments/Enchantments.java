@@ -5,20 +5,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.md_5.bungee.api.chat.BaseComponent;
-import org.bukkit.inventory.meta.EnchantmentStorageMeta;
-import org.bukkit.event.world.LootGenerateEvent;
 
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
+import org.bukkit.event.world.LootGenerateEvent;
 import org.bukkit.inventory.ItemStack;
-import org.oddlama.vane.core.item.ModelDataEnum;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 
 import org.oddlama.vane.annotation.VaneModule;
-import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.core.Core;
+import org.oddlama.vane.core.item.ModelDataEnum;
+import org.oddlama.vane.core.module.Module;
 
 @VaneModule(name = "enchantments", bstats = 8640, config_version = 1, lang_version = 1, storage_version = 1)
 public class Enchantments extends Module<Enchantments> {

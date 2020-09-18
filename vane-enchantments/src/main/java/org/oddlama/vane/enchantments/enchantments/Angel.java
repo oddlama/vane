@@ -6,17 +6,11 @@ import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.oddlama.vane.core.LootTable.LootTableEntry;
-import org.bukkit.loot.LootTables;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.inventory.meta.EnchantmentStorageMeta;
-import org.bukkit.inventory.RecipeChoice.MaterialChoice;
-import org.bukkit.inventory.ShapedRecipe;
-import org.oddlama.vane.core.item.CustomItem;
-import org.oddlama.vane.enchantments.items.AncientTomeOfKnowledge;
-import org.oddlama.vane.enchantments.items.AncientTomeOfTheGods;
-import org.oddlama.vane.enchantments.items.BookVariant;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
+import org.bukkit.loot.LootTables;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -24,9 +18,13 @@ import org.oddlama.vane.annotation.config.ConfigDouble;
 import org.oddlama.vane.annotation.config.ConfigDoubleList;
 import org.oddlama.vane.annotation.enchantment.Rarity;
 import org.oddlama.vane.annotation.enchantment.VaneEnchantment;
+import org.oddlama.vane.core.LootTable.LootTableEntry;
+import org.oddlama.vane.core.item.CustomItem;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.enchantments.CustomEnchantment;
 import org.oddlama.vane.enchantments.Enchantments;
+import org.oddlama.vane.enchantments.items.AncientTomeOfTheGods;
+import org.oddlama.vane.enchantments.items.BookVariant;
 
 @VaneEnchantment(name = "angel", max_level = 5, rarity = Rarity.VERY_RARE, treasure = true)
 public class Angel extends CustomEnchantment<Enchantments> {

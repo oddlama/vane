@@ -1,12 +1,9 @@
 package org.oddlama.vane.trifles.event;
 
-import java.util.List;
-
-import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
+import org.bukkit.event.player.PlayerTeleportEvent;
 
 public class PlayerTeleportScrollEvent extends PlayerTeleportEvent {
 	private static final HandlerList handlers = new HandlerList();

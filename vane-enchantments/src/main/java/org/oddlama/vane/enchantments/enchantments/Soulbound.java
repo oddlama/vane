@@ -3,28 +3,26 @@ package org.oddlama.vane.enchantments.enchantments;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 
+import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.inventory.meta.EnchantmentStorageMeta;
-import org.bukkit.Material;
-import org.oddlama.vane.core.LootTable.LootTableEntry;
-import org.bukkit.loot.LootTables;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.inventory.RecipeChoice.MaterialChoice;
-import org.bukkit.inventory.ShapedRecipe;
-import org.oddlama.vane.core.item.CustomItem;
-import org.oddlama.vane.enchantments.items.AncientTomeOfKnowledge;
-import org.oddlama.vane.enchantments.items.AncientTomeOfTheGods;
-import org.oddlama.vane.enchantments.items.BookVariant;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
+import org.bukkit.loot.LootTables;
 
 import org.oddlama.vane.annotation.enchantment.Rarity;
 import org.oddlama.vane.annotation.enchantment.VaneEnchantment;
+import org.oddlama.vane.core.LootTable.LootTableEntry;
+import org.oddlama.vane.core.item.CustomItem;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.enchantments.CustomEnchantment;
 import org.oddlama.vane.enchantments.Enchantments;
+import org.oddlama.vane.enchantments.items.AncientTomeOfTheGods;
+import org.oddlama.vane.enchantments.items.BookVariant;
 
 @VaneEnchantment(name = "soulbound", rarity = Rarity.RARE, treasure = true, allow_custom = true)
 public class Soulbound extends CustomEnchantment<Enchantments> {
