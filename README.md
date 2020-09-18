@@ -36,7 +36,7 @@ If you don't want a certain feature, simply disable it.
 - [x] Builtin lightweight permissions plugin (permission groups, group inheritance, live editing).
       For better control, all default permissions are revoked and need to be added explicitly.
 - [x] The server can be automatically stopped after a specified duration without players.
-      Using this together with **(TODO insert waterfall plugin)** to start the server on demand will
+      Using this together with *vane-waterfall* to start the server on demand will
       allow you to save server resources while nobody is online.
 - [x] Inaccessible commands will not be shown to players (sends "Unknown Command" instead)
 - [x] Slightly colorized chat message format for better readability
@@ -86,9 +86,13 @@ If you don't want a certain feature, simply disable it.
 - [ ] Visual selection of any 2D polygon shape with arbitrary heights.
 - [ ] Seamless integration into chest-like menus instead of commands.
 
-#### Spectator accounts
+#### vane-waterfall
 
-- [ ] Grant players additional spectator accounts (by proxying logins from a different port via **Waterfall**)
+- [x] Authentication multiplexing: Grant players any amount of additional accounts (e.g. useful for secondary spectator accounts).
+      This works by proxying logins from a different port and changing UUIDs.
+- [x] Servers can be started automatically when a player tries to join.
+- [x] `ping` command to check server ping as recieved by the proxy.
+- [x] `maintenance` command to schedule maintenance times. While maintenance is active, players without a bypass permission can't join servers.
 
 #### Remarks
 
@@ -119,6 +123,22 @@ Enjoy playing!
 > This protocol is considered insecure and therefore should NOT be used. To workaround this issue, you should host the file in a http context.
 > Using http is not a security issue, as the file will be verified via its sha1 sum by the client.
 
+#### Installation (vane-waterfall)
+
+Again, download and place `vane-waterfall` jar into the proxy server's `plugins/` directory.
+The configuration will be generated on first start.
+
+To enable the authentication multiplexing, you need to do the following:
+
+1. Define multiple listeners (distinct ports) for your servers in the proxy's `config.yml`.
+2. Map these ports to multiplexer ids in `plugins/vane-waterfall/config.yml`. The specific multiplexer ids must be >0 but other than that are only important
+   to check player permissions.
+3. Assign the corresponding permission(s) `vane_waterfall.multiplexer.<multiplexer_id>` to the desired group in the proxy's `config.yml`.
+4. Assign the group to a player using the players' **UUID**. *THIS IS IMPORTANT* and won't work with player names.
+
+Optionally you can configure the second configuration section in `plugins/vane-waterfall/config.yml` to allow automatic server start.
+An example is provided in the config file.
+
 ### Building from source
 
 You can of course build the plugin yourself. To do that you need at least JDK 11.
@@ -130,6 +150,19 @@ to `libs/`. This is required so the compiler can find minecraft-native symbols.
 3. Resulting jar files will be in `target/`.
 
 ### FAQ
+
+#### Q: Can I also use Spigot or do I need PaperMC?
+
+**A:** You need PaperMC. Vane makes use of some events and API only provided by Paper.
+If everything would get integrated into Spigot, we might retarget the plugins, to open
+them to a broader audience. But until that day comes, you will need PaperMC.
+
+For vane-waterfall, you might be able to use BungeeCord instead of Waterfall,
+yet there will be no guarantees that this will stay.
+
+#### Q: Do I need a proxy? (BungeeCord / Waterfall)
+
+**A:** No. You only need a proxy if you want any of the features described under **vane-waterfall** above.
 
 #### Q: Can I run vane alongside other plugins?
 
@@ -153,7 +186,7 @@ For smaller survival servers, using SQL would be a waste of resources and proces
 I would like to thank the following projects and people maintaining them:
 
 - [Spigot](https://www.spigotmc.org/) for the awesome baseline server software.
-- [PaperMC](https://papermc.io/) for the valuable additions missing from Spigot.
+- [PaperMC](https://papermc.io/) for the valuable additions missing from Spigot, and for Waterfall.
 - [ProtocolLib](https://github.com/dmulloy2/ProtocolLib) for the awesome protocol layer library.
 
 #### Included software
