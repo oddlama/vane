@@ -1,7 +1,6 @@
 [Features](#features) \|
 [Installation](#installation) \|
-[FAQ](#faq)
-
+[FAQ](#faq) \|
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 
 ## About vane
@@ -21,39 +20,55 @@ These plugins follow a **strict no-nonsense** rule:
 All features are modularized and can be disabled independently of each other.
 If you don't want a certain feature, simply disable it.
 
-#### Little things & quality of life
+#### Quality of life (vane-trifles)
 
 - [x] Walk faster on grass paths
 - [x] Harvest finished crops by right-clicking (or by using a *Sickle*)
 - [x] Double doors open simultaneously
 - [x] Sort chests with redstone
 - [x] Modify individual connections of walls, fences, etc. and easily modify stair shapes using the *File*
-- [x] Skip night with 50% of players sleeping
 - [x] Store XP in bottles
 - [x] Limit anvil repair cost to remove 'too-expensive'
 - [x] All recipes will be unlocked automatically when joining the server
 - [x] Access to gigantic head library (>30000 heads) for decorative purposes, including in-game menu to search and acquire heads by category, tags or name.
 - [x] Use the *Portal Scrolls* to get home or back to where you last used a scroll!
 
-#### Administrative and 'meta' features
+- [x] The *Sickle* allows you to harvest a small radius of finished crops. Similar to the hand-harvesting addition, this will drop only product and no seeds.
+- [x] The *File* allows you to modify block individual connections of fences, walls, glass panes and blocks alike.
+- [x] The *Empty Experience Bottle* allows you to bottle your experience (right click) for later use. Drinking the full bottle will grant you the stored experience.
+      Storing experience will cost a small percentage of the bottled xp. It will also calculate in terms of experience and not levels.
+- [x] The *Portal Scroll (Home)* will teleport you to your bed, but it only has a limited amount of uses!
+- [x] The *Portal Scroll (Unstable)* will teleport you back to the location where you last used a portal scroll.
+
+#### Core features (vane-core)
 
 - [x] Full localization support, currently provides english (default) and german.
 - [x] Automatically generated resource pack will provide client side translations
-- [x] Builtin lightweight permissions plugin (permission groups, group inheritance, live editing).
-      For better control, all default permissions are revoked and need to be added explicitly.
+- [x] Inaccessible commands will not be shown to players (sends "Unknown Command" instead)
+
+#### Administrative (vane-admin)
+
 - [x] The server can be automatically stopped after a specified duration without players.
       Using this together with *vane-waterfall* to start the server on demand will
       allow you to save server resources while nobody is online.
-- [x] Inaccessible commands will not be shown to players (sends "Unknown Command" instead)
 - [x] Slightly colorized chat message format for better readability
 - [x] Convenience commands for time, weather, gamemode, spawn, ...
 - [x] Hazard protection against creeper/wither explosions, door breaking, ...
 - [x] Stylish world rebuilding after explosion hazards.
 - [x] Whitelist for worlds in which the Wither may be spawned
+
+#### Permissions (vane-permissions)
+
+- [x] Builtin lightweight permissions plugin (permission groups, group inheritance, live editing).
+      For better control, all default permissions are revoked and need to be added explicitly.
 - [x] Players without any permissions cannot alter the world (just look, no touch!)
 - [x] Verified players can vouch for new players with `/vouch <player>`, which will assign a configured group to the new player.
 
-#### Custom enchantments
+#### Multiplayer sleeping (vane-bedtime)
+
+- [x] Skip night with 50% of players sleeping
+
+#### Custom enchantments (vane-enchantments)
 
 - [x] Seamless integration of custom enchantments with the vanilla system
 - [x] *Wings*: Occasionally boost your elytra mid-air by sneaking.
@@ -68,16 +83,7 @@ If you don't want a certain feature, simply disable it.
 - [x] *Angel*: A legendary enchantment to accelerate your elytra while pressing shift! Gives a more natural feeling than using rockets. Elytra go brrrr! (Replaces *Wings*)
 - [x] *Unbreakable*: Well... A legendary enchantment for truly unbreakable items. Extremely expensive. (Replaces *Unbreaking* and *Mending*)
 
-#### Custom items
-
-- [x] The *Sickle* allows you to harvest a small radius of finished crops. Similar to the hand-harvesting addition, this will drop only product and no seeds.
-- [x] The *File* allows you to modify block individual connections of fences, walls, glass panes and blocks alike.
-- [x] The *Empty Experience Bottle* allows you to bottle your experience (right click) for later use. Drinking the full bottle will grant you the stored experience.
-      Storing experience will cost a small percentage of the bottled xp. It will also calculate in terms of experience and not levels.
-- [x] The *Portal Scroll (Home)* will teleport you to your bed, but it only has a limited amount of uses!
-- [x] The *Portal Scroll (Unstable)* will teleport you back to the location where you last used a portal scroll.
-
-#### Portals
+#### Portals (vane-portals)
 
 - [x] Build portals of arbitrary shape and orientation to get around easily (even horizontal!)
 - [x] Correctly retains velocity of players, so you can fly through it
@@ -85,14 +91,14 @@ If you don't want a certain feature, simply disable it.
 - [ ] Integrates with regions to control portal connection access
 - [x] Dynmap integration shows icons for global portals
 
-#### Regions
+#### Regions (vane-regions)
 
 - [ ] Players can buy an arbitrarily shaped patch of land, and may control certain environmental conditions and player permissions for that area
 - [ ] Server-owned regions can be used to protect gobal areas (e.g. spawn).
 - [ ] Visual selection of any 2D polygon shape with arbitrary heights.
 - [ ] Seamless integration into chest-like menus instead of commands.
 
-#### vane-waterfall
+#### Proxy plugin (vane-waterfall)
 
 - [x] Authentication multiplexing: Grant players any amount of additional accounts (e.g. useful for secondary spectator accounts).
       This works by proxying logins from a different port and changing UUIDs.
