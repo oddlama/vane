@@ -27,6 +27,7 @@ If you don't want a certain feature, simply disable it.
 - [x] Limit anvil repair cost to remove 'too-expensive'
 - [x] All recipes will be unlocked automatically when joining the server
 - [x] Access to gigantic head library (>30000 heads) for decorative purposes, including in-game menu to search and acquire heads by category, tags or name.
+- [x] Use the *Portal Scrolls* to get home or back to where you last used a scroll!
 
 #### Administrative and 'meta' features
 
@@ -42,13 +43,9 @@ If you don't want a certain feature, simply disable it.
 - [x] Stylish world rebuilding after explosion hazards.
 - [x] Whitelist for worlds in which the Wither may be spawned
 - [x] Players without any permissions cannot alter the world (just look, no touch!)
+- [x] Verified players can vouch for new players with `/vouch <player>`, which will assign a configured group to the new player.
 
 #### Custom enchantments
-
-While vane technically supports enchantments to be acquired using the enchanting table,
-all enchantments from this plugin will be acquired by treasure or crafting,
-for the simple reason that late-game enchanting is too cheap,
-and therefore not well suited for giving out valuable traits (like *Angel* or *Unbreakable*).
 
 - [x] Seamless integration of custom enchantments with the vanilla system
 - [x] *Wings*: Occasionally boost your elytra mid-air by sneaking.
@@ -69,8 +66,8 @@ and therefore not well suited for giving out valuable traits (like *Angel* or *U
 - [x] The *File* allows you to modify block individual connections of fences, walls, glass panes and blocks alike.
 - [x] The *Empty Experience Bottle* allows you to bottle your experience (right click) for later use. Drinking the full bottle will grant you the stored experience.
       Storing experience will cost a small percentage of the bottled xp. It will also calculate in terms of experience and not levels.
-- [x] The *Home Portal Scroll* will teleport you to your bed, but it only has a limited amount of uses!
-- [x] The *Unstable Portal Scroll* will teleport you back to the location where you last used a portal scroll.
+- [x] The *Portal Scroll (Home)* will teleport you to your bed, but it only has a limited amount of uses!
+- [x] The *Portal Scroll (Unstable)* will teleport you back to the location where you last used a portal scroll.
 
 #### Portals
 
@@ -93,7 +90,13 @@ and therefore not well suited for giving out valuable traits (like *Angel* or *U
 
 #### Remarks
 
-> [as of 1.16.2] Showing enchantment names inside the enchantment table doesn't work due to protocol limitations. Custom enchantments will be shown without any tooltip, and therefore cannot be distinguished from one another.
+> **[as of 1.16.2]** Showing enchantment names inside the enchantment table doesn't work due to protocol limitations.
+> Custom enchantments will be shown without any tooltip, and therefore cannot be distinguished from one another.
+> **[as of 1.16.2]** Vane technically supports enchantments to be acquired using the enchanting table, but all enchantments from this plugin will be acquired by treasure or crafting.
+> The reason is that adding all these enchantments at high levels would not work out well regarding the relative probability of common and rare enchantments.
+> At the time of writing, there are only 4 rarity categories, and the vanilla rarities cannot be conveniently modified. So as the custom enchantments are
+> on average more powerful than the vanilla ones, we would need more categories to balance the enchanting process.
+> This system is not suited for giving out valuable traits (like *Angel* or *Unbreakable*), so we decided to create crafting recipes and modify loot tables instead.
 
 ### Installation
 
