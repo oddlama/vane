@@ -4,9 +4,23 @@ import static org.oddlama.vane.core.item.CustomItem.is_custom_item;
 import static org.oddlama.vane.util.BlockUtil.drop_naturally;
 import static org.oddlama.vane.util.BlockUtil.texture_from_skull;
 import static org.oddlama.vane.util.MaterialUtil.is_tillable;
+import static org.oddlama.vane.util.Util.resolve_skin;
 
 import java.io.File;
+import com.destroystokyo.paper.profile.ProfileProperty;
 import java.io.IOException;
+import java.io.ByteArrayInputStream;
+import org.bukkit.plugin.messaging.PluginMessageListener;
+import org.oddlama.vane.annotation.persistent.Persistent;
+import java.io.DataInputStream;
+import org.json.JSONException;
+import org.json.JSONObject;
+import java.io.IOException;
+import java.util.UUID;
+import java.util.Map;
+import java.util.HashMap;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.SortedSet;
@@ -41,7 +55,7 @@ import org.oddlama.vane.core.menu.MenuManager;
 import org.oddlama.vane.core.module.Module;
 
 @VaneModule(name = "core", bstats = 8637, config_version = 1, lang_version = 1, storage_version = 1)
-public class Core extends Module<Core> {
+public class Core extends Module<Core> implements PluginMessageListener {
 	/** The base offset for any model data used by vane plugins. */
 	// "vane" = 0x76616e65, but the value will be saved as float (json...), so only -2^24 - 2^24 can accurately be represented.
 	// therefore we use 0x76616e as the base value.
@@ -55,6 +69,9 @@ public class Core extends Module<Core> {
 	public static int model_data(int section, int item_id, int variant_id) {
 		return ITEM_DATA_BASE_OFFSET + section * ITEM_DATA_SECTION_SIZE + item_id * ITEM_VARIANT_SECTION_SIZE + variant_id;
 	}
+
+	// Channel for proxy messages to multiplex connections
+	public static final String CHANNEL_AUTH_MULTIPLEX = "vane_waterfall:auth_multiplex";
 
 	@LangMessage public TranslatedMessage lang_command_not_a_player;
 	@LangMessage public TranslatedMessage lang_command_permission_denied;
@@ -71,6 +88,12 @@ public class Core extends Module<Core> {
 	public Permission permission_command_catchall = new Permission("vane.*.commands.*", "Allow access to all vane commands (ONLY FOR ADMINS!)", PermissionDefault.FALSE);
 
 	public MenuManager menu_manager;
+
+	// Persistent storage
+	@Persistent
+	public Map<UUID, UUID> storage_auth_multiplex = new HashMap<>();
+	@Persistent
+	public Map<UUID, Integer> storage_auth_multiplexer_id = new HashMap<>();
 
 	public Core() {
 		// Create global command catch-all permission
@@ -91,6 +114,18 @@ public class Core extends Module<Core> {
 		new ResourcePackDistributor(this);
 		new PlayerMessageDelayer(this);
 		new CommandHider(this);
+	}
+
+	@Override
+	public void on_enable() {
+		getServer().getMessenger().registerIncomingPluginChannel(this, CHANNEL_AUTH_MULTIPLEX, this);
+		super.on_enable();
+	}
+
+	@Override
+	public void on_disable() {
+		super.on_disable();
+		getServer().getMessenger().unregisterIncomingPluginChannel(this, CHANNEL_AUTH_MULTIPLEX, this);
 	}
 
 	public boolean generate_resource_pack() {
@@ -244,5 +279,77 @@ public class Core extends Module<Core> {
 		// Set to air and drop item
 		block.setType(Material.AIR);
 		drop_naturally(block, head_material.item());
+	}
+
+	public synchronized String auth_multiplex_player_name(final UUID uuid) {
+		final var original_player_id = storage_auth_multiplex.get(uuid);
+		final var multiplexer_id = storage_auth_multiplexer_id.get(uuid);
+		if (original_player_id == null || multiplexer_id == null) {
+			return null;
+		}
+
+		final var original_player = getServer().getOfflinePlayer(original_player_id);
+		if (original_player != null) {
+			var str = "§7[" + multiplexer_id + "]§r " + original_player.getName();
+			if (str.length() > 16) {
+				str = str.substring(0, 16);
+			}
+			return str;
+		}
+
+		return null;
+	}
+
+	private void try_init_multiplexed_player_name(final Player player) {
+		final var id = player.getUniqueId();
+		final var display_name = auth_multiplex_player_name(id);
+		if (display_name == null) {
+			return;
+		}
+
+		log.info("[multiplex] Init player '" + display_name + "' for registered auth multiplexed player {" + id + ", " + player.getName() + "}");
+		player.setDisplayName(display_name);
+		player.setPlayerListName(display_name);
+
+		final var original_player_id = storage_auth_multiplex.get(id);
+		final var skin = resolve_skin(original_player_id);
+		final var profile = player.getPlayerProfile();
+		profile.setProperty(new ProfileProperty("textures", skin.texture, skin.signature));
+		player.setPlayerProfile(profile);
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
+	public void on_player_join(PlayerJoinEvent event) {
+		try_init_multiplexed_player_name(event.getPlayer());
+	}
+
+	@Override
+	public synchronized void onPluginMessageReceived(final String channel, final Player player, byte[] bytes) {
+		if (!channel.equals(CHANNEL_AUTH_MULTIPLEX)) {
+			return;
+		}
+
+		final var stream = new ByteArrayInputStream(bytes);
+		final var in = new DataInputStream(stream);
+
+		try {
+			final var multiplexer_id = in.readInt();
+			final var old_uuid = UUID.fromString(in.readUTF());
+			final var old_name = in.readUTF();
+			final var new_uuid = UUID.fromString(in.readUTF());
+			final var new_name = in.readUTF();
+
+			log.info("[multiplex] Registered auth multiplexed player {" + new_uuid + ", " + new_name + "} from player {" + old_uuid + ", " + old_name + "}");
+			storage_auth_multiplex.put(new_uuid, old_uuid);
+			storage_auth_multiplexer_id.put(new_uuid, multiplexer_id);
+			mark_persistent_storage_dirty();
+
+			final var multiplexed_player = getServer().getOfflinePlayer(new_uuid);
+			if (multiplexed_player != null && multiplexed_player.isOnline()) {
+				try_init_multiplexed_player_name(multiplexed_player.getPlayer());
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

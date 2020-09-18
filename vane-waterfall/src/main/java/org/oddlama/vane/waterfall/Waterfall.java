@@ -6,11 +6,28 @@ import net.md_5.bungee.api.Favicon;
 import net.md_5.bungee.api.event.PluginMessageEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.api.plugin.Plugin;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.util.Set;
+import java.util.HashSet;
+import java.net.URL;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.logging.Level;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 import net.md_5.bungee.event.EventHandler;
 import net.md_5.bungee.api.ProxyServer;
 import java.util.logging.Logger;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.URL;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.InetSocketAddress;
@@ -26,6 +43,7 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.PendingConnection;
+import net.md_5.bungee.api.event.LoginEvent;
 import net.md_5.bungee.api.event.PreLoginEvent;
 import net.md_5.bungee.api.event.ProxyPingEvent;
 import net.md_5.bungee.api.plugin.Listener;
@@ -81,6 +99,34 @@ public class Waterfall extends Plugin implements Listener {
 		event.setResponse(server_ping);
 	}
 
+	private static String read_all(Reader rd) throws IOException {
+		final var sb = new StringBuilder();
+		int cp;
+		while ((cp = rd.read()) != -1) {
+			sb.append((char) cp);
+		}
+		return sb.toString();
+	}
+
+	public static JSONObject read_json_from_url(String url) throws IOException, JSONException {
+		try (final var rd = new BufferedReader(new InputStreamReader(new URL(url).openStream(), StandardCharsets.UTF_8))) {
+			return new JSONObject(read_all(rd));
+		}
+	}
+
+	public UUID resolve_uuid(String name) {
+		final var url = "https://api.mojang.com/users/profiles/minecraft/" + name;
+		try {
+			final var json = read_json_from_url(url);
+			final var id_str = json.getString("id");
+			final var uuid_str = id_str.replaceFirst("(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)", "$1-$2-$3-$4-$5");
+			return UUID.fromString(uuid_str);
+		} catch (IOException e) {
+			getLogger().log(Level.WARNING, "Failed to resolve UUID for player '" + name + "'", e);
+			return null;
+		}
+	}
+
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void on_pre_login(PreLoginEvent event) {
 		if (event.isCancelled()) {
@@ -88,6 +134,9 @@ public class Waterfall extends Plugin implements Listener {
 		}
 
 		final var connection = event.getConnection();
+		// This is pre-authentication, so we need to resolve the uuid ourselves.
+		final var uuid = resolve_uuid(connection.getName());
+
 		var server = AbstractReconnectHandler.getForcedHost(connection);
 		if (server == null) {
 			server = getProxy().getServerInfo(connection.getListener().getServerPriority().get(0));
@@ -95,7 +144,7 @@ public class Waterfall extends Plugin implements Listener {
 
 		if (maintenance.enabled()) {
 			// Client is connecting while maintenance is on
-			if (has_permission(connection.getUniqueId(), "vane_waterfall.bypass_maintenance")) {
+			if (has_permission(uuid, "vane_waterfall.bypass_maintenance")) {
 				// Players with bypass_maintenance flag may join
 				return;
 			}
@@ -112,7 +161,7 @@ public class Waterfall extends Plugin implements Listener {
 			final var cms = config.managed_servers.get(sinfo.getName());
 
 			if (cms == null || cms.start_cmd() == null) {
-				getLogger().severe("Could not start server '" + sinfo.getName() + "', no START_CMD given");
+				getLogger().severe("Could not start server '" + sinfo.getName() + "', no start command was set!");
 				event.setCancelReason(TextComponent.fromLegacyText("Could not start server"));
 			} else {
 				// Client is connecting while startup
@@ -138,18 +187,18 @@ public class Waterfall extends Plugin implements Listener {
 
 		// Multiplex authentication if the connection is to an multiplexing port
 		final var port = connection.getVirtualHost().getPort();
-		final var multiplex_id = config.multiplexer_by_port.getOrDefault(port, 0);
-		if (multiplex_id > 0) {
-			final var uuid = connection.getUniqueId();
-			if (!has_permission(uuid, "vane_waterfall.multiplex_auth." + multiplex_id)) {
+		final var multiplexer_id = config.multiplexer_by_port.getOrDefault(port, 0);
+		if (multiplexer_id > 0) {
+			if (!has_permission(uuid, "vane_waterfall.multiplex_auth." + multiplexer_id)) {
 				event.setCancelReason(TextComponent.fromLegacyText(MESSAGE_MULTIPLEX_MOJANG_AUTH_NO_PERMISSION_KICK));
 				event.setCancelled(true);
 				return;
 			}
 
-			final var name = uuid.toString().substring(16);
-			final var new_uuid = add_uuid(uuid, multiplex_id);
-			final var new_name = uuid.toString().substring(16);
+			final var name = connection.getName();
+			final var new_uuid = add_uuid(uuid, multiplexer_id);
+			final var new_uuid_str = new_uuid.toString();
+			final var new_name = new_uuid_str.substring(new_uuid_str.length() - 16);
 
 			getLogger().info("auth multiplex request from player " + name +
 							 " connecting from " + connection.getSocketAddress().toString());
@@ -164,6 +213,11 @@ public class Waterfall extends Plugin implements Listener {
 				final var data_field = LoginRequest.class.getDeclaredField("data");
 				data_field.setAccessible(true);
 				data_field.set(login_request, new_name);
+
+				// Set name specifically
+				final var name_field = handler_class.getDeclaredField("name");
+				name_field.setAccessible(true);
+				name_field.set(connection, new_name);
 			} catch (ClassNotFoundException | NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
 				e.printStackTrace();
 				return;
@@ -172,16 +226,21 @@ public class Waterfall extends Plugin implements Listener {
 			connection.setOnlineMode(false);
 			connection.setUniqueId(new_uuid);
 
-			register_auth_multiplex_player(server, name, new_uuid, new_name);
-			getLogger().info("auth multiplex granted as uuid: " + new_uuid + ", name: " + new_name + " for player " + name);
+			final var resulting_uuid = UUID.nameUUIDFromBytes(
+				("OfflinePlayer:" + new_name).getBytes(StandardCharsets.UTF_8));
+
+			register_auth_multiplex_player(server, multiplexer_id, uuid, name, resulting_uuid, new_name);
+			getLogger().info("auth multiplex granted as uuid: " + resulting_uuid + ", name: " + new_name + " for player " + name);
 		}
 	}
 
-	private void register_auth_multiplex_player(ServerInfo server, String old_name, UUID new_uuid, String new_name) {
+	private void register_auth_multiplex_player(ServerInfo server, int multiplexer_id, UUID old_uuid, String old_name, UUID new_uuid, String new_name) {
 		final var stream = new ByteArrayOutputStream();
 		final var out = new DataOutputStream(stream);
 
 		try {
+			out.writeInt(multiplexer_id);
+			out.writeUTF(old_uuid.toString());
 			out.writeUTF(old_name);
 			out.writeUTF(new_uuid.toString());
 			out.writeUTF(new_name);
@@ -249,10 +308,14 @@ public class Waterfall extends Plugin implements Listener {
 	}
 
 	public boolean has_permission(UUID uuid, String permission) {
+		if (uuid == null) {
+			return false;
+		}
+
 		final var conf_adapter = getProxy().getConfigurationAdapter();
 		for (final var group : conf_adapter.getGroups(uuid.toString())) {
 			final var perms = conf_adapter.getList("permissions." + group, null);
-			if (perms != null && (perms.contains("vane_waterfall." + permission) || perms.contains("vane_waterfall.*") || perms.contains("*"))) {
+			if (perms != null && perms.contains(permission)) {
 				return true;
 			}
 		}

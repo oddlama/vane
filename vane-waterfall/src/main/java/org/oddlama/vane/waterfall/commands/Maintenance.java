@@ -56,7 +56,7 @@ public class Maintenance extends Command {
 			sender.sendMessage(TextComponent.fromLegacyText(
 				    "§7> §3/maintenance §3[ §7cancel §3] §f- Cancel any scheduled/active maintenance"
 				+ "\n§7> §3/maintenance §3[ §7status §3] §f- Display info about scheduled/active maintenance"
-				+ "\n§7> §3/maintenance §3[ §7schedule §3] <§bin§7> <§bduration§7> §f- Schedule maintenance in <in> for <duration>"
+				+ "\n§7> §3/maintenance §3[ §7schedule §3] §7<§bin§7> <§bduration§7> §f- Schedule maintenance in <in> for <duration>"
 				+ "\n§7> §3|§7 time format§7 §f- Examples: §b§o3h5m§r§f or §b§o1y2w3d4h5m6s§r"));
 		}
 	}

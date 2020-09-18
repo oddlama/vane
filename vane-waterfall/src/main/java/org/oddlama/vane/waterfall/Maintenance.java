@@ -125,7 +125,7 @@ public class Maintenance {
 		// Disable maintenance (just to be on the safe side)
 		disable();
 
-		plugin.getLogger().info("maintenance disabled!");
+		plugin.getLogger().info("Maintenance disabled!");
 	}
 
 	public void schedule(long start_millis, long duration_millis) {

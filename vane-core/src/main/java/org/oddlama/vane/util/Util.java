@@ -4,7 +4,36 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.util.Set;
+import java.util.HashSet;
+import java.net.URL;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.logging.Level;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import java.util.logging.Logger;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.URL;
+import java.io.IOException;
+import java.net.Socket;
+import java.net.InetSocketAddress;
+import java.lang.reflect.Field;
+import java.util.Random;
+import java.util.UUID;
+import java.util.Map;
+
 import org.bukkit.NamespacedKey;
+import org.bukkit.Bukkit;
+import java.util.logging.Level;
 
 public class Util {
 	@SuppressWarnings("deprecation")
@@ -104,6 +133,54 @@ public class Util {
 			return (int)(2.5 * level * level - 40.5 * level) + 360;
 		} else {
 			return (int)(4.5 * level * level - 162.5 * level) + 2220;
+		}
+	}
+
+	private static String read_all(Reader rd) throws IOException {
+		final var sb = new StringBuilder();
+		int cp;
+		while ((cp = rd.read()) != -1) {
+			sb.append((char) cp);
+		}
+		return sb.toString();
+	}
+
+	public static JSONObject read_json_from_url(String url) throws IOException, JSONException {
+		try (final var rd = new BufferedReader(new InputStreamReader(new URL(url).openStream(), StandardCharsets.UTF_8))) {
+			return new JSONObject(read_all(rd));
+		}
+	}
+
+	public static UUID resolve_uuid(String name) {
+		final var url = "https://api.mojang.com/users/profiles/minecraft/" + name;
+		try {
+			final var json = read_json_from_url(url);
+			final var id_str = json.getString("id");
+			final var uuid_str = id_str.replaceFirst("(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)", "$1-$2-$3-$4-$5");
+			return UUID.fromString(uuid_str);
+		} catch (IOException e) {
+			Bukkit.getLogger().log(Level.WARNING, "Failed to resolve UUID for player '" + name + "'", e);
+			return null;
+		}
+	}
+
+	public static class Skin {
+		public String texture;
+		public String signature;
+	}
+
+	public static Skin resolve_skin(UUID id) {
+		final var url = "https://sessionserver.mojang.com/session/minecraft/profile/" + id + "?unsigned=false";
+		try {
+			final var json = read_json_from_url(url);
+			final var skin = new Skin();
+			final var obj = json.getJSONArray("properties").getJSONObject(0);
+			skin.texture = obj.getString("value");
+			skin.signature = obj.getString("signature");
+			return skin;
+		} catch (IOException e) {
+			Bukkit.getLogger().log(Level.WARNING, "Failed to resolve skin for uuid '" + id + "'", e);
+			return null;
 		}
 	}
 }

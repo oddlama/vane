@@ -49,6 +49,9 @@ public class ManagedServer {
 	public String display_name() { return display_name; }
 
 	public BaseComponent[] motd_online() {
+		if (motd_online == null) {
+			return new BaseComponent[0];
+		}
 		return TextComponent.fromLegacyText(
 			motd_online.replace("%SERVER_DISPLAY_NAME%", display_name()));
 	}
@@ -58,11 +61,14 @@ public class ManagedServer {
 	}
 
 	public BaseComponent[] motd_offline() {
+		if (motd_offline == null) {
+			return new BaseComponent[0];
+		}
 		return TextComponent.fromLegacyText(
 			motd_offline.replace("%SERVER_DISPLAY_NAME%", display_name()));
 	}
 
-	public void motd_offline(String motdOffline) {
+	public void motd_offline(String motd_offline) {
 		this.motd_offline = motd_offline;
 	}
 
