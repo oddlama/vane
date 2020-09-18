@@ -281,9 +281,9 @@ public class Waterfall extends Plugin implements Listener {
 
 		BaseComponent motd = null;
 		if (is_online(server)) {
-			motd = new TextComponent(cms.motd_offline());
-		} else {
 			motd = new TextComponent(cms.motd_online());
+		} else {
+			motd = new TextComponent(cms.motd_offline());
 		}
 
 		return motd == null ? new TextComponent() : motd;

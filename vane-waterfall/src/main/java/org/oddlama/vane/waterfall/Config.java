@@ -65,24 +65,17 @@ public class Config {
 
 			final var conf_managed_servers = conf.getSection("managed_servers");
 			for (final var id : conf_managed_servers.getKeys()) {
-				final var display_name = conf_managed_servers.getString("display_name");
-				final var favicon = conf_managed_servers.getString("favicon");
-				final var conf_motd = conf_managed_servers.getSection("motd");
+				final var section = conf_managed_servers.getSection(id);
+				final var display_name = section.getString("display_name");
+				final var favicon = section.getString("favicon");
+				final var conf_motd = section.getSection("motd");
 				final var motd_online = conf_motd.getString("online");
 				final var motd_offline = conf_motd.getString("offline");
-				final var conf_start = conf_managed_servers.getSection("start");
+				final var conf_start = section.getSection("start");
 				final var start_cmd = conf_start.getStringList("cmd");
 				final var start_kick_msg = conf_start.getString("kick_msg");
+
 				final var managed_server = new ManagedServer(id);
-
-				System.out.println("loaded splay_name(" + display_name);
-				System.out.println("loaded vicon(" + favicon);
-				System.out.println("loaded td_online(" + motd_online);
-				System.out.println("loaded td_offline(" + motd_offline);
-				System.out.println("loaded art_cmd(" + start_cmd);
-				System.out.println("loaded art_kick_msg(" + start_kick_msg);
-				managed_servers.put(id, managed_server);
-
 				managed_server.display_name(display_name);
 				managed_server.favicon(favicon);
 				managed_server.motd_online(motd_online);
@@ -120,7 +113,7 @@ public class Config {
 			+ "#             §aowo\"\n"
 			+ "#     # %SERVER_DISPLAY_NAME%: The server display name\n"
 			+ "#     offline: \"§f>> §3%SERVER_DISPLAY_NAME%§f <<\\n\\\n"
-			+ "#             §6owo\"\n"
+			+ "#             §cowo\"\n"
 			+ "#   start:\n"
 			+ "#     # %SERVER%: The server identifier\n"
 			+ "#     cmd: [\"/path/to/startscript\", \"arg1\", \"will also subsitute %SERVER%\"]\n"
