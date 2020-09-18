@@ -10,6 +10,7 @@ import java.util.UUID;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
@@ -43,8 +44,11 @@ public class Permissions extends Module<Permissions> {
 			"vane.permissions.groups.default",
 			"vane.admin.modify_world",
 			"vane.trifles.commands.heads" }),
-		@ConfigStringListMapEntry(key = "admin", list = {
+		@ConfigStringListMapEntry(key = "verified", list = {
 			"vane.permissions.groups.user",
+			"vane.permissions.commands.vouch" }),
+		@ConfigStringListMapEntry(key = "admin", list = {
+			"vane.permissions.groups.verified",
 			"vane.*.commands.*" }),
 	}, desc = "The permission groups. A player can have multiple permission groups assigned. Permission groups can inherit other permission groups by specifying vane.permissions.groups.<groupname> as a permission.")
 	public Map<String, List<String>> config_groups;
@@ -59,6 +63,7 @@ public class Permissions extends Module<Permissions> {
 
 	public Permissions() {
 		new org.oddlama.vane.permissions.commands.Permission(this);
+		new org.oddlama.vane.permissions.commands.Vouch(this);
 	}
 
 	@Override
@@ -174,5 +179,45 @@ public class Permissions extends Module<Permissions> {
 		if (attachment != null) {
 			player.removeAttachment(attachment);
 		}
+	}
+
+	public void save_and_recalculate(final OfflinePlayer player) {
+		mark_persistent_storage_dirty();
+
+		// Recalculate permissions if player is currently online
+		if (player.isOnline()) {
+			recalculate_player_permissions(player.getPlayer());
+		}
+	}
+
+	public boolean add_player_to_group(final OfflinePlayer player, final String group) {
+		var set = storage_player_groups.get(player.getUniqueId());
+		if (set == null) {
+			set = new HashSet<String>();
+			storage_player_groups.put(player.getUniqueId(), set);
+		}
+
+		final var added = set.add(group);
+		if (added) {
+			log.info("[audit] Group " + group + " assigned to " + player.getUniqueId() + " (" + player.getName() + ")");
+			save_and_recalculate(player);
+		}
+
+		return added;
+	}
+
+	public boolean remove_player_from_group(final OfflinePlayer player, final String group) {
+		var set = storage_player_groups.get(player.getUniqueId());
+		var removed = false;
+		if (set != null) {
+			removed = set.remove(group);
+		}
+
+		if (removed) {
+			log.info("[audit] Group " + group + " removed from " + player.getUniqueId() + " (" + player.getName() + ")");
+			save_and_recalculate(player);
+		}
+
+		return removed;
 	}
 }

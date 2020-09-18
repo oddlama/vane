@@ -65,3 +65,14 @@ command_permission:
   help: "§alist §7<§agroups§7|§apermissions§7>:§r Lists all available permissions or permission groups.\n\
     §aadd §bplayer §bgroup§7:§r Adds the player to the given permission group.\n\
     §aremove §bplayer §bgroup§7:§r Remove the player from the given permission group."
+
+command_vouch:
+  # This message is sent when a player successfully vouches for a player
+  # %1$s: Player name
+  vouched: "§aYou have vouched for %1$s§a!"
+  # This message is sent when a player tries to vouch for a player for whom he already has vouched
+  # %1$s: Player name
+  already_vouched: "§6You have already vouched for %1$s§6!"
+  usage: "%1$s §bplayer"
+  description: "Vouches for a player."
+  help: "Vouches for a player so they get permission to play on the server."

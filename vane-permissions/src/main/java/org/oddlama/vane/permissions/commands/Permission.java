@@ -142,10 +142,10 @@ public class Permission extends Command<Permissions> {
 							return;
 						}
 						lang_list_permission.send(sender,
-									"§d" + perm.getName(),
-									permission_value_color_code(att.getValue())
-										+ String.valueOf(att.getValue()),
-									perm.getDescription());
+							"§d" + perm.getName(),
+							permission_value_color_code(att.getValue())
+								+ String.valueOf(att.getValue()),
+							perm.getDescription());
 					});
 			}
 		}
@@ -188,41 +188,17 @@ public class Permission extends Command<Permissions> {
 		}
 	}
 
-	private void save_and_recalculate(OfflinePlayer player) {
-		get_module().mark_persistent_storage_dirty();
-
-		// Recalculate permissions if player is currently online
-		if (player.isOnline()) {
-			get_module().recalculate_player_permissions(player.getPlayer());
-		}
-	}
-
-	private void add_player_to_group(CommandSender sender, OfflinePlayer player, String group) {
-		var set = get_module().storage_player_groups.get(player.getUniqueId());
-		if (set == null) {
-			set = new HashSet<String>();
-			get_module().storage_player_groups.put(player.getUniqueId(), set);
-		}
-		var added = set.add(group);
-
-		if (added) {
+	private void add_player_to_group(final CommandSender sender, final OfflinePlayer player, final String group) {
+		if (get_module().add_player_to_group(player, group)) {
 			lang_group_assigned.send(sender, "§b" + player.getName(), "§a" + group);
-			save_and_recalculate(player);
 		} else {
 			lang_group_already_assigned.send(sender, "§b" + player.getName(), "§a" + group);
 		}
 	}
 
-	private void remove_player_from_group(CommandSender sender, OfflinePlayer player, String group) {
-		var set = get_module().storage_player_groups.get(player.getUniqueId());
-		var removed = false;
-		if (set != null) {
-			removed = set.remove(group);
-		}
-
-		if (removed) {
+	private void remove_player_from_group(final CommandSender sender, final OfflinePlayer player, final String group) {
+		if (get_module().remove_player_from_group(player, group)) {
 			lang_group_removed.send(sender, "§b" + player.getName(), "§a" + group);
-			save_and_recalculate(player);
 		} else {
 			lang_group_not_assigned.send(sender, "§b" + player.getName(), "§a" + group);
 		}

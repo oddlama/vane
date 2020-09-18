@@ -37,3 +37,10 @@ command_permission:
   help: "§alist §7<§agroups§7|§apermissions§7>:§r Listet alle verfügbaren Berechtigungen oder Berechtigungsgruppen.\n\
     §aadd §bplayer §bgroup§7:§r Fügt einen Spieler zu einer Berechtigungsgruppe hinzu.\n\
     §aremove §bplayer §bgroup§7:§r Entfernt einen Spieler aus einer Berechtigungsgruppe."
+
+command_vouch:
+  vouched: "§aDu hast dich für %1$s§a verbürgt!"
+  already_vouched: "§6Du hast dich bereits für %1$s§6 verbürgt!"
+  usage: "%1$s §bspieler"
+  description: "Verbürge dich für einen Spieler."
+  help: "Verbürge dich für einen Spieler, wodurch dieser Spielrechte zugeteilt bekommt."
