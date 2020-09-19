@@ -85,6 +85,9 @@ public class PlayerMessageDelayer extends Listener<Core> {
 		// as the resource pack is only now fully loaded
 		final var player = event.getPlayer();
 		final var queue = stop_queueing(player.getUniqueId());
+		if (queue == null) {
+			return;
+		}
 		for (final var packet : queue) {
 			try {
 				get_module().protocol_manager.sendServerPacket(player, packet);
