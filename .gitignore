@@ -5,5 +5,6 @@
 .settings
 .idea
 build
+libs/
 target/
 target-waterfall/
