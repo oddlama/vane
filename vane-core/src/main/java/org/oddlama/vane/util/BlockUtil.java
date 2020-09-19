@@ -260,7 +260,7 @@ public class BlockUtil {
 	public static Oct raytrace_oct(final LivingEntity entity, final Block block) {
 		// Ray trace position and face
 		final var result = entity.rayTraceBlocks(10.0);
-		if (block == null || !block.equals(result.getHitBlock())) {
+		if (block == null || result == null || !block.equals(result.getHitBlock())) {
 			return null;
 		}
 
@@ -282,7 +282,7 @@ public class BlockUtil {
 	public static RaytraceDominantFaceResult raytrace_dominant_face(final LivingEntity entity, final Block block) {
 		// Ray trace clicked face
 		final var result = entity.rayTraceBlocks(10.0);
-		if (block == null || !block.equals(result.getHitBlock())) {
+		if (block == null || result == null || !block.equals(result.getHitBlock())) {
 			return null;
 		}
 
