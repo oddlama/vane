@@ -46,6 +46,9 @@ public class Config {
 				final var section = conf_managed_servers.getSection(id);
 				final var display_name = section.getString("display_name");
 				final var favicon = section.getString("favicon");
+				final var conf_quotes = section.getSection("quotes");
+				final var quotes_online = conf_quotes.getStringList("online");
+				final var quotes_offline = conf_quotes.getStringList("offline");
 				final var conf_motd = section.getSection("motd");
 				final var motd_online = conf_motd.getString("online");
 				final var motd_offline = conf_motd.getString("offline");
@@ -56,6 +59,8 @@ public class Config {
 				final var managed_server = new ManagedServer(id);
 				managed_server.display_name(display_name);
 				managed_server.favicon(favicon);
+				managed_server.quotes_online(quotes_online);
+				managed_server.quotes_offline(quotes_offline);
 				managed_server.motd_online(motd_online);
 				managed_server.motd_offline(motd_offline);
 				managed_server.start_cmd(start_cmd);
@@ -81,10 +86,20 @@ public class Config {
 			+ "\n"
 			+ "# A dictionary of managed servers, which will be started on demand.\n"
 			+ "# Example:\n"
+			+ "# # Name of server as defined in proxy's config.yml\n"
 			+ "# my_server:\n"
+			+ "#   # The server display name (used for messages and substitutions)\n"
 			+ "#   display_name: \"My Minecraft Server\"\n"
+			+ "#   # The server favicon (absolute path or relative to proxy directory)\n"
 			+ "#   # %SERVER%: The server identifier\n"
 			+ "#   favicon: \"../%SERVER%/favicon.png\"\n"
+			+ "#   # A list of quotes for substitutions\n"
+			+ "#   quotes:\n"
+			+ "#     online:\n"
+			+ "#       - \"Ah, yes.\"\n"
+			+ "#     offline:\n"
+			+ "#       - \"Paniik!\"\n"
+			+ "#   # The motd for the server list (up to two lines)\n"
 			+ "#   motd:\n"
 			+ "#     # %SERVER_DISPLAY_NAME%: The server display name\n"
 			+ "#     online: \"§f>> §3%SERVER_DISPLAY_NAME%§f <<\\n\\\n"
@@ -92,9 +107,12 @@ public class Config {
 			+ "#     # %SERVER_DISPLAY_NAME%: The server display name\n"
 			+ "#     offline: \"§f>> §3%SERVER_DISPLAY_NAME%§f <<\\n\\\n"
 			+ "#             §cowo\"\n"
+			+ "#   # Automatic start settings\n"
 			+ "#   start:\n"
+			+ "#     # The command to execute when the first player joins while the server is offline\n"
 			+ "#     # %SERVER%: The server identifier\n"
 			+ "#     cmd: [\"/path/to/startscript\", \"arg1\", \"will also subsitute %SERVER%\"]\n"
+			+ "#     # The kick message to send to the player that started the server\n"
 			+ "#     # %SERVER%: The server identifier\n"
 			+ "#     # %SERVER_DISPLAY_NAME%: The server display name\n"
 			+ "#     kick_msg: \"§f>> §3%SERVER_DISPLAY_NAME%§f << §7is being started.\\n\\\n"
