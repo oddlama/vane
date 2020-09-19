@@ -78,7 +78,7 @@ public class Config {
 		final var content = "# vim: set tabstop=2 softtabstop=0 expandtab shiftwidth=2:\n"
 			+ "\n"
 			+ "# A mapping of <port>: <multiplexer_id>\n"
-			+ "# Allows players with the permission 'vane_waterfall.multiplex_auth.<multiplexer_id>'\n"
+			+ "# Allows players with the permission 'vane_waterfall.auth_multiplexer.<multiplexer_id>'\n"
 			+ "# to connect to the same server multiple times with a fake uuid. Multiplexer id's must be > 0.\n"
 			+ "# Default:\n"
 			+ "# auth_multiplex: {}\n"

@@ -144,7 +144,7 @@ To enable the authentication multiplexing, you need to do the following:
 1. Define multiple listeners (distinct ports) for your servers in the proxy's `config.yml`.
 2. Map these ports to multiplexer ids in `plugins/vane-waterfall/config.yml`. The specific multiplexer ids must be >0.
    Other than that the ids are only important to check player permissions.
-3. Assign the corresponding permission(s) `vane_waterfall.multiplexer.<multiplexer_id>` to the desired group in the proxy's `config.yml`.
+3. Assign the corresponding permission(s) `vane_waterfall.auth_multiplexer.<multiplexer_id>` to the desired group in the proxy's `config.yml`.
 4. Assign the group to a player using the players' **UUID**. *THIS IS IMPORTANT* and won't work with player names.
 
 Optionally, you can configure the second configuration section in `plugins/vane-waterfall/config.yml` to allow automatic server start.

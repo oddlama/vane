@@ -180,7 +180,7 @@ public class Waterfall extends Plugin implements Listener {
 		final var port = connection.getVirtualHost().getPort();
 		final var multiplexer_id = config.multiplexer_by_port.getOrDefault(port, 0);
 		if (multiplexer_id > 0) {
-			if (!has_permission(uuid, "vane_waterfall.multiplex_auth." + multiplexer_id)) {
+			if (!has_permission(uuid, "vane_waterfall.auth_multiplexer." + multiplexer_id)) {
 				event.setCancelReason(TextComponent.fromLegacyText(MESSAGE_MULTIPLEX_MOJANG_AUTH_NO_PERMISSION_KICK));
 				event.setCancelled(true);
 				return;
