@@ -4,6 +4,7 @@ plugins {
 
 dependencies {
 	implementation group: 'io.github.waterfallmc', name: 'waterfall-api', version: '1.16-R0.4-SNAPSHOT';
+	implementation group: 'org.bstats', name: 'bstats-bungeecord', version: '1.7';
 	implementation group: 'org.json', name: 'json', version: '20200518';
 }
 
@@ -15,8 +16,10 @@ processResources {
 
 shadowJar {
 	dependencies {
+		include(dependency('org.bstats:bstats-bungeecord'));
 		include(dependency('org.json:json'));
 	}
+	relocate 'org.bstats', 'org.oddlama.vane.vane_waterfall.external.bstats';
 	relocate 'org.json', 'org.oddlama.vane.vane_waterfall.external.json';
 }
 

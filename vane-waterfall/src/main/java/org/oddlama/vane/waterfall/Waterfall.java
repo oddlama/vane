@@ -35,6 +35,8 @@ import net.md_5.bungee.protocol.packet.LoginRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import org.bstats.bungeecord.Metrics;
+
 public class Waterfall extends Plugin implements Listener {
 	public static final String CHANNEL_AUTH_MULTIPLEX = "vane_waterfall:auth_multiplex";
 	public static String MESSAGE_MULTIPLEX_MOJANG_AUTH_NO_PERMISSION_KICK = "§cYou have no permission to use this auth multiplexer!";
@@ -42,8 +44,13 @@ public class Waterfall extends Plugin implements Listener {
 	public Config config = new Config(this);
 	public Maintenance maintenance = new Maintenance(this);
 
+	// bStats
+	private Metrics metrics;
+
 	@Override
 	public void onEnable() {
+		metrics = new Metrics(this, 8891);
+
 		config.load();
 		maintenance.load();
 
@@ -62,6 +69,8 @@ public class Waterfall extends Plugin implements Listener {
 		plugin_manager.unregisterListeners(this);
 
 		getProxy().unregisterChannel(CHANNEL_AUTH_MULTIPLEX);
+
+		metrics = null;
 	}
 
 	@SuppressWarnings("deprecation")
