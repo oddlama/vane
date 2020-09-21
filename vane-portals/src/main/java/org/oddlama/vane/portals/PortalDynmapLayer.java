@@ -46,7 +46,7 @@ public class PortalDynmapLayer extends ModuleComponent<Portals> {
 	@Override
 	public void on_enable() {
 		final var plugin = get_module().getServer().getPluginManager().getPlugin("dynmap");
-		if (plugin == null || !plugin.isEnabled()) {
+		if (plugin == null) {
 			return;
 		}
 
