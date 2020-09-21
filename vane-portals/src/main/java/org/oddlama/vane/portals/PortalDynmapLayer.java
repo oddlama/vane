@@ -43,8 +43,7 @@ public class PortalDynmapLayer extends ModuleComponent<Portals> {
 		super(context.group("dynmap", "Enable dynmap integration. Public portals will then be shown on a separate dynmap layer."));
 	}
 
-	@Override
-	public void on_enable() {
+	public void delayed_on_enable() {
 		final var plugin = get_module().getServer().getPluginManager().getPlugin("dynmap");
 		if (plugin == null) {
 			return;
@@ -65,6 +64,11 @@ public class PortalDynmapLayer extends ModuleComponent<Portals> {
 		get_module().log.info("Enabling dynmap integration");
 		dynmap_enabled = true;
 		create_or_load_layer();
+	}
+
+	@Override
+	public void on_enable() {
+		schedule_next_tick(this::delayed_on_enable);
 	}
 
 	@Override
