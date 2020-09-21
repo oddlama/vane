@@ -11,11 +11,11 @@ import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.ModuleComponent;
-import org.oddlama.vane.external.dynmap.DynmapAPI;
-import org.oddlama.vane.external.dynmap.markers.Marker;
-import org.oddlama.vane.external.dynmap.markers.MarkerAPI;
-import org.oddlama.vane.external.dynmap.markers.MarkerIcon;
-import org.oddlama.vane.external.dynmap.markers.MarkerSet;
+import org.dynmap.DynmapAPI;
+import org.dynmap.markers.Marker;
+import org.dynmap.markers.MarkerAPI;
+import org.dynmap.markers.MarkerIcon;
+import org.dynmap.markers.MarkerSet;
 import org.oddlama.vane.portals.portal.Portal;
 
 public class PortalDynmapLayer extends ModuleComponent<Portals> {

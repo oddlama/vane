@@ -6,7 +6,6 @@ dependencies {
 	implementation group: 'org.bstats', name: 'bstats-bukkit', version: '1.7';
 	implementation group: 'org.reflections', name: 'reflections', version: '0.9.12';
 	implementation group: 'org.json', name: 'json', version: '20200518';
-	implementation group: 'us.dynmap', name: 'dynmap-api', version: '3.1-SNAPSHOT';
 	implementation project(':vane-annotations');
 }
 
@@ -15,13 +14,11 @@ shadowJar {
 		include(dependency('org.bstats:bstats-bukkit'));
 		include(dependency('org.reflections:reflections'));
 		include(dependency('org.json:json'));
-		include(dependency('us.dynmap:dynmap-api'));
 		include(dependency(':vane-annotations'));
 	}
 	relocate 'org.bstats', 'org.oddlama.vane.external.bstats';
 	relocate 'org.reflections', 'org.oddlama.vane.external.reflections';
 	relocate 'org.json', 'org.oddlama.vane.external.json';
-	relocate 'org.dynmap', 'org.oddlama.vane.external.dynmap';
 }
 
 copyJar {

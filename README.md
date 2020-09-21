@@ -120,7 +120,7 @@ If you don't want a certain feature, simply disable it.
 
 **This plugin requires Java 11!**
 
-To install vane, begin by downloading and placing all desired module jars into the `plugins/` directory.
+To install vane, begin by downloading/compiling and placing all desired module jars into the `plugins/` directory.
 
 1. Start the server to generate configuration files, and edit them to your preference.
 2. Either restart the server, or type `/vane reload` to apply the changes.
@@ -136,7 +136,7 @@ Enjoy playing!
 
 #### Installation (vane-waterfall)
 
-Again, download and place `vane-waterfall` jar into the proxy server's `plugins/` directory.
+Again, download/compile and place `vane-waterfall` jar into the proxy server's `plugins/` directory.
 The configuration will be generated on first start.
 
 To enable the authentication multiplexing, you need to do the following:
@@ -159,6 +159,9 @@ to `libs/`. This is required so the compiler can find minecraft-native symbols.
 1. Copy `cache/patched_{version}.jar` from a paper server to `libs/` (create folder if necessary).
 2. Execute `./gradlew build`
 3. Resulting jar files will be in `target/` and `target-waterfall/`.
+
+If you experience "peer not authenticated" issues from gradle, just retry.
+Seems to be a skittish integration between gradle and maven repositories.
 
 ### FAQ
 
@@ -199,6 +202,7 @@ I would like to thank the following projects and people maintaining them:
 - [Spigot](https://www.spigotmc.org/) for the awesome baseline server software.
 - [PaperMC](https://papermc.io/) for the valuable additions missing from Spigot, and for Waterfall.
 - [ProtocolLib](https://github.com/dmulloy2/ProtocolLib) for the awesome protocol layer library.
+- [DynmapCoreAPI](https://github.com/webbukkit/DynmapCoreAPI) (Apache-2.0), dynmap integration
 
 #### Included software
 
@@ -207,5 +211,4 @@ The following software packets will be included in the compilation step:
 - [org.json](https://github.com/stleary/JSON-java) (MIT), Java json implementation
 - [ronmamo reflections](https://github.com/ronmamo/reflections) (WTFPL), Java reflection helper
 - [PacketWrapper](https://github.com/dmulloy2/PacketWrapper) (LGPL3), only specific parts are included
-- [DynmapCoreAPI](https://github.com/webbukkit/DynmapCoreAPI) (Apache-2.0), dynmap integration
 - [bStats](https://bstats.org/) (LGPL3), plugin metrics
