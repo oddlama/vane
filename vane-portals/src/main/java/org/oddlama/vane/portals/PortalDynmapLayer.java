@@ -151,7 +151,7 @@ public class PortalDynmapLayer extends ModuleComponent<Portals> {
 	}
 
 	public void remove_marker(final Marker marker) {
-		if (!dynmap_enabled) {
+		if (!dynmap_enabled || marker == null) {
 			return;
 		}
 
