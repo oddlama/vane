@@ -143,7 +143,7 @@ public class PortalDynmapLayer extends ModuleComponent<Portals> {
 	}
 
 	public void remove_marker(final String marker_id) {
-		if (!dynmap_enabled) {
+		if (!dynmap_enabled || marker_id == null) {
 			return;
 		}
 
@@ -173,7 +173,7 @@ public class PortalDynmapLayer extends ModuleComponent<Portals> {
 		// Remove orphaned
 		for (final var marker : marker_set.getMarkers()) {
 			final var id = marker.getMarkerID();
-			if (!id_set.contains(id)) {
+			if (id != null && !id_set.contains(id)) {
 				remove_marker(marker);
 			}
 		}
