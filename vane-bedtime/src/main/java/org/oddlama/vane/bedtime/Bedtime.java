@@ -86,7 +86,7 @@ public class Bedtime extends Module<Bedtime> {
 	}
 
 	private static String percentage_str(double percentage) {
-		return String.format("§6%.2f", 100.0 * percentage);
+		return String.format("§6%.2f", 100.0 * percentage) + "%";
 	}
 
 	private long get_amount_sleeping(final World world) {
