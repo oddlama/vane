@@ -10,11 +10,16 @@ public class PortalDestroyEvent extends PortalEvent {
 	private Player player;
 	private Portal portal;
 	private boolean check_only;
+	private boolean cancel_if_not_owner = true;
 
 	public PortalDestroyEvent(final Player player, final Portal portal, boolean check_only) {
 		this.player = player;
 		this.portal = portal;
 		this.check_only = check_only;
+	}
+
+	public void setCancelIfNotOwner(boolean cancel_if_not_owner) {
+		this.cancel_if_not_owner = cancel_if_not_owner;
 	}
 
 	public Player getPlayer() {
@@ -35,5 +40,14 @@ public class PortalDestroyEvent extends PortalEvent {
 
 	public static HandlerList getHandlerList() {
 		return handlers;
+	}
+
+	@Override
+	public boolean isCancelled() {
+		var cancelled = super.isCancelled();
+		if (cancel_if_not_owner) {
+			cancelled |= !player.getUniqueId().equals(portal.owner());
+		}
+		return cancelled;
 	}
 }

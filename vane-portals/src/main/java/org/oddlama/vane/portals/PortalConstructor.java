@@ -19,6 +19,8 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 
+import org.jetbrains.annotations.Nullable;
+
 import org.oddlama.vane.annotation.config.ConfigInt;
 import org.oddlama.vane.annotation.config.ConfigMaterial;
 import org.oddlama.vane.annotation.lang.LangMessage;
@@ -124,7 +126,7 @@ public class PortalConstructor extends Listener<Portals> {
 	}
 
 	private boolean can_link_console(final Player player, final PortalBoundary boundary, final Block console, boolean check_only) {
-		return can_link_console(player, boundary.all_blocks(), console, check_only);
+		return can_link_console(player, boundary.all_blocks(), console, null, check_only);
 	}
 
 	private boolean can_link_console(final Player player, final Portal portal, final Block console, boolean check_only) {
@@ -133,10 +135,10 @@ public class PortalConstructor extends Listener<Portals> {
 			.filter(pb -> pb.type() != PortalBlock.Type.CONSOLE)
 			.map(pb -> pb.block())
 			.collect(Collectors.toList());
-		return can_link_console(player, blocks, console, check_only);
+		return can_link_console(player, blocks, console, portal, check_only);
 	}
 
-	private boolean can_link_console(final Player player, final List<Block> blocks, final Block console, boolean check_only) {
+	private boolean can_link_console(final Player player, final List<Block> blocks, final Block console, @Nullable final Portal existing_portal, boolean check_only) {
 		// Check console block type
 		if (console.getType() != config_material_console) {
 			lang_console_invalid_type.send(player);
@@ -166,7 +168,7 @@ public class PortalConstructor extends Listener<Portals> {
 		}
 
 		// Call event
-		final var event = new PortalLinkConsoleEvent(player, blocks, check_only);
+		final var event = new PortalLinkConsoleEvent(player, blocks, check_only, existing_portal);
 		get_module().getServer().getPluginManager().callEvent(event);
 		if (event.isCancelled()) {
 			lang_link_restricted.send(player);
