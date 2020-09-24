@@ -42,6 +42,7 @@ public class Permissions extends Module<Permissions> {
 			"bukkit.broadcast.user" }),
 		@ConfigStringListMapEntry(key = "user", list = {
 			"vane.permissions.groups.default",
+			"vane.admin.commands.spawn",
 			"vane.admin.modify_world",
 			"vane.trifles.commands.heads" }),
 		@ConfigStringListMapEntry(key = "verified", list = {
