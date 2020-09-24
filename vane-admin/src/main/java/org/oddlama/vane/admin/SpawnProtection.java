@@ -39,7 +39,7 @@ public class SpawnProtection extends Listener<Admin> {
 
 	@ConfigBoolean(def = true, desc = "Allow interaction events at spawn (buttons, levers, etc.).")
 	private boolean config_allow_interaction;
-	@ConfigInt(def = 64, desc = "Radius to protect.")
+	@ConfigInt(def = 64, min = 0, desc = "Radius to protect.")
 	private int config_radius;
 	@ConfigString(def = "world", desc = "The spawn world.")
 	private String config_world;
