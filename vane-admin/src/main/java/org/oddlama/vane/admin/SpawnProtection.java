@@ -58,17 +58,20 @@ public class SpawnProtection extends Listener<Admin> {
 	private Location spawn_center = null;
 	@Override
 	public void on_config_change() {
-		final var world = get_module().getServer().getWorld(config_world);
-		if (world == null) {
-			spawn_center = null;
-		} else {
-			if (config_use_spawn_location) {
-				spawn_center = world.getSpawnLocation();
-				spawn_center.setY(0);
+		spawn_center = null;
+		schedule_next_tick(() -> {
+			final var world = get_module().getServer().getWorld(config_world);
+			if (world == null) {
+				spawn_center = null;
 			} else {
-				spawn_center = new Location(world, config_x, 0, config_z);
+				if (config_use_spawn_location) {
+					spawn_center = world.getSpawnLocation();
+					spawn_center.setY(0);
+				} else {
+					spawn_center = new Location(world, config_x, 0, config_z);
+				}
 			}
-		}
+		});
 	}
 
 	public boolean deny_modify_spawn(final Block block, final Entity entity) {
@@ -80,8 +83,10 @@ public class SpawnProtection extends Listener<Admin> {
 			return false;
 		}
 
-		location.setY(0);
-		if (location.distance(spawn_center) > config_radius) {
+		final var dx = location.getX() - spawn_center.getX();
+		final var dz = location.getZ() - spawn_center.getZ();
+		final var distance = Math.sqrt(dx * dx + dz * dz);
+		if (distance > config_radius) {
 			return false;
 		}
 
