@@ -49,6 +49,7 @@ public class Permissions extends Module<Permissions> {
 			"vane.permissions.commands.vouch" }),
 		@ConfigStringListMapEntry(key = "admin", list = {
 			"vane.permissions.groups.verified",
+			"vane.admin.bypass_spawn_protection",
 			"vane.*.commands.*" }),
 	}, desc = "The permission groups. A player can have multiple permission groups assigned. Permission groups can inherit other permission groups by specifying vane.permissions.groups.<groupname> as a permission.")
 	public Map<String, List<String>> config_groups;

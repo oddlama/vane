@@ -33,7 +33,7 @@ public class WorldProtection extends Listener<Admin> {
 	private Permission permission = new Permission(PERMISSION_NAME, "Allow player to modify world", PermissionDefault.FALSE);
 
 	public WorldProtection(Context<Admin> context) {
-		super(context.group("world_protection", "Enable world protection. This will prevent anyone from modyfing the world of they don't have the permission '" + PERMISSION_NAME + "'."));
+		super(context.group("world_protection", "Enable world protection. This will prevent anyone from modifying the world if they don't have the permission '" + PERMISSION_NAME + "'."));
 		get_module().register_permission(permission);
 	}
 
