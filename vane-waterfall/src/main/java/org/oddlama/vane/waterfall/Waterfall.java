@@ -32,10 +32,10 @@ import net.md_5.bungee.event.EventHandler;
 import net.md_5.bungee.event.EventPriority;
 import net.md_5.bungee.protocol.packet.LoginRequest;
 
+import org.bstats.bungeecord.Metrics;
+
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import org.bstats.bungeecord.Metrics;
 
 public class Waterfall extends Plugin implements Listener {
 	public static final String CHANNEL_AUTH_MULTIPLEX = "vane_waterfall:auth_multiplex";

@@ -4,21 +4,16 @@ import java.util.HashSet;
 import java.util.UUID;
 import java.util.logging.Level;
 
-import org.oddlama.vane.annotation.config.ConfigBoolean;
-import org.oddlama.vane.annotation.config.ConfigInt;
-import org.oddlama.vane.annotation.config.ConfigString;
-import org.oddlama.vane.annotation.lang.LangMessage;
-import org.oddlama.vane.core.lang.TranslatedMessage;
-import org.oddlama.vane.core.module.Context;
-import org.oddlama.vane.core.module.ModuleComponent;
 import org.bukkit.plugin.Plugin;
+
 import org.dynmap.DynmapAPI;
 import org.dynmap.markers.Marker;
 import org.dynmap.markers.MarkerAPI;
 import org.dynmap.markers.MarkerIcon;
 import org.dynmap.markers.MarkerSet;
-import org.oddlama.vane.portals.portal.Portal;
+
 import org.oddlama.vane.portals.Portals;
+import org.oddlama.vane.portals.portal.Portal;
 
 public class PortalDynmapLayerDelegate {
 	private PortalDynmapLayer parent = null;
