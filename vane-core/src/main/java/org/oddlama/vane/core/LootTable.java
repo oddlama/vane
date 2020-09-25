@@ -34,7 +34,6 @@ public class LootTable {
 		private double chance;
 		private Consumer2<List<ItemStack>, Random> generator;
 
-
 		public LootTableEntry(int rarity_expected_chests, final ItemStack item) {
 			this(1.0 / rarity_expected_chests, item.clone(), 1, 1);
 		}

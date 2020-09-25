@@ -5,7 +5,7 @@ description: Trifles module for vane
 authors: [oddlama]
 website: 'https://github.com/oddlama/vane'
 
-depend: [vane-core]
+depend: [vane-core, vane-enchantments]
 
 main: org.oddlama.vane.trifles.Trifles
 database: false

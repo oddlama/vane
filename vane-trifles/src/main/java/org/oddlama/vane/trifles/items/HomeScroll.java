@@ -19,6 +19,7 @@ import org.oddlama.vane.annotation.item.VaneItem;
 import org.oddlama.vane.core.item.CustomItem;
 import org.oddlama.vane.core.item.CustomItemVariant;
 import org.oddlama.vane.core.module.Context;
+import org.oddlama.vane.enchantments.items.AncientTomeOfKnowledge;
 import org.oddlama.vane.trifles.Trifles;
 
 @VaneItem(name = "home_scroll")
@@ -33,11 +34,13 @@ public class HomeScroll extends CustomItem<Trifles, HomeScroll> {
 
 		@Override
 		public void register_recipes() {
+			final var ancient_tome_of_knowledge = CustomItem.<AncientTomeOfKnowledge.AncientTomeOfKnowledgeVariant>variant_of(AncientTomeOfKnowledge.class, variant()).item();
+
 			final var recipe = new ShapedRecipe(recipe_key(), item())
 				.shape("pip",
 				       "cbe",
 				       "plp")
-				.setIngredient('b', Material.ENCHANTED_BOOK)
+				.setIngredient('b', ancient_tome_of_knowledge)
 				.setIngredient('p', Material.MAP)
 				.setIngredient('i', new MaterialChoice(Tag.BEDS))
 				.setIngredient('c', Material.COMPASS)
