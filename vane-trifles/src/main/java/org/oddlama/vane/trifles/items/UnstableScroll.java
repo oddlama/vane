@@ -23,6 +23,7 @@ import org.oddlama.vane.core.item.CustomItem;
 import org.oddlama.vane.core.item.CustomItemVariant;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.enchantments.items.AncientTomeOfKnowledge;
+import org.oddlama.vane.enchantments.items.BookVariant;
 import org.oddlama.vane.trifles.Trifles;
 import org.oddlama.vane.trifles.event.PlayerTeleportScrollEvent;
 import org.oddlama.vane.util.LazyLocation;
@@ -43,7 +44,7 @@ public class UnstableScroll extends CustomItem<Trifles, UnstableScroll> {
 
 		@Override
 		public void register_recipes() {
-			final var ancient_tome_of_knowledge = CustomItem.<AncientTomeOfKnowledge.AncientTomeOfKnowledgeVariant>variant_of(AncientTomeOfKnowledge.class, variant()).item();
+			final var ancient_tome_of_knowledge = CustomItem.<AncientTomeOfKnowledge.AncientTomeOfKnowledgeVariant>variant_of(AncientTomeOfKnowledge.class, BookVariant.BOOK).item();
 
 			final var recipe = new ShapedRecipe(recipe_key(), item())
 				.shape("pip",
