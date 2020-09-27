@@ -154,10 +154,10 @@ public class Core extends Module<Core> implements PluginMessageListener {
 		}
 
 		final var player = (Player)event.getTarget();
-		if (is_custom_item(player.getInventory().getItemInMainHand())) {
+		if (!is_custom_item(player.getInventory().getItemInMainHand())) {
 			return;
 		}
-		if (is_custom_item(player.getInventory().getItemInOffHand())) {
+		if (!is_custom_item(player.getInventory().getItemInOffHand())) {
 			return;
 		}
 
@@ -208,7 +208,7 @@ public class Core extends Module<Core> implements PluginMessageListener {
 
 		for (final var item : event.getInventory().getMatrix()) {
 			if (item == null) {
-				return;
+				continue;
 			}
 
 			if (is_custom_item(item)) {

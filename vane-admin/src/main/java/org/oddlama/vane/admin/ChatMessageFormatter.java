@@ -31,6 +31,7 @@ public class ChatMessageFormatter extends Listener<Admin> {
 	public void on_player_chat(AsyncPlayerChatEvent event) {
 		// TODO color based on privilege or config value.... somehow
 		// link permission groups to different config values....
+		// TODO custom chat color event?
 		final var color = "§b";
 		event.setCancelled(true);
 
