@@ -18,7 +18,7 @@ import org.oddlama.vane.trifles.Trifles;
 
 @Name("heads")
 public class Heads extends Command<Trifles> {
-	@ConfigMaterial(def = Material.SKELETON_SKULL, desc = "Currency material used to buy heads.")
+	@ConfigMaterial(def = Material.BONE, desc = "Currency material used to buy heads.")
 	public Material config_currency;
 	@ConfigInt(def = 1, min = 0, desc = "Price (in currency) per head. Set to 0 for free heads.")
 	public int config_price_per_head;
