@@ -141,11 +141,11 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 	public void apply_display_format(BaseComponent component) {
 		switch (annotation.rarity()) {
 			default:
-			case UNCOMMON:
-				component.setColor(ChatColor.GRAY);
+			case COMMON:
+				component.setColor(ChatColor.DARK_AQUA);
 				break;
 
-			case COMMON:
+			case UNCOMMON:
 				component.setColor(ChatColor.DARK_AQUA);
 				break;
 
