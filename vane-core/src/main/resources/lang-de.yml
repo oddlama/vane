@@ -67,6 +67,8 @@ menus:
       name: "§d§lGewähltes Item"
       lore:
         - ""
+        - "Klicke auf ein beliebiges Item im Inventar, um es auszuwählen."
+        - ""
         - "§bLinks-klick§7 setzt Änderungen zurück."
         - "§bRechts-klick§7 entfert Auswahl (falls erlaubt)."
 

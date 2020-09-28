@@ -90,6 +90,8 @@ menus:
       name: "§d§lSelected Item"
       lore:
         - ""
+        - "Click any item in your inventory to select it."
+        - ""
         - "§bLeft-click§7 to reset changes."
         - "§bRight-click§7 to clear (if allowed)."
 
