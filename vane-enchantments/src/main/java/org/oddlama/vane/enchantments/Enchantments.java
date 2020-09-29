@@ -10,9 +10,14 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.enchantment.EnchantItemEvent;
+import org.bukkit.event.entity.VillagerAcquireTradeEvent;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.world.LootGenerateEvent;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Merchant;
+import org.bukkit.inventory.MerchantRecipe;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 
 import org.oddlama.vane.annotation.VaneModule;
@@ -102,21 +107,21 @@ public class Enchantments extends Module<Enchantments> {
 		}
 
 		// Track all superseded enchantments
-		var superseded = new ArrayList<Enchantment>();
+		final var superseded = new ArrayList<Enchantment>();
 
 		// All enchantments superseding other enchantments.
 		// when b supersedes [a, ..] and c supersedes [b, ..], this algorithm will not
 		// remove a when both b and c are added.
 		// HINT: circular dependencies (a -> [b, ..], b -> [a, ..] will result neither a nor b being added
-		var superseding = new ArrayList<CustomEnchantment<?>>();
+		final var superseding = new ArrayList<CustomEnchantment<?>>();
 
 		// Get superseded and superseding enchantments
-		for (var e : enchantments.keySet()) {
+		for (final var e : enchantments.keySet()) {
 			if (!(e instanceof BukkitEnchantmentWrapper)) {
 				continue;
 			}
 
-			var custom = ((BukkitEnchantmentWrapper)e).custom_enchantment();
+			final var custom = ((BukkitEnchantmentWrapper)e).custom_enchantment();
 			if (!custom.supersedes().isEmpty()) {
 				superseding.add(custom);
 				superseded.addAll(custom.supersedes());
@@ -180,5 +185,78 @@ public class Enchantments extends Module<Enchantments> {
 			// Update all item lore in case they are enchanted
 			update_enchanted_item(item, true);
 		}
+	}
+
+	private MerchantRecipe process_recipe(final MerchantRecipe recipe) {
+		var result = recipe.getResult().clone();
+
+		// Get correct enchantment map
+		final var meta = result.getItemMeta();
+		final Map<Enchantment, Integer> enchantments;
+		if (meta instanceof EnchantmentStorageMeta) {
+			enchantments = ((EnchantmentStorageMeta)meta).getStoredEnchants();
+		} else {
+			enchantments = result.getEnchantments();
+		}
+
+		// Remove bad enchants and track if we removed any
+		boolean changed = false;
+		for (final var e : enchantments.keySet()) {
+			if (!(e instanceof BukkitEnchantmentWrapper)) {
+				continue;
+			}
+
+			final var custom = ((BukkitEnchantmentWrapper)e).custom_enchantment();
+			if (!custom.generate_in_treasure()) {
+				if (meta instanceof EnchantmentStorageMeta) {
+					((EnchantmentStorageMeta)meta).removeStoredEnchant(e);
+				} else {
+					meta.removeEnchant(e);
+				}
+				changed = true;
+			}
+		}
+
+		// Update result item if needed
+		if (changed) {
+			// Add Unbreaking III as compensation
+			if (meta instanceof EnchantmentStorageMeta) {
+				((EnchantmentStorageMeta)meta).addStoredEnchant(Enchantment.DURABILITY, 3, false);
+			} else {
+				meta.addEnchant(Enchantment.DURABILITY, 3, false);
+			}
+
+			// Set meta
+			result.setItemMeta(meta);
+		}
+
+		// Create new recipe
+		final var new_recipe = new MerchantRecipe(update_enchanted_item(result, true), recipe.getUses(), recipe.getMaxUses(), recipe.hasExperienceReward(), recipe.getVillagerExperience(), recipe.getPriceMultiplier());
+		recipe.getIngredients().forEach(i -> new_recipe.addIngredient(i));
+		return new_recipe;
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void on_acquire_trade(final VillagerAcquireTradeEvent event) {
+		event.setRecipe(process_recipe(event.getRecipe()));
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void on_right_click_villager(final PlayerInteractEntityEvent event) {
+		final var entity = event.getRightClicked();
+		if (!(entity instanceof Merchant)) {
+			return;
+		}
+
+		final var merchant = (Merchant)entity;
+		final var recipes = new ArrayList<MerchantRecipe>();
+
+		// Check all recipes
+		for (final var r : merchant.getRecipes()) {
+			recipes.add(process_recipe(r));
+		}
+
+		// Update recipes
+		merchant.setRecipes(recipes);
 	}
 }
