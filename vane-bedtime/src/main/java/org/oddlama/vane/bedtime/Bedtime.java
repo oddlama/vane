@@ -110,7 +110,11 @@ public class Bedtime extends Module<Bedtime> {
 		//	.count();
 
 		final var world_id = world.getUID();
-		return world_sleepers.get(world_id).size();
+		var sleepers = world_sleepers.get(world_id);
+		if (sleepers == null) {
+			return 0;
+		}
+		return sleepers.size();
 	}
 
 	private double get_percentage_sleeping(final World world) {
