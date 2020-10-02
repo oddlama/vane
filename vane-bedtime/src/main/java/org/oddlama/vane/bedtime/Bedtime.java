@@ -11,6 +11,7 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerBedLeaveEvent;
 
@@ -40,6 +41,40 @@ public class Bedtime extends Module<Bedtime> {
 	@LangMessage private TranslatedMessage lang_player_bed_leave;
 	@LangMessage private TranslatedMessage lang_sleep_success;
 
+	public void start_check_world_task(final World world) {
+		if (enough_players_sleeping(world)) {
+			schedule_task(() -> {
+				check_world_now(world);
+			// Subtract two ticks so this runs one tick before minecraft would
+			// advance time (if all players are asleep), which would effectively cancel the task.
+			}, 100 - 2);
+		}
+	}
+
+	public void check_world_now(final World world) {
+		// Abort task if condition changed
+		if (!enough_players_sleeping(world)) {
+			return;
+		}
+
+		// Let the sun rise, and set weather
+		change_time_smoothly(world, this, config_target_time, config_interpolation_ticks);
+		world.setStorm(false);
+		world.setThundering(false);
+
+		// Send message
+		lang_sleep_success.broadcast_world(world);
+
+		// Clear sleepers
+		reset_sleepers(world);
+
+		// Wakeup players as if they were actually sleeping through the night
+		world.getPlayers().stream().filter(p -> p.isSleeping()).forEach(p -> {
+			// flag0 false = set ticks sleeping to 100, flag1 true = recalculate world.everyoneSleeping
+			Nms.get_player(p).wakeup(false, false);
+		});
+	}
+
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void on_player_bed_enter(PlayerBedEnterEvent event) {
 		final var player = event.getPlayer();
@@ -48,35 +83,8 @@ public class Bedtime extends Module<Bedtime> {
 		schedule_next_tick(() -> {
 			// Register the new player as sleeping
 			add_sleeping(world, player);
-
-			if (enough_players_sleeping(world)) {
-				schedule_task(() -> {
-					// Abort task if condition changed
-					if (!enough_players_sleeping(world)) {
-						return;
-					}
-
-					// Let the sun rise, and set weather
-					change_time_smoothly(world, this, config_target_time, config_interpolation_ticks);
-					world.setStorm(false);
-					world.setThundering(false);
-
-					// Send message
-					lang_sleep_success.broadcast_world(world);
-
-					// Clear sleepers
-					reset_sleepers(world);
-
-					// Wakeup players as if they were actually sleeping through the night
-					world.getPlayers().stream().filter(p -> p.isSleeping()).forEach(p -> {
-						// flag0 false = set ticks sleeping to 100, flag1 true = recalculate world.everyoneSleeping
-						Nms.get_player(player).wakeup(false, false);
-					});
-
-				// Subtract two ticks so this runs one tick before minecraft would
-				// advance time (if all players are asleep), which would effectively cancel the task.
-				}, 100 - 2);
-			}
+			// Start sleep check task
+			start_check_world_task(world);
 		});
 	}
 
@@ -85,15 +93,24 @@ public class Bedtime extends Module<Bedtime> {
 		remove_sleeping(event.getPlayer());
 	}
 
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void on_player_quit(PlayerQuitEvent event) {
+		// Start sleep check task
+		start_check_world_task(event.getPlayer().getWorld());
+	}
+
 	private static String percentage_str(double percentage) {
 		return String.format("§6%.2f", 100.0 * percentage) + "%";
 	}
 
 	private long get_amount_sleeping(final World world) {
-		return world.getPlayers().stream()
-			.filter(p -> p.getGameMode() != GameMode.SPECTATOR)
-			.filter(p -> p.isSleeping())
-			.count();
+		//return world.getPlayers().stream()
+		//	.filter(p -> p.getGameMode() != GameMode.SPECTATOR)
+		//	.filter(p -> p.isSleeping())
+		//	.count();
+
+		final var world_id = world.getUID();
+		return world_sleepers.get(world_id).size();
 	}
 
 	private double get_percentage_sleeping(final World world) {
@@ -102,7 +119,11 @@ public class Bedtime extends Module<Bedtime> {
 			return 0.0;
 		}
 
-		return (double)count_sleeping / world.getPlayers().size();
+		final var total = world.getPlayers().stream()
+			.filter(p -> p.getGameMode() != GameMode.SPECTATOR)
+			.count();
+
+		return (double)count_sleeping / total;
 	}
 
 	private boolean enough_players_sleeping(final World world) {
