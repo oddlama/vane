@@ -217,11 +217,11 @@ public class Waterfall extends Plugin implements Listener {
 			connection.setOnlineMode(false);
 			connection.setUniqueId(new_uuid);
 
-			final var resulting_uuid = UUID.nameUUIDFromBytes(
-				("OfflinePlayer:" + new_name).getBytes(StandardCharsets.UTF_8));
+			//final var resulting_uuid = UUID.nameUUIDFromBytes(
+			//	("OfflinePlayer:" + new_name).getBytes(StandardCharsets.UTF_8));
 
-			register_auth_multiplex_player(server, multiplexer_id, uuid, name, resulting_uuid, new_name);
-			getLogger().info("auth multiplex granted as uuid: " + resulting_uuid + ", name: " + new_name + " for player " + name);
+			register_auth_multiplex_player(server, multiplexer_id, uuid, name, new_uuid, new_name);
+			getLogger().info("auth multiplex granted as uuid: " + new_uuid + ", name: " + new_name + " for player " + name);
 		}
 	}
 

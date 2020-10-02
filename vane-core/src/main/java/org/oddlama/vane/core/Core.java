@@ -280,11 +280,13 @@ public class Core extends Module<Core> implements PluginMessageListener {
 	public synchronized String auth_multiplex_player_name(final UUID uuid) {
 		final var original_player_id = storage_auth_multiplex.get(uuid);
 		final var multiplexer_id = storage_auth_multiplexer_id.get(uuid);
+		System.out.println("auth_multiplex_player_name " + uuid + " → " + original_player_id + " → " + multiplexer_id);
 		if (original_player_id == null || multiplexer_id == null) {
 			return null;
 		}
 
 		final var original_player = getServer().getOfflinePlayer(original_player_id);
+		System.out.println("offl " + original_player);
 		if (original_player != null) {
 			var str = "§7[" + multiplexer_id + "]§r " + original_player.getName();
 			if (str.length() > 16) {
@@ -299,6 +301,7 @@ public class Core extends Module<Core> implements PluginMessageListener {
 	private void try_init_multiplexed_player_name(final Player player) {
 		final var id = player.getUniqueId();
 		final var display_name = auth_multiplex_player_name(id);
+		System.out.println("try_init_multiplexed_player_name " + player + " " + id + " dpn " + display_name);
 		if (display_name == null) {
 			return;
 		}
@@ -335,7 +338,7 @@ public class Core extends Module<Core> implements PluginMessageListener {
 			final var new_uuid = UUID.fromString(in.readUTF());
 			final var new_name = in.readUTF();
 
-			log.info("[multiplex] Registered auth multiplexed player {" + new_uuid + ", " + new_name + "} from player {" + old_uuid + ", " + old_name + "}");
+			log.info("[multiplex] Registered auth multiplexed player {" + new_uuid + ", " + new_name + "} from player {" + old_uuid + ", " + old_name + "} multiplexer_id " + multiplexer_id);
 			storage_auth_multiplex.put(new_uuid, old_uuid);
 			storage_auth_multiplexer_id.put(new_uuid, multiplexer_id);
 			mark_persistent_storage_dirty();
