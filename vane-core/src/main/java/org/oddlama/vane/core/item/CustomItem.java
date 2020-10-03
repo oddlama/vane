@@ -158,7 +158,11 @@ public class CustomItem<T extends Module<T>, V extends CustomItem<T, V>> extends
 	}
 
 	public static ReverseLookupEntry from_item(@NotNull ItemStack item) {
-		return from_model_data(item.getItemMeta().getCustomModelData());
+		final var meta = item.getItemMeta();
+		if (!meta.hasCustomModelData()) {
+			return null;
+		}
+		return from_model_data(meta.getCustomModelData());
 	}
 
 	public static ReverseLookupEntry from_model_data(int model_data) {
