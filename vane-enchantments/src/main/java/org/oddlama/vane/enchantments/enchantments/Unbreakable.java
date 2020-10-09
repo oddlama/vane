@@ -61,7 +61,7 @@ public class Unbreakable extends CustomEnchantment<Enchantments> {
 		get_module().loot_table(LootTables.BASTION_TREASURE).put(recipe_key, new LootTableEntry(30, item));
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
 	public void on_player_item_damage(final PlayerItemDamageEvent event) {
 		// Check enchantment
 		final var item = event.getItem();

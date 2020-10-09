@@ -39,7 +39,7 @@ public class Angel extends CustomEnchantment<Enchantments> {
 
 	@Override
 	public void register_superseding() {
-		supersedes(bukkit(Unbreakable.class));
+		supersedes(bukkit(Wings.class));
 	}
 
 	@Override
