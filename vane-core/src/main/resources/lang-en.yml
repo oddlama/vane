@@ -29,6 +29,9 @@ command_permission_denied: "§cerror:§6 permission denied!"
 # %1$s: format error message
 invalid_time_format: "§cerror:§6 invalid time: %1$s"
 
+# This message is sent when a block with a lootable is first attempted to be broken.
+break_loot_block_prevented: "§6This block has a loot table, and will automatically be refilled after some time. If you really want to destroy this block, wait 5 seconds and break it again."
+
 command_vane:
   # This message is sent when a module has been successfully reloaded.
   # %1$s: module

@@ -25,6 +25,7 @@ import com.destroystokyo.paper.profile.ProfileProperty;
 import org.bukkit.Keyed;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.block.Block;
 import org.bukkit.block.Skull;
 import org.bukkit.craftbukkit.libs.org.apache.commons.io.IOUtils;
 import org.bukkit.entity.Player;
@@ -37,6 +38,7 @@ import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.inventory.PrepareSmithingEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.loot.Lootable;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.messaging.PluginMessageListener;
@@ -73,6 +75,8 @@ public class Core extends Module<Core> implements PluginMessageListener {
 	@LangMessage public TranslatedMessage lang_command_permission_denied;
 
 	@LangMessage public TranslatedMessage lang_invalid_time_format;
+
+	@LangMessage public TranslatedMessage lang_break_loot_block_prevented;
 
 	// Module registry
 	private SortedSet<Module<?>> vane_modules = new TreeSet<>((a, b) -> a.get_name().compareTo(b.get_name()));
@@ -350,5 +354,45 @@ public class Core extends Module<Core> implements PluginMessageListener {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	// Prevent loot chest destruction
+	private final Map<Block, Map<UUID, Long>> loot_break_attempts = new HashMap<>();
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void on_break_loot_chest(final BlockBreakEvent event) {
+		// TODO this behavior should be configurable
+		final var state = event.getBlock().getState(false);
+		if (!(state instanceof Lootable)) {
+			return;
+		}
+
+		final var lootable = (Lootable)state;
+		if (!lootable.hasLootTable()) {
+			return;
+		}
+
+		final var block = event.getBlock();
+		final var player = event.getPlayer();
+		var block_attempts = loot_break_attempts.get(block);
+		final var now = System.currentTimeMillis();
+		if (block_attempts != null) {
+			final var player_attempt_time = block_attempts.get(player.getUniqueId());
+			if (player_attempt_time != null) {
+				final var elapsed = now - player_attempt_time;
+				if (elapsed > 5000 && elapsed < 30000) {
+					// Allow
+					return;
+				}
+			} else {
+				block_attempts.put(player.getUniqueId(), now);
+			}
+		} else {
+			block_attempts = new HashMap<UUID, Long>();
+			block_attempts.put(player.getUniqueId(), now);
+			loot_break_attempts.put(block, block_attempts);
+		}
+
+		lang_break_loot_block_prevented.send(player);
+		event.setCancelled(true);
 	}
 }
