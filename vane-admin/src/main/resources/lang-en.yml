@@ -77,6 +77,15 @@ command_setspawn:
   description: "Sets the global spawn location to your current position."
   help: "Sets the global spawn location to your current position."
 
+command_slimechunk:
+  # This message is sent when the player is standing in a slimechunk
+  slime_chunk_yes: "§aThis is a slimechunk."
+  # This message is sent when the player is not standing in a slimechunk
+  slime_chunk_no: "§cThis is not a slimechunk."
+  usage: "%1$s"
+  description: "Checks if the current chunk is a slimechunk."
+  help: "Checks if the current chunk is a slimechunk."
+
 command_spawn:
   usage: "%1$s"
   description: "Teleports you to the spawn."

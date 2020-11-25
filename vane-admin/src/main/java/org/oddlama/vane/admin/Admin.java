@@ -15,6 +15,7 @@ public class Admin extends Module<Admin> {
 		// Create components
 		new org.oddlama.vane.admin.commands.Gamemode(this);
 		new org.oddlama.vane.admin.commands.Setspawn(this);
+		new org.oddlama.vane.admin.commands.SlimeChunk(this);
 		new org.oddlama.vane.admin.commands.Spawn(this);
 		new org.oddlama.vane.admin.commands.Time(this);
 		new org.oddlama.vane.admin.commands.Weather(this);
