@@ -8,3 +8,4 @@ build
 libs/
 target/
 target-waterfall/
+bin/

@@ -8,6 +8,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityBreakDoorEvent;
+import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 
@@ -119,6 +120,20 @@ public class HazardProtection extends Listener<Admin> {
 		}
 
 		lang_wither_spawn_prohibited.broadcast_world(world, world.getName());
+		event.setCancelled(true);
+	}
+
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	public void on_entity_block_change(final EntityChangeBlockEvent event) {
+		if (!config_disable_enderman_block_pickup) {
+			return;
+		}
+
+		// Only for enderman events
+		if (event.getEntity().getType() != EntityType.ENDERMAN) {
+			return;
+		}
+
 		event.setCancelled(true);
 	}
 }
