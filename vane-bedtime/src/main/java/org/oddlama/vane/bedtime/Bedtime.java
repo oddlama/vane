@@ -23,7 +23,7 @@ import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.util.Nms;
 
-@VaneModule(name = "bedtime", bstats = 8639, config_version = 1, lang_version = 1, storage_version = 1)
+@VaneModule(name = "bedtime", bstats = 8639, config_version = 1, lang_version = 2, storage_version = 1)
 public class Bedtime extends Module<Bedtime> {
 	// One set of sleeping players per world, to keep track
 	private HashMap<UUID, HashSet<UUID>> world_sleepers = new HashMap<>();
@@ -40,6 +40,12 @@ public class Bedtime extends Module<Bedtime> {
 	@LangMessage private TranslatedMessage lang_player_bed_enter;
 	@LangMessage private TranslatedMessage lang_player_bed_leave;
 	@LangMessage private TranslatedMessage lang_sleep_success;
+
+	public BedtimeDynmapLayer dynmap_layer;
+
+	public Bedtime() {
+		dynmap_layer = new BedtimeDynmapLayer(this);
+	}
 
 	public void start_check_world_task(final World world) {
 		if (enough_players_sleeping(world)) {
@@ -79,6 +85,9 @@ public class Bedtime extends Module<Bedtime> {
 	public void on_player_bed_enter(PlayerBedEnterEvent event) {
 		final var player = event.getPlayer();
 		final var world = player.getWorld();
+
+		// Update dynmap marker
+		dynmap_layer.update_marker(player);
 
 		schedule_next_tick(() -> {
 			// Register the new player as sleeping
