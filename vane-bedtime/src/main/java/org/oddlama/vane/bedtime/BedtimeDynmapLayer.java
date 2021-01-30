@@ -19,7 +19,7 @@ public class BedtimeDynmapLayer extends ModuleComponent<Bedtime> {
 	public int config_layer_priority;
 	@ConfigBoolean(def = false, desc = "If the layer should be hidden by default.")
 	public boolean config_layer_hide;
-	@ConfigString(def = "home", desc = "The dynmap marker icon.")
+	@ConfigString(def = "house", desc = "The dynmap marker icon.")
 	public String config_marker_icon;
 
 	@LangMessage public TranslatedMessage lang_layer_label;
