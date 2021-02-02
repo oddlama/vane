@@ -6,6 +6,10 @@
 - [ ] player heads from /heads
 - [ ] lodestone portal scrolls teleport ontop of the stone
 - [ ] double door mechanic is broken for two single doors with opposite hinges after one another (visual two block, actual 0 block distance).
+- [ ] world rebuild check for armorstands and item frames. dont let them be destroyed
+- [ ] minecart speed ++++++
+- [ ] on first join: map and discord link
+- [ ] verify enderman griefing prevention works
 
 
 - permission audit for all players with moderator level
