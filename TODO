@@ -1,0 +1,67 @@
+#### IDEAS
+
+- [ ] trampelpfad
+- [ ] better elytra flight mechanics
+- [ ] add a mechanic to update in-game maps (e.g. with a custom item, or redstone)
+- [ ] player heads from /heads
+- [ ] lodestone portal scrolls teleport ontop of the stone
+- [ ] double door mechanic is broken for two single doors with opposite hinges after one another (visual two block, actual 0 block distance).
+
+
+- permission audit for all players with moderator level
+- add permissions by uuid
+- sleep day -> get night
+- private /msg /tell permission
+- portal scrolls show total uses
+- ultra infinity for all arrow types (put on arrow?)
+
+
+MAYBE FIXED:
+- double sleep time set bug, cancel other tasks
+- bed remove on sun brrrrrr not works
+
+
+
+
+
+
+bedtime: dynmap marker
+
+
+region -> zone
+
+
+portal domes? projector like setup for full-dome or even sphere!
+
+if resource pack serving is disabled, use real strings of current language!! NICE
+
+
+
+portal selection as big sphere around player with itemsss
+  sneak -> other selection?
+
+- [ ] descr level bottle
+- [ ] bottle fill max
+
+- [ ] better pack icon
+- [ ] github readme banners
+- [ ] crafting recipes in readme
+- [ ] download links
+- [ ] software licenses
+- [ ] region chunk based cache
+- [ ] armor stand poser manipulation by perpendicular intersection between Line of sight and arm 
+- [ ] item frame invisibilinator (visible if empty)
+- [ ] custom enchantment book icons
+- [ ] player list footer header configuration
+- [ ] transmutation tool copy pasta with direction awareness
+- [ ] sign editing (a tool ?)
+- [ ] add items to shulker box by right click with item in inventory on box?
+- [ ] Maybe "Advancements to guide you through most additions"
+- can we inherit spectator skins? maybe hook into data loading?
+- golden sickle -> golden mistletoe, mistel (viscum album)
+- used as enchantment binding agent/ catalyst?.
+
+SERVER SETTINGS RECOMMENDATIONS
+
+- spawn with remnants of old world
+- dont merge items, or very small merging radius.
