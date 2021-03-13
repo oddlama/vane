@@ -98,6 +98,22 @@ public class Regions extends Module<Regions> {
 	// 2. players (if not others)
 	// 2. delete role (if not special)
 
+	// Add (de-)serializers
+	static {
+		PersistentSerializer.serializers.put(EnvironmentSetting.class,    x -> ((EnvironmentSetting)x).name());
+		PersistentSerializer.deserializers.put(EnvironmentSetting.class,  x -> EnvironmentSetting.valueOf((String)x));
+		PersistentSerializer.serializers.put(RoleSetting.class,           x -> ((RoleSetting)x).name());
+		PersistentSerializer.deserializers.put(RoleSetting.class,         x -> RoleSetting.valueOf((String)x));
+		PersistentSerializer.serializers.put(Role.class,                  Role::serialize);
+		PersistentSerializer.deserializers.put(Role.class,                Role::deserialize);
+		PersistentSerializer.serializers.put(Role.RoleType.class,         x -> ((Role.RoleType)x).name());
+		PersistentSerializer.deserializers.put(Role.RoleType.class,       x -> Role.RoleType.valueOf((String)x));
+		PersistentSerializer.serializers.put(RegionGroup.class,           RegionGroup::serialize);
+		PersistentSerializer.deserializers.put(RegionGroup.class,         RegionGroup::deserialize);
+		PersistentSerializer.serializers.put(Region.class,                Region::serialize);
+		PersistentSerializer.deserializers.put(Region.class,              Region::deserialize);
+	}
+
 	// Primary storage for all regions (region.id → region)
 	@Persistent
 	private Map<UUID, Region> storage_regions = new HashMap<>();

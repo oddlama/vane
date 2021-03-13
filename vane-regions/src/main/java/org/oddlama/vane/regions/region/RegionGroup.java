@@ -61,6 +61,44 @@ import org.oddlama.vane.util.LazyBlock;
 import org.oddlama.vane.regions.Regions;
 
 public class RegionGroup {
+	public static Object serialize(@NotNull final Object o) throws IOException {
+		final var region_group = (RegionGroup)o;
+		final var json = new JSONObject();
+		json.put("id",                 to_json(UUID.class,            region_group.id));
+		json.put("owner",              to_json(UUID.class,            region_group.owner));
+		try {
+			json.put("roles",          to_json(RegionGroup.class.getDeclaredField("roles"), region_group.roles));
+		} catch (NoSuchFieldException e) { throw new RuntimeException("Invalid field. This is a bug.", e); }
+		try {
+			json.put("player_to_role", to_json(RegionGroup.class.getDeclaredField("player_to_role"), region_group.player_to_role));
+		} catch (NoSuchFieldException e) { throw new RuntimeException("Invalid field. This is a bug.", e); }
+		json.put("role_others",        to_json(UUID.class,            region_group.role_others));
+		try {
+			json.put("settings",       to_json(RegionGroup.class.getDeclaredField("settings"), region_group.settings));
+		} catch (NoSuchFieldException e) { throw new RuntimeException("Invalid field. This is a bug.", e); }
+
+		return json;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static RegionGroup deserialize(@NotNull final Object o) throws IOException {
+		final var json = (JSONObject)o;
+		final var region_group = new RegionGroup();
+		region_group.id                 = from_json(UUID.class,            json.get("id"));
+		region_group.owner              = from_json(UUID.class,            json.get("owner"));
+		try {
+			region_group.roles          = (Map<UUID, Role>)from_json(RegionGroup.class.getDeclaredField("roles"), json.get("roles"));
+		} catch (NoSuchFieldException e) { throw new RuntimeException("Invalid field. This is a bug.", e); }
+		try {
+			region_group.player_to_role = (Map<UUID, UUID>)from_json(RegionGroup.class.getDeclaredField("player_to_role"), json.get("player_to_role"));
+		} catch (NoSuchFieldException e) { throw new RuntimeException("Invalid field. This is a bug.", e); }
+		region_group.role_others        = from_json(UUID.class,            json.get("role_others"));
+		try {
+			region_group.settings       = (Map<EnvironmentSetting, Boolean>)from_json(RegionGroup.class.getDeclaredField("settings"), json.get("settings"));
+		} catch (NoSuchFieldException e) { throw new RuntimeException("Invalid field. This is a bug.", e); }
+		return region_group;
+	}
+
 	private UUID id;
 	private UUID owner;
 
@@ -68,7 +106,7 @@ public class RegionGroup {
 	private Map<UUID, UUID> player_to_role = new HashMap<>();
 	private UUID role_others;
 
-	private Map<String, Boolean> settings = new HashMap<>();
+	private Map<EnvironmentSetting, Boolean> settings = new HashMap<>();
 
 	private RegionGroup(final UUID owner) {
 		this.id = UUID.randomUUID();
@@ -85,7 +123,7 @@ public class RegionGroup {
 
 		// Set setting defaults
 		for (var es : EnvironmentSetting.values()) {
-			this.settings.put(es.name(), es.default_value());
+			this.settings.put(es, es.default_value());
 		}
 	}
 
