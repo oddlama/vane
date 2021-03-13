@@ -61,6 +61,65 @@ import org.oddlama.vane.util.LazyBlock;
 import org.oddlama.vane.regions.Regions;
 
 public class RegionExtent {
-	private LazyBlock from;
-	private LazyBlock to;
+	public static Object serialize(@NotNull final Object o) throws IOException {
+		final var region_extent = (RegionExtent)o;
+		final var json = new JSONObject();
+		json.put("min", to_json(LazyBlock.class, region_extent.min));
+		json.put("max", to_json(LazyBlock.class, region_extent.max));
+		return json;
+	}
+
+	public static RegionExtent deserialize(@NotNull final Object o) throws IOException {
+		final var json = (JSONObject)o;
+		final var min = from_json(LazyBlock.class, json.get("min"));
+		final var max = from_json(LazyBlock.class, json.get("max"));
+		return new RegionExtent(min, max);
+	}
+
+	// Both inclusive, so we don't run into errors with
+	// blocks outside of the world (y<min_height || y>max_height).
+	// Also, coordinates are sorted, so min is always the smaller coordinate on each axis.
+	// For each x,y,z: min.[x,y,z] <= max.[x,y,z]
+	private LazyBlock min; // inclusive
+	private LazyBlock max;   // inclusive
+
+	public RegionExtent(final LazyBlock min, final LazyBlock max) {
+		this.min = min;
+		this.max = max;
+	}
+
+	public RegionExtent(final Block from, final Block to) {
+		if (!from.getWorld().equals(to.getWorld())) {
+			throw new RuntimeException("Invalid region extent across dimensions!");
+		}
+
+		// Sort coordinates along axes.
+		this.min = new LazyBlock(new Block(from.getWorld(),
+				Math.min(from.getX(), to.getX()),
+				Math.min(from.getY(), to.getY()),
+				Math.min(from.getZ(), to.getZ())));
+		this.max = new LazyBlock(new Block(from.getWorld(),
+				Math.max(from.getX(), to.getX()),
+				Math.max(from.getY(), to.getY()),
+				Math.max(from.getZ(), to.getZ())));
+	}
+
+	public Block min() { return min.block(); }
+	public Block max() { return max.block(); }
+
+	public boolean is_block_inside(final Block block) {
+		if (!block.getWorld().equals(min().getWorld())) {
+			return false;
+		}
+
+		// TODO check
+	}
+
+	public boolean intersects_chunk(final Chunk chunk) {
+		if (!chunk.getWorld().equals(min().getWorld())) {
+			return false;
+		}
+
+		// TODO return true iff any block inside extent is inside chunk.
+	}
 }

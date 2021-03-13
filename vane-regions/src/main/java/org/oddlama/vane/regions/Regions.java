@@ -112,6 +112,8 @@ public class Regions extends Module<Regions> {
 		PersistentSerializer.deserializers.put(RegionGroup.class,         RegionGroup::deserialize);
 		PersistentSerializer.serializers.put(Region.class,                Region::serialize);
 		PersistentSerializer.deserializers.put(Region.class,              Region::deserialize);
+		PersistentSerializer.serializers.put(RegionExtent.class,          RegionExtent::serialize);
+		PersistentSerializer.deserializers.put(RegionExtent.class,        RegionExtent::deserialize);
 	}
 
 	// Primary storage for all regions (region.id → region)
@@ -124,8 +126,8 @@ public class Regions extends Module<Regions> {
 	@Persistent
 	private Map<UUID, UUID> storage_default_region_group = new HashMap<>();
 
-	// Per-chunk lookup cache
-	private Map<Long, List<UUID>> regions_for_chunk = new HashMap<>();
+	// Per-chunk lookup cache (world_id → chunk_key → [possible regions])
+	private Map<Long, Map<Long, List<UUID>>> regions_for_chunk = new HashMap<>();
 
 	public Regions() {
 		//menus = new RegionMenuGroup(this);

@@ -61,14 +61,42 @@ import org.oddlama.vane.util.LazyBlock;
 import org.oddlama.vane.regions.Regions;
 
 public class Region {
+	public static Object serialize(@NotNull final Object o) throws IOException {
+		final var region = (Region)o;
+		final var json = new JSONObject();
+		json.put("id",           to_json(UUID.class,         region.id));
+		json.put("name",         to_json(String.class,       region.name));
+		json.put("owner",        to_json(UUID.class,         region.owner));
+		json.put("region_group", to_json(UUID.class,         region.region_group));
+		json.put("extent",       to_json(RegionExtent.class, region.extent));
+		return json;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static Region deserialize(@NotNull final Object o) throws IOException {
+		final var json = (JSONObject)o;
+		final var region = new Region();
+		region.id           = from_json(UUID.class,         json.get("id"));
+		region.name         = from_json(String.class,       json.get("name"));
+		region.owner        = from_json(UUID.class,         json.get("owner"));
+		region.region_group = from_json(UUID.class,         json.get("region_group"));
+		region.extent       = from_json(RegionExtent.class, json.get("extent"));
+		return region;
+	}
+
 	private UUID id;
 	private String name;
+	private UUID owner;
 	private RegionExtent extent;
 	private UUID region_group;
-	private RegionGroup cached_region_group;
 
-	public boolean is_block_inside(final Block block) {
-		// check world
-		// check
+	private RegionGroup cached_region_group;
+	public RegionGroup group() {
+		if (cached_region_group == null) {
+			cached_region_group = Regions.get_region_group(region_group);
+		}
+		return cached_region_group;
 	}
+
+	public RegionExtent extent() { return extent; }
 }

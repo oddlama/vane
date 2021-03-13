@@ -108,6 +108,7 @@ public class RegionGroup {
 
 	private Map<EnvironmentSetting, Boolean> settings = new HashMap<>();
 
+	private RegionGroup() { }
 	private RegionGroup(final UUID owner) {
 		this.id = UUID.randomUUID();
 		this.owner = owner;
@@ -127,15 +128,15 @@ public class RegionGroup {
 		}
 	}
 
+	public static RegionGroup create_default_region_group(final UUID owner) {
+		return new RegionGroup(owner);
+	}
+
 	public void add_role(final Role role) {
 		this.roles.put(role.id(), role);
 	}
 
 	public Role get_role(final UUID player) {
 		return roles.get(player_to_role.getOrDefault(player, role_others));
-	}
-
-	public RegionGroup create_default_region_group(final UUID owner) {
-		return new RegionGroup(owner);
 	}
 }
