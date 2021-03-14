@@ -5,6 +5,7 @@ public enum RoleSetting {
 	BUILD(false, true),
 	USE(false, true),
 	CONTAINER(false, true),
+	PORTAL(false, true),
 	;
 
 	private boolean def;

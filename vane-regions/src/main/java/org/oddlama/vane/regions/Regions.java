@@ -39,6 +39,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -58,9 +59,13 @@ import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.core.persistent.PersistentSerializer;
 import org.oddlama.vane.regions.region.Region;
 import org.oddlama.vane.regions.region.RegionGroup;
+import org.oddlama.vane.regions.region.RegionSelection;
 import org.oddlama.vane.regions.region.Role;
 import org.oddlama.vane.regions.region.RegionExtent;
 import org.oddlama.vane.regions.region.RoleSetting;
+import org.oddlama.vane.regions.menu.RegionGroupMenuTag;
+import org.oddlama.vane.regions.menu.RegionMenuGroup;
+import org.oddlama.vane.regions.menu.RegionMenuTag;
 import org.oddlama.vane.regions.region.EnvironmentSetting;
 
 import org.oddlama.vane.util.LazyBlock;
@@ -80,15 +85,6 @@ public class Regions extends Module<Regions> {
 	// ┌────────────┐  in   ┌───────────────┐    |
 	// | Any Player | ────> | [Role] Others | ───┘
 	// └────────────┘       └───────────────┘
-	//
-	// General Menu: /rg
-	// row 1: General
-	// 1. create new region
-	// 2. create new group
-	// 5. all regions where i am admin
-	// 6. all groups where i am admin
-	// 8. shortcut to current region group if any
-	// 9. shortcut to current region if any
 	//
 	// Menu: Region
 	// 1. edit name
@@ -136,9 +132,20 @@ public class Regions extends Module<Regions> {
 
 	// Per-chunk lookup cache (world_id → chunk_key → [possible regions])
 	private Map<UUID, Map<Long, List<Region>>> regions_in_chunk_in_world = new HashMap<>();
+	// A map containing the current extent for each player who is currently selecting a region
+	// No key → Player not in selection mode
+	// extent.min or extent.max null → Selection mode active, but no selection has been made yet
+	private Map<UUID, RegionSelection> regions_selections = new HashMap<>();
+
+	@LangMessage public TranslatedMessage lang_start_region_selection;
+
+	public RegionMenuGroup menus;
 
 	public Regions() {
-		//menus = new RegionMenuGroup(this);
+		menus = new RegionMenuGroup(this);
+
+		new org.oddlama.vane.regions.commands.Region(this);
+
 		//dynmap_layer = new RegionDynmapLayer(this);
 		new RegionEnvironmentSettingEnforcer(this);
 		new RegionRoleSettingEnforcer(this);
@@ -148,6 +155,19 @@ public class Regions extends Module<Regions> {
 		for (var region : storage_regions.values()) {
 			index_add_region(region);
 		}
+	}
+
+	public boolean is_selecting_region(final Player player) {
+		return regions_selections.containsKey(player.getUniqueId());
+	}
+
+	public void cancel_region_selection(final Player player) {
+		regions_selections.remove(player.getUniqueId());
+	}
+
+	public void start_region_selection(final Player player) {
+		regions_selections.put(player.getUniqueId(), new RegionSelection(this));
+		lang_start_region_selection.send(player);
 	}
 
 	public void add_region_group(final RegionGroup group) {
@@ -185,6 +205,15 @@ public class Regions extends Module<Regions> {
 		}
 
 		mark_persistent_storage_dirty();
+
+		// Close and taint all related open menus
+		get_module().core.menu_manager.for_each_open((player, menu) -> {
+			if (menu.tag() instanceof RegionGroupMenuTag
+					&& Objects.equals(((RegionGroupMenuTag)menu.tag()).region_group_id(), group.id())) {
+				menu.taint();
+				menu.close(player);
+			}
+		});
 	}
 
 	public RegionGroup get_region_group(final UUID region_group) {
@@ -210,6 +239,15 @@ public class Regions extends Module<Regions> {
 		}
 
 		mark_persistent_storage_dirty();
+
+		// Close and taint all related open menus
+		get_module().core.menu_manager.for_each_open((player, menu) -> {
+			if (menu.tag() instanceof RegionMenuTag
+					&& Objects.equals(((RegionMenuTag)menu.tag()).region_id(), region.id())) {
+				menu.taint();
+				menu.close(player);
+			}
+		});
 
 		// Remove region from index
 		index_remove_region(region);
