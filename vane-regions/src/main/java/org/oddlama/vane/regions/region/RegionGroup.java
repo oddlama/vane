@@ -115,7 +115,7 @@ public class RegionGroup {
 	private Map<EnvironmentSetting, Boolean> settings = new HashMap<>();
 
 	private RegionGroup() { }
-	private RegionGroup(final String name, final UUID owner) {
+	public RegionGroup(final String name, final UUID owner) {
 		this.id = UUID.randomUUID();
 		this.name = name;
 		this.owner = owner;

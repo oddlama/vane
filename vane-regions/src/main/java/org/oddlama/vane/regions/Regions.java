@@ -179,7 +179,7 @@ public class Regions extends Module<Regions> {
 		}
 
 		// Remove region group from storage
-		if (storage_region_groups.remove(region_group.id()) == null) {
+		if (storage_region_groups.remove(group.id()) == null) {
 			// Was already removed
 			return;
 		}
@@ -187,7 +187,7 @@ public class Regions extends Module<Regions> {
 		mark_persistent_storage_dirty();
 	}
 
-	public RegionGroup get_region_group(UUID region_group) {
+	public RegionGroup get_region_group(final UUID region_group) {
 		return storage_region_groups.get(region_group);
 	}
 
@@ -199,7 +199,7 @@ public class Regions extends Module<Regions> {
 		index_add_region(region);
 
 		// Create dynmap marker
-		dynmap_layer.update_marker(portal);
+		//dynmap_layer.update_marker(region);
 	}
 
 	public void remove_region(final Region region) {
@@ -316,16 +316,18 @@ public class Regions extends Module<Regions> {
 	}
 
 	public RegionGroup get_or_create_default_region_group(final UUID owner) {
-		var region_group = storage_default_region_group.get(owner);
-		if (region_group == null) {
-			// Create and save owners's default group
-			region_group = new RegionGroup("[default]", owner);
-			add_region_group(region_group);
-
-			// Set group as the default
-			storage_default_region_group.put(owner, region_group.id());
-			mark_persistent_storage_dirty();
+		final var region_group_id = storage_default_region_group.get(owner);
+		if (region_group_id != null) {
+			return get_region_group(region_group_id);
 		}
+
+		// Create and save owners's default group
+		final var region_group = new RegionGroup("[default]", owner);
+		add_region_group(region_group);
+
+		// Set group as the default
+		storage_default_region_group.put(owner, region_group.id());
+		mark_persistent_storage_dirty();
 
 		return region_group;
 	}
