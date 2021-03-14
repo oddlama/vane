@@ -140,6 +140,8 @@ public class Regions extends Module<Regions> {
 	public Regions() {
 		//menus = new RegionMenuGroup(this);
 		//dynmap_layer = new RegionDynmapLayer(this);
+		new RegionEnvironmentSettingEnforcer(this);
+		new RegionRoleSettingEnforcer(this);
 	}
 
 	public void on_enable() {
@@ -311,5 +313,20 @@ public class Regions extends Module<Regions> {
 		}
 
 		return null;
+	}
+
+	public RegionGroup get_or_create_default_region_group(final UUID owner) {
+		var region_group = storage_default_region_group.get(owner);
+		if (region_group == null) {
+			// Create and save owners's default group
+			region_group = new RegionGroup("[default]", owner);
+			add_region_group(region_group);
+
+			// Set group as the default
+			storage_default_region_group.put(owner, region_group.id());
+			mark_persistent_storage_dirty();
+		}
+
+		return region_group;
 	}
 }

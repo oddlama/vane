@@ -68,6 +68,7 @@ public class RegionGroup {
 		final var region_group = (RegionGroup)o;
 		final var json = new JSONObject();
 		json.put("id",                 to_json(UUID.class,            region_group.id));
+		json.put("name",               to_json(String.class,          region_group.name));
 		json.put("owner",              to_json(UUID.class,            region_group.owner));
 		try {
 			json.put("roles",          to_json(RegionGroup.class.getDeclaredField("roles"), region_group.roles));
@@ -88,6 +89,7 @@ public class RegionGroup {
 		final var json = (JSONObject)o;
 		final var region_group = new RegionGroup();
 		region_group.id                 = from_json(UUID.class,            json.get("id"));
+		region_group.name               = from_json(String.class,          json.get("name"));
 		region_group.owner              = from_json(UUID.class,            json.get("owner"));
 		try {
 			region_group.roles          = (Map<UUID, Role>)from_json(RegionGroup.class.getDeclaredField("roles"), json.get("roles"));
@@ -103,6 +105,7 @@ public class RegionGroup {
 	}
 
 	private UUID id;
+	private String name;
 	private UUID owner;
 
 	private Map<UUID, Role> roles = new HashMap<>();
@@ -112,8 +115,9 @@ public class RegionGroup {
 	private Map<EnvironmentSetting, Boolean> settings = new HashMap<>();
 
 	private RegionGroup() { }
-	private RegionGroup(final UUID owner) {
+	private RegionGroup(final String name, final UUID owner) {
 		this.id = UUID.randomUUID();
+		this.name = name;
 		this.owner = owner;
 
 		// Add admins role
@@ -125,18 +129,21 @@ public class RegionGroup {
 		this.add_role(others);
 		this.role_others = others.id();
 
+		// Add owner to admins
+		this.player_to_role.put(owner, admins.id());
+
 		// Set setting defaults
 		for (var es : EnvironmentSetting.values()) {
 			this.settings.put(es, es.default_value());
 		}
 	}
 
-	public static RegionGroup create_default_region_group(final UUID owner) {
-		return new RegionGroup(owner);
-	}
-
 	public UUID id() { return id; }
+	public String name() { return name; }
 	public UUID owner() { return owner; }
+	public boolean get_setting(final EnvironmentSetting setting) {
+		return settings.getOrDefault(setting, setting.default_value());
+	}
 
 	public void add_role(final Role role) {
 		this.roles.put(role.id(), role);
