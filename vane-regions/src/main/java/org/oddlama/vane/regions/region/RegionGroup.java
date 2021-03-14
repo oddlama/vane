@@ -12,6 +12,9 @@ import static org.oddlama.vane.util.Nms.spawn;
 import static org.oddlama.vane.util.Util.ms_to_ticks;
 import static org.oddlama.vane.util.Util.namespaced_key;
 
+import org.oddlama.vane.external.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -131,6 +134,9 @@ public class RegionGroup {
 	public static RegionGroup create_default_region_group(final UUID owner) {
 		return new RegionGroup(owner);
 	}
+
+	public UUID id() { return id; }
+	public UUID owner() { return owner; }
 
 	public void add_role(final Role role) {
 		this.roles.put(role.id(), role);

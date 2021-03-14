@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -37,6 +38,7 @@ import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
+import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -54,6 +56,13 @@ import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.material.ExtendedMaterial;
 import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.core.persistent.PersistentSerializer;
+import org.oddlama.vane.regions.region.Region;
+import org.oddlama.vane.regions.region.RegionGroup;
+import org.oddlama.vane.regions.region.Role;
+import org.oddlama.vane.regions.region.RegionExtent;
+import org.oddlama.vane.regions.region.RoleSetting;
+import org.oddlama.vane.regions.region.EnvironmentSetting;
+
 import org.oddlama.vane.util.LazyBlock;
 
 @VaneModule(name = "regions", bstats = 8643, config_version = 2, lang_version = 2, storage_version = 1)
@@ -81,7 +90,6 @@ public class Regions extends Module<Regions> {
 	// 8. shortcut to current region group if any
 	// 9. shortcut to current region if any
 	//
-	//
 	// Menu: Region
 	// 1. edit name
 	// 2. set group
@@ -91,12 +99,12 @@ public class Regions extends Module<Regions> {
 	// 1. edit name
 	// 2. add role
 	// 3. roles
-	// 3. delete
+	// 4. delete
 	//
 	// Menu: Role
 	// 1. edit name (if not special)
 	// 2. players (if not others)
-	// 2. delete role (if not special)
+	// 3. delete role (if not special)
 
 	// Add (de-)serializers
 	static {
@@ -127,11 +135,17 @@ public class Regions extends Module<Regions> {
 	private Map<UUID, UUID> storage_default_region_group = new HashMap<>();
 
 	// Per-chunk lookup cache (world_id → chunk_key → [possible regions])
-	private Map<Long, Map<Long, List<UUID>>> regions_for_chunk = new HashMap<>();
+	private Map<UUID, Map<Long, List<Region>>> regions_in_chunk_in_world = new HashMap<>();
 
 	public Regions() {
 		//menus = new RegionMenuGroup(this);
 		//dynmap_layer = new RegionDynmapLayer(this);
+	}
+
+	public void on_enable() {
+		for (var region : storage_regions.values()) {
+			index_add_region(region);
+		}
 	}
 
 	public void add_region_group(final RegionGroup group) {
@@ -139,8 +153,163 @@ public class Regions extends Module<Regions> {
 		mark_persistent_storage_dirty();
 	}
 
+	public boolean can_remove_region_group(final RegionGroup group) {
+		// Returns true if this region group is unused and can be removed.
+
+		// If this region group is the fallback default group, it is permanent!
+		if (storage_default_region_group.values().contains(group.id())) {
+			return false;
+		}
+
+		// If any region uses this group, we can't remove it.
+		if (storage_regions.values().stream().anyMatch(
+			r -> r.region_group_id().equals(group.id()))) {
+			return false;
+		}
+
+		return true;
+	}
+
+	public void remove_region_group(final RegionGroup group) {
+		// Assert that this region group is unused.
+		if (!can_remove_region_group(group)) {
+			return;
+		}
+
+		// Remove region group from storage
+		if (storage_region_groups.remove(region_group.id()) == null) {
+			// Was already removed
+			return;
+		}
+
+		mark_persistent_storage_dirty();
+	}
+
+	public RegionGroup get_region_group(UUID region_group) {
+		return storage_region_groups.get(region_group);
+	}
+
 	public void add_region(final Region region) {
 		storage_regions.put(region.id(), region);
 		mark_persistent_storage_dirty();
+
+		// Index region for fast lookup
+		index_add_region(region);
+
+		// Create dynmap marker
+		dynmap_layer.update_marker(portal);
+	}
+
+	public void remove_region(final Region region) {
+		// Remove region from storage
+		if (storage_regions.remove(region.id()) == null) {
+			// Was already removed
+			return;
+		}
+
+		mark_persistent_storage_dirty();
+
+		// Remove region from index
+		index_remove_region(region);
+	}
+
+	private void index_add_region(final Region region) {
+		// Adds the region to the lookup map at all intersecting chunks
+		final var min = region.extent().min();
+		final var max = region.extent().max();
+
+		final var world_id = min.getWorld().getUID();
+		var regions_in_chunk = regions_in_chunk_in_world.get(world_id);
+		if (regions_in_chunk == null) {
+			regions_in_chunk = new HashMap<Long, List<Region>>();
+			regions_in_chunk_in_world.put(world_id, regions_in_chunk);
+		}
+
+		final var min_chunk = min.getChunk();
+		final var max_chunk = max.getChunk();
+
+		// Iterate all the chunks which intersect the region
+		for (int cx = min_chunk.getX(); cx <= max_chunk.getX(); ++cx) {
+			for (int cz = min_chunk.getZ(); cz <= max_chunk.getZ(); ++cz) {
+				final var chunk_key = Chunk.getChunkKey(cx, cz);
+				var possible_regions = regions_in_chunk.get(chunk_key);
+				if (possible_regions == null) {
+					possible_regions = new ArrayList<Region>();
+					regions_in_chunk.put(chunk_key, possible_regions);
+				}
+				possible_regions.add(region);
+			}
+		}
+	}
+
+	private void index_remove_region(final Region region) {
+		// Removes the region from the lookup map at all intersecting chunks
+		final var min = region.extent().min();
+		final var max = region.extent().max();
+
+		final var world_id = min.getWorld().getUID();
+		final var regions_in_chunk = regions_in_chunk_in_world.get(world_id);
+		if (regions_in_chunk == null) {
+			return;
+		}
+
+		final var min_chunk = min.getChunk();
+		final var max_chunk = max.getChunk();
+
+		// Iterate all the chunks which intersect the region
+		for (int cx = min_chunk.getX(); cx <= max_chunk.getX(); ++cx) {
+			for (int cz = min_chunk.getZ(); cz <= max_chunk.getZ(); ++cz) {
+				final var chunk_key = Chunk.getChunkKey(cx, cz);
+				final var possible_regions = regions_in_chunk.get(chunk_key);
+				if (possible_regions == null) {
+					continue;
+				}
+				possible_regions.remove(region);
+			}
+		}
+	}
+
+	public Region region_at(final Location loc) {
+		final var world_id = loc.getWorld().getUID();
+		final var regions_in_chunk = regions_in_chunk_in_world.get(world_id);
+		if (regions_in_chunk == null) {
+			return null;
+		}
+
+		final var chunk_key = loc.getChunk().getChunkKey();
+		final var possible_regions = regions_in_chunk.get(chunk_key);
+		if (possible_regions == null) {
+			return null;
+		}
+
+		for (final var region : possible_regions) {
+			if (region.extent().is_inside(loc)) {
+				return region;
+			}
+		}
+
+		return null;
+	}
+
+	public Region region_at(final Block block) {
+		final var world_id = block.getWorld().getUID();
+		final var regions_in_chunk = regions_in_chunk_in_world.get(world_id);
+		if (regions_in_chunk == null) {
+			return null;
+		}
+
+		final var chunk_key = block.getChunk().getChunkKey();
+		final var possible_regions = regions_in_chunk.get(chunk_key);
+		if (possible_regions == null) {
+			return null;
+		}
+
+		for (final var region : possible_regions) {
+			if (region.extent().is_inside(block)) {
+				return region;
+			}
+		}
+
+		return null;
 	}
 }

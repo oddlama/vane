@@ -12,6 +12,9 @@ import static org.oddlama.vane.util.Nms.spawn;
 import static org.oddlama.vane.util.Util.ms_to_ticks;
 import static org.oddlama.vane.util.Util.namespaced_key;
 
+import org.oddlama.vane.external.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -33,6 +36,7 @@ import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.block.Block;
+import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.world.ChunkLoadEvent;
@@ -94,11 +98,11 @@ public class RegionExtent {
 		}
 
 		// Sort coordinates along axes.
-		this.min = new LazyBlock(new Block(from.getWorld(),
+		this.min = new LazyBlock(from.getWorld().getBlockAt(
 				Math.min(from.getX(), to.getX()),
 				Math.min(from.getY(), to.getY()),
 				Math.min(from.getZ(), to.getZ())));
-		this.max = new LazyBlock(new Block(from.getWorld(),
+		this.max = new LazyBlock(from.getWorld().getBlockAt(
 				Math.max(from.getX(), to.getX()),
 				Math.max(from.getY(), to.getY()),
 				Math.max(from.getZ(), to.getZ())));
@@ -107,7 +111,19 @@ public class RegionExtent {
 	public Block min() { return min.block(); }
 	public Block max() { return max.block(); }
 
-	public boolean is_block_inside(final Block block) {
+	public boolean is_inside(final Location loc) {
+		if (!loc.getWorld().equals(min().getWorld())) {
+			return false;
+		}
+
+		final var l = min();
+		final var h = max();
+		return loc.getX() >= l.getX() && loc.getX() < (h.getX() + 1)
+		    && loc.getY() >= l.getY() && loc.getY() < (h.getY() + 1)
+		    && loc.getZ() >= l.getZ() && loc.getZ() < (h.getZ() + 1);
+	}
+
+	public boolean is_inside(final Block block) {
 		if (!block.getWorld().equals(min().getWorld())) {
 			return false;
 		}

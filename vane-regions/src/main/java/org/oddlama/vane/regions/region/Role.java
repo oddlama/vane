@@ -12,6 +12,7 @@ import static org.oddlama.vane.util.Nms.spawn;
 import static org.oddlama.vane.util.Util.ms_to_ticks;
 import static org.oddlama.vane.util.Util.namespaced_key;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -59,6 +60,8 @@ import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.core.persistent.PersistentSerializer;
 import org.oddlama.vane.util.LazyBlock;
 import org.oddlama.vane.regions.Regions;
+
+import org.oddlama.vane.external.json.JSONObject;
 
 public class Role {
 	public enum RoleType {
