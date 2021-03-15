@@ -30,11 +30,14 @@ import org.oddlama.vane.regions.region.RoleSetting;
 
 public class RegionMenu extends ModuleComponent<Regions> {
 	@LangMessage public TranslatedMessage lang_title;
+	@LangMessage public TranslatedMessage lang_delete_confirm_title;
 	@LangMessage public TranslatedMessage lang_select_region_group_title;
 	@LangMessage public TranslatedMessage lang_filter_region_groups_title;
 
 	public TranslatedItemStack<?> item_rename;
 	public TranslatedItemStack<?> item_delete;
+	public TranslatedItemStack<?> item_delete_confirm_accept;
+	public TranslatedItemStack<?> item_delete_confirm_cancel;
 	public TranslatedItemStack<?> item_assign_region_group;
 	public TranslatedItemStack<?> item_select_region_group;
 
@@ -42,15 +45,17 @@ public class RegionMenu extends ModuleComponent<Regions> {
 		super(context.namespace("region"));
 
 		final var ctx = get_context();
-        item_rename              = new TranslatedItemStack<>(ctx, "rename",              Material.NAME_TAG,                          1, "Used to rename the region.");
-        item_delete              = new TranslatedItemStack<>(ctx, "delete",              namespaced_key("vane", "decoration_tnt_1"), 1, "Used to delete this region.");
-        item_assign_region_group = new TranslatedItemStack<>(ctx, "assign_region_group", Material.GLOBE_BANNER_PATTERN,              1, "Used to assign a region group.");
-        item_select_region_group = new TranslatedItemStack<>(ctx, "select_region_group", Material.GLOBE_BANNER_PATTERN,              1, "Used to represent a region group in the region group assignment list.");
+        item_rename                = new TranslatedItemStack<>(ctx, "rename",                Material.NAME_TAG,                          1, "Used to rename the region.");
+        item_delete                = new TranslatedItemStack<>(ctx, "delete",                namespaced_key("vane", "decoration_tnt_1"), 1, "Used to delete this region.");
+        item_delete_confirm_accept = new TranslatedItemStack<>(ctx, "delete_confirm_accept", namespaced_key("vane", "decoration_tnt_1"), 1, "Used to confirm deleting the region.");
+        item_delete_confirm_cancel = new TranslatedItemStack<>(ctx, "delete_confirm_cancel", Material.PRISMARINE_SHARD,                  1, "Used to cancel deleting the region.");
+        item_assign_region_group   = new TranslatedItemStack<>(ctx, "assign_region_group",   Material.GLOBE_BANNER_PATTERN,              1, "Used to assign a region group.");
+        item_select_region_group   = new TranslatedItemStack<>(ctx, "select_region_group",   Material.GLOBE_BANNER_PATTERN,              1, "Used to represent a region group in the region group assignment list.");
 	}
 
 	public Menu create(final Region region, final Player player) {
 		final var columns = 9;
-		final var title = lang_title.str();
+		final var title = lang_title.str("§5§l" + region.name());
 		final var region_menu = new Menu(get_context(), Bukkit.createInventory(null, columns, title));
 		region_menu.tag(new RegionMenuTag(region.id()));
 
@@ -89,14 +94,21 @@ public class RegionMenu extends ModuleComponent<Regions> {
 
 	private MenuWidget menu_item_delete(final Region region) {
 		return new MenuItem(1, item_delete.item(), (player, menu, self) -> {
-			if (!player.getUniqueId().equals(region.owner())) {
-				return ClickResult.ERROR;
-			}
+			MenuFactory.confirm(get_context(), lang_delete_confirm_title.str(),
+				item_delete_confirm_accept.item(), (player2) -> {
+					if (!player2.getUniqueId().equals(region.owner())) {
+						return ClickResult.ERROR;
+					}
 
-			get_module().remove_region(region);
+					get_module().remove_region(region);
+					return ClickResult.SUCCESS;
+				}, item_delete_confirm_cancel.item(), (player2) -> {
+					menu.open(player2);
+				})
+				.tag(new RegionMenuTag(region.id()))
+				.open(player);
 			return ClickResult.SUCCESS;
 		});
-			// TODO item show if removable
 	}
 
 	private MenuWidget menu_item_assign_region_group(final Region region) {

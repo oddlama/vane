@@ -194,3 +194,42 @@ menus:
     select_region_group:
       name: "%1$s"
       lore: []
+
+  # Settings for the region menu.
+  region:
+    # The title for the region menu.
+    # %1$s: Region name
+    title: "§8§lRegion: %1$s"
+
+    # The item used to rename a region.
+    rename:
+      name: "§b§lRename Region"
+      lore: []
+
+    # The item used to delete a region.
+    rename:
+      name: "§c§lDelete Region"
+      lore: []
+    # The title for the delete confirmation dialog.
+    delete_confirm_title: "§c§lDelete region?"
+    # The item to accept deleting.
+    delete_confirm_accept:
+      name: "§c§lDELETE REGION"
+      lore: []
+    # The item to cance deleting.
+    delete_confirm_cancel:
+      name: "§a§lCancel"
+      lore: []
+
+    # The item used to open the list of region groups to assign the region to one
+    assign_region_group:
+      name: "§b§lAssign Group"
+      lore: []
+
+    select_region_group_title: "§8§lSelect Region Group"
+    filter_region_groups_title: "§8§lFilter Region Groups"
+    # The item used to represent a region group.
+    # %1$s: Region group name
+    select_region_group:
+      name: "%1$s"
+      lore: []

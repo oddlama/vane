@@ -332,9 +332,12 @@ menus:
         - "§7Current: %1$s"
         - "§8Target selection is currently §6§lLOCKED§r§8!"
 
-    # The item used to open the portal's target selector.
     select_target_title: "§8§lSelect Target Portal"
     filter_portals_title: "§8§lFilter Portals"
+    # The item used to represent a target portal.
+    # %1$s: Portal name
+    # %2$s: Portal distance
+    # %3$s: Portal world
     select_target_portal:
       name: "%1$s"
       lore:
