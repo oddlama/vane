@@ -26,7 +26,7 @@ import org.oddlama.vane.regions.Regions;
 import org.oddlama.vane.regions.region.Region;
 import org.oddlama.vane.regions.region.RegionGroup;
 import org.oddlama.vane.regions.region.RegionSelection;
-import org.oddlama.vane.regions.region.RoleSetting;
+import org.oddlama.vane.regions.region.EnvironmentSetting;
 import org.oddlama.vane.regions.region.Role;
 
 public class RegionGroupMenu extends ModuleComponent<Regions> {
@@ -43,23 +43,44 @@ public class RegionGroupMenu extends ModuleComponent<Regions> {
 	public TranslatedItemStack<?> item_list_roles;
 	public TranslatedItemStack<?> item_select_role;
 
+	public TranslatedItemStack<?> item_setting_toggle_on;
+	public TranslatedItemStack<?> item_setting_toggle_off;
+	public TranslatedItemStack<?> item_setting_info_animals;
+	public TranslatedItemStack<?> item_setting_info_monsters;
+	public TranslatedItemStack<?> item_setting_info_explosions;
+	public TranslatedItemStack<?> item_setting_info_fire_spread;
+	public TranslatedItemStack<?> item_setting_info_pvp;
+	public TranslatedItemStack<?> item_setting_info_trample;
+	public TranslatedItemStack<?> item_setting_info_vine_growth;
+
 	public RegionGroupMenu(Context<Regions> context) {
 		super(context.namespace("region_group"));
 
 		final var ctx = get_context();
-        item_rename                = new TranslatedItemStack<>(ctx, "rename",                Material.NAME_TAG,                          1, "Used to rename the region group.");
-        item_delete                = new TranslatedItemStack<>(ctx, "delete",                namespaced_key("vane", "decoration_tnt_1"), 1, "Used to delete this region group.");
-        item_delete_confirm_accept = new TranslatedItemStack<>(ctx, "delete_confirm_accept", namespaced_key("vane", "decoration_tnt_1"), 1, "Used to confirm deleting the region group.");
-        item_delete_confirm_cancel = new TranslatedItemStack<>(ctx, "delete_confirm_cancel", Material.PRISMARINE_SHARD,                  1, "Used to cancel deleting the region group.");
-        item_create_role           = new TranslatedItemStack<>(ctx, "create_role",           Material.WRITABLE_BOOK,                     1, "Used to create a new role.");
-        item_list_roles            = new TranslatedItemStack<>(ctx, "list_roles",            Material.GLOBE_BANNER_PATTERN,              1, "Used to list all defined roles.");
-        item_select_role           = new TranslatedItemStack<>(ctx, "select_role",           Material.GLOBE_BANNER_PATTERN,              1, "Used to represent a role in the role selection list.");
+        item_rename                   = new TranslatedItemStack<>(ctx, "rename",                Material.NAME_TAG,                          1, "Used to rename the region group.");
+        item_delete                   = new TranslatedItemStack<>(ctx, "delete",                namespaced_key("vane", "decoration_tnt_1"), 1, "Used to delete this region group.");
+        item_delete_confirm_accept    = new TranslatedItemStack<>(ctx, "delete_confirm_accept", namespaced_key("vane", "decoration_tnt_1"), 1, "Used to confirm deleting the region group.");
+        item_delete_confirm_cancel    = new TranslatedItemStack<>(ctx, "delete_confirm_cancel", Material.PRISMARINE_SHARD,                  1, "Used to cancel deleting the region group.");
+        item_create_role              = new TranslatedItemStack<>(ctx, "create_role",           Material.WRITABLE_BOOK,                     1, "Used to create a new role.");
+        item_list_roles               = new TranslatedItemStack<>(ctx, "list_roles",            Material.GLOBE_BANNER_PATTERN,              1, "Used to list all defined roles.");
+        item_select_role              = new TranslatedItemStack<>(ctx, "select_role",           Material.GLOBE_BANNER_PATTERN,              1, "Used to represent a role in the role selection list.");
+
+		item_setting_toggle_on        = new TranslatedItemStack<>(ctx, "setting_toggle_on",        Material.GREEN_TERRACOTTA,                    1, "Used to represent a toggle button with current state on.");
+		item_setting_toggle_off       = new TranslatedItemStack<>(ctx, "setting_toggle_off",       Material.RED_TERRACOTTA,                      1, "Used to represent a toggle button with current state off.");
+		item_setting_info_animals     = new TranslatedItemStack<>(ctx, "setting_info_animals",     namespaced_key("vane", "baby_pig_2"),         1, "Used to represent the info for the animals     setting.");
+		item_setting_info_monsters    = new TranslatedItemStack<>(ctx, "setting_info_monsters",    Material.ZOMBIE_HEAD,                         1, "Used to represent the info for the monsters    setting.");
+		item_setting_info_explosions  = new TranslatedItemStack<>(ctx, "setting_info_explosions",  namespaced_key("vane", "creeper_with_tnt_2"), 1, "Used to represent the info for the explosions  setting.");
+		item_setting_info_fire_spread = new TranslatedItemStack<>(ctx, "setting_info_fire_spread", Material.CAMPFIRE,                            1, "Used to represent the info for the fire spread setting.");
+		item_setting_info_pvp         = new TranslatedItemStack<>(ctx, "setting_info_pvp",         Material.IRON_SWORD,                          1, "Used to represent the info for the pvp         setting.");
+		item_setting_info_trample     = new TranslatedItemStack<>(ctx, "setting_info_trample",     Material.FARMLAND,                            1, "Used to represent the info for the trample     setting.");
+		item_setting_info_vine_growth = new TranslatedItemStack<>(ctx, "setting_info_vine_growth", Material.VINE,                                1, "Used to represent the info for the vine growth setting.");
 	}
 
 	public Menu create(final RegionGroup group, final Player player) {
 		final var columns = 9;
+		final var rows = 3;
 		final var title = lang_title.str("§5§l" + group.name());
-		final var region_group_menu = new Menu(get_context(), Bukkit.createInventory(null, columns, title));
+		final var region_group_menu = new Menu(get_context(), Bukkit.createInventory(null, rows * columns, title));
 		region_group_menu.tag(new RegionGroupMenuTag(group.id()));
 
 		final var is_owner = player.getUniqueId().equals(group.owner());
@@ -73,7 +94,14 @@ public class RegionGroupMenu extends ModuleComponent<Regions> {
 
 		region_group_menu.add(menu_item_create_role(group));
 		region_group_menu.add(menu_item_list_roles(group));
-		// TODO integrate settings directly
+
+		add_menu_item_setting(region_group_menu, group, 0, item_setting_info_animals,     EnvironmentSetting.ANIMALS);
+		add_menu_item_setting(region_group_menu, group, 1, item_setting_info_monsters,    EnvironmentSetting.MONSTERS);
+		add_menu_item_setting(region_group_menu, group, 3, item_setting_info_explosions,  EnvironmentSetting.EXPLOSIONS);
+		add_menu_item_setting(region_group_menu, group, 4, item_setting_info_fire_spread, EnvironmentSetting.FIRE_SPREAD);
+		add_menu_item_setting(region_group_menu, group, 5, item_setting_info_pvp,         EnvironmentSetting.PVP);
+		add_menu_item_setting(region_group_menu, group, 7, item_setting_info_trample,     EnvironmentSetting.TRAMPLE);
+		add_menu_item_setting(region_group_menu, group, 8, item_setting_info_vine_growth, EnvironmentSetting.VINE_GROWTH);
 
 		region_group_menu.on_natural_close(player2 ->
 			get_module().menus.main_menu
@@ -135,7 +163,17 @@ public class RegionGroupMenu extends ModuleComponent<Regions> {
 
 	private MenuWidget menu_item_create_role(final RegionGroup group) {
 		return new MenuItem(7, item_create_role.item(), (player, menu, self) -> {
-			// TODO
+			menu.close(player);
+			get_module().menus.enter_role_name_menu.create(player, (player2, name) -> {
+				final var role = new Role(name, Role.RoleType.NORMAL);
+				group.add_role(role);
+				mark_persistent_storage_dirty();
+				get_module().menus.role_menu.create(group, role, player).open(player);
+				return ClickResult.SUCCESS;
+			}).on_natural_close(player2 -> {
+				menu.open(player2);
+			}).open(player);
+
 			return ClickResult.SUCCESS;
 		});
 	}
@@ -160,6 +198,28 @@ public class RegionGroupMenu extends ModuleComponent<Regions> {
 					menu.open(player2);
 				}).open(player);
 			return ClickResult.SUCCESS;
+		});
+	}
+
+	private void add_menu_item_setting(final Menu region_group_menu, final RegionGroup group, final int col, final TranslatedItemStack<?> item_info, final EnvironmentSetting setting) {
+		region_group_menu.add(new MenuItem(1 * 9 + col, item_info.item(), (player, menu, self) -> {
+			return ClickResult.IGNORE;
+		}));
+
+		region_group_menu.add(new MenuItem(2 * 9 + col, null, (player, menu, self) -> {
+			group.settings().put(setting, !group.get_setting(setting));
+			mark_persistent_storage_dirty();
+			menu.update();
+			return ClickResult.SUCCESS;
+		}) {
+			@Override
+			public void item(final ItemStack item) {
+				if (group.get_setting(setting)) {
+					super.item(item_setting_toggle_on.item());
+				} else {
+					super.item(item_setting_toggle_off.item());
+				}
+			}
 		});
 	}
 

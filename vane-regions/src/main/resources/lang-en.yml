@@ -242,6 +242,48 @@ menus:
     # %1$s: Region group name
     title: "§8§lGroup: %1$s"
 
+    setting_toggle_on:
+      name: "§a§lENABLED"
+      lore: []
+    setting_toggle_off:
+      name: "§c§lDISABLED"
+      lore: []
+    setting_info_animals:
+      name: "§b§lAnimals"
+      lore:
+        - ""
+        - "§7Controls animal / neutral mob spawns."
+    setting_info_monsters:
+      name: "§b§lMonsters"
+      lore:
+        - ""
+        - "§7Controls monsters / hostile mob spawns."
+    setting_info_explosions:
+      name: "§b§lExplosions"
+      lore:
+        - ""
+        - "§7Controls all types of explosions."
+    setting_info_fire_spread:
+      name: "§b§lFire Spread"
+      lore:
+        - ""
+        - "§7Controls whether fire spreads."
+    setting_info_pvp:
+      name: "§b§lPVP"
+      lore:
+        - ""
+        - "§7Controls whether PVP combat is allowed."
+    setting_info_trample:
+      name: "§b§lTrampling"
+      lore:
+        - ""
+        - "§7Controls whether farmland can be trampled."
+    setting_info_vine_growth:
+      name: "§b§lVine Growth"
+      lore:
+        - ""
+        - "§7Controls whether vines grow in the region."
+
     # The item used to rename a region group.
     rename:
       name: "§b§lRename Group"
@@ -299,32 +341,32 @@ menus:
     setting_toggle_off:
       name: "§c§lDISABLED"
       lore: []
-    setting_admin_info:
+    setting_info_admin:
       name: "§b§lAdmin"
       lore:
         - ""
         - "§7The admin flag cannot be toggled"
         - "§7and is only set for the admin group."
-    setting_build_info:
+    setting_info_build:
       name: "§b§lBuild"
       lore:
         - ""
         - "§7Allows building and mining blocks."
-    setting_use_info:
+    setting_info_use:
       name: "§b§lUse Things"
       lore:
         - ""
         - "§7Allows using various things like doors,"
         - "§7levers, buttons or redstone components."
         - "§7Also controls §6view-access§7 to inventories."
-    setting_container_info:
+    setting_info_container:
       name: "§b§lContainers"
       lore:
         - ""
         - "§7Allows interaction with inventories."
         - "§7Without this flag, nothing can be taken"
         - "§7from or put into inventories."
-    setting_portal_info:
+    setting_info_portal:
       name: "§b§lUse Portals"
       lore:
         - ""

@@ -95,6 +95,7 @@ If you don't want a certain feature, simply disable it.
 - [x] Regions created by admins can be used to protect gobal areas (e.g. spawn).
 - [x] Seamless integration into chest-like menus instead of commands.
 - [x] Integrates with portals to allow only players witha the portal permission to operate portals in the region
+- [x] Integrates with dynmap to make regions visible on the online map
 - [ ] Visual region selection indicator
 
 #### Proxy plugin (vane-waterfall)

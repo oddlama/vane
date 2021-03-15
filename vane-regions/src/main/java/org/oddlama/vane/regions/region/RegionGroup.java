@@ -142,6 +142,7 @@ public class RegionGroup {
 	public String name() { return name; }
 	public void name(final String name) { this.name = name; }
 	public UUID owner() { return owner; }
+	public Map<EnvironmentSetting, Boolean> settings() { return settings; }
 	public boolean get_setting(final EnvironmentSetting setting) {
 		return settings.getOrDefault(setting, setting.default_value());
 	}

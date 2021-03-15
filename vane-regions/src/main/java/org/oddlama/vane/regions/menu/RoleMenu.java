@@ -69,11 +69,11 @@ public class RoleMenu extends ModuleComponent<Regions> {
 
 		item_setting_toggle_on      = new TranslatedItemStack<>(ctx, "setting_toggle_on",        Material.GREEN_TERRACOTTA,                  1, "Used to represent a toggle button with current state on.");
 		item_setting_toggle_off     = new TranslatedItemStack<>(ctx, "setting_toggle_off",       Material.RED_TERRACOTTA,                    1, "Used to represent a toggle button with current state off.");
-		item_setting_info_admin     = new TranslatedItemStack<>(ctx, "setting_admin_info",       Material.GOLDEN_APPLE,                      1, "Used to represent the info for the admin setting.");
-		item_setting_info_build     = new TranslatedItemStack<>(ctx, "setting_build_info",       Material.IRON_PICKAXE,                      1, "Used to represent the info for the build setting.");
-		item_setting_info_use       = new TranslatedItemStack<>(ctx, "setting_use_info",         Material.DARK_OAK_DOOR,                     1, "Used to represent the info for the use setting.");
-		item_setting_info_container = new TranslatedItemStack<>(ctx, "setting_container_info",   Material.CHEST,                             1, "Used to represent the info for the container setting.");
-		item_setting_info_portal    = new TranslatedItemStack<>(ctx, "setting_portal_info",      Material.ENDER_PEARL,                       1, "Used to represent the info for the portal setting.");
+		item_setting_info_admin     = new TranslatedItemStack<>(ctx, "setting_info_admin",       Material.GOLDEN_APPLE,                      1, "Used to represent the info for the admin setting.");
+		item_setting_info_build     = new TranslatedItemStack<>(ctx, "setting_info_build",       Material.IRON_PICKAXE,                      1, "Used to represent the info for the build setting.");
+		item_setting_info_use       = new TranslatedItemStack<>(ctx, "setting_info_use",         Material.DARK_OAK_DOOR,                     1, "Used to represent the info for the use setting.");
+		item_setting_info_container = new TranslatedItemStack<>(ctx, "setting_info_container",   Material.CHEST,                             1, "Used to represent the info for the container setting.");
+		item_setting_info_portal    = new TranslatedItemStack<>(ctx, "setting_info_portal",      Material.ENDER_PEARL,                       1, "Used to represent the info for the portal setting.");
 	}
 
 	public Menu create(final RegionGroup group, final Role role, final Player player) {
@@ -105,6 +105,7 @@ public class RoleMenu extends ModuleComponent<Regions> {
 		// TODO g money
 		// TODO g pportal ontegratoin
 		// TODO g listeners
+		// TODO g dynmap
 
 		role_menu.on_natural_close(player2 ->
 			get_module().menus.region_group_menu
