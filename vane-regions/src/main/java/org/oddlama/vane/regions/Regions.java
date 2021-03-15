@@ -167,10 +167,15 @@ public class Regions extends Module<Regions> {
 		new RegionSelectionListener(this);
 	}
 
-	public void on_enable() {
+	public void delayed_on_enable() {
 		for (var region : storage_regions.values()) {
 			index_add_region(region);
 		}
+	}
+
+	@Override
+	public void on_enable() {
+		schedule_next_tick(this::delayed_on_enable);
 	}
 
 	public Collection<Region> all_regions() {
