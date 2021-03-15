@@ -157,17 +157,25 @@ public class Regions extends Module<Regions> {
 		}
 	}
 
-	public boolean is_selecting_region(final Player player) {
-		return regions_selections.containsKey(player.getUniqueId());
+	public Collection<Region> all_regions() {
+		return storage_regions.values();
+	}
+
+	public void start_region_selection(final Player player) {
+		regions_selections.put(player.getUniqueId(), new RegionSelection(this));
+		lang_start_region_selection.send(player);
 	}
 
 	public void cancel_region_selection(final Player player) {
 		regions_selections.remove(player.getUniqueId());
 	}
 
-	public void start_region_selection(final Player player) {
-		regions_selections.put(player.getUniqueId(), new RegionSelection(this));
-		lang_start_region_selection.send(player);
+	public boolean is_selecting_region(final Player player) {
+		return regions_selections.containsKey(player.getUniqueId());
+	}
+
+	public RegionSelection get_region_selection(final Player player) {
+		return regions_selections.get(player.getUniqueId());
 	}
 
 	public void add_region_group(final RegionGroup group) {

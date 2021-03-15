@@ -25,7 +25,7 @@ public class EnterRegionNameMenu extends ModuleComponent<Regions> {
 	}
 
 	public Menu create(final Player player, final Function2<Player, String, ClickResult> on_click) {
-		return create(player, "Region Name", on_click);
+		return create(player, "Region", on_click);
 	}
 
 	public Menu create(final Player player, final String default_name, final Function2<Player, String, ClickResult> on_click) {
