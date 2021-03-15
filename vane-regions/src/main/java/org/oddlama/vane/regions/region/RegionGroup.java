@@ -164,8 +164,9 @@ public class RegionGroup {
 		return roles.values();
 	}
 
-	public boolean is_orphan(final Regions region) {
-		// TODO
-		return false;
+	public boolean is_orphan(final Regions regions) {
+		return !regions.all_regions()
+			.stream()
+			.anyMatch(r -> id.equals(r.region_group_id()));
 	}
 }

@@ -175,7 +175,7 @@ menus:
 
     # This item is used to select a region group.
     list_region_groups:
-      name: "§b§lSelect region group"
+      name: "§b§lSelect Region Group"
       lore: []
 
     # This item is a shortcut to select the region group of the region the player is standing in.

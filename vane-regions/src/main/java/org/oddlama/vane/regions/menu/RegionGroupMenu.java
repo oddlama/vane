@@ -58,7 +58,7 @@ public class RegionGroupMenu extends ModuleComponent<Regions> {
 
 	public Menu create(final RegionGroup group, final Player player) {
 		final var columns = 9;
-		final var title = lang_title.str();
+		final var title = lang_title.str(group.name());
 		final var region_group_menu = new Menu(get_context(), Bukkit.createInventory(null, columns, title));
 		region_group_menu.tag(new RegionGroupMenuTag(group.id()));
 
@@ -71,6 +71,11 @@ public class RegionGroupMenu extends ModuleComponent<Regions> {
 		region_group_menu.add(menu_item_create_role(group));
 		region_group_menu.add(menu_item_list_roles(group));
 		// TODO integrate settings directly
+
+		region_group_menu.on_natural_close(player2 ->
+			get_module().menus.main_menu
+				.create(player2)
+				.open(player2));
 
 		return region_group_menu;
 	}

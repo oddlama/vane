@@ -62,7 +62,7 @@ public class RoleMenu extends ModuleComponent<Regions> {
 
 	public Menu create(final RegionGroup group, final Role role, final Player player) {
 		final var columns = 9;
-		final var title = lang_title.str();
+		final var title = lang_title.str(role.name());
 		final var role_menu = new Menu(get_context(), Bukkit.createInventory(null, columns, title));
 
 		final var is_admin = player.getUniqueId().equals(group.owner())
@@ -79,6 +79,11 @@ public class RoleMenu extends ModuleComponent<Regions> {
 			role_menu.add(menu_item_remove_player(group, role));
 		}
 		// TODO integrate settings directly
+
+		role_menu.on_natural_close(player2 ->
+			get_module().menus.region_group_menu
+				.create(group, player2)
+				.open(player2));
 
 		return role_menu;
 	}
