@@ -216,7 +216,7 @@ menus:
     delete_confirm_accept:
       name: "§c§lDELETE REGION"
       lore: []
-    # The item to cance deleting.
+    # The item to cancel deleting.
     delete_confirm_cancel:
       name: "§a§lCancel"
       lore: []
@@ -237,18 +237,18 @@ menus:
   # Settings for the region group menu.
   region_group:
     # The title for the region group menu.
-    # %1$s: Region name
+    # %1$s: Region group name
     title: "§8§lGroup: %1$s"
 
     # The item used to rename a region group.
     rename:
-      name: "§b§lRename Region"
+      name: "§b§lRename Group"
       lore: []
 
     # The item used to delete a region group.
     # %1$s: Checkmark: No region uses this group
     delete:
-      name: "§c§lDelete Region Group"
+      name: "§c§lDelete Group"
       lore:
         - ""
         - "§6Deletion requirements:"
@@ -259,14 +259,9 @@ menus:
     delete_confirm_accept:
       name: "§c§lDELETE REGION GROUP"
       lore: []
-    # The item to cance deleting.
+    # The item to cancel deleting.
     delete_confirm_cancel:
       name: "§a§lCancel"
-      lore: []
-
-    # The item used to open the environment settings menu.
-    environment_settings:
-      name: "§b§lEnvironment Settings"
       lore: []
 
     # This item is used to create a new role.
@@ -283,9 +278,62 @@ menus:
       lore: []
 
     select_role_title: "§8§lSelect Role"
-    filter_roless_title: "§8§lFilter Roles"
+    filter_roles_title: "§8§lFilter Roles"
     # This item is used to represent a role in the selection menu.
     # %1$s: Role name
     select_role:
+      name: "%1$s"
+      lore: []
+
+  # Settings for the role menu.
+  role:
+    # The title for the role menu.
+    # %1$s: Role name
+    title: "§8§lGroup: %1$s"
+
+    # The item used to rename a role.
+    rename:
+      name: "§b§lRename Role"
+      lore: []
+
+    # The item used to delete a role.
+    delete:
+      name: "§c§lDelete Role"
+      lore: []
+    # The title for the delete confirmation dialog.
+    delete_confirm_title: "§c§lDelete role?"
+    # The item to accept deleting.
+    delete_confirm_accept:
+      name: "§c§lDELETE ROLE"
+      lore: []
+    # The item to cancel deleting.
+    delete_confirm_cancel:
+      name: "§a§lCancel"
+      lore: []
+
+    # This item is used to open the player assignment menu for a role.
+    assign_player:
+      name: "§b§lAssign Players"
+      lore:
+        - ""
+        - "§7Assign players to this role by clicking on them."
+        - "§7If the player had a different role before, they will"
+        - "§7be reassigned to this role. The list will only show"
+        - "§7players that are not already assigned to this role."
+        - "§7You can remove players by using the §bRemove Player§7 menu."
+    # This item is used to open the player removing menu for a role.
+    remove_player:
+      name: "§b§lRemove Players"
+        - ""
+        - "§7Remove players from this role by clicking on them."
+        - "§7This means they will have no assigned role afterwards"
+        - "§7and will be handled by the catch-all role §6[others]"
+
+    select_assign_player_title: "§8§lAssign Players"
+    select_remove_player_title: "§8§lRemove Players"
+    filter_players_title: "§8§lFilter Players"
+    # This item is used to represent a player in the selection menu.
+    # %1$s: Player name
+    select_player:
       name: "%1$s"
       lore: []

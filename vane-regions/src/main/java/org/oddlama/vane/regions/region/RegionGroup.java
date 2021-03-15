@@ -150,6 +150,7 @@ public class RegionGroup {
 		this.roles.put(role.id(), role);
 	}
 
+	public Map<UUID, UUID> player_to_role() { return player_to_role; }
 	public Role get_role(final UUID player) {
 		return roles.get(player_to_role.getOrDefault(player, role_others));
 	}

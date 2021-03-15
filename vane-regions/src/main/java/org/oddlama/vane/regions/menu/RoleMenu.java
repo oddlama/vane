@@ -34,13 +34,15 @@ import org.oddlama.vane.util.ItemUtil;
 
 public class RoleMenu extends ModuleComponent<Regions> {
 	@LangMessage public TranslatedMessage lang_title;
+	@LangMessage public TranslatedMessage lang_delete_confirm_title;
 	@LangMessage public TranslatedMessage lang_select_assign_player_title;
 	@LangMessage public TranslatedMessage lang_select_remove_player_title;
 	@LangMessage public TranslatedMessage lang_filter_players_title;
 
 	public TranslatedItemStack<?> item_rename;
 	public TranslatedItemStack<?> item_delete;
-	public TranslatedItemStack<?> item_role_settings;
+	public TranslatedItemStack<?> item_delete_confirm_accept;
+	public TranslatedItemStack<?> item_delete_confirm_cancel;
 	public TranslatedItemStack<?> item_assign_player;
 	public TranslatedItemStack<?> item_remove_player;
 	public TranslatedItemStack<?> item_select_player;
@@ -49,13 +51,13 @@ public class RoleMenu extends ModuleComponent<Regions> {
 		super(context.namespace("role"));
 
 		final var ctx = get_context();
-        item_rename        = new TranslatedItemStack<>(ctx, "rename",        Material.NAME_TAG,                          1, "Used to rename the role.");
-        item_delete        = new TranslatedItemStack<>(ctx, "delete",        namespaced_key("vane", "decoration_tnt_1"), 1, "Used to delete this role.");
-		// TODO icon...
-        item_role_settings = new TranslatedItemStack<>(ctx, "role_settings", Material.FLOWER_POT,                        1, "Used to open the role settings.");
-        item_assign_player = new TranslatedItemStack<>(ctx, "assign_player", Material.PLAYER_HEAD,                       1, "Used to assign players to this role.");
-        item_remove_player = new TranslatedItemStack<>(ctx, "remove_player", Material.PLAYER_HEAD,                       1, "Used to remove players from this role.");
-        item_select_player = new TranslatedItemStack<>(ctx, "select_player", Material.PLAYER_HEAD,                       1, "Used to represent a player in the role assignment/removal list.");
+        item_rename                = new TranslatedItemStack<>(ctx, "rename",                Material.NAME_TAG,                          1, "Used to rename the role.");
+        item_delete                = new TranslatedItemStack<>(ctx, "delete",                namespaced_key("vane", "decoration_tnt_1"), 1, "Used to delete this role.");
+        item_delete_confirm_accept = new TranslatedItemStack<>(ctx, "delete_confirm_accept", namespaced_key("vane", "decoration_tnt_1"), 1, "Used to confirm deleting the role.");
+        item_delete_confirm_cancel = new TranslatedItemStack<>(ctx, "delete_confirm_cancel", Material.PRISMARINE_SHARD,                  1, "Used to cancel deleting the role.");
+        item_assign_player         = new TranslatedItemStack<>(ctx, "assign_player",         Material.PLAYER_HEAD,                       1, "Used to assign players to this role.");
+        item_remove_player         = new TranslatedItemStack<>(ctx, "remove_player",         Material.PLAYER_HEAD,                       1, "Used to remove players from this role.");
+        item_select_player         = new TranslatedItemStack<>(ctx, "select_player",         Material.PLAYER_HEAD,                       1, "Used to represent a player in the role assignment/removal list.");
 	}
 
 	public Menu create(final RegionGroup group, final Role role, final Player player) {
@@ -72,11 +74,11 @@ public class RoleMenu extends ModuleComponent<Regions> {
 			role_menu.add(menu_item_delete(group, role));
 		}
 
-		role_menu.add(menu_item_role_settings(role));
 		if (role.role_type() != Role.RoleType.OTHERS) {
 			role_menu.add(menu_item_assign_player(group, role));
 			role_menu.add(menu_item_remove_player(group, role));
 		}
+		// TODO integrate settings directly
 
 		return role_menu;
 	}
@@ -103,14 +105,16 @@ public class RoleMenu extends ModuleComponent<Regions> {
 
 	private MenuWidget menu_item_delete(final RegionGroup group, final Role role) {
 		return new MenuItem(1, item_delete.item(), (player, menu, self) -> {
-			group.remove_role(role.id());
-			mark_persistent_storage_dirty();
-			return ClickResult.SUCCESS;
-		});
-	}
-
-	private MenuWidget menu_item_role_settings(final Role role) {
-		return new MenuItem(4, item_role_settings.item(), (player, menu, self) -> {
+			menu.close(player);
+			MenuFactory.confirm(get_context(), lang_delete_confirm_title.str(),
+				item_delete_confirm_accept.item(), (player2) -> {
+					group.remove_role(role.id());
+					mark_persistent_storage_dirty();
+					return ClickResult.SUCCESS;
+				}, item_delete_confirm_cancel.item(), (player2) -> {
+					menu.open(player2);
+				})
+				.open(player);
 			return ClickResult.SUCCESS;
 		});
 	}
@@ -119,6 +123,7 @@ public class RoleMenu extends ModuleComponent<Regions> {
 		return new MenuItem(7, item_assign_player.item(), (player, menu, self) -> {
 			menu.close(player);
 			final var all_players = Arrays.stream(get_module().getServer().getOfflinePlayers())
+				.filter(p -> !role.id().equals(group.player_to_role().get(p.getUniqueId())))
 				.sorted((a, b) -> {
 					int c = Boolean.compare(b.isOnline(), a.isOnline());
 					if (c != 0) { return c; }
@@ -131,7 +136,8 @@ public class RoleMenu extends ModuleComponent<Regions> {
 				p -> item_select_player.alternative(ItemUtil.skull_for_player(p), "§a§l" + p.getName()),
 				filter,
 				(player2, m, p) -> {
-					m.close(player2);
+					all_players.remove(p);
+					m.update();
 					// TODO assing
 					return ClickResult.SUCCESS;
 				}, player2 -> {
@@ -145,6 +151,7 @@ public class RoleMenu extends ModuleComponent<Regions> {
 		return new MenuItem(8, item_remove_player.item(), (player, menu, self) -> {
 			menu.close(player);
 			final var all_players = Arrays.stream(get_module().getServer().getOfflinePlayers())
+				.filter(p -> role.id().equals(group.player_to_role().get(p.getUniqueId())))
 				.sorted((a, b) -> {
 					int c = Boolean.compare(b.isOnline(), a.isOnline());
 					if (c != 0) { return c; }
@@ -157,7 +164,8 @@ public class RoleMenu extends ModuleComponent<Regions> {
 				p -> item_select_player.alternative(ItemUtil.skull_for_player(p), "§a§l" + p.getName()),
 				filter,
 				(player2, m, p) -> {
-					m.close(player2);
+					all_players.remove(p);
+					m.update();
 					// TODO remove
 					return ClickResult.SUCCESS;
 				}, player2 -> {
