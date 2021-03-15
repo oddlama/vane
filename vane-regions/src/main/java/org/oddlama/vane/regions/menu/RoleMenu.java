@@ -47,23 +47,40 @@ public class RoleMenu extends ModuleComponent<Regions> {
 	public TranslatedItemStack<?> item_remove_player;
 	public TranslatedItemStack<?> item_select_player;
 
+	public TranslatedItemStack<?> item_setting_toggle_on;
+	public TranslatedItemStack<?> item_setting_toggle_off;
+	public TranslatedItemStack<?> item_setting_info_admin;
+	public TranslatedItemStack<?> item_setting_info_build;
+	public TranslatedItemStack<?> item_setting_info_use;
+	public TranslatedItemStack<?> item_setting_info_container;
+	public TranslatedItemStack<?> item_setting_info_portal;
+
 	public RoleMenu(Context<Regions> context) {
 		super(context.namespace("role"));
 
 		final var ctx = get_context();
-        item_rename                = new TranslatedItemStack<>(ctx, "rename",                Material.NAME_TAG,                          1, "Used to rename the role.");
-        item_delete                = new TranslatedItemStack<>(ctx, "delete",                namespaced_key("vane", "decoration_tnt_1"), 1, "Used to delete this role.");
-        item_delete_confirm_accept = new TranslatedItemStack<>(ctx, "delete_confirm_accept", namespaced_key("vane", "decoration_tnt_1"), 1, "Used to confirm deleting the role.");
-        item_delete_confirm_cancel = new TranslatedItemStack<>(ctx, "delete_confirm_cancel", Material.PRISMARINE_SHARD,                  1, "Used to cancel deleting the role.");
-        item_assign_player         = new TranslatedItemStack<>(ctx, "assign_player",         Material.PLAYER_HEAD,                       1, "Used to assign players to this role.");
-        item_remove_player         = new TranslatedItemStack<>(ctx, "remove_player",         Material.PLAYER_HEAD,                       1, "Used to remove players from this role.");
-        item_select_player         = new TranslatedItemStack<>(ctx, "select_player",         Material.PLAYER_HEAD,                       1, "Used to represent a player in the role assignment/removal list.");
+        item_rename                 = new TranslatedItemStack<>(ctx, "rename",                   Material.NAME_TAG,                          1, "Used to rename the role.");
+        item_delete                 = new TranslatedItemStack<>(ctx, "delete",                   namespaced_key("vane", "decoration_tnt_1"), 1, "Used to delete this role.");
+        item_delete_confirm_accept  = new TranslatedItemStack<>(ctx, "delete_confirm_accept",    namespaced_key("vane", "decoration_tnt_1"), 1, "Used to confirm deleting the role.");
+        item_delete_confirm_cancel  = new TranslatedItemStack<>(ctx, "delete_confirm_cancel",    Material.PRISMARINE_SHARD,                  1, "Used to cancel deleting the role.");
+        item_assign_player          = new TranslatedItemStack<>(ctx, "assign_player",            Material.PLAYER_HEAD,                       1, "Used to assign players to this role.");
+        item_remove_player          = new TranslatedItemStack<>(ctx, "remove_player",            Material.PLAYER_HEAD,                       1, "Used to remove players from this role.");
+        item_select_player          = new TranslatedItemStack<>(ctx, "select_player",            Material.PLAYER_HEAD,                       1, "Used to represent a player in the role assignment/removal list.");
+
+		item_setting_toggle_on      = new TranslatedItemStack<>(ctx, "setting_toggle_on",        Material.GREEN_TERRACOTTA,                  1, "Used to represent a toggle button with current state on.");
+		item_setting_toggle_off     = new TranslatedItemStack<>(ctx, "setting_toggle_off",       Material.RED_TERRACOTTA,                    1, "Used to represent a toggle button with current state off.");
+		item_setting_info_admin     = new TranslatedItemStack<>(ctx, "setting_admin_info",       Material.GOLDEN_APPLE,                      1, "Used to represent the info for the admin setting.");
+		item_setting_info_build     = new TranslatedItemStack<>(ctx, "setting_build_info",       Material.IRON_PICKAXE,                      1, "Used to represent the info for the build setting.");
+		item_setting_info_use       = new TranslatedItemStack<>(ctx, "setting_use_info",         Material.DARK_OAK_DOOR,                     1, "Used to represent the info for the use setting.");
+		item_setting_info_container = new TranslatedItemStack<>(ctx, "setting_container_info",   Material.CHEST,                             1, "Used to represent the info for the container setting.");
+		item_setting_info_portal    = new TranslatedItemStack<>(ctx, "setting_portal_info",      Material.ENDER_PEARL,                       1, "Used to represent the info for the portal setting.");
 	}
 
 	public Menu create(final RegionGroup group, final Role role, final Player player) {
 		final var columns = 9;
-		final var title = lang_title.str(role.name());
-		final var role_menu = new Menu(get_context(), Bukkit.createInventory(null, columns, title));
+		final var rows = 3;
+		final var title = lang_title.str(role.color() + "§l" + role.name());
+		final var role_menu = new Menu(get_context(), Bukkit.createInventory(null, rows * columns, title));
 
 		final var is_admin = player.getUniqueId().equals(group.owner())
 			|| group.get_role(player.getUniqueId())
@@ -78,7 +95,16 @@ public class RoleMenu extends ModuleComponent<Regions> {
 			role_menu.add(menu_item_assign_player(group, role));
 			role_menu.add(menu_item_remove_player(group, role));
 		}
-		// TODO integrate settings directly
+
+		add_menu_item_setting(role_menu, role, 0, item_setting_info_admin,     RoleSetting.ADMIN);
+		add_menu_item_setting(role_menu, role, 2, item_setting_info_build,     RoleSetting.BUILD);
+		add_menu_item_setting(role_menu, role, 4, item_setting_info_use,       RoleSetting.USE);
+		add_menu_item_setting(role_menu, role, 5, item_setting_info_container, RoleSetting.CONTAINER);
+		add_menu_item_setting(role_menu, role, 8, item_setting_info_portal,    RoleSetting.PORTAL);
+
+		// TODO g money
+		// TODO g pportal ontegratoin
+		// TODO g listeners
 
 		role_menu.on_natural_close(player2 ->
 			get_module().menus.region_group_menu
@@ -143,7 +169,7 @@ public class RoleMenu extends ModuleComponent<Regions> {
 				(player2, m, p) -> {
 					all_players.remove(p);
 					m.update();
-					// TODO assing
+					group.player_to_role().put(p.getUniqueId(), role.id());
 					return ClickResult.SUCCESS;
 				}, player2 -> {
 					menu.open(player2);
@@ -171,12 +197,39 @@ public class RoleMenu extends ModuleComponent<Regions> {
 				(player2, m, p) -> {
 					all_players.remove(p);
 					m.update();
-					// TODO remove
+					group.player_to_role().remove(p.getUniqueId());
 					return ClickResult.SUCCESS;
 				}, player2 -> {
 					menu.open(player2);
 				}).open(player);
 			return ClickResult.SUCCESS;
+		});
+	}
+
+	private void add_menu_item_setting(final Menu role_menu, final Role role, final int col, final TranslatedItemStack<?> item_info, final RoleSetting setting) {
+		role_menu.add(new MenuItem(1 * 9 + col, item_info.item(), (player, menu, self) -> {
+			return ClickResult.IGNORE;
+		}));
+
+		role_menu.add(new MenuItem(2 * 9 + col, null, (player, menu, self) -> {
+			if (setting == RoleSetting.ADMIN) {
+				// Admin setting is immutable
+				return ClickResult.ERROR;
+			}
+
+			role.settings().put(setting, !role.get_setting(setting));
+			mark_persistent_storage_dirty();
+			menu.update();
+			return ClickResult.SUCCESS;
+		}) {
+			@Override
+			public void item(final ItemStack item) {
+				if (role.get_setting(setting)) {
+					super.item(item_setting_toggle_on.item());
+				} else {
+					super.item(item_setting_toggle_off.item());
+				}
+			}
 		});
 	}
 

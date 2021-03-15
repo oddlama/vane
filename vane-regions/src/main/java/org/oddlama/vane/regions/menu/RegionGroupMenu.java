@@ -58,14 +58,17 @@ public class RegionGroupMenu extends ModuleComponent<Regions> {
 
 	public Menu create(final RegionGroup group, final Player player) {
 		final var columns = 9;
-		final var title = lang_title.str(group.name());
+		final var title = lang_title.str("§5§l" + group.name());
 		final var region_group_menu = new Menu(get_context(), Bukkit.createInventory(null, columns, title));
 		region_group_menu.tag(new RegionGroupMenuTag(group.id()));
 
 		final var is_owner = player.getUniqueId().equals(group.owner());
 		if (is_owner) {
 			region_group_menu.add(menu_item_rename(group));
-			region_group_menu.add(menu_item_delete(group));
+			// Delete only if this isn't the default group
+			if (!get_module().get_or_create_default_region_group(player.getUniqueId()).id().equals(group.id())) {
+				region_group_menu.add(menu_item_delete(group));
+			}
 		}
 
 		region_group_menu.add(menu_item_create_role(group));
@@ -114,6 +117,11 @@ public class RegionGroupMenu extends ModuleComponent<Regions> {
 						return ClickResult.ERROR;
 					}
 
+					// Assert that this isn't the default group
+					if (get_module().get_or_create_default_region_group(player2.getUniqueId()).id().equals(group.id())) {
+						return ClickResult.ERROR;
+					}
+
 					get_module().remove_region_group(group);
 					return ClickResult.SUCCESS;
 				}, item_delete_confirm_cancel.item(), (player2) -> {
@@ -142,7 +150,7 @@ public class RegionGroupMenu extends ModuleComponent<Regions> {
 
 			final var filter = new Filter.StringFilter<Role>((r, str) -> r.name().toLowerCase().contains(str));
 			MenuFactory.generic_selector(get_context(), player, lang_select_role_title.str(), lang_filter_roles_title.str(), all_roles,
-				r -> item_select_role.item("§a§l" + r.name()),
+				r -> item_select_role.item(r.color() + "§l" + r.name()),
 				filter,
 				(player2, m, role) -> {
 					m.close(player2);

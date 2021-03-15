@@ -293,6 +293,43 @@ menus:
     # %1$s: Role name
     title: "§8§lGroup: %1$s"
 
+    setting_toggle_on:
+      name: "§a§lENABLED"
+      lore: []
+    setting_toggle_off:
+      name: "§c§lDISABLED"
+      lore: []
+    setting_admin_info:
+      name: "§b§lAdmin"
+      lore:
+        - ""
+        - "§7The admin flag cannot be toggled"
+        - "§7and is only set for the admin group."
+    setting_build_info:
+      name: "§b§lBuild"
+      lore:
+        - ""
+        - "§7Allows building and mining blocks."
+    setting_use_info:
+      name: "§b§lUse Things"
+      lore:
+        - ""
+        - "§7Allows using various things like doors,"
+        - "§7levers, buttons or redstone components."
+        - "§7Also controls §6view-access§7 to inventories."
+    setting_container_info:
+      name: "§b§lContainers"
+      lore:
+        - ""
+        - "§7Allows interaction with inventories."
+        - "§7Without this flag, nothing can be taken"
+        - "§7from or put into inventories."
+    setting_portal_info:
+      name: "§b§lUse Portals"
+      lore:
+        - ""
+        - "§7Allows interacting with portals."
+
     # The item used to rename a role.
     rename:
       name: "§b§lRename Role"

@@ -242,7 +242,7 @@ public class MainMenu extends ModuleComponent<Regions> {
 	}
 
 	private MenuWidget menu_item_create_region_group() {
-		return new MenuItem(6, item_create_region_group.item(), (player, menu, self) -> {
+		return new MenuItem(7, item_create_region_group.item(), (player, menu, self) -> {
 			menu.close(player);
 			get_module().menus.enter_region_group_name_menu.create(player, (player2, name) -> {
 				final var group = new RegionGroup(name, player2.getUniqueId());
@@ -258,7 +258,7 @@ public class MainMenu extends ModuleComponent<Regions> {
 	}
 
 	private MenuWidget menu_item_list_region_groups() {
-		return new MenuItem(7, item_list_region_groups.item(), (player, menu, self) -> {
+		return new MenuItem(8, item_list_region_groups.item(), (player, menu, self) -> {
 			menu.close(player);
 			final var all_region_groups = get_module().all_region_groups()
 				.stream()
@@ -284,7 +284,7 @@ public class MainMenu extends ModuleComponent<Regions> {
 	}
 
 	private MenuWidget menu_item_current_region_group(final RegionGroup region_group) {
-		return new MenuItem(8, item_current_region_group.item(), (player, menu, self) -> {
+		return new MenuItem(6, item_current_region_group.item(), (player, menu, self) -> {
 			menu.close(player);
 			get_module().menus.region_group_menu.create(region_group, player).open(player);
 			return ClickResult.SUCCESS;

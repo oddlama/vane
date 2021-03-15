@@ -115,7 +115,17 @@ public class Role {
 	public String name() { return name; }
 	public void name(final String name) { this.name = name; }
 	public RoleType role_type() { return role_type; }
+	public Map<RoleSetting, Boolean> settings() { return settings; }
 	public boolean get_setting(final RoleSetting setting) {
 		return settings.getOrDefault(setting, setting.default_value(false));
+	}
+
+	public String color() {
+		switch (role_type) {
+			case ADMINS: return "§c";
+			case OTHERS: return "§a";
+			default:
+			case NORMAL: return "§b";
+		}
 	}
 }
