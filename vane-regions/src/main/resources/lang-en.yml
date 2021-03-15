@@ -80,40 +80,58 @@ menus:
     # This item is shown when the selection is invalid
     # %1$s: Checkmark: primary block set
     # %2$s: Checkmark: secondary block set
-    # %3$s: Checkmark: doesn't interact existing region
-    # %4$s: Checkmark: minimum area condition met
-    # %5$s: Checkmark: not bigger than max
-    # %6$s: Selection extent X
-    # %7$s: Selection extent Y
-    # %8$s: Selection extent Z
-    # %9$s: min extent X
-    # %10$s: min extent Y
-    # %11$s: min extent Z
-    # %12$s: max extent X
-    # %13$s: max extent Y
-    # %14$s: max extent Z
+    # %3$s: Checkmark: same world
+    # %4$s: Checkmark: doesn't interact existing region
+    # %5$s: Checkmark: minimum area condition met
+    # %6$s: Checkmark: not bigger than max
+    # %7$s: Checkmark: can afford
+    # %8$s: Selection extent X
+    # %9$s: Selection extent Y
+    # %10$s: Selection extent Z
+    # %11$s: min extent X
+    # %12$s: min extent Y
+    # %13$s: min extent Z
+    # %14$s: max extent X
+    # %15$s: max extent Y
+    # %16$s: max extent Z
     create_region_invalid_selection:
       name: "§c§lInvalid Selection"
       lore:
         - ""
-        - "§6Your selection (%6$s§6 x %7$s§6 x %8$s§6) is invalid!"
+        - "§6Your selection (%8$s§6 x %9$s§6 x %10$s§6) is invalid!"
         - "§6It must meet the following requirements:"
         - "§7- %1$s§7 Primary block set"
         - "§7- %2$s§7 Secondary block set"
-        - "§7- %3$s§7 Doesn't intersect existing region"
-        - "§7- %4$s§7 Covers minimum area (%9$s§7 x %10$s§7 x %11$s§7)"
-        - "§7- %5$s§7 Not bigger than (%12$s§7 x %13$s§7 x %14$s§7)"
+        - "§7- %3$s§7 Blocks are in same world"
+        - "§7- %4$s§7 Doesn't intersect existing region"
+        - "§7- %5$s§7 Covers minimum area (%11$s§7 x %12$s§7 x %13$s§7)"
+        - "§7- %6$s§7 Not bigger than (%14$s§7 x %15$s§7 x %16$s§7)"
+        - "§7- %7$s§7 Can afford"
 
     # This item is shown when the selection is valid
     # %1$s: Selection extent X
     # %2$s: Selection extent Y
     # %3$s: Selection extent Z
+    # %4$s: min extent X
+    # %5$s: min extent Y
+    # %6$s: min extent Z
+    # %7$s: max extent X
+    # %8$s: max extent Y
+    # %9$s: max extent Z
     create_region_valid_selection:
       name: "§a§lCreate Region"
       lore:
         - ""
         - "§7Your selection (%1$s§7 x %2$s§7 x %3$s§7) is valid."
-        - "§7Create a new region by clinking this item."
+        - "§7Click here to create a new region."
+        - ""
+        - "§7- §a✓ Primary block set"
+        - "§7- §a✓ Secondary block set"
+        - "§7- §a✓ Blocks are in same world"
+        - "§7- §a✓ Doesn't intersect existing region"
+        - "§7- §a✓ Covers minimum area (%4$s§7 x %5$s§7 x %6$s§7)"
+        - "§7- §a✓ Not bigger than (%7$s§7 x %8$s§7 x %9$s§7)"
+        - "§7- §a✓ Can afford"
 
     # This item is used to cancel a pending selection.
     cancel_selection:

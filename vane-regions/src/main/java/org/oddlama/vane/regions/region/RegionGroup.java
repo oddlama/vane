@@ -140,6 +140,7 @@ public class RegionGroup {
 
 	public UUID id() { return id; }
 	public String name() { return name; }
+	public void name(final String name) { this.name = name; }
 	public UUID owner() { return owner; }
 	public boolean get_setting(final EnvironmentSetting setting) {
 		return settings.getOrDefault(setting, setting.default_value());
@@ -151,5 +152,19 @@ public class RegionGroup {
 
 	public Role get_role(final UUID player) {
 		return roles.get(player_to_role.getOrDefault(player, role_others));
+	}
+
+	public void remove_role(final UUID role_id) {
+		player_to_role.values().removeIf(r -> role_id.equals(r));
+		roles.remove(role_id);
+	}
+
+	public Collection<Role> roles() {
+		return roles.values();
+	}
+
+	public boolean is_orphan(final Regions region) {
+		// TODO
+		return false;
 	}
 }

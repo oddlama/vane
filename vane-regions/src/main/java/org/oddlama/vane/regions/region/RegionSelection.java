@@ -37,6 +37,7 @@ import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.block.Block;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.world.ChunkLoadEvent;
@@ -74,7 +75,7 @@ public class RegionSelection {
 	}
 
 	public boolean intersects_existing() {
-		final var extent = new RegionExtent(primary, secondary);
+		final var extent = extent();
 		for (final var r : regions.all_regions()) {
 			if (!r.extent().min().getWorld().equals(primary.getWorld())) {
 				continue;
@@ -88,7 +89,12 @@ public class RegionSelection {
 		return false;
 	}
 
-	public boolean is_valid() {
+	public boolean can_afford(final Player player) {
+		// TODO
+		return true;
+	}
+
+	public boolean is_valid(final Player player) {
 		// Both blocks set
 		if (primary == null || secondary == null) {
 			return false;
@@ -118,14 +124,15 @@ public class RegionSelection {
 			return false;
 		}
 
+		// Check that the player can afford it
+		if (!can_afford(player)) {
+			return false;
+		}
+
 		return true;
 	}
 
-	public RegionExtent to_extent() {
-		if (!is_valid()) {
-			return null;
-		}
-
+	public RegionExtent extent() {
 		return new RegionExtent(primary, secondary);
 	}
 }

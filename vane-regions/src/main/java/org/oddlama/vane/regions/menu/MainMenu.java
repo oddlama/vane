@@ -53,7 +53,7 @@ public class MainMenu extends ModuleComponent<Regions> {
         item_create_region_invalid_selection = new TranslatedItemStack<>(ctx, "create_region_invalid_selection", Material.BARRIER,              1, "Used to indicate an invalid selection.");
         item_create_region_valid_selection   = new TranslatedItemStack<>(ctx, "create_region_valid_selection",   Material.WRITABLE_BOOK,        1, "Used to create a new region with the current selection.");
         item_cancel_selection                = new TranslatedItemStack<>(ctx, "cancel_selection",                Material.RED_TERRACOTTA,       1, "Used to cancel region selection.");
-        item_list_regions                    = new TranslatedItemStack<>(ctx, "list_regions",                    Material.COMPASS,              1, "Used to select a region the player may administrate.");
+        item_list_regions                    = new TranslatedItemStack<>(ctx, "list_regions",                    Material.COMPASS,              1, "Used to select a region the player owns.");
         item_select_region                   = new TranslatedItemStack<>(ctx, "select_region",                   Material.FILLED_MAP,           1, "Used to represent a region in the region selection list.");
         item_current_region                  = new TranslatedItemStack<>(ctx, "current_region",                  Material.FILLED_MAP,           1, "Used to access the region the player currently stands in.");
         item_create_region_group             = new TranslatedItemStack<>(ctx, "create_region_group",             Material.WRITABLE_BOOK,        1, "Used to create a new region group.");
@@ -76,7 +76,7 @@ public class MainMenu extends ModuleComponent<Regions> {
 		// Check if target selection would be allowed
 		if (selection_mode) {
 			final var selection = get_module().get_region_selection(player);
-			main_menu.add(menu_item_create_region(selection));
+			main_menu.add(menu_item_create_region(player, selection));
 			main_menu.add(menu_item_cancel_selection());
 		} else {
 			main_menu.add(menu_item_start_selection());
@@ -111,13 +111,17 @@ public class MainMenu extends ModuleComponent<Regions> {
 		});
 	}
 
-	private MenuWidget menu_item_create_region(final RegionSelection selection) {
+	private MenuWidget menu_item_create_region(final Player final_player, final RegionSelection selection) {
 		return new MenuItem(0, null, (player, menu, self) -> {
-			if (selection.is_valid()) {
+			if (selection.is_valid(final_player)) {
 				menu.close(player);
 
 				get_module().menus.enter_region_name_menu.create(player, (player2, name) -> {
-					return ClickResult.SUCCESS;
+					if (get_module().create_region_from_selection(final_player, name)) {
+						return ClickResult.SUCCESS;
+					} else {
+						return ClickResult.ERROR;
+					}
 				}).on_natural_close(player2 -> {
 					menu.open(player2);
 				}).open(player);
@@ -129,24 +133,29 @@ public class MainMenu extends ModuleComponent<Regions> {
 		}) {
 			@Override
 			public void item(final ItemStack item) {
-				if (selection.is_valid()) {
+				if (selection.is_valid(final_player)) {
 					final var dx = 1 + Math.abs(selection.primary.getX() - selection.secondary.getX());
 					final var dy = 1 + Math.abs(selection.primary.getY() - selection.secondary.getY());
 					final var dz = 1 + Math.abs(selection.primary.getZ() - selection.secondary.getZ());
 					super.item(item_create_region_valid_selection.item(
 							"§a" + dx,
 							"§a" + dy,
-							"§a" + dz
+							"§a" + dz,
+							"§b" + get_module().config_min_region_extent_x,
+							"§b" + get_module().config_min_region_extent_y,
+							"§b" + get_module().config_min_region_extent_z,
+							"§b" + get_module().config_max_region_extent_x,
+							"§b" + get_module().config_max_region_extent_y,
+							"§b" + get_module().config_max_region_extent_z
 						));
 				} else {
 					boolean is_primary_set = selection.primary != null;
 					boolean is_secondary_set = selection.secondary != null;
-					boolean same_world = selection.primary.getWorld().equals(selection.secondary.getWorld());
-					is_secondary_set &= same_world;
+					boolean same_world = is_primary_set && is_secondary_set && selection.primary.getWorld().equals(selection.secondary.getWorld());
 
-					boolean minimum_satisified, maximum_satisfied;
+					boolean minimum_satisified, maximum_satisfied, no_intersection, can_afford;
 					String sdx, sdy, sdz;
-					if (is_primary_set && is_secondary_set) {
+					if (is_primary_set && is_secondary_set && same_world) {
 						final var dx = 1 + Math.abs(selection.primary.getX() - selection.secondary.getX());
 						final var dy = 1 + Math.abs(selection.primary.getY() - selection.secondary.getY());
 						final var dz = 1 + Math.abs(selection.primary.getZ() - selection.secondary.getZ());
@@ -162,23 +171,27 @@ public class MainMenu extends ModuleComponent<Regions> {
 							dx <= get_module().config_max_region_extent_x &&
 							dy <= get_module().config_max_region_extent_y &&
 							dz <= get_module().config_max_region_extent_z;
+						no_intersection = !selection.intersects_existing();
+						can_afford = selection.can_afford(final_player);
 					} else {
 						sdx = "§7?";
 						sdy = "§7?";
 						sdz = "§7?";
 						minimum_satisified = false;
 						maximum_satisfied = false;
+						no_intersection = true;
+						can_afford = false;
 					}
 
 					final var extent_color = minimum_satisified && maximum_satisfied ? "§a" : "§c";
-					final var no_intersection = !selection.intersects_existing();
-
 					super.item(item_create_region_invalid_selection.item(
-							is_primary_set     ? "§a✓" : "§c✗✕",
-							is_secondary_set   ? "§a✓" : "§c✗✕",
-							no_intersection    ? "§a✓" : "§c✗✕",
-							minimum_satisified ? "§a✓" : "§c✗✕",
-							maximum_satisfied  ? "§a✓" : "§c✗✕",
+							is_primary_set     ? "§a✓" : "§c✕",
+							is_secondary_set   ? "§a✓" : "§c✕",
+							same_world         ? "§a✓" : "§c✕",
+							no_intersection    ? "§a✓" : "§c✕",
+							minimum_satisified ? "§a✓" : "§c✕",
+							maximum_satisfied  ? "§a✓" : "§c✕",
+							can_afford         ? "§a✓" : "§c✕",
 							extent_color + sdx,
 							extent_color + sdy,
 							extent_color + sdz,
@@ -199,9 +212,7 @@ public class MainMenu extends ModuleComponent<Regions> {
 			menu.close(player);
 			final var all_regions = get_module().all_regions()
 				.stream()
-				.filter(r -> r.region_group(get_module())
-				             .get_role(player.getUniqueId())
-				             .get_setting(RoleSetting.ADMIN))
+				.filter(r -> player.getUniqueId().equals(r.owner()))
 				.sorted((a, b) -> a.name().compareToIgnoreCase(b.name()))
 				.collect(Collectors.toList());
 

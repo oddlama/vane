@@ -177,6 +177,10 @@ public class Regions extends Module<Regions> {
 		return storage_regions.values();
 	}
 
+	public Collection<RegionGroup> all_region_groups() {
+		return storage_region_groups.values();
+	}
+
 	public void start_region_selection(final Player player) {
 		regions_selections.put(player.getUniqueId(), new RegionSelection(this));
 		lang_start_region_selection.send(player);
@@ -242,6 +246,19 @@ public class Regions extends Module<Regions> {
 
 	public RegionGroup get_region_group(final UUID region_group) {
 		return storage_region_groups.get(region_group);
+	}
+
+	public boolean create_region_from_selection(final Player player, final String name) {
+		final var selection = get_region_selection(player);
+		if (!selection.is_valid(player)) {
+			return false;
+		}
+
+		final var def_region_group = get_or_create_default_region_group(player.getUniqueId());
+		final var region = new Region(name, player.getUniqueId(), selection.extent(), def_region_group.id());
+		add_region(region);
+		cancel_region_selection(player);
+		return true;
 	}
 
 	public void add_region(final Region region) {

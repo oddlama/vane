@@ -113,6 +113,7 @@ public class Role {
 
 	public UUID id() { return id; }
 	public String name() { return name; }
+	public void name(final String name) { this.name = name; }
 	public RoleType role_type() { return role_type; }
 	public boolean get_setting(final RoleSetting setting) {
 		return settings.getOrDefault(setting, setting.default_value(false));

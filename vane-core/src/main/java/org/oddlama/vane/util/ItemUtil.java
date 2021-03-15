@@ -21,6 +21,7 @@ import net.minecraft.server.v1_16_R3.Item;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.craftbukkit.v1_16_R3.enchantments.CraftEnchantment;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -212,6 +213,14 @@ public class ItemUtil {
 			// By enchantments
 			return compare_enchantments(a, b);
 		}
+	}
+
+	public static ItemStack skull_for_player(final OfflinePlayer player) {
+		final var item = new ItemStack(Material.PLAYER_HEAD);
+		final var meta = (SkullMeta)item.getItemMeta();
+		meta.setOwningPlayer(player);
+		item.setItemMeta(meta);
+		return item;
 	}
 
 	public static ItemStack skull_with_texture(final String name, final String base64_texture) {

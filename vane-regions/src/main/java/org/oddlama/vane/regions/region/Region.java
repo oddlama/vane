@@ -87,6 +87,15 @@ public class Region {
 		return region;
 	}
 
+	private Region() {}
+	public Region(final String name, final UUID owner, final RegionExtent extent, final UUID region_group) {
+		this.id = UUID.randomUUID();
+		this.name = name;
+		this.owner = owner;
+		this.extent = extent;
+		this.region_group = region_group;
+	}
+
 	private UUID id;
 	private String name;
 	private UUID owner;
@@ -95,11 +104,13 @@ public class Region {
 
 	public UUID id() { return id; }
 	public String name() { return name; }
+	public void name(final String name) { this.name = name; }
 	public UUID owner() { return owner; }
 	public RegionExtent extent() { return extent; }
 
-	private RegionGroup cached_region_group;
+	private RegionGroup cached_region_group = null;
 	public UUID region_group_id() { return region_group; }
+	public void region_group_id(final UUID region_group) { this.region_group = region_group; }
 	public RegionGroup region_group(final Regions regions) {
 		if (cached_region_group == null) {
 			cached_region_group = regions.get_region_group(region_group);
