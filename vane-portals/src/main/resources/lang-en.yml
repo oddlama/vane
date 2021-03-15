@@ -355,7 +355,7 @@ menus:
     unlink_console_confirm_accept:
       name: "§c§lUNLINK CONSOLE"
       lore: []
-    # The item to cance unlinking.
+    # The item to cancel unlinking.
     unlink_console_confirm_cancel:
       name: "§a§lCancel"
       lore: []

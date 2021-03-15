@@ -125,13 +125,13 @@ menus:
         - "§7Your selection (%1$s§7 x %2$s§7 x %3$s§7) is valid."
         - "§7Click here to create a new region."
         - ""
-        - "§7- §a✓ Primary block set"
-        - "§7- §a✓ Secondary block set"
-        - "§7- §a✓ Blocks are in same world"
-        - "§7- §a✓ Doesn't intersect existing region"
-        - "§7- §a✓ Covers minimum area (%4$s§7 x %5$s§7 x %6$s§7)"
-        - "§7- §a✓ Not bigger than (%7$s§7 x %8$s§7 x %9$s§7)"
-        - "§7- §a✓ Can afford"
+        - "§7- §a✓§7 Primary block set"
+        - "§7- §a✓§7 Secondary block set"
+        - "§7- §a✓§7 Blocks are in same world"
+        - "§7- §a✓§7 Doesn't intersect existing region"
+        - "§7- §a✓§7 Covers minimum area (%4$s§7 x %5$s§7 x %6$s§7)"
+        - "§7- §a✓§7 Not bigger than (%7$s§7 x %8$s§7 x %9$s§7)"
+        - "§7- §a✓§7 Can afford"
 
     # This item is used to cancel a pending selection.
     cancel_selection:
@@ -324,6 +324,7 @@ menus:
     # This item is used to open the player removing menu for a role.
     remove_player:
       name: "§b§lRemove Players"
+      lore:
         - ""
         - "§7Remove players from this role by clicking on them."
         - "§7This means they will have no assigned role afterwards"
