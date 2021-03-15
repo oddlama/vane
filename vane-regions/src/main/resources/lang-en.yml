@@ -21,6 +21,23 @@ resource_pack_lang_code: 'en_us'
 # This message is sent when the player needs to select an area for
 # a new region.
 start_region_selection: "§aChoose an area by selecting two blocks via §bleft-§a and §bright-click§a with an empty hand."
+# This message is sent when the player selects the primary block
+# for a new region.
+# %1$s: Block X
+# %2$s: Block Y
+# %3$s: Block Z
+select_primary_block: "§aSelected (%1$s§a, %2$s§a, %3$s§a) as primary block."
+# This message is sent when the player selects the secondary block
+# for a new region.
+# %1$s: Block X
+# %2$s: Block Y
+# %3$s: Block Z
+select_secondary_block: "§aSelected (%1$s§a, %2$s§a, %3$s§a) as secondary block."
+
+command_region:
+  usage: "%1$s"
+  description: "Open the region management menu."
+  help: "Execute to open the region management menu."
 
 dynmap:
   # The label for the dynmap layer
@@ -49,6 +66,7 @@ menus:
   main:
     # The title for the main menu.
     title: "§8§lManage Regions"
+
     # The item used to start a new region selection.
     create_region_start_selection:
       name: "§a§lCreate Region"
@@ -58,12 +76,13 @@ menus:
         - "§6left-click§7 to select the first block and"
         - "§6right-click§7 to select the second block. The"
         - "§7volume between the blocks will become the region."
+
     # This item is shown when the selection is invalid
     # %1$s: Checkmark: primary block set
     # %2$s: Checkmark: secondary block set
-    # %3$s: Checkmark: minimum area condition met
-    # %4$s: Checkmark: not bigger than
-    # %5$s: Checkmark: doesn't interact existing region
+    # %3$s: Checkmark: doesn't interact existing region
+    # %4$s: Checkmark: minimum area condition met
+    # %5$s: Checkmark: not bigger than max
     # %6$s: Selection extent X
     # %7$s: Selection extent Y
     # %8$s: Selection extent Z
@@ -77,13 +96,14 @@ menus:
       name: "§c§lInvalid Selection"
       lore:
         - ""
-        - "§6Your selection (%6$s x %7$s x %8$s) is invalid!"
+        - "§6Your selection (%6$s§6 x %7$s§6 x %8$s§6) is invalid!"
         - "§6It must meet the following requirements:"
-        - "§7- %1$s Primary block set"
-        - "§7- %2$s Secondary block set"
-        - "§7- %5$s Doesn't intersect existing region"
-        - "§7- %3$s Covers minimum area (%9$s x %10$s x %11$s)"
-        - "§7- %4$s Not bigger than (%12$s x %13$s x %14$s)"
+        - "§7- %1$s§7 Primary block set"
+        - "§7- %2$s§7 Secondary block set"
+        - "§7- %3$s§7 Doesn't intersect existing region"
+        - "§7- %4$s§7 Covers minimum area (%9$s§7 x %10$s§7 x %11$s§7)"
+        - "§7- %5$s§7 Not bigger than (%12$s§7 x %13$s§7 x %14$s§7)"
+
     # This item is shown when the selection is valid
     # %1$s: Selection extent X
     # %2$s: Selection extent Y
@@ -92,21 +112,29 @@ menus:
       name: "§a§lCreate Region"
       lore:
         - ""
-        - "§7Your selection (%1$s x %2$s x %3$s) is valid."
+        - "§7Your selection (%1$s§7 x %2$s§7 x %3$s§7) is valid."
         - "§7Create a new region by clinking this item."
+
     # This item is used to cancel a pending selection.
     cancel_selection:
       name: "§c§lCancel Selection"
       lore: []
+
     # This item is used to select a region where the player is administrator.
     list_regions:
       name: "§b§lSelect Region"
       lore: []
+
+    # The title for the region selection menu
+    select_region_title: "§8§lSelect Region"
+    # The title for the region selection menu filter
+    filter_regions_title: "§8§lFilter Regions"
     # This item is used to represent a region in the selection menu.
     # %1$s: Region name
     select_region:
       name: "%1$s"
       lore: []
+
     # This item is a shortcut to select the region the player is standing in.
     # %1$s: Region name
     current_region:
@@ -116,6 +144,7 @@ menus:
         - "§7Region: %1$s"
         - ""
         - "§7Select the region you are standing in."
+
     # This item is used to create a new region group.
     create_region_group:
       name: "§a§lCreate Region Group"
@@ -125,10 +154,12 @@ menus:
         - "§7are used to set permissions for players"
         - "§7by assigning them roles. All regions in"
         - "§7a region group will share these permissions"
+
     # This item is used to select a region group.
     list_region_groups:
       name: "§b§lSelect region group"
       lore: []
+
     # This item is a shortcut to select the region group of the region the player is standing in.
     # %1$s: Region group name
     current_region_group:
@@ -139,6 +170,7 @@ menus:
         - ""
         - "§7Select the region group of the"
         - "§7region you are standing in."
+
     # This item is used to represent a region group in the selection menu.
     # %1$s: Region group name
     select_region_group:

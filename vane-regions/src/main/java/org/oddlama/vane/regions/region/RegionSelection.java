@@ -66,24 +66,59 @@ import org.oddlama.vane.regions.Regions;
 
 public class RegionSelection {
 	private Regions regions;
-	private Block primary = null;
-	private Block secondary = null;
+	public Block primary = null;
+	public Block secondary = null;
 
 	public RegionSelection(final Regions regions) {
 		this.regions = regions;
 	}
 
-	public void set_primary(final Block block) {
-		primary = block;
-	}
+	public boolean intersects_existing() {
+		final var extent = new RegionExtent(primary, secondary);
+		for (final var r : regions.all_regions()) {
+			if (!r.extent().min().getWorld().equals(primary.getWorld())) {
+				continue;
+			}
 
-	public void set_secondary(final Block block) {
-		secondary = block;
+			if (extent.intersects_extent(r.extent())) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	public boolean is_valid() {
-		// not null, worlds match, size at least X, at max Z
-		return false;
+		// Both blocks set
+		if (primary == null || secondary == null) {
+			return false;
+		}
+
+		// Worlds match
+		if (!primary.getWorld().equals(secondary.getWorld())) {
+			return false;
+		}
+
+		final var dx = 1 + Math.abs(primary.getX() - secondary.getX());
+		final var dy = 1 + Math.abs(primary.getY() - secondary.getY());
+		final var dz = 1 + Math.abs(primary.getZ() - secondary.getZ());
+
+		// min <= extent <= max
+		if (dx < regions.config_min_region_extent_x ||
+			dy < regions.config_min_region_extent_y ||
+			dz < regions.config_min_region_extent_z ||
+			dx > regions.config_max_region_extent_x ||
+			dy > regions.config_max_region_extent_y ||
+			dz > regions.config_max_region_extent_z) {
+			return false;
+		}
+
+		// Assert that it doesn't intersect an existing region
+		if (intersects_existing()) {
+			return false;
+		}
+
+		return true;
 	}
 
 	public RegionExtent to_extent() {

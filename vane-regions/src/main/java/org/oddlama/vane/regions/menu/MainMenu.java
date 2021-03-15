@@ -30,9 +30,7 @@ import org.oddlama.vane.regions.region.RoleSetting;
 
 public class MainMenu extends ModuleComponent<Regions> {
 	@LangMessage public TranslatedMessage lang_title;
-	@LangMessage public TranslatedMessage lang_unlink_console_confirm_title;
-	@LangMessage public TranslatedMessage lang_destroy_region_confirm_title;
-	@LangMessage public TranslatedMessage lang_select_target_title;
+	@LangMessage public TranslatedMessage lang_select_region_title;
 	@LangMessage public TranslatedMessage lang_filter_regions_title;
 
 	public TranslatedItemStack<?> item_create_region_start_selection;
@@ -132,20 +130,64 @@ public class MainMenu extends ModuleComponent<Regions> {
 			@Override
 			public void item(final ItemStack item) {
 				if (selection.is_valid()) {
-					// TODO show x or checkmark (doesn't intersect existing, cost)
+					final var dx = 1 + Math.abs(selection.primary.getX() - selection.secondary.getX());
+					final var dy = 1 + Math.abs(selection.primary.getY() - selection.secondary.getY());
+					final var dz = 1 + Math.abs(selection.primary.getZ() - selection.secondary.getZ());
 					super.item(item_create_region_valid_selection.item(
-							"§b1","§b2","§b3"
+							"§a" + dx,
+							"§a" + dy,
+							"§a" + dz
 						));
 				} else {
+					boolean is_primary_set = selection.primary != null;
+					boolean is_secondary_set = selection.secondary != null;
+					boolean same_world = selection.primary.getWorld().equals(selection.secondary.getWorld());
+					is_secondary_set &= same_world;
+
+					boolean minimum_satisified, maximum_satisfied;
+					String sdx, sdy, sdz;
+					if (is_primary_set && is_secondary_set) {
+						final var dx = 1 + Math.abs(selection.primary.getX() - selection.secondary.getX());
+						final var dy = 1 + Math.abs(selection.primary.getY() - selection.secondary.getY());
+						final var dz = 1 + Math.abs(selection.primary.getZ() - selection.secondary.getZ());
+						sdx = Integer.toString(dx);
+						sdy = Integer.toString(dy);
+						sdz = Integer.toString(dz);
+
+						minimum_satisified =
+							dx >= get_module().config_min_region_extent_x &&
+							dy >= get_module().config_min_region_extent_y &&
+							dz >= get_module().config_min_region_extent_z;
+						maximum_satisfied =
+							dx <= get_module().config_max_region_extent_x &&
+							dy <= get_module().config_max_region_extent_y &&
+							dz <= get_module().config_max_region_extent_z;
+					} else {
+						sdx = "§7?";
+						sdy = "§7?";
+						sdz = "§7?";
+						minimum_satisified = false;
+						maximum_satisfied = false;
+					}
+
+					final var extent_color = minimum_satisified && maximum_satisfied ? "§a" : "§c";
+					final var no_intersection = !selection.intersects_existing();
+
 					super.item(item_create_region_invalid_selection.item(
-							"§a✓",
-							"§c✗✕",
-							"§c✗✕",
-							"§a✓",
-							"§a✓",
-							"§b1", "§b2", "§b3",
-							"§b4", "§b5", "§b6",
-							"§b7", "§b8", "§b9"
+							is_primary_set     ? "§a✓" : "§c✗✕",
+							is_secondary_set   ? "§a✓" : "§c✗✕",
+							no_intersection    ? "§a✓" : "§c✗✕",
+							minimum_satisified ? "§a✓" : "§c✗✕",
+							maximum_satisfied  ? "§a✓" : "§c✗✕",
+							extent_color + sdx,
+							extent_color + sdy,
+							extent_color + sdz,
+							"§b" + get_module().config_min_region_extent_x,
+							"§b" + get_module().config_min_region_extent_y,
+							"§b" + get_module().config_min_region_extent_z,
+							"§b" + get_module().config_max_region_extent_x,
+							"§b" + get_module().config_max_region_extent_y,
+							"§b" + get_module().config_max_region_extent_z
 						));
 				}
 			}
@@ -164,7 +206,7 @@ public class MainMenu extends ModuleComponent<Regions> {
 				.collect(Collectors.toList());
 
 			final var filter = new Filter.StringFilter<Region>((r, str) -> r.name().toLowerCase().contains(str));
-			MenuFactory.generic_selector(get_context(), player, lang_select_target_title.str(), lang_filter_regions_title.str(), all_regions,
+			MenuFactory.generic_selector(get_context(), player, lang_select_region_title.str(), lang_filter_regions_title.str(), all_regions,
 				r -> item_select_region.item("§a§l" + r.name()),
 				filter,
 				(player2, m, region) -> {

@@ -58,6 +58,7 @@ import org.oddlama.vane.core.material.ExtendedMaterial;
 import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.core.persistent.PersistentSerializer;
 import org.oddlama.vane.regions.region.Region;
+import org.oddlama.vane.annotation.config.ConfigInt;
 import org.oddlama.vane.regions.region.RegionGroup;
 import org.oddlama.vane.regions.region.RegionSelection;
 import org.oddlama.vane.regions.region.Role;
@@ -120,6 +121,20 @@ public class Regions extends Module<Regions> {
 		PersistentSerializer.deserializers.put(RegionExtent.class,        RegionExtent::deserialize);
 	}
 
+	@ConfigInt(def = 4, min = 1, desc = "Minimum region extent in x direction.")
+	public int config_min_region_extent_x;
+	@ConfigInt(def = 4, min = 1, desc = "Minimum region extent in y direction.")
+	public int config_min_region_extent_y;
+	@ConfigInt(def = 4, min = 1, desc = "Minimum region extent in z direction.")
+	public int config_min_region_extent_z;
+
+	@ConfigInt(def = 2048, min = 1, desc = "Maximum region extent in x direction.")
+	public int config_max_region_extent_x;
+	@ConfigInt(def = 2048, min = 1, desc = "Maximum region extent in y direction.")
+	public int config_max_region_extent_y;
+	@ConfigInt(def = 2048, min = 1, desc = "Maximum region extent in z direction.")
+	public int config_max_region_extent_z;
+
 	// Primary storage for all regions (region.id → region)
 	@Persistent
 	private Map<UUID, Region> storage_regions = new HashMap<>();
@@ -149,6 +164,7 @@ public class Regions extends Module<Regions> {
 		//dynmap_layer = new RegionDynmapLayer(this);
 		new RegionEnvironmentSettingEnforcer(this);
 		new RegionRoleSettingEnforcer(this);
+		new RegionSelectionListener(this);
 	}
 
 	public void on_enable() {
