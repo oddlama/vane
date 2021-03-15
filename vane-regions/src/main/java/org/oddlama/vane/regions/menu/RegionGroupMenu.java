@@ -31,11 +31,14 @@ import org.oddlama.vane.regions.region.Role;
 
 public class RegionGroupMenu extends ModuleComponent<Regions> {
 	@LangMessage public TranslatedMessage lang_title;
+	@LangMessage public TranslatedMessage lang_delete_confirm_title;
 	@LangMessage public TranslatedMessage lang_select_role_title;
 	@LangMessage public TranslatedMessage lang_filter_roles_title;
 
 	public TranslatedItemStack<?> item_rename;
 	public TranslatedItemStack<?> item_delete;
+	public TranslatedItemStack<?> item_delete_confirm_accept;
+	public TranslatedItemStack<?> item_delete_confirm_cancel;
 	public TranslatedItemStack<?> item_environment_settings;
 	public TranslatedItemStack<?> item_create_role;
 	public TranslatedItemStack<?> item_list_roles;
@@ -45,13 +48,15 @@ public class RegionGroupMenu extends ModuleComponent<Regions> {
 		super(context.namespace("region_group"));
 
 		final var ctx = get_context();
-        item_rename               = new TranslatedItemStack<>(ctx, "rename",               Material.NAME_TAG,                          1, "Used to rename the region group.");
-        item_delete               = new TranslatedItemStack<>(ctx, "delete",               namespaced_key("vane", "decoration_tnt_1"), 1, "Used to delete this region group.");
+        item_rename                = new TranslatedItemStack<>(ctx, "rename",                Material.NAME_TAG,                          1, "Used to rename the region group.");
+        item_delete                = new TranslatedItemStack<>(ctx, "delete",                namespaced_key("vane", "decoration_tnt_1"), 1, "Used to delete this region group.");
+        item_delete_confirm_accept = new TranslatedItemStack<>(ctx, "delete_confirm_accept", namespaced_key("vane", "decoration_tnt_1"), 1, "Used to confirm deleting the region group.");
+        item_delete_confirm_cancel = new TranslatedItemStack<>(ctx, "delete_confirm_cancel", Material.PRISMARINE_SHARD,                  1, "Used to cancel deleting the region group.");
 		// TODO icon...
-        item_environment_settings = new TranslatedItemStack<>(ctx, "environment_settings", Material.FLOWER_POT,                        1, "Used to open the environment settings.");
-        item_create_role          = new TranslatedItemStack<>(ctx, "create_role",          Material.WRITABLE_BOOK,                     1, "Used to create a new role.");
-        item_list_roles           = new TranslatedItemStack<>(ctx, "list_roles",           Material.GLOBE_BANNER_PATTERN,              1, "Used to list all defined roles.");
-        item_select_role          = new TranslatedItemStack<>(ctx, "select_role",          Material.GLOBE_BANNER_PATTERN,              1, "Used to represent a role in the role selection list.");
+        item_environment_settings  = new TranslatedItemStack<>(ctx, "environment_settings",  Material.FLOWER_POT,                        1, "Used to open the environment settings.");
+        item_create_role           = new TranslatedItemStack<>(ctx, "create_role",           Material.WRITABLE_BOOK,                     1, "Used to create a new role.");
+        item_list_roles            = new TranslatedItemStack<>(ctx, "list_roles",            Material.GLOBE_BANNER_PATTERN,              1, "Used to list all defined roles.");
+        item_select_role           = new TranslatedItemStack<>(ctx, "select_role",           Material.GLOBE_BANNER_PATTERN,              1, "Used to represent a role in the role selection list.");
 	}
 
 	public Menu create(final RegionGroup group, final Player player) {
@@ -96,18 +101,26 @@ public class RegionGroupMenu extends ModuleComponent<Regions> {
 	private MenuWidget menu_item_delete(final RegionGroup group) {
 		final var orphan_checkbox = group.is_orphan(get_module()) ? "§a✓" : "§c✕";
 		return new MenuItem(1, item_delete.item(orphan_checkbox), (player, menu, self) -> {
-			if (!player.getUniqueId().equals(group.owner())) {
-				return ClickResult.ERROR;
-			}
-
 			if (!group.is_orphan(get_module())) {
 				return ClickResult.ERROR;
 			}
 
-			get_module().remove_region_group(group);
+			menu.close(player);
+			MenuFactory.confirm(get_context(), lang_delete_confirm_title.str(),
+				item_delete_confirm_accept.item(), (player2) -> {
+					if (!player2.getUniqueId().equals(group.owner())) {
+						return ClickResult.ERROR;
+					}
+
+					get_module().remove_region_group(group);
+					return ClickResult.SUCCESS;
+				}, item_delete_confirm_cancel.item(), (player2) -> {
+					menu.open(player2);
+				})
+				.tag(new RegionMenuTag(region.id()))
+				.open(player);
 			return ClickResult.SUCCESS;
 		});
-			// TODO item show if removable
 	}
 
 	private MenuWidget menu_item_environment_settings(final RegionGroup group) {

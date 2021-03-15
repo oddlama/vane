@@ -207,7 +207,7 @@ menus:
       lore: []
 
     # The item used to delete a region.
-    rename:
+    delete:
       name: "§c§lDelete Region"
       lore: []
     # The title for the delete confirmation dialog.
@@ -231,5 +231,61 @@ menus:
     # The item used to represent a region group.
     # %1$s: Region group name
     select_region_group:
+      name: "%1$s"
+      lore: []
+
+  # Settings for the region group menu.
+  region_group:
+    # The title for the region group menu.
+    # %1$s: Region name
+    title: "§8§lGroup: %1$s"
+
+    # The item used to rename a region group.
+    rename:
+      name: "§b§lRename Region"
+      lore: []
+
+    # The item used to delete a region group.
+    # %1$s: Checkmark: No region uses this group
+    delete:
+      name: "§c§lDelete Region Group"
+      lore:
+        - ""
+        - "§6Deletion requirements:"
+        - "§7- %1$s §7No region uses this group"
+    # The title for the delete confirmation dialog.
+    delete_confirm_title: "§c§lDelete region group?"
+    # The item to accept deleting.
+    delete_confirm_accept:
+      name: "§c§lDELETE REGION GROUP"
+      lore: []
+    # The item to cance deleting.
+    delete_confirm_cancel:
+      name: "§a§lCancel"
+      lore: []
+
+    # The item used to open the environment settings menu.
+    environment_settings:
+      name: "§b§lEnvironment Settings"
+      lore: []
+
+    # This item is used to create a new role.
+    create_role:
+      name: "§a§lCreate Role"
+      lore:
+        - ""
+        - "§7Create a new §brole§7. Roles are"
+        - "§7to set permissions for groups of players."
+
+    # This item is used to open the role menu for a role.
+    list_roles:
+      name: "§b§lRoles"
+      lore: []
+
+    select_role_title: "§8§lSelect Role"
+    filter_roless_title: "§8§lFilter Roles"
+    # This item is used to represent a role in the selection menu.
+    # %1$s: Role name
+    select_role:
       name: "%1$s"
       lore: []

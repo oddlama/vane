@@ -94,6 +94,7 @@ public class RegionMenu extends ModuleComponent<Regions> {
 
 	private MenuWidget menu_item_delete(final Region region) {
 		return new MenuItem(1, item_delete.item(), (player, menu, self) -> {
+			menu.close(player);
 			MenuFactory.confirm(get_context(), lang_delete_confirm_title.str(),
 				item_delete_confirm_accept.item(), (player2) -> {
 					if (!player2.getUniqueId().equals(region.owner())) {
