@@ -189,6 +189,8 @@ menus:
         - "§7Select the region group of the"
         - "§7region you are standing in."
 
+    select_region_group_title: "§8§lSelect Region Group"
+    filter_region_groups_title: "§8§lFilter Region Groups"
     # This item is used to represent a region group in the selection menu.
     # %1$s: Region group name
     select_region_group:

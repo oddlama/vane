@@ -32,6 +32,8 @@ public class MainMenu extends ModuleComponent<Regions> {
 	@LangMessage public TranslatedMessage lang_title;
 	@LangMessage public TranslatedMessage lang_select_region_title;
 	@LangMessage public TranslatedMessage lang_filter_regions_title;
+	@LangMessage public TranslatedMessage lang_select_region_group_title;
+	@LangMessage public TranslatedMessage lang_filter_region_groups_title;
 
 	public TranslatedItemStack<?> item_create_region_start_selection;
 	public TranslatedItemStack<?> item_create_region_invalid_selection;
@@ -241,12 +243,42 @@ public class MainMenu extends ModuleComponent<Regions> {
 
 	private MenuWidget menu_item_create_region_group() {
 		return new MenuItem(6, item_create_region_group.item(), (player, menu, self) -> {
+			menu.close(player);
+			get_module().menus.enter_region_group_name_menu.create(player, (player2, name) -> {
+				final var group = new RegionGroup(name, player2.getUniqueId());
+				get_module().add_region_group(group);
+				get_module().menus.region_group_menu.create(group, player).open(player);
+				return ClickResult.SUCCESS;
+			}).on_natural_close(player2 -> {
+				menu.open(player2);
+			}).open(player);
+
 			return ClickResult.SUCCESS;
 		});
 	}
 
 	private MenuWidget menu_item_list_region_groups() {
 		return new MenuItem(7, item_list_region_groups.item(), (player, menu, self) -> {
+			menu.close(player);
+			final var all_region_groups = get_module().all_region_groups()
+				.stream()
+				.filter(g -> player.getUniqueId().equals(g.owner())
+						     || g.get_role(player.getUniqueId())
+				                 .get_setting(RoleSetting.ADMIN))
+				.sorted((a, b) -> a.name().compareToIgnoreCase(b.name()))
+				.collect(Collectors.toList());
+
+			final var filter = new Filter.StringFilter<RegionGroup>((r, str) -> r.name().toLowerCase().contains(str));
+			MenuFactory.generic_selector(get_context(), player, lang_select_region_group_title.str(), lang_filter_region_groups_title.str(), all_region_groups,
+				r -> item_select_region_group.item("§a§l" + r.name()),
+				filter,
+				(player2, m, group) -> {
+					m.close(player2);
+					get_module().menus.region_group_menu.create(group, player).open(player);
+					return ClickResult.SUCCESS;
+				}, player2 -> {
+					menu.open(player2);
+				}).open(player);
 			return ClickResult.SUCCESS;
 		});
 	}
