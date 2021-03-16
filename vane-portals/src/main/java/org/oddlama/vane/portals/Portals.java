@@ -674,13 +674,20 @@ public class Portals extends Module<Portals> {
 	public void update_portal_visibility(final Portal portal) {
 		// Replace references to the portal everywhere, if visibility
 		// has changed.
-		if (portal.visibility() != Portal.Visibility.PUBLIC) {
+		if (portal.visibility() == Portal.Visibility.PRIVATE) {
 			for (final var other : storage_portals.values()) {
 				if (Objects.equals(other.target_id(), portal.id())) {
 					other.target_id(null);
 				}
 			}
-			// TODO don't hide for group access
+		} else if (portal.visibility() == Portal.Visibility.GROUP) {
+			// Remove from portals outside of the group
+			for (final var other : storage_portals.values()) {
+				if (Objects.equals(other.target_id(), portal.id()) &&
+					!is_regions_group_visible(other, portal)) {
+					other.target_id(null);
+				}
+			}
 		}
 
 		// Update dynmap marker

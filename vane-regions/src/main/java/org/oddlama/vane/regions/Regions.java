@@ -1,6 +1,7 @@
 package org.oddlama.vane.regions;
 
 import static org.oddlama.vane.util.BlockUtil.adjacent_blocks_3d;
+import org.bukkit.event.player.PlayerQuitEvent;
 import static org.oddlama.vane.util.BlockUtil.unpack;
 import static org.oddlama.vane.util.ItemUtil.name_item;
 import static org.oddlama.vane.util.Nms.item_handle;
@@ -27,11 +28,14 @@ import net.minecraft.server.v1_16_R3.EntityTypes;
 import net.minecraft.server.v1_16_R3.EnumCreatureType;
 
 import org.bukkit.Chunk;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
+import org.bukkit.World;
+import org.bukkit.Particle.DustOptions;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -148,7 +152,7 @@ public class Regions extends Module<Regions> {
 	// A map containing the current extent for each player who is currently selecting a region
 	// No key → Player not in selection mode
 	// extent.min or extent.max null → Selection mode active, but no selection has been made yet
-	private Map<UUID, RegionSelection> regions_selections = new HashMap<>();
+	private Map<UUID, RegionSelection> region_selections = new HashMap<>();
 
 	@LangMessage public TranslatedMessage lang_start_region_selection;
 
@@ -187,6 +191,8 @@ public class Regions extends Module<Regions> {
 		});
 
 		schedule_next_tick(this::delayed_on_enable);
+		// Every second: Visualize selections
+		schedule_task_timer(this::visualize_selections, 1l, 20l);
 	}
 
 	public Collection<Region> all_regions() {
@@ -198,20 +204,125 @@ public class Regions extends Module<Regions> {
 	}
 
 	public void start_region_selection(final Player player) {
-		regions_selections.put(player.getUniqueId(), new RegionSelection(this));
+		region_selections.put(player.getUniqueId(), new RegionSelection(this));
 		lang_start_region_selection.send(player);
 	}
 
 	public void cancel_region_selection(final Player player) {
-		regions_selections.remove(player.getUniqueId());
+		region_selections.remove(player.getUniqueId());
 	}
 
 	public boolean is_selecting_region(final Player player) {
-		return regions_selections.containsKey(player.getUniqueId());
+		return region_selections.containsKey(player.getUniqueId());
 	}
 
 	public RegionSelection get_region_selection(final Player player) {
-		return regions_selections.get(player.getUniqueId());
+		return region_selections.get(player.getUniqueId());
+	}
+
+	private static final int visualize_max_particels = 20000;
+	private static final int visualize_particles_per_block = 12;
+	private static final double visualize_stddev_compensation = 0.25;
+	private static final DustOptions visualize_dust_invalid = new DustOptions(Color.fromRGB(200, 60, 11), 0.0f);
+	private static final DustOptions visualize_dust_valid = new DustOptions(Color.fromRGB(120, 220, 60), 0.0f);
+
+	private void visualize_edge(final World world, final BlockPosition c1, final BlockPosition c2, final boolean valid) {
+		// Unfortunately, particle spawns are normal distributed.
+		// To still have a good visualization, we need to calculate a stddev that looks
+		// good. Empirically we chose a 1/2 of the radius.
+		final double mx = (c1.getX() + c2.getX()) / 2.0 + 0.5;
+		final double my = (c1.getY() + c2.getY()) / 2.0 + 0.5;
+		final double mz = (c1.getZ() + c2.getZ()) / 2.0 + 0.5;
+		double dx = Math.abs(c1.getX() - c2.getX());
+		double dy = Math.abs(c1.getY() - c2.getY());
+		double dz = Math.abs(c1.getZ() - c2.getZ());
+		final double len = dx + dy + dz;
+		final int count = Math.min(visualize_max_particels, (int)(visualize_particles_per_block * len));
+
+		// Compensate for using normal distributed particles
+		dx *= visualize_stddev_compensation;
+		dy *= visualize_stddev_compensation;
+		dz *= visualize_stddev_compensation;
+
+		// Spawn base particles
+		world.spawnParticle(Particle.END_ROD,
+				mx, my, mz,
+				count,
+				dx, dy, dz,
+				0.0,   // speed
+				null,  // data
+				true); // force
+
+		// Spawn colored particles indicating validity
+		world.spawnParticle(Particle.REDSTONE,
+				mx, my, mz,
+				count,
+				dx, dy, dz,
+				0.0,   // speed
+				valid ? visualize_dust_valid : visualize_dust_invalid, // data
+				true); // force
+	}
+
+	private void visualize_selections() {
+		for (final var selection_owner : region_selections.keySet()) {
+			final var selection = region_selections.get(selection_owner);
+			if (selection == null) {
+				continue;
+			}
+
+			// Get player for selection
+			final var offline_player = getServer().getOfflinePlayer(selection_owner);
+			if (!offline_player.isOnline()) {
+				continue;
+			}
+			final var player = offline_player.getPlayer();
+
+			// Both blocks set
+			if (selection.primary == null || selection.secondary == null) {
+				continue;
+			}
+
+			// Worlds match
+			if (!selection.primary.getWorld().equals(selection.secondary.getWorld())) {
+				continue;
+			}
+
+			// Extent is visualizable. Prepare parameters.
+			final var world = selection.primary.getWorld();
+			// Check if selection is valid
+			final var valid = selection.is_valid(player);
+
+			final var lx = Math.min(selection.primary.getX(), selection.secondary.getX());
+			final var ly = Math.min(selection.primary.getY(), selection.secondary.getY());
+			final var lz = Math.min(selection.primary.getZ(), selection.secondary.getZ());
+			final var hx = Math.max(selection.primary.getX(), selection.secondary.getX());
+			final var hy = Math.max(selection.primary.getY(), selection.secondary.getY());
+			final var hz = Math.max(selection.primary.getZ(), selection.secondary.getZ());
+
+			// Corners
+			final var A = new BlockPosition(lx, ly, lz);
+			final var B = new BlockPosition(hx, ly, lz);
+			final var C = new BlockPosition(hx, hy, lz);
+			final var D = new BlockPosition(lx, hy, lz);
+			final var E = new BlockPosition(lx, ly, hz);
+			final var F = new BlockPosition(hx, ly, hz);
+			final var G = new BlockPosition(hx, hy, hz);
+			final var H = new BlockPosition(lx, hy, hz);
+
+			// Visualize each edge
+			visualize_edge(world, A, B, valid);
+			visualize_edge(world, B, C, valid);
+			visualize_edge(world, C, D, valid);
+			visualize_edge(world, D, A, valid);
+			visualize_edge(world, E, F, valid);
+			visualize_edge(world, F, G, valid);
+			visualize_edge(world, G, H, valid);
+			visualize_edge(world, H, E, valid);
+			visualize_edge(world, A, E, valid);
+			visualize_edge(world, B, F, valid);
+			visualize_edge(world, C, G, valid);
+			visualize_edge(world, D, H, valid);
+		}
 	}
 
 	public void add_region_group(final RegionGroup group) {
@@ -433,5 +544,11 @@ public class Regions extends Module<Regions> {
 		mark_persistent_storage_dirty();
 
 		return region_group;
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void on_player_quit(final PlayerQuitEvent event) {
+		// Remove pending selection
+		cancel_region_selection(event.getPlayer());
 	}
 }
