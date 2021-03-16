@@ -183,9 +183,14 @@ public class Regions extends Module<Regions> {
 		portals.set_regions_group_visible_callback((src, dst) -> {
 			final var reg_dst = region_at(dst.spawn());
 			if (reg_dst == null) {
+				// Destination has group -> show all
 				return true;
 			}
 			final var reg_src = region_at(src.spawn());
+			if (reg_src == null) {
+				// Can't look inside groups from outside
+				return false;
+			}
 			return reg_dst.region_group_id().equals(reg_src.region_group_id());
 		});
 
@@ -388,7 +393,7 @@ public class Regions extends Module<Regions> {
 			return false;
 		}
 
-		final var def_region_group = get_or_create_default_region_group(player.getUniqueId());
+		final var def_region_group = get_or_create_default_region_group(player);
 		final var region = new Region(name, player.getUniqueId(), selection.extent(), def_region_group.id());
 		add_region(region);
 		cancel_region_selection(player);
@@ -531,18 +536,19 @@ public class Regions extends Module<Regions> {
 		return null;
 	}
 
-	public RegionGroup get_or_create_default_region_group(final UUID owner) {
-		final var region_group_id = storage_default_region_group.get(owner);
+	public RegionGroup get_or_create_default_region_group(final Player owner) {
+		final var owner_id = owner.getUniqueId();
+		final var region_group_id = storage_default_region_group.get(owner_id);
 		if (region_group_id != null) {
 			return get_region_group(region_group_id);
 		}
 
 		// Create and save owners's default group
-		final var region_group = new RegionGroup("[default]", owner);
+		final var region_group = new RegionGroup("[default] " + owner.getName(), owner_id);
 		add_region_group(region_group);
 
 		// Set group as the default
-		storage_default_region_group.put(owner, region_group.id());
+		storage_default_region_group.put(owner_id, region_group.id());
 		mark_persistent_storage_dirty();
 
 		return region_group;

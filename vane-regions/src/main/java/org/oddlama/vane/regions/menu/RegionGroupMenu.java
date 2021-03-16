@@ -87,7 +87,7 @@ public class RegionGroupMenu extends ModuleComponent<Regions> {
 		if (is_owner) {
 			region_group_menu.add(menu_item_rename(group));
 			// Delete only if this isn't the default group
-			if (!get_module().get_or_create_default_region_group(player.getUniqueId()).id().equals(group.id())) {
+			if (!get_module().get_or_create_default_region_group(player).id().equals(group.id())) {
 				region_group_menu.add(menu_item_delete(group));
 			}
 		}
@@ -146,7 +146,7 @@ public class RegionGroupMenu extends ModuleComponent<Regions> {
 					}
 
 					// Assert that this isn't the default group
-					if (get_module().get_or_create_default_region_group(player2.getUniqueId()).id().equals(group.id())) {
+					if (get_module().get_or_create_default_region_group(player2).id().equals(group.id())) {
 						return ClickResult.ERROR;
 					}
 
