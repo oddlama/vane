@@ -344,6 +344,10 @@ public class Portal {
 		public boolean is_transient_target() {
 			return this == GROUP || this == PRIVATE;
 		}
+
+		public boolean requires_regions() {
+			return this == GROUP || this == GROUP_INTERNAL;
+		}
 	}
 
 	public static class TargetSelectionComparator implements Comparator<Portal> {
