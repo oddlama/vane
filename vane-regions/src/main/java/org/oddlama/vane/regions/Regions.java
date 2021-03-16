@@ -222,9 +222,8 @@ public class Regions extends Module<Regions> {
 	private static final int visualize_max_particels = 20000;
 	private static final int visualize_particles_per_block = 12;
 	private static final double visualize_stddev_compensation = 0.25;
-	// TODO color ded
-	private static final DustOptions visualize_dust_invalid = new DustOptions(Color.fromRGB(200, 60, 11), 0.0f);
-	private static final DustOptions visualize_dust_valid = new DustOptions(Color.fromRGB(120, 220, 60), 0.0f);
+	private static final DustOptions visualize_dust_invalid = new DustOptions(Color.fromRGB(220, 60, 11), 1.0f);
+	private static final DustOptions visualize_dust_valid = new DustOptions(Color.fromRGB(120, 220, 60), 1.0f);
 
 	private void visualize_edge(final World world, final BlockPosition c1, final BlockPosition c2, final boolean valid) {
 		// Unfortunately, particle spawns are normal distributed.
