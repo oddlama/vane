@@ -95,6 +95,9 @@ public class RegionDynmapLayerDelegate {
 			return;
 		}
 
+		// Area markers can't be updated.
+		remove_marker(region.id());
+
 		final var min = region.extent().min();
 		final var max = region.extent().max();
 		final var world_name = min.getWorld().getName();
