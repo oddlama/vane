@@ -301,11 +301,17 @@ public class RegionRoleSettingEnforcer extends Listener<Regions> {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = false)
 	public void on_portal_link_console(final PortalLinkConsoleEvent event) {
 		if (event.getPortal() != null && event.getPortal().owner().equals(event.getPlayer().getUniqueId())) {
 			// Owner may always use their portals
 			return;
+		}
+
+		if (get_module().region_at(event.getPortal().spawn()) != null) {
+			// Portals in regions may be administrated by region administrators,
+			// not only be the owner
+			event.setCancelIfNotOwner(false);
 		}
 
 		// Portals in regions may only be administrated by region administrators
@@ -322,11 +328,17 @@ public class RegionRoleSettingEnforcer extends Listener<Regions> {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = false)
 	public void on_portal_unlink_console(final PortalUnlinkConsoleEvent event) {
 		if (event.getPortal().owner().equals(event.getPlayer().getUniqueId())) {
 			// Owner may always use their portals
 			return;
+		}
+
+		if (get_module().region_at(event.getPortal().spawn()) != null) {
+			// Portals in regions may be administrated by region administrators,
+			// not only be the owner
+			event.setCancelIfNotOwner(false);
 		}
 
 		// Portals in regions may only be administrated by region administrators
@@ -383,15 +395,14 @@ public class RegionRoleSettingEnforcer extends Listener<Regions> {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = false)
 	public void on_portal_change_settings(final PortalChangeSettingsEvent event) {
 		if (event.getPortal().owner().equals(event.getPlayer().getUniqueId())) {
 			// Owner may always use their portals
 			return;
 		}
 
-		final var region = get_module().region_at(event.getPortal().spawn());
-		if (region == null) {
+		if (get_module().region_at(event.getPortal().spawn()) == null) {
 			return;
 		}
 
@@ -400,8 +411,7 @@ public class RegionRoleSettingEnforcer extends Listener<Regions> {
 		event.setCancelIfNotOwner(false);
 
 		// Now check if the player has the permission
-		final var group = region.region_group(get_module());
-		if (!group.get_role(event.getPlayer().getUniqueId()).get_setting(RoleSetting.ADMIN)) {
+		if (check_setting_at(event.getPortal().spawn(), event.getPlayer(), RoleSetting.ADMIN, false)) {
 			event.setCancelled(true);
 		}
 	}
