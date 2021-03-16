@@ -352,7 +352,7 @@ public class RegionRoleSettingEnforcer extends Listener<Regions> {
 		}
 
 		// Check permission on target portal
-		if (check_setting_at(event.getTarget().spawn(), event.getPlayer(), RoleSetting.PORTAL, false)) {
+		if (event.getTarget() != null && event.getTarget().spawn(), event.getPlayer(), RoleSetting.PORTAL, false)) {
 			event.setCancelled(true);
 			return;
 		}
