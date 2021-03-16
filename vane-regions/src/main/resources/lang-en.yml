@@ -12,8 +12,400 @@
 
 # DO NOT CHANGE! The version of this language file. Used to determine
 # if the file needs to be updated.
-version: 1
+version: 2
 # The corresponding language code used in resource packs. Used for
 # resource pack generation. Typically this is a combination of the
 # language code (ISO 639) and the country code (ISO 3166).
 resource_pack_lang_code: 'en_us'
+
+# This message is sent when the player needs to select an area for
+# a new region.
+start_region_selection: "§aChoose an area by selecting two blocks via §bleft-§a and §bright-click§a with an empty hand."
+
+command_region:
+  usage: "%1$s"
+  description: "Open the region management menu."
+  help: "Execute to open the region management menu."
+
+dynmap:
+  # The label for the dynmap layer
+  layer_label: "Regions"
+  # The label for the dynmap markers
+  # %1$s: Region name
+  marker_label: "%1$s"
+
+menus:
+  # Settings for the region group naming menu.
+  enter_region_group_name:
+    # The title for the naming menu.
+    title: "§8§lEnter Region Group Name"
+
+  # Settings for the region naming menu.
+  enter_region_name:
+    # The title for the naming menu.
+    title: "§8§lEnter Region Name"
+
+  # Settings for the role naming menu.
+  enter_role_name:
+    # The title for the naming menu.
+    title: "§8§lEnter Role Name"
+
+  # Settings for the main menu.
+  main:
+    # The title for the main menu.
+    title: "§8§lManage Regions"
+
+    # The item used to start a new region selection.
+    create_region_start_selection:
+      name: "§a§lCreate Region"
+      lore:
+        - ""
+        - "§7Starts a new region selection. With an empty hand,"
+        - "§6left-click§7 to select the first block and"
+        - "§6right-click§7 to select the second block. The"
+        - "§7volume between the blocks will become the region."
+
+    # This item is shown when the selection is invalid
+    # %1$s: Checkmark: primary block set
+    # %2$s: Checkmark: secondary block set
+    # %3$s: Checkmark: same world
+    # %4$s: Checkmark: doesn't interact existing region
+    # %5$s: Checkmark: minimum area condition met
+    # %6$s: Checkmark: not bigger than max
+    # %7$s: Checkmark: can afford
+    # %8$s: Selection extent X
+    # %9$s: Selection extent Y
+    # %10$s: Selection extent Z
+    # %11$s: min extent X
+    # %12$s: min extent Y
+    # %13$s: min extent Z
+    # %14$s: max extent X
+    # %15$s: max extent Y
+    # %16$s: max extent Z
+    # %17$s: price and currency
+    create_region_invalid_selection:
+      name: "§c§lInvalid Selection"
+      lore:
+        - ""
+        - "§6Your selection (%8$s§6 x %9$s§6 x %10$s§6) is invalid!"
+        - "§6It must meet the following requirements:"
+        - "§7- %1$s§7 Primary block set"
+        - "§7- %2$s§7 Secondary block set"
+        - "§7- %3$s§7 Blocks are in same world"
+        - "§7- %4$s§7 Doesn't intersect existing region"
+        - "§7- %5$s§7 Covers minimum area (%11$s§7 x %12$s§7 x %13$s§7)"
+        - "§7- %6$s§7 Not bigger than (%14$s§7 x %15$s§7 x %16$s§7)"
+        - "§7- %7$s§7 Can afford (%17$s§7)"
+
+    # This item is shown when the selection is valid
+    # %1$s: Selection extent X
+    # %2$s: Selection extent Y
+    # %3$s: Selection extent Z
+    # %4$s: min extent X
+    # %5$s: min extent Y
+    # %6$s: min extent Z
+    # %7$s: max extent X
+    # %8$s: max extent Y
+    # %9$s: max extent Z
+    # %10$s: price and currency
+    create_region_valid_selection:
+      name: "§a§lCreate Region"
+      lore:
+        - ""
+        - "§7Your selection (%1$s§7 x %2$s§7 x %3$s§7) is valid."
+        - "§7Click here to create a new region."
+        - ""
+        - "§7- §a✓§7 Primary block set"
+        - "§7- §a✓§7 Secondary block set"
+        - "§7- §a✓§7 Blocks are in same world"
+        - "§7- §a✓§7 Doesn't intersect existing region"
+        - "§7- §a✓§7 Covers minimum area (%4$s§7 x %5$s§7 x %6$s§7)"
+        - "§7- §a✓§7 Not bigger than (%7$s§7 x %8$s§7 x %9$s§7)"
+        - "§7- §a✓§7 Can afford (%10$s§7)"
+
+    # This item is used to cancel a pending selection.
+    cancel_selection:
+      name: "§c§lCancel Selection"
+      lore: []
+
+    # This item is used to select a region where the player is administrator.
+    list_regions:
+      name: "§b§lSelect Region"
+      lore: []
+
+    # The title for the region selection menu
+    select_region_title: "§8§lSelect Region"
+    # The title for the region selection menu filter
+    filter_regions_title: "§8§lFilter Regions"
+    # This item is used to represent a region in the selection menu.
+    # %1$s: Region name
+    select_region:
+      name: "%1$s"
+      lore: []
+
+    # This item is a shortcut to select the region the player is standing in.
+    # %1$s: Region name
+    current_region:
+      name: "§b§lCurrent Region"
+      lore:
+        - ""
+        - "§7Region: %1$s"
+        - ""
+        - "§7Select the region you are standing in."
+
+    # This item is used to create a new region group.
+    create_region_group:
+      name: "§a§lCreate Region Group"
+      lore:
+        - ""
+        - "§7Create a new §bregion group§7. Region groups"
+        - "§7are used to set permissions for players"
+        - "§7by assigning them roles. All regions in"
+        - "§7a region group will share these permissions"
+
+    # This item is used to select a region group.
+    list_region_groups:
+      name: "§b§lSelect Region Group"
+      lore: []
+
+    # This item is a shortcut to select the region group of the region the player is standing in.
+    # %1$s: Region group name
+    current_region_group:
+      name: "§b§lCurrent Region Group"
+      lore:
+        - ""
+        - "§7Region Group: %1$s"
+        - ""
+        - "§7Select the region group of the"
+        - "§7region you are standing in."
+
+    select_region_group_title: "§8§lSelect Region Group"
+    filter_region_groups_title: "§8§lFilter Region Groups"
+    # This item is used to represent a region group in the selection menu.
+    # %1$s: Region group name
+    select_region_group:
+      name: "%1$s"
+      lore: []
+
+  # Settings for the region menu.
+  region:
+    # The title for the region menu.
+    # %1$s: Region name
+    title: "§8§lRegion: %1$s"
+
+    # The item used to rename a region.
+    rename:
+      name: "§b§lRename Region"
+      lore: []
+
+    # The item used to delete a region.
+    delete:
+      name: "§c§lDelete Region"
+      lore: []
+    # The title for the delete confirmation dialog.
+    delete_confirm_title: "§c§lDelete region?"
+    # The item to accept deleting.
+    delete_confirm_accept:
+      name: "§c§lDELETE REGION"
+      lore: []
+    # The item to cancel deleting.
+    delete_confirm_cancel:
+      name: "§a§lCancel"
+      lore: []
+
+    # The item used to open the list of region groups to assign the region to one
+    assign_region_group:
+      name: "§b§lAssign Group"
+      lore: []
+
+    select_region_group_title: "§8§lSelect Region Group"
+    filter_region_groups_title: "§8§lFilter Region Groups"
+    # The item used to represent a region group.
+    # %1$s: Region group name
+    select_region_group:
+      name: "%1$s"
+      lore: []
+
+  # Settings for the region group menu.
+  region_group:
+    # The title for the region group menu.
+    # %1$s: Region group name
+    title: "§8§lGroup: %1$s"
+
+    setting_toggle_on:
+      name: "§a§lENABLED"
+      lore: []
+    setting_toggle_off:
+      name: "§c§lDISABLED"
+      lore: []
+    setting_info_animals:
+      name: "§b§lAnimals"
+      lore:
+        - ""
+        - "§7Controls animal mob spawns."
+    setting_info_monsters:
+      name: "§b§lMonsters"
+      lore:
+        - ""
+        - "§7Controls monsters (hostile mob) spawns."
+    setting_info_explosions:
+      name: "§b§lExplosions"
+      lore:
+        - ""
+        - "§7Controls all types of explosions."
+    setting_info_fire:
+      name: "§b§lFire"
+      lore:
+        - ""
+        - "§7Controls whether fire burns blocks and spreads."
+    setting_info_pvp:
+      name: "§b§lPVP"
+      lore:
+        - ""
+        - "§7Controls whether PVP combat is allowed."
+    setting_info_trample:
+      name: "§b§lTrampling"
+      lore:
+        - ""
+        - "§7Controls whether farmland can be trampled."
+    setting_info_vine_growth:
+      name: "§b§lVine Growth"
+      lore:
+        - ""
+        - "§7Controls whether vines grow in the region."
+
+    # The item used to rename a region group.
+    rename:
+      name: "§b§lRename Group"
+      lore: []
+
+    # The item used to delete a region group.
+    # %1$s: Checkmark: No region uses this group
+    delete:
+      name: "§c§lDelete Group"
+      lore:
+        - ""
+        - "§6Deletion requirements:"
+        - "§7- %1$s §7No region uses this group"
+    # The title for the delete confirmation dialog.
+    delete_confirm_title: "§c§lDelete region group?"
+    # The item to accept deleting.
+    delete_confirm_accept:
+      name: "§c§lDELETE REGION GROUP"
+      lore: []
+    # The item to cancel deleting.
+    delete_confirm_cancel:
+      name: "§a§lCancel"
+      lore: []
+
+    # This item is used to create a new role.
+    create_role:
+      name: "§a§lCreate Role"
+      lore:
+        - ""
+        - "§7Create a new §brole§7. Roles are used"
+        - "§7to set permissions for groups of players."
+
+    # This item is used to open the role menu for a role.
+    list_roles:
+      name: "§b§lRoles"
+      lore: []
+
+    select_role_title: "§8§lSelect Role"
+    filter_roles_title: "§8§lFilter Roles"
+    # This item is used to represent a role in the selection menu.
+    # %1$s: Role name
+    select_role:
+      name: "%1$s"
+      lore: []
+
+  # Settings for the role menu.
+  role:
+    # The title for the role menu.
+    # %1$s: Role name
+    title: "§8§lGroup: %1$s"
+
+    setting_toggle_on:
+      name: "§a§lENABLED"
+      lore: []
+    setting_toggle_off:
+      name: "§c§lDISABLED"
+      lore: []
+    setting_info_admin:
+      name: "§b§lAdmin"
+      lore:
+        - ""
+        - "§7The admin flag cannot be toggled"
+        - "§7and is only set for the admin group."
+    setting_info_build:
+      name: "§b§lBuild"
+      lore:
+        - ""
+        - "§7Allows building and mining blocks."
+    setting_info_use:
+      name: "§b§lUse Things"
+      lore:
+        - ""
+        - "§7Allows using various things like doors,"
+        - "§7levers, buttons or redstone components."
+        - "§7Also controls §6view-access§7 to inventories."
+    setting_info_container:
+      name: "§b§lContainers"
+      lore:
+        - ""
+        - "§7Allows modifying interactions with inventories."
+        - "§7Without this flag, nothing can be taken"
+        - "§7from or put into inventories."
+    setting_info_portal:
+      name: "§b§lUse Portals"
+      lore:
+        - ""
+        - "§7Allows interacting with portals."
+
+    # The item used to rename a role.
+    rename:
+      name: "§b§lRename Role"
+      lore: []
+
+    # The item used to delete a role.
+    delete:
+      name: "§c§lDelete Role"
+      lore: []
+    # The title for the delete confirmation dialog.
+    delete_confirm_title: "§c§lDelete role?"
+    # The item to accept deleting.
+    delete_confirm_accept:
+      name: "§c§lDELETE ROLE"
+      lore: []
+    # The item to cancel deleting.
+    delete_confirm_cancel:
+      name: "§a§lCancel"
+      lore: []
+
+    # This item is used to open the player assignment menu for a role.
+    assign_player:
+      name: "§b§lAssign Players"
+      lore:
+        - ""
+        - "§7Assign players to this role by clicking on them."
+        - "§7If the player had a different role before, they will"
+        - "§7be reassigned to this role. The list will only show"
+        - "§7players that are not already assigned to this role."
+        - "§7You can remove players by using the §bRemove Player§7 menu."
+    # This item is used to open the player removing menu for a role.
+    remove_player:
+      name: "§b§lRemove Players"
+      lore:
+        - ""
+        - "§7Remove players from this role by clicking on them."
+        - "§7This means they will have no assigned role afterwards"
+        - "§7and will be handled by the catch-all role §6[others]"
+
+    select_assign_player_title: "§8§lAssign players"
+    select_remove_player_title: "§8§lRemove players"
+    filter_players_title: "§8§lFilter players"
+    # This item is used to represent a player in the selection menu.
+    # %1$s: Player name
+    select_player:
+      name: "%1$s"
+      lore: []

@@ -12,8 +12,307 @@
 
 # DO NOT CHANGE! The version of this language file. Used to determine
 # if the file needs to be updated.
-version: 1
+version: 2
 # The corresponding language code used in resource packs. Used for
 # resource pack generation. Typically this is a combination of the
 # language code (ISO 639) and the country code (ISO 3166).
 resource_pack_lang_code: 'de_de'
+
+start_region_selection: "§aChoose an area by selecting two blocks via §bleft-§a and §bright-click§a with an empty hand."
+
+command_region:
+  usage: "%1$s"
+  description: "Öffnet das Regions-Management-Menü."
+  help: "Ausführen um das Regins-Management-Menü zu öffnen."
+
+dynmap:
+  layer_label: "Regionen"
+  marker_label: "%1$s"
+
+menus:
+  enter_region_group_name:
+    title: "§8§lRegions-Gruppe benennen"
+
+  enter_region_name:
+    title: "§8§lRegion benennen"
+
+  enter_role_name:
+    title: "§8§lRolle benennen"
+
+  main:
+    title: "§8§lRegions-Management"
+
+    create_region_start_selection:
+      name: "§a§lRegion erstellen"
+      lore:
+        - ""
+        - "§7Beginnt eine neue Regionsauswahl. Mit leerer Hand,"
+        - "§6links-clicke§7 um den ersten block auszuwählen and"
+        - "§6rechts-clicke§7 um den zweiten block auszuwählen."
+        - "§7Das Volumen dazwischen wird die Region."
+
+    create_region_invalid_selection:
+      name: "§c§lUnzulässige Auswahl"
+      lore:
+        - ""
+        - "§6Deine Auswahl (%8$s§6 x %9$s§6 x %10$s§6) ist unzulässig!"
+        - "§6Folgende Anforderungen müssen erfüllt sein:"
+        - "§7- %1$s§7 Erster block gesetzt"
+        - "§7- %2$s§7 Zweiter block gesetzt"
+        - "§7- %3$s§7 Blöcke sind in der selben Welt"
+        - "§7- %4$s§7 Schneidet keine vorhandene Region"
+        - "§7- %5$s§7 Größer gleich (%11$s§7 x %12$s§7 x %13$s§7)"
+        - "§7- %6$s§7 Kleiner gleich (%14$s§7 x %15$s§7 x %16$s§7)"
+        - "§7- %7$s§7 Außreichend Währung im Inventar (%17$s§7)"
+
+    create_region_valid_selection:
+      name: "§a§lRegion erstellen"
+      lore:
+        - ""
+        - "§7Deine Auswahl (%1$s§7 x %2$s§7 x %3$s§7) is zulässig."
+        - "§7Clicke hier um eine neue Region zu erstellen."
+        - ""
+        - "§7- §a✓§7 Erster block gesetzt"
+        - "§7- §a✓§7 Zweiter block gesetzt"
+        - "§7- §a✓§7 Blöcke sind in der selben Welt"
+        - "§7- §a✓§7 Schneidet keine vorhandene Region"
+        - "§7- §a✓§7 Größer gleich (%11$s§7 x %12$s§7 x %13$s§7)"
+        - "§7- §a✓§7 Kleiner gleich (%14$s§7 x %15$s§7 x %16$s§7)"
+        - "§7- §a✓§7 Außreichend Währung im Inventar (%17$s§7)"
+
+    cancel_selection:
+      name: "§c§lAuswahl abbrechen"
+      lore: []
+
+    list_regions:
+      name: "§b§lRegion auswählen"
+      lore: []
+
+    select_region_title: "§8§lRegion auswählen"
+    filter_regions_title: "§8§lRegionen filtern"
+    select_region:
+      name: "%1$s"
+      lore: []
+
+    current_region:
+      name: "§b§lAktuelle Region"
+      lore:
+        - ""
+        - "§7Region: %1$s"
+        - ""
+        - "§7Wählt die Region aus, in der du dich gerade befindest."
+
+    create_region_group:
+      name: "§a§lRegions-Gruppe erstellen"
+      lore:
+        - ""
+        - "§7Erstelle eine neue new §bRegions-Gruppe§7. Regions-Gruppen"
+        - "§7werden verwendet um Rechte an Spieler zu vergeben,"
+        - "§7indem diesen Rollen zugewiesen werden. Alle Regionen in"
+        - "§7einer Regions-Gruppe teilen diese Einstellungen."
+
+    list_region_groups:
+      name: "§b§lRegions-Gruppe auswählen"
+      lore: []
+
+    current_region_group:
+      name: "§b§lAktuelle Regions-Gruppe"
+      lore:
+        - ""
+        - "§7Regions-Gruppe: %1$s"
+        - ""
+        - "§7Wählt die Regions-Gruppe aus,"
+        - "§7in der du dich gerade befindest."
+
+    select_region_group_title: "§8§lRegions-Gruppe auswählen"
+    filter_region_groups_title: "§8§lRegions-Gruppen filtern"
+    select_region_group:
+      name: "%1$s"
+      lore: []
+
+  region:
+    title: "§8§lRegion: %1$s"
+
+    rename:
+      name: "§b§lRegion Umbenennen"
+      lore: []
+
+    delete:
+      name: "§c§lRegion Entfernen"
+      lore: []
+    delete_confirm_title: "§c§lRegion entfernen?"
+    delete_confirm_accept:
+      name: "§c§lREGION ENTFERNEN"
+      lore: []
+    delete_confirm_cancel:
+      name: "§a§lAbbrechen"
+      lore: []
+
+    assign_region_group:
+      name: "§b§lGruppe zuweisen"
+      lore: []
+
+    select_region_group_title: "§8§lRegions-Gruppe auswählen"
+    filter_region_groups_title: "§8§lRegions-Gruppen filtern"
+    select_region_group:
+      name: "%1$s"
+      lore: []
+
+  region_group:
+    title: "§8§lGruppe: %1$s"
+
+    setting_toggle_on:
+      name: "§a§lAN"
+      lore: []
+    setting_toggle_off:
+      name: "§c§lAUS"
+      lore: []
+    setting_info_animals:
+      name: "§b§lTiere"
+      lore:
+        - ""
+        - "§7Kontrolliert ob Tiere spawnen."
+    setting_info_monsters:
+      name: "§b§lMonster"
+      lore:
+        - ""
+        - "§7Kontrolliert ob Monster / feindliche Mobs spawnen."
+    setting_info_explosions:
+      name: "§b§lExplosionen"
+      lore:
+        - ""
+        - "§7Kontrolliert alle Arten von Explosionen."
+    setting_info_fire:
+      name: "§b§lFeuer"
+      lore:
+        - ""
+        - "§7Kontrolliert ob Feuer Blöcke verbrennt und sich verbreitet."
+    setting_info_pvp:
+      name: "§b§lPVP"
+      lore:
+        - ""
+        - "§7Kontrolliert ob PVP-Kämpfe möglich sind."
+    setting_info_trample:
+      name: "§b§lZertrampeln"
+      lore:
+        - ""
+        - "§7Kontrolliert ob Acker zertrampelt werden können."
+    setting_info_vine_growth:
+      name: "§b§lRanken"
+      lore:
+        - ""
+        - "§7Kontrolliert ob Ranken in dieser Region wachsen."
+
+    rename:
+      name: "§b§lGruppe Umbenennen"
+      lore: []
+
+    delete:
+      name: "§c§lGruppe Entfernen"
+      lore:
+        - ""
+        - "§6Vorraussetzungen:"
+        - "§7- %1$s §7Keine Region verwendet diese Gruppe"
+    delete_confirm_title: "§c§lRegions-Gruppe entfernen?"
+    delete_confirm_accept:
+      name: "§c§lREGIONS-GRUPPE ENTFERNEN"
+      lore: []
+    delete_confirm_cancel:
+      name: "§a§lAbbrechen"
+      lore: []
+
+    create_role:
+      name: "§a§lRolle Erstellen"
+      lore:
+        - ""
+        - "§7Erstellt eine neue §bRolle§7. Rollen werden"
+        - "§7verwendet, um mehreren Spielern Rechte zuzuweisen."
+
+    list_roles:
+      name: "§b§lRollen"
+      lore: []
+
+    select_role_title: "§8§lRolle auswählen"
+    filter_roles_title: "§8§lRollen filtern"
+    select_role:
+      name: "%1$s"
+      lore: []
+
+  role:
+    title: "§8§lGruppe: %1$s"
+
+    setting_toggle_on:
+      name: "§a§lAN"
+      lore: []
+    setting_toggle_off:
+      name: "§c§lAUS"
+      lore: []
+    setting_info_admin:
+      name: "§b§lAdmin"
+      lore:
+        - ""
+        - "§7Die Admin-berechtigung kann nicht geändert werden,"
+        - "§7und ist nur für die Admin-gruppe aktiviert."
+    setting_info_build:
+      name: "§b§lBauen"
+      lore:
+        - ""
+        - "§7Kontrolliert, ob Blöcke gesetzt und abgebaut werden können."
+    setting_info_use:
+      name: "§b§lDinge verwenden"
+      lore:
+        - ""
+        - "§7Kontrolliert, ob Dinge wie Türen, Schalter,"
+        - "§7Knöpfe, Redstone-Komponenten, ... verwendet werden können."
+        - "§7Kontrolliert außerdem §6Lese-Zugriff§7 auf Inventare."
+    setting_info_container:
+      name: "§b§lInventare"
+      lore:
+        - ""
+        - "§7Erlaubt modifizierende Interaktion mit Inventaren."
+        - "§7Ohne diese Einstellung kann nichts aus Inventaren"
+        - "§7genommen oder hineingelegt werden."
+    setting_info_portal:
+      name: "§b§lPortale Verwenden"
+      lore:
+        - ""
+        - "§7Kontrolliert, ob mit Portalen interagiert werden kann."
+
+    rename:
+      name: "§b§lRolle Umbenennen"
+      lore: []
+
+    delete:
+      name: "§c§lRolle Entfernen"
+      lore: []
+    delete_confirm_title: "§c§lRolle entfernen?"
+    delete_confirm_accept:
+      name: "§c§lROLLE ENTFERNEN"
+      lore: []
+    delete_confirm_cancel:
+      name: "§a§lAbbrechen"
+      lore: []
+
+    assign_player:
+      name: "§b§lSpieler Zuweisen"
+      lore:
+        - ""
+        - "§7Weise Spieler dieser Rolle zu, indem du sie anklickst."
+        - "§7Wenn ein Spieler vorher einer andere Rolle zugewiesen war,"
+        - "§7wird seine Zuweisung zu dieser Rolle geändert. Diese Liste zeigt"
+        - "§7nur Spieler, welche nicht bereits dieser Rolle zugewiesen sind. Du kannst"
+        - "§7Spieler wieder entfernen indem du das §bSpieler Entfernen§7 Menü verwendest."
+    remove_player:
+      name: "§b§lSpieler Entfernen"
+      lore:
+        - ""
+        - "§7Entferne Spieler von dieser Rolle, indem du sie anklickst."
+        - "§7Dies bedeutet, dass diesen danach keine Rolle zugewiesen ist"
+        - "§7und sie von der Auffang-Rolle §6[others]§7 verwaltet werden."
+
+    select_assign_player_title: "§8§lSpieler zuweisen"
+    select_remove_player_title: "§8§lSpieler entfernen"
+    filter_players_title: "§8§lSpieler filtern"
+    select_player:
+      name: "%1$s"
+      lore: []

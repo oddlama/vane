@@ -87,15 +87,16 @@ If you don't want a certain feature, simply disable it.
 - [x] Build portals of arbitrary shape and orientation to get around easily (even horizontal!)
 - [x] Correctly retains velocity of players, so you can fly through it
 - [x] Apply different styles to portals so they fit your building style
-- [ ] Integrates with regions to control portal connection access
 - [x] Dynmap integration shows icons for global portals
 
 #### Regions (vane-regions)
 
-- [ ] Players can buy an arbitrarily shaped patch of land, and may control certain environmental conditions and player permissions for that area
-- [ ] Server-owned regions can be used to protect gobal areas (e.g. spawn).
-- [ ] Visual selection of any 2D polygon shape with arbitrary heights.
-- [ ] Seamless integration into chest-like menus instead of commands.
+- [x] Players can buy a patch of land, and may control certain environmental conditions and player permissions for that area
+- [x] Regions created by admins can be used to protect gobal areas (e.g. spawn).
+- [x] Seamless integration into chest-like menus instead of commands.
+- [x] Integrates with portals to allow only players witha the portal permission to operate portals in the region
+- [x] Integrates with dynmap to make regions visible on the online map
+- [x] Visual region selection indicator
 
 #### Proxy plugin (vane-waterfall)
 

@@ -168,7 +168,7 @@ public class PortalConstructor extends Listener<Portals> {
 		}
 
 		// Call event
-		final var event = new PortalLinkConsoleEvent(player, blocks, check_only, existing_portal);
+		final var event = new PortalLinkConsoleEvent(player, console, blocks, check_only, existing_portal);
 		get_module().getServer().getPluginManager().callEvent(event);
 		if (event.isCancelled()) {
 			lang_link_restricted.send(player);

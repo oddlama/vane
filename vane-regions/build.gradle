@@ -1,0 +1,4 @@
+dependencies {
+	implementation project(':vane-portals');
+	implementation group: 'us.dynmap', name: 'dynmap-api', version: '3.1-SNAPSHOT';
+}

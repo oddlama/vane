@@ -40,12 +40,13 @@ public class PortalActivator extends Listener<Portals> {
 			return;
 		}
 
+		event.setUseInteractedBlock(Event.Result.DENY);
+		event.setUseItemInHand(Event.Result.DENY);
+
 		final var player = event.getPlayer();
 		final var portal = get_module().portal_for(portal_block);
 		if (portal.open_console(get_module(), player, block)) {
 			swing_arm(player, event.getHand());
-			event.setUseInteractedBlock(Event.Result.DENY);
-			event.setUseItemInHand(Event.Result.DENY);
 		}
 	}
 

@@ -298,7 +298,7 @@ public class Portal {
 
 	public boolean open_console(final Portals portals, final Player player, final Block console) {
 		// Call event
-		final var event = new PortalOpenConsoleEvent(player, console, id());
+		final var event = new PortalOpenConsoleEvent(player, console, this);
 		portals.getServer().getPluginManager().callEvent(event);
 		if (event.isCancelled()) {
 			return false;
@@ -323,6 +323,7 @@ public class Portal {
 	public static enum Visibility {
 		PUBLIC,
 		GROUP,
+		GROUP_INTERNAL,
 		PRIVATE;
 
 		public Visibility prev() {
@@ -338,6 +339,14 @@ public class Portal {
 		public Visibility next() {
 			final var next = (ordinal() + 1) % values().length;
 			return values()[next];
+		}
+
+		public boolean is_transient_target() {
+			return this == GROUP || this == PRIVATE;
+		}
+
+		public boolean requires_regions() {
+			return this == GROUP || this == GROUP_INTERNAL;
 		}
 	}
 

@@ -103,8 +103,8 @@ public class PortalDynmapLayerDelegate {
 			return;
 		}
 
-		// Only public portals
-		if (portal.visibility() != Portal.Visibility.PUBLIC) {
+		// Don't show private portals
+		if (portal.visibility() == Portal.Visibility.PRIVATE) {
 			remove_marker(portal.id());
 			return;
 		}
