@@ -12,7 +12,7 @@
 
 # DO NOT CHANGE! The version of this language file. Used to determine
 # if the file needs to be updated.
-version: 1
+version: 2
 # The corresponding language code used in resource packs. Used for
 # resource pack generation. Typically this is a combination of the
 # language code (ISO 639) and the country code (ISO 3166).
@@ -135,7 +135,12 @@ menus:
     # This item is used to cycle visibility and indicate group visibility.
     visibility_group:
       name: "§b§lToggle Visibility"
-      lore: ["", "§bCurrent: §e§lRegion Group§r"]
+      lore: ["", "§bCurrent: §e§lRegion Group (members)§r"]
+
+    # This item is used to cycle visibility and indicate group visibility.
+    visibility_group_internal:
+      name: "§b§lToggle Visibility"
+      lore: ["", "§bCurrent: §e§lRegion Group (only visible internally)§r"]
 
     # This item is used to cycle visibility and indicate private visibility.
     visibility_private:

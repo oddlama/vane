@@ -323,6 +323,7 @@ public class Portal {
 	public static enum Visibility {
 		PUBLIC,
 		GROUP,
+		GROUP_INTERNAL,
 		PRIVATE;
 
 		public Visibility prev() {
@@ -338,6 +339,10 @@ public class Portal {
 		public Visibility next() {
 			final var next = (ordinal() + 1) % values().length;
 			return values()[next];
+		}
+
+		public boolean is_transient_target() {
+			return this == GROUP || this == PRIVATE;
 		}
 	}
 

@@ -180,18 +180,23 @@ public class Regions extends Module<Regions> {
 
 		// Register callback to portals module so portals
 		// can find out if two portals are in the same region group
-		portals.set_regions_group_visible_callback((src, dst) -> {
-			final var reg_dst = region_at(dst.spawn());
-			if (reg_dst == null) {
-				// Destination has group -> show all
+		portals.set_is_in_same_region_group_callback((a, b) -> {
+			final var reg_a = region_at(a.spawn());
+			final var reg_b = region_at(b.spawn());
+			if (reg_a == null || reg_b == null) {
+				return reg_a == reg_b;
+			}
+			return reg_a.region_group_id().equals(reg_b.region_group_id());
+		});
+
+		portals.set_player_can_use_portals_in_region_group_of_callback((player, portal) -> {
+			final var region = region_at(portal.spawn());
+			if (region == null) {
+				// No region -> no restriction.
 				return true;
 			}
-			final var reg_src = region_at(src.spawn());
-			if (reg_src == null) {
-				// Can't look inside groups from outside
-				return false;
-			}
-			return reg_dst.region_group_id().equals(reg_src.region_group_id());
+			final var group = region.region_group(get_module());
+			return group.get_role(player.getUniqueId()).get_setting(RoleSetting.PORTAL);
 		});
 
 		schedule_next_tick(this::delayed_on_enable);

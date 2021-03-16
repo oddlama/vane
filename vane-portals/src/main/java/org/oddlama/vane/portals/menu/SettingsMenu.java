@@ -32,6 +32,7 @@ public class SettingsMenu extends ModuleComponent<Portals> {
 	public TranslatedItemStack<?> item_select_style;
 	public TranslatedItemStack<?> item_visibility_public;
 	public TranslatedItemStack<?> item_visibility_group;
+	public TranslatedItemStack<?> item_visibility_group_internal;
 	public TranslatedItemStack<?> item_visibility_private;
 	public TranslatedItemStack<?> item_target_lock_on;
 	public TranslatedItemStack<?> item_target_lock_off;
@@ -41,15 +42,16 @@ public class SettingsMenu extends ModuleComponent<Portals> {
 		super(context.namespace("settings"));
 
 		final var ctx = get_context();
-        item_rename             = new TranslatedItemStack<>(ctx, "rename",             Material.NAME_TAG,                                   1, "Used to rename the portal.");
-        item_select_icon        = new TranslatedItemStack<>(ctx, "select_icon",        namespaced_key("vane", "decoration_end_portal_orb"), 1, "Used to select the portal's icon.");
-        item_select_style       = new TranslatedItemStack<>(ctx, "select_style",       Material.ITEM_FRAME,                                 1, "Used to change the portal's style.");
-        item_visibility_public  = new TranslatedItemStack<>(ctx, "visibility_public",  Material.ENDER_EYE,                                  1, "Used to change and indicate public visibility.");
-        item_visibility_group   = new TranslatedItemStack<>(ctx, "visibility_group",   Material.ENDER_PEARL,                                1, "Used to change and indicate group visibility.");
-        item_visibility_private = new TranslatedItemStack<>(ctx, "visibility_private", Material.FIREWORK_STAR,                              1, "Used to change and indicate private visibility.");
-        item_target_lock_on     = new TranslatedItemStack<>(ctx, "target_lock_on",     Material.SLIME_BALL,                                 1, "Used to toggle and indicate enabled target lock.");
-        item_target_lock_off    = new TranslatedItemStack<>(ctx, "target_lock_off",    Material.SNOWBALL,                                   1, "Used to toggle and indicate disabled target lock.");
-        item_back               = new TranslatedItemStack<>(ctx, "back",               Material.PRISMARINE_SHARD,                           1, "Used to go back to the previous menu.");
+        item_rename                    = new TranslatedItemStack<>(ctx, "rename",                    Material.NAME_TAG,                                   1, "Used to rename the portal.");
+        item_select_icon               = new TranslatedItemStack<>(ctx, "select_icon",               namespaced_key("vane", "decoration_end_portal_orb"), 1, "Used to select the portal's icon.");
+        item_select_style              = new TranslatedItemStack<>(ctx, "select_style",              Material.ITEM_FRAME,                                 1, "Used to change the portal's style.");
+        item_visibility_public         = new TranslatedItemStack<>(ctx, "visibility_public",         Material.ENDER_EYE,                                  1, "Used to change and indicate public visibility.");
+        item_visibility_group          = new TranslatedItemStack<>(ctx, "visibility_group",          Material.ENDER_PEARL,                                1, "Used to change and indicate group visibility.");
+        item_visibility_group_internal = new TranslatedItemStack<>(ctx, "visibility_group_internal", Material.FIRE_CHARGE,                                1, "Used to change and indicate group internal visibility.");
+        item_visibility_private        = new TranslatedItemStack<>(ctx, "visibility_private",        Material.FIREWORK_STAR,                              1, "Used to change and indicate private visibility.");
+        item_target_lock_on            = new TranslatedItemStack<>(ctx, "target_lock_on",            Material.SLIME_BALL,                                 1, "Used to toggle and indicate enabled target lock.");
+        item_target_lock_off           = new TranslatedItemStack<>(ctx, "target_lock_off",           Material.SNOWBALL,                                   1, "Used to toggle and indicate disabled target lock.");
+        item_back                      = new TranslatedItemStack<>(ctx, "back",                      Material.PRISMARINE_SHARD,                           1, "Used to go back to the previous menu.");
 	}
 
 	// HINT: We don't capture the previous menu and open a new one on exit,
@@ -171,9 +173,10 @@ public class SettingsMenu extends ModuleComponent<Portals> {
 			@Override
 			public void item(final ItemStack item) {
 				switch (portal.visibility()) {
-					case PUBLIC:  super.item(item_visibility_public.item());  break;
-					case GROUP:   super.item(item_visibility_group.item());   break;
-					case PRIVATE: super.item(item_visibility_private.item()); break;
+					case PUBLIC:         super.item(item_visibility_public.item()); break;
+					case GROUP:          super.item(item_visibility_group.item()); break;
+					case GROUP_INTERNAL: super.item(item_visibility_group_internal.item()); break;
+					case PRIVATE:        super.item(item_visibility_private.item()); break;
 				}
 			}
 		};

@@ -5,6 +5,7 @@ import static org.oddlama.vane.util.Util.namespaced_key;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import org.bukkit.entity.Player;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -125,9 +126,10 @@ public class ConsoleMenu extends ModuleComponent<Portals> {
 					.stream()
 					.filter(p -> {
 						switch (p.visibility()) {
-							case PUBLIC:  return true;
-							case GROUP:   return get_module().is_regions_group_visible(portal, p);
-							case PRIVATE: return player.getUniqueId().equals(p.owner());
+							case PUBLIC:         return true;
+							case GROUP:          return get_module().player_can_use_portals_in_region_group_of(player, p);
+							case GROUP_INTERNAL: return get_module().is_in_same_region_group(portal, p);
+							case PRIVATE:        return player.getUniqueId().equals(p.owner());
 						}
 						return false;
 					})

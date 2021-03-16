@@ -12,6 +12,7 @@ import static org.oddlama.vane.util.Util.namespaced_key;
 import org.oddlama.vane.core.functional.Function2;
 import java.util.ArrayList;
 import java.util.Collection;
+import org.bukkit.entity.Player;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -64,7 +65,7 @@ import org.oddlama.vane.portals.portal.PortalBlock;
 import org.oddlama.vane.portals.portal.PortalBlockLookup;
 import org.oddlama.vane.portals.portal.Style;
 
-@VaneModule(name = "portals", bstats = 8642, config_version = 1, lang_version = 1, storage_version = 1)
+@VaneModule(name = "portals", bstats = 8642, config_version = 2, lang_version = 2, storage_version = 2)
 public class Portals extends Module<Portals> {
 	// Add (de-)serializers
 	static {
@@ -182,6 +183,8 @@ public class Portals extends Module<Portals> {
 		constructor = new PortalConstructor(this);
 		new PortalTeleporter(this);
 		dynmap_layer = new PortalDynmapLayer(this);
+
+		persistent_storage_manager.add_migration_to(2, "Portal visibility GROUP_INTERNAL was added. This is a no-op.", (json) -> {});
 	}
 
 	@SuppressWarnings("unchecked")
@@ -235,23 +238,35 @@ public class Portals extends Module<Portals> {
 		}
 	}
 
-	// A lightweight callback to the regions module, if it is installed.
+	// Lightweight callbacks to the regions module, if it is installed.
 	// Lifting the callback storage into the portals module saves us
 	// from having to ship regions api with this module.
-	private Function2<Portal, Portal, Boolean> regions_group_visible_callback = null;
-	public void set_regions_group_visible_callback(final Function2<Portal, Portal, Boolean> callback) {
-		regions_group_visible_callback = callback;
+	private Function2<Portal, Portal, Boolean> is_in_same_region_group_callback = null;
+	public void set_is_in_same_region_group_callback(final Function2<Portal, Portal, Boolean> callback) {
+		is_in_same_region_group_callback = callback;
 	}
 
-	public boolean is_regions_group_visible(final Portal src, final Portal dst) {
-		if (regions_group_visible_callback == null) {
+	private Function2<Player, Portal, Boolean> player_can_use_portals_in_region_group_of_callback = null;
+	public void set_player_can_use_portals_in_region_group_of_callback(final Function2<Player, Portal, Boolean> callback) {
+		player_can_use_portals_in_region_group_of_callback = callback;
+	}
+
+	public boolean is_in_same_region_group(final Portal a, final Portal b) {
+		if (is_in_same_region_group_callback == null) {
 			return true;
 		}
-		return regions_group_visible_callback.apply(src, dst);
+		return is_in_same_region_group_callback.apply(a, b);
+	}
+
+	public boolean player_can_use_portals_in_region_group_of(final Player player, final Portal portal) {
+		if (player_can_use_portals_in_region_group_of_callback == null) {
+			return true;
+		}
+		return player_can_use_portals_in_region_group_of_callback.apply(player, portal);
 	}
 
 	public boolean is_regions_installed() {
-		return regions_group_visible_callback != null;
+		return is_in_same_region_group_callback != null;
 	}
 
 	public Style style(final NamespacedKey key) {
@@ -554,12 +569,12 @@ public class Portals extends Module<Portals> {
 		src.on_disconnect(this, dst);
 		dst.on_disconnect(this, src);
 
-		// Reset target id's if the target portal was private
-		if (dst.visibility() == Portal.Visibility.PRIVATE) {
+		// Reset target id's if the target portal was transient
+		if (dst.visibility().is_transient_target()) {
 			src.target_id(null);
 			mark_persistent_storage_dirty();
 		}
-		if (src.visibility() == Portal.Visibility.PRIVATE) {
+		if (src.visibility().is_transient_target()) {
 			dst.target_id(null);
 			mark_persistent_storage_dirty();
 		}
@@ -674,20 +689,29 @@ public class Portals extends Module<Portals> {
 	public void update_portal_visibility(final Portal portal) {
 		// Replace references to the portal everywhere, if visibility
 		// has changed.
-		if (portal.visibility() == Portal.Visibility.PRIVATE) {
-			for (final var other : storage_portals.values()) {
-				if (Objects.equals(other.target_id(), portal.id())) {
-					other.target_id(null);
+		switch (portal.visibility()) {
+			case PRIVATE:
+			case GROUP:
+				// Not visible from outside, these are transient.
+				for (final var other : storage_portals.values()) {
+					if (Objects.equals(other.target_id(), portal.id())) {
+						other.target_id(null);
+					}
 				}
-			}
-		} else if (portal.visibility() == Portal.Visibility.GROUP) {
-			// Remove from portals outside of the group
-			for (final var other : storage_portals.values()) {
-				if (Objects.equals(other.target_id(), portal.id()) &&
-					!is_regions_group_visible(other, portal)) {
-					other.target_id(null);
+				break;
+
+			case GROUP_INTERNAL:
+				// Remove from portals outside of the group
+				for (final var other : storage_portals.values()) {
+					if (Objects.equals(other.target_id(), portal.id()) &&
+						!is_in_same_region_group(other, portal)) {
+						other.target_id(null);
+					}
 				}
-			}
+				break;
+
+			default: // Nothing to do
+				break;
 		}
 
 		// Update dynmap marker
