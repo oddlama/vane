@@ -298,7 +298,7 @@ public class Portal {
 
 	public boolean open_console(final Portals portals, final Player player, final Block console) {
 		// Call event
-		final var event = new PortalOpenConsoleEvent(player, console, id());
+		final var event = new PortalOpenConsoleEvent(player, console, this);
 		portals.getServer().getPluginManager().callEvent(event);
 		if (event.isCancelled()) {
 			return false;

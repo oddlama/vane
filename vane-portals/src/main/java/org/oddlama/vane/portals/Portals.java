@@ -9,6 +9,7 @@ import static org.oddlama.vane.util.Nms.spawn;
 import static org.oddlama.vane.util.Util.ms_to_ticks;
 import static org.oddlama.vane.util.Util.namespaced_key;
 
+import org.oddlama.vane.core.functional.Function2;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -232,6 +233,25 @@ public class Portals extends Module<Portals> {
 		for (final var style : styles.values()) {
 			portal_area_materials.add(style.material(true, PortalBlock.Type.PORTAL));
 		}
+	}
+
+	// A lightweight callback to the regions module, if it is installed.
+	// Lifting the callback storage into the portals module saves us
+	// from having to ship regions api with this module.
+	private Function2<Portal, Portal, Boolean> regions_group_visible_callback = null;
+	public void set_regions_group_visible_callback(final Function2<Portal, Portal, Boolean> callback) {
+		regions_group_visible_callback = callback;
+	}
+
+	public boolean is_regions_group_visible(final Portal src, final Portal dst) {
+		if (regions_group_visible_callback == null) {
+			return true;
+		}
+		return regions_group_visible_callback.apply(src, dst);
+	}
+
+	public boolean is_regions_installed() {
+		return regions_group_visible_callback != null;
 	}
 
 	public Style style(final NamespacedKey key) {

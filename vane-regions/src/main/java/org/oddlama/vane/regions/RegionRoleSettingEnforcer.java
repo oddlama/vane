@@ -52,6 +52,15 @@ import org.bukkit.entity.Player;
 
 import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.module.Context;
+import org.oddlama.vane.portals.event.PortalActivateEvent;
+import org.oddlama.vane.portals.event.PortalChangeSettingsEvent;
+import org.oddlama.vane.portals.event.PortalConstructEvent;
+import org.oddlama.vane.portals.event.PortalDeactivateEvent;
+import org.oddlama.vane.portals.event.PortalDestroyEvent;
+import org.oddlama.vane.portals.event.PortalLinkConsoleEvent;
+import org.oddlama.vane.portals.event.PortalOpenConsoleEvent;
+import org.oddlama.vane.portals.event.PortalSelectTargetEvent;
+import org.oddlama.vane.portals.event.PortalUnlinkConsoleEvent;
 import org.oddlama.vane.regions.region.RoleSetting;
 
 public class RegionRoleSettingEnforcer extends Listener<Regions> {
@@ -246,6 +255,124 @@ public class RegionRoleSettingEnforcer extends Listener<Regions> {
 			if (check_setting_at(inventory.getLocation(), (Player)clicker, RoleSetting.CONTAINER, false)) {
 				event.setCancelled(true);
 			}
+		}
+	}
+
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+	public void on_portal_activate(final PortalActivateEvent event) {
+		if (check_setting_at(event.getPortal().spawn(), event.getPlayer(), RoleSetting.PORTAL, false)) {
+			event.setCancelled(true);
+		}
+	}
+
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+	public void on_portal_deactivate(final PortalDeactivateEvent event) {
+		if (check_setting_at(event.getPortal().spawn(), event.getPlayer(), RoleSetting.PORTAL, false)) {
+			event.setCancelled(true);
+		}
+	}
+
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+	public void on_portal_construct(final PortalConstructEvent event) {
+		// We have to check all blocks here, because otherwise players
+		// could "steal" boundary blocks from unowned regions
+		for (final var block : event.getBoundary().all_blocks()) {
+			// Portals in regions may only be constructed by region administrators
+			if (check_setting_at(block, event.getPlayer(), RoleSetting.ADMIN, false)) {
+				event.setCancelled(true);
+				return;
+			}
+		}
+	}
+
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+	public void on_portal_destroy(final PortalDestroyEvent event) {
+		// We do NOT have to check all blocks here, because
+		// an existing portal with its spawn inside a region
+		// that the player controls can be considered proof of authority.
+		if (check_setting_at(event.getPortal().spawn(), event.getPlayer(), RoleSetting.ADMIN, false)) {
+			// Portals in regions may only be destroyed by region administrators
+			event.setCancelled(true);
+		}
+	}
+
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+	public void on_portal_link_console(final PortalLinkConsoleEvent event) {
+		// Portals in regions may only be administrated by region administrators
+		// Check permission on console
+		if (check_setting_at(event.getConsole(), event.getPlayer(), RoleSetting.ADMIN, false)) {
+			event.setCancelled(true);
+			return;
+		}
+
+		// Check permission on portal if any
+		if (event.getPortal() != null && check_setting_at(event.getPortal().spawn(), event.getPlayer(), RoleSetting.ADMIN, false)) {
+			event.setCancelled(true);
+			return;
+		}
+	}
+
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+	public void on_portal_unlink_console(final PortalUnlinkConsoleEvent event) {
+		// Portals in regions may only be administrated by region administrators
+		// Check permission on console
+		if (check_setting_at(event.getConsole(), event.getPlayer(), RoleSetting.ADMIN, false)) {
+			event.setCancelled(true);
+			return;
+		}
+
+		// Check permission on portal
+		if (check_setting_at(event.getPortal().spawn(), event.getPlayer(), RoleSetting.ADMIN, false)) {
+			event.setCancelled(true);
+			return;
+		}
+	}
+
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+	public void on_portal_open_console(final PortalOpenConsoleEvent event) {
+		// Check permission on console
+		if (check_setting_at(event.getConsole(), event.getPlayer(), RoleSetting.PORTAL, false)) {
+			event.setCancelled(true);
+			return;
+		}
+
+		// Check permission on portal
+		if (check_setting_at(event.getPortal().spawn(), event.getPlayer(), RoleSetting.PORTAL, false)) {
+			event.setCancelled(true);
+			return;
+		}
+	}
+
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+	public void on_portal_select_target(final PortalSelectTargetEvent event) {
+		// Check permission on source portal
+		if (check_setting_at(event.getPortal().spawn(), event.getPlayer(), RoleSetting.PORTAL, false)) {
+			event.setCancelled(true);
+			return;
+		}
+
+		// Check permission on target portal
+		if (check_setting_at(event.getTarget().spawn(), event.getPlayer(), RoleSetting.PORTAL, false)) {
+			event.setCancelled(true);
+			return;
+		}
+	}
+
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+	public void on_portal_change_settings(final PortalChangeSettingsEvent event) {
+		final var region = get_module().region_at(event.getPortal().spawn());
+		if (region == null) {
+			return;
+		}
+
+		// Portals in regions may be administrated by region administrators,
+		// not only be the owner
+		event.setCancelIfNotOwner(false);
+
+		// Now check if the player has the permission
+		final var group = region.region_group(get_module());
+		if (!group.get_role(event.getPlayer().getUniqueId()).get_setting(RoleSetting.ADMIN)) {
+			event.setCancelled(true);
 		}
 	}
 }

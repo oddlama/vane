@@ -135,7 +135,7 @@ menus:
     # This item is used to cycle visibility and indicate group visibility.
     visibility_group:
       name: "§b§lToggle Visibility"
-      lore: ["", "§bCurrent: §e§lGroup§r"]
+      lore: ["", "§bCurrent: §e§lRegion Group§r"]
 
     # This item is used to cycle visibility and indicate private visibility.
     visibility_private:

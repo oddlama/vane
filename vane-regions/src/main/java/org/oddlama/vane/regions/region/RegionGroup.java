@@ -121,13 +121,21 @@ public class RegionGroup {
 		this.owner = owner;
 
 		// Add admins role
-		final var admins = new Role("[admins]", Role.RoleType.ADMINS);
+		final var admins = new Role("[Admins]", Role.RoleType.ADMINS);
 		this.add_role(admins);
 
 		// Add others role
-		final var others = new Role("[others]", Role.RoleType.OTHERS);
+		final var others = new Role("[Others]", Role.RoleType.OTHERS);
 		this.add_role(others);
 		this.role_others = others.id();
+
+		// Add friends role
+		final var friends = new Role("Friends", Role.RoleType.NORMAL);
+		friends.settings().put(RoleSetting.BUILD, true);
+		friends.settings().put(RoleSetting.USE, true);
+		friends.settings().put(RoleSetting.CONTAINER, true);
+		friends.settings().put(RoleSetting.PORTAL, true);
+		this.add_role(friends);
 
 		// Add owner to admins
 		this.player_to_role.put(owner, admins.id());

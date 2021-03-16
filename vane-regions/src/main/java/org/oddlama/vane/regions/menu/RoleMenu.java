@@ -102,10 +102,6 @@ public class RoleMenu extends ModuleComponent<Regions> {
 		add_menu_item_setting(role_menu, role, 5, item_setting_info_container, RoleSetting.CONTAINER);
 		add_menu_item_setting(role_menu, role, 8, item_setting_info_portal,    RoleSetting.PORTAL);
 
-		// TODO g pportal ontegratoin
-		// TODO g listeners
-		// TODO g dynmap
-
 		role_menu.on_natural_close(player2 ->
 			get_module().menus.region_group_menu
 				.create(group, player2)

@@ -5,17 +5,18 @@ import java.util.UUID;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
+import org.oddlama.vane.portals.portal.Portal;
 
 public class PortalOpenConsoleEvent extends PortalEvent {
 	private static final HandlerList handlers = new HandlerList();
 	private Player player;
 	private Block console;
-	private UUID portal_id;
+	private Portal portal;
 
-	public PortalOpenConsoleEvent(final Player player, final Block console, final UUID portal_id) {
+	public PortalOpenConsoleEvent(final Player player, final Block console, final Portal portal) {
 		this.player = player;
 		this.console = console;
-		this.portal_id = portal_id;
+		this.portal = portal;
 	}
 
 	public Player getPlayer() {
@@ -26,8 +27,8 @@ public class PortalOpenConsoleEvent extends PortalEvent {
 		return console;
 	}
 
-	public UUID getPortalId() {
-		return portal_id;
+	public Portal getPortal() {
+		return portal;
 	}
 
 	public HandlerList getHandlers() {

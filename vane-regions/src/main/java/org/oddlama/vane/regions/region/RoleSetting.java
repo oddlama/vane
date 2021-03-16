@@ -3,7 +3,7 @@ package org.oddlama.vane.regions.region;
 public enum RoleSetting {
 	ADMIN(false, true),
 	BUILD(false, true),
-	USE(false, true),
+	USE(true, true),
 	CONTAINER(false, true),
 	PORTAL(false, true),
 	;

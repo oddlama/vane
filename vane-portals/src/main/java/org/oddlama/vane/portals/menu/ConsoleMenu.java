@@ -84,7 +84,7 @@ public class ConsoleMenu extends ModuleComponent<Portals> {
 		}
 
 		// Check if unlink would be allowed
-		final var unlink_event = new PortalUnlinkConsoleEvent(player, portal, true);
+		final var unlink_event = new PortalUnlinkConsoleEvent(player, console, portal, true);
 		get_module().getServer().getPluginManager().callEvent(unlink_event);
 		if (!unlink_event.isCancelled()) {
 			console_menu.add(menu_item_unlink_console(portal, console));
@@ -126,7 +126,7 @@ public class ConsoleMenu extends ModuleComponent<Portals> {
 					.filter(p -> {
 						switch (p.visibility()) {
 							case PUBLIC:  return true;
-							case GROUP:   return false; // TODO group visibility
+							case GROUP:   return get_module().is_regions_group_visible(portal, p);
 							case PRIVATE: return player.getUniqueId().equals(p.owner());
 						}
 						return false;
@@ -183,7 +183,7 @@ public class ConsoleMenu extends ModuleComponent<Portals> {
 			MenuFactory.confirm(get_context(), lang_unlink_console_confirm_title.str(),
 				item_unlink_console_confirm_accept.item(), (player2) -> {
 					// Call event
-					final var event = new PortalUnlinkConsoleEvent(player2, portal, false);
+					final var event = new PortalUnlinkConsoleEvent(player2, console, portal, false);
 					get_module().getServer().getPluginManager().callEvent(event);
 					if (event.isCancelled()) {
 						get_module().lang_unlink_restricted.send(player2);

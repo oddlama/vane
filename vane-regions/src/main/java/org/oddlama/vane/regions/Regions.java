@@ -59,6 +59,7 @@ import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.material.ExtendedMaterial;
 import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.core.persistent.PersistentSerializer;
+import org.oddlama.vane.portals.Portals;
 import org.oddlama.vane.regions.region.Region;
 import org.oddlama.vane.annotation.config.ConfigInt;
 import org.oddlama.vane.annotation.config.ConfigDouble;
@@ -77,6 +78,8 @@ import org.oddlama.vane.util.LazyBlock;
 
 @VaneModule(name = "regions", bstats = 8643, config_version = 2, lang_version = 2, storage_version = 1)
 public class Regions extends Module<Regions> {
+		// TODO g dynmap
+		// TODO g visual
 	//
 	//                                                  ┌───────────────────────┐
 	// ┌────────────┐  is   ┌───────────────┐         ┌───────────────────────┐ |  belongs to  ┌─────────────────┐
@@ -170,6 +173,19 @@ public class Regions extends Module<Regions> {
 
 	@Override
 	public void on_enable() {
+		final var portals = (Portals)getServer().getPluginManager().getPlugin("vane-portals");
+
+		// Register callback to portals module so portals
+		// can find out if two portals are in the same region group
+		portals.set_regions_group_visible_callback((src, dst) -> {
+			final var reg_dst = region_at(dst.spawn());
+			if (reg_dst == null) {
+				return true;
+			}
+			final var reg_src = region_at(src.spawn());
+			return reg_dst.region_group_id().equals(reg_src.region_group_id());
+		});
+
 		schedule_next_tick(this::delayed_on_enable);
 	}
 
