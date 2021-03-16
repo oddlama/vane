@@ -572,10 +572,12 @@ public class Portals extends Module<Portals> {
 		// Reset target id's if the target portal was transient
 		if (dst.visibility().is_transient_target()) {
 			src.target_id(null);
+			src.update_blocks(this);
 			mark_persistent_storage_dirty();
 		}
 		if (src.visibility().is_transient_target()) {
 			dst.target_id(null);
+			dst.update_blocks(this);
 			mark_persistent_storage_dirty();
 		}
 
