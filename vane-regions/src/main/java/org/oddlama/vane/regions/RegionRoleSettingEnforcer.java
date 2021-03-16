@@ -385,6 +385,11 @@ public class RegionRoleSettingEnforcer extends Listener<Regions> {
 
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void on_portal_change_settings(final PortalChangeSettingsEvent event) {
+		if (event.getPortal().owner().equals(event.getPlayer().getUniqueId())) {
+			// Owner may always use their portals
+			return;
+		}
+
 		final var region = get_module().region_at(event.getPortal().spawn());
 		if (region == null) {
 			return;
