@@ -67,6 +67,11 @@ public class RegionMenu extends ModuleComponent<Regions> {
 			region_menu.add(menu_item_assign_region_group(region));
 		}
 
+		region_menu.on_natural_close(player2 ->
+			get_module().menus.main_menu
+				.create(player2)
+				.open(player2));
+
 		return region_menu;
 	}
 
