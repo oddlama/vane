@@ -18,21 +18,7 @@ version: 2
 # language code (ISO 639) and the country code (ISO 3166).
 resource_pack_lang_code: 'de_de'
 
-# This message is sent when the player needs to select an area for
-# a new region.
 start_region_selection: "§aChoose an area by selecting two blocks via §bleft-§a and §bright-click§a with an empty hand."
-# This message is sent when the player selects the primary block
-# for a new region.
-# %1$s: Block X
-# %2$s: Block Y
-# %3$s: Block Z
-select_primary_block: "§aSelected (%1$s§a, %2$s§a, %3$s§a) as primary block."
-# This message is sent when the player selects the secondary block
-# for a new region.
-# %1$s: Block X
-# %2$s: Block Y
-# %3$s: Block Z
-select_secondary_block: "§aSelected (%1$s§a, %2$s§a, %3$s§a) as secondary block."
 
 command_region:
   usage: "%1$s"
@@ -94,6 +80,7 @@ menus:
     # %14$s: max extent X
     # %15$s: max extent Y
     # %16$s: max extent Z
+    # %17$s: price and currency
     create_region_invalid_selection:
       name: "§c§lInvalid Selection"
       lore:
@@ -106,7 +93,7 @@ menus:
         - "§7- %4$s§7 Doesn't intersect existing region"
         - "§7- %5$s§7 Covers minimum area (%11$s§7 x %12$s§7 x %13$s§7)"
         - "§7- %6$s§7 Not bigger than (%14$s§7 x %15$s§7 x %16$s§7)"
-        - "§7- %7$s§7 Can afford"
+        - "§7- %7$s§7 Can afford (%17$s§7)"
 
     # This item is shown when the selection is valid
     # %1$s: Selection extent X
@@ -118,6 +105,7 @@ menus:
     # %7$s: max extent X
     # %8$s: max extent Y
     # %9$s: max extent Z
+    # %10$s: price and currency
     create_region_valid_selection:
       name: "§a§lCreate Region"
       lore:
@@ -131,7 +119,7 @@ menus:
         - "§7- §a✓§7 Doesn't intersect existing region"
         - "§7- §a✓§7 Covers minimum area (%4$s§7 x %5$s§7 x %6$s§7)"
         - "§7- §a✓§7 Not bigger than (%7$s§7 x %8$s§7 x %9$s§7)"
-        - "§7- §a✓§7 Can afford"
+        - "§7- §a✓§7 Can afford (%10$s§7)"
 
     # This item is used to cancel a pending selection.
     cancel_selection:
@@ -263,11 +251,11 @@ menus:
       lore:
         - ""
         - "§7Controls all types of explosions."
-    setting_info_fire_spread:
-      name: "§b§lFire Spread"
+    setting_info_fire:
+      name: "§b§lFire"
       lore:
         - ""
-        - "§7Controls whether fire spreads."
+        - "§7Controls whether fire burns blocks and spreads."
     setting_info_pvp:
       name: "§b§lPVP"
       lore:

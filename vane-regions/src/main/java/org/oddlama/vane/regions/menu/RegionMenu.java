@@ -81,6 +81,9 @@ public class RegionMenu extends ModuleComponent<Regions> {
 				region.name(name);
 				mark_persistent_storage_dirty();
 
+				// Update dynmap marker
+				get_module().dynmap_layer.update_marker(region);
+
 				// Open new menu because of possibly changed title
 				get_module().menus.region_menu.create(region, player2).open(player2);
 				return ClickResult.SUCCESS;

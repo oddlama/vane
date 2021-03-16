@@ -94,7 +94,7 @@ public class RegionSelection {
 		final var dx = 1 + Math.abs(primary.getX() - secondary.getX());
 		final var dy = 1 + Math.abs(primary.getY() - secondary.getY());
 		final var dz = 1 + Math.abs(primary.getZ() - secondary.getZ());
-		return (int)(Math.pow(regions.config_cost_y_multiplicator, dy / 16.0) * regions.config_cost_xz_base * dx * dz);
+		return (int)Math.ceil(Math.pow(regions.config_cost_y_multiplicator, dy / 16.0) * regions.config_cost_xz_base / 256.0 * dx * dz);
 	}
 
 	public boolean can_afford(final Player player) {

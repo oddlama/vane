@@ -1,4 +1,4 @@
-package org.oddlama.vane.portals;
+package org.oddlama.vane.regions;
 
 import java.util.HashSet;
 import java.util.UUID;
@@ -12,24 +12,23 @@ import org.dynmap.markers.MarkerAPI;
 import org.dynmap.markers.MarkerIcon;
 import org.dynmap.markers.MarkerSet;
 
-import org.oddlama.vane.portals.Portals;
-import org.oddlama.vane.portals.portal.Portal;
+import org.oddlama.vane.regions.Regions;
+import org.oddlama.vane.regions.region.Region;
 
-public class PortalDynmapLayerDelegate {
-	private PortalDynmapLayer parent = null;
+public class RegionDynmapLayerDelegate {
+	private RegionDynmapLayer parent = null;
 
 	private DynmapAPI dynmap_api = null;
 	private MarkerAPI marker_api = null;
 	private boolean dynmap_enabled = false;
 
 	private MarkerSet marker_set = null;
-	private MarkerIcon marker_icon = null;
 
-	public PortalDynmapLayerDelegate(final PortalDynmapLayer parent) {
+	public RegionDynmapLayerDelegate(final RegionDynmapLayer parent) {
 		this.parent = parent;
 	}
 
-	public Portals get_module() {
+	public Regions get_module() {
 		return parent.get_module();
 	}
 
@@ -64,13 +63,13 @@ public class PortalDynmapLayerDelegate {
 
 	private void create_or_load_layer() {
 		// Create or retrieve layer
-		marker_set = marker_api.getMarkerSet(PortalDynmapLayer.LAYER_ID);
+		marker_set = marker_api.getMarkerSet(RegionDynmapLayer.LAYER_ID);
 		if (marker_set == null) {
-			marker_set = marker_api.createMarkerSet(PortalDynmapLayer.LAYER_ID, parent.lang_layer_label.str(), null, false);
+			marker_set = marker_api.createMarkerSet(RegionDynmapLayer.LAYER_ID, parent.lang_layer_label.str(), null, false);
 		}
 
 		if (marker_set == null) {
-			get_module().log.severe("Failed to create dynmap portal marker set!");
+			get_module().log.severe("Failed to create dynmap region marker set!");
 			return;
 		}
 
@@ -79,46 +78,39 @@ public class PortalDynmapLayerDelegate {
 		marker_set.setLayerPriority(parent.config_layer_priority);
 		marker_set.setHideByDefault(parent.config_layer_hide);
 
-		// Load marker
-		marker_icon = marker_api.getMarkerIcon(parent.config_marker_icon);
-		if (marker_icon == null) {
-			get_module().log.severe("Failed to load dynmap portal marker icon!");
-			return;
-		}
-
 		// Initial update
 		update_all_markers();
 	}
 
-	private String id_for(final UUID portal_id) {
-		return portal_id.toString();
+	private String id_for(final UUID region_id) {
+		return region_id.toString();
 	}
 
-	private String id_for(final Portal portal) {
-		return id_for(portal.id());
+	private String id_for(final Region region) {
+		return id_for(region.id());
 	}
 
-	public void update_marker(final Portal portal) {
+	public void update_marker(final Region region) {
 		if (!dynmap_enabled) {
 			return;
 		}
 
-		// Don't show private portals
-		if (portal.visibility() == Portal.Visibility.PRIVATE) {
-			remove_marker(portal.id());
-			return;
-		}
+		final var min = region.extent().min();
+		final var max = region.extent().max();
+		final var world_name = min.getWorld().getName();
+		final var marker_id = id_for(region);
+		final var marker_label = parent.lang_marker_label.str(region.name());
 
-		final var loc = portal.spawn();
-		final var world_name = loc.getWorld().getName();
-		final var marker_id = id_for(portal);
-		final var marker_label = parent.lang_marker_label.str(portal.name());
-
-		marker_set.createMarker(marker_id, marker_label, world_name, loc.getX(), loc.getY(), loc.getZ(), marker_icon, false);
+		final var xs = new double[] { min.getX(), max.getX() + 1 };
+		final var zs = new double[] { min.getZ(), max.getZ() + 1 };
+		final var area = marker_set.createAreaMarker(marker_id, marker_label, false, world_name, xs, zs, false);
+		area.setRangeY(max.getY() + 1, min.getY());
+		area.setLineStyle(parent.config_line_weight, parent.config_line_opacity, parent.config_line_color);
+		area.setFillStyle(parent.config_fill_opacity, parent.config_fill_color);
 	}
 
-	public void remove_marker(final UUID portal_id) {
-		remove_marker(id_for(portal_id));
+	public void remove_marker(final UUID region_id) {
+		remove_marker(id_for(region_id));
 	}
 
 	public void remove_marker(final String marker_id) {
@@ -144,9 +136,9 @@ public class PortalDynmapLayerDelegate {
 
 		// Update all existing
 		final var id_set = new HashSet<String>();
-		for (final var portal : get_module().all_portals()) {
-			id_set.add(id_for(portal));
-			update_marker(portal);
+		for (final var region : get_module().all_regions()) {
+			id_set.add(id_for(region));
+			update_marker(region);
 		}
 
 		// Remove orphaned

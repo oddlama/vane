@@ -82,7 +82,6 @@ import org.oddlama.vane.util.LazyBlock;
 
 @VaneModule(name = "regions", bstats = 8643, config_version = 2, lang_version = 2, storage_version = 1)
 public class Regions extends Module<Regions> {
-		// TODO g dynmap
 	//
 	//                                                  ┌───────────────────────┐
 	// ┌────────────┐  is   ┌───────────────┐         ┌───────────────────────┐ |  belongs to  ┌─────────────────┐
@@ -131,7 +130,7 @@ public class Regions extends Module<Regions> {
 
 	@ConfigMaterial(def = Material.DIAMOND, desc = "The currency material for regions.")
 	public Material config_currency;
-	@ConfigDouble(def = 1.0, min = 0.0, desc = "The base amount of currency required to buy an area equal to one chunk (256 blocks).")
+	@ConfigDouble(def = 2.0, min = 0.0, desc = "The base amount of currency required to buy an area equal to one chunk (256 blocks).")
 	public double config_cost_xz_base;
 	@ConfigDouble(def = 1.15, min = 1.0, desc = "The multiplicator determines how much the cost increases for each additional 16 blocks of height. A region of height h will cost multiplicator^(h / 16.0) * base_amount. Rounding is applied at the end.")
 	public double config_cost_y_multiplicator;
@@ -156,16 +155,17 @@ public class Regions extends Module<Regions> {
 	@LangMessage public TranslatedMessage lang_start_region_selection;
 
 	public RegionMenuGroup menus;
+	public RegionDynmapLayer dynmap_layer;
 
 	public Regions() {
 		menus = new RegionMenuGroup(this);
 
 		new org.oddlama.vane.regions.commands.Region(this);
 
-		//dynmap_layer = new RegionDynmapLayer(this);
 		new RegionEnvironmentSettingEnforcer(this);
 		new RegionRoleSettingEnforcer(this);
 		new RegionSelectionListener(this);
+		dynmap_layer = new RegionDynmapLayer(this);
 	}
 
 	public void delayed_on_enable() {
@@ -403,7 +403,7 @@ public class Regions extends Module<Regions> {
 		index_add_region(region);
 
 		// Create dynmap marker
-		//dynmap_layer.update_marker(region);
+		dynmap_layer.update_marker(region);
 	}
 
 	public void remove_region(final Region region) {
@@ -426,6 +426,9 @@ public class Regions extends Module<Regions> {
 
 		// Remove region from index
 		index_remove_region(region);
+
+		// Remove dynmap marker
+		dynmap_layer.remove_marker(region.id());
 	}
 
 	private void index_add_region(final Region region) {
