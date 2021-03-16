@@ -28,6 +28,8 @@ import org.bukkit.event.block.LeavesDecayEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryInteractEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
@@ -47,6 +49,7 @@ import org.bukkit.projectiles.ProjectileSource;
 
 import org.bukkit.block.Block;
 import org.bukkit.block.Container;
+import org.bukkit.block.DoubleChest;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -205,7 +208,9 @@ public class RegionRoleSettingEnforcer extends Listener<Regions> {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+	// The EventPriority is HIGH, so this is executed AFTER the portals try
+	// to activate, which is a seperate permission.
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void on_player_interact(final PlayerInteractEvent event) {
 		final var player = event.getPlayer();
 		final var block = event.getClickedBlock();
@@ -237,7 +242,6 @@ public class RegionRoleSettingEnforcer extends Listener<Regions> {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void on_player_inventory_interact(final InventoryInteractEvent event) {
 		final var clicker = event.getWhoClicked();
 		if (!(clicker instanceof Player)) {
@@ -251,11 +255,21 @@ public class RegionRoleSettingEnforcer extends Listener<Regions> {
 		}
 
 		final var holder = inventory.getHolder();
-		if (holder instanceof Container || holder instanceof ChestedHorse || holder instanceof Minecart) {
+		if (holder instanceof DoubleChest || holder instanceof Container || holder instanceof Minecart) {
 			if (check_setting_at(inventory.getLocation(), (Player)clicker, RoleSetting.CONTAINER, false)) {
 				event.setCancelled(true);
 			}
 		}
+	}
+
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+	public void on_player_inventory_click(final InventoryClickEvent event) {
+		on_player_inventory_interact(event);
+	}
+
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+	public void on_player_inventory_drag(final InventoryDragEvent event) {
+		on_player_inventory_interact(event);
 	}
 
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
@@ -308,7 +322,7 @@ public class RegionRoleSettingEnforcer extends Listener<Regions> {
 			return;
 		}
 
-		if (get_module().region_at(event.getPortal().spawn()) != null) {
+		if (event.getPortal() != null && get_module().region_at(event.getPortal().spawn()) != null) {
 			// Portals in regions may be administrated by region administrators,
 			// not only be the owner
 			event.setCancelIfNotOwner(false);
