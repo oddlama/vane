@@ -1,23 +1,14 @@
 package org.oddlama.vane.regions;
 
+import org.bukkit.Material;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.Material;
 
-import org.bukkit.block.Block;
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
-
-import org.oddlama.vane.annotation.lang.LangMessage;
-import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.module.Context;
-import org.oddlama.vane.regions.region.RoleSetting;
 
 public class RegionSelectionListener extends Listener<Regions> {
 	public RegionSelectionListener(Context<Regions> context) {

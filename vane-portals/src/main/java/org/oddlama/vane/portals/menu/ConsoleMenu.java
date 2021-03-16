@@ -5,7 +5,6 @@ import static org.oddlama.vane.util.Util.namespaced_key;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import org.bukkit.entity.Player;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;

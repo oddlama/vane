@@ -2,13 +2,11 @@ package org.oddlama.vane.regions.menu;
 
 import static org.oddlama.vane.util.Util.namespaced_key;
 
-import java.util.Objects;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -25,9 +23,7 @@ import org.oddlama.vane.core.menu.MenuWidget;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.ModuleComponent;
 import org.oddlama.vane.regions.Regions;
-import org.oddlama.vane.regions.region.Region;
 import org.oddlama.vane.regions.region.RegionGroup;
-import org.oddlama.vane.regions.region.RegionSelection;
 import org.oddlama.vane.regions.region.Role;
 import org.oddlama.vane.regions.region.RoleSetting;
 import org.oddlama.vane.util.ItemUtil;

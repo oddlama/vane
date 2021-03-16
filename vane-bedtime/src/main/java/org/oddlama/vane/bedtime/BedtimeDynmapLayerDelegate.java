@@ -4,8 +4,8 @@ import java.util.HashSet;
 import java.util.UUID;
 import java.util.logging.Level;
 
-import org.bukkit.plugin.Plugin;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.plugin.Plugin;
 
 import org.dynmap.DynmapAPI;
 import org.dynmap.markers.Marker;

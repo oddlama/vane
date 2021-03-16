@@ -1,7 +1,6 @@
 package org.oddlama.vane.admin.commands;
 
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 import org.oddlama.vane.admin.Admin;
 import org.oddlama.vane.annotation.command.Name;

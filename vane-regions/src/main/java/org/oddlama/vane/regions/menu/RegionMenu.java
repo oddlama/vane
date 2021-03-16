@@ -1,14 +1,12 @@
 package org.oddlama.vane.regions.menu;
 
-import static org.oddlama.vane.util.Util.namespaced_key;
 import static org.oddlama.vane.util.PlayerUtil.give_items;
+import static org.oddlama.vane.util.Util.namespaced_key;
 
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
