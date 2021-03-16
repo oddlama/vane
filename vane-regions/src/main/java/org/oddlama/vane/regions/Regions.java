@@ -8,6 +8,8 @@ import static org.oddlama.vane.util.Nms.register_entity;
 import static org.oddlama.vane.util.Nms.spawn;
 import static org.oddlama.vane.util.Util.ms_to_ticks;
 import static org.oddlama.vane.util.Util.namespaced_key;
+import static org.oddlama.vane.util.PlayerUtil.give_items;
+import static org.oddlama.vane.util.PlayerUtil.take_items;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -59,6 +61,8 @@ import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.core.persistent.PersistentSerializer;
 import org.oddlama.vane.regions.region.Region;
 import org.oddlama.vane.annotation.config.ConfigInt;
+import org.oddlama.vane.annotation.config.ConfigDouble;
+import org.oddlama.vane.annotation.config.ConfigMaterial;
 import org.oddlama.vane.regions.region.RegionGroup;
 import org.oddlama.vane.regions.region.RegionSelection;
 import org.oddlama.vane.regions.region.Role;
@@ -86,22 +90,6 @@ public class Regions extends Module<Regions> {
 	// ┌────────────┐  in   ┌───────────────┐    |
 	// | Any Player | ────> | [Role] Others | ───┘
 	// └────────────┘       └───────────────┘
-	//
-	// Menu: Region
-	// 1. edit name
-	// 2. set group
-	// 3. delete
-	//
-	// Menu: Group
-	// 1. edit name
-	// 2. add role
-	// 3. roles
-	// 4. delete
-	//
-	// Menu: Role
-	// 1. edit name (if not special)
-	// 2. players (if not others)
-	// 3. delete role (if not special)
 
 	// Add (de-)serializers
 	static {
@@ -134,6 +122,13 @@ public class Regions extends Module<Regions> {
 	public int config_max_region_extent_y;
 	@ConfigInt(def = 2048, min = 1, desc = "Maximum region extent in z direction.")
 	public int config_max_region_extent_z;
+
+	@ConfigMaterial(def = Material.DIAMOND, desc = "The currency material for regions.")
+	public Material config_currency;
+	@ConfigDouble(def = 1.0, min = 0.0, desc = "The base amount of currency required to buy an area equal to one chunk (256 blocks).")
+	public double config_cost_xz_base;
+	@ConfigDouble(def = 1.15, min = 1.0, desc = "The multiplicator determines how much the cost increases for each additional 16 blocks of height. A region of height h will cost multiplicator^(h / 16.0) * base_amount. Rounding is applied at the end.")
+	public double config_cost_y_multiplicator;
 
 	// Primary storage for all regions (region.id → region)
 	@Persistent
@@ -256,6 +251,14 @@ public class Regions extends Module<Regions> {
 	public boolean create_region_from_selection(final Player player, final String name) {
 		final var selection = get_region_selection(player);
 		if (!selection.is_valid(player)) {
+			return false;
+		}
+
+		// Take currency items
+		final var price = selection.price();
+		final var map = new HashMap<ItemStack, Integer>();
+		map.put(new ItemStack(config_currency), price);
+		if (price > 0 && !take_items(player, map)) {
 			return false;
 		}
 

@@ -8,6 +8,7 @@ import static org.oddlama.vane.util.BlockUtil.unpack;
 import static org.oddlama.vane.util.ItemUtil.name_item;
 import static org.oddlama.vane.util.Nms.item_handle;
 import static org.oddlama.vane.util.Nms.register_entity;
+import static org.oddlama.vane.util.PlayerUtil.has_items;
 import static org.oddlama.vane.util.Nms.spawn;
 import static org.oddlama.vane.util.Util.ms_to_ticks;
 import static org.oddlama.vane.util.Util.namespaced_key;
@@ -89,9 +90,21 @@ public class RegionSelection {
 		return false;
 	}
 
+	public int price() {
+		final var dx = 1 + Math.abs(primary.getX() - secondary.getX());
+		final var dy = 1 + Math.abs(primary.getY() - secondary.getY());
+		final var dz = 1 + Math.abs(primary.getZ() - secondary.getZ());
+		return (int)(Math.pow(regions.config_cost_y_multiplicator, dy / 16.0) * regions.config_cost_xz_base * dx * dz);
+	}
+
 	public boolean can_afford(final Player player) {
-		// TODO
-		return true;
+		final var price = price();
+		if (price <= 0) {
+			return true;
+		}
+		final var map = new HashMap<ItemStack, Integer>();
+		map.put(new ItemStack(regions.config_currency), price);
+		return has_items(player, map);
 	}
 
 	public boolean is_valid(final Player player) {

@@ -148,7 +148,8 @@ public class MainMenu extends ModuleComponent<Regions> {
 							"§b" + get_module().config_min_region_extent_z,
 							"§b" + get_module().config_max_region_extent_x,
 							"§b" + get_module().config_max_region_extent_y,
-							"§b" + get_module().config_max_region_extent_z
+							"§b" + get_module().config_max_region_extent_z,
+							"§a" + selection.price() + " §b" + String.valueOf(get_module().config_currency).toLowerCase()
 						));
 				} else {
 					boolean is_primary_set = selection.primary != null;
@@ -157,6 +158,7 @@ public class MainMenu extends ModuleComponent<Regions> {
 
 					boolean minimum_satisified, maximum_satisfied, no_intersection, can_afford;
 					String sdx, sdy, sdz;
+					String price;
 					if (is_primary_set && is_secondary_set && same_world) {
 						final var dx = 1 + Math.abs(selection.primary.getX() - selection.secondary.getX());
 						final var dy = 1 + Math.abs(selection.primary.getY() - selection.secondary.getY());
@@ -175,6 +177,7 @@ public class MainMenu extends ModuleComponent<Regions> {
 							dz <= get_module().config_max_region_extent_z;
 						no_intersection = !selection.intersects_existing();
 						can_afford = selection.can_afford(final_player);
+						price = (can_afford ? "§a" : "$§") + selection.price() + " §b" + String.valueOf(get_module().config_currency).toLowerCase();
 					} else {
 						sdx = "§7?";
 						sdy = "§7?";
@@ -183,6 +186,7 @@ public class MainMenu extends ModuleComponent<Regions> {
 						maximum_satisfied = false;
 						no_intersection = true;
 						can_afford = false;
+						price = "§7?";
 					}
 
 					final var extent_color = minimum_satisified && maximum_satisfied ? "§a" : "§c";
@@ -202,7 +206,8 @@ public class MainMenu extends ModuleComponent<Regions> {
 							"§b" + get_module().config_min_region_extent_z,
 							"§b" + get_module().config_max_region_extent_x,
 							"§b" + get_module().config_max_region_extent_y,
-							"§b" + get_module().config_max_region_extent_z
+							"§b" + get_module().config_max_region_extent_z,
+							price
 						));
 				}
 			}

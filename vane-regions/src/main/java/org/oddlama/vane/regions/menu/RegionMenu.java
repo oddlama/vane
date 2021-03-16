@@ -1,6 +1,7 @@
 package org.oddlama.vane.regions.menu;
 
 import static org.oddlama.vane.util.Util.namespaced_key;
+import static org.oddlama.vane.util.PlayerUtil.give_items;
 
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -102,6 +103,14 @@ public class RegionMenu extends ModuleComponent<Regions> {
 					}
 
 					get_module().remove_region(region);
+
+					// Give back money
+					final var temp_sel = new RegionSelection(get_module());
+					temp_sel.primary = region.extent().min();
+					temp_sel.secondary = region.extent().max();
+
+					final var price = temp_sel.price();
+					give_items(player2, new ItemStack(get_module().config_currency), price);
 					return ClickResult.SUCCESS;
 				}, item_delete_confirm_cancel.item(), (player2) -> {
 					menu.open(player2);

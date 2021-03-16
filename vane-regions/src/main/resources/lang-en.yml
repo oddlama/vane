@@ -94,6 +94,7 @@ menus:
     # %14$s: max extent X
     # %15$s: max extent Y
     # %16$s: max extent Z
+    # %17$s: price and currency
     create_region_invalid_selection:
       name: "§c§lInvalid Selection"
       lore:
@@ -106,7 +107,7 @@ menus:
         - "§7- %4$s§7 Doesn't intersect existing region"
         - "§7- %5$s§7 Covers minimum area (%11$s§7 x %12$s§7 x %13$s§7)"
         - "§7- %6$s§7 Not bigger than (%14$s§7 x %15$s§7 x %16$s§7)"
-        - "§7- %7$s§7 Can afford"
+        - "§7- %7$s§7 Can afford (%17$s§7)"
 
     # This item is shown when the selection is valid
     # %1$s: Selection extent X
@@ -118,6 +119,7 @@ menus:
     # %7$s: max extent X
     # %8$s: max extent Y
     # %9$s: max extent Z
+    # %10$s: price and currency
     create_region_valid_selection:
       name: "§a§lCreate Region"
       lore:
@@ -131,7 +133,7 @@ menus:
         - "§7- §a✓§7 Doesn't intersect existing region"
         - "§7- §a✓§7 Covers minimum area (%4$s§7 x %5$s§7 x %6$s§7)"
         - "§7- §a✓§7 Not bigger than (%7$s§7 x %8$s§7 x %9$s§7)"
-        - "§7- §a✓§7 Can afford"
+        - "§7- §a✓§7 Can afford (%10$s§7)"
 
     # This item is used to cancel a pending selection.
     cancel_selection:
