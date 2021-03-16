@@ -265,11 +265,11 @@ menus:
       lore:
         - ""
         - "§7Controls all types of explosions."
-    setting_info_fire_spread:
-      name: "§b§lFire Spread"
+    setting_info_fire:
+      name: "§b§lFire"
       lore:
         - ""
-        - "§7Controls whether fire spreads."
+        - "§7Controls whether fire burns blocks and spreads."
     setting_info_pvp:
       name: "§b§lPVP"
       lore:

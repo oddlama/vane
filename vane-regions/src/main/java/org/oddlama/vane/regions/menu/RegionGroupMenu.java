@@ -48,7 +48,7 @@ public class RegionGroupMenu extends ModuleComponent<Regions> {
 	public TranslatedItemStack<?> item_setting_info_animals;
 	public TranslatedItemStack<?> item_setting_info_monsters;
 	public TranslatedItemStack<?> item_setting_info_explosions;
-	public TranslatedItemStack<?> item_setting_info_fire_spread;
+	public TranslatedItemStack<?> item_setting_info_fire;
 	public TranslatedItemStack<?> item_setting_info_pvp;
 	public TranslatedItemStack<?> item_setting_info_trample;
 	public TranslatedItemStack<?> item_setting_info_vine_growth;
@@ -67,12 +67,12 @@ public class RegionGroupMenu extends ModuleComponent<Regions> {
 
 		item_setting_toggle_on        = new TranslatedItemStack<>(ctx, "setting_toggle_on",        Material.GREEN_TERRACOTTA,                             1, "Used to represent a toggle button with current state on.");
 		item_setting_toggle_off       = new TranslatedItemStack<>(ctx, "setting_toggle_off",       Material.RED_TERRACOTTA,                               1, "Used to represent a toggle button with current state off.");
-		item_setting_info_animals     = new TranslatedItemStack<>(ctx, "setting_info_animals",     namespaced_key("vane", "animals_baby_pig_2"),          1, "Used to represent the info for the animals     setting.");
-		item_setting_info_monsters    = new TranslatedItemStack<>(ctx, "setting_info_monsters",    Material.ZOMBIE_HEAD,                                  1, "Used to represent the info for the monsters    setting.");
-		item_setting_info_explosions  = new TranslatedItemStack<>(ctx, "setting_info_explosions",  namespaced_key("vane", "monsters_creeper_with_tnt_2"), 1, "Used to represent the info for the explosions  setting.");
-		item_setting_info_fire_spread = new TranslatedItemStack<>(ctx, "setting_info_fire_spread", Material.CAMPFIRE,                                     1, "Used to represent the info for the fire spread setting.");
-		item_setting_info_pvp         = new TranslatedItemStack<>(ctx, "setting_info_pvp",         Material.IRON_SWORD,                                   1, "Used to represent the info for the pvp         setting.");
-		item_setting_info_trample     = new TranslatedItemStack<>(ctx, "setting_info_trample",     Material.FARMLAND,                                     1, "Used to represent the info for the trample     setting.");
+		item_setting_info_animals     = new TranslatedItemStack<>(ctx, "setting_info_animals",     namespaced_key("vane", "animals_baby_pig_2"),          1, "Used to represent the info for the animals setting.");
+		item_setting_info_monsters    = new TranslatedItemStack<>(ctx, "setting_info_monsters",    Material.ZOMBIE_HEAD,                                  1, "Used to represent the info for the monsters setting.");
+		item_setting_info_explosions  = new TranslatedItemStack<>(ctx, "setting_info_explosions",  namespaced_key("vane", "monsters_creeper_with_tnt_2"), 1, "Used to represent the info for the explosions setting.");
+		item_setting_info_fire        = new TranslatedItemStack<>(ctx, "setting_info_fire",        Material.CAMPFIRE,                                     1, "Used to represent the info for the fire setting.");
+		item_setting_info_pvp         = new TranslatedItemStack<>(ctx, "setting_info_pvp",         Material.IRON_SWORD,                                   1, "Used to represent the info for the pvp setting.");
+		item_setting_info_trample     = new TranslatedItemStack<>(ctx, "setting_info_trample",     Material.FARMLAND,                                     1, "Used to represent the info for the trample setting.");
 		item_setting_info_vine_growth = new TranslatedItemStack<>(ctx, "setting_info_vine_growth", Material.VINE,                                         1, "Used to represent the info for the vine growth setting.");
 	}
 
@@ -98,7 +98,7 @@ public class RegionGroupMenu extends ModuleComponent<Regions> {
 		add_menu_item_setting(region_group_menu, group, 0, item_setting_info_animals,     EnvironmentSetting.ANIMALS);
 		add_menu_item_setting(region_group_menu, group, 1, item_setting_info_monsters,    EnvironmentSetting.MONSTERS);
 		add_menu_item_setting(region_group_menu, group, 3, item_setting_info_explosions,  EnvironmentSetting.EXPLOSIONS);
-		add_menu_item_setting(region_group_menu, group, 4, item_setting_info_fire_spread, EnvironmentSetting.FIRE_SPREAD);
+		add_menu_item_setting(region_group_menu, group, 4, item_setting_info_fire,        EnvironmentSetting.FIRE);
 		add_menu_item_setting(region_group_menu, group, 5, item_setting_info_pvp,         EnvironmentSetting.PVP);
 		add_menu_item_setting(region_group_menu, group, 7, item_setting_info_trample,     EnvironmentSetting.TRAMPLE);
 		add_menu_item_setting(region_group_menu, group, 8, item_setting_info_vine_growth, EnvironmentSetting.VINE_GROWTH);

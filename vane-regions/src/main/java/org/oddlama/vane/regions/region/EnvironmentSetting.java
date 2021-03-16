@@ -7,7 +7,7 @@ public enum EnvironmentSetting {
 
 	// Hazards
 	EXPLOSIONS(false),
-	FIRE_SPREAD(false),
+	FIRE(false),
 	PVP(true),
 
 	// Environment
