@@ -242,12 +242,12 @@ menus:
       name: "§b§lAnimals"
       lore:
         - ""
-        - "§7Controls animal / neutral mob spawns."
+        - "§7Controls animal mob spawns."
     setting_info_monsters:
       name: "§b§lMonsters"
       lore:
         - ""
-        - "§7Controls monsters / hostile mob spawns."
+        - "§7Controls monsters (hostile mob) spawns."
     setting_info_explosions:
       name: "§b§lExplosions"
       lore:
@@ -303,7 +303,7 @@ menus:
       name: "§a§lCreate Role"
       lore:
         - ""
-        - "§7Create a new §brole§7. Roles are"
+        - "§7Create a new §brole§7. Roles are used"
         - "§7to set permissions for groups of players."
 
     # This item is used to open the role menu for a role.
@@ -353,7 +353,7 @@ menus:
       name: "§b§lContainers"
       lore:
         - ""
-        - "§7Allows interaction with inventories."
+        - "§7Allows modifying interactions with inventories."
         - "§7Without this flag, nothing can be taken"
         - "§7from or put into inventories."
     setting_info_portal:
@@ -401,9 +401,9 @@ menus:
         - "§7This means they will have no assigned role afterwards"
         - "§7and will be handled by the catch-all role §6[others]"
 
-    select_assign_player_title: "§8§lAssign Players"
-    select_remove_player_title: "§8§lRemove Players"
-    filter_players_title: "§8§lFilter Players"
+    select_assign_player_title: "§8§lAssign players"
+    select_remove_player_title: "§8§lRemove players"
+    filter_players_title: "§8§lFilter players"
     # This item is used to represent a player in the selection menu.
     # %1$s: Player name
     select_player:

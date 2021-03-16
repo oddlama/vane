@@ -239,7 +239,7 @@ public class MainMenu extends ModuleComponent<Regions> {
 	}
 
 	private MenuWidget menu_item_current_region(final Region region) {
-		return new MenuItem(2, item_current_region.item(), (player, menu, self) -> {
+		return new MenuItem(2, item_current_region.item("§a§l" + region.name()), (player, menu, self) -> {
 			menu.close(player);
 			get_module().menus.region_menu.create(region, player).open(player);
 			return ClickResult.SUCCESS;
@@ -289,7 +289,7 @@ public class MainMenu extends ModuleComponent<Regions> {
 	}
 
 	private MenuWidget menu_item_current_region_group(final RegionGroup region_group) {
-		return new MenuItem(6, item_current_region_group.item(), (player, menu, self) -> {
+		return new MenuItem(6, item_current_region_group.item("§a§l" + region_group.name()), (player, menu, self) -> {
 			menu.close(player);
 			get_module().menus.region_group_menu.create(region_group, player).open(player);
 			return ClickResult.SUCCESS;
