@@ -20,9 +20,6 @@ import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.regions.region.RoleSetting;
 
 public class RegionSelectionListener extends Listener<Regions> {
-	@LangMessage public TranslatedMessage lang_select_primary_block;
-	@LangMessage public TranslatedMessage lang_select_secondary_block;
-
 	public RegionSelectionListener(Context<Regions> context) {
 		super(context);
 	}
@@ -57,18 +54,10 @@ public class RegionSelectionListener extends Listener<Regions> {
 
 			case LEFT_CLICK_BLOCK:
 				selection.primary = block;
-				lang_select_primary_block.send(player,
-					"§b" + block.getX(),
-					"§b" + block.getY(),
-					"§b" + block.getZ());
 				break;
 
 			case RIGHT_CLICK_BLOCK:
 				selection.secondary = block;
-				lang_select_secondary_block.send(player,
-					"§b" + block.getX(),
-					"§b" + block.getY(),
-					"§b" + block.getZ());
 				break;
 		}
 

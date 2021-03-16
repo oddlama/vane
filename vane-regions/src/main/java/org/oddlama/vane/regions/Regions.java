@@ -83,7 +83,6 @@ import org.oddlama.vane.util.LazyBlock;
 @VaneModule(name = "regions", bstats = 8643, config_version = 2, lang_version = 2, storage_version = 1)
 public class Regions extends Module<Regions> {
 		// TODO g dynmap
-		// TODO g visual
 	//
 	//                                                  ┌───────────────────────┐
 	// ┌────────────┐  is   ┌───────────────┐         ┌───────────────────────┐ |  belongs to  ┌─────────────────┐
