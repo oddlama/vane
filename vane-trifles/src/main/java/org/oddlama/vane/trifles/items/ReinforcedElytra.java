@@ -79,8 +79,8 @@ public class ReinforcedElytra extends CustomItem<Trifles, ReinforcedElytra> {
 		public ItemStack modify_item_stack(ItemStack item) {
 			final var meta = item.getItemMeta();
 			final var modifier_defense = new AttributeModifier(MODIFIER_UUID_REINFORCED_ELYTRA_DEFENSE, "Defense", config_defense_points, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.CHEST);
-			meta.removeAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, modifier_defense);
-			meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, modifier_defense);
+			meta.removeAttributeModifier(Attribute.GENERIC_ARMOR, modifier_defense);
+			meta.addAttributeModifier(Attribute.GENERIC_ARMOR, modifier_defense);
 			item.setItemMeta(meta);
 			return item;
 		}
