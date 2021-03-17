@@ -97,7 +97,7 @@ public class CustomItem<T extends Module<T>, V extends CustomItem<T, V>> extends
 		return name;
 	}
 
-	private final void assert_correct_variant_class(ItemVariantEnum variant) {
+	final void assert_correct_variant_class(ItemVariantEnum variant) {
 		if (!variant.getClass().equals(variant_enum_class)) {
 			throw new RuntimeException("Invalid ItemVariantEnum class " + variant.getClass() + " for item " + getClass() + ": expected " + variant_enum_class);
 		}
@@ -268,6 +268,20 @@ public class CustomItem<T extends Module<T>, V extends CustomItem<T, V>> extends
 		custom_item.assert_correct_variant_class(variant);
 		final var custom_item_variant = custom_item.variants().get(variant.ordinal());
 		final var item_stack = item.clone();
+		item_stack.setType(custom_item_variant.base());
+		return prepare_item_stack(item_stack, custom_item, custom_item_variant);
+	}
+
+	/**
+	 * Convert an existing item to a custom item. Base type will be changed,
+	 * but e.g. Enchantments and attributes will be kept.
+	 */
+	public static<A extends CustomItem<?, ?>, U extends ItemVariantEnum>
+		ItemStack convert_existing(@NotNull ItemStack item, A custom_item, U variant)
+	{
+		custom_item.assert_correct_variant_class(variant);
+		final var item_stack = item.clone();
+		final var custom_item_variant = custom_item.variants().get(variant.ordinal());
 		item_stack.setType(custom_item_variant.base());
 		return prepare_item_stack(item_stack, custom_item, custom_item_variant);
 	}

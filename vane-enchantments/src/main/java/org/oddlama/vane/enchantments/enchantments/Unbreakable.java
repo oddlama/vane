@@ -5,6 +5,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerItemDamageEvent;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.loot.LootTables;
@@ -72,6 +73,8 @@ public class Unbreakable extends CustomEnchantment<Enchantments> {
 		// Set item unbreakable to prevent further event calls
 		final var meta = item.getItemMeta();
 		meta.setUnbreakable(true);
+		// Also hide the internal unbreakable tag on the client
+		meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
 		item.setItemMeta(meta);
 
 		// Prevent damage

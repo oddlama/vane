@@ -16,7 +16,7 @@ import org.oddlama.vane.core.item.ModelDataEnum;
 import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.trifles.event.PlayerTeleportScrollEvent;
 
-@VaneModule(name = "trifles", bstats = 8644, config_version = 1, lang_version = 1, storage_version = 1)
+@VaneModule(name = "trifles", bstats = 8644, config_version = 2, lang_version = 2, storage_version = 1)
 public class Trifles extends Module<Trifles> {
 	public final HashMap<UUID, Long> last_xp_bottle_consume_time = new HashMap<>();
 
@@ -36,6 +36,7 @@ public class Trifles extends Module<Trifles> {
 		new org.oddlama.vane.trifles.items.XpBottle(this);
 		new org.oddlama.vane.trifles.items.HomeScroll(this);
 		new org.oddlama.vane.trifles.items.UnstableScroll(this);
+		new org.oddlama.vane.trifles.items.ReinforcedElytra(this);
 	}
 
 	public boolean teleport_from_scroll(final Player player, final Location from, final Location to) {

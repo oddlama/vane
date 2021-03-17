@@ -12,7 +12,7 @@
 
 # DO NOT CHANGE! The version of this language file. Used to determine
 # if the file needs to be updated.
-version: 1
+version: 2
 # The corresponding language code used in resource packs. Used for
 # resource pack generation. Typically this is a combination of the
 # language code (ISO 639) and the country code (ISO 3166).
@@ -36,6 +36,10 @@ item_empty_xp_bottle:
 
 item_home_scroll:
   name: "Portalschriftrolle (Heim)"
+
+item_reinforced_elytra:
+  netherite:
+    name: "Netherit Elytren"
 
 item_unstable_scroll:
   name: "Portalschriftrolle (Instabil)"

@@ -91,6 +91,17 @@ public class CustomItemVariant<T extends Module<T>, V extends CustomItem<T, V>, 
 	}
 
 	/**
+	 * Returns the namespaced key for this item with additional suffix.
+	 */
+	public final NamespacedKey key(String suffix) {
+		return namespaced_key(get_module().namespace(), variant_name + "_" + suffix);
+	}
+
+	public final String variant_name() {
+		return variant_name;
+	}
+
+	/**
 	 * Returns the variant enum for this item.
 	 */
 	public final U variant() {

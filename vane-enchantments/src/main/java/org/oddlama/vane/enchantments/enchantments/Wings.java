@@ -32,7 +32,7 @@ import org.oddlama.vane.enchantments.Enchantments;
 import org.oddlama.vane.enchantments.items.AncientTomeOfKnowledge;
 import org.oddlama.vane.enchantments.items.BookVariant;
 
-@VaneEnchantment(name = "wings", max_level = 4, rarity = Rarity.RARE, treasure = true)
+@VaneEnchantment(name = "wings", max_level = 4, rarity = Rarity.RARE, treasure = true, allow_custom = true)
 public class Wings extends CustomEnchantment<Enchantments> {
 	@ConfigIntList(def = {7000, 5000, 3500, 2800}, min = 0, desc = "Boost cooldown in milliseconds for each enchantment level.")
 	private List<Integer> config_boost_cooldowns;

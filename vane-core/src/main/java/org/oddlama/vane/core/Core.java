@@ -236,7 +236,7 @@ public class Core extends Module<Core> implements PluginMessageListener {
 
 		// Try to add automatic netherite conversion
 		final var item_lookup = CustomItem.from_item(item);
-		if (!item_lookup.custom_item.has_netherite_conversion()) {
+		if (item_lookup == null || !item_lookup.custom_item.has_netherite_conversion()) {
 			return;
 		}
 

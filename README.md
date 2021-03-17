@@ -38,6 +38,7 @@ If you don't want a certain feature, simply disable it.
       Storing experience will cost a small percentage of the bottled xp. It will also calculate in terms of experience and not levels.
 - [x] The *Portal Scroll (Home)* will teleport you to your bed, but it only has a limited amount of uses!
 - [x] The *Portal Scroll (Unstable)* will teleport you back to the location where you last used a portal scroll.
+- [x] The *Reinforced Elytra* allows you to have armor and an Elytra.
 
 #### Core features (vane-core)
 
@@ -195,7 +196,9 @@ issues in other plugins, but badly written 3rd-party plugins could theoretically
 
 **A:** No, vane doesn't use SQL as a persistent storage, as it is simply not
 designed to be used on large networks with tens of thousands of players.
-For smaller survival servers, using SQL would be a waste of resources and processing time.
+For smaller survival servers, using an external SQL server would be a waste
+of resources and would require an unproportional amount of maintenance,
+both in the implementation and server administration.
 
 ### Acknowledgements & 3rd-party software
 

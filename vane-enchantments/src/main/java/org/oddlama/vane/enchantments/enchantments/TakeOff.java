@@ -31,7 +31,7 @@ import org.oddlama.vane.enchantments.Enchantments;
 import org.oddlama.vane.enchantments.items.AncientTomeOfTheGods;
 import org.oddlama.vane.enchantments.items.BookVariant;
 
-@VaneEnchantment(name = "take_off", max_level = 3, rarity = Rarity.UNCOMMON, treasure = true)
+@VaneEnchantment(name = "take_off", max_level = 3, rarity = Rarity.UNCOMMON, treasure = true, allow_custom = true)
 public class TakeOff extends CustomEnchantment<Enchantments> {
 	@ConfigDoubleList(def = {0.2, 0.4, 0.6}, min = 0.0, desc = "Boost strength for each enchantment level.")
 	private List<Double> config_boost_strengths;
