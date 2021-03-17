@@ -58,7 +58,7 @@ public class Region {
 
 	private RegionGroup cached_region_group = null;
 	public UUID region_group_id() { return region_group; }
-	public void region_group_id(final UUID region_group) { this.region_group = region_group; }
+	public void region_group_id(final UUID region_group) { this.region_group = region_group; this.cached_region_group = null; }
 	public RegionGroup region_group(final Regions regions) {
 		if (cached_region_group == null) {
 			cached_region_group = regions.get_region_group(region_group);

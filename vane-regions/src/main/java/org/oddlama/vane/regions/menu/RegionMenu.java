@@ -132,9 +132,7 @@ public class RegionMenu extends ModuleComponent<Regions> {
 			menu.close(player);
 			final var all_region_groups = get_module().all_region_groups()
 				.stream()
-				.filter(g -> player.getUniqueId().equals(g.owner())
-						     || g.get_role(player.getUniqueId())
-				                 .get_setting(RoleSetting.ADMIN))
+				.filter(g -> get_module().may_administrate(player, g))
 				.sorted((a, b) -> a.name().compareToIgnoreCase(b.name()))
 				.collect(Collectors.toList());
 

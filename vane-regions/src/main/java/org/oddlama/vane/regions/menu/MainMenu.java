@@ -60,15 +60,6 @@ public class MainMenu extends ModuleComponent<Regions> {
         item_select_region_group             = new TranslatedItemStack<>(ctx, "select_region_group",             Material.GLOBE_BANNER_PATTERN, 1, "Used to represent a region group in the region group selection list.");
 	}
 
-	private boolean may_administrate(final Player player, final RegionGroup group) {
-		return player.getUniqueId().equals(group.owner())
-			|| group.get_role(player.getUniqueId()).get_setting(RoleSetting.ADMIN);
-	}
-
-	private boolean may_administrate(final Player player, final Region region) {
-		return player.getUniqueId().equals(region.owner());
-	}
-
 	public Menu create(final Player player) {
 		final var columns = 9;
 		final var title = lang_title.str();
@@ -88,7 +79,7 @@ public class MainMenu extends ModuleComponent<Regions> {
 		} else {
 			main_menu.add(menu_item_start_selection());
 			main_menu.add(menu_item_list_regions());
-			if (region != null && may_administrate(player, region)) {
+			if (region != null && get_module().may_administrate(player, region)) {
 				main_menu.add(menu_item_current_region(region));
 			}
 		}
@@ -97,7 +88,7 @@ public class MainMenu extends ModuleComponent<Regions> {
 		main_menu.add(menu_item_list_region_groups());
 		if (region != null) {
 			final var group = region.region_group(get_module());
-			if (may_administrate(player, group)) {
+			if (get_module().may_administrate(player, group)) {
 				main_menu.add(menu_item_current_region_group(group));
 			}
 		}
@@ -227,7 +218,7 @@ public class MainMenu extends ModuleComponent<Regions> {
 			menu.close(player);
 			final var all_regions = get_module().all_regions()
 				.stream()
-				.filter(r -> may_administrate(player, r))
+				.filter(r -> get_module().may_administrate(player, r))
 				.sorted((a, b) -> a.name().compareToIgnoreCase(b.name()))
 				.collect(Collectors.toList());
 
@@ -275,7 +266,7 @@ public class MainMenu extends ModuleComponent<Regions> {
 			menu.close(player);
 			final var all_region_groups = get_module().all_region_groups()
 				.stream()
-				.filter(g -> may_administrate(player, g))
+				.filter(g -> get_module().may_administrate(player, g))
 				.sorted((a, b) -> a.name().compareToIgnoreCase(b.name()))
 				.collect(Collectors.toList());
 

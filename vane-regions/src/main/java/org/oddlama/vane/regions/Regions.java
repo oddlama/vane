@@ -509,6 +509,15 @@ public class Regions extends Module<Regions> {
 		return null;
 	}
 
+	public boolean may_administrate(final Player player, final RegionGroup group) {
+		return player.getUniqueId().equals(group.owner())
+			|| group.get_role(player.getUniqueId()).get_setting(RoleSetting.ADMIN);
+	}
+
+	public boolean may_administrate(final Player player, final Region region) {
+		return player.getUniqueId().equals(region.owner());
+	}
+
 	public RegionGroup get_or_create_default_region_group(final Player owner) {
 		final var owner_id = owner.getUniqueId();
 		final var region_group_id = storage_default_region_group.get(owner_id);
