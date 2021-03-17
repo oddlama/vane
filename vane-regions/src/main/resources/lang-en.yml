@@ -21,6 +21,18 @@ resource_pack_lang_code: 'en_us'
 # This message is sent when the player needs to select an area for
 # a new region.
 start_region_selection: "§aChoose an area by selecting two blocks via §bleft-§a and §bright-click§a with an empty hand."
+# This message is sent when the player selects the primary block
+# for a new region.
+# %1$s: Block X
+# %2$s: Block Y
+# %3$s: Block Z
+select_primary_block: "§aSelected (%1$s§a, %2$s§a, %3$s§a) as primary block."
+# This message is sent when the player selects the secondary block
+# for a new region.
+# %1$s: Block X
+# %2$s: Block Y
+# %3$s: Block Z
+select_secondary_block: "§aSelected (%1$s§a, %2$s§a, %3$s§a) as secondary block."
 
 command_region:
   usage: "%1$s"

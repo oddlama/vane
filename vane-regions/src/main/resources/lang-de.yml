@@ -19,6 +19,8 @@ version: 2
 resource_pack_lang_code: 'de_de'
 
 start_region_selection: "§aChoose an area by selecting two blocks via §bleft-§a and §bright-click§a with an empty hand."
+select_primary_block: "§aBlock (%1$s§a, %2$s§a, %3$s§a) als primärer Block gewählt."
+select_secondary_block: "§aBlock (%1$s§a, %2$s§a, %3$s§a) als sekundärer Block gewählt."
 
 command_region:
   usage: "%1$s"
