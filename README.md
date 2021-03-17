@@ -66,6 +66,7 @@ If you don't want a certain feature, simply disable it.
 #### Multiplayer sleeping (vane-bedtime)
 
 - [x] Skip night with 50% of players sleeping
+- [x] Dynmap integration shows player beds
 
 #### Custom enchantments (vane-enchantments)
 
