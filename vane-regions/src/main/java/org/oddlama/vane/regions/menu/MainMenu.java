@@ -185,7 +185,7 @@ public class MainMenu extends ModuleComponent<Regions> {
 							dz <= get_module().config_max_region_extent_z;
 						no_intersection = !selection.intersects_existing();
 						can_afford = selection.can_afford(final_player);
-						price = (can_afford ? "§a" : "$§") + selection.price() + " §b" + String.valueOf(get_module().config_currency).toLowerCase();
+						price = (can_afford ? "§a" : "§c") + selection.price() + " §b" + String.valueOf(get_module().config_currency).toLowerCase();
 					} else {
 						sdx = "§7?";
 						sdy = "§7?";
