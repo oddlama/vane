@@ -22,7 +22,6 @@ import org.oddlama.vane.regions.Regions;
 import org.oddlama.vane.regions.region.Region;
 import org.oddlama.vane.regions.region.RegionGroup;
 import org.oddlama.vane.regions.region.RegionSelection;
-import org.oddlama.vane.regions.region.RoleSetting;
 
 public class MainMenu extends ModuleComponent<Regions> {
 	@LangMessage public TranslatedMessage lang_title;

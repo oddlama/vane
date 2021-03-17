@@ -1,38 +1,28 @@
 package org.oddlama.vane.trifles.items;
 
-import static org.oddlama.vane.util.ItemUtil.damage_item;
-import static org.oddlama.vane.util.PlayerUtil.swing_arm;
-import static org.oddlama.vane.util.Util.ms_to_ticks;
 import static org.oddlama.vane.core.item.CustomItem.convert_existing;
 
 import java.io.IOException;
 import java.util.UUID;
 
 import org.bukkit.Material;
-import org.bukkit.Tag;
-import org.bukkit.event.Event;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.PrepareSmithingEvent;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.RecipeChoice.MaterialChoice;
-import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.inventory.SmithingRecipe;
-import org.oddlama.vane.annotation.config.ConfigDouble;
-import org.oddlama.vane.annotation.item.VaneItem;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.inventory.PrepareSmithingEvent;
+import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.RecipeChoice.MaterialChoice;
+import org.bukkit.inventory.SmithingRecipe;
+
+import org.oddlama.vane.annotation.config.ConfigDouble;
+import org.oddlama.vane.annotation.item.VaneItem;
 import org.oddlama.vane.core.ResourcePackGenerator;
 import org.oddlama.vane.core.item.CustomItem;
 import org.oddlama.vane.core.item.CustomItemVariant;
 import org.oddlama.vane.core.item.ItemVariantEnum;
 import org.oddlama.vane.core.module.Context;
-import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.inventory.ItemStack;
-import org.oddlama.vane.enchantments.items.AncientTomeOfKnowledge;
-import org.oddlama.vane.enchantments.items.BookVariant;
 import org.oddlama.vane.trifles.Trifles;
 
 @VaneItem(name = "reinforced_elytra")
@@ -88,16 +78,6 @@ public class ReinforcedElytra extends CustomItem<Trifles, ReinforcedElytra> {
 		@Override
 		public void on_generate_resource_pack(final ResourcePackGenerator pack) throws IOException {
 			// Add normal variant
-			//final var resource_name = "items/" + variant_name() + ".png";
-			//final var resource = get_module().getResource(resource_name);
-			//if (resource == null) {
-			//	throw new RuntimeException("Missing resource '" + resource_name + "'. This is a bug.");
-			//}
-			//pack.add_item_model(key(), resource);
-			//pack.add_item_override(base().getKey(), key(), predicate -> {
-			//	predicate.put("custom_model_data", model_data());
-			//	predicate.put("broken", 0);
-			//});
 			super.on_generate_resource_pack(pack);
 
 			// Add broken variant
