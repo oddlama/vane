@@ -77,7 +77,7 @@ If you don't want a certain feature, simply disable it.
 - [x] *Rake*: Tilling farmland again will till the nearest block around it. Use repeatedly on farmland to create a circle.
 - [x] *Careless*: Tilling long grass will remove it and till the block below. Useful in combination with *Rake* to automatically till grass with long grass on top.
 - [x] *Seeding*: Right click your crops to plant crops of the same type around them. Use multiple times to create a circle.
-- [x] *Take Off*: Double jump to start gliding with your elytra and receive a small boost.
+- [x] *Takeoff*: Double jump to start gliding with your elytra and receive a small boost.
 - [x] *Hell Bent*: Don't hurt your head when flying into a wall. Again.
 - [x] *Grappling Hook*: Finally put that fishing rod to good use!
 - [x] *Leafchopper*: Remove leaves instantly with your axe. Leaves will drop items as if they decayed naturally.

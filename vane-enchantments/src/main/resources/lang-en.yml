@@ -79,7 +79,7 @@ enchantment_soulbound:
 
 enchantment_take_off:
   # The display name of this enchantment. Will be packed into a resource pack.
-  name: "Take Off"
+  name: "Takeoff"
 
 enchantment_unbreakable:
   # The display name of this enchantment. Will be packed into a resource pack.
