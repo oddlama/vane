@@ -7,7 +7,7 @@ subprojects {
 	apply plugin: 'org.ajoberstar.organize-imports';
 
 	group 'org.oddlama.vane';
-	version '1.0.0';
+	version '1.1.0';
 	sourceCompatibility = 11;
 
 	repositories() {
