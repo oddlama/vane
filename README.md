@@ -1,4 +1,4 @@
-[Features](#features) \|
+[Overview](https://oddlama.github.io/vane/) \|
 [Installation](#installation) \|
 [FAQ](#faq) \|
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
@@ -16,6 +16,9 @@ These plugins follow a **strict no-nonsense** rule:
 - [x] Augments the classic vanilla experience, and doesn't try to replace it.
 
 ### Features
+
+For a full overview and explanation of all features,
+visit the online [Overview](https://oddlama.github.io/vane/).
 
 All features are modularized and can be disabled independently of each other.
 If you don't want a certain feature, simply disable it.
