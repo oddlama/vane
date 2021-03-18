@@ -2,6 +2,10 @@
 [Installation](#installation) \|
 [FAQ](#faq) \|
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
+ 
+<p align="center">
+  <img src="./docs/vane_rounded.png" height="100" width="auto" />
+</p>
 
 # About vane
 
