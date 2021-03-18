@@ -17,8 +17,7 @@ These plugins follow a **strict no-nonsense** rule:
 
 ## Features
 
-For a full overview and explanation of all features,
-visit the online [Overview](https://oddlama.github.io/vane/).
+<b>[For a full overview and explanation of all features, visit the online overview.](https://oddlama.github.io/vane/)</b>
 
 All features are modularized and can be disabled independently of each other.
 If you don't want a certain feature, simply disable it.
