@@ -3,7 +3,7 @@
 [FAQ](#faq) \|
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 
-## About vane
+# About vane
 
 Vane is a group of plugins which provide many
 immersive and lore friendly extensions for vanilla minecraft.
@@ -15,7 +15,7 @@ These plugins follow a **strict no-nonsense** rule:
 - [x] Additions should actually be useful
 - [x] Augments the classic vanilla experience, and doesn't try to replace it.
 
-### Features
+## Features
 
 For a full overview and explanation of all features,
 visit the online [Overview](https://oddlama.github.io/vane/).
@@ -122,7 +122,7 @@ If you don't want a certain feature, simply disable it.
 > on average more powerful than the vanilla ones, we would need more categories to balance the enchanting process.
 > This system is not suited for giving out valuable traits (like *Angel* or *Unbreakable*), so we decided to create crafting recipes and modify loot tables instead.
 
-### Installation
+## Installation
 
 **This plugin requires Java 11!**
 
@@ -140,7 +140,7 @@ Enjoy playing!
 > This protocol is considered insecure and therefore should NOT be used. To workaround this issue, you should host the file in a http context.
 > Using http is not a security issue, as the file will be verified via its sha1 sum by the client.
 
-#### Installation (vane-waterfall)
+### Installation (vane-waterfall)
 
 Again, download/compile and place `vane-waterfall` jar into the proxy server's `plugins/` directory.
 The configuration will be generated on first start.
@@ -156,7 +156,7 @@ To enable the authentication multiplexing, you need to do the following:
 Optionally, you can configure the second configuration section in `plugins/vane-waterfall/config.yml` to allow automatic server start.
 An example is provided in the config file.
 
-### Building from source
+## Building from source
 
 You can of course build the plugin yourself. To do that you need at least JDK 11.
 Before you can proceed, you need to copy the fully patched Paper server jar
@@ -169,7 +169,7 @@ to `libs/`. This is required so the compiler can find minecraft-native symbols.
 If you experience "peer not authenticated" issues from gradle, just retry.
 Seems to be a skittish integration between gradle and maven repositories.
 
-### FAQ
+## FAQ
 
 #### Q: Can I also use Spigot or do I need PaperMC?
 
