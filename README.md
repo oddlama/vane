@@ -134,7 +134,7 @@ To install vane, begin by downloading/compiling and placing all desired module j
 1. Start the server to generate configuration files, and edit them to your preference.
 2. Either restart the server, or type `/vane reload` to apply the changes.
 3. Execute `/vane generate_resource_pack`. This will place the required resource pack in the server's working directory.
-4. Copy the resource pack to a publicly accessible webserver and configure the related section in `plugins/vane-core/config.yml`.
+4. Copy the resource pack to a publicly accessible webserver and configure the related section in `plugins/vane-core/config.yml`. Beware that minecraft has problems with https connection as outlined below.
 5. Either restart the server again, or type `/vane reload` to apply the changes.
 
 Enjoy playing!

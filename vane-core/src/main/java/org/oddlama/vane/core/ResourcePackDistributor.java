@@ -31,6 +31,9 @@ public class ResourcePackDistributor extends Listener<Core> {
 	public ResourcePackDistributor(Context<Core> context) {
 		super(context.group("resource_pack", "Enable resource pack distribution."));
 
+		// Delay messages if this the distributor is active.
+		new PlayerMessageDelayer(get_context());
+
 		// Register bypass permission
 		bypass_permission = new Permission("vane." + get_module().get_name() + ".resource_pack.bypass", "Allows bypassing an enforced resource pack", PermissionDefault.FALSE);
 		get_module().register_permission(bypass_permission);

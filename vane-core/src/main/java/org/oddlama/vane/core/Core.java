@@ -112,7 +112,6 @@ public class Core extends Module<Core> implements PluginMessageListener {
 		new org.oddlama.vane.core.commands.Vane(this);
 		menu_manager = new MenuManager(this);
 		new ResourcePackDistributor(this);
-		new PlayerMessageDelayer(this);
 		new CommandHider(this);
 	}
 
