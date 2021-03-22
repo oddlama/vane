@@ -279,8 +279,12 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 		if ("inherit".equals(lang_code)) {
 			lang_code = core.config_lang;
 
-			// Fallback to en in case 'inherit' is used in vane-core.
-			if ("inherit".equals(lang_code)) {
+			if (lang_code == null) {
+				// Core failed to load, so the server will be shutdown anyway.
+				// Prevent an additional warning by falling back to en.
+				lang_code = "en";
+			} else if ("inherit".equals(lang_code)) {
+				// Fallback to en in case 'inherit' is used in vane-core.
 				lang_code = "en";
 			}
 		}
