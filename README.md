@@ -1,5 +1,5 @@
 [Overview](https://oddlama.github.io/vane/) \|
-[Installation](#installation) \|
+[Installation](https://github.com/oddlama/vane/wiki/Installation-Guide) \|
 [FAQ](#faq) \|
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
  
@@ -126,6 +126,8 @@ If you don't want a certain feature, simply disable it.
 > This system is not suited for giving out valuable traits (like *Angel* or *Unbreakable*), so we decided to create crafting recipes and modify loot tables instead.
 
 ## Installation
+
+For a comprehensive guide, visit the [Installation Guide](https://github.com/oddlama/vane/wiki/Installation-Guide) on the wiki.
 
 **This plugin requires Java 11!**
 
