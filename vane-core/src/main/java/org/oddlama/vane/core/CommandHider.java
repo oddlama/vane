@@ -10,7 +10,7 @@ import org.oddlama.vane.core.module.Context;
 
 public class CommandHider extends Listener<Core> {
 	public CommandHider(Context<Core> context) {
-		super(context.group("hide_commands", "Hide error messages for all commands for which a player has no permission, by displaying the default \"Unknown Command\" message instead."));
+		super(context.group("hide_commands", "Hide error messages for all commands for which a player has no permission, by displaying the default unknown command message instead."));
 	}
 
 	private boolean allow_command_event(String message, Player player) {
@@ -39,7 +39,7 @@ public class CommandHider extends Listener<Core> {
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void on_player_command_preprocess(PlayerCommandPreprocessEvent event) {
 		if (!allow_command_event(event.getMessage(), event.getPlayer())) {
-			event.getPlayer().sendMessage("Unknown Command");
+			event.getPlayer().sendMessage("Unknown command. Type \"/help\" for help.");
 			event.setCancelled(true);
 		}
 	}
