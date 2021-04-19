@@ -15,7 +15,7 @@ It runs on any [papermc](https://papermc.io) based server.
 
 These plugins follow a **strict no-nonsense** rule:
 - [x] If you dislike any feature, you can disable it individually.
-- [x] Features must be lore friendly, properly integrated and unobstrusive
+- [x] Features must be lore friendly, properly integrated and unobtrusive
 - [x] Additions should actually be useful
 - [x] Augments the classic vanilla experience, and doesn't try to replace it.
 
@@ -100,9 +100,9 @@ If you don't want a certain feature, simply disable it.
 #### Regions (vane-regions)
 
 - [x] Players can buy a patch of land, and may control certain environmental conditions and player permissions for that area
-- [x] Regions created by admins can be used to protect gobal areas (e.g. spawn).
+- [x] Regions created by admins can be used to protect global areas (e.g. spawn).
 - [x] Seamless integration into chest-like menus instead of commands.
-- [x] Integrates with portals to allow only players witha the portal permission to operate portals in the region
+- [x] Integrates with portals to allow only players with the portal permission to operate portals in the region
 - [x] Integrates with dynmap to make regions visible on the online map
 - [x] Visual region selection indicator
 
