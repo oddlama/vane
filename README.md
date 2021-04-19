@@ -208,6 +208,11 @@ For smaller survival servers, using an external SQL server would be a waste
 of resources and would require an unproportional amount of maintenance,
 both in the implementation and server administration.
 
+#### Q: Players can't build when theya are not in the admin group
+
+**A:** They probably are in the spawn protection area, which by default is 64 block radius around (0,0).
+You can adjust the radius or disable it in `vane-admin/config.yml`.
+
 ### Acknowledgements & 3rd-party software
 
 I would like to thank the following projects and people maintaining them:
