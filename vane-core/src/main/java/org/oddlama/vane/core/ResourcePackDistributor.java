@@ -65,7 +65,7 @@ public class ResourcePackDistributor extends Listener<Core> {
 		event.getPlayer().setResourcePack(config_url, config_sha1);
 	}
 
-	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
 	public void on_player_status(final PlayerResourcePackStatusEvent event) {
 		if (!config_force || event.getPlayer().hasPermission(bypass_permission)) {
 			return;
