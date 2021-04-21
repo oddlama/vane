@@ -149,6 +149,9 @@ public class PlayerMessageDelayer extends Listener<Core> {
 				get_module().log.info("The resource pack download for player " + player.getName() + " failed. This will cause client-side issues with formatted text for them.");
 				player.sendMessage("Your resource pack download failed. Please reconnect to retry, otherwise this will cause major issues with formatted text and custom items.");
 				break;
+
+			default:
+				break;
 		}
 	}
 
