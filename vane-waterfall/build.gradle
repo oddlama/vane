@@ -23,11 +23,25 @@ shadowJar {
 	relocate 'org.json', 'org.oddlama.vane.vane_waterfall.external.json';
 }
 
+signing {
+	if (project.hasProperty('signing.gnupg.keyName')) {
+		sign shadowJar;
+	}
+}
+build.dependsOn signShadowJar;
+
 task copyJar(type: Copy) {
 	from shadowJar;
 	into "${project.rootProject.projectDir}/target-waterfall";
 	duplicatesStrategy 'include';
 	rename '(.*)-all.jar', '$1.jar';
 }
+build.dependsOn copyJar;
 
-build.dependsOn copyJar
+task copyJarAsc(type: Copy) {
+	from signShadowJar;
+	into "${project.rootProject.projectDir}/target-waterfall";
+	duplicatesStrategy 'include';
+	rename '(.*)-all.jar.asc', '$1.jar.asc';
+}
+build.dependsOn copyJarAsc;

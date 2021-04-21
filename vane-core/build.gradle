@@ -21,8 +21,20 @@ shadowJar {
 	relocate 'org.json', 'org.oddlama.vane.external.json';
 }
 
+signing {
+	if (project.hasProperty('signing.gnupg.keyName')) {
+		sign shadowJar;
+	}
+}
+
 copyJar {
 	from shadowJar;
 	duplicatesStrategy 'include';
 	rename '(.*)-all.jar', '$1.jar';
+}
+
+copyJarAsc {
+	from signShadowJar;
+	duplicatesStrategy 'include';
+	rename '(.*)-all.jar.asc', '$1.jar.asc';
 }

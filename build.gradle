@@ -1,10 +1,12 @@
 plugins {
 	id 'org.ajoberstar.organize-imports' version '1.0.3' apply false;
+	id 'signing';
 }
 
 subprojects {
 	apply plugin: 'java';
 	apply plugin: 'org.ajoberstar.organize-imports';
+	apply plugin: 'signing';
 
 	group 'org.oddlama.vane';
 	version '1.1.2';
@@ -32,6 +34,14 @@ subprojects {
 		compileOnly group: 'org.jetbrains', name: 'annotations', version: '20.0.0';
 		annotationProcessor 'org.jetbrains:annotations:20.0.0';
 	}
+
+	signing {
+		if (project.hasProperty('signing.gnupg.keyName')) {
+			useGpgCmd();
+			sign jar;
+		}
+	}
+	build.dependsOn signJar;
 }
 
 configure(subprojects.findAll {it.name != 'vane-waterfall'}) {
@@ -40,16 +50,21 @@ configure(subprojects.findAll {it.name != 'vane-waterfall'}) {
 		// Simply copy cache/patched_{..}.jar from a paper server into libs/.
 		implementation name: 'patched_1.16.5';
 	}
+}
 
+configure(subprojects.findAll {it.name != 'vane-annotations' && it.name != 'vane-waterfall'}) {
 	task copyJar(type: Copy) {
 		from jar;
 		into "${project.rootProject.projectDir}/target";
 	}
+	build.dependsOn copyJar;
 
-	build.dependsOn copyJar
-}
+	task copyJarAsc(type: Copy) {
+		from signJar;
+		into "${project.rootProject.projectDir}/target";
+	}
+	build.dependsOn copyJarAsc;
 
-configure(subprojects.findAll {it.name != 'vane-annotations' && it.name != 'vane-waterfall'}) {
 	dependencies {
 		implementation group: 'com.comphenix.protocol', name: 'ProtocolLib', version: '4.6.0-SNAPSHOT';
 

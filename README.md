@@ -213,6 +213,11 @@ both in the implementation and server administration.
 **A:** They probably are in the spawn protection area, which by default is 64 block radius around (0,0).
 You can adjust the radius or disable it in `vane-admin/config.yml`.
 
+#### Q: How can I verify that the release files I downloaded are authentic and haven't been tampered with?
+
+**A:** All artifacts are signed by me with [my gpg key](https://oddlama.org/gpg/oddlama@oddlama.org.asc). The signature files are uploaded together with the released jars. (beginning from version v1.1.2).
+Example: To verify all downloaded files, import my public key and execute `for i in *.jar; do gpg --verify "$i.asc" "$i.asc"; done` in the folder with the `.jar` and `.asc` files.
+
 ### Acknowledgements & 3rd-party software
 
 I would like to thank the following projects and people maintaining them:

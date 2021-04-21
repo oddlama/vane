@@ -4,6 +4,7 @@
 .project
 .settings
 .idea
+gradle.properties
 build
 libs/
 target/
