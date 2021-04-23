@@ -41,6 +41,13 @@ public interface Context<T extends Module<T>> {
 		return new ModuleGroup<T>(this, group, description);
 	}
 
+	/** create a subcontext group */
+	default public ModuleGroup<T> group_default_disabled(String group, String description) {
+		final var g = group(group, description);
+		g.config_enabled_def = false;
+		return g;
+	}
+
 	/**
 	 * Compile the given component (processes lang and config definitions)
 	 * and registers it for on_enable, on_disable and on_config_change events.

@@ -212,6 +212,7 @@ both in the implementation and server administration.
 
 **A:** They probably are in the spawn protection area, which by default is 64 block radius around (0,0).
 You can adjust the radius or disable it in `vane-admin/config.yml`.
+Beginning with v1.1.3, spawn protection is disabled by default.
 
 #### Q: How can I verify that the release files I downloaded are authentic and haven't been tampered with?
 

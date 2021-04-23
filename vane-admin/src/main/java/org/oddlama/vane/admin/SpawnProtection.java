@@ -42,7 +42,7 @@ public class SpawnProtection extends Listener<Admin> {
 	private int config_z;
 
 	public SpawnProtection(Context<Admin> context) {
-		super(context.group("spawn_protection", "Enable spawn protection. Slightly more sophisticated than the vanilla spawn protection, if you need even more control, use regions. This will prevent anyone from modifying the spawn of the world if they don't have the permission '" + PERMISSION_NAME + "'."));
+		super(context.group_default_disabled("spawn_protection", "Enable spawn protection. Slightly more sophisticated than the vanilla spawn protection, if you need even more control, use regions. This will prevent anyone from modifying the spawn of the world if they don't have the permission '" + PERMISSION_NAME + "'."));
 		get_module().register_permission(permission);
 	}
 
