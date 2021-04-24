@@ -1,0 +1,132 @@
+# vim: set tabstop=2 softtabstop=0 expandtab shiftwidth=2:
+#
+# >> See lang-en.yml for variable descriptions <<
+#
+# +-----------------------------------+
+# | CAUTION: Do NOT change this file! |
+# +-----------------------------------+
+#
+# It will be silently overwritten with updates! If you want
+# to customize strings yourself, copy this file to lang-custom.yml
+# and set the language in the config.yml to "lang: 'custom'"
+
+# DO NOT CHANGE! The version of this language file. Used to determine
+# if the file needs to be updated.
+version: 1
+# The corresponding language code used in resource packs. Used for
+# resource pack generation. Typically this is a combination of the
+# language code (ISO 639) and the country code (ISO 3166).
+resource_pack_lang_code: 'zh_cn'
+
+# This message is sent when a command requires a player but is executed
+# by a non-player.
+command_not_a_player: "§c错误:§6 此命令必须由玩家执行!"
+# This message is sent when the command sender is missing the required
+# permission.
+command_permission_denied: "§c错误:§6 没有恰当的权限!"
+
+# This message is sent when an invalid time format is encountered.
+# %1$s: format error message
+invalid_time_format: "§c错误:§6 无效时间格式: %1$s"
+
+# This message is sent when a block with a lootable is first attempted to be broken.
+break_loot_block_prevented: "§6这个方块有一个循环补货表，一段时间后会自动被重新填充。如果你真的想破坏这个方块，等待5秒再打破它。"
+
+command_vane:
+  # This message is sent when a module has been successfully reloaded.
+  # %1$s: module
+  reload_success: "%1$s§7: §a重载成功"
+  # This message is sent when a module failed to reload.
+  # %1$s: module
+  reload_fail: "%1$s§7: §c重载失败"
+  # This message is sent when the resource_pack has been successfully generated.
+  resource_pack_generate_success: "§a资源包生成成功"
+  # This message is sent when the resource_pack could not be generated.
+  resource_pack_generate_fail: "§c在生成资源包时遇到了错误"
+  usage: "%1$s §7<§areload§7|§agenerate_resource_pack§7>"
+  description: "管理 vane 插件。"
+  help: "§areload §7[§b模块§7]:§r 重载所有 vane 模块或指定的 vane 模块。\n\
+    §agenerate_resource_pack§7:§r 生成 vane 资源包。"
+
+resource_pack:
+  # This kick message is used when a mandatory resource pack was declined by a player.
+  declined: "您需要接收资源包才能玩这个服务器。\n\
+    It is needed for localization and textures."
+  # This kick message is used when a mandatory resource pack failed to download for  player.
+  download_failed: "§c您的资源包下载请求似乎丢失了。§r\n\
+    §7(为了避免显示错误，我们已将您与服务器的连接断开)\n\
+    \n\
+    §d请稍候重试。"
+
+menus:
+  head_selector:
+    # The title for the head selection menu.
+    # %1$s: Total heads in library
+    title: "%1$s §8§l头颅"
+    # The title for the filter menu.
+    filter_title: "§8§l头颅库筛选器"
+    # Represents a head in the library.
+    # %1$s: Head name
+    # %2$s: Head category
+    # %3$s: Head tags
+    select_head:
+      name: "%1$s"
+      lore:
+        - ""
+        - "§7类别: %2$s"
+        - "§7标签: %3$s"
+
+  # Item selection menu.
+  item_selector:
+    # The item used to accept the selection.
+    accept:
+      name: "§a§l接受"
+      lore: ["§b选中§7 当前已选择的物品。"]
+
+    # The item used to cancel the selection.
+    cancel:
+      name: "§c§l取消"
+      lore: ["§6中断§7 物品选择。"]
+
+    # The item used to represent the currently selected item.
+    selected:
+      name: "§d§l已选物品"
+      lore:
+        - ""
+        - "单击您背包中的任何物品以选中。"
+        - ""
+        - "§b左击§7 重置更改。"
+        - "§b右击§7 清空 (如果有可能)。"
+
+  # Generic thing selection menu.
+  generic_selector:
+    # The item selecting the n'th page
+    # %1$s: Page number
+    page:
+      name: "§b页码 %1$s"
+      lore: []
+
+    # The item showing the current page
+    # %1$s: Page number
+    # %2$s: Total amount of pages
+    # %3$s: Total amount of items (filtered)
+    # %4$s: Total amount of items (unfiltered)
+    current_page:
+      name: "§a当前页码 %1$s §7/ %2$s"
+      lore:
+        - ""
+        - "§b#已筛选的物品: %3$s"
+
+    # The item used to open the filter menu.
+    # Right clicking resets the filter.
+    filter:
+      name: "§d§l筛选器"
+      lore:
+        - ""
+        - "§b左击§7 以打开筛选器菜单。"
+        - "§b右击§7 以重置筛选器。"
+
+    # The item used to cancel the selection.
+    cancel:
+      name: "§c§l取消"
+      lore: ["§6中断§7 选择。"]
