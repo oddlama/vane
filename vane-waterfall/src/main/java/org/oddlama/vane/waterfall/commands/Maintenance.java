@@ -14,7 +14,7 @@ public class Maintenance extends Command {
 	private final Waterfall plugin;
 
 	public Maintenance(final Waterfall plugin) {
-		super("maintentance", "vane_waterfall.commands.maintenance", new String[0]);
+		super("maintenance", "vane_waterfall.commands.maintenance", new String[0]);
 		this.plugin = plugin;
 	}
 
