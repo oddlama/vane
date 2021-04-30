@@ -217,7 +217,7 @@ Beginning with v1.1.3, spawn protection is disabled by default.
 #### Q: How can I verify that the release files I downloaded are authentic and haven't been tampered with?
 
 **A:** All artifacts are signed by me with [my gpg key](https://oddlama.org/gpg/oddlama@oddlama.org.asc). The signature files are uploaded together with the released jars. (beginning from version v1.1.2).
-Example: To verify all downloaded files, import my public key and execute `for i in *.jar; do gpg --verify "$i.asc" "$i.asc"; done` in the folder with the `.jar` and `.asc` files.
+Example: To verify all downloaded files, import my public key and execute `for i in *.jar; do gpg --verify "$i.asc" "$i"; done` in the folder with the `.jar` and `.asc` files.
 
 ### Acknowledgements & 3rd-party software
 
