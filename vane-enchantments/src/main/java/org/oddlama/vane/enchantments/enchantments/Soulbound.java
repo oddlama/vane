@@ -1,5 +1,7 @@
 package org.oddlama.vane.enchantments.enchantments;
 
+import java.util.ArrayList;
+
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 
@@ -61,6 +63,29 @@ public class Soulbound extends CustomEnchantment<Enchantments> {
 			.setIngredient('e', Material.ENDER_EYE);
 
 		add_recipe(recipe);
+
+		// Alternate recipe with empty lore (for backwards compatibility)
+		final var curse_of_binding_empty_lore = new ItemStack(Material.ENCHANTED_BOOK);
+		final var curse_meta_empty_lore = (EnchantmentStorageMeta)curse_of_binding_empty_lore.getItemMeta();
+		curse_meta_empty_lore.addStoredEnchant(Enchantment.BINDING_CURSE, 1, false);
+		curse_meta_empty_lore.setLoreComponents(new ArrayList<BaseComponent[]>());
+		curse_of_binding_empty_lore.setItemMeta(curse_meta_empty_lore);
+
+		final var recipe_key_empty_lore = recipe_key("empty_lore");
+		final var recipe_empty_lore = new ShapedRecipe(recipe_key_empty_lore, item)
+			.shape("cqc",
+				   "obe",
+				   "rgt")
+			.setIngredient('b', ancient_tome_of_the_gods)
+			.setIngredient('c', Material.CHAIN)
+			.setIngredient('q', Material.WRITABLE_BOOK)
+			.setIngredient('o', Material.BONE)
+			.setIngredient('r', curse_of_binding_empty_lore)
+			.setIngredient('g', Material.GHAST_TEAR)
+			.setIngredient('t', Material.TOTEM_OF_UNDYING)
+			.setIngredient('e', Material.ENDER_EYE);
+
+		add_recipe(recipe_empty_lore);
 
 		// Loot generation
 		get_module().loot_table(LootTables.BASTION_TREASURE).put(recipe_key, new LootTableEntry(15, item));

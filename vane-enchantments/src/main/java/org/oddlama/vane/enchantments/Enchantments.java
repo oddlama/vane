@@ -159,7 +159,7 @@ public class Enchantments extends Module<Enchantments> {
 
 		// Set lore
 		final var meta = item_stack.getItemMeta();
-		meta.setLoreComponents(lore);
+		meta.setLoreComponents(lore.isEmpty() ? null : lore);
 		item_stack.setItemMeta(meta);
 	}
 
