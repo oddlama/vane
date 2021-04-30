@@ -26,8 +26,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.RegisteredServiceProvider;
+
+import net.milkbowl.vault.economy.Economy;
 
 import org.oddlama.vane.annotation.VaneModule;
+import org.oddlama.vane.annotation.config.ConfigBoolean;
 import org.oddlama.vane.annotation.config.ConfigDouble;
 import org.oddlama.vane.annotation.config.ConfigInt;
 import org.oddlama.vane.annotation.config.ConfigMaterial;
@@ -48,7 +52,7 @@ import org.oddlama.vane.regions.region.RegionSelection;
 import org.oddlama.vane.regions.region.Role;
 import org.oddlama.vane.regions.region.RoleSetting;
 
-@VaneModule(name = "regions", bstats = 8643, config_version = 2, lang_version = 2, storage_version = 1)
+@VaneModule(name = "regions", bstats = 8643, config_version = 3, lang_version = 3, storage_version = 1)
 public class Regions extends Module<Regions> {
 	//
 	//                                                  ┌───────────────────────┐
@@ -96,7 +100,12 @@ public class Regions extends Module<Regions> {
 	@ConfigInt(def = 2048, min = 1, desc = "Maximum region extent in z direction.")
 	public int config_max_region_extent_z;
 
-	@ConfigMaterial(def = Material.DIAMOND, desc = "The currency material for regions.")
+	@ConfigBoolean(def = false, desc = "Use economy via VaultAPI as currency provider.")
+	public boolean config_economy_as_currency;
+	@ConfigInt(def = 0, min = -1, desc = "The amount of decimal places the costs will be rounded to. If set to -1, it will round to the amount of decimal places specified by your economy plugin. If set to 0, costs will simply be rounded up to the nearest integer.")
+	public int config_economy_decimal_places;
+
+	@ConfigMaterial(def = Material.DIAMOND, desc = "The currency material for regions. The alternative option to an economy plugin.")
 	public Material config_currency;
 	@ConfigDouble(def = 2.0, min = 0.0, desc = "The base amount of currency required to buy an area equal to one chunk (256 blocks).")
 	public double config_cost_xz_base;
@@ -125,6 +134,8 @@ public class Regions extends Module<Regions> {
 	public RegionMenuGroup menus;
 	public RegionDynmapLayer dynmap_layer;
 
+	public Economy economy;
+
 	public Regions() {
 		menus = new RegionMenuGroup(this);
 
@@ -140,6 +151,28 @@ public class Regions extends Module<Regions> {
 		for (var region : storage_regions.values()) {
 			index_add_region(region);
 		}
+
+		if (config_economy_as_currency) {
+			setup_economy();
+		}
+	}
+
+	private void setup_economy() {
+		final var vault_api_plugin = getServer().getPluginManager().getPlugin("Vault");
+		if (vault_api_plugin != null) {
+			log.severe("Economy (VaultAPI) was selected as the currency provider, but the Vault plugin wasn't found! Falling back to material currency.");
+			config_economy_as_currency = false;
+			return;
+		}
+
+		RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
+		if (rsp == null) {
+			log.severe("Economy (VaultAPI) was selected as the currency provider, but no Economy service provider is installed! Falling back to material currency.");
+			config_economy_as_currency = false;
+			return;
+		}
+
+		economy = rsp.getProvider();
 	}
 
 	@Override
@@ -358,12 +391,18 @@ public class Regions extends Module<Regions> {
 			return false;
 		}
 
-		// Take currency items
+		// Take currency items / withdraw economy
 		final var price = selection.price();
-		final var map = new HashMap<ItemStack, Integer>();
-		map.put(new ItemStack(config_currency), price);
-		if (price > 0 && !take_items(player, map)) {
-			return false;
+		if (config_economy_as_currency) {
+			if (price > 0 && !economy.withdrawPlayer(player, price).transactionSuccess()) {
+				return false;
+			}
+		} else {
+			final var map = new HashMap<ItemStack, Integer>();
+			map.put(new ItemStack(config_currency), (int)price);
+			if (price > 0 && !take_items(player, map)) {
+				return false;
+			}
 		}
 
 		final var def_region_group = get_or_create_default_region_group(player);
@@ -371,6 +410,14 @@ public class Regions extends Module<Regions> {
 		add_region(region);
 		cancel_region_selection(player);
 		return true;
+	}
+
+	public String currency_string() {
+		if (config_economy_as_currency) {
+			return economy.currencyNamePlural();
+		} else {
+			return String.valueOf(config_currency).toLowerCase();
+		}
 	}
 
 	public void add_region(final Region region) {

@@ -2,6 +2,8 @@ package org.oddlama.vane.regions.region;
 
 import static org.oddlama.vane.util.PlayerUtil.has_items;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.HashMap;
 
 import org.bukkit.block.Block;
@@ -34,11 +36,25 @@ public class RegionSelection {
 		return false;
 	}
 
-	public int price() {
+	public double price() {
 		final var dx = 1 + Math.abs(primary.getX() - secondary.getX());
 		final var dy = 1 + Math.abs(primary.getY() - secondary.getY());
 		final var dz = 1 + Math.abs(primary.getZ() - secondary.getZ());
-		return (int)Math.ceil(Math.pow(regions.config_cost_y_multiplicator, dy / 16.0) * regions.config_cost_xz_base / 256.0 * dx * dz);
+		final var cost = Math.pow(regions.config_cost_y_multiplicator, dy / 16.0) * regions.config_cost_xz_base / 256.0 * dx * dz;
+		if (regions.config_economy_as_currency) {
+			int decimal_places = regions.config_economy_decimal_places;
+			if (decimal_places == -1) {
+				decimal_places = regions.economy.fractionalDigits();
+			}
+
+			if (decimal_places >= 0) {
+				return new BigDecimal(cost).setScale(decimal_places, RoundingMode.UP).doubleValue();
+			} else {
+				return cost;
+			}
+		} else {
+			return Math.ceil(cost);
+		}
 	}
 
 	public boolean can_afford(final Player player) {
@@ -46,9 +62,14 @@ public class RegionSelection {
 		if (price <= 0) {
 			return true;
 		}
-		final var map = new HashMap<ItemStack, Integer>();
-		map.put(new ItemStack(regions.config_currency), price);
-		return has_items(player, map);
+
+		if (regions.config_economy_as_currency) {
+			return regions.economy.has(player, price);
+		} else {
+			final var map = new HashMap<ItemStack, Integer>();
+			map.put(new ItemStack(regions.config_currency), (int)price);
+			return has_items(player, map);
+		}
 	}
 
 	public boolean is_valid(final Player player) {

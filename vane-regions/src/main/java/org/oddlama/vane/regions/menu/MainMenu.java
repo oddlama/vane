@@ -147,7 +147,7 @@ public class MainMenu extends ModuleComponent<Regions> {
 							"§b" + get_module().config_max_region_extent_x,
 							"§b" + get_module().config_max_region_extent_y,
 							"§b" + get_module().config_max_region_extent_z,
-							"§a" + selection.price() + " §b" + String.valueOf(get_module().config_currency).toLowerCase()
+							"§a" + selection.price() + " §b" + get_module().currency_string()
 						));
 				} else {
 					boolean is_primary_set = selection.primary != null;
@@ -175,7 +175,7 @@ public class MainMenu extends ModuleComponent<Regions> {
 							dz <= get_module().config_max_region_extent_z;
 						no_intersection = !selection.intersects_existing();
 						can_afford = selection.can_afford(final_player);
-						price = (can_afford ? "§a" : "§c") + selection.price() + " §b" + String.valueOf(get_module().config_currency).toLowerCase();
+						price = (can_afford ? "§a" : "§c") + selection.price() + " §b" + get_module().currency_string();
 					} else {
 						sdx = "§7?";
 						sdy = "§7?";

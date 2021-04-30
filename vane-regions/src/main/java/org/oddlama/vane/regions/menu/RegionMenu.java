@@ -115,7 +115,13 @@ public class RegionMenu extends ModuleComponent<Regions> {
 					temp_sel.secondary = region.extent().max();
 
 					final var price = temp_sel.price();
-					give_items(player2, new ItemStack(get_module().config_currency), price);
+					if (get_module().config_economy_as_currency) {
+						if (!get_module().economy.depositPlayer(player2, price).transactionSuccess()) {
+							get_module().log.warning("Player " + player2 + " deleted region " + region.name() + " (cost " + price + ") but the economy plugin failed to deposit.");
+						}
+					} else {
+						give_items(player2, new ItemStack(get_module().config_currency), (int)price);
+					}
 					return ClickResult.SUCCESS;
 				}, item_delete_confirm_cancel.item(), (player2) -> {
 					menu.open(player2);
