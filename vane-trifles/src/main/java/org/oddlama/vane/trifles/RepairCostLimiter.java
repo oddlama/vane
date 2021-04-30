@@ -10,34 +10,20 @@ import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.module.Context;
 
 public class RepairCostLimiter extends Listener<Trifles> {
-	@ConfigInt(def = 19, min = 0, desc = "Repair cost override for anvil-crafted items. Set < 39 to remove too-expensive for <item> + <material> crafting. Set < 20 to remove too-expensive for any item + item combination.")
+	@ConfigInt(def = 39, min = 0, desc = "Limit anvil crafting cost. Set < 40 to remove 'Too Expensive' altogether. (Costs greater than 40 will still be craftable, even if it shows 'Too Expensive')")
 	public int config_max_repair_cost;
 
 	public RepairCostLimiter(Context<Trifles> context) {
-		super(context.group("repair_cost_limiter", "Enables limited repair cost for all items. Can be used to remove too-expensive repairs."));
+		super(context.group("repair_cost_limiter", "Removes the cost limit on the anvil for all recipes. This means even if the client shows 'Too Expensive' in the anvil, the result may still be crafted, as long as the player has the required amount of levels (which unfortunately will not be shown)."));
 	}
 
 	// Set maximum item repair cost, if configured
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
 	public void on_prepare_anvil(final PrepareAnvilEvent event) {
-		final var item = event.getResult();
-		if (item == null) {
-			return;
+		final var inventory = event.getInventory();
+		inventory.setMaximumRepairCost(999999);
+		if (inventory.getRepairCost() > config_max_repair_cost) {
+			inventory.setRepairCost(config_max_repair_cost);
 		}
-
-		final var meta = item.getItemMeta();
-		if (meta == null || !(meta instanceof Repairable)) {
-			return;
-		}
-
-		final var repairable = (Repairable)meta;
-		if (repairable.getRepairCost() <= config_max_repair_cost) {
-			return;
-		}
-
-		// Limit resulting item repair cost
-		repairable.setRepairCost(config_max_repair_cost);
-		item.setItemMeta(meta);
-		event.setResult(item);
 	}
 }
