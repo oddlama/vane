@@ -26,9 +26,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
-
-import net.milkbowl.vault.economy.Economy;
 
 import org.oddlama.vane.annotation.VaneModule;
 import org.oddlama.vane.annotation.config.ConfigBoolean;
@@ -52,7 +51,7 @@ import org.oddlama.vane.regions.region.RegionSelection;
 import org.oddlama.vane.regions.region.Role;
 import org.oddlama.vane.regions.region.RoleSetting;
 
-@VaneModule(name = "regions", bstats = 8643, config_version = 3, lang_version = 3, storage_version = 1)
+@VaneModule(name = "regions", bstats = 8643, config_version = 3, lang_version = 2, storage_version = 1)
 public class Regions extends Module<Regions> {
 	//
 	//                                                  ┌───────────────────────┐
@@ -134,7 +133,7 @@ public class Regions extends Module<Regions> {
 	public RegionMenuGroup menus;
 	public RegionDynmapLayer dynmap_layer;
 
-	public Economy economy;
+	public RegionEconomyDelegate economy;
 
 	public Regions() {
 		menus = new RegionMenuGroup(this);
@@ -153,26 +152,25 @@ public class Regions extends Module<Regions> {
 		}
 
 		if (config_economy_as_currency) {
-			setup_economy();
+			if (!setup_economy()) {
+				config_economy_as_currency = false;
+			}
 		}
 	}
 
-	private void setup_economy() {
-		final var vault_api_plugin = getServer().getPluginManager().getPlugin("Vault");
-		if (vault_api_plugin != null) {
-			log.severe("Economy (VaultAPI) was selected as the currency provider, but the Vault plugin wasn't found! Falling back to material currency.");
-			config_economy_as_currency = false;
-			return;
+	private boolean setup_economy() {
+		get_module().log.info("Enabling economy integration");
+
+		Plugin vault_api_plugin;
+		try {
+			vault_api_plugin = get_module().getServer().getPluginManager().getPlugin("Vault");
+		} catch (Exception e) {
+			get_module().log.severe("Economy was selected as the currency provider, but the Vault plugin wasn't found! Falling back to material currency.");
+			return false;
 		}
 
-		RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
-		if (rsp == null) {
-			log.severe("Economy (VaultAPI) was selected as the currency provider, but no Economy service provider is installed! Falling back to material currency.");
-			config_economy_as_currency = false;
-			return;
-		}
-
-		economy = rsp.getProvider();
+		economy = new RegionEconomyDelegate(this);
+		return economy.setup(vault_api_plugin);
 	}
 
 	@Override
@@ -394,8 +392,13 @@ public class Regions extends Module<Regions> {
 		// Take currency items / withdraw economy
 		final var price = selection.price();
 		if (config_economy_as_currency) {
-			if (price > 0 && !economy.withdrawPlayer(player, price).transactionSuccess()) {
-				return false;
+			if (price > 0) {
+				final var transaction = economy.withdraw(player, price);
+				if (!transaction.transactionSuccess()) {
+					log.warning("Player " + player + " tried to create region '" + name + "' (cost " + price + ") but the economy plugin failed to withdraw:");
+					log.warning("Error message: " + transaction.errorMessage);
+					return false;
+				}
 			}
 		} else {
 			final var map = new HashMap<ItemStack, Integer>();
@@ -414,7 +417,7 @@ public class Regions extends Module<Regions> {
 
 	public String currency_string() {
 		if (config_economy_as_currency) {
-			return economy.currencyNamePlural();
+			return economy.currency_name_plural();
 		} else {
 			return String.valueOf(config_currency).toLowerCase();
 		}
