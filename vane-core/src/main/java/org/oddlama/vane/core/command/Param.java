@@ -222,9 +222,9 @@ public interface Param {
 
 	default public DynamicChoiceParam<OfflinePlayer> choose_any_player() {
 		return choice("any_player",
-				sender -> Arrays.asList(get_command().get_module().getServer().getOfflinePlayers()),
+				sender -> get_command().get_module().get_offline_players_with_valid_name(),
 				(sender, p) -> p.getName(),
-				(sender, str) -> Arrays.stream(get_command().get_module().getServer().getOfflinePlayers())
+				(sender, str) -> get_command().get_module().get_offline_players_with_valid_name().stream()
 					.filter(k -> k.getName().equalsIgnoreCase(str))
 					.findFirst()
 					.orElse(null));

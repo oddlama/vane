@@ -141,7 +141,7 @@ public class BedtimeDynmapLayerDelegate {
 
 		// Update all existing
 		final var id_set = new HashSet<String>();
-		for (final var player : get_module().getServer().getOfflinePlayers()) {
+		for (final var player : get_module().get_offline_players_with_valid_name()) {
 			if (update_marker(player)) {
 				id_set.add(id_for(player));
 			}

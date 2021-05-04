@@ -8,6 +8,11 @@ import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +28,7 @@ import org.bstats.bukkit.Metrics;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.EventHandler;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
@@ -424,6 +430,12 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 
 	public LootTable loot_table(final LootTables table) {
 		return loot_table(table.getKey());
+	}
+
+	public List<OfflinePlayer> get_offline_players_with_valid_name() {
+		return Arrays.stream(getServer().getOfflinePlayers())
+			.filter(k -> k.getName() != null)
+			.collect(Collectors.toList());
 	}
 
 	public LootTable loot_table(final NamespacedKey key) {

@@ -1,5 +1,10 @@
 #### IDEAS
 
+- [ ] tab shows ordered by world
+- [ ] if flying into portal, offset target point by +1 y so you can fly through
+- [ ] angel shift scroll selects level or some percentage.
+- [ ] autostop at certain times. 12am 12pm
+- [ ] cant hit players with snowballs. not sure if caused by vane.
 - [ ] trampelpfad
 - [ ] better elytra flight mechanics
 - [ ] add a mechanic to update in-game maps (e.g. with a custom item, or redstone)
@@ -20,25 +25,8 @@
 - ultra infinity for all arrow types (put on arrow?)
 
 
-MAYBE FIXED:
-- double sleep time set bug, cancel other tasks
-- bed remove on sun brrrrrr not works
-
-
-
-
-
-
-bedtime: dynmap marker
-
-
-region -> zone
-
 
 portal domes? projector like setup for full-dome or even sphere!
-
-if resource pack serving is disabled, use real strings of current language!! NICE
-
 
 
 portal selection as big sphere around player with itemsss
@@ -53,7 +41,7 @@ portal selection as big sphere around player with itemsss
 - [ ] download links
 - [ ] software licenses
 - [ ] region chunk based cache
-- [ ] armor stand poser manipulation by perpendicular intersection between Line of sight and arm 
+- [ ] armor stand poser manipulation by perpendicular intersection between Line of sight and arm
 - [ ] item frame invisibilinator (visible if empty)
 - [ ] custom enchantment book icons
 - [ ] player list footer header configuration

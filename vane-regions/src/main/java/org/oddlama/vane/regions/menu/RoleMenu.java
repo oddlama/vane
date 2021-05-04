@@ -145,7 +145,7 @@ public class RoleMenu extends ModuleComponent<Regions> {
 	private MenuWidget menu_item_assign_player(final RegionGroup group, final Role role) {
 		return new MenuItem(7, item_assign_player.item(), (player, menu, self) -> {
 			menu.close(player);
-			final var all_players = Arrays.stream(get_module().getServer().getOfflinePlayers())
+			final var all_players = get_module().get_offline_players_with_valid_name().stream()
 				.filter(p -> !role.id().equals(group.player_to_role().get(p.getUniqueId())))
 				.sorted((a, b) -> {
 					int c = Boolean.compare(b.isOnline(), a.isOnline());
@@ -173,7 +173,7 @@ public class RoleMenu extends ModuleComponent<Regions> {
 	private MenuWidget menu_item_remove_player(final RegionGroup group, final Role role) {
 		return new MenuItem(8, item_remove_player.item(), (player, menu, self) -> {
 			menu.close(player);
-			final var all_players = Arrays.stream(get_module().getServer().getOfflinePlayers())
+			final var all_players = get_module().get_offline_players_with_valid_name().stream()
 				.filter(p -> role.id().equals(group.player_to_role().get(p.getUniqueId())))
 				.sorted((a, b) -> {
 					int c = Boolean.compare(b.isOnline(), a.isOnline());
