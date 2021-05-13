@@ -1,11 +1,9 @@
 plugins {
-	id 'org.ajoberstar.organize-imports' version '1.0.3' apply false;
 	id 'signing';
 }
 
 subprojects {
 	apply plugin: 'java';
-	apply plugin: 'org.ajoberstar.organize-imports';
 	apply plugin: 'signing';
 
 	group 'org.oddlama.vane';

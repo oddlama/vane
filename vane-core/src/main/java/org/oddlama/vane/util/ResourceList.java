@@ -8,6 +8,8 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 /**
  * from: forums.devx.com/showthread.php?t=153784
@@ -23,16 +25,16 @@ public class ResourceList {
 	 */
 	public static Collection<String> get_resources(final Class<?> clazz, final Pattern pattern) {
 		final var jar_url = clazz.getProtectionDomain().getCodeSource().getLocation();
-		var jar = jar_url.toString();
-		if (jar.startsWith("file:")) {
-			jar = jar.substring("file:".length());
+		try {
+			return get_resources(new URI(jar_url.toString()).getPath(), pattern);
+		} catch (URISyntaxException e) {
+			return new ArrayList<String>();
 		}
-		return get_resources(jar, pattern);
 	}
 
-	private static Collection<String> get_resources(final String element, final Pattern pattern) {
+	private static Collection<String> get_resources(final String path, final Pattern pattern) {
 		final var retval = new ArrayList<String>();
-		final var file = new File(element);
+		final var file = new File(path);
 		if (file.isDirectory()) {
 			retval.addAll(get_resources_from_directory(file, pattern));
 		} else {
