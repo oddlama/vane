@@ -208,6 +208,15 @@ For smaller survival servers, using an external SQL server would be a waste
 of resources and would require an unproportional amount of maintenance,
 both in the implementation and server administration.
 
+#### Q: Minecraft's default commands like /tp don't work even when players are OP
+
+**A:** vane-permissions radically removes all permissions from players to remove
+any hidden state and allow server operators to sanely manage permissions for their players.
+To allow certain vanilla commands simply add the required permission to the respective group
+in vane-permissions' config.yml. You can list all permissions by executing `perm list permissions`,
+usually they are of the form `minecraft.command.<commandname>`, so e.g. `minecraft.command.tp`.
+You can also view a [list of all vanilla permissions](https://bukkit.fandom.com/wiki/CraftBukkit_Commands) online.
+
 #### Q: Players can't build when theya are not in the admin group
 
 **A:** They probably are in the spawn protection area, which by default is 64 block radius around (0,0).
