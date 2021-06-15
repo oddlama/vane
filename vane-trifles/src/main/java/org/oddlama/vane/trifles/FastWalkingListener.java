@@ -15,6 +15,12 @@ public class FastWalkingListener extends Listener<Trifles> {
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void on_player_move(final PlayerMoveEvent event) {
+		// Players mustn't be riding any vehicle or be flying
+		final var player = event.getPlayer();
+		if (player.isInsideVehicle() || player.isGliding()) {
+			return;
+		}
+
 		// Inspect block type just a little below the player
 		var block = event.getTo().clone().subtract(0.0, 0.1, 0.0).getBlock();
 		if (!fast_walking.config_materials.contains(block.getType())) {
