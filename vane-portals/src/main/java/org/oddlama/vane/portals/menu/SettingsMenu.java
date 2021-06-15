@@ -158,10 +158,10 @@ public class SettingsMenu extends ModuleComponent<Portals> {
 				return ClickResult.ERROR;
 			}
 
-			Portal.Visibility new_vis;
+			Portal.Visibility new_vis = portal.visibility();
 			// If regions is not installed, we need to skip group visibility.
 			do {
-				new_vis = event.getClick() == ClickType.RIGHT ? portal.visibility().prev() : portal.visibility().next();
+				new_vis = event.getClick() == ClickType.RIGHT ? new_vis.prev() : new_vis.next();
 			} while (new_vis.requires_regions() && !get_module().is_regions_installed());
 
 			portal.visibility(new_vis);
