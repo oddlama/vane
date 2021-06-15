@@ -7,7 +7,7 @@ subprojects {
 	apply plugin: 'signing';
 
 	group 'org.oddlama.vane';
-	version '1.1.5';
+	version '1.1.6';
 	sourceCompatibility = 11;
 
 	repositories() {
