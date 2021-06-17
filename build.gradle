@@ -49,7 +49,7 @@ configure(subprojects.findAll {it.name != 'vane-waterfall'}) {
 	dependencies {
 		// We need the full implementation with CraftBukkit and NMS to compile.
 		// Simply copy cache/patched_{..}.jar from a paper server into libs/.
-		implementation name: 'patched_1.16.5';
+		implementation name: 'patched_1.17';
 	}
 }
 

@@ -11,5 +11,5 @@ softdepend: [dynmap, Vault]
 main: org.oddlama.vane.regions.Regions
 database: false
 
-api-version: 1.16
+api-version: 1.17
 load: STARTUP
