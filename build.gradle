@@ -4,7 +4,9 @@ plugins {
 
 subprojects {
 	apply plugin: 'java';
-	apply plugin: 'signing';
+	if (project.hasProperty('signing.gnupg.keyName')) {
+		apply plugin: 'signing';
+	}
 
 	group 'org.oddlama.vane';
 	version '1.1.6';
@@ -34,13 +36,13 @@ subprojects {
 		annotationProcessor 'org.jetbrains:annotations:20.0.0';
 	}
 
-	signing {
-		if (project.hasProperty('signing.gnupg.keyName')) {
+	if (project.hasProperty('signing.gnupg.keyName')) {
+		signing {
 			useGpgCmd();
 			sign jar;
 		}
+		build.dependsOn signJar;
 	}
-	build.dependsOn signJar;
 }
 
 configure(subprojects.findAll {it.name != 'vane-waterfall'}) {
@@ -58,11 +60,13 @@ configure(subprojects.findAll {it.name != 'vane-annotations' && it.name != 'vane
 	}
 	build.dependsOn copyJar;
 
-	task copyJarAsc(type: Copy) {
-		from signJar;
-		into "${project.rootProject.projectDir}/target";
+	if (project.hasProperty('signing.gnupg.keyName')) {
+		task copyJarAsc(type: Copy) {
+			from signJar;
+			into "${project.rootProject.projectDir}/target";
+		}
+		build.dependsOn copyJarAsc;
 	}
-	build.dependsOn copyJarAsc;
 
 	dependencies {
 		implementation group: 'com.comphenix.protocol', name: 'ProtocolLib', version: '4.6.0-SNAPSHOT';
