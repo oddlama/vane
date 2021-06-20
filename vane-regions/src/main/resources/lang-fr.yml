@@ -18,7 +18,7 @@ version: 2
 # language code (ISO 639) and the country code (ISO 3166).
 resource_pack_lang_code: 'fr_fr'
 
-start_region_selection: "§aChoisir une surface en sélectionnant deux blocs via §clic gauche§a et §bclic droit§a avec une main vide."
+start_region_selection: "§aChoisir une surface en sélectionnant deux blocs via §bclic gauche§a et §bclic droit§a avec une main vide."
 select_primary_block: "§aBloc primaire sélectionné: (%1$s§a, %2$s§a, %3$s§a)."
 select_secondary_block: "§aBloc secondaire sélectionné: (%1$s§a, %2$s§a, %3$s§a)."
 
@@ -33,7 +33,7 @@ dynmap:
 
 menus:
   enter_region_group_name:
-    title: "§8§lEntrer un nom de groupe de régions"
+    title: "§8§lEntrer un nom de groupe"
 
   enter_region_name:
     title: "§8§lEntrer un nom de région"
@@ -63,7 +63,7 @@ menus:
         - "§7- %2$s§7 Un bloc secondaire est sélectionné"
         - "§7- %3$s§7 Les blocs se trouvent dans le même monde"
         - "§7- %4$s§7 La région n'empiète pas sur une autre région"
-        - "§7- %5$s§7 La région recouvre au moins une aire minimum (%11$s§7 x %12$s§7 x %13$s§7)"
+        - "§7- %5$s§7 La région contient au moins un volume minimum (%11$s§7 x %12$s§7 x %13$s§7)"
         - "§7- %6$s§7 La région n'éxcède pas (%14$s§7 x %15$s§7 x %16$s§7)"
         - "§7- %7$s§7 Vous avez assez de moyens (%17$s§7)"
 
@@ -78,7 +78,7 @@ menus:
         - "§7- §a✓§7 Un bloc secondaire est sélectionné"
         - "§7- §a✓§7 Les blocs se trouvent dans le même monde"
         - "§7- §a✓§7 La région n'empiète pas sur une autre région"
-        - "§7- §a✓§7 La région recouvre au moins une aire minimum (%4$s§7 x %5$s§7 x %6$s§7)"
+        - "§7- §a✓§7 La région recouvre au moins un volume minimum (%4$s§7 x %5$s§7 x %6$s§7)"
         - "§7- §a✓§7 La taille de la région n'éxcède pas (%7$s§7 x %8$s§7 x %9$s§7)"
         - "§7- §a✓§7 Vous avez assez de moyens (%10$s§7)"
 
@@ -142,7 +142,7 @@ menus:
     delete:
       name: "§c§lSupprimer une région"
       lore: []
-    delete_confirm_title: "§c§lSupprimer la région?"
+    delete_confirm_title: "§c§lSupprimer la région ?"
     delete_confirm_accept:
       name: "§c§lSUPPRIMER"
       lore: []
@@ -188,7 +188,7 @@ menus:
       name: "§b§lIncendie"
       lore:
         - ""
-        - "§7Contrôle si le feu brûle les blocs et se répand."
+        - "§7Contrôle si le feu consume les blocs et se répand."
     setting_info_pvp:
       name: "§b§lPVP"
       lore:
@@ -200,10 +200,10 @@ menus:
         - ""
         - "§7Contrôle si les surfaces arables peuvent être piétinées."
     setting_info_vine_growth:
-      name: "§b§lCroissance des vignes"
+      name: "§b§lCroissance des lianes"
       lore:
         - ""
-        - "§7Contrôle si les vignes peuvent pousser dans la région."
+        - "§7Contrôle si les lianes peuvent pousser dans la région."
 
     rename:
       name: "§b§lRenommer un groupe"
@@ -215,7 +215,7 @@ menus:
         - ""
         - "§6Conditions de suppression:"
         - "§7- %1$s §7Aucune région n'est actuellement dans le groupe"
-    delete_confirm_title: "§c§lSupprimer le groupe de régions?"
+    delete_confirm_title: "§c§lSupprimer le groupe de régions ?"
     delete_confirm_accept:
       name: "§c§lSUPPRIMER"
       lore: []
@@ -227,8 +227,8 @@ menus:
       name: "§a§lCréer un rôle"
       lore:
         - ""
-        - "§7Crée un nouveau rôle§7. Les rôles sont utiles"
-        - "§7pour décerner des permissions à des groupes de joueurs/joueuses."
+        - "§7Crée un nouveau rôle§7. Les rôles sont utiles pour décerner"
+        - "§7des permissions à des groupes de joueurs/joueuses."
 
     list_roles:
       name: "§b§lRôles"
@@ -268,7 +268,7 @@ menus:
         - "§7les leviers, les boutons ou les mécanismes de redstone."
         - "§7Contrôle également §6la vue (uniquement)§7 des inventaires."
     setting_info_container:
-      name: "§b§lContenants"
+      name: "§b§lContenu des coffres"
       lore:
         - ""
         - "§7Autorise la modification des inventaires."
@@ -287,7 +287,7 @@ menus:
     delete:
       name: "§c§lSupprimer un rôle"
       lore: []
-    delete_confirm_title: "§c§lSupprimer un rôle?"
+    delete_confirm_title: "§c§lSupprimer le rôle ?"
     delete_confirm_accept:
       name: "§c§lSUPPRIMER"
       lore: []
@@ -296,25 +296,25 @@ menus:
       lore: []
 
     assign_player:
-      name: "§b§lAssigner un rôle aux joueurs"
+      name: "§b§lAssigner un rôle aux joueurs/joueuses"
       lore:
         - ""
         - "§7Assigne un rôle aux joueurs/joueuses en leur cliquant dessus."
         - "§7Si le joueur/la joueuse a déjà un rôle, le nouveau rôle"
         - "§7leur sera assigné à la place. La liste ne montrera que"
         - "§7les joueurs/joueuses qui ne possèdent pas encore le nouveau rôle."
-        - "§7Vous pouvez retirer des joueurs/joueuses avec le menu §bRetirer des joueurs§7."
+        - "§7Vous pouvez le retirer avec le menu §bRetirer un rôle aux joueurs/joueuses§7."
     remove_player:
-      name: "§b§lRetirer un rôle aux joueurs"
+      name: "§b§lRetirer un rôle aux joueurs/joueuses"
       lore:
         - ""
         - "§7Retire un rôle à des joueurs/joueuses en leur cliquant dessus."
         - "§7Cela signifie qu'ils/elles n'auront plus de rôle."
-        - "§7et seront gérés par le rôle par défaut: §6[others]"
+        - "§7et seront géré(e)s par le rôle par défaut: §6[others]"
 
-    select_assign_player_title: "§8§lAjouter des joueurs"
-    select_remove_player_title: "§8§lRetirer des joueurs"
-    filter_players_title: "§8§lFiltrer les joueurs"
+    select_assign_player_title: "§8§lAjouter des joueurs/joueuses"
+    select_remove_player_title: "§8§lRetirer des joueurs/joueuses"
+    filter_players_title: "§8§lFiltrer les joueurs/joueuses"
     select_player:
       name: "%1$s"
       lore: []

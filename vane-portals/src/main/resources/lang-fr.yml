@@ -27,16 +27,16 @@ console_linked: "§aConsole connectée"
 no_boundary_found: "§cLe bord du portail est introuvable !"
 no_origin: "§cLe portail n'a pas de bloc d'ancrage !"
 multiple_origins: "§cLe portail ne peut pas avoir plus d'un bloc d'ancrage !"
-no_portal_block_above_origin: "§cLe bloc d'ancrage ne dispose pas d'espace pour le portail au dessus de lui !"
-not_enough_portal_blocks_above_origin: "§cLe bloc d'ancrage requiert l'espace d'au moins 3 blocs pour le portail au dessus de lui !"
+no_portal_block_above_origin: "§cLe bloc d'ancrage ne dispose pas d'espace pour l'intérieur du portail au dessus de lui !"
+not_enough_portal_blocks_above_origin: "§cLe bloc d'ancrage requiert l'espace d'au moins 3 blocs pour l'intérieur du portail au dessus de lui !"
 too_large: "§cLe portail est trop grand dans la direction %1$s§c !"
 too_small_spawn: "§cL'aire d'apparition est trop petite dans la direction %1$s§c !"
-too_many_portal_area_blocks: "§cL'espace du portail est trop grand ! %1$s§6/%2$s§c blocs"
-portal_area_obstructed: "§cL'espace du portail est obstrué !"
+too_many_portal_area_blocks: "§cL'intérieur du portail est trop grand ! %1$s§6/%2$s§c blocs"
+portal_area_obstructed: "§cL'intérieur du portail est obstrué !"
 intersects_existing_portal: "§cLe portail est en collision avec un autre portail !"
 
 build_restricted: "§cVous n'avez pas la permission de construire un portail ici !"
-link_restricted: "§cVous n'avez pas la permission de relier une console à ce portail !"
+link_restricted: "§cVous n'avez pas la permission de connecter une console à ce portail !"
 
 target_already_connected: "§6Le portail de destination est déjà relié à un autre portail !"
 source_use_restricted: "§cVous n'avez pas la permission d'utiliser ce portail !"
@@ -107,7 +107,7 @@ menus:
     title: "§8§lStyle pour: %1$s"
     select_block_console_active_title:       "Sélectionner le bloc de console actif."
     select_block_origin_active_title:        "Sélectionner le bloc d'ancrage actif."
-    select_block_portal_active_title:        "Sélectionner le bloc d'espace de portail actif."
+    select_block_portal_active_title:        "Sélectionner le bloc d'intérieur de portail actif."
     select_block_boundardy_1_active_title:   "Sélectionner le bloc de bord actif (variante 1)."
     select_block_boundardy_2_active_title:   "Sélectionner le bloc de bord actif (variante 2)."
     select_block_boundardy_3_active_title:   "Sélectionner le bloc de bord actif (variante 3)."
@@ -115,7 +115,7 @@ menus:
     select_block_boundardy_5_active_title:   "Sélectionner le bloc de bord actif (variante 5)."
     select_block_console_inactive_title:     "Sélectionner le bloc de console inactif."
     select_block_origin_inactive_title:      "Sélectionner le bloc d'ancrage inactif."
-    select_block_portal_inactive_title:      "Sélectionner le bloc d'espace de portail inactif."
+    select_block_portal_inactive_title:      "Sélectionner le bloc d'intérieur de portail inactif."
     select_block_boundardy_1_inactive_title: "Sélectionner le bloc de bord inactif (variante 1)."
     select_block_boundardy_2_inactive_title: "Sélectionner le bloc de bord inactif (variante 2)."
     select_block_boundardy_3_inactive_title: "Sélectionner le bloc de bord inactif (variante 3)."
@@ -129,7 +129,7 @@ menus:
       name: "§b§lAncrage §a(actif)"
       lore: []
     block_portal_active:
-      name: "§b§lEspace de portail §a(actif)"
+      name: "§b§lintérieur de portail §a(actif)"
       lore: []
     block_boundardy_1_active:
       name: "§b§lBord §a(actif)"
@@ -153,7 +153,7 @@ menus:
       name: "§b§lAncrage §e(inactif)"
       lore: []
     block_portal_inactive:
-      name: "§b§lEspace de portail §e(inactif)"
+      name: "§b§lintérieur de portail §e(inactif)"
       lore: []
     block_boundardy_1_inactive:
       name: "§b§lBord §e(inactif)"
