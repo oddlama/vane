@@ -39,7 +39,7 @@ item_home_scroll:
 
 item_reinforced_elytra:
   netherite:
-    name: "Elytra en netherite"
+    name: "Élytres en netherite"
 
 item_unstable_scroll:
   name: "Parchemin de Rappel (instable)"
