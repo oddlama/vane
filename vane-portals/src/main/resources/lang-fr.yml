@@ -129,7 +129,7 @@ menus:
       name: "§b§lAncrage §a(actif)"
       lore: []
     block_portal_active:
-      name: "§b§lintérieur de portail §a(actif)"
+      name: "§b§lIntérieur de portail §a(actif)"
       lore: []
     block_boundardy_1_active:
       name: "§b§lBord §a(actif)"
@@ -153,7 +153,7 @@ menus:
       name: "§b§lAncrage §e(inactif)"
       lore: []
     block_portal_inactive:
-      name: "§b§lintérieur de portail §e(inactif)"
+      name: "§b§lIntérieur de portail §e(inactif)"
       lore: []
     block_boundardy_1_inactive:
       name: "§b§lBord §e(inactif)"
