@@ -33,7 +33,7 @@ dynmap:
 
 menus:
   enter_region_group_name:
-    title: "§8§lEntrer un nom de groupe"
+    title: "§8§lEntrer un nom de groupe de régions"
 
   enter_region_name:
     title: "§8§lEntrer un nom de région"
@@ -78,7 +78,7 @@ menus:
         - "§7- §a✓§7 Un bloc secondaire est sélectionné"
         - "§7- §a✓§7 Les blocs se trouvent dans le même monde"
         - "§7- §a✓§7 La région n'empiète pas sur une autre région"
-        - "§7- §a✓§7 La région recouvre au moins un volume minimum (%4$s§7 x %5$s§7 x %6$s§7)"
+        - "§7- §a✓§7 La région contient au moins un volume minimum (%4$s§7 x %5$s§7 x %6$s§7)"
         - "§7- §a✓§7 La taille de la région n'éxcède pas (%7$s§7 x %8$s§7 x %9$s§7)"
         - "§7- §a✓§7 Vous avez assez de moyens (%10$s§7)"
 
