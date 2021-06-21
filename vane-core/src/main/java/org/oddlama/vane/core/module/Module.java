@@ -225,7 +225,7 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 		context_group.config_change();
 	}
 
-    @Override
+	@Override
 	public void generate_resource_pack(final ResourcePackGenerator pack) throws IOException {
 		// Generate language
 		get_resources(getClass(), Pattern.compile("lang-.*\\.yml")).stream().forEach(lang_file -> {

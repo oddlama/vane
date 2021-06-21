@@ -129,7 +129,7 @@ If you don't want a certain feature, simply disable it.
 
 For a comprehensive guide, visit the [Installation Guide](https://github.com/oddlama/vane/wiki/Installation-Guide) on the wiki.
 
-**This plugin requires Java 11!**
+**This plugin requires Java 16!**
 
 To install vane, begin by downloading/compiling and placing all desired module jars into the `plugins/` directory.
 
@@ -163,7 +163,7 @@ An example is provided in the config file.
 
 ## Building from source
 
-You can of course build the plugin yourself. To do that you need at least JDK 11.
+You can of course build the plugin yourself. To do that you need at least JDK 16.
 Before you can proceed, you need to copy the fully patched Paper server jar
 to `libs/`. This is required so the compiler can find minecraft-native symbols.
 

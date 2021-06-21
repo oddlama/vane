@@ -17,7 +17,7 @@ public class FastWalkingGroup extends ModuleGroup<Trifles> {
 	@ConfigLong(def = 2000, min = 50, max = 5000, desc = "Speed effect duration in milliseconds.")
 	public long config_duration;
 
-	@ConfigMaterialSet(def = {Material.GRASS_PATH}, desc = "Materials on which players will walk faster.")
+	@ConfigMaterialSet(def = {Material.DIRT_PATH}, desc = "Materials on which players will walk faster.")
 	public Set<Material> config_materials;
 
 	// Variables

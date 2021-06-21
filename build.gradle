@@ -69,7 +69,7 @@ configure(subprojects.findAll {it.name != 'vane-annotations' && it.name != 'vane
 	}
 
 	dependencies {
-		implementation group: 'com.comphenix.protocol', name: 'ProtocolLib', version: '4.6.0-SNAPSHOT';
+		implementation group: 'com.comphenix.protocol', name: 'ProtocolLib', version: '4.7.0-SNAPSHOT';
 
 		compileOnly project(':vane-annotations');
 		annotationProcessor project(':vane-annotations');

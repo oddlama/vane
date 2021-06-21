@@ -2,13 +2,13 @@ package org.oddlama.vane.core.menu;
 
 import static org.oddlama.vane.util.Nms.player_handle;
 
-import net.minecraft.server.v1_16_R3.BlockPosition;
-import net.minecraft.server.v1_16_R3.ChatMessage;
-import net.minecraft.server.v1_16_R3.ContainerAccess;
-import net.minecraft.server.v1_16_R3.ContainerAnvil;
-import net.minecraft.server.v1_16_R3.EntityHuman;
-import net.minecraft.server.v1_16_R3.EntityPlayer;
-import net.minecraft.server.v1_16_R3.PacketPlayOutOpenWindow;
+import net.minecraft.core.BlockPosition;
+import net.minecraft.network.chat.ChatMessage;
+import net.minecraft.world.inventory.ContainerAccess;
+import net.minecraft.world.inventory.ContainerAnvil;
+import net.minecraft.world.entity.player.EntityHuman;
+import net.minecraft.server.level.EntityPlayer;
+import net.minecraft.network.protocol.game.PacketPlayOutOpenWindow;
 
 import org.bukkit.entity.Player;
 

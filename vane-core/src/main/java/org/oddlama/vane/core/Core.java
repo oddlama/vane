@@ -19,8 +19,8 @@ import java.util.TreeSet;
 import java.util.UUID;
 import java.util.logging.Level;
 
-import com.destroystokyo.paper.MaterialTags;
-import com.destroystokyo.paper.profile.ProfileProperty;
+//117 import com.destroystokyo.paper.MaterialTags;
+//117 import com.destroystokyo.paper.profile.ProfileProperty;
 
 import org.bukkit.Keyed;
 import org.bukkit.Material;
@@ -183,9 +183,9 @@ public class Core extends Module<Core> implements PluginMessageListener {
 		// Only when using a custom item that is a hoe
 		final var player = event.getPlayer();
 		final var item = player.getEquipment().getItem(event.getHand());
-		if (is_custom_item(item) && MaterialTags.HOES.isTagged(item)) {
-			event.setCancelled(true);
-		}
+		//117 if (is_custom_item(item) && MaterialTags.HOES.isTagged(item)) {
+		//117 	event.setCancelled(true);
+		//117 }
 	}
 
 	// Prevent custom items from being used in minecraft's crafting
@@ -315,9 +315,9 @@ public class Core extends Module<Core> implements PluginMessageListener {
 
 		final var original_player_id = storage_auth_multiplex.get(id);
 		final var skin = resolve_skin(original_player_id);
-		final var profile = player.getPlayerProfile();
-		profile.setProperty(new ProfileProperty("textures", skin.texture, skin.signature));
-		player.setPlayerProfile(profile);
+		//117 final var profile = player.getPlayerProfile();
+		//117 profile.setProperty(new ProfileProperty("textures", skin.texture, skin.signature));
+		//117 player.setPlayerProfile(profile);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
