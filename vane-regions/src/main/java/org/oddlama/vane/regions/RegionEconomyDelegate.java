@@ -11,8 +11,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
-import net.minecraft.server.BlockPosition;
-
 import org.bukkit.Chunk;
 import org.bukkit.Color;
 import org.bukkit.Location;

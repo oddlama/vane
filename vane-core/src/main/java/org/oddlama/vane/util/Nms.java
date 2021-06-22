@@ -7,21 +7,22 @@ import com.mojang.datafixers.DataFixUtils;
 import com.mojang.datafixers.types.Type;
 
 import net.minecraft.core.BlockPosition;
+import net.minecraft.core.IRegistry;
 import net.minecraft.world.Clearable;
 import net.minecraft.world.entity.item.EntityFallingBlock;
-import net.minecraft.util.datafix.DataConverterRegistry;
-import net.minecraft.util.datafix.fixes.DataConverterTypes;
 import net.minecraft.server.dedicated.DedicatedServer;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentSlotType;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.server.level.EntityPlayer;
-import net.minecraft.world.entity.EntityTypes;
-import net.minecraft.core.IRegistry;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.resources.MinecraftKey;
 import net.minecraft.SharedConstants;
+import net.minecraft.resources.MinecraftKey;
+import net.minecraft.util.datafix.DataConverterRegistry;
+import net.minecraft.util.datafix.fixes.DataConverterTypes;
+import net.minecraft.world.item.enchantment.EnchantmentSlotType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.server.level.WorldServer;
 
 import org.bukkit.Bukkit;
@@ -139,23 +140,8 @@ public class Nms {
 	}
 
 	public static int creative_tab_id(final Item item) {
-		CreativeModeTab tab = null;
-		try {
-			final var creative_mode_tab_field = Item.class.getDeclaredField("i");
-			creative_mode_tab_field.setAccessible(true);
-			tab = (CreativeModeTab)creative_mode_tab_field.get(item);
-		} catch (NoSuchFieldException |	IllegalAccessException e) {
-			Bukkit.getLogger().log(Level.SEVERE, "Could not get creative mode tab", e);
-		}
-
-		try {
-			final var id_field = CreativeModeTab.class.getDeclaredField("o");
-			id_field.setAccessible(true);
-			return tab == null ? Integer.MAX_VALUE : (int)id_field.get(tab);
-		} catch (NoSuchFieldException |	IllegalAccessException e) {
-			Bukkit.getLogger().log(Level.SEVERE, "Could not get creative mode tab id", e);
-			return Integer.MAX_VALUE;
-		}
+		final var tab = item.t(); // getCategory()
+		return tab == null ? Integer.MAX_VALUE : tab.a(); // getId()
 	}
 
 	public static void set_air_no_drops(final org.bukkit.block.Block block) {

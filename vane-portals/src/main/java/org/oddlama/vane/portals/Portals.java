@@ -20,8 +20,8 @@ import java.util.UUID;
 
 import net.md_5.bungee.api.chat.BaseComponent;
 
-import net.minecraft.server.EntityTypes;
-import net.minecraft.server.EnumCreatureType;
+import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.entity.EnumCreatureType;
 
 import org.bukkit.Chunk;
 import org.bukkit.Material;

@@ -41,21 +41,21 @@ public class AnvilMenu extends Menu {
 			manager.get_module().log.warning("AnvilMenu.open() was called with a player for whom this inventory wasn't created!");
 		}
 
-		entity.playerConnection.sendPacket(new PacketPlayOutOpenWindow(container_id, container.getType(), new ChatMessage(title)));
-		entity.activeContainer = container;
-		entity.activeContainer.addSlotListener(entity);
+		entity.connection.sendPacket(new PacketPlayOutOpenWindow(container_id, container.getType(), new ChatMessage(title)));
+		entity.initMenu(container);
+		entity.containerMenu = container;
 	}
 
 	private class AnvilContainer extends ContainerAnvil {
 		public AnvilContainer(int window_id, final EntityHuman entity) {
-			super(window_id, entity.inventory, ContainerAccess.at(entity.world, new BlockPosition(0, 0, 0)));
+			super(window_id, entity.getInventory(), ContainerAccess.at(entity.level, new BlockPosition(0, 0, 0)));
 			this.checkReachable = false;
 		}
 
 		@Override
-		public void e() {
-			super.e();
-			this.levelCost.set(0);
+		public void i() {
+			super.i();
+			this.cost.set(0);
 		}
 	}
 }
