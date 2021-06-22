@@ -8,5 +8,5 @@ gradle.properties
 build
 libs/
 target/
-target-waterfall/
+target-obf/
 bin/

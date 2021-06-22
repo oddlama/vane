@@ -1,3 +1,9 @@
+#### Important
+
+- Remove deprecation introduced by 1.17
+- Integrate remapping into build process
+
+
 #### IDEAS
 
 - [ ] tab shows ordered by world
