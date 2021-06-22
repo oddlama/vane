@@ -228,8 +228,9 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 	@Override
 	public void generate_resource_pack(final ResourcePackGenerator pack) throws IOException {
 		// Generate language
-		get_resources(getClass(), Pattern.compile("lang-.*\\.yml")).stream().forEach(lang_file -> {
-			final var yaml = YamlConfiguration.loadConfiguration(new File(getDataFolder(), lang_file));
+		final var pattern = Pattern.compile("lang-.*\\.yml");
+		Arrays.stream(getDataFolder().listFiles((d, name) -> pattern.matcher(name).matches())).forEach(lang_file -> {
+			final var yaml = YamlConfiguration.loadConfiguration(lang_file);
 			try {
 				lang_manager.generate_resource_pack(pack, yaml);
 			} catch (Exception e) {
