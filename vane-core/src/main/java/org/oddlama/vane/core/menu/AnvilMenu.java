@@ -6,6 +6,7 @@ import net.minecraft.core.BlockPosition;
 import net.minecraft.network.chat.ChatMessage;
 import net.minecraft.world.inventory.ContainerAccess;
 import net.minecraft.world.inventory.ContainerAnvil;
+import net.minecraft.world.IInventory;
 import net.minecraft.world.entity.player.EntityHuman;
 import net.minecraft.server.level.EntityPlayer;
 import net.minecraft.network.protocol.game.PacketPlayOutOpenWindow;
@@ -43,12 +44,15 @@ public class AnvilMenu extends Menu {
 
 		entity.connection.sendPacket(new PacketPlayOutOpenWindow(container_id, container.getType(), new ChatMessage(title)));
 		entity.initMenu(container);
-		entity.containerMenu = container;
+
+		// This cast is necessary so the remapper understands that containerMenu is part of EntityHuman,
+		// otherwise it doesn't recognize that this field needs to be renamed
+		((EntityHuman)entity).containerMenu = container;
 	}
 
 	private class AnvilContainer extends ContainerAnvil {
 		public AnvilContainer(int window_id, final EntityHuman entity) {
-			super(window_id, entity.getInventory(), ContainerAccess.at(entity.level, new BlockPosition(0, 0, 0)));
+			super(window_id, entity.getInventory(), ContainerAccess.at(entity.getWorld(), new BlockPosition(0, 0, 0)));
 			this.checkReachable = false;
 		}
 
@@ -56,6 +60,14 @@ public class AnvilMenu extends Menu {
 		public void i() {
 			super.i();
 			this.cost.set(0);
+		}
+
+		@Override
+		public void b(EntityHuman player) {
+		}
+
+		@Override
+		protected void a(EntityHuman player, IInventory container) {
 		}
 	}
 }
