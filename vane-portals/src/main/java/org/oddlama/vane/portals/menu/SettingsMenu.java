@@ -57,7 +57,7 @@ public class SettingsMenu extends ModuleComponent<Portals> {
 	// to correctly reflect changes done in here. (e.g. menu title due to portal name)
 	public Menu create(final Portal portal, final Player player, final Block console) {
 		final var columns = 9;
-		final var title = lang_title.str("§5§l" + portal.name());
+		final var title = lang_title.str_component("§5§l" + portal.name());
 		final var settings_menu = new Menu(get_context(), Bukkit.createInventory(null, columns, title));
 		settings_menu.tag(new PortalMenuTag(portal.id()));
 

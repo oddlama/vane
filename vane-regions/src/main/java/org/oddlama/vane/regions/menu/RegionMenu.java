@@ -51,7 +51,7 @@ public class RegionMenu extends ModuleComponent<Regions> {
 
 	public Menu create(final Region region, final Player player) {
 		final var columns = 9;
-		final var title = lang_title.str("§5§l" + region.name());
+		final var title = lang_title.str_component("§5§l" + region.name());
 		final var region_menu = new Menu(get_context(), Bukkit.createInventory(null, columns, title));
 		region_menu.tag(new RegionMenuTag(region.id()));
 

@@ -6,9 +6,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.TranslatableComponent;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Keyed;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
@@ -134,24 +134,24 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 	 * RARE: gold
 	 * VERY_RARE: bold dark purple
 	 */
-	public void apply_display_format(BaseComponent component) {
+	public void apply_display_format(Component component) {
 		switch (annotation.rarity()) {
 			default:
 			case COMMON:
-				component.setColor(ChatColor.DARK_AQUA);
+				component.color(NamedTextColor.DARK_AQUA);
 				break;
 
 			case UNCOMMON:
-				component.setColor(ChatColor.DARK_AQUA);
+				component.color(NamedTextColor.DARK_AQUA);
 				break;
 
 			case RARE:
-				component.setColor(ChatColor.GOLD);
+				component.color(NamedTextColor.GOLD);
 				break;
 
 			case VERY_RARE:
-				component.setColor(ChatColor.DARK_PURPLE);
-				component.setBold(true);
+				component.color(NamedTextColor.DARK_PURPLE);
+				component.decorate(TextDecoration.BOLD);
 				break;
 		}
 	}
@@ -161,17 +161,17 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 	 * Usually you don't need to override this method, as it already
 	 * uses clientside translation keys and supports chat formatting.
 	 */
-	public BaseComponent display_name(int level) {
+	public Component display_name(int level) {
         final var display_name = lang_name.format();
-		display_name.setItalic(false);
+		display_name.decoration(TextDecoration.ITALIC, false);
 		apply_display_format(display_name);
 
 		if (level != 1 || max_level() != 1) {
-			final var chat_level = new TranslatableComponent("enchantment.level." + level);
-			chat_level.setItalic(false);
+			final var chat_level = Component.translatable("enchantment.level." + level);
+			chat_level.decoration(TextDecoration.ITALIC, false);
 			apply_display_format(chat_level);
-			display_name.addExtra(" ");
-			display_name.addExtra(chat_level);
+			display_name.append(Component.text(" "));
+			display_name.append(chat_level);
         }
 
         return display_name;

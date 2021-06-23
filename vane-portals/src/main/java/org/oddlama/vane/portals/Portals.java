@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
-import net.md_5.bungee.api.chat.BaseComponent;
+import net.kyori.adventure.text.Component;
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.EnumCreatureType;
 import org.bukkit.Chunk;
@@ -660,7 +660,7 @@ public class Portals extends Module<Portals> {
 		}
 
 		final var target_name = target == null ? lang_console_no_target.str() : target.name();
-		final BaseComponent display_name;
+		final Component display_name;
 		if (active) {
 			display_name = lang_console_display_active.format("§5" + target_name);
 		} else {

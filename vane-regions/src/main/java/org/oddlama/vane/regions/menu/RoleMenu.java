@@ -72,7 +72,7 @@ public class RoleMenu extends ModuleComponent<Regions> {
 	public Menu create(final RegionGroup group, final Role role, final Player player) {
 		final var columns = 9;
 		final var rows = 3;
-		final var title = lang_title.str(role.color() + "§l" + role.name());
+		final var title = lang_title.str_component(role.color() + "§l" + role.name());
 		final var role_menu = new Menu(get_context(), Bukkit.createInventory(null, rows * columns, title));
 
 		final var is_admin = player.getUniqueId().equals(group.owner())

@@ -61,7 +61,7 @@ public class MainMenu extends ModuleComponent<Regions> {
 
 	public Menu create(final Player player) {
 		final var columns = 9;
-		final var title = lang_title.str();
+		final var title = lang_title.str_component();
 		final var main_menu = new Menu(get_context(), Bukkit.createInventory(null, columns, title));
 
 		final var selection_mode = get_module().is_selecting_region(player);

@@ -12,6 +12,8 @@ import org.oddlama.vane.core.command.Command;
 import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Context;
 
+import net.kyori.adventure.text.format.NamedTextColor;
+
 @Name("gamemode")
 @Aliases({"gm"})
 public class Gamemode extends Command<Admin> {
@@ -46,6 +48,6 @@ public class Gamemode extends Command<Admin> {
 
 	private void set_gamemode(CommandSender sender, GameMode mode, Player player) {
 		player.setGameMode(mode);
-		lang_set.send(sender, "§b" + player.getDisplayName(), "§a" + mode.name());
+		lang_set.send(sender, player.displayName().color(NamedTextColor.AQUA), "§a" + mode.name());
 	}
 }

@@ -63,7 +63,7 @@ public class ConsoleMenu extends ModuleComponent<Portals> {
 
 	public Menu create(final Portal portal, final Player player, final Block console) {
 		final var columns = 9;
-		final var title = lang_title.str("§5§l" + portal.name());
+		final var title = lang_title.str_component("§5§l" + portal.name());
 		final var console_menu = new Menu(get_context(), Bukkit.createInventory(null, columns, title));
 		console_menu.tag(new PortalMenuTag(portal.id()));
 

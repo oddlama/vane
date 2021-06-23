@@ -27,7 +27,17 @@ public class TranslatedMessage {
 	public String key() { return key; }
 	public String str(Object... args) {
 		try {
-			return String.format(default_translation, args);
+			final var list = new Object[args.length];
+			for (int i = 0; i < args.length; ++i) {
+				if (args[i] instanceof Component) {
+					list[i] = LegacyComponentSerializer.legacySection().serialize((Component)args[i]);
+				} else if (args[i] instanceof String) {
+					list[i] = args[i];
+				} else {
+					throw new RuntimeException("Error while formatting message '" + key() + "', invalid argument to str() serializer" + args[i]);
+				}
+			}
+			return String.format(default_translation, list);
 		} catch (Exception e) {
 			throw new RuntimeException("Error while formatting message '" + key() + "'", e);
 		}

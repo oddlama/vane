@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.md_5.bungee.api.chat.BaseComponent;
-
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -18,8 +16,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Merchant;
 import org.bukkit.inventory.MerchantRecipe;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
-
 import org.oddlama.vane.annotation.VaneModule;
+import net.kyori.adventure.text.Component;
 import org.oddlama.vane.core.Core;
 import org.oddlama.vane.core.item.ModelDataEnum;
 import org.oddlama.vane.core.module.Module;
@@ -146,20 +144,16 @@ public class Enchantments extends Module<Enchantments> {
 	private void update_lore(ItemStack item_stack, Map<Enchantment, Integer> enchantments) {
 		// Create lore by converting enchantment name and level to string
 		// and prepend rarity color (can be overwritten in description)
-		final var lore = new ArrayList<BaseComponent[]>();
+		final var lore = new ArrayList<Component>();
 		enchantments.entrySet().stream()
 			.filter(p -> p.getKey() instanceof BukkitEnchantmentWrapper)
 			.sorted(Map.Entry.<Enchantment, Integer>comparingByKey((a, b) -> a.getKey().toString().compareTo(b.getKey().toString()))
 				.thenComparing(Map.Entry.<Enchantment, Integer>comparingByValue()))
-			.forEach(p -> {
-				lore.add(new BaseComponent[] {
-					((BukkitEnchantmentWrapper)p.getKey()).custom_enchantment().display_name(p.getValue())
-				});
-			});
+			.forEach(p -> lore.add(((BukkitEnchantmentWrapper)p.getKey()).custom_enchantment().display_name(p.getValue())));
 
 		// Set lore
 		final var meta = item_stack.getItemMeta();
-		meta.setLoreComponents(lore.isEmpty() ? null : lore);
+		meta.lore(lore.isEmpty() ? null : lore);
 		item_stack.setItemMeta(meta);
 	}
 

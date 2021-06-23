@@ -73,7 +73,7 @@ public class RegionGroupMenu extends ModuleComponent<Regions> {
 	public Menu create(final RegionGroup group, final Player player) {
 		final var columns = 9;
 		final var rows = 3;
-		final var title = lang_title.str("§5§l" + group.name());
+		final var title = lang_title.str_component("§5§l" + group.name());
 		final var region_group_menu = new Menu(get_context(), Bukkit.createInventory(null, rows * columns, title));
 		region_group_menu.tag(new RegionGroupMenuTag(group.id()));
 
