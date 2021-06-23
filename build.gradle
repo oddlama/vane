@@ -1,5 +1,10 @@
+plugins {
+	id "com.diffplug.spotless" version "5.14.0";
+}
+
 subprojects {
 	apply plugin: 'java';
+	apply plugin: 'com.diffplug.spotless';
 
 	group 'org.oddlama.vane';
 	version '1.1.6';
@@ -27,6 +32,13 @@ subprojects {
 	dependencies {
 		compileOnly group: 'org.jetbrains', name: 'annotations', version: '20.0.0';
 		annotationProcessor 'org.jetbrains:annotations:20.0.0';
+	}
+
+	spotless {
+		java {
+			importOrder()
+			removeUnusedImports()
+		}
 	}
 }
 
