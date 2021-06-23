@@ -46,13 +46,15 @@ import org.bukkit.plugin.messaging.PluginMessageListener;
 import org.oddlama.vane.annotation.VaneModule;
 import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.annotation.persistent.Persistent;
+import org.oddlama.vane.core.functional.Consumer1;
 import org.oddlama.vane.core.item.CustomItem;
 import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.material.HeadMaterialLibrary;
 import org.oddlama.vane.core.menu.MenuManager;
 import org.oddlama.vane.core.module.Module;
+import org.oddlama.vane.core.module.ModuleComponent;
 
-@VaneModule(name = "core", bstats = 8637, config_version = 2, lang_version = 1, storage_version = 1)
+@VaneModule(name = "core", bstats = 8637, config_version = 3, lang_version = 2, storage_version = 1)
 public class Core extends Module<Core> implements PluginMessageListener {
 	/** The base offset for any model data used by vane plugins. */
 	// "vane" = 0x76616e65, but the value will be saved as float (json...), so only -2^24 - 2^24 can accurately be represented.
@@ -110,6 +112,7 @@ public class Core extends Module<Core> implements PluginMessageListener {
 
 		// Components
 		new org.oddlama.vane.core.commands.Vane(this);
+		new org.oddlama.vane.core.commands.CustomItem(this);
 		menu_manager = new MenuManager(this);
 		new ResourcePackDistributor(this);
 		new CommandHider(this);
@@ -143,6 +146,12 @@ public class Core extends Module<Core> implements PluginMessageListener {
 			return false;
 		}
 		return true;
+	}
+
+	public void for_all_module_components(final Consumer1<ModuleComponent<?>> f) {
+		for (var m : vane_modules) {
+			m.for_each_module_component(f);
+		}
 	}
 
 	// Prevent entity targeting by tempting when the reason is a custom item.

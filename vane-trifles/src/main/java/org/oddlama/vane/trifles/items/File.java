@@ -161,14 +161,6 @@ public class File extends CustomItem<Trifles, File> {
 		return Variant.NETHERITE;
 	}
 
-	private Bisected.Half other_half(Bisected.Half h) {
-		switch (h) {
-			default:
-			case BOTTOM: return Bisected.Half.TOP;
-			case TOP:    return Bisected.Half.BOTTOM;
-		}
-	}
-
 	private BlockFace next_facing(Set<BlockFace> allowed_faces, BlockFace face) {
 		if (allowed_faces.isEmpty()) {
 			return face;
@@ -230,30 +222,35 @@ public class File extends CustomItem<Trifles, File> {
 					case NORTH_WEST: shape = Stairs.Shape.OUTER_RIGHT; face = BlockFace.NORTH; added = false; break;
 					case NORTH_EAST: shape = Stairs.Shape.OUTER_LEFT;  face = BlockFace.NORTH; added = false; break;
 					case SOUTH_EAST: shape = Stairs.Shape.INNER_RIGHT; face = BlockFace.NORTH; added = true;  break;
+					default: break;
 				}
 				break;
 			case INNER_LEFT:
 				switch (corner.xz_face()) {
 					case SOUTH_WEST: shape = Stairs.Shape.STRAIGHT;    face = BlockFace.NORTH; added = false; break;
 					case NORTH_EAST: shape = Stairs.Shape.STRAIGHT;    face = BlockFace.WEST;  added = false; break;
+					default: break;
 				}
 				break;
 			case INNER_RIGHT:
 				switch (corner.xz_face()) {
 					case NORTH_WEST: shape = Stairs.Shape.STRAIGHT;    face = BlockFace.EAST;  added = false; break;
 					case SOUTH_EAST: shape = Stairs.Shape.STRAIGHT;    face = BlockFace.NORTH; added = false; break;
+					default: break;
 				}
 				break;
 			case OUTER_LEFT:
 				switch (corner.xz_face()) {
 					case SOUTH_WEST: shape = Stairs.Shape.STRAIGHT;    face = BlockFace.WEST;  added = true;  break;
 					case NORTH_EAST: shape = Stairs.Shape.STRAIGHT;    face = BlockFace.NORTH; added = true;  break;
+					default: break;
 				}
 				break;
 			case OUTER_RIGHT:
 				switch (corner.xz_face()) {
 					case NORTH_WEST: shape = Stairs.Shape.STRAIGHT;    face = BlockFace.NORTH; added = true;  break;
 					case SOUTH_EAST: shape = Stairs.Shape.STRAIGHT;    face = BlockFace.EAST;  added = true;  break;
+					default: break;
 				}
 				break;
 		}
@@ -269,6 +266,7 @@ public class File extends CustomItem<Trifles, File> {
 			case EAST:  face = next_face_ccw(original_facing).getOppositeFace(); break;
 			case SOUTH: face = original_facing.getOppositeFace(); break;
 			case WEST:  face = next_face_ccw(original_facing); break;
+			default: break;
 		}
 
 		stairs.setShape(shape);

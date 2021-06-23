@@ -14,7 +14,7 @@
 
 # DO NOT CHANGE! The version of this language file. Used to determine
 # if the file needs to be updated.
-version: 1
+version: 2
 # The corresponding language code used in resource packs. Used for
 # resource pack generation. Typically this is a combination of the
 # language code (ISO 639) and the country code (ISO 3166).
@@ -26,6 +26,11 @@ command_permission_denied: "§cerror:§6 Fehlende Berechtigung!"
 invalid_time_format: "§cerror:§6 Ungültige Zeit: %1$s"
 
 break_loot_block_prevented: "§6Dieser Block enthält Loot, welcher automatisch nach einiger Zeit nachgefüllt wird. Wenn du diesen Block wirklich zerstören möchtest, warte 5 Sekunden und baue ihn erneut ab."
+
+command_customitem:
+  usage: "%1$s §agive §7<§bitem§7>"
+  description: "Gibt dem Spieler ein spezifisches Custom-Item."
+  help: "§agive §7<§bitem§7>:§r Gibt dem Spieler ein spezifisches Custom-Item."
 
 command_vane:
   reload_success: "%1$s§7: §areload erfolgreich"

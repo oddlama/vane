@@ -8,6 +8,7 @@ import org.bukkit.scheduler.BukkitTask;
 import org.json.JSONObject;
 
 import org.oddlama.vane.core.ResourcePackGenerator;
+import org.oddlama.vane.core.functional.Consumer1;
 
 /**
  * A ModuleContext is an association to a specific Module and also a
@@ -64,6 +65,7 @@ public interface Context<T extends Module<T>> {
 	public void disable();
 	public void config_change();
 	public void generate_resource_pack(final ResourcePackGenerator pack) throws IOException;
+	public void for_each_module_component(final Consumer1<ModuleComponent<?>> f);
 
 	default public void on_enable() {}
 	default public void on_disable() {}

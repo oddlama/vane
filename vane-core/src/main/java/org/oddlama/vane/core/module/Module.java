@@ -50,6 +50,7 @@ import org.oddlama.vane.core.LootTable;
 import org.oddlama.vane.core.ResourcePackGenerator;
 import org.oddlama.vane.core.command.Command;
 import org.oddlama.vane.core.config.ConfigManager;
+import org.oddlama.vane.core.functional.Consumer1;
 import org.oddlama.vane.core.item.ModelDataEnum;
 import org.oddlama.vane.core.lang.LangManager;
 import org.oddlama.vane.core.persistent.PersistentStorageManager;
@@ -119,6 +120,10 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 	public void on_disable() {}
 	public void on_config_change() {}
 	public void on_generate_resource_pack() throws IOException {}
+
+	final public void for_each_module_component(final Consumer1<ModuleComponent<?>> f) {
+		context_group.for_each_module_component(f);
+	}
 
 	// Loot modification
 	private final Map<NamespacedKey, LootTable> additional_loot_tables = new HashMap<>();
