@@ -4,12 +4,10 @@ import static org.oddlama.vane.core.item.CustomItem.is_custom_item;
 import static org.oddlama.vane.util.Nms.bukkit_enchantment;
 import static org.oddlama.vane.util.Nms.enchantment_slot_type;
 
-import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.entity.EnumItemSlot;
 import net.minecraft.world.item.ItemStack;
-
+import net.minecraft.world.item.enchantment.Enchantment;
 import org.jetbrains.annotations.NotNull;
-
 import org.oddlama.vane.util.Nms;
 
 /**

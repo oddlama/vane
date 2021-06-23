@@ -2,12 +2,9 @@ package org.oddlama.vane.core.config;
 
 import static org.oddlama.vane.util.Util.namespaced_key;
 
-import java.lang.StringBuilder;
 import java.lang.reflect.Field;
 import java.util.function.Function;
-
 import org.bukkit.configuration.file.YamlConfiguration;
-
 import org.oddlama.vane.annotation.config.ConfigExtendedMaterial;
 import org.oddlama.vane.core.YamlLoadException;
 import org.oddlama.vane.core.material.ExtendedMaterial;
@@ -73,4 +70,3 @@ public class ConfigExtendedMaterialField extends ConfigField<ExtendedMaterial> {
 		}
 	}
 }
-

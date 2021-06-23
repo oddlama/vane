@@ -5,7 +5,6 @@ import static org.oddlama.vane.util.WorldUtil.change_time_smoothly;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.UUID;
-
 import org.bukkit.GameMode;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -14,7 +13,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerBedLeaveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-
 import org.oddlama.vane.annotation.VaneModule;
 import org.oddlama.vane.annotation.config.ConfigDouble;
 import org.oddlama.vane.annotation.config.ConfigLong;

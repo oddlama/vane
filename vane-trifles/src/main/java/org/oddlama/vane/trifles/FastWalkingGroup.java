@@ -3,11 +3,9 @@ package org.oddlama.vane.trifles;
 import static org.oddlama.vane.util.Util.ms_to_ticks;
 
 import java.util.Set;
-
 import org.bukkit.Material;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-
 import org.oddlama.vane.annotation.config.ConfigLong;
 import org.oddlama.vane.annotation.config.ConfigMaterialSet;
 import org.oddlama.vane.core.module.Context;

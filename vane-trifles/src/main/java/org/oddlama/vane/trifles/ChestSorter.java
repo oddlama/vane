@@ -4,7 +4,6 @@ import static org.oddlama.vane.util.ItemUtil.ItemStackComparator;
 import static org.oddlama.vane.util.Util.namespaced_key;
 
 import java.util.Arrays;
-
 import org.bukkit.NamespacedKey;
 import org.bukkit.Tag;
 import org.bukkit.block.Block;
@@ -17,11 +16,9 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.DoubleChestInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
-
 import org.oddlama.vane.annotation.config.ConfigLong;
 import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.module.Context;
-import org.oddlama.vane.trifles.Trifles;
 
 public class ChestSorter extends Listener<Trifles> {
 	private static final NamespacedKey LAST_SORT_TIME = namespaced_key("vane_trifles", "last_sort_time");

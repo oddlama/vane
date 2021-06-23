@@ -7,7 +7,6 @@ import static org.oddlama.vane.util.PlayerUtil.swing_arm;
 import static org.oddlama.vane.util.PlayerUtil.till_block;
 
 import com.destroystokyo.paper.MaterialTags;
-
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.enchantments.EnchantmentTarget;
@@ -19,9 +18,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
-
 import org.jetbrains.annotations.NotNull;
-
 import org.oddlama.vane.annotation.enchantment.Rarity;
 import org.oddlama.vane.annotation.enchantment.VaneEnchantment;
 import org.oddlama.vane.core.item.CustomItem;

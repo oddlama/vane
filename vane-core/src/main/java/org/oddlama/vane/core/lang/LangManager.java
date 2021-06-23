@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
-
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.annotation.lang.LangMessageArray;

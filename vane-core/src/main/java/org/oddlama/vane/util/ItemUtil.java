@@ -4,22 +4,18 @@ import static org.oddlama.vane.util.Nms.creative_tab_id;
 import static org.oddlama.vane.util.Nms.item_handle;
 import static org.oddlama.vane.util.Nms.player_handle;
 
+import com.destroystokyo.paper.profile.ProfileProperty;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
-
-import com.destroystokyo.paper.profile.ProfileProperty;
-
 import net.kyori.adventure.text.serializer.plain.PlainComponentSerializer;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
-
 import net.minecraft.world.item.Item;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;

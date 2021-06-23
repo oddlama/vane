@@ -18,10 +18,6 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.UUID;
 import java.util.logging.Level;
-
-//117 import com.destroystokyo.paper.MaterialTags;
-//117 import com.destroystokyo.paper.profile.ProfileProperty;
-
 import org.bukkit.Keyed;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -42,7 +38,6 @@ import org.bukkit.loot.Lootable;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.messaging.PluginMessageListener;
-
 import org.oddlama.vane.annotation.VaneModule;
 import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.annotation.persistent.Persistent;

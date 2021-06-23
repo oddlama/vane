@@ -6,14 +6,12 @@ import static org.oddlama.vane.util.Util.ms_to_ticks;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-
 import org.bukkit.Material;
 import org.bukkit.SoundCategory;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
-
 import org.oddlama.vane.annotation.config.ConfigDouble;
 import org.oddlama.vane.annotation.config.ConfigLong;
 import org.oddlama.vane.core.Listener;

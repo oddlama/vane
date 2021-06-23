@@ -17,12 +17,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
-
 import net.md_5.bungee.api.chat.BaseComponent;
-
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.EnumCreatureType;
-
 import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -37,10 +34,8 @@ import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
 import org.oddlama.vane.annotation.VaneModule;
 import org.oddlama.vane.annotation.config.ConfigExtendedMaterial;
 import org.oddlama.vane.annotation.config.ConfigLong;

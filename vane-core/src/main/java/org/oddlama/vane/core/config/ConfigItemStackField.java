@@ -3,13 +3,10 @@ package org.oddlama.vane.core.config;
 import static org.oddlama.vane.util.MaterialUtil.material_from;
 import static org.oddlama.vane.util.Util.namespaced_key;
 
-import java.lang.StringBuilder;
 import java.lang.reflect.Field;
 import java.util.function.Function;
-
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
-
 import org.oddlama.vane.annotation.config.ConfigItemStack;
 import org.oddlama.vane.core.YamlLoadException;
 
@@ -136,4 +133,3 @@ public class ConfigItemStackField extends ConfigField<ItemStack> {
 		}
 	}
 }
-

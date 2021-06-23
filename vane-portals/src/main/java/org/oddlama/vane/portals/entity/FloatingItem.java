@@ -2,8 +2,6 @@ package org.oddlama.vane.portals.entity;
 
 import static org.oddlama.vane.util.Nms.world_handle;
 
-import org.bukkit.Location;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -12,6 +10,7 @@ import net.minecraft.world.entity.item.EntityItem;
 import net.minecraft.world.entity.player.EntityHuman;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.World;
+import org.bukkit.Location;
 
 public class FloatingItem extends EntityItem {
 	public FloatingItem(final Location location) {

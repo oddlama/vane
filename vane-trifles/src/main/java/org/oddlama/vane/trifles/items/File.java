@@ -10,7 +10,6 @@ import static org.oddlama.vane.util.PlayerUtil.swing_arm;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Set;
-
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
@@ -38,7 +37,6 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice.MaterialChoice;
 import org.bukkit.inventory.ShapedRecipe;
-
 import org.oddlama.vane.annotation.config.ConfigDouble;
 import org.oddlama.vane.annotation.item.VaneItem;
 import org.oddlama.vane.core.item.CustomItem;

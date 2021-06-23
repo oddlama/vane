@@ -6,7 +6,6 @@ import static org.oddlama.vane.util.Util.exp_for_level;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
-
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
@@ -14,7 +13,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.EquipmentSlot;
-
 import org.oddlama.vane.annotation.config.ConfigInt;
 import org.oddlama.vane.annotation.item.VaneItem;
 import org.oddlama.vane.core.item.CustomItem;

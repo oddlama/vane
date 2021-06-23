@@ -3,13 +3,10 @@ package org.oddlama.vane.core.config;
 import static org.oddlama.vane.util.MaterialUtil.material_from;
 import static org.oddlama.vane.util.Util.namespaced_key;
 
-import java.lang.StringBuilder;
 import java.lang.reflect.Field;
 import java.util.function.Function;
-
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
-
 import org.oddlama.vane.annotation.config.ConfigMaterial;
 import org.oddlama.vane.core.YamlLoadException;
 
@@ -70,4 +67,3 @@ public class ConfigMaterialField extends ConfigField<Material> {
 		}
 	}
 }
-

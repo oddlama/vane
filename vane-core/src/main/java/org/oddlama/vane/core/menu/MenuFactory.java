@@ -5,16 +5,13 @@ import static org.oddlama.vane.util.ItemUtil.name_of;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
-
 import org.jetbrains.annotations.Nullable;
-
 import org.oddlama.vane.core.functional.Consumer1;
 import org.oddlama.vane.core.functional.Function1;
 import org.oddlama.vane.core.functional.Function2;

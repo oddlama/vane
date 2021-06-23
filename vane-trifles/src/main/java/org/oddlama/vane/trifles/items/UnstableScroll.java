@@ -7,7 +7,6 @@ import static org.oddlama.vane.util.Util.ms_to_ticks;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-
 import org.bukkit.Material;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -15,7 +14,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ShapedRecipe;
-
 import org.oddlama.vane.annotation.config.ConfigInt;
 import org.oddlama.vane.annotation.item.VaneItem;
 import org.oddlama.vane.annotation.persistent.Persistent;

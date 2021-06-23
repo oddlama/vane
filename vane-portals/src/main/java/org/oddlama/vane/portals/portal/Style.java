@@ -7,12 +7,9 @@ import static org.oddlama.vane.util.Util.namespaced_key;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-
 import org.jetbrains.annotations.NotNull;
-
 import org.oddlama.vane.external.json.JSONObject;
 
 public class Style {

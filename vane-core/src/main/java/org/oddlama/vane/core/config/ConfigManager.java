@@ -4,7 +4,6 @@ import static org.reflections.ReflectionUtils.getAllFields;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.StringBuilder;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
@@ -17,11 +16,8 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
-
 import org.apache.commons.lang.WordUtils;
-
 import org.bukkit.configuration.file.YamlConfiguration;
-
 import org.oddlama.vane.annotation.config.ConfigBoolean;
 import org.oddlama.vane.annotation.config.ConfigDouble;
 import org.oddlama.vane.annotation.config.ConfigDoubleList;
@@ -38,22 +34,6 @@ import org.oddlama.vane.annotation.config.ConfigStringList;
 import org.oddlama.vane.annotation.config.ConfigStringListMap;
 import org.oddlama.vane.annotation.config.ConfigVersion;
 import org.oddlama.vane.core.YamlLoadException;
-import org.oddlama.vane.core.config.ConfigBooleanField;
-import org.oddlama.vane.core.config.ConfigDoubleField;
-import org.oddlama.vane.core.config.ConfigDoubleListField;
-import org.oddlama.vane.core.config.ConfigExtendedMaterialField;
-import org.oddlama.vane.core.config.ConfigField;
-import org.oddlama.vane.core.config.ConfigIntField;
-import org.oddlama.vane.core.config.ConfigIntListField;
-import org.oddlama.vane.core.config.ConfigItemStackField;
-import org.oddlama.vane.core.config.ConfigLongField;
-import org.oddlama.vane.core.config.ConfigMaterialField;
-import org.oddlama.vane.core.config.ConfigMaterialMapMapMapField;
-import org.oddlama.vane.core.config.ConfigMaterialSetField;
-import org.oddlama.vane.core.config.ConfigStringField;
-import org.oddlama.vane.core.config.ConfigStringListField;
-import org.oddlama.vane.core.config.ConfigStringListMapField;
-import org.oddlama.vane.core.config.ConfigVersionField;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.Module;
 

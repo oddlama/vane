@@ -12,11 +12,9 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Level;
 import javax.imageio.ImageIO;
-
 import net.md_5.bungee.api.AbstractReconnectHandler;
 import net.md_5.bungee.api.Favicon;
 import net.md_5.bungee.api.ServerPing;
@@ -31,9 +29,7 @@ import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.event.EventHandler;
 import net.md_5.bungee.event.EventPriority;
 import net.md_5.bungee.protocol.packet.LoginRequest;
-
 import org.bstats.bungeecord.Metrics;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 

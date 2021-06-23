@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
-
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -18,9 +17,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
-
 import org.jetbrains.annotations.Nullable;
-
 import org.oddlama.vane.annotation.config.ConfigInt;
 import org.oddlama.vane.annotation.config.ConfigMaterial;
 import org.oddlama.vane.annotation.lang.LangMessage;

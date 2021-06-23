@@ -4,15 +4,13 @@ import static org.oddlama.vane.util.Nms.player_handle;
 
 import net.minecraft.core.BlockPosition;
 import net.minecraft.network.chat.ChatMessage;
-import net.minecraft.world.inventory.ContainerAccess;
-import net.minecraft.world.inventory.ContainerAnvil;
+import net.minecraft.network.protocol.game.PacketPlayOutOpenWindow;
+import net.minecraft.server.level.EntityPlayer;
 import net.minecraft.world.IInventory;
 import net.minecraft.world.entity.player.EntityHuman;
-import net.minecraft.server.level.EntityPlayer;
-import net.minecraft.network.protocol.game.PacketPlayOutOpenWindow;
-
+import net.minecraft.world.inventory.ContainerAccess;
+import net.minecraft.world.inventory.ContainerAnvil;
 import org.bukkit.entity.Player;
-
 import org.oddlama.vane.core.module.Context;
 
 public class AnvilMenu extends Menu {

@@ -3,17 +3,14 @@ package org.oddlama.vane.core.config;
 import static org.oddlama.vane.util.MaterialUtil.material_from;
 import static org.oddlama.vane.util.Util.namespaced_key;
 
-import java.lang.StringBuilder;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
-
 import org.oddlama.vane.annotation.config.ConfigMaterialMapEntry;
 import org.oddlama.vane.annotation.config.ConfigMaterialMapMapEntry;
 import org.oddlama.vane.annotation.config.ConfigMaterialMapMapMap;
