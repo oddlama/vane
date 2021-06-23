@@ -2,15 +2,16 @@ package org.oddlama.vane.portals.entity;
 
 import static org.oddlama.vane.util.Nms.world_handle;
 
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.player.EntityHuman;
-import net.minecraft.world.entity.item.EntityItem;
-import net.minecraft.world.entity.EntityTypes;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.level.World;
-
 import org.bukkit.Location;
+
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.entity.item.EntityItem;
+import net.minecraft.world.entity.player.EntityHuman;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.World;
 
 public class FloatingItem extends EntityItem {
 	public FloatingItem(final Location location) {
@@ -40,7 +41,10 @@ public class FloatingItem extends EntityItem {
 		//setSneaking(true); // Names would then only visible on direct line of sight BUT much darker and offset by -0.5 in y direction
 		p(); // setNoPickup(); (same as: pickupDelay = 32767;)
 		persist = false;
-		noPhysics = true;
+
+		// This cast is necessary so the remapper understands that containerMenu is part of EntityHuman,
+		// otherwise it doesn't recognize that this field needs to be renamed
+		((Entity)this).noPhysics = true;
 	}
 
 	@Override public boolean isInteractable() { return false; }
