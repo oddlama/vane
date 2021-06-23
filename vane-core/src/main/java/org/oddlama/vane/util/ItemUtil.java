@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 
 import com.destroystokyo.paper.profile.ProfileProperty;
 
+import net.kyori.adventure.text.serializer.plain.PlainComponentSerializer;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -48,6 +49,7 @@ public class ItemUtil {
 		handle.damage(amount, player_handle(player), x -> {});
 	}
 
+	@SuppressWarnings("deprecation") // Sad but necessary, as even the PlainComponentSerializer is deprecated. :(
 	public static String name_of(final ItemStack item) {
 		if (item == null || !item.hasItemMeta()) {
 			return "";
@@ -56,7 +58,8 @@ public class ItemUtil {
 		if (!meta.hasDisplayName()) {
 			return "";
 		}
-		return meta.getDisplayName();
+
+		return PlainComponentSerializer.plain().serialize(meta.displayName());
 	}
 
 	public static ItemStack name_item(final ItemStack item, final BaseComponent name) {
