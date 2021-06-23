@@ -93,8 +93,8 @@ public class Soulbound extends CustomEnchantment<Enchantments> {
 	}
 
 	@Override
-	public void apply_display_format(Component component) {
-		component.color(NamedTextColor.DARK_GRAY);
+	public Component apply_display_format(Component component) {
+		return component.color(NamedTextColor.DARK_GRAY);
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

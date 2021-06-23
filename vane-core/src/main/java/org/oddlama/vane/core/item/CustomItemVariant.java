@@ -76,8 +76,8 @@ public class CustomItemVariant<T extends Module<T>, V extends CustomItem<T, V>, 
 	 * Returns the display name for this item variant.
 	 */
 	public Component display_name() {
-		final var display_name = lang_name.format();
-		display_name.decoration(TextDecoration.ITALIC, false);
+		final var display_name = lang_name.format()
+			.decoration(TextDecoration.ITALIC, false);
 		return display_name;
 	}
 

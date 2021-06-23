@@ -61,23 +61,20 @@ public class ItemUtil {
 		return name_item(item, name, (List<Component>)null);
 	}
 
-	public static ItemStack name_item(final ItemStack item, final Component name, final Component lore) {
-		lore.decoration(TextDecoration.ITALIC, false);
+	public static ItemStack name_item(final ItemStack item, final Component name, Component lore) {
+		lore = lore.decoration(TextDecoration.ITALIC, false);
 		return name_item(item, name, Arrays.<Component>asList(new Component[] { lore }));
 	}
 
-	public static ItemStack name_item(final ItemStack item, final Component name, final List<Component> lore) {
+	public static ItemStack name_item(final ItemStack item, Component name, final List<Component> lore) {
 		final var meta = item.getItemMeta();
 
-		name.decoration(TextDecoration.ITALIC, false);
+		name = name.decoration(TextDecoration.ITALIC, false);
 		meta.displayName(name);
 
 		if (lore != null) {
 			final var list = lore.stream()
-				.map(x -> {
-					x.decoration(TextDecoration.ITALIC, false);
-					return x;
-				})
+				.map(x -> x.decoration(TextDecoration.ITALIC, false))
 				.collect(Collectors.toList());
 			meta.lore(list);
 		}
@@ -224,9 +221,9 @@ public class ItemUtil {
 
 		final var item = new ItemStack(Material.PLAYER_HEAD);
 		final var meta = (SkullMeta)item.getItemMeta();
-		final var name_component = Component.text(name);
-		name_component.decoration(TextDecoration.ITALIC, false);
-		name_component.color(NamedTextColor.YELLOW);
+		final var name_component = Component.text(name)
+			.decoration(TextDecoration.ITALIC, false)
+			.color(NamedTextColor.YELLOW);
 		meta.displayName(name_component);
 		meta.setPlayerProfile(profile);
 		item.setItemMeta(meta);

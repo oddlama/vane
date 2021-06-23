@@ -47,9 +47,8 @@ public class XpBottle extends CustomItem<Trifles, XpBottle> {
 
 		@Override
 		public Component display_name() {
-			final var name = super.display_name();
-			name.color(NamedTextColor.YELLOW);
-			return name;
+			return super.display_name()
+				.color(NamedTextColor.YELLOW);
 		}
 
 		public int config_capacity_def() {

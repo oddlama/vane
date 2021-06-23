@@ -134,25 +134,13 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 	 * RARE: gold
 	 * VERY_RARE: bold dark purple
 	 */
-	public void apply_display_format(Component component) {
+	public Component apply_display_format(Component component) {
 		switch (annotation.rarity()) {
 			default:
-			case COMMON:
-				component.color(NamedTextColor.DARK_AQUA);
-				break;
-
-			case UNCOMMON:
-				component.color(NamedTextColor.DARK_AQUA);
-				break;
-
-			case RARE:
-				component.color(NamedTextColor.GOLD);
-				break;
-
-			case VERY_RARE:
-				component.color(NamedTextColor.DARK_PURPLE);
-				component.decorate(TextDecoration.BOLD);
-				break;
+			case COMMON:    return component.color(NamedTextColor.DARK_AQUA);
+			case UNCOMMON:  return component.color(NamedTextColor.DARK_AQUA);
+			case RARE:      return component.color(NamedTextColor.GOLD);
+			case VERY_RARE: return component.color(NamedTextColor.DARK_PURPLE).decorate(TextDecoration.BOLD);
 		}
 	}
 
@@ -162,16 +150,15 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 	 * uses clientside translation keys and supports chat formatting.
 	 */
 	public Component display_name(int level) {
-        final var display_name = lang_name.format();
-		display_name.decoration(TextDecoration.ITALIC, false);
-		apply_display_format(display_name);
+        var display_name = apply_display_format(lang_name.format()
+			.decoration(TextDecoration.ITALIC, false));
 
 		if (level != 1 || max_level() != 1) {
-			final var chat_level = Component.translatable("enchantment.level." + level);
-			chat_level.decoration(TextDecoration.ITALIC, false);
-			apply_display_format(chat_level);
-			display_name.append(Component.text(" "));
-			display_name.append(chat_level);
+			final var chat_level = apply_display_format(Component.translatable("enchantment.level." + level)
+				.decoration(TextDecoration.ITALIC, false));
+			display_name = display_name
+				.append(Component.text(" "))
+				.append(chat_level);
         }
 
         return display_name;
