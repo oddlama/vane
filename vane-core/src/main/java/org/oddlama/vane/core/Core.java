@@ -6,6 +6,8 @@ import static org.oddlama.vane.util.BlockUtil.texture_from_skull;
 import static org.oddlama.vane.util.MaterialUtil.is_tillable;
 import static org.oddlama.vane.util.Util.resolve_skin;
 
+import com.destroystokyo.paper.MaterialTags;
+import com.destroystokyo.paper.profile.ProfileProperty;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.File;
@@ -18,6 +20,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.UUID;
 import java.util.logging.Level;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Keyed;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -187,9 +190,9 @@ public class Core extends Module<Core> implements PluginMessageListener {
 		// Only when using a custom item that is a hoe
 		final var player = event.getPlayer();
 		final var item = player.getEquipment().getItem(event.getHand());
-		//117 if (is_custom_item(item) && MaterialTags.HOES.isTagged(item)) {
-		//117 	event.setCancelled(true);
-		//117 }
+		if (is_custom_item(item) && MaterialTags.HOES.isTagged(item)) {
+			event.setCancelled(true);
+		}
 	}
 
 	// Prevent custom items from being used in minecraft's crafting
@@ -306,22 +309,16 @@ public class Core extends Module<Core> implements PluginMessageListener {
 			return;
 		}
 
-		final String stripped_name;
-		if (display_name.length() > 16) {
-			stripped_name = display_name.substring(0, 16);
-		} else {
-			stripped_name = display_name;
-		}
-
 		log.info("[multiplex] Init player '" + display_name + "' for registered auth multiplexed player {" + id + ", " + player.getName() + "}");
-		player.setDisplayName(display_name);
-		player.setPlayerListName(display_name);
+		final var display_name_component = LegacyComponentSerializer.legacySection().deserialize(display_name);
+		player.displayName(display_name_component);
+		player.playerListName(display_name_component);
 
 		final var original_player_id = storage_auth_multiplex.get(id);
 		final var skin = resolve_skin(original_player_id);
-		//117 final var profile = player.getPlayerProfile();
-		//117 profile.setProperty(new ProfileProperty("textures", skin.texture, skin.signature));
-		//117 player.setPlayerProfile(profile);
+		final var profile = player.getPlayerProfile();
+		profile.setProperty(new ProfileProperty("textures", skin.texture, skin.signature));
+		player.setPlayerProfile(profile);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)

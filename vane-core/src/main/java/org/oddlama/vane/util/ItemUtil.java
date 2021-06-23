@@ -11,10 +11,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import net.kyori.adventure.text.serializer.plain.PlainComponentSerializer;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.TextComponent;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.minecraft.world.item.Item;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -45,7 +45,6 @@ public class ItemUtil {
 		handle.damage(amount, player_handle(player), x -> {});
 	}
 
-	@SuppressWarnings("deprecation") // Sad but necessary, as even the PlainComponentSerializer is deprecated. :(
 	public static String name_of(final ItemStack item) {
 		if (item == null || !item.hasItemMeta()) {
 			return "";
@@ -55,37 +54,34 @@ public class ItemUtil {
 			return "";
 		}
 
-		return PlainComponentSerializer.plain().serialize(meta.displayName());
+		return PlainTextComponentSerializer.plainText().serialize(meta.displayName());
 	}
 
-	public static ItemStack name_item(final ItemStack item, final BaseComponent name) {
-		name.setItalic(false);
-		return name_item(item, new BaseComponent[] { name }, (List<BaseComponent[]>)null);
+	public static ItemStack name_item(final ItemStack item, final Component name) {
+		return name_item(item, name, (List<Component>)null);
 	}
 
-	public static ItemStack name_item(final ItemStack item, final BaseComponent name, final BaseComponent lore) {
-		name.setItalic(false);
-		lore.setItalic(false);
-		return name_item(item, new BaseComponent[] { name }, Arrays.<BaseComponent[]>asList(new BaseComponent[] { lore }));
+	public static ItemStack name_item(final ItemStack item, final Component name, final Component lore) {
+		lore.decoration(TextDecoration.ITALIC, false);
+		return name_item(item, name, Arrays.<Component>asList(new Component[] { lore }));
 	}
 
-	public static ItemStack name_item(final ItemStack item, final BaseComponent name, final List<BaseComponent> lore) {
-		name.setItalic(false);
-		final var list = lore.stream()
-			.map(x -> {
-				x.setItalic(false);
-				return new BaseComponent[] { x };
-			})
-			.collect(Collectors.toList());
-		return name_item(item, new BaseComponent[] { name }, list);
-	}
-
-	public static ItemStack name_item(final ItemStack item, final BaseComponent[] name, final List<BaseComponent[]> lore) {
+	public static ItemStack name_item(final ItemStack item, final Component name, final List<Component> lore) {
 		final var meta = item.getItemMeta();
-		meta.setDisplayNameComponent(name);
+
+		name.decoration(TextDecoration.ITALIC, false);
+		meta.displayName(name);
+
 		if (lore != null) {
-			meta.setLoreComponents(lore);
+			final var list = lore.stream()
+				.map(x -> {
+					x.decoration(TextDecoration.ITALIC, false);
+					return x;
+				})
+				.collect(Collectors.toList());
+			meta.lore(list);
 		}
+
 		item.setItemMeta(meta);
 		return item;
 	}
@@ -228,10 +224,10 @@ public class ItemUtil {
 
 		final var item = new ItemStack(Material.PLAYER_HEAD);
 		final var meta = (SkullMeta)item.getItemMeta();
-		final var name_component = new TextComponent(name);
-		name_component.setItalic(false);
-		name_component.setColor(ChatColor.YELLOW);
-		meta.setDisplayNameComponent(new BaseComponent[] { name_component });
+		final var name_component = Component.text(name);
+		name_component.decoration(TextDecoration.ITALIC, false);
+		name_component.color(NamedTextColor.YELLOW);
+		meta.displayName(name_component);
 		meta.setPlayerProfile(profile);
 		item.setItemMeta(meta);
 		return item;

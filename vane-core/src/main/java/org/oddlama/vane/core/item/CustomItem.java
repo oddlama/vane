@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
-import net.md_5.bungee.api.chat.BaseComponent;
-
 import org.bukkit.inventory.ItemStack;
 
 import org.jetbrains.annotations.NotNull;
@@ -246,8 +244,7 @@ public class CustomItem<T extends Module<T>, V extends CustomItem<T, V>> extends
 	{
 		final var meta = item_stack.getItemMeta();
 		meta.setCustomModelData(custom_item.model_data(custom_item_variant.variant()));
-		meta.setDisplayNameComponent(new BaseComponent[] {
-			custom_item_variant.display_name() });
+		meta.displayName(custom_item_variant.display_name());
 		item_stack.setItemMeta(meta);
 		return custom_item.modify_item_stack(
 				custom_item_variant.modify_item_stack(item_stack));

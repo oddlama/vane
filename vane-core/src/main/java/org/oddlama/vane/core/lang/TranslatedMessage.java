@@ -1,11 +1,17 @@
 package org.oddlama.vane.core.lang;
 
-import net.md_5.bungee.api.chat.TranslatableComponent;
+import java.util.ArrayList;
 
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
-
+import org.jetbrains.annotations.NotNull;
 import org.oddlama.vane.core.module.Module;
+
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.ComponentLike;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.TranslatableComponent;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
 public class TranslatedMessage {
 	private Module<?> module;
@@ -27,8 +33,22 @@ public class TranslatedMessage {
 		}
 	}
 
+	public @NotNull TextComponent str_component(Object... args) {
+		return LegacyComponentSerializer.legacySection().deserialize(str(args));
+	}
+
 	public TranslatableComponent format(Object... args) {
-		return new TranslatableComponent(key, args);
+		final var list = new ArrayList<ComponentLike>();
+		for (final var o : args) {
+			if (o instanceof ComponentLike) {
+				list.add((ComponentLike)o);
+			} else if (o instanceof String) {
+				list.add(LegacyComponentSerializer.legacySection().deserialize((String)o));
+			} else {
+				throw new RuntimeException("Error while formatting message '" + key() + "', got invalid argument " + o);
+			}
+		}
+		return Component.translatable(key, list);
 	}
 
 	public void broadcast_server_players(Object... args) {
