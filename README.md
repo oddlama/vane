@@ -167,9 +167,25 @@ You can of course build the plugin yourself. To do that you need at least JDK 16
 Before you can proceed, you need to copy the fully patched Paper server jar
 to `libs/`. This is required so the compiler can find minecraft-native symbols.
 
-1. Copy `cache/patched_{version}.jar` from a paper server to `libs/` (create folder if necessary).
-2. Execute `./gradlew build`
-3. Resulting jar files will be in `target/` and `target-waterfall/`.
+Unfortunately, the update to 1.17 made compiling a lot harder, because we need to
+apply deobfuscation mappings ourselves before and after compilation. Therefore
+we need to to some preparation before we can compile vane.
+
+#### Preparation
+
+This needs to be done only once after cloning the repository, or when the minecraft version changes in the future.
+
+1. Compile spigot using their BuildTools.jar (you can stop compiling after spigot has finished remapping the inital minecraft.jar)
+2. In the directory `work/` you will find a file named similar to `work/bukkit-<checksum>-fields.csrg`. Copy it to the `external/` folder.
+2. Download md_5's `SpecialSource-...-shaded.jar` to the `external/` folder.
+3. Adjust the path to these files in `./remap_patched_paper_for_development.sh` and `./remap_plugins.sh`. Also set `sign=false` in `./remap_plugins.sh`.
+4. From any paper server copy `paper_server/cache/patched_{version}.jar` to `libs/` (create folder if necessary).
+5. Execute `./remap_patched_paper_for_development.sh`
+
+#### Building
+
+1. Execute `./gradlew build` and afterwards `./remap_plugins.sh`
+2. All resulting jar files that can be used on a server will be in `target-obf/`.
 
 If you experience "peer not authenticated" issues from gradle, just retry.
 Seems to be a skittish integration between gradle and maven repositories.

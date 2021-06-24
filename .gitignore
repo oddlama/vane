@@ -9,4 +9,5 @@ build
 libs/
 target/
 target-obf/
+external/
 bin/

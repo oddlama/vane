@@ -1,7 +1,7 @@
 #!/bin/bash
 
-specialsource="$HOME/Downloads/SpecialSource-1.10.0-shaded.jar"
-mapping="../spigot/work/bukkit-e3c5450d-fields.csrg"
+specialsource="external/SpecialSource-1.10.0-shaded.jar"
+mapping="external/bukkit-e3c5450d-fields.csrg"
 paper_jar="libs/patched_1.17.jar"
 
 die() {

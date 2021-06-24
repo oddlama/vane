@@ -1,7 +1,8 @@
 #!/bin/bash
 
-specialsource="$HOME/Downloads/SpecialSource-1.10.0-shaded.jar"
-mapping="../spigot/work/bukkit-e3c5450d-fields.csrg"
+specialsource="external/SpecialSource-1.10.0-shaded.jar"
+mapping="external/bukkit-e3c5450d-fields.csrg"
+sign=true
 
 die() {
     echo "[1;31merror:[m $*" >&2
@@ -18,11 +19,13 @@ for i in target/*.jar; do
         || die "Could not apply mapping"
 done
 
-echo "[+] Signing jar files"
-for i in target-obf/*.jar; do
-    gpg --local-user 680AA614E988DE3E84E0DEFA503F6C0684104B0A --armor --detach-sign --sign "$i" \
-        || die "Could not sign jar file"
-done
+if [[ "$sign" == "true" ]]; then
+    echo "[+] Signing jar files"
+    for i in target-obf/*.jar; do
+        gpg --local-user 680AA614E988DE3E84E0DEFA503F6C0684104B0A --armor --detach-sign --sign "$i" \
+            || die "Could not sign jar file"
+    done
+fi
 
 echo "[+] Creating all-plugins.zip"
 cd target-obf \
