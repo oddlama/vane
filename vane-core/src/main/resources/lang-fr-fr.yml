@@ -18,7 +18,7 @@ version: 1
 # language code (ISO 639) and the country code (ISO 3166).
 resource_pack_lang_code: 'fr_fr'
 
-command_not_a_player: "§cerreur:§6 cette commande doit être exécutée par un(e) joueur/joueuse !"
+command_not_a_player: "§cerreur:§6 cette commande doit être exécutée par un·e joueur·se !"
 command_permission_denied: "§cerreur:§6 permission refusée!"
 invalid_time_format: "§cerreur:§6 format d'heure invalide: %1$s"
 break_loot_block_prevented: "§6Ce bloc a une table de butin, et sera automatiquement rempli à nouveau après quelque temps. Si vous tenez vraiment à briser ce bloc, attendez 5 secondes et tentez de le briser à nouveau."
@@ -27,7 +27,7 @@ command_vane:
   reload_success: "%1$s§7: §arechargé avec succès"
   reload_fail: "%1$s§7: §céchec du rechargement"
   resource_pack_generate_success: "§aPack de ressources généré avec succès"
-  resource_pack_generate_fail: "§cUn erreur est survenue pendant la génération du pack de ressources"
+  resource_pack_generate_fail: "§cUne erreur est survenue pendant la génération du pack de ressources"
   usage: "%1$s §7<§areload§7|§agenerate_resource_pack§7>"
   description: "Gère les plugins de vane."
   help: "§areload §7[§bmodule§7]:§r Recharge tous les modules, ou seulement le module spécifié.\n\
@@ -37,7 +37,7 @@ resource_pack:
   declined: "Vous devez accepter le pack de ressources pour pouvoir jouer sur ce serveur.\n\
     Il est indispensable pour les traductions, ainsi que les textures."
   download_failed: "§cLe téléchargement du pack de ressources semble avoir échoué.§r\n\
-    §7(Vous avez été déconnecté(e) afin d'éviter les erreurs d'affichage)\n\
+    §7(Vous avez été déconnecté·e afin d'éviter les erreurs d'affichage)\n\
     \n\
     §dMerci de bien vouloir essayer à nouveau."
 

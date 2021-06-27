@@ -33,13 +33,13 @@ dynmap:
 
 menus:
   enter_region_group_name:
-    title: "§8§lEntrer un nom de groupe de régions"
+    title: "§8§lEntrer un nom"
 
   enter_region_name:
-    title: "§8§lEntrer un nom de région"
+    title: "§8§lEntrer un nom"
 
   enter_role_name:
-    title: "§8§lEntrer un nom de rôle"
+    title: "§8§lEntrer un nom"
 
   main:
     title: "§8§lGérer les régions"
@@ -109,7 +109,7 @@ menus:
       lore:
         - ""
         - "§7Crée un nouveau §bgroupe de régions§7. Les groupes de régions"
-        - "§7sont utiles pour donner des permissions aux joueurs/joueuses"
+        - "§7sont utiles pour donner des permissions aux joueur·se·s"
         - "§7en leur assignant un rôle. Toutes les régions dans un même"
         - "§7groupe de régions honoreront ces permissions."
 
@@ -228,7 +228,7 @@ menus:
       lore:
         - ""
         - "§7Crée un nouveau rôle§7. Les rôles sont utiles pour décerner"
-        - "§7des permissions à des groupes de joueurs/joueuses."
+        - "§7des permissions à des groupes de joueur·se·s."
 
     list_roles:
       name: "§b§lRôles"
@@ -296,25 +296,25 @@ menus:
       lore: []
 
     assign_player:
-      name: "§b§lAssigner un rôle aux joueurs/joueuses"
+      name: "§b§lAssigner un rôle aux joueur·se·s"
       lore:
         - ""
-        - "§7Assigne un rôle aux joueurs/joueuses en leur cliquant dessus."
-        - "§7Si le joueur/la joueuse a déjà un rôle, le nouveau rôle"
+        - "§7Assigne un rôle aux joueur·se·s en leur cliquant dessus."
+        - "§7Si le·a joueur·se a déjà un rôle, le nouveau rôle"
         - "§7leur sera assigné à la place. La liste ne montrera que"
-        - "§7les joueurs/joueuses qui ne possèdent pas encore le nouveau rôle."
-        - "§7Vous pouvez le retirer avec le menu §bRetirer un rôle aux joueurs/joueuses§7."
+        - "§7les joueur·se·s qui ne possèdent pas encore le nouveau rôle."
+        - "§7Vous pouvez le retirer avec le menu §bRetirer un rôle aux joueur·se·s§7."
     remove_player:
-      name: "§b§lRetirer un rôle aux joueurs/joueuses"
+      name: "§b§lRetirer un rôle aux joueur·se·s"
       lore:
         - ""
-        - "§7Retire un rôle à des joueurs/joueuses en leur cliquant dessus."
+        - "§7Retire un rôle à des joueur·se·s en leur cliquant dessus."
         - "§7Cela signifie qu'ils/elles n'auront plus de rôle."
-        - "§7et seront géré(e)s par le rôle par défaut: §6[others]"
+        - "§7et seront géré·e·s par le rôle par défaut: §6[others]"
 
-    select_assign_player_title: "§8§lAjouter des joueurs/joueuses"
-    select_remove_player_title: "§8§lRetirer des joueurs/joueuses"
-    filter_players_title: "§8§lFiltrer les joueurs/joueuses"
+    select_assign_player_title: "§8§lAjouter des joueur·se·s"
+    select_remove_player_title: "§8§lRetirer des joueur·se·s"
+    filter_players_title: "§8§lFiltrer les joueur·se·s"
     select_player:
       name: "%1$s"
       lore: []
