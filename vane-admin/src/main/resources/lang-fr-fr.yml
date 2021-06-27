@@ -21,7 +21,7 @@ resource_pack_lang_code: 'fr_fr'
 player_chat_format: "%1$s§7: %2$s"
 
 player_join: "%1$s§e a rejoint le serveur"
-player_kick: "%1$s§e a été éjecté(e) du serveur"
+player_kick: "%1$s§e a été éjecté·e du serveur"
 player_quit: "%1$s§e a quitté le serveur"
 
 autostop:
@@ -35,7 +35,7 @@ autostop:
     usage: "%1$s §7<§aabort§7|§aschedule§7|§astatus§7>"
     description: "Gère l'arrêt automatique."
     help: "§aabort§7:§r Annule l'arrêt automatique programmé.\n\
-      §aschedule §7[§bdélai§7]:§r Programme un arrêt automatique immédiatement sans tenir compte du nombre de joueurs/joueuses. Accepte un paramètre \"délai\" pour outrepasser le délai par défaut.\n\
+      §aschedule §7[§bdélai§7]:§r Programme un arrêt automatique immédiatement sans tenir compte du nombre de joueur·se·s. Accepte un paramètre \"délai\" pour outrepasser le délai par défaut.\n\
       §astatus§7:§r Montre le statut actuel de l'arrêt automatique."
 
 hazard_protection:
@@ -45,7 +45,7 @@ command_gamemode:
   set: "§7Le mode de jeu de %1$s§7 a été changé en: %2$s"
   usage: "%1$s §bgamemode §7[§bjoueur|joueuse§7]"
   description: "§bgamemode §7[§bjoueur|joueuse§7]"
-  help: "Sélectionne le mode de jeu pour un(e) joueur/joueuse."
+  help: "Sélectionne le mode de jeu pour un·e joueur·se."
 
 command_setspawn:
   usage: "%1$s"
