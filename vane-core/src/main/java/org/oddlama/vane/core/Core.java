@@ -6,6 +6,8 @@ import static org.oddlama.vane.util.BlockUtil.texture_from_skull;
 import static org.oddlama.vane.util.MaterialUtil.is_tillable;
 import static org.oddlama.vane.util.Util.resolve_skin;
 
+import com.destroystokyo.paper.MaterialTags;
+import com.destroystokyo.paper.profile.ProfileProperty;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.File;
@@ -18,10 +20,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.UUID;
 import java.util.logging.Level;
-
-import com.destroystokyo.paper.MaterialTags;
-import com.destroystokyo.paper.profile.ProfileProperty;
-
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Keyed;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -42,17 +41,18 @@ import org.bukkit.loot.Lootable;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.messaging.PluginMessageListener;
-
 import org.oddlama.vane.annotation.VaneModule;
 import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.annotation.persistent.Persistent;
+import org.oddlama.vane.core.functional.Consumer1;
 import org.oddlama.vane.core.item.CustomItem;
 import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.material.HeadMaterialLibrary;
 import org.oddlama.vane.core.menu.MenuManager;
 import org.oddlama.vane.core.module.Module;
+import org.oddlama.vane.core.module.ModuleComponent;
 
-@VaneModule(name = "core", bstats = 8637, config_version = 2, lang_version = 1, storage_version = 1)
+@VaneModule(name = "core", bstats = 8637, config_version = 3, lang_version = 2, storage_version = 1)
 public class Core extends Module<Core> implements PluginMessageListener {
 	/** The base offset for any model data used by vane plugins. */
 	// "vane" = 0x76616e65, but the value will be saved as float (json...), so only -2^24 - 2^24 can accurately be represented.
@@ -110,6 +110,7 @@ public class Core extends Module<Core> implements PluginMessageListener {
 
 		// Components
 		new org.oddlama.vane.core.commands.Vane(this);
+		new org.oddlama.vane.core.commands.CustomItem(this);
 		menu_manager = new MenuManager(this);
 		new ResourcePackDistributor(this);
 		new CommandHider(this);
@@ -143,6 +144,12 @@ public class Core extends Module<Core> implements PluginMessageListener {
 			return false;
 		}
 		return true;
+	}
+
+	public void for_all_module_components(final Consumer1<ModuleComponent<?>> f) {
+		for (var m : vane_modules) {
+			m.for_each_module_component(f);
+		}
 	}
 
 	// Prevent entity targeting by tempting when the reason is a custom item.
@@ -302,16 +309,10 @@ public class Core extends Module<Core> implements PluginMessageListener {
 			return;
 		}
 
-		final String stripped_name;
-		if (display_name.length() > 16) {
-			stripped_name = display_name.substring(0, 16);
-		} else {
-			stripped_name = display_name;
-		}
-
 		log.info("[multiplex] Init player '" + display_name + "' for registered auth multiplexed player {" + id + ", " + player.getName() + "}");
-		player.setDisplayName(display_name);
-		player.setPlayerListName(display_name);
+		final var display_name_component = LegacyComponentSerializer.legacySection().deserialize(display_name);
+		player.displayName(display_name_component);
+		player.playerListName(display_name_component);
 
 		final var original_player_id = storage_auth_multiplex.get(id);
 		final var skin = resolve_skin(original_player_id);

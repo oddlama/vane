@@ -2,21 +2,18 @@ package org.oddlama.vane.regions.menu;
 
 import static org.oddlama.vane.util.Util.namespaced_key;
 
-import java.util.Arrays;
 import java.util.stream.Collectors;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-
 import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.core.config.TranslatedItemStack;
 import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.menu.Filter;
-import org.oddlama.vane.core.menu.Menu.ClickResult;
 import org.oddlama.vane.core.menu.Menu;
+import org.oddlama.vane.core.menu.Menu.ClickResult;
 import org.oddlama.vane.core.menu.MenuFactory;
 import org.oddlama.vane.core.menu.MenuItem;
 import org.oddlama.vane.core.menu.MenuWidget;
@@ -75,7 +72,7 @@ public class RoleMenu extends ModuleComponent<Regions> {
 	public Menu create(final RegionGroup group, final Role role, final Player player) {
 		final var columns = 9;
 		final var rows = 3;
-		final var title = lang_title.str(role.color() + "§l" + role.name());
+		final var title = lang_title.str_component(role.color() + "§l" + role.name());
 		final var role_menu = new Menu(get_context(), Bukkit.createInventory(null, rows * columns, title));
 
 		final var is_admin = player.getUniqueId().equals(group.owner())

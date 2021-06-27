@@ -5,11 +5,9 @@ import static org.oddlama.vane.util.PlayerUtil.has_items;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.HashMap;
-
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-
 import org.oddlama.vane.regions.Regions;
 
 public class RegionSelection {

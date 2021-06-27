@@ -10,18 +10,12 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
-
 import org.bukkit.configuration.file.YamlConfiguration;
-
 import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.annotation.lang.LangMessageArray;
 import org.oddlama.vane.annotation.lang.LangVersion;
 import org.oddlama.vane.core.ResourcePackGenerator;
 import org.oddlama.vane.core.YamlLoadException;
-import org.oddlama.vane.core.lang.LangField;
-import org.oddlama.vane.core.lang.LangMessageArrayField;
-import org.oddlama.vane.core.lang.LangMessageField;
-import org.oddlama.vane.core.lang.LangVersionField;
 import org.oddlama.vane.core.module.Module;
 
 public class LangManager {
@@ -164,7 +158,6 @@ public class LangManager {
 		return true;
 	}
 
-	@SuppressWarnings("unchecked")
 	public void generate_resource_pack(final ResourcePackGenerator pack, YamlConfiguration yaml) {
 		var lang_code = yaml.getString("resource_pack_lang_code");
 		if (lang_code == null) {

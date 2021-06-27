@@ -5,9 +5,7 @@ import static org.oddlama.vane.core.persistent.PersistentSerializer.to_json;
 
 import java.io.IOException;
 import java.util.UUID;
-
 import org.jetbrains.annotations.NotNull;
-
 import org.oddlama.vane.external.json.JSONObject;
 import org.oddlama.vane.regions.Regions;
 

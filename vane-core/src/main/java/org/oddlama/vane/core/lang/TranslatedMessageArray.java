@@ -3,10 +3,11 @@ package org.oddlama.vane.core.lang;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.TranslatableComponent;
-
 import org.oddlama.vane.core.module.Module;
+
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.ComponentLike;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
 public class TranslatedMessageArray {
 	private Module<?> module;
@@ -33,10 +34,20 @@ public class TranslatedMessageArray {
 		}
 	}
 
-	public List<BaseComponent> format(Object... args) {
-		final var arr = new ArrayList<BaseComponent>();
+	public List<Component> format(Object... args) {
+		final var arr = new ArrayList<Component>();
 		for (int i = 0; i < default_translation.size(); ++i) {
-			arr.add(new TranslatableComponent(key + "." + i, args));
+			final var list = new ArrayList<ComponentLike>();
+			for (final var o : args) {
+				if (o instanceof ComponentLike) {
+					list.add((ComponentLike)o);
+				} else if (o instanceof String) {
+					list.add(LegacyComponentSerializer.legacySection().deserialize((String)o));
+				} else {
+					throw new RuntimeException("Error while formatting message '" + key() + "', got invalid argument " + o);
+				}
+			}
+			arr.add(Component.translatable(key + "." + i, list));
 		}
 		return arr;
 	}

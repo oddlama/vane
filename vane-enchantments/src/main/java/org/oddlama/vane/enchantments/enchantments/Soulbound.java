@@ -2,11 +2,10 @@ package org.oddlama.vane.enchantments.enchantments;
 
 import java.util.ArrayList;
 
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.BaseComponent;
-
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -25,6 +24,8 @@ import org.oddlama.vane.enchantments.CustomEnchantment;
 import org.oddlama.vane.enchantments.Enchantments;
 import org.oddlama.vane.enchantments.items.AncientTomeOfTheGods;
 import org.oddlama.vane.enchantments.items.BookVariant;
+
+import net.kyori.adventure.text.Component;
 
 @VaneEnchantment(name = "soulbound", rarity = Rarity.RARE, treasure = true, allow_custom = true)
 public class Soulbound extends CustomEnchantment<Enchantments> {
@@ -68,7 +69,7 @@ public class Soulbound extends CustomEnchantment<Enchantments> {
 		final var curse_of_binding_empty_lore = new ItemStack(Material.ENCHANTED_BOOK);
 		final var curse_meta_empty_lore = (EnchantmentStorageMeta)curse_of_binding_empty_lore.getItemMeta();
 		curse_meta_empty_lore.addStoredEnchant(Enchantment.BINDING_CURSE, 1, false);
-		curse_meta_empty_lore.setLoreComponents(new ArrayList<BaseComponent[]>());
+		curse_meta_empty_lore.lore(new ArrayList<Component>());
 		curse_of_binding_empty_lore.setItemMeta(curse_meta_empty_lore);
 
 		final var recipe_key_empty_lore = recipe_key("empty_lore");
@@ -92,8 +93,8 @@ public class Soulbound extends CustomEnchantment<Enchantments> {
 	}
 
 	@Override
-	public void apply_display_format(BaseComponent component) {
-		component.setColor(ChatColor.DARK_GRAY);
+	public Component apply_display_format(Component component) {
+		return component.color(NamedTextColor.DARK_GRAY);
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

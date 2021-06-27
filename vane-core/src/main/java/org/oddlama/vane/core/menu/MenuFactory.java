@@ -5,16 +5,14 @@ import static org.oddlama.vane.util.ItemUtil.name_of;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
-
 import org.jetbrains.annotations.Nullable;
-
 import org.oddlama.vane.core.functional.Consumer1;
 import org.oddlama.vane.core.functional.Function1;
 import org.oddlama.vane.core.functional.Function2;
@@ -29,7 +27,7 @@ public class MenuFactory {
 	public static Menu anvil_string_input(final Context<?> context, final Player player, final String title, final ItemStack _input_item, final String default_name, final Function3<Player, Menu, String, ClickResult> on_click) {
 		final var input_item = _input_item.clone();
 		final var meta = input_item.getItemMeta();
-		meta.setDisplayName(default_name);
+		meta.displayName(LegacyComponentSerializer.legacySection().deserialize(default_name));
 		input_item.setItemMeta(meta);
 
 		final var anvil = new AnvilMenu(context, player, title);
@@ -42,7 +40,7 @@ public class MenuFactory {
 
 	public static Menu confirm(final Context<?> context, final String title, final ItemStack item_confirm, final Function1<Player, ClickResult> on_confirm, final ItemStack item_cancel, final Consumer1<Player> on_cancel) {
 		final var columns = 9;
-		final var confirmation_menu = new Menu(context, Bukkit.createInventory(null, columns, title));
+		final var confirmation_menu = new Menu(context, Bukkit.createInventory(null, columns, LegacyComponentSerializer.legacySection().deserialize(title)));
 		final var confirm_index = (int)(Math.random() * columns);
 
 		for (int i = 0; i < columns; ++i) {
@@ -85,7 +83,7 @@ public class MenuFactory {
 		}
 
 		final var columns = 9;
-		final var item_selector_menu = new Menu(context, Bukkit.createInventory(null, columns, title));
+		final var item_selector_menu = new Menu(context, Bukkit.createInventory(null, columns, LegacyComponentSerializer.legacySection().deserialize(title)));
 		final var selected_item = new MenuItem(4, default_item, (p, menu, self, event) -> {
 			if (!Menu.is_left_or_right_click(event)) {
 				return ClickResult.INVALID_CLICK;

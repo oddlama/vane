@@ -4,25 +4,22 @@ import static org.oddlama.vane.util.Nms.creative_tab_id;
 import static org.oddlama.vane.util.Nms.item_handle;
 import static org.oddlama.vane.util.Nms.player_handle;
 
+import com.destroystokyo.paper.profile.ProfileProperty;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
-
-import com.destroystokyo.paper.profile.ProfileProperty;
-
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.TextComponent;
-
-import net.minecraft.server.v1_16_R3.Item;
-
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import net.minecraft.world.item.Item;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.craftbukkit.v1_16_R3.enchantments.CraftEnchantment;
+import org.bukkit.craftbukkit.v1_17_R1.enchantments.CraftEnchantment;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -56,37 +53,32 @@ public class ItemUtil {
 		if (!meta.hasDisplayName()) {
 			return "";
 		}
-		return meta.getDisplayName();
+
+		return PlainTextComponentSerializer.plainText().serialize(meta.displayName());
 	}
 
-	public static ItemStack name_item(final ItemStack item, final BaseComponent name) {
-		name.setItalic(false);
-		return name_item(item, new BaseComponent[] { name }, (List<BaseComponent[]>)null);
+	public static ItemStack name_item(final ItemStack item, final Component name) {
+		return name_item(item, name, (List<Component>)null);
 	}
 
-	public static ItemStack name_item(final ItemStack item, final BaseComponent name, final BaseComponent lore) {
-		name.setItalic(false);
-		lore.setItalic(false);
-		return name_item(item, new BaseComponent[] { name }, Arrays.<BaseComponent[]>asList(new BaseComponent[] { lore }));
+	public static ItemStack name_item(final ItemStack item, final Component name, Component lore) {
+		lore = lore.decoration(TextDecoration.ITALIC, false);
+		return name_item(item, name, Arrays.<Component>asList(new Component[] { lore }));
 	}
 
-	public static ItemStack name_item(final ItemStack item, final BaseComponent name, final List<BaseComponent> lore) {
-		name.setItalic(false);
-		final var list = lore.stream()
-			.map(x -> {
-				x.setItalic(false);
-				return new BaseComponent[] { x };
-			})
-			.collect(Collectors.toList());
-		return name_item(item, new BaseComponent[] { name }, list);
-	}
-
-	public static ItemStack name_item(final ItemStack item, final BaseComponent[] name, final List<BaseComponent[]> lore) {
+	public static ItemStack name_item(final ItemStack item, Component name, final List<Component> lore) {
 		final var meta = item.getItemMeta();
-		meta.setDisplayNameComponent(name);
+
+		name = name.decoration(TextDecoration.ITALIC, false);
+		meta.displayName(name);
+
 		if (lore != null) {
-			meta.setLoreComponents(lore);
+			final var list = lore.stream()
+				.map(x -> x.decoration(TextDecoration.ITALIC, false))
+				.collect(Collectors.toList());
+			meta.lore(list);
 		}
+
 		item.setItemMeta(meta);
 		return item;
 	}
@@ -229,10 +221,10 @@ public class ItemUtil {
 
 		final var item = new ItemStack(Material.PLAYER_HEAD);
 		final var meta = (SkullMeta)item.getItemMeta();
-		final var name_component = new TextComponent(name);
-		name_component.setItalic(false);
-		name_component.setColor(ChatColor.YELLOW);
-		meta.setDisplayNameComponent(new BaseComponent[] { name_component });
+		final var name_component = Component.text(name)
+			.decoration(TextDecoration.ITALIC, false)
+			.color(NamedTextColor.YELLOW);
+		meta.displayName(name_component);
 		meta.setPlayerProfile(profile);
 		item.setItemMeta(meta);
 		return item;

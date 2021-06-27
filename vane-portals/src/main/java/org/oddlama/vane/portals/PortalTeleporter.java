@@ -83,6 +83,12 @@ public class PortalTeleporter extends Listener<Portals> {
 			entities_portalling.put(player_id, null);
 
 			var target_location = target.spawn().clone();
+			// Increase Y value if player is currently flying through a portal that
+			// has extent in the y direction (i.e. is built upright)
+			if (player.isGliding() && portal.orientation().plane().y()) {
+				target_location.setY(target_location.getY() + 1.5);
+			}
+
 			final var player_location = player.getLocation();
 			target_location.setPitch(player_location.getPitch());
 			target_location.setYaw(player_location.getYaw());

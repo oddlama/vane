@@ -10,7 +10,6 @@ import org.bukkit.permissions.PermissionDefault;
 import org.oddlama.vane.annotation.config.ConfigBoolean;
 import org.oddlama.vane.annotation.config.ConfigString;
 import org.oddlama.vane.annotation.lang.LangMessage;
-import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.ModuleGroup;
@@ -85,11 +84,14 @@ public class ResourcePackDistributor extends Listener<Core> {
 
 		switch (event.getStatus()) {
 			case DECLINED:
-				event.getPlayer().kickPlayer(lang_declined.str());
+				event.getPlayer().kick(lang_declined.str_component());
 				break;
 
 			case FAILED_DOWNLOAD:
-				event.getPlayer().kickPlayer(lang_download_failed.str());
+				event.getPlayer().kick(lang_download_failed.str_component());
+				break;
+
+			default:
 				break;
 		}
 	}

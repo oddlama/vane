@@ -6,32 +6,33 @@ import java.util.logging.Level;
 import com.mojang.datafixers.DataFixUtils;
 import com.mojang.datafixers.types.Type;
 
-import net.minecraft.server.v1_16_R3.BlockPosition;
-import net.minecraft.server.v1_16_R3.Clearable;
-import net.minecraft.server.v1_16_R3.CreativeModeTab;
-import net.minecraft.server.v1_16_R3.DataConverterRegistry;
-import net.minecraft.server.v1_16_R3.DataConverterTypes;
-import net.minecraft.server.v1_16_R3.DedicatedServer;
-import net.minecraft.server.v1_16_R3.Enchantment;
-import net.minecraft.server.v1_16_R3.EnchantmentSlotType;
-import net.minecraft.server.v1_16_R3.Entity;
-import net.minecraft.server.v1_16_R3.EntityPlayer;
-import net.minecraft.server.v1_16_R3.EntityTypes;
-import net.minecraft.server.v1_16_R3.IRegistry;
-import net.minecraft.server.v1_16_R3.Item;
-import net.minecraft.server.v1_16_R3.ItemStack;
-import net.minecraft.server.v1_16_R3.MinecraftKey;
-import net.minecraft.server.v1_16_R3.SharedConstants;
-import net.minecraft.server.v1_16_R3.WorldServer;
+import net.minecraft.core.BlockPosition;
+import net.minecraft.core.IRegistry;
+import net.minecraft.world.Clearable;
+import net.minecraft.world.entity.item.EntityFallingBlock;
+import net.minecraft.server.dedicated.DedicatedServer;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.server.level.EntityPlayer;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.SharedConstants;
+import net.minecraft.resources.MinecraftKey;
+import net.minecraft.util.datafix.DataConverterRegistry;
+import net.minecraft.util.datafix.fixes.DataConverterTypes;
+import net.minecraft.world.item.enchantment.EnchantmentSlotType;
+import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.server.level.WorldServer;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.craftbukkit.v1_16_R3.CraftServer;
-import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
-import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack;
-import org.bukkit.craftbukkit.v1_16_R3.util.CraftNamespacedKey;
+import org.bukkit.craftbukkit.v1_17_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_17_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_17_R1.util.CraftNamespacedKey;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.entity.Player;
 
@@ -139,23 +140,8 @@ public class Nms {
 	}
 
 	public static int creative_tab_id(final Item item) {
-		CreativeModeTab tab = null;
-		try {
-			final var creative_mode_tab_field = Item.class.getDeclaredField("i");
-			creative_mode_tab_field.setAccessible(true);
-			tab = (CreativeModeTab)creative_mode_tab_field.get(item);
-		} catch (NoSuchFieldException |	IllegalAccessException e) {
-			Bukkit.getLogger().log(Level.SEVERE, "Could not get creative mode tab", e);
-		}
-
-		try {
-			final var id_field = CreativeModeTab.class.getDeclaredField("o");
-			id_field.setAccessible(true);
-			return tab == null ? Integer.MAX_VALUE : (int)id_field.get(tab);
-		} catch (NoSuchFieldException |	IllegalAccessException e) {
-			Bukkit.getLogger().log(Level.SEVERE, "Could not get creative mode tab id", e);
-			return Integer.MAX_VALUE;
-		}
+		final var tab = item.t(); // getCategory()
+		return tab == null ? Integer.MAX_VALUE : tab.a(); // getId()
 	}
 
 	public static void set_air_no_drops(final org.bukkit.block.Block block) {

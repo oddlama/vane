@@ -2,6 +2,8 @@ package org.oddlama.vane.core.module;
 
 import static org.oddlama.vane.util.ResourceList.get_resources;
 
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -9,26 +11,18 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
-
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.ProtocolManager;
-
+import java.util.stream.Collectors;
 import org.bstats.bukkit.Metrics;
-
 import org.bukkit.NamespacedKey;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.EventHandler;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
@@ -38,7 +32,6 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.java.JavaPlugin;
-
 import org.oddlama.vane.annotation.VaneModule;
 import org.oddlama.vane.annotation.config.ConfigBoolean;
 import org.oddlama.vane.annotation.config.ConfigString;
@@ -50,6 +43,7 @@ import org.oddlama.vane.core.LootTable;
 import org.oddlama.vane.core.ResourcePackGenerator;
 import org.oddlama.vane.core.command.Command;
 import org.oddlama.vane.core.config.ConfigManager;
+import org.oddlama.vane.core.functional.Consumer1;
 import org.oddlama.vane.core.item.ModelDataEnum;
 import org.oddlama.vane.core.lang.LangManager;
 import org.oddlama.vane.core.persistent.PersistentStorageManager;
@@ -119,6 +113,10 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 	public void on_disable() {}
 	public void on_config_change() {}
 	public void on_generate_resource_pack() throws IOException {}
+
+	final public void for_each_module_component(final Consumer1<ModuleComponent<?>> f) {
+		context_group.for_each_module_component(f);
+	}
 
 	// Loot modification
 	private final Map<NamespacedKey, LootTable> additional_loot_tables = new HashMap<>();
@@ -225,11 +223,12 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 		context_group.config_change();
 	}
 
-    @Override
+	@Override
 	public void generate_resource_pack(final ResourcePackGenerator pack) throws IOException {
 		// Generate language
-		get_resources(getClass(), Pattern.compile("lang-.*\\.yml")).stream().forEach(lang_file -> {
-			final var yaml = YamlConfiguration.loadConfiguration(new File(getDataFolder(), lang_file));
+		final var pattern = Pattern.compile("lang-.*\\.yml");
+		Arrays.stream(getDataFolder().listFiles((d, name) -> pattern.matcher(name).matches())).forEach(lang_file -> {
+			final var yaml = YamlConfiguration.loadConfiguration(lang_file);
 			try {
 				lang_manager.generate_resource_pack(pack, yaml);
 			} catch (Exception e) {

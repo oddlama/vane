@@ -5,7 +5,6 @@ import static org.oddlama.vane.util.ItemUtil.name_item;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
-
 import org.oddlama.vane.annotation.config.ConfigExtendedMaterial;
 import org.oddlama.vane.annotation.config.ConfigInt;
 import org.oddlama.vane.annotation.lang.LangMessage;
@@ -70,4 +69,3 @@ public class TranslatedItemStack<T extends Module<T>> extends ModuleComponent<T>
 	@Override
 	public void on_disable() {}
 }
-

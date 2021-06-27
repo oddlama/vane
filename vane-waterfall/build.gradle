@@ -4,7 +4,7 @@ plugins {
 
 dependencies {
 	implementation group: 'io.github.waterfallmc', name: 'waterfall-api', version: '1.17-R0.1-SNAPSHOT';
-	implementation group: 'org.bstats', name: 'bstats-bungeecord', version: '2.2.1';
+	implementation group: 'org.bstats', name: 'bstats-bungeecord', version: '1.7';
 	implementation group: 'org.json', name: 'json', version: '20200518';
 }
 
@@ -23,27 +23,10 @@ shadowJar {
 	relocate 'org.json', 'org.oddlama.vane.vane_waterfall.external.json';
 }
 
-if (project.hasProperty('signing.gnupg.keyName')) {
-	signing {
-		sign shadowJar;
-	}
-	build.dependsOn signShadowJar;
-}
-
 task copyJar(type: Copy) {
 	from shadowJar;
-	into "${project.rootProject.projectDir}/target-waterfall";
+	into "${project.rootProject.projectDir}/target";
 	duplicatesStrategy 'include';
 	rename '(.*)-all.jar', '$1.jar';
 }
 build.dependsOn copyJar;
-
-if (project.hasProperty('signing.gnupg.keyName')) {
-	task copyJarAsc(type: Copy) {
-		from signShadowJar;
-		into "${project.rootProject.projectDir}/target-waterfall";
-		duplicatesStrategy 'include';
-		rename '(.*)-all.jar.asc', '$1.jar.asc';
-	}
-	build.dependsOn copyJarAsc;
-}

@@ -14,6 +14,8 @@ import org.oddlama.vane.core.functional.Function4;
 import org.oddlama.vane.core.menu.Menu.ClickResult;
 import org.oddlama.vane.core.module.Context;
 
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+
 public class GenericSelector<T, F extends Filter<T>> {
 	private MenuManager menu_manager;
 	private Function1<T, ItemStack> to_item;
@@ -41,7 +43,7 @@ public class GenericSelector<T, F extends Filter<T>> {
 		generic_selector.filter = filter;
 		generic_selector.page_size = 5 * columns;
 
-		final var generic_selector_menu = new Menu(context, Bukkit.createInventory(null, 6 * columns, title)) {
+		final var generic_selector_menu = new Menu(context, Bukkit.createInventory(null, 6 * columns, LegacyComponentSerializer.legacySection().deserialize(title))) {
 			@Override
 			public void update(boolean force_update) {
 				if (generic_selector.update_filter) {

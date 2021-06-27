@@ -4,7 +4,6 @@ import static org.oddlama.vane.core.item.CustomItem.convert_existing;
 
 import java.io.IOException;
 import java.util.UUID;
-
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -15,7 +14,6 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice.MaterialChoice;
 import org.bukkit.inventory.SmithingRecipe;
-
 import org.oddlama.vane.annotation.config.ConfigDouble;
 import org.oddlama.vane.annotation.item.VaneItem;
 import org.oddlama.vane.core.ResourcePackGenerator;

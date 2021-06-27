@@ -17,17 +17,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Function;
-
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
-
 import org.jetbrains.annotations.NotNull;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import org.oddlama.vane.util.LazyBlock;
 import org.oddlama.vane.util.LazyLocation;
 

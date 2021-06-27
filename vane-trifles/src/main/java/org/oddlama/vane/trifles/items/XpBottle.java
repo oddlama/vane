@@ -4,9 +4,8 @@ import static org.oddlama.vane.util.PlayerUtil.give_item;
 import static org.oddlama.vane.util.PlayerUtil.remove_one_item_from_hand;
 import static org.oddlama.vane.util.Util.exp_for_level;
 
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.BaseComponent;
-
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
@@ -14,7 +13,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.EquipmentSlot;
-
 import org.oddlama.vane.annotation.config.ConfigInt;
 import org.oddlama.vane.annotation.item.VaneItem;
 import org.oddlama.vane.core.item.CustomItem;
@@ -48,10 +46,9 @@ public class XpBottle extends CustomItem<Trifles, XpBottle> {
 		}
 
 		@Override
-		public BaseComponent display_name() {
-			final var name = super.display_name();
-			name.setColor(ChatColor.YELLOW);
-			return name;
+		public Component display_name() {
+			return super.display_name()
+				.color(NamedTextColor.YELLOW);
 		}
 
 		public int config_capacity_def() {

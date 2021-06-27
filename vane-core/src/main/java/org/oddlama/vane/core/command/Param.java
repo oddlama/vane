@@ -7,7 +7,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import org.bukkit.GameMode;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
@@ -15,7 +14,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
-
 import org.oddlama.vane.core.command.check.CheckResult;
 import org.oddlama.vane.core.command.check.CombinedErrorCheckResult;
 import org.oddlama.vane.core.command.check.ErrorCheckResult;

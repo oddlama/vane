@@ -75,7 +75,7 @@ public class ResourcePackGenerator {
 
 	private String generate_pack_mcmeta() {
 		final var pack = new JSONObject();
-		pack.put("pack_format", 6);
+		pack.put("pack_format", 7);
 		pack.put("description", description);
 
 		final var root = new JSONObject();

@@ -6,7 +6,6 @@ import static org.oddlama.vane.util.PlayerUtil.take_items;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-
 import org.oddlama.vane.annotation.command.Name;
 import org.oddlama.vane.annotation.config.ConfigInt;
 import org.oddlama.vane.annotation.config.ConfigMaterial;

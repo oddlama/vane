@@ -17,12 +17,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
-
-import net.md_5.bungee.api.chat.BaseComponent;
-
-import net.minecraft.server.v1_16_R3.EntityTypes;
-import net.minecraft.server.v1_16_R3.EnumCreatureType;
-
+import net.kyori.adventure.text.Component;
+import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.entity.EnumCreatureType;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -37,10 +34,8 @@ import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
 import org.oddlama.vane.annotation.VaneModule;
 import org.oddlama.vane.annotation.config.ConfigExtendedMaterial;
 import org.oddlama.vane.annotation.config.ConfigLong;
@@ -665,7 +660,7 @@ public class Portals extends Module<Portals> {
 		}
 
 		final var target_name = target == null ? lang_console_no_target.str() : target.name();
-		final BaseComponent display_name;
+		final Component display_name;
 		if (active) {
 			display_name = lang_console_display_active.format("§5" + target_name);
 		} else {

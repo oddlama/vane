@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.oddlama.vane.core.ResourcePackGenerator;
+import org.oddlama.vane.core.functional.Consumer1;
 import org.oddlama.vane.core.module.Module;
 
 /**
@@ -127,6 +128,16 @@ public class ModuleContext<T extends Module<T>> implements Context<T> {
 		}
 		for (var subcontext : subcontexts) {
 			subcontext.generate_resource_pack(pack);
+		}
+	}
+
+	@Override
+	public void for_each_module_component(final Consumer1<ModuleComponent<?>> f) {
+		for (var component : components) {
+			f.apply(component);
+		}
+		for (var subcontext : subcontexts) {
+			subcontext.for_each_module_component(f);
 		}
 	}
 }

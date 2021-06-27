@@ -2,16 +2,15 @@ package org.oddlama.vane.core.menu;
 
 import static org.oddlama.vane.util.Nms.player_handle;
 
-import net.minecraft.server.v1_16_R3.BlockPosition;
-import net.minecraft.server.v1_16_R3.ChatMessage;
-import net.minecraft.server.v1_16_R3.ContainerAccess;
-import net.minecraft.server.v1_16_R3.ContainerAnvil;
-import net.minecraft.server.v1_16_R3.EntityHuman;
-import net.minecraft.server.v1_16_R3.EntityPlayer;
-import net.minecraft.server.v1_16_R3.PacketPlayOutOpenWindow;
-
+import net.minecraft.core.BlockPosition;
+import net.minecraft.network.chat.ChatMessage;
+import net.minecraft.network.protocol.game.PacketPlayOutOpenWindow;
+import net.minecraft.server.level.EntityPlayer;
+import net.minecraft.world.IInventory;
+import net.minecraft.world.entity.player.EntityHuman;
+import net.minecraft.world.inventory.ContainerAccess;
+import net.minecraft.world.inventory.ContainerAnvil;
 import org.bukkit.entity.Player;
-
 import org.oddlama.vane.core.module.Context;
 
 public class AnvilMenu extends Menu {
@@ -41,21 +40,32 @@ public class AnvilMenu extends Menu {
 			manager.get_module().log.warning("AnvilMenu.open() was called with a player for whom this inventory wasn't created!");
 		}
 
-		entity.playerConnection.sendPacket(new PacketPlayOutOpenWindow(container_id, container.getType(), new ChatMessage(title)));
-		entity.activeContainer = container;
-		entity.activeContainer.addSlotListener(entity);
+		entity.connection.sendPacket(new PacketPlayOutOpenWindow(container_id, container.getType(), new ChatMessage(title)));
+		entity.initMenu(container);
+
+		// This cast is necessary so the remapper understands that containerMenu is part of EntityHuman,
+		// otherwise it doesn't recognize that this field needs to be renamed
+		((EntityHuman)entity).containerMenu = container;
 	}
 
 	private class AnvilContainer extends ContainerAnvil {
 		public AnvilContainer(int window_id, final EntityHuman entity) {
-			super(window_id, entity.inventory, ContainerAccess.at(entity.world, new BlockPosition(0, 0, 0)));
+			super(window_id, entity.getInventory(), ContainerAccess.at(entity.getWorld(), new BlockPosition(0, 0, 0)));
 			this.checkReachable = false;
 		}
 
 		@Override
-		public void e() {
-			super.e();
-			this.levelCost.set(0);
+		public void i() {
+			super.i();
+			this.cost.set(0);
+		}
+
+		@Override
+		public void b(EntityHuman player) {
+		}
+
+		@Override
+		protected void a(EntityHuman player, IInventory container) {
 		}
 	}
 }

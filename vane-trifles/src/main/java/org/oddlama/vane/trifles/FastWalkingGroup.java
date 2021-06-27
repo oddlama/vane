@@ -3,11 +3,9 @@ package org.oddlama.vane.trifles;
 import static org.oddlama.vane.util.Util.ms_to_ticks;
 
 import java.util.Set;
-
 import org.bukkit.Material;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-
 import org.oddlama.vane.annotation.config.ConfigLong;
 import org.oddlama.vane.annotation.config.ConfigMaterialSet;
 import org.oddlama.vane.core.module.Context;
@@ -17,7 +15,7 @@ public class FastWalkingGroup extends ModuleGroup<Trifles> {
 	@ConfigLong(def = 2000, min = 50, max = 5000, desc = "Speed effect duration in milliseconds.")
 	public long config_duration;
 
-	@ConfigMaterialSet(def = {Material.GRASS_PATH}, desc = "Materials on which players will walk faster.")
+	@ConfigMaterialSet(def = {Material.DIRT_PATH}, desc = "Materials on which players will walk faster.")
 	public Set<Material> config_materials;
 
 	// Variables

@@ -14,12 +14,9 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
-
 import org.json.JSONObject;
-
 import org.oddlama.vane.annotation.persistent.Persistent;
 import org.oddlama.vane.core.module.Module;
-import org.oddlama.vane.core.persistent.PersistentField;
 
 public class PersistentStorageManager {
 	public class Migration {

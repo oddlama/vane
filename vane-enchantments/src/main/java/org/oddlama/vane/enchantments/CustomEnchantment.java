@@ -6,20 +6,16 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.TranslatableComponent;
-
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Keyed;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
-
 import org.jetbrains.annotations.NotNull;
-
 import org.oddlama.vane.annotation.enchantment.Rarity;
 import org.oddlama.vane.annotation.enchantment.VaneEnchantment;
 import org.oddlama.vane.annotation.lang.LangMessage;
@@ -138,25 +134,13 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 	 * RARE: gold
 	 * VERY_RARE: bold dark purple
 	 */
-	public void apply_display_format(BaseComponent component) {
+	public Component apply_display_format(Component component) {
 		switch (annotation.rarity()) {
 			default:
-			case COMMON:
-				component.setColor(ChatColor.DARK_AQUA);
-				break;
-
-			case UNCOMMON:
-				component.setColor(ChatColor.DARK_AQUA);
-				break;
-
-			case RARE:
-				component.setColor(ChatColor.GOLD);
-				break;
-
-			case VERY_RARE:
-				component.setColor(ChatColor.DARK_PURPLE);
-				component.setBold(true);
-				break;
+			case COMMON:    return component.color(NamedTextColor.DARK_AQUA);
+			case UNCOMMON:  return component.color(NamedTextColor.DARK_AQUA);
+			case RARE:      return component.color(NamedTextColor.GOLD);
+			case VERY_RARE: return component.color(NamedTextColor.DARK_PURPLE).decorate(TextDecoration.BOLD);
 		}
 	}
 
@@ -165,17 +149,16 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 	 * Usually you don't need to override this method, as it already
 	 * uses clientside translation keys and supports chat formatting.
 	 */
-	public BaseComponent display_name(int level) {
-        final var display_name = lang_name.format();
-		display_name.setItalic(false);
-		apply_display_format(display_name);
+	public Component display_name(int level) {
+        var display_name = apply_display_format(lang_name.format()
+			.decoration(TextDecoration.ITALIC, false));
 
 		if (level != 1 || max_level() != 1) {
-			final var chat_level = new TranslatableComponent("enchantment.level." + level);
-			chat_level.setItalic(false);
-			apply_display_format(chat_level);
-			display_name.addExtra(" ");
-			display_name.addExtra(chat_level);
+			final var chat_level = apply_display_format(Component.translatable("enchantment.level." + level)
+				.decoration(TextDecoration.ITALIC, false));
+			display_name = display_name
+				.append(Component.text(" "))
+				.append(chat_level);
         }
 
         return display_name;

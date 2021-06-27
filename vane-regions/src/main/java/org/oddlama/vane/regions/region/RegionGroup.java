@@ -7,11 +7,8 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
-
 import org.jetbrains.annotations.NotNull;
-
 import org.oddlama.vane.external.json.JSONObject;
 import org.oddlama.vane.regions.Regions;
 

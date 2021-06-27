@@ -4,18 +4,16 @@ import static org.oddlama.vane.util.PlayerUtil.give_items;
 import static org.oddlama.vane.util.Util.namespaced_key;
 
 import java.util.stream.Collectors;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-
 import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.core.config.TranslatedItemStack;
 import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.menu.Filter;
-import org.oddlama.vane.core.menu.Menu.ClickResult;
 import org.oddlama.vane.core.menu.Menu;
+import org.oddlama.vane.core.menu.Menu.ClickResult;
 import org.oddlama.vane.core.menu.MenuFactory;
 import org.oddlama.vane.core.menu.MenuItem;
 import org.oddlama.vane.core.menu.MenuWidget;
@@ -53,7 +51,7 @@ public class RegionMenu extends ModuleComponent<Regions> {
 
 	public Menu create(final Region region, final Player player) {
 		final var columns = 9;
-		final var title = lang_title.str("§5§l" + region.name());
+		final var title = lang_title.str_component("§5§l" + region.name());
 		final var region_menu = new Menu(get_context(), Bukkit.createInventory(null, columns, title));
 		region_menu.tag(new RegionMenuTag(region.id()));
 

@@ -1,12 +1,16 @@
+#### Important
+
+- Remove deprecation introduced by 1.17
+- Integrate remapping into build process
+
+
 #### IDEAS
 
 - [ ] tab shows ordered by world
-- [ ] if flying into portal, offset target point by +1 y so you can fly through
 - [ ] angel shift scroll selects level or some percentage.
 - [ ] autostop at certain times. 12am 12pm
 - [ ] cant hit players with snowballs. not sure if caused by vane.
 - [ ] trampelpfad
-- [ ] better elytra flight mechanics
 - [ ] add a mechanic to update in-game maps (e.g. with a custom item, or redstone)
 - [ ] player heads from /heads
 - [ ] set scroll cooldown usage for 5 seconds after damage
@@ -15,7 +19,6 @@
 - [ ] world rebuild check for armorstands and item frames. dont let them be destroyed
 - [ ] minecart speed ++++++ only if player in minecart OR netherite minecart!!!
 - [ ] on first join: map and discord link
-- [ ] verify enderman griefing prevention works
 
 
 - permission audit for all players with moderator level
@@ -53,8 +56,3 @@ portal selection as big sphere around player with itemsss
 - can we inherit spectator skins? maybe hook into data loading?
 - golden sickle -> golden mistletoe, mistel (viscum album)
 - used as enchantment binding agent/ catalyst?.
-
-SERVER SETTINGS RECOMMENDATIONS
-
-- spawn with remnants of old world
-- dont merge items, or very small merging radius.

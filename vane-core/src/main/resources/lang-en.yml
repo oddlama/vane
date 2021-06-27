@@ -12,7 +12,7 @@
 
 # DO NOT CHANGE! The version of this language file. Used to determine
 # if the file needs to be updated.
-version: 1
+version: 2
 # The corresponding language code used in resource packs. Used for
 # resource pack generation. Typically this is a combination of the
 # language code (ISO 639) and the country code (ISO 3166).
@@ -31,6 +31,11 @@ invalid_time_format: "§cerror:§6 invalid time: %1$s"
 
 # This message is sent when a block with a lootable is first attempted to be broken.
 break_loot_block_prevented: "§6This block has a loot table, and will automatically be refilled after some time. If you really want to destroy this block, wait 5 seconds and break it again."
+
+command_customitem:
+  usage: "%1$s §agive §7<§bitem§7>"
+  description: "Gives a specific custom item to the player."
+  help: "§agive §7<§bitem§7>:§r Gives a specific custom item to the player."
 
 command_vane:
   # This message is sent when a module has been successfully reloaded.

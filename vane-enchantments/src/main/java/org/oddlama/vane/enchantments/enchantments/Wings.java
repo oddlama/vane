@@ -6,7 +6,6 @@ import static org.oddlama.vane.util.Util.ms_to_ticks;
 
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
-
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.event.EventHandler;
@@ -17,9 +16,7 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.loot.LootTables;
 import org.bukkit.util.Vector;
-
 import org.jetbrains.annotations.NotNull;
-
 import org.oddlama.vane.annotation.config.ConfigDoubleList;
 import org.oddlama.vane.annotation.config.ConfigIntList;
 import org.oddlama.vane.annotation.enchantment.Rarity;

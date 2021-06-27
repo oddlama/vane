@@ -5,15 +5,13 @@ import static org.oddlama.vane.util.Util.namespaced_key;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
-import net.md_5.bungee.api.chat.BaseComponent;
-
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Keyed;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
-
 import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.core.ResourcePackGenerator;
 import org.oddlama.vane.core.lang.TranslatedMessage;
@@ -77,9 +75,9 @@ public class CustomItemVariant<T extends Module<T>, V extends CustomItem<T, V>, 
 	/**
 	 * Returns the display name for this item variant.
 	 */
-	public BaseComponent display_name() {
-		final var display_name = lang_name.format();
-		display_name.setItalic(false);
+	public Component display_name() {
+		final var display_name = lang_name.format()
+			.decoration(TextDecoration.ITALIC, false);
 		return display_name;
 	}
 
