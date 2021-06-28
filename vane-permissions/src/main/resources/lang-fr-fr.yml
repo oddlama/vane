@@ -1,0 +1,46 @@
+# vim: set tabstop=2 softtabstop=0 expandtab shiftwidth=2:
+#
+# >> See lang-en.yml for variable descriptions <<
+#
+# +-----------------------------------+
+# | CAUTION: Do NOT change this file! |
+# +-----------------------------------+
+#
+# It will be silently overwritten with updates! If you want
+# to customize strings yourself, copy this file to lang-custom.yml
+# and set the language in the config.yml to "lang: 'custom'"
+
+# DO NOT CHANGE! The version of this language file. Used to determine
+# if the file needs to be updated.
+version: 1
+# The corresponding language code used in resource packs. Used for
+# resource pack generation. Typically this is a combination of the
+# language code (ISO 639) and the country code (ISO 3166).
+resource_pack_lang_code: 'fr_fr'
+
+command_permission:
+  list_empty: "§b∅"
+  list_header_groups: "Liste de tous les groupes connus:"
+  list_header_permissions: "Liste de toutes les permissions connues:\nFormat: <permission> (<valeur par défaut>): <description>"
+  list_header_player_groups: "Liste de tous les groupes de %1$s:"
+  list_header_player_permissions: "Liste de toutes les permissions de %1$s:\nFormat: <permission> (<valeur par défaut>): <description>"
+  list_header_group_permissions: "Liste de toutes les permissions du groupe %1$s:\nFormat: <permission> (<valeur par défaut>): <description>"
+  list_player_offline: "§6Le·a joueur·se est actuellement hors-ligne. Seules les permissions configurées seront montrées. Des permissions issues d'autres plugins de gestion de permissions peuvent être manquantes."
+  list_group: "§7 - %1$s"
+  list_permission: "§7 - %1$s§7 (%2$s§7): %3$s"
+  group_assigned: "%1$s a été assigné·e au groupe %2$s"
+  group_removed: "%1$s a été retiré·e du groupe %2$s"
+  group_already_assigned: "§6Déjà dans ce groupe"
+  group_not_assigned: "§6N'est pas dans ce groupe"
+  usage: "%1$s §7<§alist§7|§aadd§7|§aremove§7>"
+  description: "Gère les permissions des joueur·se·s."
+  help: "§alist §7<§agroups§7|§apermissions§7>:§r Liste toutes les permissions existantes, ou tous les groupes existants.\n\
+    §aadd §bjoueur §bgroupe§7:§r Ajoute le·a joueur·se au groupe spécifié.\n\
+    §aremove §bjoueur §bgroupe§7:§r Retire le·a joueur·se du groupe spécifié."
+
+command_vouch:
+  vouched: "§aVous vous êtes porté·e garant·e pour %1$s§a !"
+  already_vouched: "§6Vous vous êtes déjà porté·e garant·e pour %1$s§6 !"
+  usage: "%1$s §bjoueur"
+  description: "Se porter garant·e pour un·e joueur·se."
+  help: "Se porter garant·e pour un·e joueur·se afin que celui·elle-ci ait la permission de jouer sur ce serveur."

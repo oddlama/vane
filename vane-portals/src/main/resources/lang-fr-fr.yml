@@ -1,0 +1,242 @@
+# vim: set tabstop:2 softtabstop:0 expandtab shiftwidth:2:
+#
+# >> See lang-en.yml for variable descriptions <<
+#
+# +-----------------------------------+
+# | CAUTION: Do NOT change this file! |
+# +-----------------------------------+
+#
+# It will be silently overwritten with updates! If you want
+# to customize strings yourself, copy this file to lang-custom.yml
+# and set the language in the config.yml to "lang: 'custom'"
+
+# DO NOT CHANGE! The version of this language file. Used to determine
+# if the file needs to be updated.
+version: 2
+# The corresponding language code used in resource packs. Used for
+# resource pack generation. Typically this is a combination of the
+# language code (ISO 639) and the country code (ISO 3166).
+resource_pack_lang_code: 'fr_fr'
+
+select_boundary_now: "§6Faites à présent un clic droit sur le bord du portail"
+console_invalid_type: "§cLe bloc de console est d'un type de bloc invalide !"
+console_different_world: "§cLa console doit se trouver dans le même monde que le portail"
+console_too_far_away: "§cLa console est trop éloignée du portail"
+console_linked: "§aConsole connectée"
+
+no_boundary_found: "§cLe bord du portail est introuvable !"
+no_origin: "§cLe portail n'a pas de bloc d'ancrage !"
+multiple_origins: "§cLe portail ne peut pas avoir plus d'un bloc d'ancrage !"
+no_portal_block_above_origin: "§cLe bloc d'ancrage ne dispose pas d'espace pour l'intérieur du portail au dessus de lui !"
+not_enough_portal_blocks_above_origin: "§cLe bloc d'ancrage requiert l'espace d'au moins 3 blocs pour l'intérieur du portail au dessus de lui !"
+too_large: "§cLe portail est trop grand dans la direction %1$s§c !"
+too_small_spawn: "§cL'aire d'apparition est trop petite dans la direction %1$s§c !"
+too_many_portal_area_blocks: "§cL'intérieur du portail est trop grand ! %1$s§6/%2$s§c blocs"
+portal_area_obstructed: "§cL'intérieur du portail est obstrué !"
+intersects_existing_portal: "§cLe portail est en collision avec un autre portail !"
+
+build_restricted: "§cVous n'avez pas la permission de construire un portail ici !"
+link_restricted: "§cVous n'avez pas la permission de connecter une console à ce portail !"
+
+target_already_connected: "§6Le portail de destination est déjà relié à un autre portail !"
+source_use_restricted: "§cVous n'avez pas la permission d'utiliser ce portail !"
+target_use_restricted: "§cVous n'avez pas la permission d'utiliser le portail de destination !"
+
+console_display_active: "§6§l>§r %1$s §6§l<§r"
+console_display_inactive: "§8§l>§r %1$s §8§l<§r"
+console_no_target: "§k?"
+
+unlink_restricted: "§cVous n'avez pas la permission de déconnecter une console de ce portail !"
+destroy_restricted: "§cVous n'avez pas la permission de détruire ce portail !"
+settings_restricted: "§cVous n'avez pas la permission de modifier les réglages de ce portail !"
+select_target_restricted: "§cVous n'avez pas la permission de choisir une destination pour ce portail !"
+
+dynmap:
+  layer_label: "Portails"
+  marker_label: "%1$s"
+
+menus:
+  enter_name:
+    title: "§8§lEntrer le nom du portail"
+
+  settings:
+    title: "§8§lRéglages: %1$s"
+    select_icon_title: "§8§lSélectionner une icône"
+
+    rename:
+      name: "§b§lRenommer"
+      lore: []
+
+    select_icon:
+      name: "§b§lSélectionner une icône"
+      lore: []
+
+    select_style:
+      name: "§b§lSélectionner un style de portail"
+      lore: []
+
+    visibility_public:
+      name: "§b§lChanger la visibilité"
+      lore: ["", "§bSélection: §a§lPublic§r"]
+
+    visibility_group:
+      name: "§b§lChanger la visibilité"
+      lore: ["", "§bSélection: §e§lGroupe (membres)§r"]
+
+    visibility_group_internal:
+      name: "§b§lChanger la visibilité"
+      lore: ["", "§bSélection: §e§lGroupe (visible en interne seulement)§r"]
+
+    visibility_private:
+      name: "§b§lChanger la visibilité"
+      lore: ["", "§bSélection: §c§lPrivé§r"]
+
+    target_lock_on:
+      name: "§b§lChanger le verrouillage de destination"
+      lore: ["", "§bSélection: §c§lVerrouillé§r"]
+
+    target_lock_off:
+      name: "§b§lChanger le verrouillage de destination"
+      lore: ["", "§bSélection: §c§lDéverrouillé§r"]
+
+    back:
+      name: "§6↩ §lRetour"
+      lore: []
+
+  style:
+    title: "§8§lStyle pour: %1$s"
+    select_block_console_active_title:       "Sélectionner le bloc de console actif."
+    select_block_origin_active_title:        "Sélectionner le bloc d'ancrage actif."
+    select_block_portal_active_title:        "Sélectionner le bloc d'intérieur de portail actif."
+    select_block_boundardy_1_active_title:   "Sélectionner le bloc de bord actif (variante 1)."
+    select_block_boundardy_2_active_title:   "Sélectionner le bloc de bord actif (variante 2)."
+    select_block_boundardy_3_active_title:   "Sélectionner le bloc de bord actif (variante 3)."
+    select_block_boundardy_4_active_title:   "Sélectionner le bloc de bord actif (variante 4)."
+    select_block_boundardy_5_active_title:   "Sélectionner le bloc de bord actif (variante 5)."
+    select_block_console_inactive_title:     "Sélectionner le bloc de console inactif."
+    select_block_origin_inactive_title:      "Sélectionner le bloc d'ancrage inactif."
+    select_block_portal_inactive_title:      "Sélectionner le bloc d'intérieur de portail inactif."
+    select_block_boundardy_1_inactive_title: "Sélectionner le bloc de bord inactif (variante 1)."
+    select_block_boundardy_2_inactive_title: "Sélectionner le bloc de bord inactif (variante 2)."
+    select_block_boundardy_3_inactive_title: "Sélectionner le bloc de bord inactif (variante 3)."
+    select_block_boundardy_4_inactive_title: "Sélectionner le bloc de bord inactif (variante 4)."
+    select_block_boundardy_5_inactive_title: "Sélectionner le bloc de bord inactif (variante 5)."
+
+    block_console_active:
+      name: "§b§lConsole §a(active)"
+      lore: []
+    block_origin_active:
+      name: "§b§lAncrage §a(actif)"
+      lore: []
+    block_portal_active:
+      name: "§b§lIntérieur de portail §a(actif)"
+      lore: []
+    block_boundardy_1_active:
+      name: "§b§lBord §a(actif)"
+      lore: ["", "§aVariante 1", "§7Matériau: %1$s"]
+    block_boundardy_2_active:
+      name: "§b§lBord §a(actif)"
+      lore: ["", "§aVariante 2", "§7Matériau: %1$s"]
+    block_boundardy_3_active:
+      name: "§b§lBord §a(actif)"
+      lore: ["", "§aVariante 3", "§7Matériau: %1$s"]
+    block_boundardy_4_active:
+      name: "§b§lBord §a(actif)"
+      lore: ["", "§aVariante 4", "§7Matériau: %1$s"]
+    block_boundardy_5_active:
+      name: "§b§lBord §a(actif)"
+      lore: ["", "§aVariante 5", "§7Matériau: %1$s"]
+    block_console_inactive:
+      name: "§b§lConsole §e(inactive)"
+      lore: []
+    block_origin_inactive:
+      name: "§b§lAncrage §e(inactif)"
+      lore: []
+    block_portal_inactive:
+      name: "§b§lIntérieur de portail §e(inactif)"
+      lore: []
+    block_boundardy_1_inactive:
+      name: "§b§lBord §e(inactif)"
+      lore: ["", "§aVariante 1", "§7Matériau: %1$s"]
+    block_boundardy_2_inactive:
+      name: "§b§lBord §e(inactif)"
+      lore: ["", "§aVariante 2", "§7Matériau: %1$s"]
+    block_boundardy_3_inactive:
+      name: "§b§lBord §e(inactif)"
+      lore: ["", "§aVariante 3", "§7Matériau: %1$s"]
+    block_boundardy_4_inactive:
+      name: "§b§lBord §e(inactif)"
+      lore: ["", "§aVariante 4", "§7Matériau: %1$s"]
+    block_boundardy_5_inactive:
+      name: "§b§lBord §e(inactif)"
+      lore: ["", "§aVariante 5", "§7Matériau: %1$s"]
+
+    accept:
+      name: "§a§lAppliquer le style"
+      lore: []
+
+    reset:
+      name: "§6§lRéinitialiser"
+      lore: []
+
+    select_style_title: "§8§lSelectionner un style prédéfini"
+    filter_styles_title: "§8§lFiltrer les styles"
+    select_defined:
+      name: "§b§lSélectionner un style prédéfini"
+      lore: []
+    select_style:
+      name: "%1$s"
+      lore: []
+    cancel:
+      name: "§6↩ §lAnnuler les changements"
+      lore: []
+
+  console:
+    title: "§8§lPortail: %1$s"
+
+    settings:
+      name: "§b§lRéglages"
+      lore: []
+
+    select_target:
+      name: "§d§lSélectionner une destination"
+      lore:
+        - ""
+        - "§7Destination actuelle: %1$s"
+    select_target_locked:
+      name: "§d§lSélectionner une destination"
+      lore:
+        - ""
+        - "§7Destination actuelle: %1$s"
+        - "§8La sélection de destination est actuellement §6§lVERROUILLÉE§r§8!"
+
+    select_target_title: "§8§lSélectionner un portail de destination"
+    filter_portals_title: "§8§lFiltrer les portails"
+    select_target_portal:
+      name: "%1$s"
+      lore:
+        - ""
+        - "§7Distance: %2$s§6m"
+        - "§7Monde: %3$s"
+
+    unlink_console:
+      name: "§c§lDéconnecter la console"
+      lore: []
+    unlink_console_confirm_title: "§c§lDéconnecter la console?"
+    unlink_console_confirm_accept:
+      name: "§c§lDÉCONNECTER"
+      lore: []
+    unlink_console_confirm_cancel:
+      name: "§a§lAnnuler"
+      lore: []
+
+    destroy_portal:
+      name: "§c§lDétruire le portail"
+      lore: []
+    destroy_portal_confirm_title: "§c§lDétruire le portail?"
+    destroy_portal_confirm_accept:
+      name: "§c§lDÉTRUIRE"
+      lore: []
+    destroy_portal_confirm_cancel:
+      name: "§a§lAnnuler"
+      lore: []

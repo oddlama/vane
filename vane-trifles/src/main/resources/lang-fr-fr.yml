@@ -1,0 +1,73 @@
+# vim: set tabstop=2 softtabstop=0 expandtab shiftwidth=2:
+#
+# >> See lang-en.yml for variable descriptions <<
+#
+# +-----------------------------------+
+# | CAUTION: Do NOT change this file! |
+# +-----------------------------------+
+#
+# It will be silently overwritten with updates! If you want
+# to customize strings yourself, copy this file to lang-custom.yml
+# and set the language in the config.yml to "lang: 'custom'"
+
+# DO NOT CHANGE! The version of this language file. Used to determine
+# if the file needs to be updated.
+version: 2
+# The corresponding language code used in resource packs. Used for
+# resource pack generation. Typically this is a combination of the
+# language code (ISO 639) and the country code (ISO 3166).
+resource_pack_lang_code: 'fr_fr'
+
+command_heads:
+  usage: "%1$s"
+  description: "Obtenir des Têtes depuis le répertoire de Têtes."
+  help: "Exécuter la commande pour ouvrir le répertoire de Têtes."
+
+item_xp_bottle:
+  small:
+    name: "Petite fiole d'Expérience"
+  medium:
+    name: "Moyenne fiole d'Expérience"
+  large:
+    name: "Grande fiole d'Expérience"
+
+item_empty_xp_bottle:
+  name: "Fiole d'Expérience vide"
+
+item_home_scroll:
+  name: "Parchemin de Rappel (Foyer)"
+
+item_reinforced_elytra:
+  netherite:
+    name: "Élytres en netherite"
+
+item_unstable_scroll:
+  name: "Parchemin de Rappel (instable)"
+
+item_file:
+  wooden:
+    name: "Lime en bois"
+  stone:
+    name: "Lime en pierre"
+  iron:
+    name: "Lime en fer"
+  golden:
+    name: "Lime en or"
+  diamond:
+    name: "Lime en diamant"
+  netherite:
+    name: "Lime en netherite"
+
+item_sickle:
+  wooden:
+    name: "Faucille en bois"
+  stone:
+    name: "Faucille en pierre"
+  iron:
+    name: "Faucille en fer"
+  golden:
+    name: "Faucille en or"
+  diamond:
+    name: "Faucille en diamant"
+  netherite:
+    name: "Faucille en netherite"

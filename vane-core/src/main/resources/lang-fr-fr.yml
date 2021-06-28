@@ -1,0 +1,98 @@
+# vim: set tabstop=2 softtabstop=0 expandtab shiftwidth=2:
+#
+# >> See lang-en.yml for variable descriptions <<
+#
+# +-----------------------------------+
+# | CAUTION: Do NOT change this file! |
+# +-----------------------------------+
+#
+# It will be silently overwritten with updates! If you want
+# to customize strings yourself, copy this file to lang-custom.yml
+# and set the language in the config.yml to "lang: 'custom'"
+
+# DO NOT CHANGE! The version of this language file. Used to determine
+# if the file needs to be updated.
+version: 1
+# The corresponding language code used in resource packs. Used for
+# resource pack generation. Typically this is a combination of the
+# language code (ISO 639) and the country code (ISO 3166).
+resource_pack_lang_code: 'fr_fr'
+
+command_not_a_player: "§cerreur:§6 cette commande doit être exécutée par un·e joueur·se !"
+command_permission_denied: "§cerreur:§6 permission refusée!"
+invalid_time_format: "§cerreur:§6 format d'heure invalide: %1$s"
+break_loot_block_prevented: "§6Ce bloc a une table de butin, et sera automatiquement rempli à nouveau après quelque temps. Si vous tenez vraiment à briser ce bloc, attendez 5 secondes et tentez de le briser à nouveau."
+
+command_customitem:
+  usage: "%1$s §agive §7<§bobjet§7>"
+  description: "Donne un objet personnalisé à le·a joueur·se."
+  help: "§agive §7<§bobjet§7>:§r Donne un objet personnalisé à le·a joueur·se."
+
+command_vane:
+  reload_success: "%1$s§7: §arechargé avec succès"
+  reload_fail: "%1$s§7: §céchec du rechargement"
+  resource_pack_generate_success: "§aPack de ressources généré avec succès"
+  resource_pack_generate_fail: "§cUne erreur est survenue pendant la génération du pack de ressources"
+  usage: "%1$s §7<§areload§7|§agenerate_resource_pack§7>"
+  description: "Gère les plugins de vane."
+  help: "§areload §7[§bmodule§7]:§r Recharge tous les modules, ou seulement le module spécifié.\n\
+    §agenerate_resource_pack§7:§r génère le pack de ressources de vane."
+
+resource_pack:
+  declined: "Vous devez accepter le pack de ressources pour pouvoir jouer sur ce serveur.\n\
+    Il est indispensable pour les traductions, ainsi que les textures."
+  download_failed: "§cLe téléchargement du pack de ressources semble avoir échoué.§r\n\
+    §7(Vous avez été déconnecté·e afin d'éviter les erreurs d'affichage)\n\
+    \n\
+    §dMerci de bien vouloir essayer à nouveau."
+
+menus:
+  head_selector:
+    title: "%1$s §8§lTêtes"
+    filter_title: "§8§lFiltrer la liste de Têtes"
+    select_head:
+      name: "%1$s"
+      lore:
+        - ""
+        - "Catégorie: %2$s"
+        - "§7Mots-clés: %3$s"
+
+  item_selector:
+    accept:
+      name: "§a§lAccepter"
+      lore: ["§bChoisir§7 l'objet actuellement sélectionné."]
+
+    cancel:
+      name: "§c§lAnnuler"
+      lore: ["§6Annule§7 la sélection."]
+
+    selected:
+      name: "§d§lObjet sélectionné"
+      lore:
+        - ""
+        - "Cliquer sur un objet de votre inventaire pour le sélectionner."
+        - ""
+        - "§bClic gauche§7 pour réinitialiser les changements."
+        - "§bClic droit§7 pour tout désélectionner (si possible)."
+
+  generic_selector:
+    page:
+      name: "§bPage %1$s"
+      lore: []
+
+    current_page:
+      name: "Page actuelle: %1$s §7/ %2$s"
+      lore:
+        - ""
+        - "§b#Objets filtrés: %3$s"
+
+    filter:
+      name: "§d§lFiltre"
+      lore:
+        - ""
+        - "§bClic gauche§7 pour ouvrir le menu de filtrage."
+        - "§bClic droit§7 pour réinitialiser le filtre."
+
+    cancel:
+      name: "§c§lAnnuler"
+      lore: ["§6Annule§7 la sélection."]

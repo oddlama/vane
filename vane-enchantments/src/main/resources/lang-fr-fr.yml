@@ -1,0 +1,78 @@
+# vim: set tabstop=2 softtabstop=0 expandtab shiftwidth=2:
+#
+# >> See lang-en.yml for variable descriptions <<
+#
+# +-----------------------------------+
+# | CAUTION: Do NOT change this file! |
+# +-----------------------------------+
+#
+# It will be silently overwritten with updates! If you want
+# to customize strings yourself, copy this file to lang-custom.yml
+# and set the language in the config.yml to "lang: 'custom'"
+
+# DO NOT CHANGE! The version of this language file. Used to determine
+# if the file needs to be updated.
+version: 1
+# The corresponding language code used in resource packs. Used for
+# resource pack generation. Typically this is a combination of the
+# language code (ISO 639) and the country code (ISO 3166).
+resource_pack_lang_code: 'fr_fr'
+
+item_ancient_tome:
+  book:
+    name: "Grimoire antique"
+  enchanted_book:
+    name: "Grimoire antique"
+
+item_ancient_tome_of_knowledge:
+  book:
+    name: "Grimoire antique de Connaissance"
+  enchanted_book:
+    name: "Grimoire antique de Connaissance"
+
+item_ancient_tome_of_the_gods:
+  book:
+    name: "Grimoire antique des Dieux"
+  enchanted_book:
+    name: "Grimoire antique des Dieux"
+
+enchantment_angel:
+  name: "Ange"
+
+enchantment_careless:
+  name: "Débroussaillage"
+
+enchantment_grappling_hook:
+  name: "Grappin"
+
+enchantment_hell_bent:
+  name: "Tête dure"
+
+enchantment_leafchopper:
+  name: "Taille-feuille"
+
+enchantment_rake:
+  name: "Rateau"
+
+enchantment_seeding:
+  name: "Semences"
+
+enchantment_soulbound:
+  name: "Lié à l'âme"
+
+enchantment_take_off:
+  name: "Décollage"
+
+enchantment_unbreakable:
+  name: "Indestructible"
+
+enchantment_wings:
+  name: "Ailes"
+
+command_enchant:
+  level_too_low: "§cerreur:§6 le niveau %1$s§6 est trop bas, un minimum de %2$s§6 est requis"
+  level_too_high: "§cerreur:§6 le niveau d'enchantement %1$s§6 est trop élevé, un maximum de %2$s§6 est autorisé"
+  invalid_enchantment: "§cerreur: %1$s§6 ne peux pas être appliqué sur %2$s"
+  usage: "%1$s §benchantment §7[§bniveau§7]"
+  description: "Enchante l'objet que vous tenez dans votre main."
+  help: "Enchante l'objet que vous tenez dans votre main."
