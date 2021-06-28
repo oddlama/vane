@@ -23,6 +23,11 @@ command_permission_denied: "§cerreur:§6 permission refusée!"
 invalid_time_format: "§cerreur:§6 format d'heure invalide: %1$s"
 break_loot_block_prevented: "§6Ce bloc a une table de butin, et sera automatiquement rempli à nouveau après quelque temps. Si vous tenez vraiment à briser ce bloc, attendez 5 secondes et tentez de le briser à nouveau."
 
+command_customitem:
+  usage: "%1$s §agive §7<§bobjet§7>"
+  description: "Donne un objet personnalisé à le·a joueur·se."
+  help: "§agive §7<§bobjet§7>:§r Donne un objet personnalisé à le·a joueur·se."
+
 command_vane:
   reload_success: "%1$s§7: §arechargé avec succès"
   reload_fail: "%1$s§7: §céchec du rechargement"
