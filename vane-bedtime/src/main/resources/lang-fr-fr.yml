@@ -1,0 +1,27 @@
+# vim: set tabstop=2 softtabstop=0 expandtab shiftwidth=2:
+#
+# >> See lang-en.yml for variable descriptions <<
+#
+# +-----------------------------------+
+# | CAUTION: Do NOT change this file! |
+# +-----------------------------------+
+#
+# It will be silently overwritten with updates! If you want
+# to customize strings yourself, copy this file to lang-custom.yml
+# and set the language in the config.yml to "lang: 'custom'"
+
+# DO NOT CHANGE! The version of this language file. Used to determine
+# if the file needs to be updated.
+version: 2
+# The corresponding language code used in resource packs. Used for
+# resource pack generation. Typically this is a combination of the
+# language code (ISO 639) and the country code (ISO 3166).
+resource_pack_lang_code: 'fr_fr'
+
+player_bed_enter: "%1$s§e est endormi·e (%2$s§e)"
+player_bed_leave: "%1$s§e se sent reposé·e (%2$s§e)"
+sleep_success: "§eEt boum, le soleil se lève !"
+
+dynmap:
+  layer_label: "Lits"
+  marker_label: "%1$s"

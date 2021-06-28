@@ -1,0 +1,320 @@
+# vim: set tabstop=2 softtabstop=0 expandtab shiftwidth=2:
+#
+# >> See lang-en.yml for variable descriptions <<
+#
+# +-----------------------------------+
+# | CAUTION: Do NOT change this file! |
+# +-----------------------------------+
+#
+# It will be silently overwritten with updates! If you want
+# to customize strings yourself, copy this file to lang-custom.yml
+# and set the language in the config.yml to "lang: 'custom'"
+
+# DO NOT CHANGE! The version of this language file. Used to determine
+# if the file needs to be updated.
+version: 2
+# The corresponding language code used in resource packs. Used for
+# resource pack generation. Typically this is a combination of the
+# language code (ISO 639) and the country code (ISO 3166).
+resource_pack_lang_code: 'fr_fr'
+
+start_region_selection: "§aChoisir une surface en sélectionnant deux blocs via §bclic gauche§a et §bclic droit§a avec une main vide."
+select_primary_block: "§aBloc primaire sélectionné: (%1$s§a, %2$s§a, %3$s§a)."
+select_secondary_block: "§aBloc secondaire sélectionné: (%1$s§a, %2$s§a, %3$s§a)."
+
+command_region:
+  usage: "%1$s"
+  description: "Ouvrir le menu de gestion des régions."
+  help: "Exécuter cette commande pour ouvrir le menu de gestion des régions."
+
+dynmap:
+  layer_label: "Régions"
+  marker_label: "%1$s"
+
+menus:
+  enter_region_group_name:
+    title: "§8§lEntrer un nom"
+
+  enter_region_name:
+    title: "§8§lEntrer un nom"
+
+  enter_role_name:
+    title: "§8§lEntrer un nom"
+
+  main:
+    title: "§8§lGérer les régions"
+
+    create_region_start_selection:
+      name: "§a§lCréer une région"
+      lore:
+        - ""
+        - "§7Initie une nouvelle sélection de région. Avec la main vide,"
+        - "§6faire un clic gauche§7 pour sélectionner le premier bloc et"
+        - "§6faire un clic droit§7 pour sélectionner le second bloc. Le"
+        - "§7volume entre ces deux blocs deviendra la nouvelle région."
+
+    create_region_invalid_selection:
+      name: "§c§lSélection invalide"
+      lore:
+        - ""
+        - "§6Votre sélection (%8$s§6 x %9$s§6 x %10$s§6) est invalide !"
+        - "§6Elle doit satisfaire ces conditions:"
+        - "§7- %1$s§7 Un bloc primaire est sélectionné"
+        - "§7- %2$s§7 Un bloc secondaire est sélectionné"
+        - "§7- %3$s§7 Les blocs se trouvent dans le même monde"
+        - "§7- %4$s§7 La région n'empiète pas sur une autre région"
+        - "§7- %5$s§7 La région contient au moins un volume minimum (%11$s§7 x %12$s§7 x %13$s§7)"
+        - "§7- %6$s§7 La région n'éxcède pas (%14$s§7 x %15$s§7 x %16$s§7)"
+        - "§7- %7$s§7 Vous avez assez de moyens (%17$s§7)"
+
+    create_region_valid_selection:
+      name: "§a§lCréer une région"
+      lore:
+        - ""
+        - "§7Votre sélection (%1$s§7 x %2$s§7 x %3$s§7) est valide."
+        - "§7Cliquez ici pour créer une nouvelle région."
+        - ""
+        - "§7- §a✓§7 Un bloc primaire est sélectionné"
+        - "§7- §a✓§7 Un bloc secondaire est sélectionné"
+        - "§7- §a✓§7 Les blocs se trouvent dans le même monde"
+        - "§7- §a✓§7 La région n'empiète pas sur une autre région"
+        - "§7- §a✓§7 La région contient au moins un volume minimum (%4$s§7 x %5$s§7 x %6$s§7)"
+        - "§7- §a✓§7 La taille de la région n'éxcède pas (%7$s§7 x %8$s§7 x %9$s§7)"
+        - "§7- §a✓§7 Vous avez assez de moyens (%10$s§7)"
+
+    cancel_selection:
+      name: "§c§lAnnuler la sélection"
+      lore: []
+
+    list_regions:
+      name: "§b§lSélectionner une région"
+      lore: []
+
+    select_region_title: "§8§lSélectionner une région"
+    filter_regions_title: "§8§lFiltrer les régions"
+    select_region:
+      name: "%1$s"
+      lore: []
+
+    current_region:
+      name: "§b§lRégion actuelle"
+      lore:
+        - ""
+        - "§7Région: %1$s"
+        - ""
+        - "§7Sélectionne la région dans laquelle vous vous trouvez."
+
+    create_region_group:
+      name: "§a§lCréer un groupe de régions"
+      lore:
+        - ""
+        - "§7Crée un nouveau §bgroupe de régions§7. Les groupes de régions"
+        - "§7sont utiles pour donner des permissions aux joueur·se·s"
+        - "§7en leur assignant un rôle. Toutes les régions dans un même"
+        - "§7groupe de régions honoreront ces permissions."
+
+    list_region_groups:
+      name: "§b§lSélectionner un groupe de régions"
+      lore: []
+
+    current_region_group:
+      name: "§b§lGroupe de régions actuel"
+      lore:
+        - ""
+        - "§7Groupe de régions: %1$s"
+        - ""
+        - "§7Sélectionne le groupe de régions de"
+        - "§7la région dans laquelle vous vous trouvez."
+
+    select_region_group_title: "§8§lSélectionner un groupe de régions"
+    filter_region_groups_title: "§8§lFiltrer les groupes de régions"
+    select_region_group:
+      name: "%1$s"
+      lore: []
+
+  region:
+    title: "§8§lRégion: %1$s"
+
+    rename:
+      name: "§b§lRenommer une région"
+      lore: []
+
+    delete:
+      name: "§c§lSupprimer une région"
+      lore: []
+    delete_confirm_title: "§c§lSupprimer la région ?"
+    delete_confirm_accept:
+      name: "§c§lSUPPRIMER"
+      lore: []
+    delete_confirm_cancel:
+      name: "§a§lAnnuler"
+      lore: []
+
+    assign_region_group:
+      name: "§b§lAssigner à un groupe de régions"
+      lore: []
+
+    select_region_group_title: "§8§lSélectionner un groupe de régions"
+    filter_region_groups_title: "§8§lFiltrer les groupes de régions"
+    select_region_group:
+      name: "%1$s"
+      lore: []
+
+  region_group:
+    title: "§8§lGroupe: %1$s"
+
+    setting_toggle_on:
+      name: "§a§lACTIF"
+      lore: []
+    setting_toggle_off:
+      name: "§c§lINACTIF"
+      lore: []
+    setting_info_animals:
+      name: "§b§lAnimaux"
+      lore:
+        - ""
+        - "§7Contrôle l'apparition d'animaux."
+    setting_info_monsters:
+      name: "§b§lMonstres"
+      lore:
+        - ""
+        - "§7Contrôle l'appartion de monstres hostiles."
+    setting_info_explosions:
+      name: "§b§lExplosions"
+      lore:
+        - ""
+        - "§7Contrôle tout type d'explosion."
+    setting_info_fire:
+      name: "§b§lIncendie"
+      lore:
+        - ""
+        - "§7Contrôle si le feu consume les blocs et se répand."
+    setting_info_pvp:
+      name: "§b§lPVP"
+      lore:
+        - ""
+        - "§7Contrôle si le combat PVP est autorisé."
+    setting_info_trample:
+      name: "§b§lPiétinement"
+      lore:
+        - ""
+        - "§7Contrôle si les surfaces arables peuvent être piétinées."
+    setting_info_vine_growth:
+      name: "§b§lCroissance des lianes"
+      lore:
+        - ""
+        - "§7Contrôle si les lianes peuvent pousser dans la région."
+
+    rename:
+      name: "§b§lRenommer un groupe"
+      lore: []
+
+    delete:
+      name: "§c§lSupprimer un groupe"
+      lore:
+        - ""
+        - "§6Conditions de suppression:"
+        - "§7- %1$s §7Aucune région n'est actuellement dans le groupe"
+    delete_confirm_title: "§c§lSupprimer le groupe de régions ?"
+    delete_confirm_accept:
+      name: "§c§lSUPPRIMER"
+      lore: []
+    delete_confirm_cancel:
+      name: "§a§lAnnuler"
+      lore: []
+
+    create_role:
+      name: "§a§lCréer un rôle"
+      lore:
+        - ""
+        - "§7Crée un nouveau rôle§7. Les rôles sont utiles pour décerner"
+        - "§7des permissions à des groupes de joueur·se·s."
+
+    list_roles:
+      name: "§b§lRôles"
+      lore: []
+
+    select_role_title: "§8§lSélectionner un rôle"
+    filter_roles_title: "§8§lFiltrer les rôles"
+    select_role:
+      name: "%1$s"
+      lore: []
+
+  role:
+    title: "§8§lRôle: %1$s"
+
+    setting_toggle_on:
+      name: "§a§lACTIF"
+      lore: []
+    setting_toggle_off:
+      name: "§c§lINACTIF"
+      lore: []
+    setting_info_admin:
+      name: "§b§lAdministrateur"
+      lore:
+        - ""
+        - "§7Le marqueur admin ne peut être modifié"
+        - "§7et n'est activé que pour le rôle Administrateur."
+    setting_info_build:
+      name: "§b§lConstruire"
+      lore:
+        - ""
+        - "§7Autorise la pose et le minage de blocs."
+    setting_info_use:
+      name: "§b§lUtiliser les objets"
+      lore:
+        - ""
+        - "§7Autorise l'utilisation de choses variées comme les portes,"
+        - "§7les leviers, les boutons ou les mécanismes de redstone."
+        - "§7Contrôle également §6la vue (uniquement)§7 des inventaires."
+    setting_info_container:
+      name: "§b§lContenu des coffres"
+      lore:
+        - ""
+        - "§7Autorise la modification des inventaires."
+        - "§7Sans cette permission, rien ne peut être retiré"
+        - "§7ou déposé dans les inventaires."
+    setting_info_portal:
+      name: "§b§lUtiliser les portails"
+      lore:
+        - ""
+        - "§7Autorise les interactions avec les portails."
+
+    rename:
+      name: "§b§lRenommer un rôle"
+      lore: []
+
+    delete:
+      name: "§c§lSupprimer un rôle"
+      lore: []
+    delete_confirm_title: "§c§lSupprimer le rôle ?"
+    delete_confirm_accept:
+      name: "§c§lSUPPRIMER"
+      lore: []
+    delete_confirm_cancel:
+      name: "§a§lAnnuler"
+      lore: []
+
+    assign_player:
+      name: "§b§lAssigner un rôle aux joueur·se·s"
+      lore:
+        - ""
+        - "§7Assigne un rôle aux joueur·se·s en leur cliquant dessus."
+        - "§7Si le·a joueur·se a déjà un rôle, le nouveau rôle"
+        - "§7leur sera assigné à la place. La liste ne montrera que"
+        - "§7les joueur·se·s qui ne possèdent pas encore le nouveau rôle."
+        - "§7Vous pouvez le retirer avec le menu §bRetirer un rôle aux joueur·se·s§7."
+    remove_player:
+      name: "§b§lRetirer un rôle aux joueur·se·s"
+      lore:
+        - ""
+        - "§7Retire un rôle à des joueur·se·s en leur cliquant dessus."
+        - "§7Cela signifie qu'ils/elles n'auront plus de rôle."
+        - "§7et seront géré·e·s par le rôle par défaut: §6[others]"
+
+    select_assign_player_title: "§8§lAjouter des joueur·se·s"
+    select_remove_player_title: "§8§lRetirer des joueur·se·s"
+    filter_players_title: "§8§lFiltrer les joueur·se·s"
+    select_player:
+      name: "%1$s"
+      lore: []
