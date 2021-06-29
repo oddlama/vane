@@ -12,28 +12,29 @@
 
 # DO NOT CHANGE! The version of this language file. Used to determine
 # if the file needs to be updated.
-version: 1
+version: 2
 # The corresponding language code used in resource packs. Used for
 # resource pack generation. Typically this is a combination of the
 # language code (ISO 639) and the country code (ISO 3166).
 resource_pack_lang_code: 'en_us'
 
-# This is the format for player chat messages
-# %1$s: player name
-# %2$s: message
-player_chat_format: "%1$s§7: %2$s"
+chat_message_formatter:
+  # This is the format for player chat messages
+  # %1$s: player name
+  # %2$s: message
+  player_chat_format: "%1$s§7: %2$s"
 
-# This message is sent when a player joins the server
-# %1$s: player name
-player_join: "%1$s§e has joined the server"
+  # This message is sent when a player joins the server
+  # %1$s: player name
+  player_join: "%1$s§e has joined the server"
 
-# This message is sent when a player is kicked from the server
-# %1$s: player name
-player_kick: "%1$s§e was kicked from the server"
+  # This message is sent when a player is kicked from the server
+  # %1$s: player name
+  player_kick: "%1$s§e was kicked from the server"
 
-# This message is sent when a player leaves the server
-# %1$s: player name
-player_quit: "%1$s§e has left the server"
+  # This message is sent when a player leaves the server
+  # %1$s: player name
+  player_quit: "%1$s§e has left the server"
 
 autostop:
   # This message is sent when autostop is aborted, due to an administrative command

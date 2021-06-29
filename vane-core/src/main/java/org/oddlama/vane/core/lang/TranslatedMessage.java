@@ -9,8 +9,6 @@ import org.oddlama.vane.core.module.Module;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
-import net.kyori.adventure.text.TextComponent;
-import net.kyori.adventure.text.TranslatableComponent;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
 public class TranslatedMessage {
@@ -43,11 +41,15 @@ public class TranslatedMessage {
 		}
 	}
 
-	public @NotNull TextComponent str_component(Object... args) {
+	public @NotNull Component str_component(Object... args) {
 		return LegacyComponentSerializer.legacySection().deserialize(str(args));
 	}
 
-	public TranslatableComponent format(Object... args) {
+	public Component format(Object... args) {
+		if (!module.core.config_client_side_translations) {
+			return str_component(args);
+		}
+
 		final var list = new ArrayList<ComponentLike>();
 		for (final var o : args) {
 			if (o instanceof ComponentLike) {

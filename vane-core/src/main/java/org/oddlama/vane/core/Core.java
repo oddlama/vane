@@ -42,6 +42,7 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 import org.oddlama.vane.annotation.VaneModule;
+import org.oddlama.vane.annotation.config.ConfigBoolean;
 import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.annotation.persistent.Persistent;
 import org.oddlama.vane.core.functional.Consumer1;
@@ -52,7 +53,7 @@ import org.oddlama.vane.core.menu.MenuManager;
 import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.core.module.ModuleComponent;
 
-@VaneModule(name = "core", bstats = 8637, config_version = 3, lang_version = 2, storage_version = 1)
+@VaneModule(name = "core", bstats = 8637, config_version = 4, lang_version = 2, storage_version = 1)
 public class Core extends Module<Core> implements PluginMessageListener {
 	/** The base offset for any model data used by vane plugins. */
 	// "vane" = 0x76616e65, but the value will be saved as float (json...), so only -2^24 - 2^24 can accurately be represented.
@@ -94,6 +95,10 @@ public class Core extends Module<Core> implements PluginMessageListener {
 	public Map<UUID, UUID> storage_auth_multiplex = new HashMap<>();
 	@Persistent
 	public Map<UUID, Integer> storage_auth_multiplexer_id = new HashMap<>();
+
+	// core-config
+	@ConfigBoolean(def = true, desc = "Let the client translate messages using the generated resource pack. This allows every player to select their preferred language, and all plugin messages will also be translated. Disabling this won't allow you to skip generating the resource pack, as it will be needed for custom item textures.")
+	public boolean config_client_side_translations;
 
 	public Core() {
 		// Create global command catch-all permission

@@ -12,16 +12,17 @@
 
 # DO NOT CHANGE! The version of this language file. Used to determine
 # if the file needs to be updated.
-version: 1
+version: 2
 # The corresponding language code used in resource packs. Used for
 # resource pack generation. Typically this is a combination of the
 # language code (ISO 639) and the country code (ISO 3166).
 resource_pack_lang_code: 'de_de'
 
-player_chat_format: "%1$s§7: %2$s"
-player_join: "%1$s§e hat den Server betreten"
-player_kick: "%1$s§e wurde vom Server geworfen"
-player_quit: "%1$s§e hat den Server verlassen"
+chat_message_formatter:
+  player_chat_format: "%1$s§7: %2$s"
+  player_join: "%1$s§e hat den Server betreten"
+  player_kick: "%1$s§e wurde vom Server geworfen"
+  player_quit: "%1$s§e hat den Server verlassen"
 
 autostop:
   aborted: "§7Autostop §dabgebrochen"

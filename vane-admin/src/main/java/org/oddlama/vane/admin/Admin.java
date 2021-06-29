@@ -5,7 +5,7 @@ import org.oddlama.vane.annotation.persistent.Persistent;
 import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.util.LazyLocation;
 
-@VaneModule(name = "admin", bstats = 8638, config_version = 2, lang_version = 1, storage_version = 1)
+@VaneModule(name = "admin", bstats = 8638, config_version = 2, lang_version = 2, storage_version = 1)
 public class Admin extends Module<Admin> {
 	// Persistent storage
 	@Persistent

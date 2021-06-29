@@ -3,6 +3,7 @@ package org.oddlama.vane.core.lang;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.util.stream.Collectors;
 import org.oddlama.vane.core.module.Module;
 
 import net.kyori.adventure.text.Component;
@@ -35,6 +36,12 @@ public class TranslatedMessageArray {
 	}
 
 	public List<Component> format(Object... args) {
+		if (!module.core.config_client_side_translations) {
+			return str(args).stream()
+				.map(s -> LegacyComponentSerializer.legacySection().deserialize(s))
+				.collect(Collectors.toList());
+		}
+
 		final var arr = new ArrayList<Component>();
 		for (int i = 0; i < default_translation.size(); ++i) {
 			final var list = new ArrayList<ComponentLike>();
