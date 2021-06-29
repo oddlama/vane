@@ -23,7 +23,7 @@ public class ChatMessageFormatter extends Listener<Admin> {
 	@LangMessage private TranslatedMessage lang_player_quit;
 
 	public ChatMessageFormatter(Context<Admin> context) {
-		super(context);
+		super(context.group("chat_message_formatter", "Enables custom formatting of chat messages like player chats and join / quit messages."));
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
