@@ -7,7 +7,7 @@ subprojects {
 	apply plugin: 'com.diffplug.spotless';
 
 	group 'org.oddlama.vane';
-	version '1.2.1';
+	version '1.2.2';
 	sourceCompatibility = 11;
 
 	repositories() {
