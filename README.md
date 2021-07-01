@@ -48,7 +48,7 @@ If you don't want a certain feature, simply disable it.
 
 #### Core features (vane-core)
 
-- [x] Full localization support, currently provides english (default) and german.
+- [x] Full localization support, currently provides english (default), german and french.
 - [x] Automatically generated resource pack will provide client side translations
 - [x] Inaccessible commands will not be shown to players (sends "Unknown Command" instead)
 
