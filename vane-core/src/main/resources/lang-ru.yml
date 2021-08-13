@@ -1,0 +1,137 @@
+# vim: set tabstop=2 softtabstop=0 expandtab shiftwidth=2:
+#
+# >> See lang-en.yml for variable descriptions <<
+#
+# +-----------------------------------+
+# | CAUTION: Do NOT change this file! |
+# +-----------------------------------+
+#
+# It will be silently overwritten with updates! If you want
+# to customize strings yourself, copy this file to lang-custom.yml
+# and set the language in the config.yml to "lang: 'custom'"
+
+# DO NOT CHANGE! The version of this language file. Used to determine
+# if the file needs to be updated.
+version: 2
+# The corresponding language code used in resource packs. Used for
+# resource pack generation. Typically this is a combination of the
+# language code (ISO 639) and the country code (ISO 3166).
+resource_pack_lang_code: 'ru_ru'
+
+# This message is sent when a command requires a player but is executed
+# by a non-player.
+command_not_a_player: "§cОшибка:§6 команда должна быть выполнена игроком!"
+# This message is sent when the command sender is missing the required
+# permission.
+command_permission_denied: "§cОшибка:§6 доступ запрещён!"
+
+# This message is sent when an invalid time format is encountered.
+# %1$s: format error message
+invalid_time_format: "§cОшибка:§6 неверное время: %1$s"
+
+# This message is sent when a block with a lootable is first attempted to be broken.
+break_loot_block_prevented: "§6Этот блок включён в таблицу добычи, его содержимое будет обновлено через некоторое время. Если вы действительно хотите его уничтожить подождите 5 секунд и сломайте его снова."
+
+command_customitem:
+  usage: "%1$s §agive §7<§bitem§7>"
+  description: "Выдаёт игроку определённый кастомный предмет."
+  help: "§agive §7<§bitem§7>:§r Выдаёт игроку определённый кастомный предмет."
+
+command_vane:
+  # This message is sent when a module has been successfully reloaded.
+  # %1$s: module
+  reload_success: "%1$s§7: §aуспешно перезагружен"
+  # This message is sent when a module failed to reload.
+  # %1$s: module
+  reload_fail: "%1$s§7: §cперезагрузка завершилась неудачей"
+  # This message is sent when the resource_pack has been successfully generated.
+  resource_pack_generate_success: "§aРесурспак успешно сгенерирован"
+  # This message is sent when the resource_pack could not be generated.
+  resource_pack_generate_fail: "§cПроизошла ошибка во время генерации ресурспака"
+  usage: "%1$s §7<§areload§7|§agenerate_resource_pack§7>"
+  description: "Управляет vane плагинами."
+  help: "§areload §7[§bmodule§7]:§r Перезагружает все или выбранный vane модуль.\n\
+    §agenerate_resource_pack§7:§r генерирует vane ресурспак."
+
+resource_pack:
+  # This kick message is used when a mandatory resource pack was declined by a player.
+  declined: "Вам нужно принять ресурспак для игры на этом сервере.\n\
+    Это нужно для локализации и текстур."
+  # This kick message is used when a mandatory resource pack failed to download for  player.
+  download_failed: "§cПохоже возникла ошибка в загрузке ресурспака.§r\n\
+    §7(Вы будете кикнуты во избежание ошибок отображения)\n\
+    \n\
+    §dПожалуйста попробуйте снова."
+
+menus:
+  head_selector:
+    # The title for the head selection menu.
+    # %1$s: Total heads in library
+    title: "%1$s §8§lГоловы"
+    # The title for the filter menu.
+    filter_title: "§8§lФильтр библиотеки голов"
+    # Represents a head in the library.
+    # %1$s: Head name
+    # %2$s: Head category
+    # %3$s: Head tags
+    select_head:
+      name: "%1$s"
+      lore:
+        - ""
+        - "§7Категория: %2$s"
+        - "§7Тэги: %3$s"
+
+  # Item selection menu.
+  item_selector:
+    # The item used to accept the selection.
+    accept:
+      name: "§a§lПринять"
+      lore: ["§bВыбрать§7 выделенный предмет."]
+
+    # The item used to cancel the selection.
+    cancel:
+      name: "§c§lОтклонить"
+      lore: ["§6Отменяет§7 выбор предмета."]
+
+    # The item used to represent the currently selected item.
+    selected:
+      name: "§d§lВыбранный предмет"
+      lore:
+        - ""
+        - "Кликните на любой предмет в вашем инвенатре чтобы выбрать его."
+        - ""
+        - "§bЛКМ§7 для сброса настроек."
+        - "§bПКМ§7 для отчистки (если разрешено)."
+
+  # Generic thing selection menu.
+  generic_selector:
+    # The item selecting the n'th page
+    # %1$s: Page number
+    page:
+      name: "§bСтраница %1$s"
+      lore: []
+
+    # The item showing the current page
+    # %1$s: Page number
+    # %2$s: Total amount of pages
+    # %3$s: Total amount of items (filtered)
+    # %4$s: Total amount of items (unfiltered)
+    current_page:
+      name: "§aТекущая страница %1$s §7/ %2$s"
+      lore:
+        - ""
+        - "§b#Отсортированных предметов: %3$s"
+
+    # The item used to open the filter menu.
+    # Right clicking resets the filter.
+    filter:
+      name: "§d§lФильтр"
+      lore:
+        - ""
+        - "§bЛКМ§7 чтобы открыть меню фильтра."
+        - "§bПКМ§7 чтобы сбросить фильтр."
+
+    # The item used to cancel the selection.
+    cancel:
+      name: "§c§lОтмена"
+      lore: ["§6Отменяет§7 выбор."]

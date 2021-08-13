@@ -1,0 +1,107 @@
+# vim: set tabstop=2 softtabstop=0 expandtab shiftwidth=2:
+#
+# >> See lang-en.yml for variable descriptions <<
+#
+# +-----------------------------------+
+# | CAUTION: Do NOT change this file! |
+# +-----------------------------------+
+#
+# It will be silently overwritten with updates! If you want
+# to customize strings yourself, copy this file to lang-custom.yml
+# and set the language in the config.yml to "lang: 'custom'"
+
+# DO NOT CHANGE! The version of this language file. Used to determine
+# if the file needs to be updated.
+version: 1
+# The corresponding language code used in resource packs. Used for
+# resource pack generation. Typically this is a combination of the
+# language code (ISO 639) and the country code (ISO 3166).
+resource_pack_lang_code: 'ru_ru'
+
+item_ancient_tome:
+  book:
+    # The display name of this item variant.
+    name: "Древняя книга"
+
+  enchanted_book:
+    # The display name of this item variant.
+    name: "Древняя книга"
+
+item_ancient_tome_of_knowledge:
+  book:
+    # The display name of this item variant.
+    name: "Древняя книга знаний"
+
+  enchanted_book:
+    # The display name of this item variant.
+    name: "Древняя книга знаний"
+
+item_ancient_tome_of_the_gods:
+  book:
+    # The display name of this item variant.
+    name: "Древняя книга богов"
+
+  enchanted_book:
+    # The display name of this item variant.
+    name: "Древняя книга богов"
+
+enchantment_angel:
+  # The display name of this enchantment. Will be packed into a resource pack.
+  name: "Ангел"
+
+enchantment_careless:
+  # The display name of this enchantment. Will be packed into a resource pack.
+  name: "Неосторожность"
+
+enchantment_grappling_hook:
+  # The display name of this enchantment. Will be packed into a resource pack.
+  name: "Абардажный крюк"
+
+enchantment_hell_bent:
+  # The display name of this enchantment. Will be packed into a resource pack.
+  name: "Стены больше не помеха"
+
+enchantment_leafchopper:
+  # The display name of this enchantment. Will be packed into a resource pack.
+  name: "Листорез"
+
+enchantment_rake:
+  # The display name of this enchantment. Will be packed into a resource pack.
+  name: "Грабли"
+
+enchantment_seeding:
+  # The display name of this enchantment. Will be packed into a resource pack.
+  name: "Посев"
+
+enchantment_soulbound:
+  # The display name of this enchantment. Will be packed into a resource pack.
+  name: "Духовная связь"
+
+enchantment_take_off:
+  # The display name of this enchantment. Will be packed into a resource pack.
+  name: "На взлёт!"
+
+enchantment_unbreakable:
+  # The display name of this enchantment. Will be packed into a resource pack.
+  name: "Неразрушимый"
+
+enchantment_wings:
+  # The display name of this enchantment. Will be packed into a resource pack.
+  name: "Крылья"
+
+command_enchant:
+  # This message is sent when an enchantment level is given that is too low for the chosen enchantment.
+  # %1$s: Given level
+  # %2$s: Minimum level
+  level_too_low: "§cОшибка:§6 уровень %1$s§6 слишком низкий, должен быть как минимум %2$s"
+  # This message is sent when an enchantment level is given that is too high for the chosen enchantment.
+  # %1$s: Given level
+  # %2$s: Maximum level
+  level_too_high: "§cОшибка:§6 уровень %1$s§6 слишком высокий, должен быть максимум %2$s"
+  # This message is sent when the selected enchantment cannot be applied to the item in hand.
+  # %1$s: Enchantment
+  # %2$s: Item in hand
+  invalid_enchantment: "§cОшибка: %1$s§6 не может быть применён к %2$s"
+  usage: "%1$s §benchantment §7[§blevel§7]"
+  description: "Зачаровывает предмет в вашей руке."
+  help: "Зачаровывает предмет в вашей руке."
