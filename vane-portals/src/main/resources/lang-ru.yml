@@ -203,7 +203,7 @@ menus:
     # The item used to represent the selected active console block.
     # %1$s: Building material
     block_console_active:
-      name: "§b§lCКонсоль §a(активная)"
+      name: "§b§lКонсоль §a(активная)"
       lore: []
     # The item used to represent the selected active origin block.
     # %1$s: Building material
