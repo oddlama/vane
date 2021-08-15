@@ -1,0 +1,381 @@
+# vim: set tabstop:2 softtabstop:0 expandtab shiftwidth:2:
+#
+# >> See lang-en.yml for variable descriptions <<
+#
+# +-----------------------------------+
+# | CAUTION: Do NOT change this file! |
+# +-----------------------------------+
+#
+# It will be silently overwritten with updates! If you want
+# to customize strings yourself, copy this file to lang-custom.yml
+# and set the language in the config.yml to "lang: 'custom'"
+
+# DO NOT CHANGE! The version of this language file. Used to determine
+# if the file needs to be updated.
+version: 2
+# The corresponding language code used in resource packs. Used for
+# resource pack generation. Typically this is a combination of the
+# language code (ISO 639) and the country code (ISO 3166).
+resource_pack_lang_code: 'ru_ru'
+
+# This message is sent when a new portal console has been selected
+# and the player may now select a boundary block to construct a portal.
+select_boundary_now: "§6ПКМ по рамке портала теперь"
+# This message is sent when the selected console block is not of the correct
+# type anymore. This can happen when a player replaces the console block
+# while it is selected as a pending console.
+console_invalid_type: "§cБлок консоли имеет неправильный тип!"
+# This message is sent when the selected console is in a another world than the portal boundary.
+console_different_world: "§cКонсоль должна быть в том-же мире что и портал"
+# This message is sent when the selected portal console is too far away from
+# the portal boundary.
+console_too_far_away: "§cКонсоль слишком далеко от портала"
+# This message is sent when a console has successfully been linked.
+console_linked: "§aКонсоль привязана"
+
+# This message is sent when no boundary was found at the given location
+no_boundary_found: "§cПортал не найден!"
+# This message is sent when the selected boundary doesn't contain an origin block
+no_origin: "§cУ портала нет основного блока!"
+# This message is sent when the selected boundary has multiple origin blocks
+multiple_origins: "§cПортал не может иметь несколько основных блоков!"
+# This message is sent when the selected vertical portal boundary has no portal area above the origin block
+no_portal_block_above_origin: "§cНад основным блоком должно быть пространство для портала!"
+# This message is sent when the selected vertical portal boundary has not enough portal area above the origin block
+not_enough_portal_blocks_above_origin: "§cНад основным блоком должно быть как минимум 3 свободных блока!"
+# This message is sent when the selected portal boundary is too large in a given direction.
+# %1$s: The direction (x,y,z)
+too_large: "§cПортал слишком большой в %1$s§c направлении!"
+# This message is sent when the selected portal boundary is too small in a given direction.
+# %1$s: The direction (x,y,z)
+too_small_spawn: "§cМесто спавна слишком маленькое в %1$s§c направлении!"
+# This message is sent when the selected portal boundary contains too many portal area blocks.
+# %1$s: Current amount of blocks
+# %2$s: Maximum allowed amount of blocks
+too_many_portal_area_blocks: "§cПортал слишком большой! %1$s§6/%2$s§c блоков"
+# This message is sent when a portal boundary is selected but
+# a part of the area is obstructed.
+portal_area_obstructed: "§cПорталу что-то мешает!"
+# This message is sent when the selected boundary instersects an existing portal.
+intersects_existing_portal: "§cПорталы пересекаются друг с другом!"
+
+# This message is sent when a player has no permission to build a portal in the area.
+build_restricted: "§cУ вас нет разрешения чтобы сделать тут портал!"
+# This message is sent when a player has no permission to link a console to a portal.
+link_restricted: "§cВам запрещено привязывать консоль к этому порталу!"
+
+# This message is sent when a portal is activated, but the target is already connected to another portal.
+target_already_connected: "§6Этот портал уже связан с другим порталом!"
+# This message is sent when a portal is activated, but the player has no permission to use it.
+source_use_restricted: "§cУ вас нет разрешения на использование этого портала!"
+# This message is sent when a portal is activated, but the player has no permission to use the target portal.
+target_use_restricted: "§cВы не можете использовать этот портал как место назначения!"
+
+# This is the displayed on a floating item over all portal consoles of activated portals to indicate the connected portal.
+# HINT: The trailing §r's are important, otherwise the label will have empty space to the right
+# %1$s: Target portal name
+console_display_active: "§6§l>§r %1$s §6§l<§r"
+# This is the displayed on a floating item over all portal consoles of inactive portals to indicate the selected target portal.
+# HINT: The trailing §r's are important, otherwise the label will have empty space to the right
+# %1$s: Target portal name
+console_display_inactive: "§8§l>§r %1$s §8§l<§r"
+# This is the name substitution used for portals without a selected target portal.
+console_no_target: "§k?"
+
+# This message is sent when a player tries to unlink a console for which they have no permission.
+unlink_restricted: "§cВам запрещено отвязывать консоль от этого портала!"
+# This message is sent when a player tries to destroy a console for which they have no permission.
+destroy_restricted: "§cВы не можете разрушить этот портал!"
+# This message is sent when a player tries to change a portal setting for which they have no permission.
+settings_restricted: "§cУ вас нет доступа к настройкам этого портала!"
+# This message is sent when a player tries to change the target selection of a portal for which they have no permission.
+select_target_restricted: "§cВы не можете выбрать пункт назначения для этого портала!"
+
+dynmap:
+  # The label for the dynmap layer
+  layer_label: "Portals"
+  # The label for the dynmap markers
+  # %1$s: Portal name
+  marker_label: "%1$s"
+
+menus:
+  # Settings for the portal naming menu.
+  enter_name:
+    # The title for the naming menu.
+    title: "§8§lВыберите название для портала"
+
+  # Settings for the portal settings menu.
+  settings:
+    # The title for the settings menu.
+    # %1$s: Portal name
+    title: "§8§lНастройки: %1$s"
+    # The title for the icon seletion menu.
+    select_icon_title: "§8§lВыберите значок"
+
+    # This item is used to rename the portal.
+    rename:
+      name: "§b§lПереименовать"
+      lore: []
+
+    # This item is used to select the portal's icon.
+    select_icon:
+      name: "§b§lВыберите значок"
+      lore: []
+
+    # This item is used to change the portal's style.
+    select_style:
+      name: "§b§lВыберите стиль"
+      lore: []
+
+    # This item is used to cycle visibility and indicate public visibility.
+    visibility_public:
+      name: "§b§lПереключить видимость"
+      lore: ["", "§bТекущая: §a§lПубличный§r"]
+
+    # This item is used to cycle visibility and indicate group visibility.
+    visibility_group:
+      name: "§b§lПереключить видимость"
+      lore: ["", "§bТекущая: §e§lГруппа региона (участники)§r"]
+
+    # This item is used to cycle visibility and indicate group visibility.
+    visibility_group_internal:
+      name: "§b§lПереключить видимость"
+      lore: ["", "§bТекущая: §e§lГруппа региона (видимый только внутри)§r"]
+
+    # This item is used to cycle visibility and indicate private visibility.
+    visibility_private:
+      name: "§b§lПереключить видимость"
+      lore: ["", "§bТекущая: §c§lЧастный§r"]
+
+    # This item is used to change and indicate enabled target lock.
+    target_lock_on:
+      name: "§b§lПереключить блокировку выбора цели"
+      lore: ["", "§bТекущая §c§lЗаблокировано§r"]
+
+    # This item is used to change and indicate disabled target lock.
+    target_lock_off:
+      name: "§b§lПереключить блокировку выбора цели"
+      lore: ["", "§bТекущая: §c§lРазблокировано§r"]
+
+    # This item is used to return to the previous menu.
+    back:
+      name: "§6↩ §lНазад"
+      lore: []
+
+  # Settings for the portal style menu.
+  style:
+    # The title for the style menu.
+    # %1$s: Portal name
+    title: "§8§lСтиль для: %1$s"
+    # The title for the block selector for the active console block.
+    select_block_console_active_title:       "Выберите активный блок консоли."
+    # The title for the block selector for the active origin block.
+    select_block_origin_active_title:        "Выберите активный основной блок."
+    # The title for the block selector for the active portal block.
+    select_block_portal_active_title:        "Выберите активный блок заполнения."
+    # The title for the block selector for the active boundary variant 1 block.
+    select_block_boundardy_1_active_title:   "Выберите активную рамку портала - 1 вариант."
+    # The title for the block selector for the active boundary variant 2 block.
+    select_block_boundardy_2_active_title:   "Выберите активную рамку портала - 2 вариант."
+    # The title for the block selector for the active boundary variant 3 block.
+    select_block_boundardy_3_active_title:   "Выберите активную рамку портала - 3 вариант."
+    # The title for the block selector for the active boundary variant 4 block.
+    select_block_boundardy_4_active_title:   "Выберите активную рамку портала - 4 вариант."
+    # The title for the block selector for the active boundary variant 5 block.
+    select_block_boundardy_5_active_title:   "Выберите активную рамку портала - 5 вариант."
+    # The title for the block selector for the inactive console block.
+    select_block_console_inactive_title:     "Выберите неактивный блок консоли."
+    # The title for the block selector for the inactive origin block.
+    select_block_origin_inactive_title:      "Выберите неактивный основной блок."
+    # The title for the block selector for the inactive portal block.
+    select_block_portal_inactive_title:      "Выберите неактивный блок заполнения."
+    # The title for the block selector for the inactive boundary variant 1 block.
+    select_block_boundardy_1_inactive_title: "Выберите неактивную рамку портала - 1 вариант."
+    # The title for the block selector for the inactive boundary variant 2 block.
+    select_block_boundardy_2_inactive_title: "Выберите неактивную рамку портала - 2 вариант."
+    # The title for the block selector for the inactive boundary variant 3 block.
+    select_block_boundardy_3_inactive_title: "Выберите неактивную рамку портала - 3 вариант."
+    # The title for the block selector for the inactive boundary variant 4 block.
+    select_block_boundardy_4_inactive_title: "Выберите неактивную рамку портала - 4 вариант."
+    # The title for the block selector for the inactive boundary variant 5 block.
+    select_block_boundardy_5_inactive_title: "Выберите неактивную рамку портала - 5 вариант."
+
+    # The item used to represent the selected active console block.
+    # %1$s: Building material
+    block_console_active:
+      name: "§b§lКонсоль §a(активная)"
+      lore: []
+    # The item used to represent the selected active origin block.
+    # %1$s: Building material
+    block_origin_active:
+      name: "§b§lОсновной блок §a(активный)"
+      lore: []
+    # The item used to represent the selected active portal block.
+    # %1$s: Building material
+    block_portal_active:
+      name: "§b§lБлок заполнения §a(активный)"
+      lore: []
+    # The item used to represent the selected active boundary variant 1 block.
+    # %1$s: Building material
+    block_boundardy_1_active:
+      name: "§b§lРамка §a(активная)"
+      lore: ["", "§aВариант 1", "§7Строительный материал: %1$s"]
+    # The item used to represent the selected active boundary variant 2 block.
+    # %1$s: Building material
+    block_boundardy_2_active:
+      name: "§b§lРамка §a(активная)"
+      lore: ["", "§aВариант 2", "§7Строительный материал: %1$s"]
+    # The item used to represent the selected active boundary variant 3 block.
+    # %1$s: Building material
+    block_boundardy_3_active:
+      name: "§b§lРамка §a(активная)"
+      lore: ["", "§aВариант 3", "§7Строительный материал: %1$s"]
+    # The item used to represent the selected active boundary variant 4 block.
+    # %1$s: Building material
+    block_boundardy_4_active:
+      name: "§b§lРамка §a(активная)"
+      lore: ["", "§aВариант 4", "§7Строительный материал: %1$s"]
+    # The item used to represent the selected active boundary variant 5 block.
+    # %1$s: Building material
+    block_boundardy_5_active:
+      name: "§b§lРамка §a(активная)"
+      lore: ["", "§aВариант 5", "§7Строительный материал: %1$s"]
+    # The item used to represent the selected inactive console block.
+    # %1$s: Building material
+    block_console_inactive:
+      name: "§b§lКонсоль §e(неактивная)"
+      lore: []
+    # The item used to represent the selected inactive origin block.
+    # %1$s: Building material
+    block_origin_inactive:
+      name: "§b§lОсновной блок §e(неактивный)"
+      lore: []
+    # The item used to represent the selected inactive portal block.
+    # %1$s: Building material
+    block_portal_inactive:
+      name: "§b§lБлок заполнения §e(Неактиный)"
+      lore: []
+    # The item used to represent the selected inactive boundary variant 1 block.
+    # %1$s: Building material
+    block_boundardy_1_inactive:
+      name: "§b§lРамка §e(неактивная)"
+      lore: ["", "§aВариант 1", "§7Строительный материал: %1$s"]
+    # The item used to represent the selected inactive boundary variant 2 block.
+    # %1$s: Building material
+    block_boundardy_2_inactive:
+      name: "§b§lРамка §e(неактивная)"
+      lore: ["", "§aВариант 2", "§7Строительный материал: %1$s"]
+    # The item used to represent the selected inactive boundary variant 3 block.
+    # %1$s: Building material
+    block_boundardy_3_inactive:
+      name: "§b§lРамка §e(неактивная)"
+      lore: ["", "§aВариант 3", "§7Строительный материал: %1$s"]
+    # The item used to represent the selected inactive boundary variant 4 block.
+    # %1$s: Building material
+    block_boundardy_4_inactive:
+      name: "§b§lРамка §e(неактивная)"
+      lore: ["", "§aВариант 4", "§7Строительный материал: %1$s"]
+    # The item used to represent the selected inactive boundary variant 5 block.
+    # %1$s: Building material
+    block_boundardy_5_inactive:
+      name: "§b§lРамка §e(неактивная)"
+      lore: ["", "§aВариант 5", "§7Строительный материал: %1$s"]
+
+    # The item used to apply the style to the portal.
+    accept:
+      name: "§a§lПрименить стиль"
+      lore: []
+
+    # The item used to reset all changes made in this menu.
+    reset:
+      name: "§6§lСбросить изменения"
+      lore: []
+
+    # The title for the predefined style selector.
+    select_style_title: "§8§lВыбрать стиль"
+    # The filter title for the predefined style selector.
+    filter_styles_title: "§8§lФильтр стилей"
+    # The item used to open the style selector for predefined styles.
+    select_defined:
+      name: "§b§lВыбрать подготовленный стиль"
+      lore: []
+    # The item used to represent a predefined style.
+    # %1$s: Name of the style
+    select_style:
+      name: "%1$s"
+      lore: []
+
+    # The item used to discard any changes and return to the previous menu.
+    cancel:
+      name: "§6↩ §lСбросить изменения"
+      lore: []
+
+  # Settings for the portal console menu.
+  console:
+    # The title for the console menu.
+    # %1$s: Portal name
+    title: "§8§lПортал: %1$s"
+
+    # The item used to open the portal's settings.
+    settings:
+      name: "§b§lНастройки"
+      lore: []
+
+    # The item used to open the portal's target selector.
+    # %1$s: The currently selected target
+    select_target:
+      name: "§d§lВыберите цель"
+      lore:
+        - ""
+        - "§7Текущая: %1$s"
+    # The item used to show the current target when the target is locked.
+    # %1$s: The currently selected target
+    select_target_locked:
+      name: "§d§lВыберите цель"
+      lore:
+        - ""
+        - "§7CТекущая: %1$s"
+        - "§8Выбор цели на данный момент §6§lЗАБЛОКИРОВАН§r§8!"
+
+    select_target_title: "§8§lВыберите цель"
+    filter_portals_title: "§8§lФильтр порталов"
+    # The item used to represent a target portal.
+    # %1$s: Portal name
+    # %2$s: Portal distance
+    # %3$s: Portal world
+    select_target_portal:
+      name: "%1$s"
+      lore:
+        - ""
+        - "§7Расстояние: %2$s§6m"
+        - "§7Мир: %3$s"
+
+    # The item used to unlink the current console.
+    unlink_console:
+      name: "§c§lОтвязать консоль"
+      lore: []
+    # The title for the unlink confirmation dialog.
+    unlink_console_confirm_title: "§c§lОтвязать консоль?"
+    # The item to accept unlinking.
+    unlink_console_confirm_accept:
+      name: "§c§lОТВЯЗАТЬ КОНСОЛЬ"
+      lore: []
+    # The item to cancel unlinking.
+    unlink_console_confirm_cancel:
+      name: "§a§lОтмена"
+      lore: []
+
+    # The item used to destroy the portal.
+    destroy_portal:
+      name: "§c§lРазрушить портал"
+      lore: []
+    # The title for the destroy portal confirmation dialog.
+    destroy_portal_confirm_title: "§c§lРазрушить портал?"
+    # The item to accept destroying.
+    destroy_portal_confirm_accept:
+      name: "§c§lРАЗРУШИТЬ ПОРТАЛ"
+      lore: []
+    # The item to cancel destroying.
+    destroy_portal_confirm_cancel:
+      name: "§a§lОтмена"
+      lore: []

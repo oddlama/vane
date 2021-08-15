@@ -1,0 +1,103 @@
+# vim: set tabstop=2 softtabstop=0 expandtab shiftwidth=2:
+#
+# >> See lang-en.yml for variable descriptions <<
+#
+# +-----------------------------------+
+# | CAUTION: Do NOT change this file! |
+# +-----------------------------------+
+#
+# It will be silently overwritten with updates! If you want
+# to customize strings yourself, copy this file to lang-custom.yml
+# and set the language in the config.yml to "lang: 'custom'"
+
+# DO NOT CHANGE! The version of this language file. Used to determine
+# if the file needs to be updated.
+version: 2
+# The corresponding language code used in resource packs. Used for
+# resource pack generation. Typically this is a combination of the
+# language code (ISO 639) and the country code (ISO 3166).
+resource_pack_lang_code: 'ru_ru'
+
+chat_message_formatter:
+  # This is the format for player chat messages
+  # %1$s: player name
+  # %2$s: message
+  player_chat_format: "%1$s§7: %2$s"
+
+  # This message is sent when a player joins the server
+  # %1$s: player name
+  player_join: "%1$s§e только что пожаловал"
+
+  # This message is sent when a player is kicked from the server
+  # %1$s: player name
+  player_kick: "%1$s§e был удалён с сервера"
+
+  # This message is sent when a player leaves the server
+  # %1$s: player name
+  player_quit: "%1$s§e покинул сервер"
+
+autostop:
+  # This message is sent when autostop is aborted, due to an administrative command
+  # or a player joining the server.
+  aborted: "§dЗапланированное выключение прервано"
+  # This message is sent when autostop is scheduled, due to an administrative command
+  # or the last player leaving the server.
+  # %1$s: Time until stop
+  scheduled: "§dЗапланированное выключение через %1$s"
+  # This message is sent when autostop status is requested and autostop is already scheduled.
+  # %1$s: Time until stop
+  status: "§dЗапланированное выключение через %1$s"
+  # This message is sent when autostop status is requested but autostop is not scheduled.
+  status_not_scheduled: "§dАвтоматическое отключение не запланировано"
+  # This message is sent when the actual autostop is performed.
+  shutdown: "§dЗапланированное выключение инициализировано!"
+
+  command_autostop:
+    usage: "%1$s §7<§aabort§7|§aschedule§7|§astatus§7>"
+    description: "Управляет запланированным отключением."
+    help: "§aabort§7:§r Прерывает запланированное отключение.\n\
+      §aschedule §7[§bdelay§7]:§r Инициирует остановку сервера независимо от количества игроков. Принимает задержку в качестве параметра, игнорируя значение в конфиге.\n\
+      §astatus§7:§r Показывает текущий статус планировщика."
+
+hazard_protection:
+  # This message is sent when the wither has been prevented from spawning in a non-whitelisted world
+  # %1$s: world name
+  wither_spawn_prohibited: "§7Визера нельзя заспавнить в этом мире!"
+
+command_gamemode:
+  # This message is sent when the gamemode of a player is changed by the gamemode command.
+  # %1$s: Player name
+  # %2$s: Gamemode name
+  set: "§7Режим игры %1$s§7 был изменён на %2$s"
+  usage: "%1$s §bgamemode §7[§bplayer§7]"
+  description: "§bgamemode §7[§bplayer§7]"
+  help: "Устанавливает режим игры для игрока."
+
+command_setspawn:
+  usage: "%1$s"
+  description: "Устанавливает глобальный спавнпоинт на текущую позицию."
+  help: "Устанавливает глобальный спавнпоинт на текущую позицию."
+
+command_slimechunk:
+  # This message is sent when the player is standing in a slimechunk
+  slime_chunk_yes: "§aЭто слаймчанк."
+  # This message is sent when the player is not standing in a slimechunk
+  slime_chunk_no: "§cЭто не слаймчанк."
+  usage: "%1$s"
+  description: "Проверяет является ли текущий чанк слаймчанком."
+  help: "Проверяет является ли текущий чанк слаймчанком."
+
+command_spawn:
+  usage: "%1$s"
+  description: "Телепортирует тебя на спавн."
+  help: "Телепортирует тебя на спавн."
+
+command_time:
+  usage: "%1$s §btime §7[§bworld§7]"
+  description: "Устанавливает время текущего или выбранного мира."
+  help: "Устанавливает время текущего или выбранного мира."
+
+command_weather:
+  usage: "%1$s §bweather §7[§bworld§7]"
+  description: "Устанавливает погоду для текущего или выбранного мира."
+  help: "Устанавливает погоду для текущего или выбранного мира."

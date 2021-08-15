@@ -1,0 +1,92 @@
+# vim: set tabstop=2 softtabstop=0 expandtab shiftwidth=2:
+#
+# >> See lang-en.yml for variable descriptions <<
+#
+# +-----------------------------------+
+# | CAUTION: Do NOT change this file! |
+# +-----------------------------------+
+#
+# It will be silently overwritten with updates! If you want
+# to customize strings yourself, copy this file to lang-custom.yml
+# and set the language in the config.yml to "lang: 'custom'"
+
+# DO NOT CHANGE! The version of this language file. Used to determine
+# if the file needs to be updated.
+version: 2
+# The corresponding language code used in resource packs. Used for
+# resource pack generation. Typically this is a combination of the
+# language code (ISO 639) and the country code (ISO 3166).
+resource_pack_lang_code: 'ru_ru'
+
+command_heads:
+  usage: "%1$s"
+  description: "Получить голову из библиотеки голов."
+  help: "Активируйте чтобы открыть библиотеку голов."
+
+item_xp_bottle:
+  small:
+    # The display name of this item variant.
+    name: "Маленькая бутылка опыта"
+  medium:
+    # The display name of this item variant.
+    name: "Средняя бутылка опыта"
+  large:
+    # The display name of this item variant.
+    name: "Большая бутылка опыта"
+
+item_empty_xp_bottle:
+  # The display name of this item variant.
+  name: "Пустая бутылка опыта"
+
+item_home_scroll:
+  # The display name of this item variant.
+  name: "Свиток телепортации (Домой)"
+
+item_reinforced_elytra:
+  netherite:
+    # The display name of this item variant.
+    name: "Незеритовая элитра"
+
+item_unstable_scroll:
+  # The display name of this item variant.
+  name: "Свиток телепортации (Нестабильный)"
+
+item_file:
+  wooden:
+    # The display name of this item variant.
+    name: "Деревянный Напильник"
+  stone:
+    # The display name of this item variant.
+    name: "Каменный Напильник"
+  iron:
+    # The display name of this item variant.
+    name: "Железный Напильник"
+  golden:
+    # The display name of this item variant.
+    name: "Золотой Напильник"
+  diamond:
+    # The display name of this item variant.
+    name: "Алмазный Напильник"
+  netherite:
+    # The display name of this item variant.
+    name: "Незеритовый Напильник"
+
+item_sickle:
+  wooden:
+    # The display name of this item variant.
+    name: "Деревянный Серп"
+  stone:
+    # The display name of this item variant.
+    name: "Каменный Серп"
+  iron:
+    # The display name of this item variant.
+    name: "Железный Серп"
+  golden:
+    # The display name of this item variant.
+    name: "Золотой Серп"
+  diamond:
+    # The display name of this item variant.
+    name: "Алмазный Серп"
+  netherite:
+    # The display name of this item variant.
+    name: "Незеритовый Серп"
