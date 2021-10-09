@@ -53,7 +53,7 @@ public class PortalBlockProtector extends Listener<Portals> {
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-	public void on_block_piston_extend_event(final BlockPistonExtendEvent event) {
+	public void on_block_piston_extend(final BlockPistonExtendEvent event) {
 		// Prevent pistons from moving portal blocks
 		for (final var block : event.getBlocks()) {
 			if (get_module().is_portal_block(block)) {
