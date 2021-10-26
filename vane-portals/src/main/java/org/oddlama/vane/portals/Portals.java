@@ -186,7 +186,7 @@ public class Portals extends Module<Portals> {
 		dynmap_layer = new PortalDynmapLayer(this);
 
 		// Register admin permission
-		admin_permission = new Permission("vane." + get_module().get_name() + ".admin", "Allows modification of any portal", PermissionDefault.FALSE);
+		admin_permission = new Permission("vane." + get_module().get_name() + ".admin", "Allows administration of any portal", PermissionDefault.FALSE);
 		get_module().register_permission(admin_permission);
 
 		persistent_storage_manager.add_migration_to(2, "Portal visibility GROUP_INTERNAL was added. This is a no-op.", (json) -> {});
