@@ -32,7 +32,7 @@ public class Permissions extends Module<Permissions> {
 	@ConfigBoolean(def = true, desc = "Remove all default permissions to start with a clean preset.")
 	public boolean config_remove_defaults;
 
-	@ConfigString(def = "default", desc = "The permission group that will be given to new players.")
+	@ConfigString(def = "default", desc = "The permission group that will be given to players that have no other permission group.")
 	public String config_default_group;
 
 	@ConfigStringListMap(def = {
@@ -160,18 +160,19 @@ public class Permissions extends Module<Permissions> {
 			});
 
 		// Add permissions again
-		final var groups = storage_player_groups.get(player.getUniqueId());
-		if (groups == null) {
-			// Nothing to add.
-		} else {
-			for (var group : groups) {
-				for (var p : permission_groups.getOrDefault(group, Collections.emptySet())) {
-					final var perm = getServer().getPluginManager().getPermission(p);
-					if (perm == null) {
-						log.warning("Use of unregistered permission '" + p + "' might have unintended effects.");
-					}
-					attachment.setPermission(p, true);
+		var groups = storage_player_groups.get(player.getUniqueId());
+		if (groups == null || groups.isEmpty()) {
+			// Assign player to default permission group
+			groups = Set.of(config_default_group);
+		}
+
+		for (var group : groups) {
+			for (var p : permission_groups.getOrDefault(group, Collections.emptySet())) {
+				final var perm = getServer().getPluginManager().getPermission(p);
+				if (perm == null) {
+					log.warning("Use of unregistered permission '" + p + "' might have unintended effects.");
 				}
+				attachment.setPermission(p, true);
 			}
 		}
 
