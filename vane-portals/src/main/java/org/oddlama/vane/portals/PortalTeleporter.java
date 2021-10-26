@@ -3,13 +3,14 @@ package org.oddlama.vane.portals;
 import java.util.HashMap;
 import java.util.UUID;
 
+import com.destroystokyo.paper.event.entity.EntityTeleportEndGatewayEvent;
 import com.destroystokyo.paper.event.player.PlayerTeleportEndGatewayEvent;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.entity.EntityPortalEvent;
+import org.bukkit.event.entity.EntityTeleportEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
 
@@ -43,8 +44,19 @@ public class PortalTeleporter extends Listener<Portals> {
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void on_entity_portal_event(final EntityPortalEvent event) {
+	public void on_entity_teleport_event(final EntityTeleportEvent event) {
 		if (cancel_portal_event(event.getEntity())) {
+			event.setCancelled(true);
+		}
+	}
+
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	public void on_entity_teleport_end_gateway_event(final EntityTeleportEndGatewayEvent event) {
+		// End gateway teleport can be initiated when the bounding boxes overlap, so
+		// the entities location will not necessarily be at the position where the end gateway block is.
+		// Therefore we additionally check whether the initiating end gateway block is part of a portal structure.
+		// Otherwise, this event would already be handeled by EntityTeleportEvent.
+		if (get_module().is_portal_block(event.getGateway().getBlock())) {
 			event.setCancelled(true);
 		}
 	}
