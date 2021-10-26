@@ -27,11 +27,14 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.block.Skull;
 import org.bukkit.craftbukkit.libs.org.apache.commons.io.IOUtils;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.inventory.PrepareSmithingEvent;
@@ -268,6 +271,42 @@ public class Core extends Module<Core> implements PluginMessageListener {
 		// Create new item
 		final var variant_to = item_lookup.custom_item.netherite_conversion_to();
 		event.setResult(CustomItem.modify_variant(item, variant_to));
+	}
+
+	// Prevent netherite items from burning, as they are made of netherite
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+	public void on_item_burn(final EntityDamageEvent event) {
+		// Only burn damage on dropped items
+		if (event.getEntity().getType() != EntityType.DROPPED_ITEM) {
+			return;
+		}
+
+		switch (event.getCause()) {
+			default: return;
+			case FIRE:
+			case FIRE_TICK:
+			case LAVA:
+				break;
+		}
+
+		// Get item variant
+		final var entity = event.getEntity();
+		if (!(entity instanceof Item)) {
+			return;
+		}
+
+		final var item = ((Item)entity).getItemStack();
+		final var item_lookup = CustomItem.from_item(item);
+		if (item_lookup == null || !item_lookup.custom_item.has_netherite_conversion()) {
+			return;
+		}
+
+		// Only if we deal with the netherite variant
+		if (item_lookup.variant != item_lookup.custom_item.netherite_conversion_to()) {
+			return;
+		}
+
+		event.setCancelled(true);
 	}
 
 	// Restore correct head item from head library when broken

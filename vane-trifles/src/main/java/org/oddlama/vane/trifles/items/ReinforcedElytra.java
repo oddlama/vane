@@ -7,8 +7,11 @@ import java.util.UUID;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.inventory.PrepareSmithingEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -114,5 +117,41 @@ public class ReinforcedElytra extends CustomItem<Trifles, ReinforcedElytra> {
 
 		// Convert existing item
 		event.setResult(convert_existing(item, this, Variant.NETHERITE));
+	}
+
+	// Prevent netherite elytra from burning, as it is made of netherite
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+	public void on_item_burn(final EntityDamageEvent event) {
+		// Only burn damage on dropped items
+		if (event.getEntity().getType() != EntityType.DROPPED_ITEM) {
+			return;
+		}
+
+		switch (event.getCause()) {
+			default: return;
+			case FIRE:
+			case FIRE_TICK:
+			case LAVA:
+				break;
+		}
+
+		// Get item variant
+		final var entity = event.getEntity();
+		if (!(entity instanceof Item)) {
+			return;
+		}
+
+		final var item = ((Item)entity).getItemStack();
+		final var variant = this.<ReinforcedElytraVariant>variant_of(item);
+		if (variant == null || !variant.enabled()) {
+			return;
+		}
+
+		// Require netherite variant
+		if (variant.variant() != Variant.NETHERITE) {
+			return;
+		}
+
+		event.setCancelled(true);
 	}
 }
