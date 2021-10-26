@@ -33,6 +33,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -144,6 +146,10 @@ public class Portals extends Module<Portals> {
 	@LangMessage public TranslatedMessage lang_settings_restricted;
 	@LangMessage public TranslatedMessage lang_select_target_restricted;
 
+	// This permission allows players (usually admins) to always modify settings
+	// on any portal, regardless of whether other restrictions would block access.
+	public final Permission admin_permission;
+
 	// Primary storage for all portals (portal_id → portal)
 	@Persistent
 	private Map<UUID, Portal> storage_portals = new HashMap<>();
@@ -178,6 +184,10 @@ public class Portals extends Module<Portals> {
 		constructor = new PortalConstructor(this);
 		new PortalTeleporter(this);
 		dynmap_layer = new PortalDynmapLayer(this);
+
+		// Register admin permission
+		admin_permission = new Permission("vane." + get_module().get_name() + ".admin", "Allows modification of any portal", PermissionDefault.FALSE);
+		get_module().register_permission(admin_permission);
 
 		persistent_storage_manager.add_migration_to(2, "Portal visibility GROUP_INTERNAL was added. This is a no-op.", (json) -> {});
 	}

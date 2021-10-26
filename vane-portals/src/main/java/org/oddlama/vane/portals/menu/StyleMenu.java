@@ -188,7 +188,7 @@ public class StyleMenu extends ModuleComponent<Portals> {
 
 			final var settings_event = new PortalChangeSettingsEvent(player, portal, false);
 			get_module().getServer().getPluginManager().callEvent(settings_event);
-			if (settings_event.isCancelled()) {
+			if (settings_event.isCancelled() && !player.hasPermission(get_module().admin_permission)) {
 				return ClickResult.ERROR;
 			}
 

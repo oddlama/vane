@@ -70,28 +70,28 @@ public class ConsoleMenu extends ModuleComponent<Portals> {
 		// Check if target selection would be allowed
 		final var select_target_event = new PortalSelectTargetEvent(player, portal, null, true);
 		get_module().getServer().getPluginManager().callEvent(select_target_event);
-		if (!select_target_event.isCancelled()) {
+		if (!select_target_event.isCancelled() || player.hasPermission(get_module().admin_permission)) {
 			console_menu.add(menu_item_select_target(portal));
 		}
 
 		// Check if settings would be allowed
 		final var settings_event = new PortalChangeSettingsEvent(player, portal, true);
 		get_module().getServer().getPluginManager().callEvent(settings_event);
-		if (!settings_event.isCancelled()) {
+		if (!settings_event.isCancelled() || player.hasPermission(get_module().admin_permission)) {
 			console_menu.add(menu_item_settings(portal, console));
 		}
 
 		// Check if unlink would be allowed
 		final var unlink_event = new PortalUnlinkConsoleEvent(player, console, portal, true);
 		get_module().getServer().getPluginManager().callEvent(unlink_event);
-		if (!unlink_event.isCancelled()) {
+		if (!unlink_event.isCancelled() || player.hasPermission(get_module().admin_permission)) {
 			console_menu.add(menu_item_unlink_console(portal, console));
 		}
 
 		// Check if destroy would be allowed
 		final var destroy_event = new PortalDestroyEvent(player, portal, true);
 		get_module().getServer().getPluginManager().callEvent(destroy_event);
-		if (!destroy_event.isCancelled()) {
+		if (!destroy_event.isCancelled() || player.hasPermission(get_module().admin_permission)) {
 			console_menu.add(menu_item_destroy_portal(portal));
 		}
 
@@ -102,7 +102,7 @@ public class ConsoleMenu extends ModuleComponent<Portals> {
 		return new MenuItem(0, item_settings.item(), (player, menu, self) -> {
 			final var settings_event = new PortalChangeSettingsEvent(player, portal, false);
 			get_module().getServer().getPluginManager().callEvent(settings_event);
-			if (settings_event.isCancelled()) {
+			if (settings_event.isCancelled() && !player.hasPermission(get_module().admin_permission)) {
 				get_module().lang_settings_restricted.send(player);
 				return ClickResult.ERROR;
 			}
@@ -144,9 +144,9 @@ public class ConsoleMenu extends ModuleComponent<Portals> {
 					(player2, m, t) -> {
 						m.close(player2);
 
-						final var select_target_event = new PortalSelectTargetEvent(player, portal, t, false);
+						final var select_target_event = new PortalSelectTargetEvent(player2, portal, t, false);
 						get_module().getServer().getPluginManager().callEvent(select_target_event);
-						if (select_target_event.isCancelled()) {
+						if (select_target_event.isCancelled() && !player2.hasPermission(get_module().admin_permission)) {
 							get_module().lang_select_target_restricted.send(player2);
 							return ClickResult.ERROR;
 						}
@@ -184,7 +184,7 @@ public class ConsoleMenu extends ModuleComponent<Portals> {
 					// Call event
 					final var event = new PortalUnlinkConsoleEvent(player2, console, portal, false);
 					get_module().getServer().getPluginManager().callEvent(event);
-					if (event.isCancelled()) {
+					if (event.isCancelled() && !player2.hasPermission(get_module().admin_permission)) {
 						get_module().lang_unlink_restricted.send(player2);
 						return ClickResult.ERROR;
 					}
@@ -214,7 +214,7 @@ public class ConsoleMenu extends ModuleComponent<Portals> {
 					// Call event
 					final var event = new PortalDestroyEvent(player2, portal, false);
 					get_module().getServer().getPluginManager().callEvent(event);
-					if (event.isCancelled()) {
+					if (event.isCancelled() && !player2.hasPermission(get_module().admin_permission)) {
 						get_module().lang_destroy_restricted.send(player2);
 						return ClickResult.ERROR;
 					}

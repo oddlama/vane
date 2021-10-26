@@ -83,7 +83,7 @@ public class SettingsMenu extends ModuleComponent<Portals> {
 			get_module().menus.enter_name_menu.create(player, portal.name(), (player2, name) -> {
 				final var settings_event = new PortalChangeSettingsEvent(player2, portal, false);
 				get_module().getServer().getPluginManager().callEvent(settings_event);
-				if (settings_event.isCancelled()) {
+				if (settings_event.isCancelled() && !player2.hasPermission(get_module().admin_permission)) {
 					get_module().lang_settings_restricted.send(player2);
 					return ClickResult.ERROR;
 				}
@@ -112,7 +112,7 @@ public class SettingsMenu extends ModuleComponent<Portals> {
 			MenuFactory.item_selector(get_context(), player, lang_select_icon_title.str(), portal.icon(), true, (player2, item) -> {
 				final var settings_event = new PortalChangeSettingsEvent(player2, portal, false);
 				get_module().getServer().getPluginManager().callEvent(settings_event);
-				if (settings_event.isCancelled()) {
+				if (settings_event.isCancelled() && !player2.hasPermission(get_module().admin_permission)) {
 					get_module().lang_settings_restricted.send(player2);
 					return ClickResult.ERROR;
 				}
@@ -133,7 +133,7 @@ public class SettingsMenu extends ModuleComponent<Portals> {
 		return new MenuItem(2, item_select_style.item(), (player, menu, self) -> {
 			final var settings_event = new PortalChangeSettingsEvent(player, portal, false);
 			get_module().getServer().getPluginManager().callEvent(settings_event);
-			if (settings_event.isCancelled()) {
+			if (settings_event.isCancelled() && !player.hasPermission(get_module().admin_permission)) {
 				get_module().lang_settings_restricted.send(player);
 				return ClickResult.ERROR;
 			}
@@ -152,7 +152,7 @@ public class SettingsMenu extends ModuleComponent<Portals> {
 
 			final var settings_event = new PortalChangeSettingsEvent(player, portal, false);
 			get_module().getServer().getPluginManager().callEvent(settings_event);
-			if (settings_event.isCancelled()) {
+			if (settings_event.isCancelled() && !player.hasPermission(get_module().admin_permission)) {
 				get_module().lang_settings_restricted.send(player);
 				return ClickResult.ERROR;
 			}
@@ -185,7 +185,7 @@ public class SettingsMenu extends ModuleComponent<Portals> {
 		return new MenuItem(6, null, (player, menu, self) -> {
 			final var settings_event = new PortalChangeSettingsEvent(player, portal, false);
 			get_module().getServer().getPluginManager().callEvent(settings_event);
-			if (settings_event.isCancelled()) {
+			if (settings_event.isCancelled() && !player.hasPermission(get_module().admin_permission)) {
 				get_module().lang_settings_restricted.send(player);
 				return ClickResult.ERROR;
 			}

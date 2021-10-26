@@ -297,7 +297,7 @@ public class Portal {
 		// Call event
 		final var event = new PortalOpenConsoleEvent(player, console, this);
 		portals.getServer().getPluginManager().callEvent(event);
-		if (event.isCancelled()) {
+		if (event.isCancelled() && !player.hasPermission(get_module().admin_permission)) {
 			return false;
 		}
 
