@@ -65,7 +65,7 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 
 	// Permission attachment for console
 	private List<String> pending_console_permissions = new ArrayList<>();
-	private PermissionAttachment console_attachment;
+	public PermissionAttachment console_attachment;
 
 	// Version fields for config, lang, storage
 	@ConfigVersion
@@ -227,7 +227,7 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 	public void generate_resource_pack(final ResourcePackGenerator pack) throws IOException {
 		// Generate language
 		final var pattern = Pattern.compile("lang-.*\\.yml");
-		Arrays.stream(getDataFolder().listFiles((d, name) -> pattern.matcher(name).matches())).forEach(lang_file -> {
+		Arrays.stream(getDataFolder().listFiles((d, name) -> pattern.matcher(name).matches())).sorted().forEach(lang_file -> {
 			final var yaml = YamlConfiguration.loadConfiguration(lang_file);
 			try {
 				lang_manager.generate_resource_pack(pack, yaml);
