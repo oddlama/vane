@@ -1,11 +1,13 @@
 package org.oddlama.vane.admin;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 
@@ -14,6 +16,7 @@ import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Context;
 
+import io.papermc.paper.chat.ChatRenderer;
 import io.papermc.paper.event.player.AsyncChatEvent;
 
 public class ChatMessageFormatter extends Listener<Admin> {
@@ -22,21 +25,27 @@ public class ChatMessageFormatter extends Listener<Admin> {
 	@LangMessage private TranslatedMessage lang_player_kick;
 	@LangMessage private TranslatedMessage lang_player_quit;
 
+	final ChatRenderer chat_renderer;
+
 	public ChatMessageFormatter(Context<Admin> context) {
 		super(context.group("chat_message_formatter", "Enables custom formatting of chat messages like player chats and join / quit messages."));
+
+		// Create custom chat renderer
+		chat_renderer = new ChatRenderer() {
+			public Component render(final Player source,
+					final Component sourceDisplayName,
+					final Component message,
+					final Audience viewer) {
+				// TODO more sophisticated formatting?
+				final var who = sourceDisplayName.color(NamedTextColor.AQUA);
+				return lang_player_chat_format.format(who, message);
+			}
+		};
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void on_player_chat(AsyncChatEvent event) {
-		// TODO color based on privilege or config value.... somehow
-		// link permission groups to different config values....
-		// TODO custom chat color event?
-		event.setCancelled(true);
-
-		final var chat = event.message();
-		final var who = event.getPlayer().displayName().color(NamedTextColor.AQUA);
-		lang_player_chat_format.broadcast_server_players(who, chat);
-		System.out.println("[chat] " + lang_player_chat_format.str(who, chat));
+		event.renderer(chat_renderer);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
