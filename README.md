@@ -1,6 +1,6 @@
 [Overview](https://oddlama.github.io/vane/) \|
 [Installation](https://github.com/oddlama/vane/wiki/Installation-Guide) \|
-[FAQ](#faq) \|
+[FAQ](https://github.com/oddlama/vane/wiki/FAQ) \|
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
  
 <p align="center">
@@ -192,59 +192,9 @@ Seems to be a skittish integration between gradle and maven repositories.
 
 ## FAQ
 
-#### Q: Can I also use Spigot or do I need PaperMC?
+Please refer to the [FAQ](https://github.com/oddlama/vane/wiki/FAQ) in the wiki.
 
-**A:** You need PaperMC. Vane makes use of some events and API only provided by Paper.
-If everything would get integrated into Spigot, we might retarget the plugins, to open
-them to a broader audience. But until that day comes, you will need PaperMC.
-
-For vane-waterfall, you might be able to use BungeeCord instead of Waterfall,
-yet there will be no guarantees that this will stay.
-
-#### Q: Do I need a proxy? (BungeeCord / Waterfall)
-
-**A:** No. You only need a proxy if you want any of the features described under **vane-waterfall** above.
-
-#### Q: Can I run vane alongside other plugins?
-
-**A:** Yes, for the most part. Almost all 3rd party plugins should work without any issues. Where you might begin
-to see problems is when the other plugin also makes use of a custom resource pack,
-especially if it also modifies items and/or uses the `custom_model_data` tag in incompatible ways.
-
-In the best case you can simply merge merge both resource packs before serving it.
-The worst case would be an incompatibility caused e.g. by the other plugin's registered listeners.
-Vane always tries to be as conservative as possible regarding these things and shouldn't cause
-issues in other plugins, but badly written 3rd-party plugins could theoretically break logic in vane.
-
-#### Q: Is an SQL database required? (like MySQL, PostgreSQL, ...)
-
-**A:** No, vane doesn't use SQL as a persistent storage, as it is simply not
-designed to be used on large networks with tens of thousands of players.
-For smaller survival servers, using an external SQL server would be a waste
-of resources and would require an unproportional amount of maintenance,
-both in the implementation and server administration.
-
-#### Q: Minecraft's default commands like /tp don't work even when players are OP
-
-**A:** vane-permissions radically removes all permissions from players to remove
-any hidden state and allow server operators to sanely manage permissions for their players.
-To allow certain vanilla commands simply add the required permission to the respective group
-in vane-permissions' config.yml. You can list all permissions by executing `perm list permissions`,
-usually they are of the form `minecraft.command.<commandname>`, so e.g. `minecraft.command.tp`.
-You can also view a [list of all vanilla permissions](https://bukkit.fandom.com/wiki/CraftBukkit_Commands) online.
-
-#### Q: Players can't build when theya are not in the admin group
-
-**A:** They probably are in the spawn protection area, which by default is 64 block radius around (0,0).
-You can adjust the radius or disable it in `vane-admin/config.yml`.
-Beginning with v1.1.3, spawn protection is disabled by default.
-
-#### Q: How can I verify that the release files I downloaded are authentic and haven't been tampered with?
-
-**A:** All artifacts are signed by me with [my gpg key](https://oddlama.org/gpg/oddlama@oddlama.org.asc). The signature files are uploaded together with the released jars. (beginning from version v1.1.2).
-Example: To verify all downloaded files, import my public key and execute `for i in *.jar; do gpg --verify "$i.asc" "$i"; done` in the folder with the `.jar` and `.asc` files.
-
-### Acknowledgements & 3rd-party software
+## Acknowledgements & 3rd-party software
 
 I would like to thank the following projects and people maintaining them:
 
