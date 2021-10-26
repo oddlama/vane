@@ -55,8 +55,7 @@ public class RegionMenu extends ModuleComponent<Regions> {
 		final var region_menu = new Menu(get_context(), Bukkit.createInventory(null, columns, title));
 		region_menu.tag(new RegionMenuTag(region.id()));
 
-		final var is_owner = player.getUniqueId().equals(region.owner());
-		if (is_owner) {
+		if (get_module().may_administrate(player, region)) {
 			region_menu.add(menu_item_rename(region));
 			region_menu.add(menu_item_delete(region));
 			region_menu.add(menu_item_assign_region_group(region));
@@ -73,7 +72,7 @@ public class RegionMenu extends ModuleComponent<Regions> {
 	private MenuWidget menu_item_rename(final Region region) {
 		return new MenuItem(0, item_rename.item(), (player, menu, self) -> {
 			menu.close(player);
-			if (!player.getUniqueId().equals(region.owner())) {
+			if (!get_module().may_administrate(player, region)) {
 				return ClickResult.ERROR;
 			}
 
@@ -101,7 +100,7 @@ public class RegionMenu extends ModuleComponent<Regions> {
 			menu.close(player);
 			MenuFactory.confirm(get_context(), lang_delete_confirm_title.str(),
 				item_delete_confirm_accept.item(), (player2) -> {
-					if (!player2.getUniqueId().equals(region.owner())) {
+					if (!get_module().may_administrate(player2, region)) {
 						return ClickResult.ERROR;
 					}
 
@@ -146,7 +145,7 @@ public class RegionMenu extends ModuleComponent<Regions> {
 				r -> item_select_region_group.item("§a§l" + r.name()),
 				filter,
 				(player2, m, group) -> {
-					if (!player2.getUniqueId().equals(region.owner())) {
+					if (!get_module().may_administrate(player2, region)) {
 						return ClickResult.ERROR;
 					}
 

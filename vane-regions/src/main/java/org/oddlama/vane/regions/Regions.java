@@ -23,6 +23,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.Plugin;
 import org.oddlama.vane.annotation.VaneModule;
 import org.oddlama.vane.annotation.config.ConfigBoolean;
@@ -125,6 +127,11 @@ public class Regions extends Module<Regions> {
 
 	@LangMessage public TranslatedMessage lang_start_region_selection;
 
+	// This permission allows players (usually admins) to always administrate
+	// any region (rename, delete), regardless of whether other restrictions
+	// would block access.
+	public final Permission admin_permission;
+
 	public RegionMenuGroup menus;
 	public RegionDynmapLayer dynmap_layer;
 
@@ -139,6 +146,10 @@ public class Regions extends Module<Regions> {
 		new RegionRoleSettingEnforcer(this);
 		new RegionSelectionListener(this);
 		dynmap_layer = new RegionDynmapLayer(this);
+
+		// Register admin permission
+		admin_permission = new Permission("vane." + get_module().get_name() + ".admin", "Allows administration of any region", PermissionDefault.FALSE);
+		get_module().register_permission(admin_permission);
 	}
 
 	public void delayed_on_enable() {
@@ -560,7 +571,7 @@ public class Regions extends Module<Regions> {
 	}
 
 	public boolean may_administrate(final Player player, final Region region) {
-		return player.getUniqueId().equals(region.owner());
+		return player.getUniqueId().equals(region.owner()) || player.hasPermission(admin_permission);
 	}
 
 	public RegionGroup get_or_create_default_region_group(final Player owner) {
