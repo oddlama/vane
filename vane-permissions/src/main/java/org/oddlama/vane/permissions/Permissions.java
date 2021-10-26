@@ -9,12 +9,16 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.bukkit.OfflinePlayer;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.server.ServerCommandEvent;
+import org.bukkit.event.server.RemoteServerCommandEvent;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionDefault;
 
@@ -104,6 +108,41 @@ public class Permissions extends Module<Permissions> {
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void on_player_quit(PlayerQuitEvent event) {
 		unregister_player(event.getPlayer());
+	}
+
+	private final Map<CommandSender, PermissionAttachment> sender_attachments = new HashMap<>();
+	private void add_console_permissions(final CommandSender sender) {
+		// Register attachment for sender if not done already
+		if (!sender_attachments.containsKey(sender)) {
+			final var attachment = sender.addAttachment(this);
+			sender_attachments.put(sender, attachment);
+
+			final var attached_perms = console_attachment.getPermissions();
+			attached_perms.forEach((p, v) -> {
+					attachment.setPermission(p, v);
+				});
+		}
+	}
+
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+	public void on_server_command_event(ServerCommandEvent event) {
+		final var sender = event.getSender();
+		if (sender instanceof ConsoleCommandSender) {
+			// Console command sender will always have the correct permission attachment
+			return;
+		}
+
+		if (sender.isOp()) {
+			add_console_permissions(sender);
+		}
+	}
+
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+	public void on_remote_server_command_event(RemoteServerCommandEvent event) {
+		final var sender = event.getSender();
+		if (sender.isOp()) {
+			add_console_permissions(sender);
+		}
 	}
 
 	/** Resolve references to other permission groups in the hierarchy. */
