@@ -74,7 +74,11 @@ public class RegionEnvironmentSettingEnforcer extends Listener<Regions> {
 
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void on_entity_change_block(final EntityChangeBlockEvent event) {
-		// Prevent entities from changing region blocks
+		if (!(event.getEntity() instanceof Monster)) {
+			return;
+		}
+
+		// Prevent monster entities from changing region blocks
 		if (check_setting_at(event.getBlock(), EnvironmentSetting.MONSTERS, false)) {
 			event.setCancelled(true);
 		}
