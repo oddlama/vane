@@ -53,7 +53,7 @@ import org.oddlama.vane.core.menu.MenuManager;
 import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.core.module.ModuleComponent;
 
-@VaneModule(name = "core", bstats = 8637, config_version = 4, lang_version = 2, storage_version = 1)
+@VaneModule(name = "core", bstats = 8637, config_version = 5, lang_version = 2, storage_version = 1)
 public class Core extends Module<Core> implements PluginMessageListener {
 	/** The base offset for any model data used by vane plugins. */
 	// "vane" = 0x76616e65, but the value will be saved as float (json...), so only -2^24 - 2^24 can accurately be represented.
@@ -99,6 +99,8 @@ public class Core extends Module<Core> implements PluginMessageListener {
 	// core-config
 	@ConfigBoolean(def = true, desc = "Let the client translate messages using the generated resource pack. This allows every player to select their preferred language, and all plugin messages will also be translated. Disabling this won't allow you to skip generating the resource pack, as it will be needed for custom item textures.")
 	public boolean config_client_side_translations;
+	@ConfigBoolean(def = true, desc = "Prevent players from breaking blocks with loot-tables (like treasure chests) when they first attempt to destroy it. They still can break it, but must do so within a short timeframe.")
+	public boolean config_warn_breaking_loot_blocks;
 
 	public Core() {
 		// Create global command catch-all permission
@@ -365,7 +367,10 @@ public class Core extends Module<Core> implements PluginMessageListener {
 	private final Map<Block, Map<UUID, Long>> loot_break_attempts = new HashMap<>();
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void on_break_loot_chest(final BlockBreakEvent event) {
-		// TODO this behavior should be configurable
+		if (!config_warn_breaking_loot_blocks) {
+			return;
+		}
+
 		final var state = event.getBlock().getState(false);
 		if (!(state instanceof Lootable)) {
 			return;

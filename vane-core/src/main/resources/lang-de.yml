@@ -25,7 +25,7 @@ command_permission_denied: "§cerror:§6 Fehlende Berechtigung!"
 
 invalid_time_format: "§cerror:§6 Ungültige Zeit: %1$s"
 
-break_loot_block_prevented: "§6Dieser Block enthält Loot, welcher automatisch nach einiger Zeit nachgefüllt wird. Wenn du diesen Block wirklich zerstören möchtest, warte 5 Sekunden und baue ihn erneut ab."
+break_loot_block_prevented: "§6Dieser Block enthält Loot, welcher automatisch nach einiger Zeit nachgefüllt wird. Wenn du diesen Block wirklich zerstören möchtest, warte 5 Sekunden und baue diesen erneut ab."
 
 command_customitem:
   usage: "%1$s §agive §7<§bitem§7>"
