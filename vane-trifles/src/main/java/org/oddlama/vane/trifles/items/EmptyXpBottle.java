@@ -8,6 +8,7 @@ import static org.oddlama.vane.util.Util.exp_for_level;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -49,6 +50,22 @@ public class EmptyXpBottle extends CustomItem<Trifles, EmptyXpBottle> {
 
 	public EmptyXpBottle(Context<Trifles> context) {
 		super(context, EmptyXpBottleVariant::new);
+	}
+
+	public static int get_total_exp(final Player player) {
+		return level_to_exp(player.getLevel())
+			+ Math.round(player.getExpToLevel() * player.getExp());
+	}
+
+	public static int level_to_exp(int level) {
+		// Formulas taken from: https://minecraft.fandom.com/wiki/Experience#Leveling_up
+		if (level > 30) {
+			return (int)(4.5 * level * level - 162.5 * level + 2220);
+		}
+		if (level > 15) {
+			return (int)(2.5 * level * level - 40.5 * level + 360);
+		}
+		return level * level + 6 * level;
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = false) // ignoreCancelled = false to catch right-click-air events
@@ -94,7 +111,7 @@ public class EmptyXpBottle extends CustomItem<Trifles, EmptyXpBottle> {
 			var cur_exp = (int)((1.0 / (1.0 - config_loss_percentage)) * exp_for_level(cur_xp_bottle_variant.config_capacity));
 
 			// Check if player has enough xp and this variant has more than the last
-			if (player.getTotalExperience() >= cur_exp && cur_exp > exp) {
+			if (get_total_exp(player) >= cur_exp && cur_exp > exp) {
 				exp = cur_exp;
 				xp_bottle_variant = cur_xp_bottle_variant;
 			}
