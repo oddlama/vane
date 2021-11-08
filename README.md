@@ -1,11 +1,11 @@
-[Overview](https://oddlama.github.io/vane/) \|
-[Installation](https://github.com/oddlama/vane/wiki/Installation-Guide) \|
-[FAQ](https://github.com/oddlama/vane/wiki/FAQ) \|
-[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
- 
-<p align="center">
-  <img src="./docs/vane.png" height="100" width="auto" />
-</p>
+<img align="left" width="auto" height="90" src="./docs/vane.png">
+
+[![MIT License](https://img.shields.io/badge/license-MIT-informational.svg)](./LICENSE)
+[![Join us on Discord](https://img.shields.io/discord/907277628816388106.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/RueJ6A59x2)
+
+[![Overview](https://img.shields.io/badge/link-Overview-informational.svg)](https://oddlama.github.io/vane/)
+[![Overview](https://img.shields.io/badge/wiki-Installation-informational.svg)](https://github.com/oddlama/vane/wiki/Installation-Guide)
+[![Overview](https://img.shields.io/badge/wiki-FAQ-informational.svg)](https://github.com/oddlama/vane/wiki/FAQ)
 
 # About vane
 
