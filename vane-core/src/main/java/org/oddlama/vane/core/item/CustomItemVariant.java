@@ -165,8 +165,12 @@ public class CustomItemVariant<T extends Module<T>, V extends CustomItem<T, V>, 
 		return recipe;
 	}
 
+	@Override
 	public final boolean enabled() {
-		return variant.enabled();
+		// parent.enabled() is the base custom-item.
+		// super.enabled() is the actual item variant config setting.
+		// variant.enabled() is the developer override (→ mostly just true).
+		return parent.enabled() && super.enabled() && variant.enabled();
 	}
 
 	/**
@@ -178,10 +182,13 @@ public class CustomItemVariant<T extends Module<T>, V extends CustomItem<T, V>, 
 
 	@Override
 	public void on_config_change() {
+		// Recipes are processed in on-config-change and not in on_disable() / on_enable(),
+		// as they could change even e.g. an item is disabled but the plugin is still
+		// enabled and was reloaded.
 		recipes.keySet().forEach(get_module().getServer()::removeRecipe);
 		recipes.clear();
 
-		if (variant().enabled()) {
+		if (enabled()) {
 			register_recipes();
 			recipes.values().forEach(get_module().getServer()::addRecipe);
 		}

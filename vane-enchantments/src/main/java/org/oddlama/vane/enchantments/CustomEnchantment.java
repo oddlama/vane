@@ -293,11 +293,16 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 
 	@Override
 	public void on_config_change() {
+		// Recipes are processed in on-config-change and not in on_disable() / on_enable(),
+		// as they could change even e.g. an item is disabled but the plugin is still
+		// enabled and was reloaded.
 		recipes.keySet().forEach(get_module().getServer()::removeRecipe);
 		recipes.clear();
 
-		register_recipes();
-		recipes.values().forEach(get_module().getServer()::addRecipe);
+		if (enabled()) {
+			register_recipes();
+			recipes.values().forEach(get_module().getServer()::addRecipe);
+		}
 
 		super.on_config_change();
 	}
