@@ -1,5 +1,4 @@
 *.sw?
-gradle
 env.sh
 .gradle
 .classpath
