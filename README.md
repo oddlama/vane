@@ -176,11 +176,11 @@ we need to to some preparation before we can compile vane.
 This needs to be done only once after cloning the repository, or when the minecraft version changes in the future.
 
 1. Compile spigot using their BuildTools.jar (you can stop compiling after spigot has finished remapping the inital minecraft.jar)
-2. In the directory `work/` you will find a file named similar to `work/bukkit-<checksum>-fields.csrg`. Copy it to the `external/` folder.
-2. Download md_5's `SpecialSource-...-shaded.jar` to the `external/` folder.
-3. Adjust the path to these files in `./remap_patched_paper_for_development.sh` and `./remap_plugins.sh`. Also set `sign=false` in `./remap_plugins.sh`.
-4. From any paper server copy `paper_server/cache/patched_{version}.jar` to `libs/` (create folder if necessary).
-5. Execute `./remap_patched_paper_for_development.sh`
+2. In the directory `work/` you will find a file named similar to `work/bukkit-<checksum>-members.csrg`. Copy it to the `external/` folder.
+3. Download md_5's `SpecialSource-...-shaded.jar` to the `external/` folder.
+4. Adjust the path to these files in `./remap_patched_paper_for_development.sh` and `./remap_plugins.sh`. Also set `sign=false` in `./remap_plugins.sh`.
+5. From any paper server copy `paper_server/versions/{version}/paper-{version}.jar` to `libs/patched_{version}.jar` (create folder if necessary).
+6. Execute `./remap_patched_paper_for_development.sh`
 
 #### Building
 

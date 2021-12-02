@@ -1,7 +1,7 @@
 #!/bin/bash
 
-specialsource="external/SpecialSource-1.10.0-shaded.jar"
-mapping="external/bukkit-e3c5450d-fields.csrg"
+specialsource="external/SpecialSource-1.11.0-shaded.jar"
+mapping="external/bukkit-8e9479b6-members.csrg"
 sign=true
 
 die() {

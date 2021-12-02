@@ -8,7 +8,7 @@ subprojects {
 
 	group 'org.oddlama.vane';
 	version '1.3.2';
-	sourceCompatibility = 11;
+	sourceCompatibility = 17;
 
 	repositories() {
 		mavenCentral();
@@ -46,8 +46,9 @@ configure(subprojects.findAll {it.name != 'vane-waterfall'}) {
 	dependencies {
 		// We need the full implementation with CraftBukkit and NMS to compile.
 		// Simply copy cache/patched_{..}.jar from a paper server into libs/.
-		//implementation name: 'patchedp_1.17';
-		implementation name: 'patched_1.17_remapped';
+		//implementation name: 'patchedp_1.18';
+		implementation name: 'patched_1.18_remapped';
+		compileOnly group: 'io.papermc.paper', name: 'paper-api', version: '1.18-R0.1-SNAPSHOT';
 	}
 }
 
@@ -59,7 +60,7 @@ configure(subprojects.findAll {it.name != 'vane-annotations' && it.name != 'vane
 	build.dependsOn copyJar;
 
 	dependencies {
-		implementation group: 'com.comphenix.protocol', name: 'ProtocolLib', version: '4.7.0-SNAPSHOT';
+		implementation group: 'com.comphenix.protocol', name: 'ProtocolLib', version: '4.8.0-SNAPSHOT';
 
 		compileOnly project(':vane-annotations');
 		annotationProcessor project(':vane-annotations');

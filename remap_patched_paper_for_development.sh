@@ -1,8 +1,8 @@
 #!/bin/bash
 
-specialsource="external/SpecialSource-1.10.0-shaded.jar"
-mapping="external/bukkit-e3c5450d-fields.csrg"
-paper_jar="libs/patched_1.17.jar"
+specialsource="external/SpecialSource-1.11.0-shaded.jar"
+mapping="external/bukkit-8e9479b6-members.csrg"
+paper_jar="libs/patched_1.18.jar"
 
 die() {
     echo "[1;31merror:[m $*" >&2

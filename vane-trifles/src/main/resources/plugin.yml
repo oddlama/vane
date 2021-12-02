@@ -10,5 +10,5 @@ depend: [vane-core, vane-enchantments]
 main: org.oddlama.vane.trifles.Trifles
 database: false
 
-api-version: 1.17
+api-version: 1.18
 load: STARTUP

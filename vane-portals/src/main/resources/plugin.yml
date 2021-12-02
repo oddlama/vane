@@ -11,5 +11,5 @@ softdepend: [dynmap]
 main: org.oddlama.vane.portals.Portals
 database: false
 
-api-version: 1.17
+api-version: 1.18
 load: STARTUP
