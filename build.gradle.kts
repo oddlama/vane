@@ -1,6 +1,6 @@
 plugins {
     `java-library`
-	id("com.diffplug.spotless") version "5.14.0"
+	id("com.diffplug.spotless") version "6.0.1"
 	id("io.papermc.paperweight.userdev") version "1.3.1"
 }
 
@@ -40,8 +40,10 @@ subprojects {
 
 	spotless {
 		java {
-			importOrder()
+			importOrder("java", "javax", "com", "net", "org", "")
 			removeUnusedImports()
+			trimTrailingWhitespace()
+			prettier(mapOf("prettier" to "2.5.0", "prettier-plugin-java" to "1.6.0")).config(mapOf("parser" to "java", "printWidth" to 120, "tabWidth" to 4))
 		}
 	}
 }
