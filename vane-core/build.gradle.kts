@@ -21,10 +21,4 @@ tasks {
 		relocate("org.reflections", "org.oddlama.vane.external.reflections")
 		relocate("org.json", "org.oddlama.vane.external.json")
 	}
-
-	copyJar {
-		from("shadowJar")
-		duplicatesStrategy = DuplicatesStrategy.INCLUDE
-		rename("(.*)-all.jar", "$1.jar")
-	}
 }

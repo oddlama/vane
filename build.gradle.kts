@@ -18,7 +18,7 @@ subprojects {
 	apply(plugin = "com.diffplug.spotless")
 
 	group = "org.oddlama.vane"
-	version = "1.3.2"
+	version = "1.4.0"
 
 	repositories() {
 		mavenCentral()
@@ -43,7 +43,7 @@ subprojects {
 			importOrder("java", "javax", "com", "net", "org", "")
 			removeUnusedImports()
 			trimTrailingWhitespace()
-			prettier(mapOf("prettier" to "2.5.0", "prettier-plugin-java" to "1.6.0")).config(mapOf("parser" to "java", "printWidth" to 120, "tabWidth" to 4))
+			prettier(mapOf("prettier" to "2.5.0", "prettier-plugin-java" to "1.6.0")).config(mapOf("parser" to "java", "printWidth" to 120, "tabWidth" to 4, "useTabs" to true))
 		}
 	}
 }
@@ -68,7 +68,7 @@ configure(subprojects.filter {
     !listOf("vane-annotations", "vane-waterfall").contains(it.name)
 }) {
 	tasks.create<Copy>("copyJar") {
-		from("jar")
+		from(tasks.reobfJar)
 		into("${project.rootProject.projectDir}/target")
 	}
 

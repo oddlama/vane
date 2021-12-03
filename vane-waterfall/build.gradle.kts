@@ -9,7 +9,7 @@ dependencies {
 }
 
 tasks.create<Copy>("copyJar") {
-	from("shadowJar")
+	from(tasks.shadowJar)
 	into("${project.rootProject.projectDir}/target")
 	duplicatesStrategy = DuplicatesStrategy.INCLUDE
 	rename("(.*)-all.jar", "$1.jar")
