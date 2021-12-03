@@ -27,7 +27,6 @@ import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-
 import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.portals.event.PortalActivateEvent;
@@ -42,11 +41,17 @@ import org.oddlama.vane.portals.event.PortalUnlinkConsoleEvent;
 import org.oddlama.vane.regions.region.RoleSetting;
 
 public class RegionRoleSettingEnforcer extends Listener<Regions> {
+
 	public RegionRoleSettingEnforcer(Context<Regions> context) {
 		super(context);
 	}
 
-	public boolean check_setting_at(final Location location, final Player player, final RoleSetting setting, final boolean check_against) {
+	public boolean check_setting_at(
+		final Location location,
+		final Player player,
+		final RoleSetting setting,
+		final boolean check_against
+	) {
 		final var region = get_module().region_at(location);
 		if (region == null) {
 			return false;
@@ -56,7 +61,12 @@ public class RegionRoleSettingEnforcer extends Listener<Regions> {
 		return group.get_role(player.getUniqueId()).get_setting(setting) == check_against;
 	}
 
-	public boolean check_setting_at(final Block block, final Player player, final RoleSetting setting, final boolean check_against) {
+	public boolean check_setting_at(
+		final Block block,
+		final Player player,
+		final RoleSetting setting,
+		final boolean check_against
+	) {
 		final var region = get_module().region_at(block);
 		if (region == null) {
 			return false;
@@ -90,35 +100,42 @@ public class RegionRoleSettingEnforcer extends Listener<Regions> {
 		switch (damaged.getType()) {
 			default:
 				return;
+			case ARMOR_STAND:
+				{
+					if (!(damager instanceof Player)) {
+						break;
+					}
 
-			case ARMOR_STAND: {
-				if (!(damager instanceof Player)) {
-					break;
-				}
-
-				final var player_damager = (Player)damager;
-				if (check_setting_at(damaged.getLocation().getBlock(), player_damager, RoleSetting.BUILD, false)) {
-					event.setCancelled(true);
-				}
-				return;
-			}
-
-			case ITEM_FRAME: {
-				if (!(damager instanceof Player)) {
-					break;
-				}
-
-				final var player_damager = (Player)damager;
-				final var item_frame = (ItemFrame)damaged;
-				final var item = item_frame.getItem();
-				if (item != null && item.getType() != Material.AIR) {
-					// This is a player taking the item out of an item-frame
-					if (check_setting_at(damaged.getLocation().getBlock(), player_damager, RoleSetting.CONTAINER, false)) {
+					final var player_damager = (Player) damager;
+					if (check_setting_at(damaged.getLocation().getBlock(), player_damager, RoleSetting.BUILD, false)) {
 						event.setCancelled(true);
 					}
+					return;
 				}
-				return;
-			}
+			case ITEM_FRAME:
+				{
+					if (!(damager instanceof Player)) {
+						break;
+					}
+
+					final var player_damager = (Player) damager;
+					final var item_frame = (ItemFrame) damaged;
+					final var item = item_frame.getItem();
+					if (item != null && item.getType() != Material.AIR) {
+						// This is a player taking the item out of an item-frame
+						if (
+							check_setting_at(
+								damaged.getLocation().getBlock(),
+								player_damager,
+								RoleSetting.CONTAINER,
+								false
+							)
+						) {
+							event.setCancelled(true);
+						}
+					}
+					return;
+				}
 		}
 	}
 
@@ -128,12 +145,12 @@ public class RegionRoleSettingEnforcer extends Listener<Regions> {
 		Player player = null;
 
 		if (remover instanceof Player) {
-			player = (Player)remover;
+			player = (Player) remover;
 		} else if (remover instanceof Projectile) {
-			final var projectile = (Projectile)remover;
+			final var projectile = (Projectile) remover;
 			final var shooter = projectile.getShooter();
 			if (shooter instanceof Player) {
-				player = (Player)shooter;
+				player = (Player) shooter;
 			}
 		}
 
@@ -194,26 +211,28 @@ public class RegionRoleSettingEnforcer extends Listener<Regions> {
 		}
 
 		switch (event.getAction()) {
-			default: return;
-			case PHYSICAL: {
-				if (Tag.PRESSURE_PLATES.isTagged(block.getType())) {
+			default:
+				return;
+			case PHYSICAL:
+				{
+					if (Tag.PRESSURE_PLATES.isTagged(block.getType())) {
+						if (check_setting_at(block, player, RoleSetting.USE, false)) {
+							event.setCancelled(true);
+						}
+					} else if (block.getType() == Material.TRIPWIRE) {
+						if (check_setting_at(block, player, RoleSetting.USE, false)) {
+							event.setCancelled(true);
+						}
+					}
+					return;
+				}
+			case RIGHT_CLICK_BLOCK:
+				{
 					if (check_setting_at(block, player, RoleSetting.USE, false)) {
 						event.setCancelled(true);
 					}
-				} else if (block.getType() == Material.TRIPWIRE) {
-					if (check_setting_at(block, player, RoleSetting.USE, false)) {
-						event.setCancelled(true);
-					}
+					return;
 				}
-				return;
-			}
-
-			case RIGHT_CLICK_BLOCK: {
-				if (check_setting_at(block, player, RoleSetting.USE, false)) {
-					event.setCancelled(true);
-				}
-				return;
-			}
 		}
 	}
 
@@ -231,7 +250,7 @@ public class RegionRoleSettingEnforcer extends Listener<Regions> {
 
 		final var holder = inventory.getHolder();
 		if (holder instanceof DoubleChest || holder instanceof Container || holder instanceof Minecart) {
-			if (check_setting_at(inventory.getLocation(), (Player)clicker, RoleSetting.CONTAINER, false)) {
+			if (check_setting_at(inventory.getLocation(), (Player) clicker, RoleSetting.CONTAINER, false)) {
 				event.setCancelled(true);
 			}
 		}
@@ -311,7 +330,10 @@ public class RegionRoleSettingEnforcer extends Listener<Regions> {
 		}
 
 		// Check permission on portal if any
-		if (event.getPortal() != null && check_setting_at(event.getPortal().spawn(), event.getPlayer(), RoleSetting.ADMIN, false)) {
+		if (
+			event.getPortal() != null &&
+			check_setting_at(event.getPortal().spawn(), event.getPlayer(), RoleSetting.ADMIN, false)
+		) {
 			event.setCancelled(true);
 			return;
 		}
@@ -378,7 +400,10 @@ public class RegionRoleSettingEnforcer extends Listener<Regions> {
 		}
 
 		// Check permission on target portal
-		if (event.getTarget() != null && check_setting_at(event.getTarget().spawn(), event.getPlayer(), RoleSetting.PORTAL, false)) {
+		if (
+			event.getTarget() != null &&
+			check_setting_at(event.getTarget().spawn(), event.getPlayer(), RoleSetting.PORTAL, false)
+		) {
 			event.setCancelled(true);
 			return;
 		}

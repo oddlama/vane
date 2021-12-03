@@ -13,26 +13,45 @@ import org.jetbrains.annotations.NotNull;
 import org.oddlama.vane.external.json.JSONObject;
 
 public class Style {
+
 	public static Object serialize(@NotNull final Object o) throws IOException {
-		final var style = (Style)o;
+		final var style = (Style) o;
 		final var json = new JSONObject();
 		json.put("key", to_json(NamespacedKey.class, style.key));
 		try {
-			json.put("active_materials",   to_json(Style.class.getDeclaredField("active_materials"),   style.active_materials));
-			json.put("inactive_materials", to_json(Style.class.getDeclaredField("inactive_materials"), style.inactive_materials));
-		} catch (NoSuchFieldException e) { throw new RuntimeException("Invalid field. This is a bug.", e); }
+			json.put(
+				"active_materials",
+				to_json(Style.class.getDeclaredField("active_materials"), style.active_materials)
+			);
+			json.put(
+				"inactive_materials",
+				to_json(Style.class.getDeclaredField("inactive_materials"), style.inactive_materials)
+			);
+		} catch (NoSuchFieldException e) {
+			throw new RuntimeException("Invalid field. This is a bug.", e);
+		}
 		return json;
 	}
 
 	@SuppressWarnings("unchecked")
 	public static Style deserialize(@NotNull final Object o) throws IOException {
-		final var json = (JSONObject)o;
+		final var json = (JSONObject) o;
 		final var style = new Style(null);
 		style.key = from_json(NamespacedKey.class, json.get("key"));
 		try {
-			style.active_materials   = (Map<PortalBlock.Type, Material>)from_json(Style.class.getDeclaredField("active_materials"),   json.get("active_materials"));
-			style.inactive_materials = (Map<PortalBlock.Type, Material>)from_json(Style.class.getDeclaredField("inactive_materials"), json.get("inactive_materials"));
-		} catch (NoSuchFieldException e) { throw new RuntimeException("Invalid field. This is a bug.", e); }
+			style.active_materials =
+				(Map<PortalBlock.Type, Material>) from_json(
+					Style.class.getDeclaredField("active_materials"),
+					json.get("active_materials")
+				);
+			style.inactive_materials =
+				(Map<PortalBlock.Type, Material>) from_json(
+					Style.class.getDeclaredField("inactive_materials"),
+					json.get("inactive_materials")
+				);
+		} catch (NoSuchFieldException e) {
+			throw new RuntimeException("Invalid field. This is a bug.", e);
+		}
 		return style;
 	}
 
@@ -73,7 +92,9 @@ public class Style {
 		}
 
 		if (!overwrite && map.containsKey(type)) {
-			throw new RuntimeException("Invalid style definition! PortalBlock.Type." + type + " was specified multiple times.");
+			throw new RuntimeException(
+				"Invalid style definition! PortalBlock.Type." + type + " was specified multiple times."
+			);
 		}
 		map.put(type, material);
 	}
@@ -82,32 +103,36 @@ public class Style {
 		// Checks if every key is set
 		for (final var type : PortalBlock.Type.values()) {
 			if (!active_materials.containsKey(type)) {
-				throw new RuntimeException("Invalid style definition! Active state for PortalBlock.Type." + type + " was not specified!");
+				throw new RuntimeException(
+					"Invalid style definition! Active state for PortalBlock.Type." + type + " was not specified!"
+				);
 			}
 			if (!inactive_materials.containsKey(type)) {
-				throw new RuntimeException("Invalid style definition! Inactive state for PortalBlock.Type." + type + " was not specified!");
+				throw new RuntimeException(
+					"Invalid style definition! Inactive state for PortalBlock.Type." + type + " was not specified!"
+				);
 			}
 		}
 	}
 
 	public static Style default_style() {
 		final var style = new Style(default_style_key());
-		style.set_material(true, PortalBlock.Type.BOUNDARY_1,  Material.OBSIDIAN);
-		style.set_material(true, PortalBlock.Type.BOUNDARY_2,  Material.CRYING_OBSIDIAN);
-		style.set_material(true, PortalBlock.Type.BOUNDARY_3,  Material.GOLD_BLOCK);
-		style.set_material(true, PortalBlock.Type.BOUNDARY_4,  Material.GILDED_BLACKSTONE);
-		style.set_material(true, PortalBlock.Type.BOUNDARY_5,  Material.EMERALD_BLOCK);
-		style.set_material(true, PortalBlock.Type.CONSOLE,     Material.ENCHANTING_TABLE);
-		style.set_material(true, PortalBlock.Type.ORIGIN,      Material.OBSIDIAN);
-		style.set_material(true, PortalBlock.Type.PORTAL,      Material.END_GATEWAY);
+		style.set_material(true, PortalBlock.Type.BOUNDARY_1, Material.OBSIDIAN);
+		style.set_material(true, PortalBlock.Type.BOUNDARY_2, Material.CRYING_OBSIDIAN);
+		style.set_material(true, PortalBlock.Type.BOUNDARY_3, Material.GOLD_BLOCK);
+		style.set_material(true, PortalBlock.Type.BOUNDARY_4, Material.GILDED_BLACKSTONE);
+		style.set_material(true, PortalBlock.Type.BOUNDARY_5, Material.EMERALD_BLOCK);
+		style.set_material(true, PortalBlock.Type.CONSOLE, Material.ENCHANTING_TABLE);
+		style.set_material(true, PortalBlock.Type.ORIGIN, Material.OBSIDIAN);
+		style.set_material(true, PortalBlock.Type.PORTAL, Material.END_GATEWAY);
 		style.set_material(false, PortalBlock.Type.BOUNDARY_1, Material.OBSIDIAN);
 		style.set_material(false, PortalBlock.Type.BOUNDARY_2, Material.CRYING_OBSIDIAN);
 		style.set_material(false, PortalBlock.Type.BOUNDARY_3, Material.GOLD_BLOCK);
 		style.set_material(false, PortalBlock.Type.BOUNDARY_4, Material.GILDED_BLACKSTONE);
 		style.set_material(false, PortalBlock.Type.BOUNDARY_5, Material.EMERALD_BLOCK);
-		style.set_material(false, PortalBlock.Type.CONSOLE,    Material.ENCHANTING_TABLE);
-		style.set_material(false, PortalBlock.Type.ORIGIN,     Material.OBSIDIAN);
-		style.set_material(false, PortalBlock.Type.PORTAL,     Material.AIR);
+		style.set_material(false, PortalBlock.Type.CONSOLE, Material.ENCHANTING_TABLE);
+		style.set_material(false, PortalBlock.Type.ORIGIN, Material.OBSIDIAN);
+		style.set_material(false, PortalBlock.Type.PORTAL, Material.AIR);
 		return style;
 	}
 

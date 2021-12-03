@@ -17,7 +17,6 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
-
 import org.oddlama.vane.annotation.config.ConfigBoolean;
 import org.oddlama.vane.annotation.config.ConfigInt;
 import org.oddlama.vane.annotation.config.ConfigString;
@@ -25,28 +24,46 @@ import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.module.Context;
 
 public class SpawnProtection extends Listener<Admin> {
+
 	private static final String PERMISSION_NAME = "vane.admin.bypass_spawn_protection";
-	private Permission permission = new Permission(PERMISSION_NAME, "Allow player to bypass spawn protection", PermissionDefault.FALSE);
+	private Permission permission = new Permission(
+		PERMISSION_NAME,
+		"Allow player to bypass spawn protection",
+		PermissionDefault.FALSE
+	);
 
 	@ConfigBoolean(def = true, desc = "Allow interaction events at spawn (buttons, levers, etc.).")
 	private boolean config_allow_interaction;
+
 	@ConfigInt(def = 64, min = 0, desc = "Radius to protect.")
 	private int config_radius;
+
 	@ConfigString(def = "world", desc = "The spawn world.")
 	private String config_world;
+
 	@ConfigBoolean(def = true, desc = "Use world's spawn location instead of the specified center coordinates.")
 	private boolean config_use_spawn_location;
+
 	@ConfigInt(def = 0, desc = "Center X coordinate.")
 	private int config_x;
+
 	@ConfigInt(def = 0, desc = "Center Z coordinate.")
 	private int config_z;
 
 	public SpawnProtection(Context<Admin> context) {
-		super(context.group_default_disabled("spawn_protection", "Enable spawn protection. Slightly more sophisticated than the vanilla spawn protection, if you need even more control, use regions. This will prevent anyone from modifying the spawn of the world if they don't have the permission '" + PERMISSION_NAME + "'."));
+		super(
+			context.group_default_disabled(
+				"spawn_protection",
+				"Enable spawn protection. Slightly more sophisticated than the vanilla spawn protection, if you need even more control, use regions. This will prevent anyone from modifying the spawn of the world if they don't have the permission '" +
+				PERMISSION_NAME +
+				"'."
+			)
+		);
 		get_module().register_permission(permission);
 	}
 
 	private Location spawn_center = null;
+
 	@Override
 	public void on_config_change() {
 		spawn_center = null;
@@ -81,7 +98,7 @@ public class SpawnProtection extends Listener<Admin> {
 			return false;
 		}
 
-		return !((Player)entity).hasPermission(permission);
+		return !((Player) entity).hasPermission(permission);
 	}
 
 	/* ************************ blocks ************************ */
@@ -148,7 +165,11 @@ public class SpawnProtection extends Listener<Admin> {
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void on_player_interact(PlayerInteractEvent event) {
-		if (event.getClickedBlock() != null && !config_allow_interaction && deny_modify_spawn(event.getClickedBlock(), event.getPlayer())) {
+		if (
+			event.getClickedBlock() != null &&
+			!config_allow_interaction &&
+			deny_modify_spawn(event.getClickedBlock(), event.getPlayer())
+		) {
 			event.setCancelled(true);
 		}
 	}

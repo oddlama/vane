@@ -21,7 +21,9 @@ import org.oddlama.vane.core.module.ModuleComponent;
 
 @VaneCommand
 public abstract class Command<T extends Module<T>> extends ModuleComponent<T> {
+
 	public class BukkitCommand extends org.bukkit.command.Command implements PluginIdentifiableCommand {
+
 		public BukkitCommand(String name) {
 			super(name);
 			setPermission(Command.this.permission.getName());
@@ -55,13 +57,16 @@ public abstract class Command<T extends Module<T>> extends ModuleComponent<T> {
 			try {
 				return root_param.check_accept(sender, prepend(args, alias), 0).apply(Command.this, sender);
 			} catch (Exception e) {
-				sender.sendMessage("§cAn unexpected error occurred. Please examine the console log and/or notify a server administator.");
+				sender.sendMessage(
+					"§cAn unexpected error occurred. Please examine the console log and/or notify a server administator."
+				);
 				throw e;
 			}
 		}
 
 		@Override
-		public List<String> tabComplete(CommandSender sender, String alias, String[] args) throws IllegalArgumentException {
+		public List<String> tabComplete(CommandSender sender, String alias, String[] args)
+			throws IllegalArgumentException {
 			// Don't allow information exfiltration!
 			if (!sender.hasPermission(getPermission())) {
 				return Collections.emptyList();
@@ -70,16 +75,23 @@ public abstract class Command<T extends Module<T>> extends ModuleComponent<T> {
 			try {
 				return root_param.build_completions(sender, prepend(args, alias), 0);
 			} catch (Exception e) {
-				sender.sendMessage("§cAn unexpected error occurred. Please examine the console log and/or notify a server administator.");
+				sender.sendMessage(
+					"§cAn unexpected error occurred. Please examine the console log and/or notify a server administator."
+				);
 				throw e;
 			}
 		}
 	}
 
 	// Language
-	@LangMessage public TranslatedMessage lang_usage;
-	@LangMessage public TranslatedMessage lang_description;
-	@LangMessage public TranslatedMessage lang_help;
+	@LangMessage
+	public TranslatedMessage lang_usage;
+
+	@LangMessage
+	public TranslatedMessage lang_description;
+
+	@LangMessage
+	public TranslatedMessage lang_help;
 
 	// Variables
 	private String name;
@@ -91,14 +103,18 @@ public abstract class Command<T extends Module<T>> extends ModuleComponent<T> {
 
 	public Command(Context<T> context) {
 		super(null);
-
 		// Make namespace
 		name = getClass().getAnnotation(Name.class).value();
 		context = context.group("command_" + name, "Enable command " + name);
 		set_context(context);
 
 		// Register permission
-		permission = new Permission("vane." + get_module().get_name() + ".commands." + name, "Allow access to /" + name, PermissionDefault.FALSE);
+		permission =
+			new Permission(
+				"vane." + get_module().get_name() + ".commands." + name,
+				"Allow access to /" + name,
+				PermissionDefault.FALSE
+			);
 		get_module().register_permission(permission);
 		permission.addParent(get_module().permission_command_catchall_module, true);
 		permission.addParent(get_module().core.permission_command_catchall, true);

@@ -24,7 +24,9 @@ import org.oddlama.vane.trifles.Trifles;
 
 @VaneItem(name = "home_scroll")
 public class HomeScroll extends CustomItem<Trifles, HomeScroll> {
+
 	public static class HomeScrollVariant extends CustomItemVariant<Trifles, HomeScroll, SingleVariant> {
+
 		@ConfigInt(def = 10000, min = 0, desc = "Cooldown in milliseconds until another scroll can be used.")
 		private int config_cooldown;
 
@@ -34,12 +36,15 @@ public class HomeScroll extends CustomItem<Trifles, HomeScroll> {
 
 		@Override
 		public void register_recipes() {
-			final var ancient_tome_of_knowledge = CustomItem.<AncientTomeOfKnowledge.AncientTomeOfKnowledgeVariant>variant_of(AncientTomeOfKnowledge.class, BookVariant.BOOK).item();
+			final var ancient_tome_of_knowledge = CustomItem
+				.<AncientTomeOfKnowledge.AncientTomeOfKnowledgeVariant>variant_of(
+					AncientTomeOfKnowledge.class,
+					BookVariant.BOOK
+				)
+				.item();
 
 			final var recipe = new ShapedRecipe(recipe_key(), item())
-				.shape("pip",
-				       "cbe",
-				       "plp")
+				.shape("pip", "cbe", "plp")
 				.setIngredient('b', ancient_tome_of_knowledge)
 				.setIngredient('p', Material.MAP)
 				.setIngredient('i', new MaterialChoice(Tag.BEDS))
@@ -55,7 +60,9 @@ public class HomeScroll extends CustomItem<Trifles, HomeScroll> {
 			return Material.CARROT_ON_A_STICK;
 		}
 
-		public int cooldown() { return config_cooldown; }
+		public int cooldown() {
+			return config_cooldown;
+		}
 	}
 
 	public HomeScroll(Context<Trifles> context) {
@@ -84,8 +91,10 @@ public class HomeScroll extends CustomItem<Trifles, HomeScroll> {
 		event.setUseItemInHand(Event.Result.DENY);
 
 		switch (event.getAction()) {
-			default: return;
-			case RIGHT_CLICK_AIR: break;
+			default:
+				return;
+			case RIGHT_CLICK_AIR:
+				break;
 			case RIGHT_CLICK_BLOCK:
 				// Require non-cancelled state (so it won't trigger for block-actions like chests)
 				// But allow if the clicked block can't be interacted with in the first place
@@ -113,7 +122,7 @@ public class HomeScroll extends CustomItem<Trifles, HomeScroll> {
 		if (get_module().teleport_from_scroll(player, current_location, to_location)) {
 			// Set cooldown
 			final var cooldown = ms_to_ticks(variant.cooldown());
-			player.setCooldown(variant.base(), (int)cooldown);
+			player.setCooldown(variant.base(), (int) cooldown);
 
 			// Damage item
 			damage_item(player, item, 1);

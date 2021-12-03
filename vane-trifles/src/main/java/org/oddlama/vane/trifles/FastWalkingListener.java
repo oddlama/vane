@@ -3,11 +3,12 @@ package org.oddlama.vane.trifles;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerMoveEvent;
-
 import org.oddlama.vane.core.Listener;
 
 public class FastWalkingListener extends Listener<Trifles> {
+
 	FastWalkingGroup fast_walking;
+
 	public FastWalkingListener(FastWalkingGroup context) {
 		super(context);
 		this.fast_walking = context;

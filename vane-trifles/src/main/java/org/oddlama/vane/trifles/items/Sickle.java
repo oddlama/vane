@@ -35,6 +35,7 @@ import org.oddlama.vane.util.BlockUtil;
 
 @VaneItem(name = "sickle")
 public class Sickle extends CustomItem<Trifles, Sickle> {
+
 	public static enum Variant implements ItemVariantEnum {
 		WOODEN,
 		STONE,
@@ -43,16 +44,31 @@ public class Sickle extends CustomItem<Trifles, Sickle> {
 		DIAMOND,
 		NETHERITE;
 
-		@Override public String prefix() { return name().toLowerCase(); }
-		@Override public boolean enabled() { return true; }
+		@Override
+		public String prefix() {
+			return name().toLowerCase();
+		}
+
+		@Override
+		public boolean enabled() {
+			return true;
+		}
 	}
 
 	public static class SickleVariant extends CustomItemVariant<Trifles, Sickle, Variant> {
+
 		@ConfigDouble(def = Double.NaN, desc = "Attack damage modifier.")
 		public double config_attack_damage;
+
 		@ConfigDouble(def = Double.NaN, desc = "Attack speed modifier.")
 		public double config_attack_speed;
-		@ConfigInt(def = -1, min = 0, max = BlockUtil.NEAREST_RELATIVE_BLOCKS_FOR_RADIUS_MAX, desc = "Harvesting radius.")
+
+		@ConfigInt(
+			def = -1,
+			min = 0,
+			max = BlockUtil.NEAREST_RELATIVE_BLOCKS_FOR_RADIUS_MAX,
+			desc = "Harvesting radius."
+		)
 		public int config_harvest_radius;
 
 		public SickleVariant(Sickle parent, Variant variant) {
@@ -67,18 +83,27 @@ public class Sickle extends CustomItem<Trifles, Sickle> {
 			}
 
 			final var recipe = new ShapedRecipe(recipe_key(), item())
-				.shape(" mm",
-					   "  m",
-					   " s ")
+				.shape(" mm", "  m", " s ")
 				.setIngredient('s', Material.STICK);
 
 			switch (variant()) {
-				case WOODEN:    recipe.setIngredient('m', new MaterialChoice(Tag.PLANKS)); break;
-				case STONE:     recipe.setIngredient('m', new MaterialChoice(Tag.ITEMS_STONE_TOOL_MATERIALS)); break;
-				case IRON:      recipe.setIngredient('m', Material.IRON_INGOT); break;
-				case GOLDEN:    recipe.setIngredient('m', Material.GOLD_INGOT); break;
-				case DIAMOND:   recipe.setIngredient('m', Material.DIAMOND); break;
-				case NETHERITE: /* Can't happen */ break;
+				case WOODEN:
+					recipe.setIngredient('m', new MaterialChoice(Tag.PLANKS));
+					break;
+				case STONE:
+					recipe.setIngredient('m', new MaterialChoice(Tag.ITEMS_STONE_TOOL_MATERIALS));
+					break;
+				case IRON:
+					recipe.setIngredient('m', Material.IRON_INGOT);
+					break;
+				case GOLDEN:
+					recipe.setIngredient('m', Material.GOLD_INGOT);
+					break;
+				case DIAMOND:
+					recipe.setIngredient('m', Material.DIAMOND);
+					break;
+				case NETHERITE:
+					/* Can't happen */break;
 			}
 
 			add_recipe(recipe);
@@ -87,57 +112,97 @@ public class Sickle extends CustomItem<Trifles, Sickle> {
 		@Override
 		public Material base() {
 			switch (variant()) {
-				default:        throw new RuntimeException("Missing variant case. This is a bug.");
-				case WOODEN:    return Material.WOODEN_HOE;
-				case STONE:     return Material.STONE_HOE;
-				case IRON:      return Material.IRON_HOE;
-				case GOLDEN:    return Material.GOLDEN_HOE;
-				case DIAMOND:   return Material.DIAMOND_HOE;
-				case NETHERITE: return Material.NETHERITE_HOE;
+				default:
+					throw new RuntimeException("Missing variant case. This is a bug.");
+				case WOODEN:
+					return Material.WOODEN_HOE;
+				case STONE:
+					return Material.STONE_HOE;
+				case IRON:
+					return Material.IRON_HOE;
+				case GOLDEN:
+					return Material.GOLDEN_HOE;
+				case DIAMOND:
+					return Material.DIAMOND_HOE;
+				case NETHERITE:
+					return Material.NETHERITE_HOE;
 			}
 		}
 
 		public double config_attack_damage_def() {
 			switch (variant()) {
-				default:        throw new RuntimeException("Missing variant case. This is a bug.");
-				case WOODEN:    return 2.0;
-				case STONE:     return 3.0;
-				case IRON:      return 4.0;
-				case GOLDEN:    return 3.0;
-				case DIAMOND:   return 5.0;
-				case NETHERITE: return 6.0;
+				default:
+					throw new RuntimeException("Missing variant case. This is a bug.");
+				case WOODEN:
+					return 2.0;
+				case STONE:
+					return 3.0;
+				case IRON:
+					return 4.0;
+				case GOLDEN:
+					return 3.0;
+				case DIAMOND:
+					return 5.0;
+				case NETHERITE:
+					return 6.0;
 			}
 		}
 
 		public double config_attack_speed_def() {
 			switch (variant()) {
-				default:        throw new RuntimeException("Missing variant case. This is a bug.");
-				case WOODEN:    return 1.0;
-				case STONE:     return 2.0;
-				case IRON:      return 3.0;
-				case GOLDEN:    return 5.0;
-				case DIAMOND:   return 4.0;
-				case NETHERITE: return 4.0;
+				default:
+					throw new RuntimeException("Missing variant case. This is a bug.");
+				case WOODEN:
+					return 1.0;
+				case STONE:
+					return 2.0;
+				case IRON:
+					return 3.0;
+				case GOLDEN:
+					return 5.0;
+				case DIAMOND:
+					return 4.0;
+				case NETHERITE:
+					return 4.0;
 			}
 		}
 
 		public int config_harvest_radius_def() {
 			switch (variant()) {
-				default:        throw new RuntimeException("Missing variant case. This is a bug.");
-				case WOODEN:    return 1;
-				case STONE:     return 1;
-				case IRON:      return 2;
-				case GOLDEN:    return 3;
-				case DIAMOND:   return 2;
-				case NETHERITE: return 2;
+				default:
+					throw new RuntimeException("Missing variant case. This is a bug.");
+				case WOODEN:
+					return 1;
+				case STONE:
+					return 1;
+				case IRON:
+					return 2;
+				case GOLDEN:
+					return 3;
+				case DIAMOND:
+					return 2;
+				case NETHERITE:
+					return 2;
 			}
 		}
 
 		@Override
 		public ItemStack modify_item_stack(ItemStack item) {
 			final var meta = item.getItemMeta();
-			final var modifier_damage = new AttributeModifier(MODIFIER_UUID_GENERIC_ATTACK_DAMAGE, "Tool damage", config_attack_damage, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
-			final var modifier_speed = new AttributeModifier(MODIFIER_UUID_GENERIC_ATTACK_SPEED, "Tool speed", config_attack_speed, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
+			final var modifier_damage = new AttributeModifier(
+				MODIFIER_UUID_GENERIC_ATTACK_DAMAGE,
+				"Tool damage",
+				config_attack_damage,
+				AttributeModifier.Operation.ADD_NUMBER,
+				EquipmentSlot.HAND
+			);
+			final var modifier_speed = new AttributeModifier(
+				MODIFIER_UUID_GENERIC_ATTACK_SPEED,
+				"Tool speed",
+				config_attack_speed,
+				AttributeModifier.Operation.ADD_NUMBER,
+				EquipmentSlot.HAND
+			);
 			meta.removeAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, modifier_damage);
 			meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, modifier_damage);
 			meta.removeAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, modifier_speed);
@@ -197,9 +262,11 @@ public class Sickle extends CustomItem<Trifles, Sickle> {
 
 		// Damage item if we harvested at least one plant
 		if (total_harvested > 0) {
-			damage_item(player, item, 1 + (int)(0.25 * total_harvested));
+			damage_item(player, item, 1 + (int) (0.25 * total_harvested));
 			swing_arm(player, event.getHand());
-			root_block.getWorld().playSound(root_block.getLocation(), Sound.ITEM_HOE_TILL, SoundCategory.BLOCKS, 1.0f, 2.0f);
+			root_block
+				.getWorld()
+				.playSound(root_block.getLocation(), Sound.ITEM_HOE_TILL, SoundCategory.BLOCKS, 1.0f, 2.0f);
 		}
 	}
 }

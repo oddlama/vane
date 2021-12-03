@@ -8,11 +8,18 @@ public interface Consumer6<T1, T2, T3, T4, T5, T6> extends ErasedFunctor, Generi
 
 	@Override
 	@SuppressWarnings("unchecked")
-	default public Object invoke(List<Object> args) {
+	public default Object invoke(List<Object> args) {
 		if (args.size() != 6) {
 			throw new IllegalArgumentException("Functor needs 6 arguments but got " + args.size() + " arguments");
 		}
-		apply((T1)args.get(0), (T2)args.get(1), (T3)args.get(2), (T4)args.get(3), (T5)args.get(4), (T6)args.get(5));
+		apply(
+			(T1) args.get(0),
+			(T2) args.get(1),
+			(T3) args.get(2),
+			(T4) args.get(3),
+			(T5) args.get(4),
+			(T6) args.get(5)
+		);
 		return null;
 	}
 }

@@ -1,11 +1,9 @@
 package org.oddlama.vane.admin.commands;
 
 import java.util.List;
-
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
 import org.oddlama.vane.admin.Admin;
 import org.oddlama.vane.annotation.command.Name;
 import org.oddlama.vane.core.command.Command;
@@ -13,6 +11,7 @@ import org.oddlama.vane.core.module.Context;
 
 @Name("weather")
 public class Weather extends Command<Admin> {
+
 	public enum WeatherValue {
 		clear(false, false),
 		sun(false, false),
@@ -21,18 +20,23 @@ public class Weather extends Command<Admin> {
 
 		private boolean is_storm;
 		private boolean is_thunder;
+
 		private WeatherValue(boolean is_storm, boolean is_thunder) {
 			this.is_storm = is_storm;
 			this.is_thunder = is_thunder;
 		}
 
-		public boolean storm() { return is_storm; }
-		public boolean thunder() { return is_thunder; }
+		public boolean storm() {
+			return is_storm;
+		}
+
+		public boolean thunder() {
+			return is_thunder;
+		}
 	}
 
 	public Weather(Context<Admin> context) {
 		super(context);
-
 		// Add help
 		params().fixed("help").ignore_case().exec(this::print_help);
 		// Command parameters

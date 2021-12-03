@@ -23,21 +23,39 @@ import org.oddlama.vane.util.Nms;
 
 @VaneModule(name = "bedtime", bstats = 8639, config_version = 2, lang_version = 2, storage_version = 1)
 public class Bedtime extends Module<Bedtime> {
+
 	// One set of sleeping players per world, to keep track
 	private HashMap<UUID, HashSet<UUID>> world_sleepers = new HashMap<>();
 
 	// Configuration
-	@ConfigDouble(def = 0.5, min = 0.0, max = 1.0, desc = "The percentage of sleeping players required to advance time.")
+	@ConfigDouble(
+		def = 0.5,
+		min = 0.0,
+		max = 1.0,
+		desc = "The percentage of sleeping players required to advance time."
+	)
 	double config_sleep_threshold;
-	@ConfigLong(def = 1000, min = 0, max = 12000, desc = "The target time in ticks to advance to. 1000 is just after sunrise.")
+
+	@ConfigLong(
+		def = 1000,
+		min = 0,
+		max = 12000,
+		desc = "The target time in ticks to advance to. 1000 is just after sunrise."
+	)
 	long config_target_time;
+
 	@ConfigLong(def = 100, min = 0, max = 1200, desc = "The interpolation time in ticks for a smooth change of time.")
 	long config_interpolation_ticks;
 
 	// Language
-	@LangMessage private TranslatedMessage lang_player_bed_enter;
-	@LangMessage private TranslatedMessage lang_player_bed_leave;
-	@LangMessage private TranslatedMessage lang_sleep_success;
+	@LangMessage
+	private TranslatedMessage lang_player_bed_enter;
+
+	@LangMessage
+	private TranslatedMessage lang_player_bed_leave;
+
+	@LangMessage
+	private TranslatedMessage lang_sleep_success;
 
 	public BedtimeDynmapLayer dynmap_layer;
 
@@ -47,11 +65,14 @@ public class Bedtime extends Module<Bedtime> {
 
 	public void start_check_world_task(final World world) {
 		if (enough_players_sleeping(world)) {
-			schedule_task(() -> {
-				check_world_now(world);
-			// Subtract two ticks so this runs one tick before minecraft would
-			// advance time (if all players are asleep), which would effectively cancel the task.
-			}, 100 - 2);
+			schedule_task(
+				() -> {
+					check_world_now(world);
+					// Subtract two ticks so this runs one tick before minecraft would
+					// advance time (if all players are asleep), which would effectively cancel the task.
+				},
+				100 - 2
+			);
 		}
 	}
 
@@ -73,11 +94,15 @@ public class Bedtime extends Module<Bedtime> {
 		reset_sleepers(world);
 
 		// Wakeup players as if they were actually sleeping through the night
-		world.getPlayers().stream().filter(Player::isSleeping).forEach(p -> {
-			// skipSleepTimer = false (-> set sleepCounter to 100)
-			// updateSleepingPlayers = false
-			Nms.get_player(p).stopSleepInBed(false, false);
-		});
+		world
+			.getPlayers()
+			.stream()
+			.filter(Player::isSleeping)
+			.forEach(p -> {
+				// skipSleepTimer = false (-> set sleepCounter to 100)
+				// updateSleepingPlayers = false
+				Nms.get_player(p).stopSleepInBed(false, false);
+			});
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -131,11 +156,9 @@ public class Bedtime extends Module<Bedtime> {
 			return 0.0;
 		}
 
-		final var total = world.getPlayers().stream()
-			.filter(p -> p.getGameMode() != GameMode.SPECTATOR)
-			.count();
+		final var total = world.getPlayers().stream().filter(p -> p.getGameMode() != GameMode.SPECTATOR).count();
 
-		return (double)count_sleeping / total;
+		return (double) count_sleeping / total;
 	}
 
 	private boolean enough_players_sleeping(final World world) {

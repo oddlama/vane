@@ -1,11 +1,9 @@
 package org.oddlama.vane.permissions.commands;
 
 import java.util.Collections;
-
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.PermissionDefault;
-
 import org.oddlama.vane.annotation.command.Aliases;
 import org.oddlama.vane.annotation.command.Name;
 import org.oddlama.vane.annotation.lang.LangMessage;
@@ -15,25 +13,50 @@ import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.permissions.Permissions;
 
 @Name("permission")
-@Aliases({"perm"})
+@Aliases({ "perm" })
 public class Permission extends Command<Permissions> {
-	@LangMessage private TranslatedMessage lang_list_empty;
-	@LangMessage private TranslatedMessage lang_list_header_groups;
-	@LangMessage private TranslatedMessage lang_list_header_permissions;
-	@LangMessage private TranslatedMessage lang_list_header_player_groups;
-	@LangMessage private TranslatedMessage lang_list_header_player_permissions;
-	@LangMessage private TranslatedMessage lang_list_header_group_permissions;
-	@LangMessage private TranslatedMessage lang_list_player_offline;
-	@LangMessage private TranslatedMessage lang_list_group;
-	@LangMessage private TranslatedMessage lang_list_permission;
-	@LangMessage private TranslatedMessage lang_group_assigned;
-	@LangMessage private TranslatedMessage lang_group_removed;
-	@LangMessage private TranslatedMessage lang_group_already_assigned;
-	@LangMessage private TranslatedMessage lang_group_not_assigned;
+
+	@LangMessage
+	private TranslatedMessage lang_list_empty;
+
+	@LangMessage
+	private TranslatedMessage lang_list_header_groups;
+
+	@LangMessage
+	private TranslatedMessage lang_list_header_permissions;
+
+	@LangMessage
+	private TranslatedMessage lang_list_header_player_groups;
+
+	@LangMessage
+	private TranslatedMessage lang_list_header_player_permissions;
+
+	@LangMessage
+	private TranslatedMessage lang_list_header_group_permissions;
+
+	@LangMessage
+	private TranslatedMessage lang_list_player_offline;
+
+	@LangMessage
+	private TranslatedMessage lang_list_group;
+
+	@LangMessage
+	private TranslatedMessage lang_list_permission;
+
+	@LangMessage
+	private TranslatedMessage lang_group_assigned;
+
+	@LangMessage
+	private TranslatedMessage lang_group_removed;
+
+	@LangMessage
+	private TranslatedMessage lang_group_already_assigned;
+
+	@LangMessage
+	private TranslatedMessage lang_group_not_assigned;
 
 	public Permission(Context<Permissions> context) {
 		super(context);
-
 		// Add help
 		params().fixed("help").ignore_case().exec(this::print_help);
 
@@ -49,38 +72,54 @@ public class Permission extends Command<Permissions> {
 		var permissions = list.fixed("permissions").ignore_case();
 		permissions.exec(this::list_permissions);
 		permissions.choose_any_player().exec(this::list_permissions_for_player);
-		permissions.choice("permission_group",
-					sender -> get_module().permission_groups.keySet(),
-					(sender, g) -> g,
-					(sender, str) -> get_module().permission_groups.containsKey(str) ? str : null)
+		permissions
+			.choice(
+				"permission_group",
+				sender -> get_module().permission_groups.keySet(),
+				(sender, g) -> g,
+				(sender, str) -> get_module().permission_groups.containsKey(str) ? str : null
+			)
 			.exec(this::list_permissions_for_group);
 
 		// add group to player
-		params().fixed("add").ignore_case()
+		params()
+			.fixed("add")
+			.ignore_case()
 			.choose_any_player()
-			.choice("permission_group",
-					sender -> get_module().permission_groups.keySet(),
-					(sender, g) -> g,
-					(sender, str) -> get_module().permission_groups.containsKey(str) ? str : null)
+			.choice(
+				"permission_group",
+				sender -> get_module().permission_groups.keySet(),
+				(sender, g) -> g,
+				(sender, str) -> get_module().permission_groups.containsKey(str) ? str : null
+			)
 			.exec(this::add_player_to_group);
 
 		// remove group from player
-		params().fixed("remove").ignore_case()
+		params()
+			.fixed("remove")
+			.ignore_case()
 			.choose_any_player()
-			.choice("permission_group",
-					sender -> get_module().permission_groups.keySet(),
-					(sender, g) -> g,
-					(sender, str) -> get_module().permission_groups.containsKey(str) ? str : null)
+			.choice(
+				"permission_group",
+				sender -> get_module().permission_groups.keySet(),
+				(sender, g) -> g,
+				(sender, str) -> get_module().permission_groups.containsKey(str) ? str : null
+			)
 			.exec(this::remove_player_from_group);
 	}
 
 	private String permission_default_value_color_code(PermissionDefault def) {
 		switch (def) {
-			default:     return "§6";
-			case FALSE:  return "§c";
-			case NOT_OP: return "§5";
-			case OP:     return "§b";
-			case TRUE:   return "§a";
+			default:
+				return "§6";
+			case FALSE:
+				return "§c";
+			case NOT_OP:
+				return "§5";
+			case OP:
+				return "§b";
+			case TRUE:
+				return "§a";
 		}
 	}
 
@@ -90,7 +129,8 @@ public class Permission extends Command<Permissions> {
 
 	private void list_groups(CommandSender sender) {
 		lang_list_header_groups.send(sender);
-		get_module().permission_groups.keySet()
+		get_module()
+			.permission_groups.keySet()
 			.stream()
 			.sorted((a, b) -> a.compareTo(b))
 			.forEach(group -> {
@@ -100,14 +140,19 @@ public class Permission extends Command<Permissions> {
 
 	private void list_permissions(CommandSender sender) {
 		lang_list_header_permissions.send(sender);
-		get_module().getServer().getPluginManager().getPermissions().stream()
+		get_module()
+			.getServer()
+			.getPluginManager()
+			.getPermissions()
+			.stream()
 			.sorted((a, b) -> a.getName().compareTo(b.getName()))
 			.forEach(perm -> {
-				lang_list_permission.send(sender,
-							"§d" + perm.getName(),
-							permission_default_value_color_code(perm.getDefault())
-								+ perm.getDefault().toString().toLowerCase(),
-							perm.getDescription());
+				lang_list_permission.send(
+					sender,
+					"§d" + perm.getName(),
+					permission_default_value_color_code(perm.getDefault()) + perm.getDefault().toString().toLowerCase(),
+					perm.getDescription()
+				);
 			});
 	}
 
@@ -131,20 +176,23 @@ public class Permission extends Command<Permissions> {
 			if (effective_permissions.isEmpty()) {
 				lang_list_empty.send(sender);
 			} else {
-				player.getEffectivePermissions()
+				player
+					.getEffectivePermissions()
 					.stream()
 					.sorted((a, b) -> a.getPermission().compareTo(b.getPermission()))
 					.forEach(att -> {
 						var perm = get_module().getServer().getPluginManager().getPermission(att.getPermission());
 						if (perm == null) {
-							get_module().log.warning("Encountered unregistered permission '" + att.getPermission() + "'");
+							get_module()
+								.log.warning("Encountered unregistered permission '" + att.getPermission() + "'");
 							return;
 						}
-						lang_list_permission.send(sender,
+						lang_list_permission.send(
+							sender,
 							"§d" + perm.getName(),
-							permission_value_color_code(att.getValue())
-								+ String.valueOf(att.getValue()),
-							perm.getDescription());
+							permission_value_color_code(att.getValue()) + String.valueOf(att.getValue()),
+							perm.getDescription()
+						);
 					});
 			}
 		}
@@ -155,17 +203,19 @@ public class Permission extends Command<Permissions> {
 			var perm = get_module().getServer().getPluginManager().getPermission(p);
 			if (perm == null) {
 				get_module().log.warning("Use of unregistered permission '" + p + "' might have unintended effects.");
-				lang_list_permission.send(sender,
-							"§d" + p,
-							permission_value_color_code(true)
-								+ String.valueOf(true),
-							"");
+				lang_list_permission.send(
+					sender,
+					"§d" + p,
+					permission_value_color_code(true) + String.valueOf(true),
+					""
+				);
 			} else {
-				lang_list_permission.send(sender,
-							"§d" + perm.getName(),
-							permission_value_color_code(true)
-								+ String.valueOf(true),
-							perm.getDescription());
+				lang_list_permission.send(
+					sender,
+					"§d" + perm.getName(),
+					permission_value_color_code(true) + String.valueOf(true),
+					perm.getDescription()
+				);
 			}
 		}
 	}

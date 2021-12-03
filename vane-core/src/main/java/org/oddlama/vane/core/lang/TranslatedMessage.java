@@ -1,17 +1,16 @@
 package org.oddlama.vane.core.lang;
 
 import java.util.ArrayList;
-
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.ComponentLike;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.oddlama.vane.core.module.Module;
 
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.ComponentLike;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-
 public class TranslatedMessage {
+
 	private Module<?> module;
 	private String key;
 	private String default_translation;
@@ -22,17 +21,22 @@ public class TranslatedMessage {
 		this.default_translation = default_translation;
 	}
 
-	public String key() { return key; }
+	public String key() {
+		return key;
+	}
+
 	public String str(Object... args) {
 		try {
 			final var list = new Object[args.length];
 			for (int i = 0; i < args.length; ++i) {
 				if (args[i] instanceof Component) {
-					list[i] = LegacyComponentSerializer.legacySection().serialize((Component)args[i]);
+					list[i] = LegacyComponentSerializer.legacySection().serialize((Component) args[i]);
 				} else if (args[i] instanceof String) {
 					list[i] = args[i];
 				} else {
-					throw new RuntimeException("Error while formatting message '" + key() + "', invalid argument to str() serializer" + args[i]);
+					throw new RuntimeException(
+						"Error while formatting message '" + key() + "', invalid argument to str() serializer" + args[i]
+					);
 				}
 			}
 			return String.format(default_translation, list);
@@ -53,9 +57,9 @@ public class TranslatedMessage {
 		final var list = new ArrayList<ComponentLike>();
 		for (final var o : args) {
 			if (o instanceof ComponentLike) {
-				list.add((ComponentLike)o);
+				list.add((ComponentLike) o);
 			} else if (o instanceof String) {
-				list.add(LegacyComponentSerializer.legacySection().deserialize((String)o));
+				list.add(LegacyComponentSerializer.legacySection().deserialize((String) o));
 			} else {
 				throw new RuntimeException("Error while formatting message '" + key() + "', got invalid argument " + o);
 			}

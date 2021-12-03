@@ -4,18 +4,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
-
 import org.oddlama.vane.core.functional.Consumer2;
 
 public class LootTable {
+
 	private Random random = new Random();
 	private Map<NamespacedKey, LootTableEntry> possible_loot = new HashMap<>();
 
-	public LootTable() {
-	}
+	public LootTable() {}
 
 	public LootTable put(final NamespacedKey key, final LootTableEntry entry) {
 		possible_loot.put(key, entry);
@@ -31,6 +29,7 @@ public class LootTable {
 	}
 
 	public static class LootTableEntry {
+
 		private double chance;
 		private Consumer2<List<ItemStack>, Random> generator;
 
@@ -43,16 +42,19 @@ public class LootTable {
 		}
 
 		private LootTableEntry(double chance, final ItemStack item, int amount_min, int amount_max) {
-			this(chance, (list, random) -> {
-				final var i = item.clone();
-				final var amount = random.nextInt(amount_max - amount_min + 1) + amount_min;
-				if (amount < 1) {
-					return;
-				}
+			this(
+				chance,
+				(list, random) -> {
+					final var i = item.clone();
+					final var amount = random.nextInt(amount_max - amount_min + 1) + amount_min;
+					if (amount < 1) {
+						return;
+					}
 
-				i.setAmount(amount);
-				list.add(i);
-			});
+					i.setAmount(amount);
+					list.add(i);
+				}
+			);
 		}
 
 		public LootTableEntry(double chance, Consumer2<List<ItemStack>, Random> generator) {

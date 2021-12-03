@@ -1,10 +1,10 @@
 package org.oddlama.vane.core.command.check;
 
 import org.bukkit.command.CommandSender;
-
 import org.oddlama.vane.core.command.Command;
 
 public class ParseCheckResult implements CheckResult {
+
 	private int depth;
 	private String argument_type;
 	private Object parsed;
@@ -17,9 +17,17 @@ public class ParseCheckResult implements CheckResult {
 		this.include_param = include_param;
 	}
 
-	public String argument_type() { return argument_type; }
-	public Object parsed() { return parsed; }
-	public boolean include_param() { return include_param; }
+	public String argument_type() {
+		return argument_type;
+	}
+
+	public Object parsed() {
+		return parsed;
+	}
+
+	public boolean include_param() {
+		return include_param;
+	}
 
 	@Override
 	public int depth() {

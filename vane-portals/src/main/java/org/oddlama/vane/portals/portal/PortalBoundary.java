@@ -5,14 +5,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.Stack;
-
 import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
-
 import org.oddlama.vane.portals.PortalConstructor;
 
 public class PortalBoundary {
+
 	public static enum ErrorState {
 		NONE,
 		NO_ORIGIN,
@@ -26,7 +25,7 @@ public class PortalBoundary {
 		NO_PORTAL_BLOCK_ABOVE_ORIGIN,
 		NOT_ENOUGH_PORTAL_BLOCKS_ABOVE_ORIGIN,
 		TOO_MANY_PORTAL_AREA_BLOCKS,
-		PORTAL_AREA_OBSTRUCTED;
+		PORTAL_AREA_OBSTRUCTED,
 	}
 
 	private Set<Block> boundary_blocks = null;
@@ -63,12 +62,29 @@ public class PortalBoundary {
 		return origin_block;
 	}
 
-	public Plane plane() { return plane; }
-	public Location spawn() { return spawn; }
-	public ErrorState error_state() { return error_state; }
-	public int dim_x() { return dim_x; }
-	public int dim_y() { return dim_y; }
-	public int dim_z() { return dim_z; }
+	public Plane plane() {
+		return plane;
+	}
+
+	public Location spawn() {
+		return spawn;
+	}
+
+	public ErrorState error_state() {
+		return error_state;
+	}
+
+	public int dim_x() {
+		return dim_x;
+	}
+
+	public int dim_y() {
+		return dim_y;
+	}
+
+	public int dim_z() {
+		return dim_z;
+	}
 
 	public List<Block> all_blocks() {
 		final var all_blocks = new ArrayList<Block>();
@@ -87,7 +103,12 @@ public class PortalBoundary {
 		return false;
 	}
 
-	private static void push_block_if_not_contained(final Block block, final Stack<Block> stack, final Set<Block> out_boundary, final Set<Block> out_portal_area) {
+	private static void push_block_if_not_contained(
+		final Block block,
+		final Stack<Block> stack,
+		final Set<Block> out_boundary,
+		final Set<Block> out_portal_area
+	) {
 		if (out_boundary.contains(block) || out_portal_area.contains(block)) {
 			return;
 		}
@@ -95,7 +116,13 @@ public class PortalBoundary {
 		stack.push(block);
 	}
 
-	private static void push_adjacent_blocks_to_stack(final Block block, final Stack<Block> stack, final Set<Block> out_boundary, final Set<Block> out_portal_area, Plane plane) {
+	private static void push_adjacent_blocks_to_stack(
+		final Block block,
+		final Stack<Block> stack,
+		final Set<Block> out_boundary,
+		final Set<Block> out_portal_area,
+		Plane plane
+	) {
 		switch (plane) {
 			case XY:
 				push_block_if_not_contained(block.getRelative(1, 0, 0), stack, out_boundary, out_portal_area);
@@ -103,14 +130,12 @@ public class PortalBoundary {
 				push_block_if_not_contained(block.getRelative(0, 1, 0), stack, out_boundary, out_portal_area);
 				push_block_if_not_contained(block.getRelative(0, -1, 0), stack, out_boundary, out_portal_area);
 				break;
-
 			case YZ:
 				push_block_if_not_contained(block.getRelative(0, 0, 1), stack, out_boundary, out_portal_area);
 				push_block_if_not_contained(block.getRelative(0, 0, -1), stack, out_boundary, out_portal_area);
 				push_block_if_not_contained(block.getRelative(0, 1, 0), stack, out_boundary, out_portal_area);
 				push_block_if_not_contained(block.getRelative(0, -1, 0), stack, out_boundary, out_portal_area);
 				break;
-
 			case XZ:
 				push_block_if_not_contained(block.getRelative(1, 0, 0), stack, out_boundary, out_portal_area);
 				push_block_if_not_contained(block.getRelative(-1, 0, 0), stack, out_boundary, out_portal_area);
@@ -120,7 +145,13 @@ public class PortalBoundary {
 		}
 	}
 
-	private static void do_flood_fill4_step(final PortalConstructor portal_constructor, final Stack<Block> stack, final Set<Block> out_boundary, final Set<Block> out_portal_area, final Plane plane) {
+	private static void do_flood_fill4_step(
+		final PortalConstructor portal_constructor,
+		final Stack<Block> stack,
+		final Set<Block> out_boundary,
+		final Set<Block> out_portal_area,
+		final Plane plane
+	) {
 		final var block = stack.pop();
 		if (portal_constructor.is_type_part_of_boundary_or_origin(block.getType())) {
 			out_boundary.add(block);
@@ -135,7 +166,11 @@ public class PortalBoundary {
 	 * Return as soon as a valid area is found or the maximum depth is exceeded.
 	 * Returns a pair of { boundary, portal_area }
 	 */
-	private static Pair<Set<Block>, Set<Block>> simultaneous_flood_fill4(final PortalConstructor portal_constructor, final Block[] areas, final Plane plane) {
+	private static Pair<Set<Block>, Set<Block>> simultaneous_flood_fill4(
+		final PortalConstructor portal_constructor,
+		final Block[] areas,
+		final Plane plane
+	) {
 		final var boundary0 = new HashSet<Block>();
 		final var boundary1 = new HashSet<Block>();
 		final var portal_area0 = new HashSet<Block>();
@@ -143,12 +178,18 @@ public class PortalBoundary {
 		final var flood_fill_stack0 = new Stack<Block>();
 		final var flood_fill_stack1 = new Stack<Block>();
 
-		if (areas[0] != null) { flood_fill_stack0.push(areas[0]); }
-		if (areas[1] != null) { flood_fill_stack1.push(areas[1]); }
+		if (areas[0] != null) {
+			flood_fill_stack0.push(areas[0]);
+		}
+		if (areas[1] != null) {
+			flood_fill_stack1.push(areas[1]);
+		}
 
 		// Keep going as long as all stacks of enabled areas are not empty and max depth is not reached
 		int depth = 0;
-		while ((areas[0] == null || !flood_fill_stack0.isEmpty()) && (areas[1] == null || !flood_fill_stack1.isEmpty())) {
+		while (
+			(areas[0] == null || !flood_fill_stack0.isEmpty()) && (areas[1] == null || !flood_fill_stack1.isEmpty())
+		) {
 			++depth;
 
 			// Maximum depth reached -> both areas are invalid
@@ -156,8 +197,12 @@ public class PortalBoundary {
 				return null;
 			}
 
-			if (areas[0] != null) { do_flood_fill4_step(portal_constructor, flood_fill_stack0, boundary0, portal_area0, plane); }
-			if (areas[1] != null) { do_flood_fill4_step(portal_constructor, flood_fill_stack1, boundary1, portal_area1, plane); }
+			if (areas[0] != null) {
+				do_flood_fill4_step(portal_constructor, flood_fill_stack0, boundary0, portal_area0, plane);
+			}
+			if (areas[1] != null) {
+				do_flood_fill4_step(portal_constructor, flood_fill_stack1, boundary1, portal_area1, plane);
+			}
 		}
 
 		if (areas[0] != null && flood_fill_stack0.isEmpty()) {
@@ -184,7 +229,6 @@ public class PortalBoundary {
 				surrounding_blocks.add(block.getRelative(-1, -1, 0));
 				surrounding_blocks.add(block.getRelative(0, -1, 0));
 				break;
-
 			case YZ:
 				surrounding_blocks.add(block.getRelative(0, 1, -1));
 				surrounding_blocks.add(block.getRelative(0, 1, 0));
@@ -195,7 +239,6 @@ public class PortalBoundary {
 				surrounding_blocks.add(block.getRelative(0, -1, -1));
 				surrounding_blocks.add(block.getRelative(0, 0, -1));
 				break;
-
 			case XZ:
 				surrounding_blocks.add(block.getRelative(1, 0, -1));
 				surrounding_blocks.add(block.getRelative(1, 0, 0));
@@ -211,7 +254,11 @@ public class PortalBoundary {
 		return surrounding_blocks;
 	}
 
-	private static Block[] get_potential_area_blocks(final PortalConstructor portal_constructor, final Block block, final Plane plane) {
+	private static Block[] get_potential_area_blocks(
+		final PortalConstructor portal_constructor,
+		final Block block,
+		final Plane plane
+	) {
 		/* Step 1: Assert that the 8 surrounding blocks must include two or more boundary blocks
 		 * Step 2: Set area index to first area
 		 * Step 3: Start at any surrounding block.
@@ -243,16 +290,14 @@ public class PortalBoundary {
 		for (final var surrounding_block : surrounding_blocks) {
 			// Examine block type
 			if (portal_constructor.is_type_part_of_boundary_or_origin(surrounding_block.getType())) {
-				if (!had_boundary_block_before)
-					area_index = (area_index + 1) % 2;
+				if (!had_boundary_block_before) area_index = (area_index + 1) % 2;
 
 				had_boundary_block_before = true;
 			} else {
 				areas[area_index] = surrounding_block;
 
 				// Check if other area is also set
-				if (areas[(area_index + 1) % 2] != null)
-					return areas;
+				if (areas[(area_index + 1) % 2] != null) return areas;
 
 				had_boundary_block_before = false;
 			}
@@ -262,7 +307,14 @@ public class PortalBoundary {
 		return areas;
 	}
 
-	private static void add3_air_stacks(final PortalConstructor portal_constructor, final Block start_air, final List<Block> lowest_air_blocks, boolean insert_front, int mod_x, int mod_z) {
+	private static void add3_air_stacks(
+		final PortalConstructor portal_constructor,
+		final Block start_air,
+		final List<Block> lowest_air_blocks,
+		boolean insert_front,
+		int mod_x,
+		int mod_z
+	) {
 		var air = start_air;
 		while (true) {
 			air = air.getRelative(-mod_x, 0, -mod_z);
@@ -293,7 +345,11 @@ public class PortalBoundary {
 		}
 	}
 
-	private static PortalBoundary search_at(final PortalConstructor portal_constructor, final Block search_block, Plane plane) {
+	private static PortalBoundary search_at(
+		final PortalConstructor portal_constructor,
+		final Block search_block,
+		Plane plane
+	) {
 		/* A 3x3 field of blocks around the start block is always split into 2 areas:
 		 *
 		 * []''''
@@ -397,10 +453,14 @@ public class PortalBoundary {
 		// Determine spawn point and check minimum size constraints (these are only important at the portal's spawn point)
 		if (boundary.plane == Plane.XZ) {
 			// Find middle of portal, then find first (2,3x2,3) (even,uneven) area in direction of origin block (the greater x/z distance is chosen)
-			final var middle_small_coords = boundary.origin_block().getWorld().getBlockAt(
-					(int)Math.floor(min_x / 2.0 + max_x / 2.0),
+			final var middle_small_coords = boundary
+				.origin_block()
+				.getWorld()
+				.getBlockAt(
+					(int) Math.floor(min_x / 2.0 + max_x / 2.0),
 					boundary.origin_block().getY(),
-					(int)Math.floor(min_z / 2.0 + max_z / 2.0));
+					(int) Math.floor(min_z / 2.0 + max_z / 2.0)
+				);
 
 			int diff_x = middle_small_coords.getX() - boundary.origin_block().getX();
 			int diff_z = middle_small_coords.getZ() - boundary.origin_block().getZ();
@@ -443,7 +503,7 @@ public class PortalBoundary {
 			// Find "backwards" last block inside
 			Block next = first_inside;
 			Block back_last_inside = null;
-			int total_blocks_inside = -1;  // -1 because both forward and backward search include first_inside
+			int total_blocks_inside = -1; // -1 because both forward and backward search include first_inside
 			do {
 				back_last_inside = next;
 				next = back_last_inside.getRelative(-mod_x, 0, -mod_z);
@@ -467,11 +527,11 @@ public class PortalBoundary {
 			// Get block in the middle (if block edge round to smaller coords)
 			int m_x, m_z;
 			if (mod_x == 0) {
-				m_x = (int)Math.floor(min_x / 2.0 + max_x / 2.0);
-				m_z = (int)Math.floor(last_inside.getZ() / 2.0 + back_last_inside.getZ() / 2.0);
+				m_x = (int) Math.floor(min_x / 2.0 + max_x / 2.0);
+				m_z = (int) Math.floor(last_inside.getZ() / 2.0 + back_last_inside.getZ() / 2.0);
 			} else {
-				m_x = (int)Math.floor(last_inside.getX() / 2.0 + back_last_inside.getX() / 2.0);
-				m_z = (int)Math.floor(min_z / 2.0 + max_z / 2.0);
+				m_x = (int) Math.floor(last_inside.getX() / 2.0 + back_last_inside.getX() / 2.0);
+				m_z = (int) Math.floor(min_z / 2.0 + max_z / 2.0);
 			}
 
 			final var middle_inside = last_inside.getWorld().getBlockAt(m_x, last_inside.getY(), m_z);
@@ -554,7 +614,10 @@ public class PortalBoundary {
 			// Check for at least 1x3 air blocks above the origin
 			final var air_above_origin2 = boundary.origin_block().getRelative(0, 2, 0);
 			final var air_above_origin3 = boundary.origin_block().getRelative(0, 3, 0);
-			if (!boundary.portal_area_blocks().contains(air_above_origin2) || !boundary.portal_area_blocks().contains(air_above_origin3)) {
+			if (
+				!boundary.portal_area_blocks().contains(air_above_origin2) ||
+				!boundary.portal_area_blocks().contains(air_above_origin3)
+			) {
 				boundary.error_state = ErrorState.NOT_ENOUGH_PORTAL_BLOCKS_ABOVE_ORIGIN;
 				return boundary;
 			}
@@ -570,7 +633,8 @@ public class PortalBoundary {
 
 			// Must be at least 1x3 area of portal blocks to be valid
 			if (air_above_with_boundary_below.size() < 1) {
-				boundary.error_state = boundary.plane().x() ? ErrorState.TOO_SMALL_SPAWN_X : ErrorState.TOO_SMALL_SPAWN_Z;
+				boundary.error_state =
+					boundary.plane().x() ? ErrorState.TOO_SMALL_SPAWN_X : ErrorState.TOO_SMALL_SPAWN_Z;
 				return boundary;
 			}
 
@@ -579,7 +643,8 @@ public class PortalBoundary {
 			final var large_coord_end = air_above_with_boundary_below.get(air_above_with_boundary_below.size() - 1);
 			final var middle_x = 0.5 + (small_coord_end.getX() + large_coord_end.getX()) / 2.0;
 			final var middle_z = 0.5 + (small_coord_end.getZ() + large_coord_end.getZ()) / 2.0;
-			boundary.spawn = new Location(air_above_origin.getWorld(), middle_x, air_above_origin.getY() + 0.05, middle_z);
+			boundary.spawn =
+				new Location(air_above_origin.getWorld(), middle_x, air_above_origin.getY() + 0.05, middle_z);
 		}
 
 		return boundary;

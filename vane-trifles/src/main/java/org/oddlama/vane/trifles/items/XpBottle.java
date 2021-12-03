@@ -23,16 +23,25 @@ import org.oddlama.vane.trifles.Trifles;
 
 @VaneItem(name = "xp_bottle")
 public class XpBottle extends CustomItem<Trifles, XpBottle> {
+
 	public static enum Variant implements ItemVariantEnum {
 		SMALL,
 		MEDIUM,
 		LARGE;
 
-		@Override public String prefix() { return name().toLowerCase(); }
-		@Override public boolean enabled() { return true; }
+		@Override
+		public String prefix() {
+			return name().toLowerCase();
+		}
+
+		@Override
+		public boolean enabled() {
+			return true;
+		}
 	}
 
 	public static class XpBottleVariant extends CustomItemVariant<Trifles, XpBottle, Variant> {
+
 		@ConfigInt(def = -1, desc = "Level capacity.")
 		public int config_capacity;
 
@@ -47,16 +56,19 @@ public class XpBottle extends CustomItem<Trifles, XpBottle> {
 
 		@Override
 		public Component display_name() {
-			return super.display_name()
-				.color(NamedTextColor.YELLOW);
+			return super.display_name().color(NamedTextColor.YELLOW);
 		}
 
 		public int config_capacity_def() {
 			switch (variant()) {
-				default:     throw new RuntimeException("Missing variant case. This is a bug.");
-				case SMALL:  return 10;
-				case MEDIUM: return 20;
-				case LARGE:  return 30;
+				default:
+					throw new RuntimeException("Missing variant case. This is a bug.");
+				case SMALL:
+					return 10;
+				case MEDIUM:
+					return 20;
+				case LARGE:
+					return 30;
 			}
 		}
 	}
@@ -78,7 +90,10 @@ public class XpBottle extends CustomItem<Trifles, XpBottle> {
 
 		// Get empty bottle variant
 		final var empty_variant = CustomItem.SingleVariant.SINGLETON;
-		final var empty_xp_bottle_variant = CustomItem.<EmptyXpBottle.EmptyXpBottleVariant>variant_of(EmptyXpBottle.class, empty_variant);
+		final var empty_xp_bottle_variant = CustomItem.<EmptyXpBottle.EmptyXpBottleVariant>variant_of(
+			EmptyXpBottle.class,
+			empty_variant
+		);
 
 		// Exchange items
 		final var main_hand = item.equals(player.getInventory().getItemInMainHand());
@@ -88,7 +103,9 @@ public class XpBottle extends CustomItem<Trifles, XpBottle> {
 		// Add player experience without applying mending effects
 		get_module().last_xp_bottle_consume_time.put(player.getUniqueId(), System.currentTimeMillis());
 		player.giveExp(exp_for_level(variant.config_capacity), false);
-		player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0f, 1.0f);
+		player
+			.getWorld()
+			.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0f, 1.0f);
 
 		// Do not consume actual base item
 		event.setCancelled(true);

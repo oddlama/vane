@@ -58,6 +58,7 @@ import org.oddlama.vane.core.module.ModuleComponent;
 
 @VaneModule(name = "core", bstats = 8637, config_version = 5, lang_version = 2, storage_version = 1)
 public class Core extends Module<Core> implements PluginMessageListener {
+
 	/** The base offset for any model data used by vane plugins. */
 	// "vane" = 0x76616e65, but the value will be saved as float (json...), so only -2^24 - 2^24 can accurately be represented.
 	// therefore we use 0x76616e as the base value.
@@ -69,40 +70,68 @@ public class Core extends Module<Core> implements PluginMessageListener {
 
 	/** Returns the item model data given the section and id */
 	public static int model_data(int section, int item_id, int variant_id) {
-		return ITEM_DATA_BASE_OFFSET + section * ITEM_DATA_SECTION_SIZE + item_id * ITEM_VARIANT_SECTION_SIZE + variant_id;
+		return (
+			ITEM_DATA_BASE_OFFSET + section * ITEM_DATA_SECTION_SIZE + item_id * ITEM_VARIANT_SECTION_SIZE + variant_id
+		);
 	}
 
 	// Channel for proxy messages to multiplex connections
 	public static final String CHANNEL_AUTH_MULTIPLEX = "vane_waterfall:auth_multiplex";
 
-	@LangMessage public TranslatedMessage lang_command_not_a_player;
-	@LangMessage public TranslatedMessage lang_command_permission_denied;
+	@LangMessage
+	public TranslatedMessage lang_command_not_a_player;
 
-	@LangMessage public TranslatedMessage lang_invalid_time_format;
+	@LangMessage
+	public TranslatedMessage lang_command_permission_denied;
 
-	@LangMessage public TranslatedMessage lang_break_loot_block_prevented;
+	@LangMessage
+	public TranslatedMessage lang_invalid_time_format;
+
+	@LangMessage
+	public TranslatedMessage lang_break_loot_block_prevented;
 
 	// Module registry
 	private SortedSet<Module<?>> vane_modules = new TreeSet<>((a, b) -> a.get_name().compareTo(b.get_name()));
-	public void register_module(Module<?> module) { vane_modules.add(module); }
-	public void unregister_module(Module<?> module) { vane_modules.remove(module); }
-	public SortedSet<Module<?>> get_modules() { return Collections.unmodifiableSortedSet(vane_modules); }
+
+	public void register_module(Module<?> module) {
+		vane_modules.add(module);
+	}
+
+	public void unregister_module(Module<?> module) {
+		vane_modules.remove(module);
+	}
+
+	public SortedSet<Module<?>> get_modules() {
+		return Collections.unmodifiableSortedSet(vane_modules);
+	}
 
 	// Vane global command catch-all permission
-	public Permission permission_command_catchall = new Permission("vane.*.commands.*", "Allow access to all vane commands (ONLY FOR ADMINS!)", PermissionDefault.FALSE);
+	public Permission permission_command_catchall = new Permission(
+		"vane.*.commands.*",
+		"Allow access to all vane commands (ONLY FOR ADMINS!)",
+		PermissionDefault.FALSE
+	);
 
 	public MenuManager menu_manager;
 
 	// Persistent storage
 	@Persistent
 	public Map<UUID, UUID> storage_auth_multiplex = new HashMap<>();
+
 	@Persistent
 	public Map<UUID, Integer> storage_auth_multiplexer_id = new HashMap<>();
 
 	// core-config
-	@ConfigBoolean(def = true, desc = "Let the client translate messages using the generated resource pack. This allows every player to select their preferred language, and all plugin messages will also be translated. Disabling this won't allow you to skip generating the resource pack, as it will be needed for custom item textures.")
+	@ConfigBoolean(
+		def = true,
+		desc = "Let the client translate messages using the generated resource pack. This allows every player to select their preferred language, and all plugin messages will also be translated. Disabling this won't allow you to skip generating the resource pack, as it will be needed for custom item textures."
+	)
 	public boolean config_client_side_translations;
-	@ConfigBoolean(def = true, desc = "Prevent players from breaking blocks with loot-tables (like treasure chests) when they first attempt to destroy it. They still can break it, but must do so within a short timeframe.")
+
+	@ConfigBoolean(
+		def = true,
+		desc = "Prevent players from breaking blocks with loot-tables (like treasure chests) when they first attempt to destroy it. They still can break it, but must do so within a short timeframe."
+	)
 	public boolean config_warn_breaking_loot_blocks;
 
 	public Core() {
@@ -173,7 +202,7 @@ public class Core extends Module<Core> implements PluginMessageListener {
 			return;
 		}
 
-		final var player = (Player)event.getTarget();
+		final var player = (Player) event.getTarget();
 		if (!is_custom_item(player.getInventory().getItemInMainHand())) {
 			return;
 		}
@@ -216,7 +245,7 @@ public class Core extends Module<Core> implements PluginMessageListener {
 
 		final NamespacedKey key;
 		if (recipe instanceof Keyed) {
-			key = ((Keyed)recipe).getKey();
+			key = ((Keyed) recipe).getKey();
 		} else {
 			return;
 		}
@@ -282,7 +311,8 @@ public class Core extends Module<Core> implements PluginMessageListener {
 		}
 
 		switch (event.getCause()) {
-			default: return;
+			default:
+				return;
 			case FIRE:
 			case FIRE_TICK:
 			case LAVA:
@@ -295,7 +325,7 @@ public class Core extends Module<Core> implements PluginMessageListener {
 			return;
 		}
 
-		final var item = ((Item)entity).getItemStack();
+		final var item = ((Item) entity).getItemStack();
 		final var item_lookup = CustomItem.from_item(item);
 		if (item_lookup == null || !item_lookup.custom_item.has_netherite_conversion()) {
 			return;
@@ -317,7 +347,7 @@ public class Core extends Module<Core> implements PluginMessageListener {
 			return;
 		}
 
-		final var skull = (Skull)block.getState();
+		final var skull = (Skull) block.getState();
 		final var texture = texture_from_skull(skull);
 		if (texture == null) {
 			return;
@@ -355,7 +385,15 @@ public class Core extends Module<Core> implements PluginMessageListener {
 			return;
 		}
 
-		log.info("[multiplex] Init player '" + display_name + "' for registered auth multiplexed player {" + id + ", " + player.getName() + "}");
+		log.info(
+			"[multiplex] Init player '" +
+			display_name +
+			"' for registered auth multiplexed player {" +
+			id +
+			", " +
+			player.getName() +
+			"}"
+		);
 		final var display_name_component = LegacyComponentSerializer.legacySection().deserialize(display_name);
 		player.displayName(display_name_component);
 		player.playerListName(display_name_component);
@@ -388,7 +426,18 @@ public class Core extends Module<Core> implements PluginMessageListener {
 			final var new_uuid = UUID.fromString(in.readUTF());
 			final var new_name = in.readUTF();
 
-			log.info("[multiplex] Registered auth multiplexed player {" + new_uuid + ", " + new_name + "} from player {" + old_uuid + ", " + old_name + "} multiplexer_id " + multiplexer_id);
+			log.info(
+				"[multiplex] Registered auth multiplexed player {" +
+				new_uuid +
+				", " +
+				new_name +
+				"} from player {" +
+				old_uuid +
+				", " +
+				old_name +
+				"} multiplexer_id " +
+				multiplexer_id
+			);
 			storage_auth_multiplex.put(new_uuid, old_uuid);
 			storage_auth_multiplexer_id.put(new_uuid, multiplexer_id);
 			mark_persistent_storage_dirty();
@@ -404,6 +453,7 @@ public class Core extends Module<Core> implements PluginMessageListener {
 
 	// Prevent loot chest destruction
 	private final Map<Block, Map<UUID, Long>> loot_break_attempts = new HashMap<>();
+
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void on_break_loot_chest(final BlockBreakEvent event) {
 		if (!config_warn_breaking_loot_blocks) {
@@ -415,7 +465,7 @@ public class Core extends Module<Core> implements PluginMessageListener {
 			return;
 		}
 
-		final var lootable = (Lootable)state;
+		final var lootable = (Lootable) state;
 		if (!lootable.hasLootTable()) {
 			return;
 		}

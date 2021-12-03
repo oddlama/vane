@@ -2,11 +2,10 @@ package org.oddlama.vane.portals.event;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
-
-import org.oddlama.vane.portals.Portals;
 import org.oddlama.vane.portals.portal.Portal;
 
 public class PortalDestroyEvent extends PortalEvent {
+
 	private static final HandlerList handlers = new HandlerList();
 	private Player player;
 	private Portal portal;

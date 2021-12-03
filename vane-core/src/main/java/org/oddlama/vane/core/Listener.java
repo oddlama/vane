@@ -5,6 +5,7 @@ import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.core.module.ModuleComponent;
 
 public class Listener<T extends Module<T>> extends ModuleComponent<T> implements org.bukkit.event.Listener {
+
 	public Listener(Context<T> context) {
 		super(context);
 	}

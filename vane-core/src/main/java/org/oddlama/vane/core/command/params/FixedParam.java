@@ -2,9 +2,7 @@ package org.oddlama.vane.core.command.params;
 
 import java.util.Collections;
 import java.util.List;
-
 import org.bukkit.command.CommandSender;
-
 import org.oddlama.vane.core.command.Command;
 import org.oddlama.vane.core.command.check.CheckResult;
 import org.oddlama.vane.core.command.check.ErrorCheckResult;
@@ -12,6 +10,7 @@ import org.oddlama.vane.core.command.check.ParseCheckResult;
 import org.oddlama.vane.core.functional.Function1;
 
 public class FixedParam<T> extends BaseParam {
+
 	private T fixed_arg;
 	private String fixed_arg_str;
 	private boolean include_param = false;
@@ -42,7 +41,10 @@ public class FixedParam<T> extends BaseParam {
 		}
 		var parsed = parse(args[offset]);
 		if (parsed == null) {
-			return new ErrorCheckResult(offset, "§6invalid argument: expected §3" + fixed_arg_str + "§6 got §b" + args[offset] + "§r");
+			return new ErrorCheckResult(
+				offset,
+				"§6invalid argument: expected §3" + fixed_arg_str + "§6 got §b" + args[offset] + "§r"
+			);
 		}
 		return new ParseCheckResult(offset, fixed_arg_str, parsed, include_param);
 	}

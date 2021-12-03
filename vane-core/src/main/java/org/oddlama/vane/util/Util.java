@@ -11,14 +11,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
-
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Util {
+
 	@SuppressWarnings("deprecation")
 	public static NamespacedKey namespaced_key(String namespace, String key) {
 		return new NamespacedKey(namespace, key);
@@ -50,14 +49,15 @@ public class Util {
 	}
 
 	private static Map<Character, Long> time_multiplier;
+
 	static {
 		Map<Character, Long> mult = new HashMap<>();
-		mult.put('s', 1000l);         //seconds
-		mult.put('m', 60000l);        //minutes
-		mult.put('h', 3600000l);      //hours
-		mult.put('d', 86400000l);     //days
-		mult.put('w', 604800000l);    //weeks
-		mult.put('y', 31536000000l);  //years
+		mult.put('s', 1000l); //seconds
+		mult.put('m', 60000l); //minutes
+		mult.put('h', 3600000l); //hours
+		mult.put('d', 86400000l); //days
+		mult.put('w', 604800000l); //weeks
+		mult.put('y', 31536000000l); //years
 		time_multiplier = mult;
 	}
 
@@ -113,9 +113,9 @@ public class Util {
 		if (level < 17) {
 			return level * level + 6 * level;
 		} else if (level < 32) {
-			return (int)(2.5 * level * level - 40.5 * level) + 360;
+			return (int) (2.5 * level * level - 40.5 * level) + 360;
 		} else {
-			return (int)(4.5 * level * level - 162.5 * level) + 2220;
+			return (int) (4.5 * level * level - 162.5 * level) + 2220;
 		}
 	}
 
@@ -129,7 +129,9 @@ public class Util {
 	}
 
 	public static JSONObject read_json_from_url(String url) throws IOException, JSONException {
-		try (final var rd = new BufferedReader(new InputStreamReader(new URL(url).openStream(), StandardCharsets.UTF_8))) {
+		try (
+			final var rd = new BufferedReader(new InputStreamReader(new URL(url).openStream(), StandardCharsets.UTF_8))
+		) {
 			return new JSONObject(read_all(rd));
 		}
 	}
@@ -139,7 +141,10 @@ public class Util {
 		try {
 			final var json = read_json_from_url(url);
 			final var id_str = json.getString("id");
-			final var uuid_str = id_str.replaceFirst("(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)", "$1-$2-$3-$4-$5");
+			final var uuid_str = id_str.replaceFirst(
+				"(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)",
+				"$1-$2-$3-$4-$5"
+			);
 			return UUID.fromString(uuid_str);
 		} catch (IOException e) {
 			Bukkit.getLogger().log(Level.WARNING, "Failed to resolve UUID for player '" + name + "'", e);
@@ -148,6 +153,7 @@ public class Util {
 	}
 
 	public static class Skin {
+
 		public String texture;
 		public String signature;
 	}

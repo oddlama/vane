@@ -9,7 +9,10 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface ConfigDouble {
 	double def();
+
 	double min() default Double.NaN;
+
 	double max() default Double.NaN;
+
 	String desc();
 }

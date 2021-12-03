@@ -1,11 +1,10 @@
 package org.oddlama.vane.enchantments.enchantments;
 
 import java.util.ArrayList;
-
-import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -14,7 +13,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.loot.LootTables;
-
 import org.oddlama.vane.annotation.enchantment.Rarity;
 import org.oddlama.vane.annotation.enchantment.VaneEnchantment;
 import org.oddlama.vane.core.LootTable.LootTableEntry;
@@ -25,35 +23,39 @@ import org.oddlama.vane.enchantments.Enchantments;
 import org.oddlama.vane.enchantments.items.AncientTomeOfTheGods;
 import org.oddlama.vane.enchantments.items.BookVariant;
 
-import net.kyori.adventure.text.Component;
-
 @VaneEnchantment(name = "soulbound", rarity = Rarity.RARE, treasure = true, allow_custom = true)
 public class Soulbound extends CustomEnchantment<Enchantments> {
+
 	public Soulbound(Context<Enchantments> context) {
 		super(context);
 	}
 
 	@Override
 	public void register_recipes() {
-		final var ancient_tome_of_the_gods_enchanted = CustomItem.<AncientTomeOfTheGods.AncientTomeOfTheGodsVariant>variant_of(AncientTomeOfTheGods.class, BookVariant.ENCHANTED_BOOK).item();
-		final var ancient_tome_of_the_gods = CustomItem.<AncientTomeOfTheGods.AncientTomeOfTheGodsVariant>variant_of(AncientTomeOfTheGods.class, BookVariant.BOOK).item();
+		final var ancient_tome_of_the_gods_enchanted = CustomItem
+			.<AncientTomeOfTheGods.AncientTomeOfTheGodsVariant>variant_of(
+				AncientTomeOfTheGods.class,
+				BookVariant.ENCHANTED_BOOK
+			)
+			.item();
+		final var ancient_tome_of_the_gods = CustomItem
+			.<AncientTomeOfTheGods.AncientTomeOfTheGodsVariant>variant_of(AncientTomeOfTheGods.class, BookVariant.BOOK)
+			.item();
 
 		final var recipe_key = recipe_key();
 		final var item = ancient_tome_of_the_gods_enchanted.clone();
-		final var meta = (EnchantmentStorageMeta)item.getItemMeta();
+		final var meta = (EnchantmentStorageMeta) item.getItemMeta();
 		meta.addStoredEnchant(bukkit(), 1, false);
 		item.setItemMeta(meta);
 		get_module().update_enchanted_item(item);
 
 		final var curse_of_binding = new ItemStack(Material.ENCHANTED_BOOK);
-		final var curse_meta = (EnchantmentStorageMeta)curse_of_binding.getItemMeta();
+		final var curse_meta = (EnchantmentStorageMeta) curse_of_binding.getItemMeta();
 		curse_meta.addStoredEnchant(Enchantment.BINDING_CURSE, 1, false);
 		curse_of_binding.setItemMeta(curse_meta);
 
 		final var recipe = new ShapedRecipe(recipe_key, item)
-			.shape("cqc",
-				   "obe",
-				   "rgt")
+			.shape("cqc", "obe", "rgt")
 			.setIngredient('b', ancient_tome_of_the_gods)
 			.setIngredient('c', Material.CHAIN)
 			.setIngredient('q', Material.WRITABLE_BOOK)
@@ -67,16 +69,14 @@ public class Soulbound extends CustomEnchantment<Enchantments> {
 
 		// Alternate recipe with empty lore (for backwards compatibility)
 		final var curse_of_binding_empty_lore = new ItemStack(Material.ENCHANTED_BOOK);
-		final var curse_meta_empty_lore = (EnchantmentStorageMeta)curse_of_binding_empty_lore.getItemMeta();
+		final var curse_meta_empty_lore = (EnchantmentStorageMeta) curse_of_binding_empty_lore.getItemMeta();
 		curse_meta_empty_lore.addStoredEnchant(Enchantment.BINDING_CURSE, 1, false);
 		curse_meta_empty_lore.lore(new ArrayList<Component>());
 		curse_of_binding_empty_lore.setItemMeta(curse_meta_empty_lore);
 
 		final var recipe_key_empty_lore = recipe_key("empty_lore");
 		final var recipe_empty_lore = new ShapedRecipe(recipe_key_empty_lore, item)
-			.shape("cqc",
-				   "obe",
-				   "rgt")
+			.shape("cqc", "obe", "rgt")
 			.setIngredient('b', ancient_tome_of_the_gods)
 			.setIngredient('c', Material.CHAIN)
 			.setIngredient('q', Material.WRITABLE_BOOK)

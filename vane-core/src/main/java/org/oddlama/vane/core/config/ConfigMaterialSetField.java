@@ -14,21 +14,33 @@ import org.oddlama.vane.annotation.config.ConfigMaterialSet;
 import org.oddlama.vane.core.YamlLoadException;
 
 public class ConfigMaterialSetField extends ConfigField<Set<Material>> {
+
 	public ConfigMaterialSet annotation;
 
-	public ConfigMaterialSetField(Object owner, Field field, Function<String, String> map_name, ConfigMaterialSet annotation) {
+	public ConfigMaterialSetField(
+		Object owner,
+		Field field,
+		Function<String, String> map_name,
+		ConfigMaterialSet annotation
+	) {
 		super(owner, field, map_name, "set of materials", annotation.desc());
 		this.annotation = annotation;
 	}
 
 	private void append_material_set_definition(StringBuilder builder, String indent, String prefix) {
-		append_list_definition(builder, indent, prefix, def(), (b, m) -> {
+		append_list_definition(
+			builder,
+			indent,
+			prefix,
+			def(),
+			(b, m) -> {
 				b.append("\"");
 				b.append(escape_yaml(m.getKey().getNamespace()));
 				b.append(":");
 				b.append(escape_yaml(m.getKey().getKey()));
 				b.append("\"");
-			});
+			}
+		);
 	}
 
 	@Override
@@ -70,15 +82,19 @@ public class ConfigMaterialSetField extends ConfigField<Set<Material>> {
 				throw new YamlLoadException("Invalid type for yaml path '" + yaml_path() + "', expected string");
 			}
 
-			final var str = (String)obj;
+			final var str = (String) obj;
 			final var split = str.split(":");
 			if (split.length != 2) {
-				throw new YamlLoadException("Invalid material entry in list '" + yaml_path() + "': '" + str + "' is not a valid namespaced key");
+				throw new YamlLoadException(
+					"Invalid material entry in list '" + yaml_path() + "': '" + str + "' is not a valid namespaced key"
+				);
 			}
 
 			final var mat = material_from(namespaced_key(split[0], split[1]));
 			if (mat == null) {
-				throw new YamlLoadException("Invalid material entry in list '" + yaml_path() + "': '" + str + "' does not exist");
+				throw new YamlLoadException(
+					"Invalid material entry in list '" + yaml_path() + "': '" + str + "' does not exist"
+				);
 			}
 		}
 	}
@@ -86,7 +102,7 @@ public class ConfigMaterialSetField extends ConfigField<Set<Material>> {
 	public void load(YamlConfiguration yaml) {
 		final var set = new HashSet<>();
 		for (var obj : yaml.getList(yaml_path())) {
-			final var split = ((String)obj).split(":");
+			final var split = ((String) obj).split(":");
 			set.add(material_from(namespaced_key(split[0], split[1])));
 		}
 

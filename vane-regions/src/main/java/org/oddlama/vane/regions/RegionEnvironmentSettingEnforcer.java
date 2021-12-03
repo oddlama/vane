@@ -20,17 +20,21 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-
 import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.regions.region.EnvironmentSetting;
 
 public class RegionEnvironmentSettingEnforcer extends Listener<Regions> {
+
 	public RegionEnvironmentSettingEnforcer(Context<Regions> context) {
 		super(context);
 	}
 
-	public boolean check_setting_at(final Location location, final EnvironmentSetting setting, final boolean check_against) {
+	public boolean check_setting_at(
+		final Location location,
+		final EnvironmentSetting setting,
+		final boolean check_against
+	) {
 		final var region = get_module().region_at(location);
 		if (region == null) {
 			return false;
@@ -97,9 +101,12 @@ public class RegionEnvironmentSettingEnforcer extends Listener<Regions> {
 		switch (event.getNewState().getType()) {
 			default:
 				return;
-
-			case FIRE: setting = EnvironmentSetting.FIRE; break;
-			case VINE: setting = EnvironmentSetting.VINE_GROWTH; break;
+			case FIRE:
+				setting = EnvironmentSetting.FIRE;
+				break;
+			case VINE:
+				setting = EnvironmentSetting.VINE_GROWTH;
+				break;
 		}
 
 		if (check_setting_at(event.getBlock(), setting, false)) {
@@ -115,7 +122,6 @@ public class RegionEnvironmentSettingEnforcer extends Listener<Regions> {
 			case MOUNT:
 			case NATURAL:
 				break;
-
 			default:
 				return;
 		}
@@ -138,23 +144,29 @@ public class RegionEnvironmentSettingEnforcer extends Listener<Regions> {
 		final var damager = event.getDamager();
 
 		switch (damaged.getType()) {
-			case PLAYER: break;
-			default: return;
+			case PLAYER:
+				break;
+			default:
+				return;
 		}
 
-		final Player player_damaged = (Player)damaged;
+		final Player player_damaged = (Player) damaged;
 		final Player player_damager;
 		if (damager instanceof Player) {
-			player_damager = (Player)damager;
-		} else if (damager instanceof Projectile && ((Projectile)damager).getShooter() instanceof Player) {
-			player_damager = (Player)((Projectile)damager).getShooter();
+			player_damager = (Player) damager;
+		} else if (damager instanceof Projectile && ((Projectile) damager).getShooter() instanceof Player) {
+			player_damager = (Player) ((Projectile) damager).getShooter();
 		} else {
 			return;
 		}
 
-		if (player_damager != null && player_damaged != player_damager && (
-			check_setting_at(player_damaged.getLocation(), EnvironmentSetting.PVP, false) ||
-			check_setting_at(player_damager.getLocation(), EnvironmentSetting.PVP, false))
+		if (
+			player_damager != null &&
+			player_damaged != player_damager &&
+			(
+				check_setting_at(player_damaged.getLocation(), EnvironmentSetting.PVP, false) ||
+				check_setting_at(player_damager.getLocation(), EnvironmentSetting.PVP, false)
+			)
 		) {
 			event.setCancelled(true);
 		}
@@ -163,14 +175,17 @@ public class RegionEnvironmentSettingEnforcer extends Listener<Regions> {
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void on_hanging_break_event(final HangingBreakEvent event) {
 		switch (event.getCause()) {
-			default: return;
-			case ENTITY: return; // Handeled by on_hanging_break_by_entity
-			case EXPLOSION: {
-				if (check_setting_at(event.getEntity().getLocation(), EnvironmentSetting.EXPLOSIONS, false)) {
-					event.setCancelled(true);
-				}
+			default:
 				return;
-			}
+			case ENTITY:
+				return; // Handeled by on_hanging_break_by_entity
+			case EXPLOSION:
+				{
+					if (check_setting_at(event.getEntity().getLocation(), EnvironmentSetting.EXPLOSIONS, false)) {
+						event.setCancelled(true);
+					}
+					return;
+				}
 		}
 	}
 
@@ -195,7 +210,7 @@ public class RegionEnvironmentSettingEnforcer extends Listener<Regions> {
 			return;
 		}
 
-		final var thrower = (Player)event.getEntity().getShooter();
+		final var thrower = (Player) event.getEntity().getShooter();
 		final var source_pvp_restricted = check_setting_at(thrower.getLocation(), EnvironmentSetting.PVP, false);
 
 		// Cancel all damage to players if either thrower or damaged is

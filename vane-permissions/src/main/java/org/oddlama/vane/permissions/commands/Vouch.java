@@ -5,10 +5,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
-
 import org.oddlama.vane.annotation.command.Name;
 import org.oddlama.vane.annotation.config.ConfigString;
 import org.oddlama.vane.annotation.lang.LangMessage;
@@ -20,8 +18,12 @@ import org.oddlama.vane.permissions.Permissions;
 
 @Name("vouch")
 public class Vouch extends Command<Permissions> {
-	@LangMessage private TranslatedMessage lang_vouched;
-	@LangMessage private TranslatedMessage lang_already_vouched;
+
+	@LangMessage
+	private TranslatedMessage lang_vouched;
+
+	@LangMessage
+	private TranslatedMessage lang_already_vouched;
 
 	@ConfigString(def = "user", desc = "The group to assign to players when someone vouches for them.")
 	private String config_vouch_group;
@@ -32,7 +34,6 @@ public class Vouch extends Command<Permissions> {
 
 	public Vouch(Context<Permissions> context) {
 		super(context);
-
 		// Add help
 		params().fixed("help").ignore_case().exec(this::print_help);
 		// Player vouch for player

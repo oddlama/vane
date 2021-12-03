@@ -18,6 +18,7 @@ import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.portals.portal.PortalBlock;
 
 public class PortalActivator extends Listener<Portals> {
+
 	public PortalActivator(Context<Portals> context) {
 		super(context);
 	}
@@ -70,13 +71,19 @@ public class PortalActivator extends Listener<Portals> {
 		}
 
 		// Get base block the switch is attached to
-		final var bswitch = (Switch)block.getBlockData();
+		final var bswitch = (Switch) block.getBlockData();
 		final BlockFace attached_face;
 		switch (bswitch.getAttachedFace()) {
 			default:
-			case WALL:    attached_face = bswitch.getFacing().getOppositeFace(); break;
-			case CEILING: attached_face = BlockFace.UP; break;
-			case FLOOR:   attached_face = BlockFace.DOWN; break;
+			case WALL:
+				attached_face = bswitch.getFacing().getOppositeFace();
+				break;
+			case CEILING:
+				attached_face = BlockFace.UP;
+				break;
+			case FLOOR:
+				attached_face = BlockFace.DOWN;
+				break;
 		}
 
 		// Find controlled portal
@@ -112,11 +119,11 @@ public class PortalActivator extends Listener<Portals> {
 		}
 	}
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void on_block_redstone(final BlockRedstoneEvent event) {
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void on_block_redstone(final BlockRedstoneEvent event) {
 		// Only on rising edge.
-	    if (event.getOldCurrent() != 0 || event.getNewCurrent() == 0) {
-		    return;
+		if (event.getOldCurrent() != 0 || event.getNewCurrent() == 0) {
+			return;
 		}
 
 		// Only repeaters
@@ -126,15 +133,15 @@ public class PortalActivator extends Listener<Portals> {
 		}
 
 		// Get the block it's pointing towards. (Opposite of block's facing for repeaters)
-		final var repeater = (Repeater)block.getBlockData();
+		final var repeater = (Repeater) block.getBlockData();
 		final var into_block = block.getRelative(repeater.getFacing().getOppositeFace());
 
 		// Find controlled portal
-	    final var portal = get_module().portal_for(into_block);
-	    if (portal == null) {
-		    return;
+		final var portal = get_module().portal_for(into_block);
+		if (portal == null) {
+			return;
 		}
 
 		portal.activate(get_module(), null);
-    }
+	}
 }

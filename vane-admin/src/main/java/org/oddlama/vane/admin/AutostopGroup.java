@@ -12,14 +12,24 @@ import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.ModuleGroup;
 
 public class AutostopGroup extends ModuleGroup<Admin> {
+
 	@ConfigLong(def = 20 * 60, min = 0, desc = "Delay in seconds after which to stop the server.")
 	public long config_delay;
 
-	@LangMessage public TranslatedMessage lang_aborted;
-	@LangMessage public TranslatedMessage lang_scheduled;
-	@LangMessage public TranslatedMessage lang_status;
-	@LangMessage public TranslatedMessage lang_status_not_scheduled;
-	@LangMessage public TranslatedMessage lang_shutdown;
+	@LangMessage
+	public TranslatedMessage lang_aborted;
+
+	@LangMessage
+	public TranslatedMessage lang_scheduled;
+
+	@LangMessage
+	public TranslatedMessage lang_status;
+
+	@LangMessage
+	public TranslatedMessage lang_status_not_scheduled;
+
+	@LangMessage
+	public TranslatedMessage lang_shutdown;
 
 	// Variables
 	public BukkitTask task = null;
@@ -36,7 +46,10 @@ public class AutostopGroup extends ModuleGroup<Admin> {
 		return start_time + (config_delay * 1000) - System.currentTimeMillis();
 	}
 
-	public void abort() { abort(null); }
+	public void abort() {
+		abort(null);
+	}
+
 	public void abort(CommandSender sender) {
 		if (task == null) {
 			lang_status_not_scheduled.send(sender);
@@ -50,18 +63,28 @@ public class AutostopGroup extends ModuleGroup<Admin> {
 		lang_aborted.send_and_log(sender);
 	}
 
-	public void schedule() { schedule(null); }
-	public void schedule(CommandSender sender) { schedule(sender, config_delay * 1000); }
+	public void schedule() {
+		schedule(null);
+	}
+
+	public void schedule(CommandSender sender) {
+		schedule(sender, config_delay * 1000);
+	}
+
 	public void schedule(CommandSender sender, long delay) {
 		if (task != null) {
 			abort(sender);
 		}
 
 		start_time = System.currentTimeMillis();
-		task = schedule_task(() -> {
-			lang_shutdown.send_and_log(null);
-			get_module().getServer().shutdown();
-		}, ms_to_ticks(delay));
+		task =
+			schedule_task(
+				() -> {
+					lang_shutdown.send_and_log(null);
+					get_module().getServer().shutdown();
+				},
+				ms_to_ticks(delay)
+			);
 
 		lang_scheduled.send_and_log(sender, "§b" + format_time(delay));
 	}

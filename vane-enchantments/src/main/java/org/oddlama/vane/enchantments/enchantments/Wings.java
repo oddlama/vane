@@ -31,9 +31,15 @@ import org.oddlama.vane.enchantments.items.BookVariant;
 
 @VaneEnchantment(name = "wings", max_level = 4, rarity = Rarity.RARE, treasure = true, allow_custom = true)
 public class Wings extends CustomEnchantment<Enchantments> {
-	@ConfigIntList(def = {7000, 5000, 3500, 2800}, min = 0, desc = "Boost cooldown in milliseconds for each enchantment level.")
+
+	@ConfigIntList(
+		def = { 7000, 5000, 3500, 2800 },
+		min = 0,
+		desc = "Boost cooldown in milliseconds for each enchantment level."
+	)
 	private List<Integer> config_boost_cooldowns;
-	@ConfigDoubleList(def = {0.4, 0.47, 0.54, 0.6}, min = 0.0, desc = "Boost strength for each enchantment level.")
+
+	@ConfigDoubleList(def = { 0.4, 0.47, 0.54, 0.6 }, min = 0.0, desc = "Boost strength for each enchantment level.")
 	private List<Double> config_boost_strengths;
 
 	public Wings(Context<Enchantments> context) {
@@ -42,20 +48,28 @@ public class Wings extends CustomEnchantment<Enchantments> {
 
 	@Override
 	public void register_recipes() {
-		final var ancient_tome_of_knowledge_enchanted = CustomItem.<AncientTomeOfKnowledge.AncientTomeOfKnowledgeVariant>variant_of(AncientTomeOfKnowledge.class, BookVariant.ENCHANTED_BOOK).item();
-		final var ancient_tome_of_knowledge = CustomItem.<AncientTomeOfKnowledge.AncientTomeOfKnowledgeVariant>variant_of(AncientTomeOfKnowledge.class, BookVariant.BOOK).item();
+		final var ancient_tome_of_knowledge_enchanted = CustomItem
+			.<AncientTomeOfKnowledge.AncientTomeOfKnowledgeVariant>variant_of(
+				AncientTomeOfKnowledge.class,
+				BookVariant.ENCHANTED_BOOK
+			)
+			.item();
+		final var ancient_tome_of_knowledge = CustomItem
+			.<AncientTomeOfKnowledge.AncientTomeOfKnowledgeVariant>variant_of(
+				AncientTomeOfKnowledge.class,
+				BookVariant.BOOK
+			)
+			.item();
 
 		final var recipe_key = recipe_key();
 		final var item = ancient_tome_of_knowledge_enchanted.clone();
-		final var meta = (EnchantmentStorageMeta)item.getItemMeta();
+		final var meta = (EnchantmentStorageMeta) item.getItemMeta();
 		meta.addStoredEnchant(bukkit(), 1, false);
 		item.setItemMeta(meta);
 		get_module().update_enchanted_item(item);
 
 		final var recipe = new ShapedRecipe(recipe_key, item)
-			.shape("m m",
-				   "dbd",
-			       "r r")
+			.shape("m m", "dbd", "r r")
 			.setIngredient('b', ancient_tome_of_knowledge)
 			.setIngredient('m', Material.PHANTOM_MEMBRANE)
 			.setIngredient('d', Material.DISPENSER)
@@ -123,22 +137,27 @@ public class Wings extends CustomEnchantment<Enchantments> {
 
 		// Apply boost
 		final var cooldown = ms_to_ticks(get_boost_cooldown(level));
-		player.setCooldown(Material.ELYTRA, (int)cooldown);
+		player.setCooldown(Material.ELYTRA, (int) cooldown);
 		apply_elytra_boost(player, get_boost_strength(level));
-		damage_item(player, chest, (int)(1.0 + 2.0 * Math.random()));
+		damage_item(player, chest, (int) (1.0 + 2.0 * Math.random()));
 
 		// Spawn particles
 		final var loc = player.getLocation();
 		final var vel = player.getVelocity().length();
 		for (int i = 0; i < 16; ++i) {
-			final var rnd = Vector.getRandom()
-				.subtract(new Vector(.5, .5, .5))
-				.normalize()
-				.multiply(.25);
-			final var dir = rnd.clone()
-				.multiply(.5)
-				.subtract(player.getVelocity());
-			loc.getWorld().spawnParticle(Particle.FIREWORKS_SPARK, loc.add(rnd), 0, dir.getX(), dir.getY(), dir.getZ(), vel * ThreadLocalRandom.current().nextDouble(0.4, 0.6));
+			final var rnd = Vector.getRandom().subtract(new Vector(.5, .5, .5)).normalize().multiply(.25);
+			final var dir = rnd.clone().multiply(.5).subtract(player.getVelocity());
+			loc
+				.getWorld()
+				.spawnParticle(
+					Particle.FIREWORKS_SPARK,
+					loc.add(rnd),
+					0,
+					dir.getX(),
+					dir.getY(),
+					dir.getZ(),
+					vel * ThreadLocalRandom.current().nextDouble(0.4, 0.6)
+				);
 		}
 	}
 }

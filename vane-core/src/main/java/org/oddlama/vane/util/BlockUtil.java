@@ -21,22 +21,26 @@ import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
 public class BlockUtil {
+
 	public static final List<BlockFace> BLOCK_FACES = Arrays.asList(
-	    BlockFace.NORTH,
-	    BlockFace.EAST,
-	    BlockFace.SOUTH,
-	    BlockFace.WEST,
-	    BlockFace.UP,
-	    BlockFace.DOWN);
+		BlockFace.NORTH,
+		BlockFace.EAST,
+		BlockFace.SOUTH,
+		BlockFace.WEST,
+		BlockFace.UP,
+		BlockFace.DOWN
+	);
 
 	public static final List<BlockFace> XZ_FACES = Arrays.asList(
-	    BlockFace.NORTH,
-	    BlockFace.EAST,
-	    BlockFace.SOUTH,
-	    BlockFace.WEST);
+		BlockFace.NORTH,
+		BlockFace.EAST,
+		BlockFace.SOUTH,
+		BlockFace.WEST
+	);
 
 	public static final int NEAREST_RELATIVE_BLOCKS_FOR_RADIUS_MAX = 6;
 	public static final List<List<BlockVector>> NEAREST_RELATIVE_BLOCKS_FOR_RADIUS = new ArrayList<>();
+
 	static {
 		for (int i = 0; i <= NEAREST_RELATIVE_BLOCKS_FOR_RADIUS_MAX; ++i) {
 			NEAREST_RELATIVE_BLOCKS_FOR_RADIUS.add(nearest_blocks_for_radius(i));
@@ -52,7 +56,9 @@ public class BlockUtil {
 	}
 
 	public static void drop_naturally(Location loc, ItemStack drop) {
-		loc.getWorld().dropItem(loc.add(Vector.getRandom().subtract(new Vector(.5, .5, .5)).multiply(0.5)), drop)
+		loc
+			.getWorld()
+			.dropItem(loc.add(Vector.getRandom().subtract(new Vector(.5, .5, .5)).multiply(0.5)), drop)
 			.setVelocity(Vector.getRandom().add(new Vector(-.5, +.5, -.5)).normalize().multiply(.15));
 	}
 
@@ -80,9 +86,9 @@ public class BlockUtil {
 	}
 
 	public static Block unpack(final Chunk chunk, long block_key) {
-		int x = (int)((block_key << 37) >> 37) & 0x0f;
-		int y = (int)(block_key >>> 54)        & 0xff;
-		int z = (int)((block_key << 10) >> 37) & 0x0f;
+		int x = (int) ((block_key << 37) >> 37) & 0x0f;
+		int y = (int) (block_key >>> 54) & 0xff;
+		int z = (int) ((block_key << 10) >> 37) & 0x0f;
 		return chunk.getBlock(x, y, z);
 	}
 
@@ -120,36 +126,36 @@ public class BlockUtil {
 		final var adjacent = new Block[26];
 
 		// Direct adjacents
-		adjacent[0] = root.getRelative( 1,  0,  0);
-		adjacent[1] = root.getRelative(-1,  0,  0);
-		adjacent[2] = root.getRelative( 0,  0,  1);
-		adjacent[3] = root.getRelative( 0,  0, -1);
-		adjacent[4] = root.getRelative( 0,  1,  0);
-		adjacent[5] = root.getRelative( 0, -1,  0);
+		adjacent[0] = root.getRelative(1, 0, 0);
+		adjacent[1] = root.getRelative(-1, 0, 0);
+		adjacent[2] = root.getRelative(0, 0, 1);
+		adjacent[3] = root.getRelative(0, 0, -1);
+		adjacent[4] = root.getRelative(0, 1, 0);
+		adjacent[5] = root.getRelative(0, -1, 0);
 
 		// Edge adjacents
-		adjacent[6]  = root.getRelative( 0, -1, -1);
-		adjacent[7]  = root.getRelative( 0, -1,  1);
-		adjacent[8]  = root.getRelative( 0,  1, -1);
-		adjacent[9]  = root.getRelative( 0,  1,  1);
-		adjacent[10] = root.getRelative(-1,  0, -1);
-		adjacent[11] = root.getRelative(-1,  0,  1);
-		adjacent[12] = root.getRelative( 1,  0, -1);
-		adjacent[13] = root.getRelative( 1,  0,  1);
-		adjacent[14] = root.getRelative(-1, -1,  0);
-		adjacent[15] = root.getRelative(-1,  1,  0);
-		adjacent[16] = root.getRelative( 1, -1,  0);
-		adjacent[17] = root.getRelative( 1,  1,  0);
+		adjacent[6] = root.getRelative(0, -1, -1);
+		adjacent[7] = root.getRelative(0, -1, 1);
+		adjacent[8] = root.getRelative(0, 1, -1);
+		adjacent[9] = root.getRelative(0, 1, 1);
+		adjacent[10] = root.getRelative(-1, 0, -1);
+		adjacent[11] = root.getRelative(-1, 0, 1);
+		adjacent[12] = root.getRelative(1, 0, -1);
+		adjacent[13] = root.getRelative(1, 0, 1);
+		adjacent[14] = root.getRelative(-1, -1, 0);
+		adjacent[15] = root.getRelative(-1, 1, 0);
+		adjacent[16] = root.getRelative(1, -1, 0);
+		adjacent[17] = root.getRelative(1, 1, 0);
 
 		// Corner adjacents
 		adjacent[18] = root.getRelative(-1, -1, -1);
-		adjacent[19] = root.getRelative(-1, -1,  1);
-		adjacent[20] = root.getRelative(-1,  1, -1);
-		adjacent[21] = root.getRelative(-1,  1,  1);
-		adjacent[22] = root.getRelative( 1, -1, -1);
-		adjacent[23] = root.getRelative( 1, -1,  1);
-		adjacent[24] = root.getRelative( 1,  1, -1);
-		adjacent[25] = root.getRelative( 1,  1,  1);
+		adjacent[19] = root.getRelative(-1, -1, 1);
+		adjacent[20] = root.getRelative(-1, 1, -1);
+		adjacent[21] = root.getRelative(-1, 1, 1);
+		adjacent[22] = root.getRelative(1, -1, -1);
+		adjacent[23] = root.getRelative(1, -1, 1);
+		adjacent[24] = root.getRelative(1, 1, -1);
+		adjacent[25] = root.getRelative(1, 1, 1);
 
 		return adjacent;
 	}
@@ -170,6 +176,7 @@ public class BlockUtil {
 	}
 
 	public static class Corner {
+
 		private boolean x;
 		private boolean y;
 		private boolean z;
@@ -189,13 +196,29 @@ public class BlockUtil {
 			this.id = (mx << 2) | (my << 1) | (mz << 0);
 		}
 
-		public boolean up() { return y; }
-		public boolean east() { return x; }
-		public boolean south() { return z; }
+		public boolean up() {
+			return y;
+		}
 
-		public Corner up(boolean up) { return new Corner(x, up, z); }
-		public Corner east(boolean east) { return new Corner(east, y, z); }
-		public Corner south(boolean south) { return new Corner(x, y, south); }
+		public boolean east() {
+			return x;
+		}
+
+		public boolean south() {
+			return z;
+		}
+
+		public Corner up(boolean up) {
+			return new Corner(x, up, z);
+		}
+
+		public Corner east(boolean east) {
+			return new Corner(east, y, z);
+		}
+
+		public Corner south(boolean south) {
+			return new Corner(x, y, south);
+		}
 
 		/**
 		 * Rotates the corner as if it were on a north facing block
@@ -203,11 +226,16 @@ public class BlockUtil {
 		 */
 		public Corner rotate_to_north_reference(final BlockFace rotation) {
 			switch (rotation) {
-				default: throw new IllegalArgumentException("rotation must be one of NORTH, EAST, SOUTH, WEST");
-				case NORTH: return new Corner( x, y,  z);
-				case EAST:  return new Corner( z, y, !x);
-				case SOUTH: return new Corner(!x, y, !z);
-				case WEST:  return new Corner(!z, y,  x);
+				default:
+					throw new IllegalArgumentException("rotation must be one of NORTH, EAST, SOUTH, WEST");
+				case NORTH:
+					return new Corner(x, y, z);
+				case EAST:
+					return new Corner(z, y, !x);
+				case SOUTH:
+					return new Corner(!x, y, !z);
+				case WEST:
+					return new Corner(!z, y, x);
 			}
 		}
 
@@ -235,11 +263,12 @@ public class BlockUtil {
 
 		@Override
 		public boolean equals(Object other) {
-			return other != null && other instanceof Corner && ((Corner)other).id == id;
+			return other != null && other instanceof Corner && ((Corner) other).id == id;
 		}
 	}
 
 	public static class Oct {
+
 		private Vector hit_pos; // Relative to block middle
 		private Corner corner;
 		private BlockFace face;
@@ -250,9 +279,17 @@ public class BlockUtil {
 			this.face = face;
 		}
 
-		public Vector hit_pos() { return hit_pos; }
-		public Corner corner() { return corner; }
-		public BlockFace face() { return face; }
+		public Vector hit_pos() {
+			return hit_pos;
+		}
+
+		public Corner corner() {
+			return corner;
+		}
+
+		public BlockFace face() {
+			return face;
+		}
 	}
 
 	public static Oct raytrace_oct(final LivingEntity entity, final Block block) {
@@ -265,7 +302,8 @@ public class BlockUtil {
 		// Get in-block hit position and bias the result
 		// a bit inside the clicked face, so we don't get ambigous results.
 		final var block_middle = block.getLocation().toVector().add(new Vector(0.5, 0.5, 0.5));
-		final var hit = result.getHitPosition()
+		final var hit = result
+			.getHitPosition()
 			.subtract(block_middle)
 			.subtract(result.getHitBlockFace().getDirection().multiply(0.25));
 
@@ -273,6 +311,7 @@ public class BlockUtil {
 	}
 
 	public static class RaytraceDominantFaceResult {
+
 		public BlockFace face = null;
 		public double dominance = 0.0;
 	}
@@ -320,10 +359,13 @@ public class BlockUtil {
 	}
 
 	public static class BlockVectorRadiusComparator implements Comparator<BlockVector> {
+
 		@Override
 		public int compare(BlockVector a, BlockVector b) {
-			return (a.getBlockX() * a.getBlockX() + a.getBlockY() * a.getBlockY() + a.getBlockZ() * a.getBlockZ())
-			     - (b.getBlockX() * b.getBlockX() + b.getBlockY() * b.getBlockY() + b.getBlockZ() * b.getBlockZ());
+			return (
+				(a.getBlockX() * a.getBlockX() + a.getBlockY() * a.getBlockY() + a.getBlockZ() * a.getBlockZ()) -
+				(b.getBlockX() * b.getBlockX() + b.getBlockY() * b.getBlockY() + b.getBlockZ() * b.getBlockZ())
+			);
 		}
 	}
 }

@@ -8,11 +8,11 @@ public interface Consumer3<T1, T2, T3> extends ErasedFunctor, GenericsFinder {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	default public Object invoke(List<Object> args) {
+	public default Object invoke(List<Object> args) {
 		if (args.size() != 3) {
 			throw new IllegalArgumentException("Functor needs 3 arguments but got " + args.size() + " arguments");
 		}
-		apply((T1)args.get(0), (T2)args.get(1), (T3)args.get(2));
+		apply((T1) args.get(0), (T2) args.get(1), (T3) args.get(2));
 		return null;
 	}
 }

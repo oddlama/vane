@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -17,11 +16,10 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.server.ServerCommandEvent;
 import org.bukkit.event.server.RemoteServerCommandEvent;
+import org.bukkit.event.server.ServerCommandEvent;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionDefault;
-
 import org.oddlama.vane.annotation.VaneModule;
 import org.oddlama.vane.annotation.config.ConfigBoolean;
 import org.oddlama.vane.annotation.config.ConfigString;
@@ -32,34 +30,50 @@ import org.oddlama.vane.core.module.Module;
 
 @VaneModule(name = "permissions", bstats = 8641, config_version = 1, lang_version = 1, storage_version = 1)
 public class Permissions extends Module<Permissions> {
+
 	// Configuration
 	@ConfigBoolean(def = true, desc = "Remove all default permissions to start with a clean preset.")
 	public boolean config_remove_defaults;
 
-	@ConfigString(def = "default", desc = "The permission group that will be given to players that have no other permission group.")
+	@ConfigString(
+		def = "default",
+		desc = "The permission group that will be given to players that have no other permission group."
+	)
 	public String config_default_group;
 
-	@ConfigStringListMap(def = {
-		@ConfigStringListMapEntry(key = "default", list = {
-			"bukkit.command.help",
-			"bukkit.broadcast",
-			"bukkit.broadcast.user" }),
-		@ConfigStringListMapEntry(key = "user", list = {
-			"vane.permissions.groups.default",
-			"vane.admin.commands.spawn",
-			"vane.admin.modify_world",
-			"vane.regions.commands.region",
-			"vane.trifles.commands.heads" }),
-		@ConfigStringListMapEntry(key = "verified", list = {
-			"vane.permissions.groups.user",
-			"vane.permissions.commands.vouch" }),
-		@ConfigStringListMapEntry(key = "admin", list = {
-			"vane.permissions.groups.verified",
-			"vane.admin.bypass_spawn_protection",
-			"vane.portals.admin",
-			"vane.regions.admin",
-			"vane.*.commands.*" }),
-	}, desc = "The permission groups. A player can have multiple permission groups assigned. Permission groups can inherit other permission groups by specifying vane.permissions.groups.<groupname> as a permission.")
+	@ConfigStringListMap(
+		def = {
+			@ConfigStringListMapEntry(
+				key = "default",
+				list = { "bukkit.command.help", "bukkit.broadcast", "bukkit.broadcast.user" }
+			),
+			@ConfigStringListMapEntry(
+				key = "user",
+				list = {
+					"vane.permissions.groups.default",
+					"vane.admin.commands.spawn",
+					"vane.admin.modify_world",
+					"vane.regions.commands.region",
+					"vane.trifles.commands.heads",
+				}
+			),
+			@ConfigStringListMapEntry(
+				key = "verified",
+				list = { "vane.permissions.groups.user", "vane.permissions.commands.vouch" }
+			),
+			@ConfigStringListMapEntry(
+				key = "admin",
+				list = {
+					"vane.permissions.groups.verified",
+					"vane.admin.bypass_spawn_protection",
+					"vane.portals.admin",
+					"vane.regions.admin",
+					"vane.*.commands.*",
+				}
+			),
+		},
+		desc = "The permission groups. A player can have multiple permission groups assigned. Permission groups can inherit other permission groups by specifying vane.permissions.groups.<groupname> as a permission."
+	)
 	public Map<String, List<String>> config_groups;
 
 	// Persistent storage
@@ -111,6 +125,7 @@ public class Permissions extends Module<Permissions> {
 	}
 
 	private final Map<CommandSender, PermissionAttachment> sender_attachments = new HashMap<>();
+
 	private void add_console_permissions(final CommandSender sender) {
 		// Register attachment for sender if not done already
 		if (!sender_attachments.containsKey(sender)) {
@@ -119,8 +134,8 @@ public class Permissions extends Module<Permissions> {
 
 			final var attached_perms = console_attachment.getPermissions();
 			attached_perms.forEach((p, v) -> {
-					attachment.setPermission(p, v);
-				});
+				attachment.setPermission(p, v);
+			});
 		}
 	}
 
@@ -161,7 +176,9 @@ public class Permissions extends Module<Permissions> {
 		});
 
 		// Resolve group inheritance
-		var modified = new Object() { boolean value = false; };
+		var modified = new Object() {
+			boolean value = false;
+		};
 		do {
 			modified.value = false;
 			config_groups.forEach((k, v) -> {
@@ -171,7 +188,13 @@ public class Permissions extends Module<Permissions> {
 						final var group = perm.substring("vane.permissions.groups.".length());
 						final var group_perms = permission_groups.get(group);
 						if (group_perms == null) {
-							log.severe("Nonexistent permission group '" + group + "' referenced by group '" + k + "'; Ignoring statement!");
+							log.severe(
+								"Nonexistent permission group '" +
+								group +
+								"' referenced by group '" +
+								k +
+								"'; Ignoring statement!"
+							);
 							continue;
 						}
 						modified.value |= set.addAll(group_perms);
@@ -195,8 +218,8 @@ public class Permissions extends Module<Permissions> {
 		final var attachment = player_attachments.get(player.getUniqueId());
 		final var attached_perms = attachment.getPermissions();
 		attached_perms.forEach((p, v) -> {
-				attachment.unsetPermission(p);
-			});
+			attachment.unsetPermission(p);
+		});
 
 		// Add permissions again
 		var groups = storage_player_groups.get(player.getUniqueId());
@@ -259,7 +282,9 @@ public class Permissions extends Module<Permissions> {
 		}
 
 		if (removed) {
-			log.info("[audit] Group " + group + " removed from " + player.getUniqueId() + " (" + player.getName() + ")");
+			log.info(
+				"[audit] Group " + group + " removed from " + player.getUniqueId() + " (" + player.getName() + ")"
+			);
 			save_and_recalculate(player);
 		}
 

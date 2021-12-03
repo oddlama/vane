@@ -12,13 +12,20 @@ import org.bukkit.inventory.ItemStack;
 import org.json.JSONObject;
 
 public class HeadMaterial {
+
 	private NamespacedKey key;
 	private String name;
 	private String category;
 	private Set<String> tags;
 	private String base64_texture;
 
-	public HeadMaterial(final NamespacedKey key, final String name, final String category, final List<String> tags, final String base64_texture) {
+	public HeadMaterial(
+		final NamespacedKey key,
+		final String name,
+		final String category,
+		final List<String> tags,
+		final String base64_texture
+	) {
 		this.key = key;
 		this.name = name;
 		this.category = category;
@@ -26,11 +33,25 @@ public class HeadMaterial {
 		this.base64_texture = base64_texture;
 	}
 
-	public NamespacedKey key() { return key; }
-	public String name() { return name; }
-	public String category() { return category; }
-	public Set<String> tags() { return tags; }
-	public String texture() { return base64_texture; }
+	public NamespacedKey key() {
+		return key;
+	}
+
+	public String name() {
+		return name;
+	}
+
+	public String category() {
+		return category;
+	}
+
+	public Set<String> tags() {
+		return tags;
+	}
+
+	public String texture() {
+		return base64_texture;
+	}
 
 	public ItemStack item() {
 		return skull_with_texture(name, base64_texture);

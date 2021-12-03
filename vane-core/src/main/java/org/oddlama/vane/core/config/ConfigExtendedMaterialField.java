@@ -10,9 +10,15 @@ import org.oddlama.vane.core.YamlLoadException;
 import org.oddlama.vane.core.material.ExtendedMaterial;
 
 public class ConfigExtendedMaterialField extends ConfigField<ExtendedMaterial> {
+
 	public ConfigExtendedMaterial annotation;
 
-	public ConfigExtendedMaterialField(Object owner, Field field, Function<String, String> map_name, ConfigExtendedMaterial annotation) {
+	public ConfigExtendedMaterialField(
+		Object owner,
+		Field field,
+		Function<String, String> map_name,
+		ConfigExtendedMaterial annotation
+	) {
 		super(owner, field, map_name, "extended material", annotation.desc());
 		this.annotation = annotation;
 	}
@@ -25,7 +31,13 @@ public class ConfigExtendedMaterialField extends ConfigField<ExtendedMaterial> {
 		} else {
 			final var split = annotation.def().split(":");
 			if (split.length != 2) {
-				throw new RuntimeException("Invalid default extended material entry for '" + yaml_path() + "': '" + annotation.def() + "' is not a valid namespaced key");
+				throw new RuntimeException(
+					"Invalid default extended material entry for '" +
+					yaml_path() +
+					"': '" +
+					annotation.def() +
+					"' is not a valid namespaced key"
+				);
 			}
 			return ExtendedMaterial.from(namespaced_key(split[0], split[1]));
 		}
@@ -50,12 +62,20 @@ public class ConfigExtendedMaterialField extends ConfigField<ExtendedMaterial> {
 		final var str = yaml.getString(yaml_path());
 		final var split = str.split(":");
 		if (split.length != 2) {
-			throw new YamlLoadException("Invalid extended material entry in list '" + yaml_path() + "': '" + str + "' is not a valid namespaced key");
+			throw new YamlLoadException(
+				"Invalid extended material entry in list '" +
+				yaml_path() +
+				"': '" +
+				str +
+				"' is not a valid namespaced key"
+			);
 		}
 
 		final var mat = ExtendedMaterial.from(namespaced_key(split[0], split[1]));
 		if (mat == null) {
-			throw new YamlLoadException("Invalid extended material entry in list '" + yaml_path() + "': '" + str + "' does not exist");
+			throw new YamlLoadException(
+				"Invalid extended material entry in list '" + yaml_path() + "': '" + str + "' does not exist"
+			);
 		}
 	}
 

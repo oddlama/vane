@@ -2,9 +2,7 @@ package org.oddlama.vane.core.command.params;
 
 import java.util.Collections;
 import java.util.List;
-
 import org.bukkit.command.CommandSender;
-
 import org.oddlama.vane.core.command.Command;
 import org.oddlama.vane.core.command.check.CheckResult;
 import org.oddlama.vane.core.command.check.ErrorCheckResult;
@@ -12,6 +10,7 @@ import org.oddlama.vane.core.command.check.ParseCheckResult;
 import org.oddlama.vane.core.functional.Function1;
 
 public class AnyParam<T> extends BaseParam {
+
 	private String argument_type;
 	private Function1<String, ? extends T> from_string;
 

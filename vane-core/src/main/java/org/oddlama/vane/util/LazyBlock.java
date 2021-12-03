@@ -1,11 +1,11 @@
 package org.oddlama.vane.util;
 
 import java.util.UUID;
-
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 
 public class LazyBlock {
+
 	private UUID world_id = null;
 	private int x;
 	private int y;
@@ -35,10 +35,21 @@ public class LazyBlock {
 		this.block = null;
 	}
 
-	public UUID world_id() { return world_id; }
-	public int x() { return x; }
-	public int y() { return y; }
-	public int z() { return z; }
+	public UUID world_id() {
+		return world_id;
+	}
+
+	public int x() {
+		return x;
+	}
+
+	public int y() {
+		return y;
+	}
+
+	public int z() {
+		return z;
+	}
 
 	public Block block() {
 		if (world_id != null && block == null) {

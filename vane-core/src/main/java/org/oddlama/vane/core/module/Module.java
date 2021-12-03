@@ -49,6 +49,7 @@ import org.oddlama.vane.core.lang.LangManager;
 import org.oddlama.vane.core.persistent.PersistentStorageManager;
 
 public abstract class Module<T extends Module<T>> extends JavaPlugin implements Context<T>, org.bukkit.event.Listener {
+
 	public final VaneModule annotation = getClass().getAnnotation(VaneModule.class);
 	public Core core;
 	public Logger log = getLogger();
@@ -70,22 +71,38 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 	// Version fields for config, lang, storage
 	@ConfigVersion
 	public long config_version;
+
 	@LangVersion
 	public long lang_version;
+
 	@Persistent
 	public long storage_version;
 
 	// Base configuration
-	@ConfigString(def = "inherit", desc = "The language for this module. The corresponding language file must be named lang-{lang}.yml. Specifying 'inherit' will load the value set for vane-core.")
+	@ConfigString(
+		def = "inherit",
+		desc = "The language for this module. The corresponding language file must be named lang-{lang}.yml. Specifying 'inherit' will load the value set for vane-core."
+	)
 	public String config_lang;
 
-	@ConfigBoolean(def = true, desc = "Enable plugin metrics via bStats. You can opt-out here or via the global bStats configuration.")
+	@ConfigBoolean(
+		def = true,
+		desc = "Enable plugin metrics via bStats. You can opt-out here or via the global bStats configuration."
+	)
 	public boolean config_metrics_enabled;
 
 	// Context<T> interface proxy
-	private ModuleGroup<T> context_group = new ModuleGroup<>(this, "", "The module will only add functionality if this is set to true.");
+	private ModuleGroup<T> context_group = new ModuleGroup<>(
+		this,
+		"",
+		"The module will only add functionality if this is set to true."
+	);
+
 	@Override
-	public void compile(ModuleComponent<T> component) { context_group.compile(component); }
+	public void compile(ModuleComponent<T> component) {
+		context_group.compile(component);
+	}
+
 	@Override
 	public void add_child(Context<T> subcontext) {
 		if (context_group == null) {
@@ -95,26 +112,45 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 		}
 		context_group.add_child(subcontext);
 	}
+
 	@Override
-	public Context<T> get_context() { return this; }
+	public Context<T> get_context() {
+		return this;
+	}
+
 	@SuppressWarnings("unchecked")
 	@Override
-	public T get_module() { return (T)this; }
+	public T get_module() {
+		return (T) this;
+	}
+
 	@Override
-	public String yaml_path() { return ""; }
+	public String yaml_path() {
+		return "";
+	}
+
 	@Override
-	public String variable_yaml_path(String variable) { return variable; }
+	public String variable_yaml_path(String variable) {
+		return variable;
+	}
+
 	@Override
-	public boolean enabled() { return context_group.enabled(); }
+	public boolean enabled() {
+		return context_group.enabled();
+	}
 
 	// Callbacks for derived classes
 	protected void on_load() {}
+
 	public void on_enable() {}
+
 	public void on_disable() {}
+
 	public void on_config_change() {}
+
 	public void on_generate_resource_pack() throws IOException {}
 
-	final public void for_each_module_component(final Consumer1<ModuleComponent<?>> f) {
+	public final void for_each_module_component(final Consumer1<ModuleComponent<?>> f) {
 		context_group.for_each_module_component(f);
 	}
 
@@ -131,13 +167,18 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 		// Get core plugin reference, important for inherited configuration
 		// and shared state between vane modules
 		if (this.getName().equals("vane-core")) {
-			core = (Core)this;
+			core = (Core) this;
 		} else {
-			core = (Core)getServer().getPluginManager().getPlugin("vane-core");
+			core = (Core) getServer().getPluginManager().getPlugin("vane-core");
 		}
 
 		// Create per module command catch-all permission
-		permission_command_catchall_module = new Permission("vane." + get_name() + ".commands.*", "Allow access to all vane-" + get_name() + " commands", PermissionDefault.FALSE);
+		permission_command_catchall_module =
+			new Permission(
+				"vane." + get_name() + ".commands.*",
+				"Allow access to all vane-" + get_name() + " commands",
+				PermissionDefault.FALSE
+			);
 		register_permission(permission_command_catchall_module);
 	}
 
@@ -177,12 +218,16 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 		reload_configuration();
 
 		// Schedule persistent storage saving every minute
-		schedule_task_timer(() -> {
-			if (persistent_storage_dirty) {
-				save_persistent_storage();
-				persistent_storage_dirty = false;
-			}
-		}, 60 * 20, 60 * 20);
+		schedule_task_timer(
+			() -> {
+				if (persistent_storage_dirty) {
+					save_persistent_storage();
+					persistent_storage_dirty = false;
+				}
+			},
+			60 * 20,
+			60 * 20
+		);
 	}
 
 	@Override
@@ -227,15 +272,18 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 	public void generate_resource_pack(final ResourcePackGenerator pack) throws IOException {
 		// Generate language
 		final var pattern = Pattern.compile("lang-.*\\.yml");
-		Arrays.stream(getDataFolder().listFiles((d, name) -> pattern.matcher(name).matches())).sorted().forEach(lang_file -> {
-			final var yaml = YamlConfiguration.loadConfiguration(lang_file);
-			try {
-				lang_manager.generate_resource_pack(pack, yaml);
-			} catch (Exception e) {
-				log.severe("Error while generating language for '" + lang_file + "' of module " + get_name());
-				throw e;
-			}
-		});
+		Arrays
+			.stream(getDataFolder().listFiles((d, name) -> pattern.matcher(name).matches()))
+			.sorted()
+			.forEach(lang_file -> {
+				final var yaml = YamlConfiguration.loadConfiguration(lang_file);
+				try {
+					lang_manager.generate_resource_pack(pack, yaml);
+				} catch (Exception e) {
+					log.severe("Error while generating language for '" + lang_file + "' of module " + get_name());
+					throw e;
+				}
+			});
 
 		on_generate_resource_pack(pack);
 		context_group.generate_resource_pack(pack);
@@ -254,14 +302,12 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 
 	private void update_lang_file(String lang_file) {
 		final var file = new File(getDataFolder(), lang_file);
-		final var file_version = YamlConfiguration.loadConfiguration(file)
-		                             .getLong("version", -1);
+		final var file_version = YamlConfiguration.loadConfiguration(file).getLong("version", -1);
 		long resource_version = -1;
 
 		final var res = getResource(lang_file);
 		try (final var reader = new InputStreamReader(res)) {
-			resource_version = YamlConfiguration.loadConfiguration(reader)
-			                       .getLong("version", -1);
+			resource_version = YamlConfiguration.loadConfiguration(reader).getLong("version", -1);
 		} catch (IOException e) {
 			log.log(Level.SEVERE, "Error while updating lang file '" + file + "' of module " + get_name(), e);
 		}
@@ -374,7 +420,11 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 	}
 
 	public void register_command(Command<?> command) {
-		if (!getServer().getCommandMap().register(command.get_name(), command.get_prefix(), command.get_bukkit_command())) {
+		if (
+			!getServer()
+				.getCommandMap()
+				.register(command.get_name(), command.get_prefix(), command.get_bukkit_command())
+		) {
 			log.warning("Command " + command.get_name() + " was registered using the fallback prefix!");
 			log.warning("Another command with the same name already exists!");
 		}
@@ -415,7 +465,9 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 	 * like the corresponding item names, but uppercase.
 	 */
 	public Class<? extends ModelDataEnum> model_data_enum() {
-		throw new RuntimeException("A module must override 'model_data_enum()', if it want's to register custom items!");
+		throw new RuntimeException(
+			"A module must override 'model_data_enum()', if it want's to register custom items!"
+		);
 	}
 
 	/**
@@ -424,7 +476,9 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 	 * unique per base material across all plugins. That sucks.
 	 */
 	public int model_data(int item_id, int variant_id) {
-		throw new RuntimeException("A module must override 'model_data(int, int)', if it want's to register custom items!");
+		throw new RuntimeException(
+			"A module must override 'model_data(int, int)', if it want's to register custom items!"
+		);
 	}
 
 	public LootTable loot_table(final LootTables table) {
@@ -432,7 +486,8 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 	}
 
 	public List<OfflinePlayer> get_offline_players_with_valid_name() {
-		return Arrays.stream(getServer().getOfflinePlayers())
+		return Arrays
+			.stream(getServer().getOfflinePlayers())
 			.filter(k -> k.getName() != null)
 			.collect(Collectors.toList());
 	}

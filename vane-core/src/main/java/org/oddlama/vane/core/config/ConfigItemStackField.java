@@ -11,9 +11,15 @@ import org.oddlama.vane.annotation.config.ConfigItemStack;
 import org.oddlama.vane.core.YamlLoadException;
 
 public class ConfigItemStackField extends ConfigField<ItemStack> {
+
 	public ConfigItemStack annotation;
 
-	public ConfigItemStackField(Object owner, Field field, Function<String, String> map_name, ConfigItemStack annotation) {
+	public ConfigItemStackField(
+		Object owner,
+		Field field,
+		Function<String, String> map_name,
+		ConfigItemStack annotation
+	) {
 		super(owner, field, map_name, "item stack", annotation.desc());
 		this.annotation = annotation;
 	}
@@ -25,7 +31,12 @@ public class ConfigItemStackField extends ConfigField<ItemStack> {
 		builder.append(indent);
 		builder.append(prefix);
 		builder.append("  material: ");
-		final var material = "\"" + escape_yaml(item.getType().getKey().getNamespace()) + ":" + escape_yaml(item.getType().getKey().getKey()) + "\"";
+		final var material =
+			"\"" +
+			escape_yaml(item.getType().getKey().getNamespace()) +
+			":" +
+			escape_yaml(item.getType().getKey().getKey()) +
+			"\"";
 		builder.append(material);
 		builder.append("\n");
 
@@ -76,29 +87,40 @@ public class ConfigItemStackField extends ConfigField<ItemStack> {
 		for (var var_key : yaml.getConfigurationSection(yaml_path()).getKeys(false)) {
 			final var var_path = yaml_path() + "." + var_key;
 			switch (var_key) {
-				case "material": {
-					if (!yaml.isString(var_path)) {
-						throw new YamlLoadException("Invalid type for yaml path '" + var_path + "', expected list");
-					}
+				case "material":
+					{
+						if (!yaml.isString(var_path)) {
+							throw new YamlLoadException("Invalid type for yaml path '" + var_path + "', expected list");
+						}
 
-					final var str = yaml.getString(var_path);
-					final var split = str.split(":");
-					if (split.length != 2) {
-						throw new YamlLoadException("Invalid material for yaml path '" + yaml_path() + "': '" + str + "' is not a valid namespaced key");
+						final var str = yaml.getString(var_path);
+						final var split = str.split(":");
+						if (split.length != 2) {
+							throw new YamlLoadException(
+								"Invalid material for yaml path '" +
+								yaml_path() +
+								"': '" +
+								str +
+								"' is not a valid namespaced key"
+							);
+						}
+						break;
 					}
-					break;
-				}
-
-				case "amount": {
-					if (!(yaml.get(var_path) instanceof Number)) {
-						throw new YamlLoadException("Invalid type for yaml path '" + yaml_path() + "', expected int");
+				case "amount":
+					{
+						if (!(yaml.get(var_path) instanceof Number)) {
+							throw new YamlLoadException(
+								"Invalid type for yaml path '" + yaml_path() + "', expected int"
+							);
+						}
+						final var val = yaml.getInt(yaml_path());
+						if (val < 0) {
+							throw new YamlLoadException(
+								"Invalid value for yaml path '" + yaml_path() + "' Must be >= 0"
+							);
+						}
+						break;
 					}
-					final var val = yaml.getInt(yaml_path());
-					if (val < 0) {
-						throw new YamlLoadException("Invalid value for yaml path '" + yaml_path() + "' Must be >= 0");
-					}
-					break;
-				}
 			}
 		}
 	}
@@ -109,16 +131,17 @@ public class ConfigItemStackField extends ConfigField<ItemStack> {
 		for (var var_key : yaml.getConfigurationSection(yaml_path()).getKeys(false)) {
 			final var var_path = yaml_path() + "." + var_key;
 			switch (var_key) {
-				case "material": {
-					amount = 0;
-					material_str = yaml.getString(var_path);
-					break;
-				}
-
-				case "amount": {
-					amount = yaml.getInt(var_path);
-					break;
-				}
+				case "material":
+					{
+						amount = 0;
+						material_str = yaml.getString(var_path);
+						break;
+					}
+				case "amount":
+					{
+						amount = yaml.getInt(var_path);
+						break;
+					}
 			}
 		}
 

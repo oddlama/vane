@@ -3,7 +3,6 @@ package org.oddlama.vane.core.menu;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
-
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
@@ -13,12 +12,12 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-
 import org.oddlama.vane.core.functional.Consumer1;
 import org.oddlama.vane.core.functional.Consumer2;
 import org.oddlama.vane.core.module.Context;
 
 public class Menu {
+
 	protected final MenuManager manager;
 	protected Inventory inventory = null;
 	private final Set<MenuWidget> widgets = new HashSet<>();
@@ -40,12 +39,26 @@ public class Menu {
 		this.inventory = inventory;
 	}
 
-	public MenuManager manager() { return manager; }
-	public Inventory inventory() { return inventory; }
-	public Object tag() { return tag; }
+	public MenuManager manager() {
+		return manager;
+	}
 
-	public Menu tag(Object tag) { this.tag = tag; return this; }
-	public void taint() { this.tainted = true; }
+	public Inventory inventory() {
+		return inventory;
+	}
+
+	public Object tag() {
+		return tag;
+	}
+
+	public Menu tag(Object tag) {
+		this.tag = tag;
+		return this;
+	}
+
+	public void taint() {
+		this.tainted = true;
+	}
 
 	public void add(final MenuWidget widget) {
 		widgets.add(widget);
@@ -55,11 +68,12 @@ public class Menu {
 		return widgets.remove(widget);
 	}
 
-	public void update() { update(false); }
+	public void update() {
+		update(false);
+	}
+
 	public void update(boolean force_update) {
-		int updated = widgets.stream()
-			.mapToInt(w -> w.update(this) ? 1 : 0)
-			.sum();
+		int updated = widgets.stream().mapToInt(w -> w.update(this) ? 1 : 0).sum();
 
 		if (updated > 0 || force_update) {
 			// Send inventory content to players
@@ -95,12 +109,20 @@ public class Menu {
 			try {
 				throw new RuntimeException("Invalid close from unrelated menu.");
 			} catch (RuntimeException e) {
-				manager.get_module().log.log(Level.WARNING, "Tried to close menu inventory that isn't opened by the player " + player, e);
+				manager
+					.get_module()
+					.log.log(
+						Level.WARNING,
+						"Tried to close menu inventory that isn't opened by the player " + player,
+						e
+					);
 			}
 			return false;
 		}
 
-		manager.schedule_next_tick(() -> { player.closeInventory(reason); });
+		manager.schedule_next_tick(() -> {
+			player.closeInventory(reason);
+		});
 		return true;
 	}
 
@@ -158,9 +180,12 @@ public class Menu {
 			case INVALID_CLICK:
 			case IGNORE:
 				break;
-
-			case SUCCESS: player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK,       SoundCategory.MASTER, 1.0f, 1.0f); break;
-			case ERROR:   player.playSound(player.getLocation(), Sound.BLOCK_FIRE_EXTINGUISH, SoundCategory.MASTER, 1.0f, 1.0f); break;
+			case SUCCESS:
+				player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 1.0f, 1.0f);
+				break;
+			case ERROR:
+				player.playSound(player.getLocation(), Sound.BLOCK_FIRE_EXTINGUISH, SoundCategory.MASTER, 1.0f, 1.0f);
+				break;
 		}
 	}
 
@@ -181,6 +206,7 @@ public class Menu {
 		ERROR(3);
 
 		private int priority;
+
 		private ClickResult(int priority) {
 			this.priority = priority;
 		}

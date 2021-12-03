@@ -66,54 +66,78 @@ public class Regions extends Module<Regions> {
 
 	// Add (de-)serializers
 	static {
-		PersistentSerializer.serializers.put(EnvironmentSetting.class,    x -> ((EnvironmentSetting)x).name());
-		PersistentSerializer.deserializers.put(EnvironmentSetting.class,  x -> EnvironmentSetting.valueOf((String)x));
-		PersistentSerializer.serializers.put(RoleSetting.class,           x -> ((RoleSetting)x).name());
-		PersistentSerializer.deserializers.put(RoleSetting.class,         x -> RoleSetting.valueOf((String)x));
-		PersistentSerializer.serializers.put(Role.class,                  Role::serialize);
-		PersistentSerializer.deserializers.put(Role.class,                Role::deserialize);
-		PersistentSerializer.serializers.put(Role.RoleType.class,         x -> ((Role.RoleType)x).name());
-		PersistentSerializer.deserializers.put(Role.RoleType.class,       x -> Role.RoleType.valueOf((String)x));
-		PersistentSerializer.serializers.put(RegionGroup.class,           RegionGroup::serialize);
-		PersistentSerializer.deserializers.put(RegionGroup.class,         RegionGroup::deserialize);
-		PersistentSerializer.serializers.put(Region.class,                Region::serialize);
-		PersistentSerializer.deserializers.put(Region.class,              Region::deserialize);
-		PersistentSerializer.serializers.put(RegionExtent.class,          RegionExtent::serialize);
-		PersistentSerializer.deserializers.put(RegionExtent.class,        RegionExtent::deserialize);
+		PersistentSerializer.serializers.put(EnvironmentSetting.class, x -> ((EnvironmentSetting) x).name());
+		PersistentSerializer.deserializers.put(EnvironmentSetting.class, x -> EnvironmentSetting.valueOf((String) x));
+		PersistentSerializer.serializers.put(RoleSetting.class, x -> ((RoleSetting) x).name());
+		PersistentSerializer.deserializers.put(RoleSetting.class, x -> RoleSetting.valueOf((String) x));
+		PersistentSerializer.serializers.put(Role.class, Role::serialize);
+		PersistentSerializer.deserializers.put(Role.class, Role::deserialize);
+		PersistentSerializer.serializers.put(Role.RoleType.class, x -> ((Role.RoleType) x).name());
+		PersistentSerializer.deserializers.put(Role.RoleType.class, x -> Role.RoleType.valueOf((String) x));
+		PersistentSerializer.serializers.put(RegionGroup.class, RegionGroup::serialize);
+		PersistentSerializer.deserializers.put(RegionGroup.class, RegionGroup::deserialize);
+		PersistentSerializer.serializers.put(Region.class, Region::serialize);
+		PersistentSerializer.deserializers.put(Region.class, Region::deserialize);
+		PersistentSerializer.serializers.put(RegionExtent.class, RegionExtent::serialize);
+		PersistentSerializer.deserializers.put(RegionExtent.class, RegionExtent::deserialize);
 	}
 
 	@ConfigInt(def = 4, min = 1, desc = "Minimum region extent in x direction.")
 	public int config_min_region_extent_x;
+
 	@ConfigInt(def = 4, min = 1, desc = "Minimum region extent in y direction.")
 	public int config_min_region_extent_y;
+
 	@ConfigInt(def = 4, min = 1, desc = "Minimum region extent in z direction.")
 	public int config_min_region_extent_z;
 
 	@ConfigInt(def = 2048, min = 1, desc = "Maximum region extent in x direction.")
 	public int config_max_region_extent_x;
+
 	@ConfigInt(def = 2048, min = 1, desc = "Maximum region extent in y direction.")
 	public int config_max_region_extent_y;
+
 	@ConfigInt(def = 2048, min = 1, desc = "Maximum region extent in z direction.")
 	public int config_max_region_extent_z;
 
 	@ConfigBoolean(def = false, desc = "Use economy via VaultAPI as currency provider.")
 	public boolean config_economy_as_currency;
-	@ConfigInt(def = 0, min = -1, desc = "The amount of decimal places the costs will be rounded to. If set to -1, it will round to the amount of decimal places specified by your economy plugin. If set to 0, costs will simply be rounded up to the nearest integer.")
+
+	@ConfigInt(
+		def = 0,
+		min = -1,
+		desc = "The amount of decimal places the costs will be rounded to. If set to -1, it will round to the amount of decimal places specified by your economy plugin. If set to 0, costs will simply be rounded up to the nearest integer."
+	)
 	public int config_economy_decimal_places;
 
-	@ConfigMaterial(def = Material.DIAMOND, desc = "The currency material for regions. The alternative option to an economy plugin.")
+	@ConfigMaterial(
+		def = Material.DIAMOND,
+		desc = "The currency material for regions. The alternative option to an economy plugin."
+	)
 	public Material config_currency;
-	@ConfigDouble(def = 2.0, min = 0.0, desc = "The base amount of currency required to buy an area equal to one chunk (256 blocks).")
+
+	@ConfigDouble(
+		def = 2.0,
+		min = 0.0,
+		desc = "The base amount of currency required to buy an area equal to one chunk (256 blocks)."
+	)
 	public double config_cost_xz_base;
-	@ConfigDouble(def = 1.15, min = 1.0, desc = "The multiplicator determines how much the cost increases for each additional 16 blocks of height. A region of height h will cost multiplicator^(h / 16.0) * base_amount. Rounding is applied at the end.")
+
+	@ConfigDouble(
+		def = 1.15,
+		min = 1.0,
+		desc = "The multiplicator determines how much the cost increases for each additional 16 blocks of height. A region of height h will cost multiplicator^(h / 16.0) * base_amount. Rounding is applied at the end."
+	)
 	public double config_cost_y_multiplicator;
 
 	// Primary storage for all regions (region.id → region)
 	@Persistent
 	private Map<UUID, Region> storage_regions = new HashMap<>();
+
 	// Primary storage for all region_groups (region_group.id → region_group)
 	@Persistent
 	private Map<UUID, RegionGroup> storage_region_groups = new HashMap<>();
+
 	// Primary storage for the default region groups for new regions created by a player (player_uuid → region_group.id)
 	@Persistent
 	private Map<UUID, UUID> storage_default_region_group = new HashMap<>();
@@ -125,7 +149,8 @@ public class Regions extends Module<Regions> {
 	// extent.min or extent.max null → Selection mode active, but no selection has been made yet
 	private Map<UUID, RegionSelection> region_selections = new HashMap<>();
 
-	@LangMessage public TranslatedMessage lang_start_region_selection;
+	@LangMessage
+	public TranslatedMessage lang_start_region_selection;
 
 	// This permission allows players (usually admins) to always administrate
 	// any region (rename, delete), regardless of whether other restrictions
@@ -148,7 +173,12 @@ public class Regions extends Module<Regions> {
 		dynmap_layer = new RegionDynmapLayer(this);
 
 		// Register admin permission
-		admin_permission = new Permission("vane." + get_module().get_name() + ".admin", "Allows administration of any region", PermissionDefault.FALSE);
+		admin_permission =
+			new Permission(
+				"vane." + get_module().get_name() + ".admin",
+				"Allows administration of any region",
+				PermissionDefault.FALSE
+			);
 		get_module().register_permission(admin_permission);
 	}
 
@@ -171,7 +201,10 @@ public class Regions extends Module<Regions> {
 		try {
 			vault_api_plugin = get_module().getServer().getPluginManager().getPlugin("Vault");
 		} catch (Exception e) {
-			get_module().log.severe("Economy was selected as the currency provider, but the Vault plugin wasn't found! Falling back to material currency.");
+			get_module()
+				.log.severe(
+					"Economy was selected as the currency provider, but the Vault plugin wasn't found! Falling back to material currency."
+				);
 			return false;
 		}
 
@@ -181,7 +214,7 @@ public class Regions extends Module<Regions> {
 
 	@Override
 	public void on_enable() {
-		final var portals = (Portals)getServer().getPluginManager().getPlugin("vane-portals");
+		final var portals = (Portals) getServer().getPluginManager().getPlugin("vane-portals");
 
 		// Register callback to portals module so portals
 		// can find out if two portals are in the same region group
@@ -251,7 +284,7 @@ public class Regions extends Module<Regions> {
 		double dy = Math.abs(c1.getY() - c2.getY());
 		double dz = Math.abs(c1.getZ() - c2.getZ());
 		final double len = dx + dy + dz;
-		final int count = Math.min(visualize_max_particels, (int)(visualize_particles_per_block * len));
+		final int count = Math.min(visualize_max_particels, (int) (visualize_particles_per_block * len));
 
 		// Compensate for using normal distributed particles
 		dx *= visualize_stddev_compensation;
@@ -259,22 +292,34 @@ public class Regions extends Module<Regions> {
 		dz *= visualize_stddev_compensation;
 
 		// Spawn base particles
-		world.spawnParticle(Particle.END_ROD,
-				mx, my, mz,
-				count,
-				dx, dy, dz,
-				0.0,   // speed
-				null,  // data
-				true); // force
+		world.spawnParticle(
+			Particle.END_ROD,
+			mx,
+			my,
+			mz,
+			count,
+			dx,
+			dy,
+			dz,
+			0.0, // speed
+			null, // data
+			true
+		); // force
 
 		// Spawn colored particles indicating validity
-		world.spawnParticle(Particle.REDSTONE,
-				mx, my, mz,
-				count,
-				dx, dy, dz,
-				0.0,   // speed
-				valid ? visualize_dust_valid : visualize_dust_invalid, // data
-				true); // force
+		world.spawnParticle(
+			Particle.REDSTONE,
+			mx,
+			my,
+			mz,
+			count,
+			dx,
+			dy,
+			dz,
+			0.0, // speed
+			valid ? visualize_dust_valid : visualize_dust_invalid, // data
+			true
+		); // force
 	}
 
 	private void visualize_selections() {
@@ -353,8 +398,7 @@ public class Regions extends Module<Regions> {
 		}
 
 		// If any region uses this group, we can't remove it.
-		if (storage_regions.values().stream().anyMatch(
-			r -> r.region_group_id().equals(group.id()))) {
+		if (storage_regions.values().stream().anyMatch(r -> r.region_group_id().equals(group.id()))) {
 			return false;
 		}
 
@@ -376,13 +420,16 @@ public class Regions extends Module<Regions> {
 		mark_persistent_storage_dirty();
 
 		// Close and taint all related open menus
-		get_module().core.menu_manager.for_each_open((player, menu) -> {
-			if (menu.tag() instanceof RegionGroupMenuTag
-					&& Objects.equals(((RegionGroupMenuTag)menu.tag()).region_group_id(), group.id())) {
-				menu.taint();
-				menu.close(player);
-			}
-		});
+		get_module()
+			.core.menu_manager.for_each_open((player, menu) -> {
+				if (
+					menu.tag() instanceof RegionGroupMenuTag &&
+					Objects.equals(((RegionGroupMenuTag) menu.tag()).region_group_id(), group.id())
+				) {
+					menu.taint();
+					menu.close(player);
+				}
+			});
 	}
 
 	public RegionGroup get_region_group(final UUID region_group) {
@@ -401,14 +448,22 @@ public class Regions extends Module<Regions> {
 			if (price > 0) {
 				final var transaction = economy.withdraw(player, price);
 				if (!transaction.transactionSuccess()) {
-					log.warning("Player " + player + " tried to create region '" + name + "' (cost " + price + ") but the economy plugin failed to withdraw:");
+					log.warning(
+						"Player " +
+						player +
+						" tried to create region '" +
+						name +
+						"' (cost " +
+						price +
+						") but the economy plugin failed to withdraw:"
+					);
 					log.warning("Error message: " + transaction.errorMessage);
 					return false;
 				}
 			}
 		} else {
 			final var map = new HashMap<ItemStack, Integer>();
-			map.put(new ItemStack(config_currency), (int)price);
+			map.put(new ItemStack(config_currency), (int) price);
 			if (price > 0 && !take_items(player, map)) {
 				return false;
 			}
@@ -450,13 +505,16 @@ public class Regions extends Module<Regions> {
 		mark_persistent_storage_dirty();
 
 		// Close and taint all related open menus
-		get_module().core.menu_manager.for_each_open((player, menu) -> {
-			if (menu.tag() instanceof RegionMenuTag
-					&& Objects.equals(((RegionMenuTag)menu.tag()).region_id(), region.id())) {
-				menu.taint();
-				menu.close(player);
-			}
-		});
+		get_module()
+			.core.menu_manager.for_each_open((player, menu) -> {
+				if (
+					menu.tag() instanceof RegionMenuTag &&
+					Objects.equals(((RegionMenuTag) menu.tag()).region_id(), region.id())
+				) {
+					menu.taint();
+					menu.close(player);
+				}
+			});
 
 		// Remove region from index
 		index_remove_region(region);
@@ -566,8 +624,10 @@ public class Regions extends Module<Regions> {
 	}
 
 	public boolean may_administrate(final Player player, final RegionGroup group) {
-		return player.getUniqueId().equals(group.owner())
-			|| group.get_role(player.getUniqueId()).get_setting(RoleSetting.ADMIN);
+		return (
+			player.getUniqueId().equals(group.owner()) ||
+			group.get_role(player.getUniqueId()).get_setting(RoleSetting.ADMIN)
+		);
 	}
 
 	public boolean may_administrate(final Player player, final Region region) {

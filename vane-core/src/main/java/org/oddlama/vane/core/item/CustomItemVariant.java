@@ -18,7 +18,9 @@ import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.core.module.ModuleComponent;
 
-public class CustomItemVariant<T extends Module<T>, V extends CustomItem<T, V>, U extends ItemVariantEnum> extends ModuleComponent<T> {
+public class CustomItemVariant<T extends Module<T>, V extends CustomItem<T, V>, U extends ItemVariantEnum>
+	extends ModuleComponent<T> {
+
 	private CustomItem<T, V> parent;
 
 	private NamespacedKey key;
@@ -29,7 +31,8 @@ public class CustomItemVariant<T extends Module<T>, V extends CustomItem<T, V>, 
 	private Map<NamespacedKey, Recipe> recipes = new HashMap<>();
 
 	// Language
-	@LangMessage public TranslatedMessage lang_name;
+	@LangMessage
+	public TranslatedMessage lang_name;
 
 	public CustomItemVariant(CustomItem<T, V> parent, U variant) {
 		super(null);
@@ -76,8 +79,7 @@ public class CustomItemVariant<T extends Module<T>, V extends CustomItem<T, V>, 
 	 * Returns the display name for this item variant.
 	 */
 	public Component display_name() {
-		final var display_name = lang_name.format()
-			.decoration(TextDecoration.ITALIC, false);
+		final var display_name = lang_name.format().decoration(TextDecoration.ITALIC, false);
 		return display_name;
 	}
 
@@ -135,7 +137,10 @@ public class CustomItemVariant<T extends Module<T>, V extends CustomItem<T, V>, 
 	}
 
 	/** Returns the main recipe key */
-	public final NamespacedKey recipe_key() { return recipe_key(""); }
+	public final NamespacedKey recipe_key() {
+		return recipe_key("");
+	}
+
 	/** Returns a named recipe key */
 	public final NamespacedKey recipe_key(String recipe_name) {
 		if (recipe_name.equals("")) {
@@ -160,8 +165,8 @@ public class CustomItemVariant<T extends Module<T>, V extends CustomItem<T, V>, 
 		return recipe;
 	}
 
-	public final<R extends Recipe & Keyed> Recipe add_recipe(R recipe) {
-		add_recipe_or_throw(((Keyed)recipe).getKey(), recipe);
+	public final <R extends Recipe & Keyed> Recipe add_recipe(R recipe) {
+		add_recipe_or_throw(((Keyed) recipe).getKey(), recipe);
 		return recipe;
 	}
 
@@ -195,12 +200,10 @@ public class CustomItemVariant<T extends Module<T>, V extends CustomItem<T, V>, 
 	}
 
 	@Override
-	public void on_enable() {
-	}
+	public void on_enable() {}
 
 	@Override
-	public void on_disable() {
-	}
+	public void on_disable() {}
 
 	@Override
 	public void on_generate_resource_pack(final ResourcePackGenerator pack) throws IOException {
@@ -210,8 +213,12 @@ public class CustomItemVariant<T extends Module<T>, V extends CustomItem<T, V>, 
 			throw new RuntimeException("Missing resource '" + resource_name + "'. This is a bug.");
 		}
 		pack.add_item_model(key, resource);
-		pack.add_item_override(base().getKey(), key, predicate -> {
-			predicate.put("custom_model_data", model_data());
-		});
+		pack.add_item_override(
+			base().getKey(),
+			key,
+			predicate -> {
+				predicate.put("custom_model_data", model_data());
+			}
+		);
 	}
 }

@@ -28,28 +28,43 @@ import org.oddlama.vane.enchantments.Enchantments;
 import org.oddlama.vane.enchantments.items.AncientTomeOfKnowledge;
 import org.oddlama.vane.enchantments.items.BookVariant;
 
-@VaneEnchantment(name = "seeding", max_level = 4, rarity = Rarity.COMMON, treasure = true, target = EnchantmentTarget.TOOL)
+@VaneEnchantment(
+	name = "seeding",
+	max_level = 4,
+	rarity = Rarity.COMMON,
+	treasure = true,
+	target = EnchantmentTarget.TOOL
+)
 public class Seeding extends CustomEnchantment<Enchantments> {
+
 	public Seeding(Context<Enchantments> context) {
 		super(context);
 	}
 
 	@Override
 	public void register_recipes() {
-		final var ancient_tome_of_knowledge_enchanted = CustomItem.<AncientTomeOfKnowledge.AncientTomeOfKnowledgeVariant>variant_of(AncientTomeOfKnowledge.class, BookVariant.ENCHANTED_BOOK).item();
-		final var ancient_tome_of_knowledge = CustomItem.<AncientTomeOfKnowledge.AncientTomeOfKnowledgeVariant>variant_of(AncientTomeOfKnowledge.class, BookVariant.BOOK).item();
+		final var ancient_tome_of_knowledge_enchanted = CustomItem
+			.<AncientTomeOfKnowledge.AncientTomeOfKnowledgeVariant>variant_of(
+				AncientTomeOfKnowledge.class,
+				BookVariant.ENCHANTED_BOOK
+			)
+			.item();
+		final var ancient_tome_of_knowledge = CustomItem
+			.<AncientTomeOfKnowledge.AncientTomeOfKnowledgeVariant>variant_of(
+				AncientTomeOfKnowledge.class,
+				BookVariant.BOOK
+			)
+			.item();
 
 		final var recipe_key = recipe_key();
 		final var item = ancient_tome_of_knowledge_enchanted.clone();
-		final var meta = (EnchantmentStorageMeta)item.getItemMeta();
+		final var meta = (EnchantmentStorageMeta) item.getItemMeta();
 		meta.addStoredEnchant(bukkit(), 1, false);
 		item.setItemMeta(meta);
 		get_module().update_enchanted_item(item);
 
 		final var recipe = new ShapedRecipe(recipe_key, item)
-			.shape("1 7",
-				   "2b6",
-				   "345")
+			.shape("1 7", "2b6", "345")
 			.setIngredient('b', ancient_tome_of_knowledge)
 			.setIngredient('1', Material.PUMPKIN_SEEDS)
 			.setIngredient('2', Material.CARROT)

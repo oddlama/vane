@@ -1,15 +1,13 @@
 package org.oddlama.vane.core.config;
 
-import java.lang.StringBuilder;
 import java.lang.reflect.Field;
 import java.util.function.Function;
-
 import org.bukkit.configuration.file.YamlConfiguration;
-
 import org.oddlama.vane.annotation.config.ConfigInt;
 import org.oddlama.vane.core.YamlLoadException;
 
 public class ConfigIntField extends ConfigField<Integer> {
+
 	public ConfigInt annotation;
 
 	public ConfigIntField(Object owner, Field field, Function<String, String> map_name, ConfigInt annotation) {
@@ -45,10 +43,14 @@ public class ConfigIntField extends ConfigField<Integer> {
 
 		final var val = yaml.getInt(yaml_path());
 		if (annotation.min() != Integer.MIN_VALUE && val < annotation.min()) {
-			throw new YamlLoadException("Configuration '" + yaml_path() + "' has an invalid value: Value must be >= " + annotation.min());
+			throw new YamlLoadException(
+				"Configuration '" + yaml_path() + "' has an invalid value: Value must be >= " + annotation.min()
+			);
 		}
 		if (annotation.max() != Integer.MAX_VALUE && val > annotation.max()) {
-			throw new YamlLoadException("Configuration '" + yaml_path() + "' has an invalid value: Value must be <= " + annotation.max());
+			throw new YamlLoadException(
+				"Configuration '" + yaml_path() + "' has an invalid value: Value must be <= " + annotation.max()
+			);
 		}
 	}
 
@@ -60,4 +62,3 @@ public class ConfigIntField extends ConfigField<Integer> {
 		}
 	}
 }
-

@@ -19,7 +19,9 @@ import org.oddlama.vane.annotation.persistent.Persistent;
 import org.oddlama.vane.core.module.Module;
 
 public class PersistentStorageManager {
+
 	public class Migration {
+
 		public long to;
 		public String name;
 		public Consumer<JSONObject> migrator;
@@ -84,10 +86,13 @@ public class PersistentStorageManager {
 	@SuppressWarnings("unchecked")
 	public void compile(Object owner, Function<String, String> map_name) {
 		// Compile all annotated fields
-		persistent_fields.addAll(getAllFields(owner.getClass()).stream()
-			.filter(this::has_persistent_annotation)
-			.map(f -> compile_field(owner, f, map_name))
-			.collect(Collectors.toList()));
+		persistent_fields.addAll(
+			getAllFields(owner.getClass())
+				.stream()
+				.filter(this::has_persistent_annotation)
+				.map(f -> compile_field(owner, f, map_name))
+				.collect(Collectors.toList())
+		);
 	}
 
 	public void add_migration_to(long to, String name, Consumer<JSONObject> migrator) {
@@ -121,7 +126,7 @@ public class PersistentStorageManager {
 		// Check version and migrate if necessary
 		final var version_path = module.storage_path_of("storage_version");
 		final var version_obj = Long.valueOf(json.optString(version_path, "0"));
-		final var version = version_obj == null ? 0 : (long)version_obj;
+		final var version = version_obj == null ? 0 : (long) version_obj;
 		final var needed_version = module.annotation.storage_version();
 		if (version != needed_version && migrations.size() > 0) {
 			module.log.info("Persistent storage is out of date.");
@@ -129,7 +134,8 @@ public class PersistentStorageManager {
 
 			// Sort migrations by target version,
 			// then apply new migrations in order.
-			migrations.stream()
+			migrations
+				.stream()
 				.filter(m -> m.to >= version)
 				.sorted((a, b) -> Long.compare(a.to, b.to))
 				.forEach(m -> {

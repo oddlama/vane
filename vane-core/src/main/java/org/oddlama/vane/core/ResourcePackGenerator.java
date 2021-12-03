@@ -14,13 +14,12 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-
 import org.bukkit.NamespacedKey;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class ResourcePackGenerator {
+
 	private String description = "";
 	private byte[] icon_png_content = null;
 	private Map<String, Map<String, JSONObject>> translations = new HashMap<>();
@@ -57,7 +56,11 @@ public class ResourcePackGenerator {
 		item_textures.put(key, texture_png.readAllBytes());
 	}
 
-	public void add_item_override(NamespacedKey base_item_key, NamespacedKey new_item_key, Consumer<JSONObject> create_predicate) {
+	public void add_item_override(
+		NamespacedKey base_item_key,
+		NamespacedKey new_item_key,
+		Consumer<JSONObject> create_predicate
+	) {
 		var overrides = item_overrides.get(base_item_key);
 		if (overrides == null) {
 			overrides = new ArrayList<JSONObject>();

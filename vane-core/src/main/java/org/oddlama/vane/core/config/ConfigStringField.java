@@ -1,15 +1,13 @@
 package org.oddlama.vane.core.config;
 
-import java.lang.StringBuilder;
 import java.lang.reflect.Field;
 import java.util.function.Function;
-
 import org.bukkit.configuration.file.YamlConfiguration;
-
 import org.oddlama.vane.annotation.config.ConfigString;
 import org.oddlama.vane.core.YamlLoadException;
 
 public class ConfigStringField extends ConfigField<String> {
+
 	public ConfigString annotation;
 
 	public ConfigStringField(Object owner, Field field, Function<String, String> map_name, ConfigString annotation) {
@@ -52,4 +50,3 @@ public class ConfigStringField extends ConfigField<String> {
 		}
 	}
 }
-

@@ -13,6 +13,7 @@ import org.oddlama.vane.core.module.Context;
 
 @Name("time")
 public class Time extends Command<Admin> {
+
 	public enum TimeValue {
 		dawn(23000),
 		day(1000),
@@ -23,16 +24,18 @@ public class Time extends Command<Admin> {
 		midnight(18000);
 
 		private int ticks;
+
 		private TimeValue(int ticks) {
 			this.ticks = ticks;
 		}
 
-		public int ticks() { return ticks; }
+		public int ticks() {
+			return ticks;
+		}
 	}
 
 	public Time(Context<Admin> context) {
 		super(context);
-
 		// Add help
 		params().fixed("help").ignore_case().exec(this::print_help);
 		// Command parameters

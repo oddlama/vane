@@ -2,14 +2,12 @@ package org.oddlama.vane.trifles;
 
 import java.util.HashMap;
 import java.util.UUID;
-
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
-
 import org.oddlama.vane.annotation.VaneModule;
 import org.oddlama.vane.core.Core;
 import org.oddlama.vane.core.item.ModelDataEnum;
@@ -18,6 +16,7 @@ import org.oddlama.vane.trifles.event.PlayerTeleportScrollEvent;
 
 @VaneModule(name = "trifles", bstats = 8644, config_version = 3, lang_version = 2, storage_version = 1)
 public class Trifles extends Module<Trifles> {
+
 	public final HashMap<UUID, Long> last_xp_bottle_consume_time = new HashMap<>();
 
 	public Trifles() {

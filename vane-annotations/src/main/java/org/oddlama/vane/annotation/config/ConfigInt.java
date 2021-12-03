@@ -9,7 +9,10 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface ConfigInt {
 	int def();
+
 	int min() default Integer.MIN_VALUE;
+
 	int max() default Integer.MAX_VALUE;
+
 	String desc();
 }

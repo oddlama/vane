@@ -14,6 +14,7 @@ public enum Orientation {
 
 	private Plane plane;
 	private Vector vector;
+
 	private Orientation(Plane plane, Vector vector) {
 		this.plane = plane;
 		this.vector = vector;
@@ -141,49 +142,55 @@ public enum Orientation {
 		throw new RuntimeException("Invalid control flow. This is a bug.");
 	}
 
-	public static Orientation from(final Plane plane, final Block origin, final Block console, final Location entity_location) {
+	public static Orientation from(
+		final Plane plane,
+		final Block origin,
+		final Block console,
+		final Location entity_location
+	) {
 		switch (plane) {
-			case XY: {
-				final var origin_z = origin.getZ() + 0.5;
-				final var console_z = console.getZ() + 0.5;
-				if (console_z > origin_z) {
-					return NEGATIVE_Z;
-				} else if (console_z < origin_z) {
-					return POSITIVE_Z;
-				} else {
-					if (entity_location.getZ() > origin_z) {
+			case XY:
+				{
+					final var origin_z = origin.getZ() + 0.5;
+					final var console_z = console.getZ() + 0.5;
+					if (console_z > origin_z) {
 						return NEGATIVE_Z;
-					} else {
+					} else if (console_z < origin_z) {
 						return POSITIVE_Z;
-					}
-				}
-			}
-
-			case YZ: {
-				final var origin_x = origin.getX() + 0.5;
-				final var console_x = console.getX() + 0.5;
-				if (console_x > origin_x) {
-					return NEGATIVE_X;
-				} else if (console_x < origin_x) {
-					return POSITIVE_X;
-				} else {
-					if (entity_location.getX() > origin_x) {
-						return NEGATIVE_X;
 					} else {
-						return POSITIVE_X;
+						if (entity_location.getZ() > origin_z) {
+							return NEGATIVE_Z;
+						} else {
+							return POSITIVE_Z;
+						}
 					}
 				}
-			}
-
-			case XZ: {
-				final var origin_y = origin.getY() + 0.5;
-				final var console_y = console.getY() + 0.5;
-				if (console_y >= origin_y) {
-					return NEGATIVE_Y;
-				} else { // if (console_y < origin_y)
-					return POSITIVE_Y;
+			case YZ:
+				{
+					final var origin_x = origin.getX() + 0.5;
+					final var console_x = console.getX() + 0.5;
+					if (console_x > origin_x) {
+						return NEGATIVE_X;
+					} else if (console_x < origin_x) {
+						return POSITIVE_X;
+					} else {
+						if (entity_location.getX() > origin_x) {
+							return NEGATIVE_X;
+						} else {
+							return POSITIVE_X;
+						}
+					}
 				}
-			}
+			case XZ:
+				{
+					final var origin_y = origin.getY() + 0.5;
+					final var console_y = console.getY() + 0.5;
+					if (console_y >= origin_y) {
+						return NEGATIVE_Y;
+					} else { // if (console_y < origin_y)
+						return POSITIVE_Y;
+					}
+				}
 		}
 
 		// Unreachable

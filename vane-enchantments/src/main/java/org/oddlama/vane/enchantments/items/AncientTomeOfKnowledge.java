@@ -3,7 +3,6 @@ package org.oddlama.vane.enchantments.items;
 import org.bukkit.Material;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.loot.LootTables;
-
 import org.oddlama.vane.annotation.item.VaneItem;
 import org.oddlama.vane.core.LootTable.LootTableEntry;
 import org.oddlama.vane.core.item.CustomItem;
@@ -13,7 +12,10 @@ import org.oddlama.vane.enchantments.Enchantments;
 
 @VaneItem(name = "ancient_tome_of_knowledge")
 public class AncientTomeOfKnowledge extends CustomItem<Enchantments, AncientTomeOfKnowledge> {
-	public static class AncientTomeOfKnowledgeVariant extends CustomItemVariant<Enchantments, AncientTomeOfKnowledge, BookVariant> {
+
+	public static class AncientTomeOfKnowledgeVariant
+		extends CustomItemVariant<Enchantments, AncientTomeOfKnowledge, BookVariant> {
+
 		public AncientTomeOfKnowledgeVariant(AncientTomeOfKnowledge parent, BookVariant variant) {
 			super(parent, variant);
 		}
@@ -24,10 +26,11 @@ public class AncientTomeOfKnowledge extends CustomItem<Enchantments, AncientTome
 				final var recipe_key = recipe_key();
 				final var item = item();
 
-				final var ancient_tome = CustomItem.<AncientTome.AncientTomeVariant>variant_of(AncientTome.class, variant()).item();
+				final var ancient_tome = CustomItem
+					.<AncientTome.AncientTomeVariant>variant_of(AncientTome.class, variant())
+					.item();
 				final var recipe = new ShapedRecipe(recipe_key, item)
-					.shape("fb",
-						   "rg")
+					.shape("fb", "rg")
 					.setIngredient('f', Material.FEATHER)
 					.setIngredient('b', ancient_tome)
 					.setIngredient('r', Material.BLAZE_ROD)
@@ -57,9 +60,12 @@ public class AncientTomeOfKnowledge extends CustomItem<Enchantments, AncientTome
 		@Override
 		public Material base() {
 			switch (variant()) {
-				default:             throw new RuntimeException("Missing variant case. This is a bug.");
-				case BOOK:           return Material.BOOK;
-				case ENCHANTED_BOOK: return Material.ENCHANTED_BOOK;
+				default:
+					throw new RuntimeException("Missing variant case. This is a bug.");
+				case BOOK:
+					return Material.BOOK;
+				case ENCHANTED_BOOK:
+					return Material.ENCHANTED_BOOK;
 			}
 		}
 	}

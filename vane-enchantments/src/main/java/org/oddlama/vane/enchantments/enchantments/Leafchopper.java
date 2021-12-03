@@ -1,7 +1,6 @@
 package org.oddlama.vane.enchantments.enchantments;
 
 import com.destroystokyo.paper.MaterialTags;
-
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
@@ -15,9 +14,7 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
-
 import org.jetbrains.annotations.NotNull;
-
 import org.oddlama.vane.annotation.enchantment.Rarity;
 import org.oddlama.vane.annotation.enchantment.VaneEnchantment;
 import org.oddlama.vane.core.item.CustomItem;
@@ -29,26 +26,35 @@ import org.oddlama.vane.enchantments.items.BookVariant;
 
 @VaneEnchantment(name = "leafchopper", rarity = Rarity.COMMON, treasure = true, target = EnchantmentTarget.TOOL)
 public class Leafchopper extends CustomEnchantment<Enchantments> {
+
 	public Leafchopper(Context<Enchantments> context) {
 		super(context);
 	}
 
 	@Override
 	public void register_recipes() {
-		final var ancient_tome_of_knowledge_enchanted = CustomItem.<AncientTomeOfKnowledge.AncientTomeOfKnowledgeVariant>variant_of(AncientTomeOfKnowledge.class, BookVariant.ENCHANTED_BOOK).item();
-		final var ancient_tome_of_knowledge = CustomItem.<AncientTomeOfKnowledge.AncientTomeOfKnowledgeVariant>variant_of(AncientTomeOfKnowledge.class, BookVariant.BOOK).item();
+		final var ancient_tome_of_knowledge_enchanted = CustomItem
+			.<AncientTomeOfKnowledge.AncientTomeOfKnowledgeVariant>variant_of(
+				AncientTomeOfKnowledge.class,
+				BookVariant.ENCHANTED_BOOK
+			)
+			.item();
+		final var ancient_tome_of_knowledge = CustomItem
+			.<AncientTomeOfKnowledge.AncientTomeOfKnowledgeVariant>variant_of(
+				AncientTomeOfKnowledge.class,
+				BookVariant.BOOK
+			)
+			.item();
 
 		final var recipe_key = recipe_key();
 		final var item = ancient_tome_of_knowledge_enchanted.clone();
-		final var meta = (EnchantmentStorageMeta)item.getItemMeta();
+		final var meta = (EnchantmentStorageMeta) item.getItemMeta();
 		meta.addStoredEnchant(bukkit(), 1, false);
 		item.setItemMeta(meta);
 		get_module().update_enchanted_item(item);
 
 		final var recipe = new ShapedRecipe(recipe_key, item)
-			.shape(" s ",
-				   "sbs",
-				   " s ")
+			.shape(" s ", "sbs", " s ")
 			.setIngredient('b', ancient_tome_of_knowledge)
 			.setIngredient('s', Material.SHEARS);
 
@@ -62,7 +68,9 @@ public class Leafchopper extends CustomEnchantment<Enchantments> {
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void on_player_left_click_leaves(PlayerInteractEvent event) {
-		if (!event.hasBlock() || event.getHand() != EquipmentSlot.HAND || event.getAction() != Action.LEFT_CLICK_BLOCK) {
+		if (
+			!event.hasBlock() || event.getHand() != EquipmentSlot.HAND || event.getAction() != Action.LEFT_CLICK_BLOCK
+		) {
 			return;
 		}
 
@@ -74,7 +82,7 @@ public class Leafchopper extends CustomEnchantment<Enchantments> {
 		}
 
 		// Check non persistent leaves
-		var leaves = (Leaves)data;
+		var leaves = (Leaves) data;
 		if (leaves.isPersistent()) {
 			return;
 		}

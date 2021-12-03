@@ -9,5 +9,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface ConfigMaterialMapMapMap {
 	ConfigMaterialMapMapMapEntry[] def();
+
 	String desc();
 }

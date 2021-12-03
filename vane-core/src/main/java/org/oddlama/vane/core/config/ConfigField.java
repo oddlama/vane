@@ -1,20 +1,16 @@
 package org.oddlama.vane.core.config;
 
-import java.lang.Comparable;
-import java.lang.StringBuilder;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.function.Function;
-
 import org.apache.commons.lang.WordUtils;
-
 import org.bukkit.configuration.file.YamlConfiguration;
-
 import org.oddlama.vane.core.YamlLoadException;
 import org.oddlama.vane.core.functional.Consumer2;
 
 public abstract class ConfigField<T> implements Comparable<ConfigField<?>> {
+
 	protected Object owner;
 	protected Field field;
 	protected String path;
@@ -26,7 +22,13 @@ public abstract class ConfigField<T> implements Comparable<ConfigField<?>> {
 	private String basename;
 	private String description;
 
-	public ConfigField(Object owner, Field field, Function<String, String> map_name, String type_name, String description) {
+	public ConfigField(
+		Object owner,
+		Field field,
+		Function<String, String> map_name,
+		String type_name,
+		String description
+	) {
 		this.owner = owner;
 		this.field = field;
 		this.path = map_name.apply(field.getName().substring("config_".length()));
@@ -51,24 +53,38 @@ public abstract class ConfigField<T> implements Comparable<ConfigField<?>> {
 
 		// Dynamic description
 		try {
-			this.description = (String)owner.getClass().getMethod(field.getName() + "_desc").invoke(owner);
+			this.description = (String) owner.getClass().getMethod(field.getName() + "_desc").invoke(owner);
 		} catch (NoSuchMethodException e) {
 			// Ignore, field wasn't overridden
 			this.description = description;
 		} catch (InvocationTargetException | IllegalAccessException e) {
-			throw new RuntimeException("Could not call " + owner.getClass().getName() + "." + field.getName() + "_desc() to override description value", e);
+			throw new RuntimeException(
+				"Could not call " +
+				owner.getClass().getName() +
+				"." +
+				field.getName() +
+				"_desc() to override description value",
+				e
+			);
 		}
 	}
 
 	@SuppressWarnings("unchecked")
 	protected T overridden_def() {
 		try {
-			return (T)owner.getClass().getMethod(field.getName() + "_def").invoke(owner);
+			return (T) owner.getClass().getMethod(field.getName() + "_def").invoke(owner);
 		} catch (NoSuchMethodException e) {
 			// Ignore, field wasn't overridden
 			return null;
 		} catch (InvocationTargetException | IllegalAccessException e) {
-			throw new RuntimeException("Could not call " + owner.getClass().getName() + "." + field.getName() + "_def() to override default value", e);
+			throw new RuntimeException(
+				"Could not call " +
+				owner.getClass().getName() +
+				"." +
+				field.getName() +
+				"_def() to override default value",
+				e
+			);
 		}
 	}
 
@@ -112,28 +128,45 @@ public abstract class ConfigField<T> implements Comparable<ConfigField<?>> {
 					return c;
 				}
 			}
-			return modify_yaml_path_for_sorting(yaml_path()).compareTo(
-					modify_yaml_path_for_sorting(other.yaml_path()));
+			return modify_yaml_path_for_sorting(yaml_path()).compareTo(modify_yaml_path_for_sorting(other.yaml_path()));
 		}
 	}
 
 	protected void append_description(StringBuilder builder, String indent) {
-		final var description_wrapped = indent + "# " + WordUtils.wrap(description, Math.max(60, 80 - indent.length()), "\n" + indent + "# ", false);
+		final var description_wrapped =
+			indent +
+			"# " +
+			WordUtils.wrap(description, Math.max(60, 80 - indent.length()), "\n" + indent + "# ", false);
 		builder.append(description_wrapped);
 		builder.append("\n");
 	}
 
-	protected<U> void append_list_definition(StringBuilder builder, String indent, String prefix, Collection<U> list, Consumer2<StringBuilder, U> append) {
-		list.stream().forEach(i -> {
-			builder.append(indent);
-			builder.append(prefix);
-			builder.append("  - ");
-			append.apply(builder, i);
-			builder.append("\n");
-		});
+	protected <U> void append_list_definition(
+		StringBuilder builder,
+		String indent,
+		String prefix,
+		Collection<U> list,
+		Consumer2<StringBuilder, U> append
+	) {
+		list
+			.stream()
+			.forEach(i -> {
+				builder.append(indent);
+				builder.append(prefix);
+				builder.append("  - ");
+				append.apply(builder, i);
+				builder.append("\n");
+			});
 	}
 
-	protected<U> void append_value_range(StringBuilder builder, String indent, U min, U max, U invalid_min, U invalid_max) {
+	protected <U> void append_value_range(
+		StringBuilder builder,
+		String indent,
+		U min,
+		U max,
+		U invalid_min,
+		U invalid_max
+	) {
 		builder.append(indent);
 		builder.append("# Valid values: ");
 		if (!min.equals(invalid_min)) {
@@ -182,14 +215,17 @@ public abstract class ConfigField<T> implements Comparable<ConfigField<?>> {
 	}
 
 	public abstract T def();
+
 	public abstract void generate_yaml(StringBuilder builder, String indent);
+
 	public abstract void check_loadable(YamlConfiguration yaml) throws YamlLoadException;
+
 	public abstract void load(YamlConfiguration yaml);
 
 	@SuppressWarnings("unchecked")
 	public T get() {
 		try {
-			return (T)field.get(owner);
+			return (T) field.get(owner);
 		} catch (IllegalAccessException e) {
 			throw new RuntimeException("Invalid field access on '" + field.getName() + "'. This is a bug.");
 		}

@@ -9,7 +9,6 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.loot.LootTables;
-
 import org.oddlama.vane.annotation.enchantment.Rarity;
 import org.oddlama.vane.annotation.enchantment.VaneEnchantment;
 import org.oddlama.vane.core.LootTable.LootTableEntry;
@@ -22,6 +21,7 @@ import org.oddlama.vane.enchantments.items.BookVariant;
 
 @VaneEnchantment(name = "unbreakable", rarity = Rarity.RARE, treasure = true, allow_custom = true)
 public class Unbreakable extends CustomEnchantment<Enchantments> {
+
 	public Unbreakable(Context<Enchantments> context) {
 		super(context);
 	}
@@ -34,20 +34,25 @@ public class Unbreakable extends CustomEnchantment<Enchantments> {
 
 	@Override
 	public void register_recipes() {
-		final var ancient_tome_of_the_gods_enchanted = CustomItem.<AncientTomeOfTheGods.AncientTomeOfTheGodsVariant>variant_of(AncientTomeOfTheGods.class, BookVariant.ENCHANTED_BOOK).item();
-		final var ancient_tome_of_the_gods = CustomItem.<AncientTomeOfTheGods.AncientTomeOfTheGodsVariant>variant_of(AncientTomeOfTheGods.class, BookVariant.BOOK).item();
+		final var ancient_tome_of_the_gods_enchanted = CustomItem
+			.<AncientTomeOfTheGods.AncientTomeOfTheGodsVariant>variant_of(
+				AncientTomeOfTheGods.class,
+				BookVariant.ENCHANTED_BOOK
+			)
+			.item();
+		final var ancient_tome_of_the_gods = CustomItem
+			.<AncientTomeOfTheGods.AncientTomeOfTheGodsVariant>variant_of(AncientTomeOfTheGods.class, BookVariant.BOOK)
+			.item();
 
 		final var recipe_key = recipe_key();
 		final var item = ancient_tome_of_the_gods_enchanted.clone();
-		final var meta = (EnchantmentStorageMeta)item.getItemMeta();
+		final var meta = (EnchantmentStorageMeta) item.getItemMeta();
 		meta.addStoredEnchant(bukkit(), 1, false);
 		item.setItemMeta(meta);
 		get_module().update_enchanted_item(item);
 
 		final var recipe = new ShapedRecipe(recipe_key, item)
-			.shape("waw",
-				   "nbn",
-			       "tst")
+			.shape("waw", "nbn", "tst")
 			.setIngredient('b', ancient_tome_of_the_gods)
 			.setIngredient('w', Material.WITHER_ROSE)
 			.setIngredient('a', Material.ENCHANTED_GOLDEN_APPLE)

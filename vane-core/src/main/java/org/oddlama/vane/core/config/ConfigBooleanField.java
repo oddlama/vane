@@ -1,15 +1,13 @@
 package org.oddlama.vane.core.config;
 
-import java.lang.StringBuilder;
 import java.lang.reflect.Field;
 import java.util.function.Function;
-
 import org.bukkit.configuration.file.YamlConfiguration;
-
 import org.oddlama.vane.annotation.config.ConfigBoolean;
 import org.oddlama.vane.core.YamlLoadException;
 
 public class ConfigBooleanField extends ConfigField<Boolean> {
+
 	private ConfigBoolean annotation;
 
 	public ConfigBooleanField(Object owner, Field field, Function<String, String> map_name, ConfigBoolean annotation) {
@@ -51,4 +49,3 @@ public class ConfigBooleanField extends ConfigField<Boolean> {
 		}
 	}
 }
-

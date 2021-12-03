@@ -2,14 +2,12 @@ package org.oddlama.vane.core.module;
 
 import java.io.IOException;
 import java.util.function.Consumer;
-
 import org.bukkit.scheduler.BukkitTask;
-
 import org.json.JSONObject;
-
 import org.oddlama.vane.core.ResourcePackGenerator;
 
 public abstract class ModuleComponent<T extends Module<T>> {
+
 	private Context<T> context = null;
 
 	public ModuleComponent(Context<T> context) {
@@ -41,8 +39,11 @@ public abstract class ModuleComponent<T extends Module<T>> {
 	}
 
 	protected abstract void on_enable();
+
 	protected abstract void on_disable();
+
 	protected void on_config_change() {}
+
 	protected void on_generate_resource_pack(final ResourcePackGenerator pack) throws IOException {}
 
 	public final BukkitTask schedule_task_timer(Runnable task, long delay_ticks, long period_ticks) {

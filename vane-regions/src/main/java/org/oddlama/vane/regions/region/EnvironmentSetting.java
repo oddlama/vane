@@ -12,10 +12,10 @@ public enum EnvironmentSetting {
 
 	// Environment
 	TRAMPLE(false),
-	VINE_GROWTH(false),
-	;
+	VINE_GROWTH(false);
 
 	private boolean def;
+
 	private EnvironmentSetting(final boolean def) {
 		this.def = def;
 	}

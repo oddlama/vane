@@ -34,8 +34,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Waterfall extends Plugin implements Listener {
+
 	public static final String CHANNEL_AUTH_MULTIPLEX = "vane_waterfall:auth_multiplex";
-	public static String MESSAGE_MULTIPLEX_MOJANG_AUTH_NO_PERMISSION_KICK = "§cYou have no permission to use this auth multiplexer!";
+	public static String MESSAGE_MULTIPLEX_MOJANG_AUTH_NO_PERMISSION_KICK =
+		"§cYou have no permission to use this auth multiplexer!";
 
 	public Config config = new Config(this);
 	public Maintenance maintenance = new Maintenance(this);
@@ -96,7 +98,9 @@ public class Waterfall extends Plugin implements Listener {
 	}
 
 	public static JSONObject read_json_from_url(String url) throws IOException, JSONException {
-		try (final var rd = new BufferedReader(new InputStreamReader(new URL(url).openStream(), StandardCharsets.UTF_8))) {
+		try (
+			final var rd = new BufferedReader(new InputStreamReader(new URL(url).openStream(), StandardCharsets.UTF_8))
+		) {
 			return new JSONObject(read_all(rd));
 		}
 	}
@@ -106,7 +110,10 @@ public class Waterfall extends Plugin implements Listener {
 		try {
 			final var json = read_json_from_url(url);
 			final var id_str = json.getString("id");
-			final var uuid_str = id_str.replaceFirst("(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)", "$1-$2-$3-$4-$5");
+			final var uuid_str = id_str.replaceFirst(
+				"(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)",
+				"$1-$2-$3-$4-$5"
+			);
 			return UUID.fromString(uuid_str);
 		} catch (IOException e) {
 			getLogger().log(Level.WARNING, "Failed to resolve UUID for player '" + name + "'", e);
@@ -152,14 +159,19 @@ public class Waterfall extends Plugin implements Listener {
 				event.setCancelReason(TextComponent.fromLegacyText("Could not start server"));
 			} else {
 				// Client is connecting while startup
-				getProxy().getScheduler().runAsync(this, () -> {
-					try {
-						final var p = Runtime.getRuntime().exec(cms.start_cmd());
-						p.waitFor();
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				});
+				getProxy()
+					.getScheduler()
+					.runAsync(
+						this,
+						() -> {
+							try {
+								final var p = Runtime.getRuntime().exec(cms.start_cmd());
+								p.waitFor();
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+						}
+					);
 
 				if (cms.start_kick_msg() == null) {
 					event.setCancelReason(TextComponent.fromLegacyText("Server started"));
@@ -187,15 +199,20 @@ public class Waterfall extends Plugin implements Listener {
 			final var new_uuid_str = new_uuid.toString();
 			final var new_name = new_uuid_str.substring(new_uuid_str.length() - 16);
 
-			getLogger().info("auth multiplex request from player " + name +
-							 " connecting from " + connection.getSocketAddress().toString());
+			getLogger()
+				.info(
+					"auth multiplex request from player " +
+					name +
+					" connecting from " +
+					connection.getSocketAddress().toString()
+				);
 
 			try {
 				// Change the name of the player
 				final var handler_class = Class.forName("net.md_5.bungee.connection.InitialHandler");
 				final var request_field = handler_class.getDeclaredField("loginRequest");
 				request_field.setAccessible(true);
-				final var login_request = (LoginRequest)request_field.get(connection);
+				final var login_request = (LoginRequest) request_field.get(connection);
 
 				final var data_field = LoginRequest.class.getDeclaredField("data");
 				data_field.setAccessible(true);
@@ -205,7 +222,13 @@ public class Waterfall extends Plugin implements Listener {
 				final var name_field = handler_class.getDeclaredField("name");
 				name_field.setAccessible(true);
 				name_field.set(connection, new_name);
-			} catch (ClassNotFoundException | NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+			} catch (
+				ClassNotFoundException
+				| NoSuchFieldException
+				| SecurityException
+				| IllegalArgumentException
+				| IllegalAccessException e
+			) {
 				e.printStackTrace();
 				return;
 			}
@@ -217,11 +240,19 @@ public class Waterfall extends Plugin implements Listener {
 			//	("OfflinePlayer:" + new_name).getBytes(StandardCharsets.UTF_8));
 
 			register_auth_multiplex_player(server, multiplexer_id, uuid, name, new_uuid, new_name);
-			getLogger().info("auth multiplex granted as uuid: " + new_uuid + ", name: " + new_name + " for player " + name);
+			getLogger()
+				.info("auth multiplex granted as uuid: " + new_uuid + ", name: " + new_name + " for player " + name);
 		}
 	}
 
-	private void register_auth_multiplex_player(ServerInfo server, int multiplexer_id, UUID old_uuid, String old_name, UUID new_uuid, String new_name) {
+	private void register_auth_multiplex_player(
+		ServerInfo server,
+		int multiplexer_id,
+		UUID old_uuid,
+		String old_name,
+		UUID new_uuid,
+		String new_name
+	) {
 		final var stream = new ByteArrayOutputStream();
 		final var out = new DataOutputStream(stream);
 
@@ -244,7 +275,7 @@ public class Waterfall extends Plugin implements Listener {
 			return false;
 		}
 
-		final var inet_addr = (InetSocketAddress)addr;
+		final var inet_addr = (InetSocketAddress) addr;
 		var connected = false;
 		try (final var test = new Socket(inet_addr.getHostName(), inet_addr.getPort())) {
 			connected = test.isConnected();

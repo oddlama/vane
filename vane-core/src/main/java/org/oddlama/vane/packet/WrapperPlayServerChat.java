@@ -18,15 +18,15 @@
  */
 package org.oddlama.vane.packet;
 
-import java.util.Arrays;
-
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
-import com.comphenix.protocol.wrappers.EnumWrappers.ChatType;
 import com.comphenix.protocol.wrappers.EnumWrappers;
+import com.comphenix.protocol.wrappers.EnumWrappers.ChatType;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
+import java.util.Arrays;
 
 public class WrapperPlayServerChat extends AbstractPacket {
+
 	public static final PacketType TYPE = PacketType.Play.Server.CHAT;
 
 	public WrapperPlayServerChat() {
@@ -96,7 +96,11 @@ public class WrapperPlayServerChat extends AbstractPacket {
 		handle.getBytes().writeSafely(0, value);
 
 		if (EnumWrappers.getChatTypeClass() != null) {
-			Arrays.stream(ChatType.values()).filter(t -> t.getId() == value).findAny().ifPresent(t -> handle.getChatTypes().writeSafely(0, t));
+			Arrays
+				.stream(ChatType.values())
+				.filter(t -> t.getId() == value)
+				.findAny()
+				.ifPresent(t -> handle.getChatTypes().writeSafely(0, t));
 		}
 	}
 }

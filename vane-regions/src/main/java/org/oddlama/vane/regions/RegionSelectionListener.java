@@ -6,15 +6,18 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
-
 import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Context;
 
 public class RegionSelectionListener extends Listener<Regions> {
-	@LangMessage public TranslatedMessage lang_select_primary_block;
-	@LangMessage public TranslatedMessage lang_select_secondary_block;
+
+	@LangMessage
+	public TranslatedMessage lang_select_primary_block;
+
+	@LangMessage
+	public TranslatedMessage lang_select_secondary_block;
 
 	public RegionSelectionListener(Context<Regions> context) {
 		super(context);
@@ -38,8 +41,10 @@ public class RegionSelectionListener extends Listener<Regions> {
 			return;
 		}
 
-		if (player.getEquipment().getItemInMainHand().getType() != Material.AIR ||
-			player.getEquipment().getItemInOffHand().getType() != Material.AIR) {
+		if (
+			player.getEquipment().getItemInMainHand().getType() != Material.AIR ||
+			player.getEquipment().getItemInOffHand().getType() != Material.AIR
+		) {
 			return;
 		}
 
@@ -47,21 +52,13 @@ public class RegionSelectionListener extends Listener<Regions> {
 		switch (event.getAction()) {
 			default:
 				return;
-
 			case LEFT_CLICK_BLOCK:
 				selection.primary = block;
-				lang_select_primary_block.send(player,
-					"§b" + block.getX(),
-					"§b" + block.getY(),
-					"§b" + block.getZ());
+				lang_select_primary_block.send(player, "§b" + block.getX(), "§b" + block.getY(), "§b" + block.getZ());
 				break;
-
 			case RIGHT_CLICK_BLOCK:
 				selection.secondary = block;
-				lang_select_secondary_block.send(player,
-					"§b" + block.getX(),
-					"§b" + block.getY(),
-					"§b" + block.getZ());
+				lang_select_secondary_block.send(player, "§b" + block.getX(), "§b" + block.getY(), "§b" + block.getZ());
 				break;
 		}
 

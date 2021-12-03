@@ -12,10 +12,11 @@ import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.ModuleGroup;
 
 public class FastWalkingGroup extends ModuleGroup<Trifles> {
+
 	@ConfigLong(def = 2000, min = 50, max = 5000, desc = "Speed effect duration in milliseconds.")
 	public long config_duration;
 
-	@ConfigMaterialSet(def = {Material.DIRT_PATH}, desc = "Materials on which players will walk faster.")
+	@ConfigMaterialSet(def = { Material.DIRT_PATH }, desc = "Materials on which players will walk faster.")
 	public Set<Material> config_materials;
 
 	// Variables
@@ -28,9 +29,10 @@ public class FastWalkingGroup extends ModuleGroup<Trifles> {
 	@Override
 	public void on_config_change() {
 		var ticks = ms_to_ticks(config_duration);
-		walk_speed_effect = new PotionEffect(PotionEffectType.SPEED, (int)ticks, 1)
-			.withAmbient(false)
-			.withParticles(false)
-			.withIcon(false);
+		walk_speed_effect =
+			new PotionEffect(PotionEffectType.SPEED, (int) ticks, 1)
+				.withAmbient(false)
+				.withParticles(false)
+				.withIcon(false);
 	}
 }

@@ -17,14 +17,15 @@ import org.oddlama.vane.trifles.Trifles;
 
 @Name("heads")
 public class Heads extends Command<Trifles> {
+
 	@ConfigMaterial(def = Material.BONE, desc = "Currency material used to buy heads.")
 	public Material config_currency;
+
 	@ConfigInt(def = 1, min = 0, desc = "Price (in currency) per head. Set to 0 for free heads.")
 	public int config_price_per_head;
 
 	public Heads(Context<Trifles> context) {
 		super(context);
-
 		// Add help
 		params().fixed("help").ignore_case().exec(this::print_help);
 		// Command parameters
@@ -32,25 +33,48 @@ public class Heads extends Command<Trifles> {
 	}
 
 	private void open_head_library(final Player player) {
-		MenuFactory.head_selector(get_context(), player, (player2, m, t, event) -> {
-			final int amount;
-			switch (event.getClick()) {
-				default: return ClickResult.INVALID_CLICK;
-				case NUMBER_KEY:  amount = event.getHotbarButton() + 1; break;
-				case LEFT:        amount = 1; break;
-				case RIGHT:       amount = 32; break;
-				case MIDDLE:      amount = 64; break;
-				case SHIFT_LEFT:  amount = 64; break;
-				case SHIFT_RIGHT: amount = 16; break;
-			}
+		MenuFactory
+			.head_selector(
+				get_context(),
+				player,
+				(player2, m, t, event) -> {
+					final int amount;
+					switch (event.getClick()) {
+						default:
+							return ClickResult.INVALID_CLICK;
+						case NUMBER_KEY:
+							amount = event.getHotbarButton() + 1;
+							break;
+						case LEFT:
+							amount = 1;
+							break;
+						case RIGHT:
+							amount = 32;
+							break;
+						case MIDDLE:
+							amount = 64;
+							break;
+						case SHIFT_LEFT:
+							amount = 64;
+							break;
+						case SHIFT_RIGHT:
+							amount = 16;
+							break;
+					}
 
-			// Take currency items
-			if (config_price_per_head > 0 && !take_items(player2, new ItemStack(config_currency, config_price_per_head * amount))) {
-				return ClickResult.ERROR;
-			}
+					// Take currency items
+					if (
+						config_price_per_head > 0 &&
+						!take_items(player2, new ItemStack(config_currency, config_price_per_head * amount))
+					) {
+						return ClickResult.ERROR;
+					}
 
-			give_items(player2, t.item(), amount);
-			return ClickResult.SUCCESS;
-		}, player2 -> { }).open(player);
+					give_items(player2, t.item(), amount);
+					return ClickResult.SUCCESS;
+				},
+				player2 -> {}
+			)
+			.open(player);
 	}
 }

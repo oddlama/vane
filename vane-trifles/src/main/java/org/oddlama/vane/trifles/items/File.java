@@ -48,6 +48,7 @@ import org.oddlama.vane.util.BlockUtil;
 
 @VaneItem(name = "file")
 public class File extends CustomItem<Trifles, File> {
+
 	public static enum Variant implements ItemVariantEnum {
 		WOODEN,
 		STONE,
@@ -56,13 +57,22 @@ public class File extends CustomItem<Trifles, File> {
 		DIAMOND,
 		NETHERITE;
 
-		@Override public String prefix() { return name().toLowerCase(); }
-		@Override public boolean enabled() { return true; }
+		@Override
+		public String prefix() {
+			return name().toLowerCase();
+		}
+
+		@Override
+		public boolean enabled() {
+			return true;
+		}
 	}
 
 	public static class FileVariant extends CustomItemVariant<Trifles, File, Variant> {
+
 		@ConfigDouble(def = Double.NaN, desc = "Attack damage modifier.")
 		public double config_attack_damage;
+
 		@ConfigDouble(def = Double.NaN, desc = "Attack speed modifier.")
 		public double config_attack_speed;
 
@@ -78,17 +88,27 @@ public class File extends CustomItem<Trifles, File> {
 			}
 
 			final var recipe = new ShapedRecipe(recipe_key(), item())
-				.shape(" m",
-					   "s ")
+				.shape(" m", "s ")
 				.setIngredient('s', Material.STICK);
 
 			switch (variant()) {
-				case WOODEN:    recipe.setIngredient('m', new MaterialChoice(Tag.PLANKS)); break;
-				case STONE:     recipe.setIngredient('m', new MaterialChoice(Tag.ITEMS_STONE_TOOL_MATERIALS)); break;
-				case IRON:      recipe.setIngredient('m', Material.IRON_INGOT); break;
-				case GOLDEN:    recipe.setIngredient('m', Material.GOLD_INGOT); break;
-				case DIAMOND:   recipe.setIngredient('m', Material.DIAMOND); break;
-				case NETHERITE: /* Can't happen */ break;
+				case WOODEN:
+					recipe.setIngredient('m', new MaterialChoice(Tag.PLANKS));
+					break;
+				case STONE:
+					recipe.setIngredient('m', new MaterialChoice(Tag.ITEMS_STONE_TOOL_MATERIALS));
+					break;
+				case IRON:
+					recipe.setIngredient('m', Material.IRON_INGOT);
+					break;
+				case GOLDEN:
+					recipe.setIngredient('m', Material.GOLD_INGOT);
+					break;
+				case DIAMOND:
+					recipe.setIngredient('m', Material.DIAMOND);
+					break;
+				case NETHERITE:
+					/* Can't happen */break;
 			}
 
 			add_recipe(recipe);
@@ -97,45 +117,78 @@ public class File extends CustomItem<Trifles, File> {
 		@Override
 		public Material base() {
 			switch (variant()) {
-				default:        throw new RuntimeException("Missing variant case. This is a bug.");
-				case WOODEN:    return Material.WOODEN_HOE;
-				case STONE:     return Material.STONE_HOE;
-				case IRON:      return Material.IRON_HOE;
-				case GOLDEN:    return Material.GOLDEN_HOE;
-				case DIAMOND:   return Material.DIAMOND_HOE;
-				case NETHERITE: return Material.NETHERITE_HOE;
+				default:
+					throw new RuntimeException("Missing variant case. This is a bug.");
+				case WOODEN:
+					return Material.WOODEN_HOE;
+				case STONE:
+					return Material.STONE_HOE;
+				case IRON:
+					return Material.IRON_HOE;
+				case GOLDEN:
+					return Material.GOLDEN_HOE;
+				case DIAMOND:
+					return Material.DIAMOND_HOE;
+				case NETHERITE:
+					return Material.NETHERITE_HOE;
 			}
 		}
 
 		public double config_attack_damage_def() {
 			switch (variant()) {
-				default:        throw new RuntimeException("Missing variant case. This is a bug.");
-				case WOODEN:    return 1.0;
-				case STONE:     return 1.0;
-				case IRON:      return 1.0;
-				case GOLDEN:    return 1.0;
-				case DIAMOND:   return 2.0;
-				case NETHERITE: return 3.0;
+				default:
+					throw new RuntimeException("Missing variant case. This is a bug.");
+				case WOODEN:
+					return 1.0;
+				case STONE:
+					return 1.0;
+				case IRON:
+					return 1.0;
+				case GOLDEN:
+					return 1.0;
+				case DIAMOND:
+					return 2.0;
+				case NETHERITE:
+					return 3.0;
 			}
 		}
 
 		public double config_attack_speed_def() {
 			switch (variant()) {
-				default:        throw new RuntimeException("Missing variant case. This is a bug.");
-				case WOODEN:    return 2.0;
-				case STONE:     return 3.0;
-				case IRON:      return 4.0;
-				case GOLDEN:    return 6.0;
-				case DIAMOND:   return 5.0;
-				case NETHERITE: return 5.0;
+				default:
+					throw new RuntimeException("Missing variant case. This is a bug.");
+				case WOODEN:
+					return 2.0;
+				case STONE:
+					return 3.0;
+				case IRON:
+					return 4.0;
+				case GOLDEN:
+					return 6.0;
+				case DIAMOND:
+					return 5.0;
+				case NETHERITE:
+					return 5.0;
 			}
 		}
 
 		@Override
 		public ItemStack modify_item_stack(ItemStack item) {
 			final var meta = item.getItemMeta();
-			final var modifier_damage = new AttributeModifier(MODIFIER_UUID_GENERIC_ATTACK_DAMAGE, "Tool damage", config_attack_damage, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
-			final var modifier_speed = new AttributeModifier(MODIFIER_UUID_GENERIC_ATTACK_SPEED, "Tool speed", config_attack_speed, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
+			final var modifier_damage = new AttributeModifier(
+				MODIFIER_UUID_GENERIC_ATTACK_DAMAGE,
+				"Tool damage",
+				config_attack_damage,
+				AttributeModifier.Operation.ADD_NUMBER,
+				EquipmentSlot.HAND
+			);
+			final var modifier_speed = new AttributeModifier(
+				MODIFIER_UUID_GENERIC_ATTACK_SPEED,
+				"Tool speed",
+				config_attack_speed,
+				AttributeModifier.Operation.ADD_NUMBER,
+				EquipmentSlot.HAND
+			);
 			meta.removeAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, modifier_damage);
 			meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, modifier_damage);
 			meta.removeAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, modifier_speed);
@@ -180,15 +233,25 @@ public class File extends CustomItem<Trifles, File> {
 
 	private BlockFace next_face_ccw(final BlockFace face) {
 		switch (face) {
-			default:    return null;
-			case NORTH: return BlockFace.WEST;
-			case EAST:  return BlockFace.NORTH;
-			case SOUTH: return BlockFace.EAST;
-			case WEST:  return BlockFace.SOUTH;
+			default:
+				return null;
+			case NORTH:
+				return BlockFace.WEST;
+			case EAST:
+				return BlockFace.NORTH;
+			case SOUTH:
+				return BlockFace.EAST;
+			case WEST:
+				return BlockFace.SOUTH;
 		}
 	}
 
-	private Sound change_stair_shape(final Player player, final Block block, final Stairs stairs, final BlockFace clicked_face) {
+	private Sound change_stair_shape(
+		final Player player,
+		final Block block,
+		final Stairs stairs,
+		final BlockFace clicked_face
+	) {
 		// Check which eighth of the block was clicked
 		final var oct = raytrace_oct(player, block);
 		if (oct == null) {
@@ -216,39 +279,92 @@ public class File extends CustomItem<Trifles, File> {
 		switch (stairs.getShape()) {
 			case STRAIGHT:
 				switch (corner.xz_face()) {
-					case SOUTH_WEST: shape = Stairs.Shape.INNER_LEFT;  face = BlockFace.NORTH; added = true;  break;
-					case NORTH_WEST: shape = Stairs.Shape.OUTER_RIGHT; face = BlockFace.NORTH; added = false; break;
-					case NORTH_EAST: shape = Stairs.Shape.OUTER_LEFT;  face = BlockFace.NORTH; added = false; break;
-					case SOUTH_EAST: shape = Stairs.Shape.INNER_RIGHT; face = BlockFace.NORTH; added = true;  break;
-					default: break;
+					case SOUTH_WEST:
+						shape = Stairs.Shape.INNER_LEFT;
+						face = BlockFace.NORTH;
+						added = true;
+						break;
+					case NORTH_WEST:
+						shape = Stairs.Shape.OUTER_RIGHT;
+						face = BlockFace.NORTH;
+						added = false;
+						break;
+					case NORTH_EAST:
+						shape = Stairs.Shape.OUTER_LEFT;
+						face = BlockFace.NORTH;
+						added = false;
+						break;
+					case SOUTH_EAST:
+						shape = Stairs.Shape.INNER_RIGHT;
+						face = BlockFace.NORTH;
+						added = true;
+						break;
+					default:
+						break;
 				}
 				break;
 			case INNER_LEFT:
 				switch (corner.xz_face()) {
-					case SOUTH_WEST: shape = Stairs.Shape.STRAIGHT;    face = BlockFace.NORTH; added = false; break;
-					case NORTH_EAST: shape = Stairs.Shape.STRAIGHT;    face = BlockFace.WEST;  added = false; break;
-					default: break;
+					case SOUTH_WEST:
+						shape = Stairs.Shape.STRAIGHT;
+						face = BlockFace.NORTH;
+						added = false;
+						break;
+					case NORTH_EAST:
+						shape = Stairs.Shape.STRAIGHT;
+						face = BlockFace.WEST;
+						added = false;
+						break;
+					default:
+						break;
 				}
 				break;
 			case INNER_RIGHT:
 				switch (corner.xz_face()) {
-					case NORTH_WEST: shape = Stairs.Shape.STRAIGHT;    face = BlockFace.EAST;  added = false; break;
-					case SOUTH_EAST: shape = Stairs.Shape.STRAIGHT;    face = BlockFace.NORTH; added = false; break;
-					default: break;
+					case NORTH_WEST:
+						shape = Stairs.Shape.STRAIGHT;
+						face = BlockFace.EAST;
+						added = false;
+						break;
+					case SOUTH_EAST:
+						shape = Stairs.Shape.STRAIGHT;
+						face = BlockFace.NORTH;
+						added = false;
+						break;
+					default:
+						break;
 				}
 				break;
 			case OUTER_LEFT:
 				switch (corner.xz_face()) {
-					case SOUTH_WEST: shape = Stairs.Shape.STRAIGHT;    face = BlockFace.WEST;  added = true;  break;
-					case NORTH_EAST: shape = Stairs.Shape.STRAIGHT;    face = BlockFace.NORTH; added = true;  break;
-					default: break;
+					case SOUTH_WEST:
+						shape = Stairs.Shape.STRAIGHT;
+						face = BlockFace.WEST;
+						added = true;
+						break;
+					case NORTH_EAST:
+						shape = Stairs.Shape.STRAIGHT;
+						face = BlockFace.NORTH;
+						added = true;
+						break;
+					default:
+						break;
 				}
 				break;
 			case OUTER_RIGHT:
 				switch (corner.xz_face()) {
-					case NORTH_WEST: shape = Stairs.Shape.STRAIGHT;    face = BlockFace.NORTH; added = true;  break;
-					case SOUTH_EAST: shape = Stairs.Shape.STRAIGHT;    face = BlockFace.EAST;  added = true;  break;
-					default: break;
+					case NORTH_WEST:
+						shape = Stairs.Shape.STRAIGHT;
+						face = BlockFace.NORTH;
+						added = true;
+						break;
+					case SOUTH_EAST:
+						shape = Stairs.Shape.STRAIGHT;
+						face = BlockFace.EAST;
+						added = true;
+						break;
+					default:
+						break;
 				}
 				break;
 		}
@@ -260,11 +376,20 @@ public class File extends CustomItem<Trifles, File> {
 
 		// Undo reference rotation
 		switch (face) {
-			case NORTH: face = original_facing; break;
-			case EAST:  face = next_face_ccw(original_facing).getOppositeFace(); break;
-			case SOUTH: face = original_facing.getOppositeFace(); break;
-			case WEST:  face = next_face_ccw(original_facing); break;
-			default: break;
+			case NORTH:
+				face = original_facing;
+				break;
+			case EAST:
+				face = next_face_ccw(original_facing).getOppositeFace();
+				break;
+			case SOUTH:
+				face = original_facing.getOppositeFace();
+				break;
+			case WEST:
+				face = next_face_ccw(original_facing);
+				break;
+			default:
+				break;
 		}
 
 		stairs.setShape(shape);
@@ -273,7 +398,12 @@ public class File extends CustomItem<Trifles, File> {
 		return added ? Sound.UI_STONECUTTER_TAKE_RESULT : Sound.BLOCK_GRINDSTONE_USE;
 	}
 
-	private Sound change_multiple_facing(final Player player, final Block block, final MultipleFacing mf, BlockFace clicked_face) {
+	private Sound change_multiple_facing(
+		final Player player,
+		final Block block,
+		final MultipleFacing mf,
+		BlockFace clicked_face
+	) {
 		final int min_faces;
 		if (mf instanceof Fence || mf instanceof GlassPane) {
 			// Allow fences and glass panes to have 0 faces
@@ -339,9 +469,14 @@ public class File extends CustomItem<Trifles, File> {
 				// click top on side -> toggle height
 				final var height = wall.getHeight(adjusted_clicked_face);
 				switch (height) {
-					case NONE: return null;
-					case LOW:  wall.setHeight(adjusted_clicked_face, Wall.Height.TALL); break;
-					case TALL: wall.setHeight(adjusted_clicked_face, Wall.Height.LOW); break;
+					case NONE:
+						return null;
+					case LOW:
+						wall.setHeight(adjusted_clicked_face, Wall.Height.TALL);
+						break;
+					case TALL:
+						wall.setHeight(adjusted_clicked_face, Wall.Height.LOW);
+						break;
 				}
 			}
 
@@ -366,7 +501,12 @@ public class File extends CustomItem<Trifles, File> {
 		}
 	}
 
-	private Sound change_directional_facing(final Player player, final Block block, final Directional directional, final BlockFace clicked_face) {
+	private Sound change_directional_facing(
+		final Player player,
+		final Block block,
+		final Directional directional,
+		final BlockFace clicked_face
+	) {
 		// Toggle facing
 		directional.setFacing(next_facing(directional.getFaces(), directional.getFacing()));
 		return Sound.UI_STONECUTTER_TAKE_RESULT;
@@ -404,17 +544,17 @@ public class File extends CustomItem<Trifles, File> {
 		final Sound sound;
 		if (player.isSneaking()) {
 			if (data instanceof Stairs) {
-				sound = change_stair_half((Stairs)data);
+				sound = change_stair_half((Stairs) data);
 			} else {
 				return;
 			}
 		} else {
 			if (data instanceof MultipleFacing) {
-				sound = change_multiple_facing(player, block, (MultipleFacing)data, clicked_face);
+				sound = change_multiple_facing(player, block, (MultipleFacing) data, clicked_face);
 			} else if (data instanceof Wall) {
-				sound = change_wall(player, block, (Wall)data, clicked_face);
+				sound = change_wall(player, block, (Wall) data, clicked_face);
 			} else if (data instanceof Stairs) {
-				sound = change_stair_shape(player, block, (Stairs)data, clicked_face);
+				sound = change_stair_shape(player, block, (Stairs) data, clicked_face);
 			} else {
 				return;
 			}

@@ -11,7 +11,7 @@ public interface GenericsFinder extends Serializable {
 		try {
 			Method replaceMethod = getClass().getDeclaredMethod("writeReplace");
 			replaceMethod.setAccessible(true);
-			return (SerializedLambda)replaceMethod.invoke(this);
+			return (SerializedLambda) replaceMethod.invoke(this);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -29,10 +29,11 @@ public interface GenericsFinder extends Serializable {
 	default Method method() {
 		SerializedLambda lambda = serialized();
 		Class<?> containingClass = getContainingClass();
-		return Arrays.asList(containingClass.getDeclaredMethods())
-		    .stream()
-		    .filter(method -> Objects.equals(method.getName(), lambda.getImplMethodName()))
-		    .findFirst()
-		    .orElseThrow(RuntimeException::new);
+		return Arrays
+			.asList(containingClass.getDeclaredMethods())
+			.stream()
+			.filter(method -> Objects.equals(method.getName(), lambda.getImplMethodName()))
+			.findFirst()
+			.orElseThrow(RuntimeException::new);
 	}
 }

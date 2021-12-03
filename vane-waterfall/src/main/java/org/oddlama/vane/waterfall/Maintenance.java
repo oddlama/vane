@@ -13,6 +13,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.scheduler.ScheduledTask;
 
 public class Maintenance {
+
 	public static long SHUTDOWN_THRESHOLD = 10000l; // MESSAGE_SHUTDOWN if <= 10 seconds
 	public static final long[] NOTIFY_TIMES = {
 		240 * 60000l,
@@ -36,38 +37,31 @@ public class Maintenance {
 		1000l,
 	};
 
-	public static String MESSAGE_ABORTED =
-	    "§7> §cServerwartung §l§6ABGEBROCHEN§r§c!";
+	public static String MESSAGE_ABORTED = "§7> §cServerwartung §l§6ABGEBROCHEN§r§c!";
 
 	public static String MESSAGE_INFO =
-	        "§7>"
-	    + "\n§7> §cScheduled maintenance in: §6%time%"
-	    + "\n§7> §cExpected time remaining: §6%remaining%"
-	    + "\n§7>";
+		"§7>" +
+		"\n§7> §cScheduled maintenance in: §6%time%" +
+		"\n§7> §cExpected time remaining: §6%remaining%" +
+		"\n§7>";
 
 	public static String MESSAGE_SCHEDULED =
-	        "§7>"
-	    + "\n§7> §e\u21af§r §6§lMaintenance active§r §e\u21af§r"
-	    + "\n§7>"
-	    + "\n§7> §cScheduled maintenance in: §6%time%"
-	    + "\n§7> §cExpected duration: §6%duration%"
-	    + "\n§7>";
+		"§7>" +
+		"\n§7> §e\u21af§r §6§lMaintenance active§r §e\u21af§r" +
+		"\n§7>" +
+		"\n§7> §cScheduled maintenance in: §6%time%" +
+		"\n§7> §cExpected duration: §6%duration%" +
+		"\n§7>";
 
-	public static String MESSAGE_SHUTDOWN =
-	    "§7> §cShutdown in §6%time%§c!";
+	public static String MESSAGE_SHUTDOWN = "§7> §cShutdown in §6%time%§c!";
 
 	public static String MESSAGE_KICK =
-	    "§e\u21af§r §6§lMaintenance active§r §e\u21af§r"
-	    + "\n§cExpected duration: §6%duration%";
+		"§e\u21af§r §6§lMaintenance active§r §e\u21af§r" + "\n§cExpected duration: §6%duration%";
 
 	public static String MOTD =
-	    "§e\u21af§r §6§lMaintenance active§r §e\u21af§r"
-	    + "\n§cExpected time remaining: §6%remaining%";
+		"§e\u21af§r §6§lMaintenance active§r §e\u21af§r" + "\n§cExpected time remaining: §6%remaining%";
 
-	public static String MESSAGE_CONNECT =
-	    "%MOTD%"
-	    + "\n"
-	    + "\n§7Please try again later.";
+	public static String MESSAGE_CONNECT = "%MOTD%" + "\n" + "\n§7Please try again later.";
 
 	private final Waterfall plugin;
 	private final File file = new File("./.maintenance");
@@ -83,9 +77,17 @@ public class Maintenance {
 		this.plugin = plugin;
 	}
 
-	public long start() { return start; }
-	public long duration() { return duration; }
-	public boolean enabled() { return enabled; }
+	public long start() {
+		return start;
+	}
+
+	public long duration() {
+		return duration;
+	}
+
+	public boolean enabled() {
+		return enabled;
+	}
 
 	public void enable() {
 		enabled = true;
@@ -145,9 +147,7 @@ public class Maintenance {
 		if (file.exists()) {
 			// Recover maintenance times
 
-			try (
-			    final var file_reader = new FileReader(file);
-			    final var reader = new BufferedReader(file_reader)) {
+			try (final var file_reader = new FileReader(file); final var reader = new BufferedReader(file_reader)) {
 				start = Long.parseLong(reader.readLine());
 				duration = Long.parseLong(reader.readLine());
 			} catch (IOException | NumberFormatException e) {
@@ -200,24 +200,26 @@ public class Maintenance {
 			remaining = 0;
 		}
 
-		return TextComponent.fromLegacyText(message
-		    .replace("%MOTD%", MOTD)
-		    .replace("%time%", time)
-		    .replace("%duration%", format_time(duration))
-		    .replace("%remaining%", format_time(remaining)));
+		return TextComponent.fromLegacyText(
+			message
+				.replace("%MOTD%", MOTD)
+				.replace("%time%", time)
+				.replace("%duration%", format_time(duration))
+				.replace("%remaining%", format_time(remaining))
+		);
 	}
 
 	public class TaskNotify implements Runnable {
+
 		private ScheduledTask task = null;
 		private long notify_time = -1;
 
 		@Override
 		public synchronized void run() {
 			// Broadcast message
-			plugin.getProxy().broadcast(format_message(
-			    notify_time <= SHUTDOWN_THRESHOLD
-			        ? MESSAGE_SHUTDOWN
-			        : MESSAGE_SCHEDULED));
+			plugin
+				.getProxy()
+				.broadcast(format_message(notify_time <= SHUTDOWN_THRESHOLD ? MESSAGE_SHUTDOWN : MESSAGE_SCHEDULED));
 
 			// Schedule next time
 			schedule();
@@ -252,7 +254,8 @@ public class Maintenance {
 			}
 
 			// Schedule for next time
-			task = plugin.getProxy().getScheduler().schedule(plugin, this, timespan - notify_time, TimeUnit.MILLISECONDS);
+			task =
+				plugin.getProxy().getScheduler().schedule(plugin, this, timespan - notify_time, TimeUnit.MILLISECONDS);
 		}
 
 		public long next_notify_time() {
@@ -271,6 +274,7 @@ public class Maintenance {
 	}
 
 	public class TaskEnable implements Runnable {
+
 		private ScheduledTask task = null;
 
 		@Override

@@ -9,7 +9,6 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.loot.LootTables;
-
 import org.oddlama.vane.annotation.enchantment.Rarity;
 import org.oddlama.vane.annotation.enchantment.VaneEnchantment;
 import org.oddlama.vane.core.LootTable.LootTableEntry;
@@ -22,26 +21,35 @@ import org.oddlama.vane.enchantments.items.BookVariant;
 
 @VaneEnchantment(name = "hell_bent", rarity = Rarity.COMMON, treasure = true, target = EnchantmentTarget.ARMOR_HEAD)
 public class HellBent extends CustomEnchantment<Enchantments> {
+
 	public HellBent(Context<Enchantments> context) {
 		super(context);
 	}
 
 	@Override
 	public void register_recipes() {
-		final var ancient_tome_of_knowledge_enchanted = CustomItem.<AncientTomeOfKnowledge.AncientTomeOfKnowledgeVariant>variant_of(AncientTomeOfKnowledge.class, BookVariant.ENCHANTED_BOOK).item();
-		final var ancient_tome_of_knowledge = CustomItem.<AncientTomeOfKnowledge.AncientTomeOfKnowledgeVariant>variant_of(AncientTomeOfKnowledge.class, BookVariant.BOOK).item();
+		final var ancient_tome_of_knowledge_enchanted = CustomItem
+			.<AncientTomeOfKnowledge.AncientTomeOfKnowledgeVariant>variant_of(
+				AncientTomeOfKnowledge.class,
+				BookVariant.ENCHANTED_BOOK
+			)
+			.item();
+		final var ancient_tome_of_knowledge = CustomItem
+			.<AncientTomeOfKnowledge.AncientTomeOfKnowledgeVariant>variant_of(
+				AncientTomeOfKnowledge.class,
+				BookVariant.BOOK
+			)
+			.item();
 
 		final var recipe_key = recipe_key();
 		final var item = ancient_tome_of_knowledge_enchanted.clone();
-		final var meta = (EnchantmentStorageMeta)item.getItemMeta();
+		final var meta = (EnchantmentStorageMeta) item.getItemMeta();
 		meta.addStoredEnchant(bukkit(), 1, false);
 		item.setItemMeta(meta);
 		get_module().update_enchanted_item(item);
 
 		final var recipe = new ShapedRecipe(recipe_key, item)
-			.shape(" m ",
-				   " b ",
-				   " t ")
+			.shape(" m ", " b ", " t ")
 			.setIngredient('b', ancient_tome_of_knowledge)
 			.setIngredient('t', Material.TURTLE_HELMET)
 			.setIngredient('m', Material.MUSIC_DISC_PIGSTEP);
@@ -68,7 +76,7 @@ public class HellBent extends CustomEnchantment<Enchantments> {
 		}
 
 		// Get helmet
-		final var player = (Player)entity;
+		final var player = (Player) entity;
 		final var helmet = player.getEquipment().getHelmet();
 		if (helmet == null) {
 			return;

@@ -1,7 +1,6 @@
 package org.oddlama.vane.enchantments.enchantments;
 
 import java.util.List;
-
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.event.EventHandler;
@@ -11,9 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.loot.LootTables;
-
 import org.jetbrains.annotations.NotNull;
-
 import org.oddlama.vane.annotation.config.ConfigDouble;
 import org.oddlama.vane.annotation.config.ConfigDoubleList;
 import org.oddlama.vane.annotation.enchantment.Rarity;
@@ -28,9 +25,20 @@ import org.oddlama.vane.enchantments.items.BookVariant;
 
 @VaneEnchantment(name = "angel", max_level = 5, rarity = Rarity.VERY_RARE, treasure = true, allow_custom = true)
 public class Angel extends CustomEnchantment<Enchantments> {
-	@ConfigDouble(def = 0.1, min = 0.0, max = 1.0, desc = "Acceleration percentage. Each tick, the current flying speed is increased X percent towards the target speed. Low values (~0.1) typically result in a smooth acceleration curve and a natural feeling.")
+
+	@ConfigDouble(
+		def = 0.1,
+		min = 0.0,
+		max = 1.0,
+		desc = "Acceleration percentage. Each tick, the current flying speed is increased X percent towards the target speed. Low values (~0.1) typically result in a smooth acceleration curve and a natural feeling."
+	)
 	private double config_acceleration_percentage;
-	@ConfigDoubleList(def = {0.7, 1.1, 1.4, 1.7, 2.0}, min = 0.0, desc = "Flying speed in blocks per second for each enchantment level.")
+
+	@ConfigDoubleList(
+		def = { 0.7, 1.1, 1.4, 1.7, 2.0 },
+		min = 0.0,
+		desc = "Flying speed in blocks per second for each enchantment level."
+	)
 	private List<Double> config_speed;
 
 	public Angel(Context<Enchantments> context) {
@@ -44,20 +52,25 @@ public class Angel extends CustomEnchantment<Enchantments> {
 
 	@Override
 	public void register_recipes() {
-		final var ancient_tome_of_the_gods_enchanted = CustomItem.<AncientTomeOfTheGods.AncientTomeOfTheGodsVariant>variant_of(AncientTomeOfTheGods.class, BookVariant.ENCHANTED_BOOK).item();
-		final var ancient_tome_of_the_gods = CustomItem.<AncientTomeOfTheGods.AncientTomeOfTheGodsVariant>variant_of(AncientTomeOfTheGods.class, BookVariant.BOOK).item();
+		final var ancient_tome_of_the_gods_enchanted = CustomItem
+			.<AncientTomeOfTheGods.AncientTomeOfTheGodsVariant>variant_of(
+				AncientTomeOfTheGods.class,
+				BookVariant.ENCHANTED_BOOK
+			)
+			.item();
+		final var ancient_tome_of_the_gods = CustomItem
+			.<AncientTomeOfTheGods.AncientTomeOfTheGodsVariant>variant_of(AncientTomeOfTheGods.class, BookVariant.BOOK)
+			.item();
 
 		final var recipe_key = recipe_key();
 		final var item = ancient_tome_of_the_gods_enchanted.clone();
-		final var meta = (EnchantmentStorageMeta)item.getItemMeta();
+		final var meta = (EnchantmentStorageMeta) item.getItemMeta();
 		meta.addStoredEnchant(bukkit(), 1, false);
 		item.setItemMeta(meta);
 		get_module().update_enchanted_item(item);
 
 		final var recipe = new ShapedRecipe(recipe_key, item)
-			.shape("prp",
-				   "mbm",
-				   "mdm")
+			.shape("prp", "mbm", "mdm")
 			.setIngredient('b', ancient_tome_of_the_gods)
 			.setIngredient('m', Material.PHANTOM_MEMBRANE)
 			.setIngredient('d', Material.DRAGON_BREATH)
@@ -123,6 +136,8 @@ public class Angel extends CustomEnchantment<Enchantments> {
 		player.setVelocity(new_vel);
 
 		// Spawn particles
-		loc.getWorld().spawnParticle(Particle.FIREWORKS_SPARK, loc, 0, -new_vel.getX(), -new_vel.getY(), -new_vel.getZ(), 0.4);
+		loc
+			.getWorld()
+			.spawnParticle(Particle.FIREWORKS_SPARK, loc, 0, -new_vel.getX(), -new_vel.getY(), -new_vel.getZ(), 0.4);
 	}
 }

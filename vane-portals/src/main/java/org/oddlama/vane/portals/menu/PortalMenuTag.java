@@ -3,6 +3,7 @@ package org.oddlama.vane.portals.menu;
 import java.util.UUID;
 
 public class PortalMenuTag {
+
 	private UUID portal_id = null;
 
 	public PortalMenuTag(final UUID portal_id) {

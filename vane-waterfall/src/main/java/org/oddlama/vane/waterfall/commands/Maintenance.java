@@ -1,4 +1,5 @@
 package org.oddlama.vane.waterfall.commands;
+
 import static org.oddlama.vane.waterfall.Util.parse_time;
 
 import net.md_5.bungee.api.CommandSender;
@@ -8,6 +9,7 @@ import net.md_5.bungee.api.plugin.Command;
 import org.oddlama.vane.waterfall.Waterfall;
 
 public class Maintenance extends Command {
+
 	public static String MESSAGE_INVALID_TIME_FORMAT = "§cInvalid time format §6'%time%'§c!";
 
 	private final Waterfall plugin;
@@ -27,9 +29,10 @@ public class Maintenance extends Command {
 
 		if (args.length == 1 && (args[0].equalsIgnoreCase("status"))) {
 			if (plugin.maintenance.start() != 0) {
-				sender.sendMessage(plugin.maintenance.format_message(org.oddlama.vane.waterfall.Maintenance.MESSAGE_INFO));
-			} else {
-			}
+				sender.sendMessage(
+					plugin.maintenance.format_message(org.oddlama.vane.waterfall.Maintenance.MESSAGE_INFO)
+				);
+			} else {}
 		} else if (args.length == 1 && (args[0].equalsIgnoreCase("cancel"))) {
 			plugin.maintenance.abort();
 		} else if (args.length == 3 && (args[0].equalsIgnoreCase("schedule"))) {
@@ -39,24 +42,31 @@ public class Maintenance extends Command {
 			try {
 				time = parse_time(args[1]);
 			} catch (NumberFormatException e) {
-				sender.sendMessage(TextComponent.fromLegacyText(MESSAGE_INVALID_TIME_FORMAT.replace("%time%", args[1])));
+				sender.sendMessage(
+					TextComponent.fromLegacyText(MESSAGE_INVALID_TIME_FORMAT.replace("%time%", args[1]))
+				);
 				return;
 			}
 
 			try {
 				duration = parse_time(args[2]);
 			} catch (NumberFormatException e) {
-				sender.sendMessage(TextComponent.fromLegacyText(MESSAGE_INVALID_TIME_FORMAT.replace("%time%", args[2])));
+				sender.sendMessage(
+					TextComponent.fromLegacyText(MESSAGE_INVALID_TIME_FORMAT.replace("%time%", args[2]))
+				);
 				return;
 			}
 
 			plugin.maintenance.schedule(System.currentTimeMillis() + time, duration);
 		} else {
-			sender.sendMessage(TextComponent.fromLegacyText(
-				    "§7> §3/maintenance §3[ §7cancel §3] §f- Cancel any scheduled/active maintenance"
-				+ "\n§7> §3/maintenance §3[ §7status §3] §f- Display info about scheduled/active maintenance"
-				+ "\n§7> §3/maintenance §3[ §7schedule §3] §7<§bin§7> <§bduration§7> §f- Schedule maintenance in <in> for <duration>"
-				+ "\n§7> §3|§7 time format§7 §f- Examples: §b§o3h5m§r§f or §b§o1y2w3d4h5m6s§r"));
+			sender.sendMessage(
+				TextComponent.fromLegacyText(
+					"§7> §3/maintenance §3[ §7cancel §3] §f- Cancel any scheduled/active maintenance" +
+					"\n§7> §3/maintenance §3[ §7status §3] §f- Display info about scheduled/active maintenance" +
+					"\n§7> §3/maintenance §3[ §7schedule §3] §7<§bin§7> <§bduration§7> §f- Schedule maintenance in <in> for <duration>" +
+					"\n§7> §3|§7 time format§7 §f- Examples: §b§o3h5m§r§f or §b§o1y2w3d4h5m6s§r"
+				)
+			);
 		}
 	}
 }

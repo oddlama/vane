@@ -6,6 +6,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 public class PlayerTeleportScrollEvent extends PlayerTeleportEvent {
+
 	private static final HandlerList handlers = new HandlerList();
 
 	public PlayerTeleportScrollEvent(final Player player, final Location from, final Location to) {

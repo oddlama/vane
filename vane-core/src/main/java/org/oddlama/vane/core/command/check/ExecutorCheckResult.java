@@ -1,13 +1,12 @@
 package org.oddlama.vane.core.command.check;
 
 import java.util.ArrayList;
-
 import org.bukkit.command.CommandSender;
-
 import org.oddlama.vane.core.command.Command;
 import org.oddlama.vane.core.command.Executor;
 
 public class ExecutorCheckResult implements CheckResult {
+
 	private int depth;
 	private Executor executor;
 	private ArrayList<Object> parsed_args = new ArrayList<>();

@@ -1,7 +1,6 @@
 package org.oddlama.vane.portals;
 
 import java.util.UUID;
-
 import org.oddlama.vane.annotation.config.ConfigBoolean;
 import org.oddlama.vane.annotation.config.ConfigInt;
 import org.oddlama.vane.annotation.config.ConfigString;
@@ -12,22 +11,33 @@ import org.oddlama.vane.core.module.ModuleComponent;
 import org.oddlama.vane.portals.portal.Portal;
 
 public class PortalDynmapLayer extends ModuleComponent<Portals> {
+
 	public static final String LAYER_ID = "vane_portals.portals";
 
 	@ConfigInt(def = 29, min = 0, desc = "Layer ordering priority.")
 	public int config_layer_priority;
+
 	@ConfigBoolean(def = false, desc = "If the layer should be hidden by default.")
 	public boolean config_layer_hide;
+
 	@ConfigString(def = "compass", desc = "The dynmap marker icon.")
 	public String config_marker_icon;
 
-	@LangMessage public TranslatedMessage lang_layer_label;
-	@LangMessage public TranslatedMessage lang_marker_label;
+	@LangMessage
+	public TranslatedMessage lang_layer_label;
+
+	@LangMessage
+	public TranslatedMessage lang_marker_label;
 
 	private PortalDynmapLayerDelegate delegate = null;
 
 	public PortalDynmapLayer(final Context<Portals> context) {
-		super(context.group("dynmap", "Enable dynmap integration. Public portals will then be shown on a separate dynmap layer."));
+		super(
+			context.group(
+				"dynmap",
+				"Enable dynmap integration. Public portals will then be shown on a separate dynmap layer."
+			)
+		);
 	}
 
 	public void delayed_on_enable() {
@@ -52,7 +62,6 @@ public class PortalDynmapLayer extends ModuleComponent<Portals> {
 			delegate = null;
 		}
 	}
-
 
 	public void update_marker(final Portal portal) {
 		if (delegate != null) {

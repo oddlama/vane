@@ -4,13 +4,17 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-
-import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.module.Context;
 
 public class CommandHider extends Listener<Core> {
+
 	public CommandHider(Context<Core> context) {
-		super(context.group("hide_commands", "Hide error messages for all commands for which a player has no permission, by displaying the default unknown command message instead."));
+		super(
+			context.group(
+				"hide_commands",
+				"Hide error messages for all commands for which a player has no permission, by displaying the default unknown command message instead."
+			)
+		);
 	}
 
 	private boolean allow_command_event(String message, Player player) {

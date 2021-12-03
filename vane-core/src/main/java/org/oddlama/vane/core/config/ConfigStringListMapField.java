@@ -1,6 +1,5 @@
 package org.oddlama.vane.core.config;
 
-import java.lang.StringBuilder;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,37 +8,42 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
 import org.bukkit.configuration.file.YamlConfiguration;
-
 import org.oddlama.vane.annotation.config.ConfigStringListMap;
 import org.oddlama.vane.annotation.config.ConfigStringListMapEntry;
 import org.oddlama.vane.core.YamlLoadException;
 
 public class ConfigStringListMapField extends ConfigField<Map<String, List<String>>> {
+
 	public ConfigStringListMap annotation;
 
-	public ConfigStringListMapField(Object owner, Field field, Function<String, String> map_name, ConfigStringListMap annotation) {
+	public ConfigStringListMapField(
+		Object owner,
+		Field field,
+		Function<String, String> map_name,
+		ConfigStringListMap annotation
+	) {
 		super(owner, field, map_name, "map of string to string list", annotation.desc());
 		this.annotation = annotation;
 	}
 
 	private void append_string_list_map_definition(StringBuilder builder, String indent, String prefix) {
-		def().forEach((k, list) -> {
-			builder.append(indent);
-			builder.append(prefix);
-			builder.append("  ");
-			builder.append(escape_yaml(k));
-			builder.append(":\n");
-
-			list.forEach(s -> {
+		def()
+			.forEach((k, list) -> {
 				builder.append(indent);
 				builder.append(prefix);
-				builder.append("    - ");
-				builder.append(escape_yaml(s));
-				builder.append("\n");
+				builder.append("  ");
+				builder.append(escape_yaml(k));
+				builder.append(":\n");
+
+				list.forEach(s -> {
+					builder.append(indent);
+					builder.append(prefix);
+					builder.append("    - ");
+					builder.append(escape_yaml(s));
+					builder.append("\n");
+				});
 			});
-		});
 	}
 
 	@Override
@@ -48,9 +52,9 @@ public class ConfigStringListMapField extends ConfigField<Map<String, List<Strin
 		if (override != null) {
 			return override;
 		} else {
-			return Arrays.stream(annotation.def()).collect(
-					Collectors.toMap(ConfigStringListMapEntry::key,
-					e -> Arrays.asList(e.list())));
+			return Arrays
+				.stream(annotation.def())
+				.collect(Collectors.toMap(ConfigStringListMapEntry::key, e -> Arrays.asList(e.list())));
 		}
 	}
 
@@ -99,7 +103,7 @@ public class ConfigStringListMapField extends ConfigField<Map<String, List<Strin
 			final var list = new ArrayList<String>();
 			map.put(list_key, list);
 			for (final var obj : yaml.getList(list_path)) {
-				list.add((String)obj);
+				list.add((String) obj);
 			}
 		}
 

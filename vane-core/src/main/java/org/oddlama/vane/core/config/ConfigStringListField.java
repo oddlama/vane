@@ -1,31 +1,40 @@
 package org.oddlama.vane.core.config;
 
-import java.lang.StringBuilder;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
-
 import org.bukkit.configuration.file.YamlConfiguration;
-
 import org.oddlama.vane.annotation.config.ConfigStringList;
 import org.oddlama.vane.core.YamlLoadException;
 
 public class ConfigStringListField extends ConfigField<List<String>> {
+
 	public ConfigStringList annotation;
 
-	public ConfigStringListField(Object owner, Field field, Function<String, String> map_name, ConfigStringList annotation) {
+	public ConfigStringListField(
+		Object owner,
+		Field field,
+		Function<String, String> map_name,
+		ConfigStringList annotation
+	) {
 		super(owner, field, map_name, "list of strings", annotation.desc());
 		this.annotation = annotation;
 	}
 
 	private void append_string_list_definition(StringBuilder builder, String indent, String prefix) {
-		append_list_definition(builder, indent, prefix, def(), (b, s) -> {
+		append_list_definition(
+			builder,
+			indent,
+			prefix,
+			def(),
+			(b, s) -> {
 				b.append("\"");
 				b.append(escape_yaml(s));
 				b.append("\"");
-			});
+			}
+		);
 	}
 
 	@Override
@@ -72,7 +81,7 @@ public class ConfigStringListField extends ConfigField<List<String>> {
 	public void load(YamlConfiguration yaml) {
 		final var list = new ArrayList<>();
 		for (var obj : yaml.getList(yaml_path())) {
-			list.add((String)obj);
+			list.add((String) obj);
 		}
 
 		try {
@@ -82,4 +91,3 @@ public class ConfigStringListField extends ConfigField<List<String>> {
 		}
 	}
 }
-

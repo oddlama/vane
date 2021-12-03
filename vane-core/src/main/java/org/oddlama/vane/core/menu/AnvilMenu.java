@@ -12,6 +12,7 @@ import net.minecraft.world.inventory.ContainerLevelAccess;
 import org.oddlama.vane.core.module.Context;
 
 public class AnvilMenu extends Menu {
+
 	private ServerPlayer entity;
 	private AnvilContainer container;
 	private int container_id;
@@ -19,7 +20,6 @@ public class AnvilMenu extends Menu {
 
 	public AnvilMenu(final Context<?> context, final org.bukkit.entity.Player player, final String title) {
 		super(context);
-
 		this.title = title;
 		this.entity = player_handle(player);
 		this.container_id = entity.nextContainerCounter();
@@ -35,17 +35,26 @@ public class AnvilMenu extends Menu {
 		}
 
 		if (player_handle(player) != entity) {
-			manager.get_module().log.warning("AnvilMenu.open() was called with a player for whom this inventory wasn't created!");
+			manager
+				.get_module()
+				.log.warning("AnvilMenu.open() was called with a player for whom this inventory wasn't created!");
 		}
 
-		entity.connection.send(new ClientboundOpenScreenPacket(container_id, container.getType(), new TextComponent(title)));
+		entity.connection.send(
+			new ClientboundOpenScreenPacket(container_id, container.getType(), new TextComponent(title))
+		);
 		entity.initMenu(container);
 		entity.containerMenu = container;
 	}
 
 	private class AnvilContainer extends net.minecraft.world.inventory.AnvilMenu {
+
 		public AnvilContainer(int window_id, final Player entity) {
-			super(window_id, entity.getInventory(), ContainerLevelAccess.create(entity.getLevel(), new BlockPos(0, 0, 0)));
+			super(
+				window_id,
+				entity.getInventory(),
+				ContainerLevelAccess.create(entity.getLevel(), new BlockPos(0, 0, 0))
+			);
 			this.checkReachable = false;
 		}
 
@@ -56,11 +65,9 @@ public class AnvilMenu extends Menu {
 		}
 
 		@Override
-		public void removed(Player player) {
-		}
+		public void removed(Player player) {}
 
 		@Override
-		protected void clearContainer(Player player, Container container) {
-		}
+		protected void clearContainer(Player player, Container container) {}
 	}
 }

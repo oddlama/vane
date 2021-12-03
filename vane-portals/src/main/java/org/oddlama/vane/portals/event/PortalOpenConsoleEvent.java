@@ -3,10 +3,10 @@ package org.oddlama.vane.portals.event;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
-
 import org.oddlama.vane.portals.portal.Portal;
 
 public class PortalOpenConsoleEvent extends PortalEvent {
+
 	private static final HandlerList handlers = new HandlerList();
 	private Player player;
 	private Block console;

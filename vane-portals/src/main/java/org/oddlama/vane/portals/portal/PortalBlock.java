@@ -1,4 +1,5 @@
 package org.oddlama.vane.portals.portal;
+
 import static org.oddlama.vane.core.persistent.PersistentSerializer.from_json;
 import static org.oddlama.vane.core.persistent.PersistentSerializer.to_json;
 
@@ -10,18 +11,19 @@ import org.oddlama.vane.external.json.JSONObject;
 import org.oddlama.vane.util.LazyBlock;
 
 public class PortalBlock {
+
 	public static Object serialize(@NotNull final Object o) throws IOException {
-		final var portal_block = (PortalBlock)o;
+		final var portal_block = (PortalBlock) o;
 		final var json = new JSONObject();
-		json.put("block", to_json(LazyBlock.class,        portal_block.block));
-		json.put("type",  to_json(PortalBlock.Type.class, portal_block.type));
+		json.put("block", to_json(LazyBlock.class, portal_block.block));
+		json.put("type", to_json(PortalBlock.Type.class, portal_block.type));
 		return json;
 	}
 
 	public static PortalBlock deserialize(@NotNull final Object o) throws IOException {
-		final var json = (JSONObject)o;
-		final var block = from_json(LazyBlock.class,        json.get("block"));
-		final var type  = from_json(PortalBlock.Type.class, json.get("type"));
+		final var json = (JSONObject) o;
+		final var block = from_json(LazyBlock.class, json.get("block"));
+		final var type = from_json(PortalBlock.Type.class, json.get("type"));
 		return new PortalBlock(block, type);
 	}
 
@@ -37,8 +39,13 @@ public class PortalBlock {
 		this(new LazyBlock(block), type);
 	}
 
-	public Block block() { return block.block(); }
-	public Type type() { return type; }
+	public Block block() {
+		return block.block();
+	}
+
+	public Type type() {
+		return type;
+	}
 
 	public PortalBlockLookup lookup(final UUID portal_id) {
 		return new PortalBlockLookup(portal_id, type);
@@ -55,7 +62,7 @@ public class PortalBlock {
 			return false;
 		}
 
-		final var po = (PortalBlock)other;
+		final var po = (PortalBlock) other;
 		// Only block is compared, as the same block can only have one functions.
 		return block().equals(po.block());
 	}
@@ -68,6 +75,6 @@ public class PortalBlock {
 		BOUNDARY_3,
 		BOUNDARY_4,
 		BOUNDARY_5,
-		PORTAL;
+		PORTAL,
 	}
 }

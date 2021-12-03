@@ -24,16 +24,27 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerShearEntityEvent;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
-
 import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.module.Context;
 
 public class WorldProtection extends Listener<Admin> {
+
 	private static final String PERMISSION_NAME = "vane.admin.modify_world";
-	private Permission permission = new Permission(PERMISSION_NAME, "Allow player to modify world", PermissionDefault.FALSE);
+	private Permission permission = new Permission(
+		PERMISSION_NAME,
+		"Allow player to modify world",
+		PermissionDefault.FALSE
+	);
 
 	public WorldProtection(Context<Admin> context) {
-		super(context.group("world_protection", "Enable world protection. This will prevent anyone from modifying the world if they don't have the permission '" + PERMISSION_NAME + "'."));
+		super(
+			context.group(
+				"world_protection",
+				"Enable world protection. This will prevent anyone from modifying the world if they don't have the permission '" +
+				PERMISSION_NAME +
+				"'."
+			)
+		);
 		get_module().register_permission(permission);
 	}
 
@@ -42,7 +53,7 @@ public class WorldProtection extends Listener<Admin> {
 			return false;
 		}
 
-		return !((Player)entity).hasPermission(permission);
+		return !((Player) entity).hasPermission(permission);
 	}
 
 	/* ************************ blocks ************************ */
@@ -89,7 +100,7 @@ public class WorldProtection extends Listener<Admin> {
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void on_entity_damage(EntityDamageEvent event) {
 		if (event instanceof EntityDamageByEntityEvent) {
-			final var damage_event = (EntityDamageByEntityEvent)event;
+			final var damage_event = (EntityDamageByEntityEvent) event;
 			if (deny_modify_world(damage_event.getDamager())) {
 				event.setCancelled(true);
 			} else if (deny_modify_world(damage_event.getEntity())) {

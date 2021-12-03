@@ -4,9 +4,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import org.bukkit.command.CommandSender;
-
 import org.oddlama.vane.core.command.Command;
 import org.oddlama.vane.core.command.check.CheckResult;
 import org.oddlama.vane.core.command.check.ErrorCheckResult;
@@ -14,13 +12,19 @@ import org.oddlama.vane.core.command.check.ParseCheckResult;
 import org.oddlama.vane.core.functional.Function1;
 
 public class ChoiceParam<T> extends BaseParam {
+
 	private String argument_type;
 	private Collection<? extends T> choices;
 	private Function1<T, String> to_string;
 	private HashMap<String, T> from_string = new HashMap<>();
 	private boolean ignore_case = false;
 
-	public ChoiceParam(Command<?> command, String argument_type, Collection<? extends T> choices, Function1<T, String> to_string) {
+	public ChoiceParam(
+		Command<?> command,
+		String argument_type,
+		Collection<? extends T> choices,
+		Function1<T, String> to_string
+	) {
 		super(command);
 		this.argument_type = argument_type;
 		this.choices = choices;
@@ -54,7 +58,8 @@ public class ChoiceParam<T> extends BaseParam {
 
 	@Override
 	public List<String> completions_for(CommandSender sender, String[] args, int offset) {
-		return choices.stream()
+		return choices
+			.stream()
 			.map(choice -> to_string.apply(choice))
 			.filter(str -> str.toLowerCase().contains(args[offset].toLowerCase()))
 			.collect(Collectors.toList());

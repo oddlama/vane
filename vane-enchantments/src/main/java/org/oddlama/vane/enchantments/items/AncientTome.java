@@ -2,7 +2,6 @@ package org.oddlama.vane.enchantments.items;
 
 import org.bukkit.Material;
 import org.bukkit.loot.LootTables;
-
 import org.oddlama.vane.annotation.item.VaneItem;
 import org.oddlama.vane.core.LootTable.LootTableEntry;
 import org.oddlama.vane.core.item.CustomItem;
@@ -12,7 +11,9 @@ import org.oddlama.vane.enchantments.Enchantments;
 
 @VaneItem(name = "ancient_tome")
 public class AncientTome extends CustomItem<Enchantments, AncientTome> {
+
 	public static class AncientTomeVariant extends CustomItemVariant<Enchantments, AncientTome, BookVariant> {
+
 		public AncientTomeVariant(AncientTome parent, BookVariant variant) {
 			super(parent, variant);
 		}
@@ -54,9 +55,12 @@ public class AncientTome extends CustomItem<Enchantments, AncientTome> {
 		@Override
 		public Material base() {
 			switch (variant()) {
-				default:             throw new RuntimeException("Missing variant case. This is a bug.");
-				case BOOK:           return Material.BOOK;
-				case ENCHANTED_BOOK: return Material.ENCHANTED_BOOK;
+				default:
+					throw new RuntimeException("Missing variant case. This is a bug.");
+				case BOOK:
+					return Material.BOOK;
+				case ENCHANTED_BOOK:
+					return Material.ENCHANTED_BOOK;
 			}
 		}
 	}

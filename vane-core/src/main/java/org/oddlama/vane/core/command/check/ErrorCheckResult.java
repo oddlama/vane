@@ -1,10 +1,10 @@
 package org.oddlama.vane.core.command.check;
 
 import org.bukkit.command.CommandSender;
-
 import org.oddlama.vane.core.command.Command;
 
 public class ErrorCheckResult implements CheckResult {
+
 	private int depth;
 	private String message;
 	private String arg_chain = "";
@@ -25,7 +25,7 @@ public class ErrorCheckResult implements CheckResult {
 	}
 
 	@Override
-	public boolean apply(Command<?> command ,CommandSender sender) {
+	public boolean apply(Command<?> command, CommandSender sender) {
 		return apply(command, sender, "");
 	}
 

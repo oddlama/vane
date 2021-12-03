@@ -24,6 +24,7 @@ import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.module.Context;
 
 public class ChestSorter extends Listener<Trifles> {
+
 	private static final NamespacedKey LAST_SORT_TIME = namespaced_key("vane_trifles", "last_sort_time");
 
 	@ConfigLong(def = 1000, min = 0, desc = "Chest sorting cooldown in milliseconds.")
@@ -98,11 +99,11 @@ public class ChestSorter extends Listener<Trifles> {
 		// Get persistent data
 		final Chest persistent_chest;
 		if (inventory instanceof DoubleChestInventory) {
-			final var left_side = (((DoubleChestInventory)inventory).getLeftSide()).getHolder();
+			final var left_side = (((DoubleChestInventory) inventory).getLeftSide()).getHolder();
 			if (!(left_side instanceof Chest)) {
 				return;
 			}
-			persistent_chest = (Chest)left_side;
+			persistent_chest = (Chest) left_side;
 		} else {
 			persistent_chest = chest;
 		}
@@ -145,9 +146,9 @@ public class ChestSorter extends Listener<Trifles> {
 					final var block = root_block.getRelative(x, y, z);
 					final var state = block.getState();
 					if (state instanceof Chest) {
-						sort_chest((Chest)state);
+						sort_chest((Chest) state);
 					} else if (state instanceof Barrel) {
-						sort_container((Barrel)state);
+						sort_container((Barrel) state);
 					}
 				}
 			}

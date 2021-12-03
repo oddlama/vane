@@ -10,7 +10,9 @@ import org.oddlama.vane.core.command.Command;
 
 @Name("autostop")
 public class Autostop extends Command<Admin> {
+
 	AutostopGroup autostop;
+
 	public Autostop(AutostopGroup context) {
 		super(context);
 		this.autostop = context;
@@ -26,9 +28,18 @@ public class Autostop extends Command<Admin> {
 		schedule.any_string().exec(this::schedule_delay);
 	}
 
-	private void status(CommandSender sender) { autostop.status(sender); }
-	private void abort(CommandSender sender) { autostop.abort(sender); }
-	private void schedule(CommandSender sender) { autostop.schedule(sender); }
+	private void status(CommandSender sender) {
+		autostop.status(sender);
+	}
+
+	private void abort(CommandSender sender) {
+		autostop.abort(sender);
+	}
+
+	private void schedule(CommandSender sender) {
+		autostop.schedule(sender);
+	}
+
 	private void schedule_delay(CommandSender sender, String delay) {
 		try {
 			autostop.schedule(sender, parse_time(delay));

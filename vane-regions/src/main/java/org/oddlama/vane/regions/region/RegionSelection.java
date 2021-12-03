@@ -11,6 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.oddlama.vane.regions.Regions;
 
 public class RegionSelection {
+
 	private Regions regions;
 	public Block primary = null;
 	public Block secondary = null;
@@ -38,7 +39,8 @@ public class RegionSelection {
 		final var dx = 1 + Math.abs(primary.getX() - secondary.getX());
 		final var dy = 1 + Math.abs(primary.getY() - secondary.getY());
 		final var dz = 1 + Math.abs(primary.getZ() - secondary.getZ());
-		final var cost = Math.pow(regions.config_cost_y_multiplicator, dy / 16.0) * regions.config_cost_xz_base / 256.0 * dx * dz;
+		final var cost =
+			Math.pow(regions.config_cost_y_multiplicator, dy / 16.0) * regions.config_cost_xz_base / 256.0 * dx * dz;
 		if (regions.config_economy_as_currency) {
 			int decimal_places = regions.config_economy_decimal_places;
 			if (decimal_places == -1) {
@@ -65,7 +67,7 @@ public class RegionSelection {
 			return regions.economy.has(player, price);
 		} else {
 			final var map = new HashMap<ItemStack, Integer>();
-			map.put(new ItemStack(regions.config_currency), (int)price);
+			map.put(new ItemStack(regions.config_currency), (int) price);
 			return has_items(player, map);
 		}
 	}
@@ -86,12 +88,14 @@ public class RegionSelection {
 		final var dz = 1 + Math.abs(primary.getZ() - secondary.getZ());
 
 		// min <= extent <= max
-		if (dx < regions.config_min_region_extent_x ||
+		if (
+			dx < regions.config_min_region_extent_x ||
 			dy < regions.config_min_region_extent_y ||
 			dz < regions.config_min_region_extent_z ||
 			dx > regions.config_max_region_extent_x ||
 			dy > regions.config_max_region_extent_y ||
-			dz > regions.config_max_region_extent_z) {
+			dz > regions.config_max_region_extent_z
+		) {
 			return false;
 		}
 

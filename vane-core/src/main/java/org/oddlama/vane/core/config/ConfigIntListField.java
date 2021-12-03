@@ -1,20 +1,17 @@
 package org.oddlama.vane.core.config;
 
-import java.lang.StringBuilder;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
-
 import org.apache.commons.lang.ArrayUtils;
-
 import org.bukkit.configuration.file.YamlConfiguration;
-
 import org.oddlama.vane.annotation.config.ConfigIntList;
 import org.oddlama.vane.core.YamlLoadException;
 
 public class ConfigIntListField extends ConfigField<List<Integer>> {
+
 	public ConfigIntList annotation;
 
 	public ConfigIntListField(Object owner, Field field, Function<String, String> map_name, ConfigIntList annotation) {
@@ -68,10 +65,14 @@ public class ConfigIntListField extends ConfigField<List<Integer>> {
 
 			var val = yaml.getInt(yaml_path());
 			if (annotation.min() != Integer.MIN_VALUE && val < annotation.min()) {
-				throw new YamlLoadException("Configuration '" + yaml_path() + "' has an invalid value: Value must be >= " + annotation.min());
+				throw new YamlLoadException(
+					"Configuration '" + yaml_path() + "' has an invalid value: Value must be >= " + annotation.min()
+				);
 			}
 			if (annotation.max() != Integer.MAX_VALUE && val > annotation.max()) {
-				throw new YamlLoadException("Configuration '" + yaml_path() + "' has an invalid value: Value must be <= " + annotation.max());
+				throw new YamlLoadException(
+					"Configuration '" + yaml_path() + "' has an invalid value: Value must be <= " + annotation.max()
+				);
 			}
 		}
 	}
@@ -79,7 +80,7 @@ public class ConfigIntListField extends ConfigField<List<Integer>> {
 	public void load(YamlConfiguration yaml) {
 		final var list = new ArrayList<Integer>();
 		for (var obj : yaml.getList(yaml_path())) {
-			list.add(((Number)obj).intValue());
+			list.add(((Number) obj).intValue());
 		}
 
 		try {
@@ -89,4 +90,3 @@ public class ConfigIntListField extends ConfigField<List<Integer>> {
 		}
 	}
 }
-

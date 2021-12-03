@@ -3,16 +3,15 @@ package org.oddlama.vane.core.module;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.oddlama.vane.core.ResourcePackGenerator;
 import org.oddlama.vane.core.functional.Consumer1;
-import org.oddlama.vane.core.module.Module;
 
 /**
  * A ModuleContext is an association to a specific Module and also a
  * grouping of config and language variables with a common namespace.
  */
 public class ModuleContext<T extends Module<T>> implements Context<T> {
+
 	protected Context<T> context;
 	protected T module; // cache to not generate chains of get_context()
 	protected String name;

@@ -3,9 +3,7 @@ package org.oddlama.vane.core.command.params;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import org.bukkit.command.CommandSender;
-
 import org.oddlama.vane.core.command.Command;
 import org.oddlama.vane.core.command.check.CheckResult;
 import org.oddlama.vane.core.command.check.ErrorCheckResult;
@@ -14,12 +12,19 @@ import org.oddlama.vane.core.functional.Function1;
 import org.oddlama.vane.core.functional.Function2;
 
 public class DynamicChoiceParam<T> extends BaseParam {
+
 	private String argument_type;
 	private Function1<CommandSender, Collection<? extends T>> choices;
 	private Function2<CommandSender, T, String> to_string;
 	private Function2<CommandSender, String, ? extends T> from_string;
 
-	public DynamicChoiceParam(Command<?> command, String argument_type, Function1<CommandSender, Collection<? extends T>> choices, Function2<CommandSender, T, String> to_string, Function2<CommandSender, String, ? extends T> from_string) {
+	public DynamicChoiceParam(
+		Command<?> command,
+		String argument_type,
+		Function1<CommandSender, Collection<? extends T>> choices,
+		Function2<CommandSender, T, String> to_string,
+		Function2<CommandSender, String, ? extends T> from_string
+	) {
 		super(command);
 		this.argument_type = argument_type;
 		this.choices = choices;
@@ -41,7 +46,9 @@ public class DynamicChoiceParam<T> extends BaseParam {
 
 	@Override
 	public List<String> completions_for(CommandSender sender, String[] args, int offset) {
-		return choices.apply(sender).stream()
+		return choices
+			.apply(sender)
+			.stream()
 			.map(choice -> to_string.apply(sender, choice))
 			.filter(str -> str.toLowerCase().contains(args[offset].toLowerCase()))
 			.collect(Collectors.toList());

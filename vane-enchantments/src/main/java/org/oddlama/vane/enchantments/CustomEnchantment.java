@@ -26,6 +26,7 @@ import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.util.Nms;
 
 public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
+
 	// Track instances
 	private static final Map<Class<?>, CustomEnchantment<?>> instances = new HashMap<>();
 
@@ -38,14 +39,14 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 	private final Set<Enchantment> supersedes = new HashSet<>();
 
 	// Language
-	@LangMessage public TranslatedMessage lang_name;
+	@LangMessage
+	public TranslatedMessage lang_name;
 
 	// All associated recipes
 	private Map<NamespacedKey, Recipe> recipes = new HashMap<>();
 
 	public CustomEnchantment(Context<T> context) {
 		super(null);
-
 		// Make namespace
 		name = annotation.name();
 		context = context.group("enchantment_" + name, "Enable enchantment " + name);
@@ -72,7 +73,7 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 	/**
 	 * May be overridden to reigster superseding enchantments.
 	 */
-	public void register_superseding() { }
+	public void register_superseding() {}
 
 	/**
 	 * Calls register_superseding() on all custom enchantment instances.
@@ -137,10 +138,14 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 	public Component apply_display_format(Component component) {
 		switch (annotation.rarity()) {
 			default:
-			case COMMON:    return component.color(NamedTextColor.DARK_AQUA);
-			case UNCOMMON:  return component.color(NamedTextColor.DARK_AQUA);
-			case RARE:      return component.color(NamedTextColor.GOLD);
-			case VERY_RARE: return component.color(NamedTextColor.DARK_PURPLE).decorate(TextDecoration.BOLD);
+			case COMMON:
+				return component.color(NamedTextColor.DARK_AQUA);
+			case UNCOMMON:
+				return component.color(NamedTextColor.DARK_AQUA);
+			case RARE:
+				return component.color(NamedTextColor.GOLD);
+			case VERY_RARE:
+				return component.color(NamedTextColor.DARK_PURPLE).decorate(TextDecoration.BOLD);
 		}
 	}
 
@@ -150,18 +155,16 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 	 * uses clientside translation keys and supports chat formatting.
 	 */
 	public Component display_name(int level) {
-        var display_name = apply_display_format(lang_name.format()
-			.decoration(TextDecoration.ITALIC, false));
+		var display_name = apply_display_format(lang_name.format().decoration(TextDecoration.ITALIC, false));
 
 		if (level != 1 || max_level() != 1) {
-			final var chat_level = apply_display_format(Component.translatable("enchantment.level." + level)
-				.decoration(TextDecoration.ITALIC, false));
-			display_name = display_name
-				.append(Component.text(" "))
-				.append(chat_level);
-        }
+			final var chat_level = apply_display_format(
+				Component.translatable("enchantment.level." + level).decoration(TextDecoration.ITALIC, false)
+			);
+			display_name = display_name.append(Component.text(" ")).append(chat_level);
+		}
 
-        return display_name;
+		return display_name;
 	}
 
 	/**
@@ -261,7 +264,10 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 	public void register_recipes() {}
 
 	/** Returns the main recipe key */
-	public final NamespacedKey recipe_key() { return recipe_key(""); }
+	public final NamespacedKey recipe_key() {
+		return recipe_key("");
+	}
+
 	/** Returns a named recipe key */
 	public final NamespacedKey recipe_key(String recipe_name) {
 		if (recipe_name.equals("")) {
@@ -286,8 +292,8 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 		return recipe;
 	}
 
-	public final<R extends Recipe & Keyed> Recipe add_recipe(R recipe) {
-		add_recipe_or_throw(((Keyed)recipe).getKey(), recipe);
+	public final <R extends Recipe & Keyed> Recipe add_recipe(R recipe) {
+		add_recipe_or_throw(((Keyed) recipe).getKey(), recipe);
 		return recipe;
 	}
 

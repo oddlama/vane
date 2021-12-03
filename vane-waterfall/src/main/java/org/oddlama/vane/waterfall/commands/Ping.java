@@ -1,12 +1,13 @@
 package org.oddlama.vane.waterfall.commands;
+
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
-
 import org.oddlama.vane.waterfall.Waterfall;
 
 public class Ping extends Command {
+
 	private final Waterfall plugin;
 
 	public Ping(final Waterfall plugin) {
@@ -26,7 +27,7 @@ public class Ping extends Command {
 			return;
 		}
 
-		final var player = (ProxiedPlayer)sender;
+		final var player = (ProxiedPlayer) sender;
 		player.sendMessage(TextComponent.fromLegacyText("§7ping: §3" + Integer.toString(player.getPing()) + "ms"));
 	}
 }

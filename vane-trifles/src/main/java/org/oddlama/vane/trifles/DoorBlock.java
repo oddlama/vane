@@ -4,10 +4,10 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected;
 import org.bukkit.block.data.type.Door;
-
 import org.oddlama.vane.util.BlockUtil;
 
 public class DoorBlock {
+
 	private Block lower_block; // Must be lower block
 	private Door lower;
 	private Door upper;
@@ -16,14 +16,14 @@ public class DoorBlock {
 		// Update to the the current state if possible
 		final var lower_data = lower_block.getBlockData();
 		if (lower_data instanceof Door) {
-			lower = (Door)lower_data;
+			lower = (Door) lower_data;
 		} else {
 			return false;
 		}
 
 		final var upper_data = lower_block.getRelative(BlockFace.UP).getBlockData();
 		if (upper_data instanceof Door) {
-			upper = (Door)upper_data;
+			upper = (Door) upper_data;
 		} else {
 			return false;
 		}
@@ -31,11 +31,20 @@ public class DoorBlock {
 		return true;
 	}
 
-	public BlockFace get_facing() { return lower.getFacing(); }
-	public Door.Hinge get_hinge() { return upper.getHinge(); }
-	public boolean is_open() { return lower.isOpen(); }
+	public BlockFace get_facing() {
+		return lower.getFacing();
+	}
+
+	public Door.Hinge get_hinge() {
+		return upper.getHinge();
+	}
+
+	public boolean is_open() {
+		return lower.isOpen();
+	}
+
 	public void set_open(boolean open) {
-		var data = (Door)lower_block.getBlockData();
+		var data = (Door) lower_block.getBlockData();
 		data.setOpen(open);
 		lower_block.setBlockData(data);
 	}
@@ -46,7 +55,7 @@ public class DoorBlock {
 			return null;
 		}
 
-		final var door = (Door)block_data;
+		final var door = (Door) block_data;
 		final var door_block = new DoorBlock();
 
 		if (door.getHalf() == Bisected.Half.TOP) {
@@ -55,7 +64,7 @@ public class DoorBlock {
 
 			if (data instanceof Door) {
 				door_block.lower_block = tmp;
-				door_block.lower = (Door)data;
+				door_block.lower = (Door) data;
 				door_block.upper = door;
 			} else {
 				return null;
@@ -65,7 +74,7 @@ public class DoorBlock {
 			if (data instanceof Door) {
 				door_block.lower_block = block;
 				door_block.lower = door;
-				door_block.upper = (Door)data;
+				door_block.upper = (Door) data;
 			} else {
 				return null;
 			}

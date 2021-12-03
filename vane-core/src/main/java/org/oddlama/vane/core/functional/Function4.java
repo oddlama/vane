@@ -8,10 +8,10 @@ public interface Function4<T1, T2, T3, T4, R> extends ErasedFunctor, GenericsFin
 
 	@Override
 	@SuppressWarnings("unchecked")
-	default public Object invoke(List<Object> args) {
+	public default Object invoke(List<Object> args) {
 		if (args.size() != 4) {
 			throw new IllegalArgumentException("Functor needs 4 arguments but got " + args.size() + " arguments");
 		}
-		return apply((T1)args.get(0), (T2)args.get(1), (T3)args.get(2), (T4)args.get(3));
+		return apply((T1) args.get(0), (T2) args.get(1), (T3) args.get(2), (T4) args.get(3));
 	}
 }

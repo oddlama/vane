@@ -28,16 +28,27 @@ import org.oddlama.vane.trifles.Trifles;
 
 @VaneItem(name = "reinforced_elytra")
 public class ReinforcedElytra extends CustomItem<Trifles, ReinforcedElytra> {
-	public static final UUID MODIFIER_UUID_REINFORCED_ELYTRA_DEFENSE = UUID.fromString("8d3a5a3c-06d4-40c5-be66-41ebf6a46435"); // Self-generated; Must always be the same!
+
+	public static final UUID MODIFIER_UUID_REINFORCED_ELYTRA_DEFENSE = UUID.fromString(
+		"8d3a5a3c-06d4-40c5-be66-41ebf6a46435"
+	); // Self-generated; Must always be the same!
 
 	public static enum Variant implements ItemVariantEnum {
 		NETHERITE;
 
-		@Override public String prefix() { return name().toLowerCase(); }
-		@Override public boolean enabled() { return true; }
+		@Override
+		public String prefix() {
+			return name().toLowerCase();
+		}
+
+		@Override
+		public boolean enabled() {
+			return true;
+		}
 	}
 
 	public static class ReinforcedElytraVariant extends CustomItemVariant<Trifles, ReinforcedElytra, Variant> {
+
 		@ConfigDouble(def = 6.0, min = 0, desc = "Amount of defense points.")
 		private double config_defense_points;
 
@@ -48,9 +59,12 @@ public class ReinforcedElytra extends CustomItem<Trifles, ReinforcedElytra> {
 		@Override
 		public void register_recipes() {
 			// We need to register a dummy recipe so we can change the result later.
-			final var recipe = new SmithingRecipe(recipe_key(), item(),
-					new MaterialChoice(Material.ELYTRA),
-					new MaterialChoice(Material.NETHERITE_INGOT));
+			final var recipe = new SmithingRecipe(
+				recipe_key(),
+				item(),
+				new MaterialChoice(Material.ELYTRA),
+				new MaterialChoice(Material.NETHERITE_INGOT)
+			);
 			add_recipe(recipe);
 		}
 
@@ -61,15 +75,23 @@ public class ReinforcedElytra extends CustomItem<Trifles, ReinforcedElytra> {
 
 		public double config_defense_points_def() {
 			switch (variant()) {
-				default:        throw new RuntimeException("Missing variant case. This is a bug.");
-				case NETHERITE: return 6.0;
+				default:
+					throw new RuntimeException("Missing variant case. This is a bug.");
+				case NETHERITE:
+					return 6.0;
 			}
 		}
 
 		@Override
 		public ItemStack modify_item_stack(ItemStack item) {
 			final var meta = item.getItemMeta();
-			final var modifier_defense = new AttributeModifier(MODIFIER_UUID_REINFORCED_ELYTRA_DEFENSE, "Defense", config_defense_points, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.CHEST);
+			final var modifier_defense = new AttributeModifier(
+				MODIFIER_UUID_REINFORCED_ELYTRA_DEFENSE,
+				"Defense",
+				config_defense_points,
+				AttributeModifier.Operation.ADD_NUMBER,
+				EquipmentSlot.CHEST
+			);
 			meta.removeAttributeModifier(Attribute.GENERIC_ARMOR, modifier_defense);
 			meta.addAttributeModifier(Attribute.GENERIC_ARMOR, modifier_defense);
 			item.setItemMeta(meta);
@@ -89,10 +111,14 @@ public class ReinforcedElytra extends CustomItem<Trifles, ReinforcedElytra> {
 				throw new RuntimeException("Missing resource '" + broken_resource_name + "'. This is a bug.");
 			}
 			pack.add_item_model(key_broken, broken_resource);
-			pack.add_item_override(base().getKey(), key_broken, predicate -> {
-				predicate.put("custom_model_data", model_data());
-				predicate.put("broken", 1);
-			});
+			pack.add_item_override(
+				base().getKey(),
+				key_broken,
+				predicate -> {
+					predicate.put("custom_model_data", model_data());
+					predicate.put("broken", 1);
+				}
+			);
 		}
 	}
 
@@ -128,7 +154,8 @@ public class ReinforcedElytra extends CustomItem<Trifles, ReinforcedElytra> {
 		}
 
 		switch (event.getCause()) {
-			default: return;
+			default:
+				return;
 			case FIRE:
 			case FIRE_TICK:
 			case LAVA:
@@ -141,7 +168,7 @@ public class ReinforcedElytra extends CustomItem<Trifles, ReinforcedElytra> {
 			return;
 		}
 
-		final var item = ((Item)entity).getItemStack();
+		final var item = ((Item) entity).getItemStack();
 		final var variant = this.<ReinforcedElytraVariant>variant_of(item);
 		if (variant == null || !variant.enabled()) {
 			return;

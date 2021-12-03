@@ -8,11 +8,11 @@ import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
-
 import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.module.Context;
 
 public class PortalBlockProtector extends Listener<Portals> {
+
 	public PortalBlockProtector(Context<Portals> context) {
 		super(context);
 	}

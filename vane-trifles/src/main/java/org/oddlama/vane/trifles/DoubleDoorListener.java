@@ -7,13 +7,18 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.event.entity.EntityInteractEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-
 import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.module.Context;
 
 public class DoubleDoorListener extends Listener<Trifles> {
+
 	public DoubleDoorListener(Context<Trifles> context) {
-		super(context.group("doubledoor", "Enable updating of double doors automatically when one of the doors is changed."));
+		super(
+			context.group(
+				"doubledoor",
+				"Enable updating of double doors automatically when one of the doors is changed."
+			)
+		);
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

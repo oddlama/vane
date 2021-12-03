@@ -19,6 +19,7 @@ import org.oddlama.vane.core.YamlLoadException;
 import org.oddlama.vane.core.module.Module;
 
 public class LangManager {
+
 	Module<?> module;
 	private List<LangField<?>> lang_fields = new ArrayList<>();
 	LangVersionField field_version;
@@ -66,17 +67,19 @@ public class LangManager {
 
 		// Return correct wrapper object
 		if (atype.equals(LangMessage.class)) {
-			return new LangMessageField(module, owner, field, map_name, (LangMessage)annotation);
+			return new LangMessageField(module, owner, field, map_name, (LangMessage) annotation);
 		} else if (atype.equals(LangMessageArray.class)) {
-			return new LangMessageArrayField(module, owner, field, map_name, (LangMessageArray)annotation);
+			return new LangMessageArrayField(module, owner, field, map_name, (LangMessageArray) annotation);
 		} else if (atype.equals(LangVersion.class)) {
 			if (owner != module) {
 				throw new RuntimeException("@LangVersion can only be used inside the main module. This is a bug.");
 			}
 			if (field_version != null) {
-				throw new RuntimeException("There must be exactly one @LangVersion field! (found multiple). This is a bug.");
+				throw new RuntimeException(
+					"There must be exactly one @LangVersion field! (found multiple). This is a bug."
+				);
 			}
-			return field_version = new LangVersionField(module, owner, field, map_name, (LangVersion)annotation);
+			return field_version = new LangVersionField(module, owner, field, map_name, (LangVersion) annotation);
 		} else {
 			throw new RuntimeException("Missing LangField handler for @" + atype.getName() + ". This is a bug.");
 		}
@@ -89,7 +92,9 @@ public class LangManager {
 			if (version == 0) {
 				module.log.severe("Something went wrong while generating or loading the configuration.");
 				module.log.severe("If you are sure your configuration is correct and this isn't a file");
-				module.log.severe("system permission issue, please report this to https://github.com/oddlama/vane/issues");
+				module.log.severe(
+					"system permission issue, please report this to https://github.com/oddlama/vane/issues"
+				);
 			} else if (version < expected_version()) {
 				module.log.severe("This language file is for an older version of " + module.getName() + ".");
 				module.log.severe("Please update your file or use an officially supported language file.");
@@ -108,10 +113,13 @@ public class LangManager {
 	@SuppressWarnings("unchecked")
 	public void compile(Object owner, Function<String, String> map_name) {
 		// Compile all annotated fields
-		lang_fields.addAll(getAllFields(owner.getClass()).stream()
-			.filter(this::has_lang_annotation)
-			.map(f -> compile_field(owner, f, map_name))
-			.collect(Collectors.toList()));
+		lang_fields.addAll(
+			getAllFields(owner.getClass())
+				.stream()
+				.filter(this::has_lang_annotation)
+				.map(f -> compile_field(owner, f, map_name))
+				.collect(Collectors.toList())
+		);
 
 		if (owner == module && field_version == null) {
 			throw new RuntimeException("There must be exactly one @LangVersion field! (found none). This is a bug.");
@@ -120,13 +128,14 @@ public class LangManager {
 
 	@SuppressWarnings("unchecked")
 	public <T> T get_field(String name) {
-		var field = lang_fields.stream()
+		var field = lang_fields
+			.stream()
 			.filter(f -> f.get_name().equals(name))
 			.findFirst()
 			.orElseThrow(() -> new RuntimeException("Missing lang field lang_" + name));
 
 		try {
-			return (T)field;
+			return (T) field;
 		} catch (ClassCastException e) {
 			throw new RuntimeException("Invalid lang field type for lang_" + name, e);
 		}

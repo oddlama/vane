@@ -3,19 +3,16 @@ package org.oddlama.vane.portals;
 import java.util.HashSet;
 import java.util.UUID;
 import java.util.logging.Level;
-
 import org.bukkit.plugin.Plugin;
-
 import org.dynmap.DynmapAPI;
 import org.dynmap.markers.Marker;
 import org.dynmap.markers.MarkerAPI;
 import org.dynmap.markers.MarkerIcon;
 import org.dynmap.markers.MarkerSet;
-
-import org.oddlama.vane.portals.Portals;
 import org.oddlama.vane.portals.portal.Portal;
 
 public class PortalDynmapLayerDelegate {
+
 	private PortalDynmapLayer parent = null;
 
 	private DynmapAPI dynmap_api = null;
@@ -35,7 +32,7 @@ public class PortalDynmapLayerDelegate {
 
 	public void on_enable(final Plugin plugin) {
 		try {
-			dynmap_api = (DynmapAPI)plugin;
+			dynmap_api = (DynmapAPI) plugin;
 			marker_api = dynmap_api.getMarkerAPI();
 		} catch (Exception e) {
 			get_module().log.log(Level.WARNING, "Error while enabling dynmap integration!", e);
@@ -66,7 +63,8 @@ public class PortalDynmapLayerDelegate {
 		// Create or retrieve layer
 		marker_set = marker_api.getMarkerSet(PortalDynmapLayer.LAYER_ID);
 		if (marker_set == null) {
-			marker_set = marker_api.createMarkerSet(PortalDynmapLayer.LAYER_ID, parent.lang_layer_label.str(), null, false);
+			marker_set =
+				marker_api.createMarkerSet(PortalDynmapLayer.LAYER_ID, parent.lang_layer_label.str(), null, false);
 		}
 
 		if (marker_set == null) {
@@ -114,7 +112,16 @@ public class PortalDynmapLayerDelegate {
 		final var marker_id = id_for(portal);
 		final var marker_label = parent.lang_marker_label.str(portal.name());
 
-		marker_set.createMarker(marker_id, marker_label, world_name, loc.getX(), loc.getY(), loc.getZ(), marker_icon, false);
+		marker_set.createMarker(
+			marker_id,
+			marker_label,
+			world_name,
+			loc.getX(),
+			loc.getY(),
+			loc.getZ(),
+			marker_icon,
+			false
+		);
 	}
 
 	public void remove_marker(final UUID portal_id) {

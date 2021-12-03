@@ -1,20 +1,24 @@
 package org.oddlama.vane.core.config;
 
-import java.lang.StringBuilder;
 import java.lang.reflect.Field;
 import java.util.function.Function;
-
 import org.bukkit.configuration.file.YamlConfiguration;
-
 import org.oddlama.vane.annotation.config.ConfigVersion;
 import org.oddlama.vane.core.YamlLoadException;
 import org.oddlama.vane.core.module.Module;
 
 public class ConfigVersionField extends ConfigField<Long> {
+
 	public ConfigVersion annotation;
 
 	public ConfigVersionField(Object owner, Field field, Function<String, String> map_name, ConfigVersion annotation) {
-		super(owner, field, map_name, "version id", "DO NOT CHANGE! The version of this config file. Used to determine if the config needs to be updated.");
+		super(
+			owner,
+			field,
+			map_name,
+			"version id",
+			"DO NOT CHANGE! The version of this config file. Used to determine if the config needs to be updated."
+		);
 		this.annotation = annotation;
 
 		// Version field should be at the bottom
@@ -29,7 +33,7 @@ public class ConfigVersionField extends ConfigField<Long> {
 	@Override
 	public void generate_yaml(StringBuilder builder, String indent) {
 		append_description(builder, indent);
-		append_field_definition(builder, indent, ((Module<?>)owner).annotation.config_version());
+		append_field_definition(builder, indent, ((Module<?>) owner).annotation.config_version());
 	}
 
 	@Override
@@ -54,4 +58,3 @@ public class ConfigVersionField extends ConfigField<Long> {
 		}
 	}
 }
-

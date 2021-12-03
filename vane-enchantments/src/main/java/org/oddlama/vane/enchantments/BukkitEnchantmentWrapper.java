@@ -1,12 +1,11 @@
 package org.oddlama.vane.enchantments;
 
 import net.minecraft.world.item.enchantment.Enchantment;
-
 import org.bukkit.craftbukkit.v1_18_R1.enchantments.CraftEnchantment;
-
 import org.jetbrains.annotations.NotNull;
 
 public class BukkitEnchantmentWrapper extends CraftEnchantment {
+
 	private CustomEnchantment<?> custom_enchantment;
 
 	public BukkitEnchantmentWrapper(CustomEnchantment<?> custom_enchantment, Enchantment native_enchantment) {

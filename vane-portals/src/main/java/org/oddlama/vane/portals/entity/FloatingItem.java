@@ -12,6 +12,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 
 public class FloatingItem extends ItemEntity {
+
 	public FloatingItem(final Location location) {
 		this(location.getWorld(), location.getX(), location.getY(), location.getZ());
 	}
@@ -23,7 +24,6 @@ public class FloatingItem extends ItemEntity {
 
 	public FloatingItem(EntityType<? extends ItemEntity> entitytypes, Level world) {
 		super(entitytypes, world);
-
 		setSilent(true);
 		setInvulnerable(true);
 		setNoGravity(true);
@@ -33,21 +33,61 @@ public class FloatingItem extends ItemEntity {
 		noPhysics = true;
 	}
 
-	@Override public boolean isAttackable() { return false; }
-	@Override public boolean isCollidable(boolean ignoreClimbing) { return false; }
-	@Override public boolean isInvulnerableTo(DamageSource source) { return true; }
-	@Override public boolean isInvisible() { return true; }
-	@Override public boolean fireImmune() { return true; }
-	@Override public void tick() { }
-	@Override public void inactiveTick() { }
+	@Override
+	public boolean isAttackable() {
+		return false;
+	}
+
+	@Override
+	public boolean isCollidable(boolean ignoreClimbing) {
+		return false;
+	}
+
+	@Override
+	public boolean isInvulnerableTo(DamageSource source) {
+		return true;
+	}
+
+	@Override
+	public boolean isInvisible() {
+		return true;
+	}
+
+	@Override
+	public boolean fireImmune() {
+		return true;
+	}
+
+	@Override
+	public void tick() {}
+
+	@Override
+	public void inactiveTick() {}
 
 	// Don't save or load
-	@Override public void readAdditionalSaveData(CompoundTag nbt) {}
-	@Override public void addAdditionalSaveData(CompoundTag nbt) {}
-	@Override public boolean serializeEntity(CompoundTag nbt) { return false; }
-	@Override public boolean save(CompoundTag nbt) { return false; }
-	@Override public CompoundTag saveWithoutId(CompoundTag nbt) { return nbt; }
-	@Override public void load(CompoundTag nbt) {}
+	@Override
+	public void readAdditionalSaveData(CompoundTag nbt) {}
+
+	@Override
+	public void addAdditionalSaveData(CompoundTag nbt) {}
+
+	@Override
+	public boolean serializeEntity(CompoundTag nbt) {
+		return false;
+	}
+
+	@Override
+	public boolean save(CompoundTag nbt) {
+		return false;
+	}
+
+	@Override
+	public CompoundTag saveWithoutId(CompoundTag nbt) {
+		return nbt;
+	}
+
+	@Override
+	public void load(CompoundTag nbt) {}
 
 	@Override
 	public void setItem(ItemStack itemStack) {
@@ -56,7 +96,6 @@ public class FloatingItem extends ItemEntity {
 		if (itemStack.hasCustomHoverName()) {
 			setCustomNameVisible(true);
 			setCustomName(itemStack.getHoverName());
-		} else
-			setCustomNameVisible(false);
+		} else setCustomNameVisible(false);
 	}
 }

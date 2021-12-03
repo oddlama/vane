@@ -27,10 +27,15 @@ import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
 public class ItemUtil {
+
 	private static final UUID SKULL_OWNER = UUID.fromString("00000000-0000-0000-0000-000000000000");
 
-	public static final UUID MODIFIER_UUID_GENERIC_ATTACK_DAMAGE = UUID.fromString("CB3F55D3-645C-4F38-A497-9C13A33DB5CF");
-	public static final UUID MODIFIER_UUID_GENERIC_ATTACK_SPEED = UUID.fromString("FA233E1C-4180-4865-B01B-BCCE9785ACA3");
+	public static final UUID MODIFIER_UUID_GENERIC_ATTACK_DAMAGE = UUID.fromString(
+		"CB3F55D3-645C-4F38-A497-9C13A33DB5CF"
+	);
+	public static final UUID MODIFIER_UUID_GENERIC_ATTACK_SPEED = UUID.fromString(
+		"FA233E1C-4180-4865-B01B-BCCE9785ACA3"
+	);
 
 	public static void damage_item(final Player player, ItemStack item_stack, int amount) {
 		if (amount <= 0) {
@@ -58,7 +63,7 @@ public class ItemUtil {
 	}
 
 	public static ItemStack name_item(final ItemStack item, final Component name) {
-		return name_item(item, name, (List<Component>)null);
+		return name_item(item, name, (List<Component>) null);
 	}
 
 	public static ItemStack name_item(final ItemStack item, final Component name, Component lore) {
@@ -73,7 +78,8 @@ public class ItemUtil {
 		meta.displayName(name);
 
 		if (lore != null) {
-			final var list = lore.stream()
+			final var list = lore
+				.stream()
 				.map(x -> x.decoration(TextDecoration.ITALIC, false))
 				.collect(Collectors.toList());
 			meta.lore(list);
@@ -89,7 +95,7 @@ public class ItemUtil {
 
 		final var a_meta = item_a.getItemMeta();
 		if (a_meta instanceof EnchantmentStorageMeta) {
-			final var stored = ((EnchantmentStorageMeta)a_meta).getStoredEnchants();
+			final var stored = ((EnchantmentStorageMeta) a_meta).getStoredEnchants();
 			if (stored.size() > 0) {
 				ae = stored;
 			}
@@ -97,7 +103,7 @@ public class ItemUtil {
 
 		final var b_meta = item_b.getItemMeta();
 		if (b_meta instanceof EnchantmentStorageMeta) {
-			final var stored = ((EnchantmentStorageMeta)b_meta).getStoredEnchants();
+			final var stored = ((EnchantmentStorageMeta) b_meta).getStoredEnchants();
 			if (stored.size() > 0) {
 				be = stored;
 			}
@@ -120,19 +126,41 @@ public class ItemUtil {
 		}
 
 		// Sort by combined rarity (rare = low value) first
-		final var a_rarity = ae.keySet().stream().mapToInt(e -> CraftEnchantment.getRaw(e).getRarity().getWeight()).sum();
-		final var b_rarity = be.keySet().stream().mapToInt(e -> CraftEnchantment.getRaw(e).getRarity().getWeight()).sum();
+		final var a_rarity = ae
+			.keySet()
+			.stream()
+			.mapToInt(e -> CraftEnchantment.getRaw(e).getRarity().getWeight())
+			.sum();
+		final var b_rarity = be
+			.keySet()
+			.stream()
+			.mapToInt(e -> CraftEnchantment.getRaw(e).getRarity().getWeight())
+			.sum();
 		if (a_rarity != b_rarity) {
 			return b_rarity - a_rarity;
 		}
 
-		final var a_sorted = ae.entrySet().stream()
-			.sorted(Map.Entry.<Enchantment, Integer>comparingByKey((a, b) -> a.getKey().toString().compareTo(b.getKey().toString()))
-				.thenComparing(Map.Entry.<Enchantment, Integer>comparingByValue()))
+		final var a_sorted = ae
+			.entrySet()
+			.stream()
+			.sorted(
+				Map.Entry
+					.<Enchantment, Integer>comparingByKey((a, b) ->
+						a.getKey().toString().compareTo(b.getKey().toString())
+					)
+					.thenComparing(Map.Entry.<Enchantment, Integer>comparingByValue())
+			)
 			.collect(Collectors.toList());
-		final var b_sorted = be.entrySet().stream()
-			.sorted(Map.Entry.<Enchantment, Integer>comparingByKey((a, b) -> a.getKey().toString().compareTo(b.getKey().toString()))
-				.thenComparing(Map.Entry.<Enchantment, Integer>comparingByValue()))
+		final var b_sorted = be
+			.entrySet()
+			.stream()
+			.sorted(
+				Map.Entry
+					.<Enchantment, Integer>comparingByKey((a, b) ->
+						a.getKey().toString().compareTo(b.getKey().toString())
+					)
+					.thenComparing(Map.Entry.<Enchantment, Integer>comparingByValue())
+			)
 			.collect(Collectors.toList());
 
 		// Lastly, compare names and levels
@@ -160,6 +188,7 @@ public class ItemUtil {
 	}
 
 	public static class ItemStackComparator implements Comparator<ItemStack> {
+
 		@Override
 		public int compare(final ItemStack a, final ItemStack b) {
 			if (a == null && b == null) {
@@ -209,7 +238,7 @@ public class ItemUtil {
 
 	public static ItemStack skull_for_player(final OfflinePlayer player) {
 		final var item = new ItemStack(Material.PLAYER_HEAD);
-		final var meta = (SkullMeta)item.getItemMeta();
+		final var meta = (SkullMeta) item.getItemMeta();
 		meta.setOwningPlayer(player);
 		item.setItemMeta(meta);
 		return item;
@@ -220,8 +249,9 @@ public class ItemUtil {
 		profile.setProperty(new ProfileProperty("textures", base64_texture));
 
 		final var item = new ItemStack(Material.PLAYER_HEAD);
-		final var meta = (SkullMeta)item.getItemMeta();
-		final var name_component = Component.text(name)
+		final var meta = (SkullMeta) item.getItemMeta();
+		final var name_component = Component
+			.text(name)
 			.decoration(TextDecoration.ITALIC, false)
 			.color(NamedTextColor.YELLOW);
 		meta.displayName(name_component);

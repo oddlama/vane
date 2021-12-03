@@ -3,7 +3,7 @@ package org.oddlama.vane.enchantments;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
+import net.kyori.adventure.text.Component;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -17,19 +17,19 @@ import org.bukkit.inventory.Merchant;
 import org.bukkit.inventory.MerchantRecipe;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.oddlama.vane.annotation.VaneModule;
-import net.kyori.adventure.text.Component;
 import org.oddlama.vane.core.Core;
 import org.oddlama.vane.core.item.ModelDataEnum;
 import org.oddlama.vane.core.module.Module;
 
 @VaneModule(name = "enchantments", bstats = 8640, config_version = 1, lang_version = 1, storage_version = 1)
 public class Enchantments extends Module<Enchantments> {
+
 	public Enchantments() {
 		try {
 			final var accepting = Enchantment.class.getDeclaredField("acceptingNew");
 			accepting.setAccessible(true);
 			accepting.set(null, true);
-		} catch (NoSuchFieldException |	IllegalAccessException e) {
+		} catch (NoSuchFieldException | IllegalAccessException e) {
 			log.severe("Could not re-enable enchantment registration! Shutting down.");
 			getServer().shutdown();
 		}
@@ -80,11 +80,15 @@ public class Enchantments extends Module<Enchantments> {
 		return update_enchanted_item(item_stack, new HashMap<Enchantment, Integer>(), only_if_enchanted);
 	}
 
-	public ItemStack update_enchanted_item(ItemStack item_stack, Map<Enchantment, Integer> additional_enchantments, boolean only_if_enchanted) {
+	public ItemStack update_enchanted_item(
+		ItemStack item_stack,
+		Map<Enchantment, Integer> additional_enchantments,
+		boolean only_if_enchanted
+	) {
 		final var enchantments = new HashMap<>(additional_enchantments);
 		final var meta = item_stack.getItemMeta();
 		if (meta instanceof EnchantmentStorageMeta) {
-			enchantments.putAll(((EnchantmentStorageMeta)meta).getStoredEnchants());
+			enchantments.putAll(((EnchantmentStorageMeta) meta).getStoredEnchants());
 		} else {
 			enchantments.putAll(item_stack.getEnchantments());
 		}
@@ -118,7 +122,7 @@ public class Enchantments extends Module<Enchantments> {
 				continue;
 			}
 
-			final var custom = ((BukkitEnchantmentWrapper)e).custom_enchantment();
+			final var custom = ((BukkitEnchantmentWrapper) e).custom_enchantment();
 			if (!custom.supersedes().isEmpty()) {
 				superseding.add(custom);
 				superseded.addAll(custom.supersedes());
@@ -145,11 +149,20 @@ public class Enchantments extends Module<Enchantments> {
 		// Create lore by converting enchantment name and level to string
 		// and prepend rarity color (can be overwritten in description)
 		final var lore = new ArrayList<Component>();
-		enchantments.entrySet().stream()
+		enchantments
+			.entrySet()
+			.stream()
 			.filter(p -> p.getKey() instanceof BukkitEnchantmentWrapper)
-			.sorted(Map.Entry.<Enchantment, Integer>comparingByKey((a, b) -> a.getKey().toString().compareTo(b.getKey().toString()))
-				.thenComparing(Map.Entry.<Enchantment, Integer>comparingByValue()))
-			.forEach(p -> lore.add(((BukkitEnchantmentWrapper)p.getKey()).custom_enchantment().display_name(p.getValue())));
+			.sorted(
+				Map.Entry
+					.<Enchantment, Integer>comparingByKey((a, b) ->
+						a.getKey().toString().compareTo(b.getKey().toString())
+					)
+					.thenComparing(Map.Entry.<Enchantment, Integer>comparingByValue())
+			)
+			.forEach(p ->
+				lore.add(((BukkitEnchantmentWrapper) p.getKey()).custom_enchantment().display_name(p.getValue()))
+			);
 
 		// Set lore
 		final var meta = item_stack.getItemMeta();
@@ -187,7 +200,7 @@ public class Enchantments extends Module<Enchantments> {
 		final var meta = result.getItemMeta();
 		final Map<Enchantment, Integer> enchantments;
 		if (meta instanceof EnchantmentStorageMeta) {
-			enchantments = ((EnchantmentStorageMeta)meta).getStoredEnchants();
+			enchantments = ((EnchantmentStorageMeta) meta).getStoredEnchants();
 		} else {
 			enchantments = result.getEnchantments();
 		}
@@ -199,10 +212,10 @@ public class Enchantments extends Module<Enchantments> {
 				continue;
 			}
 
-			final var custom = ((BukkitEnchantmentWrapper)e).custom_enchantment();
+			final var custom = ((BukkitEnchantmentWrapper) e).custom_enchantment();
 			if (!custom.generate_in_treasure()) {
 				if (meta instanceof EnchantmentStorageMeta) {
-					((EnchantmentStorageMeta)meta).removeStoredEnchant(e);
+					((EnchantmentStorageMeta) meta).removeStoredEnchant(e);
 				} else {
 					meta.removeEnchant(e);
 				}
@@ -214,7 +227,7 @@ public class Enchantments extends Module<Enchantments> {
 		if (changed) {
 			// Add Unbreaking III as compensation
 			if (meta instanceof EnchantmentStorageMeta) {
-				((EnchantmentStorageMeta)meta).addStoredEnchant(Enchantment.DURABILITY, 3, false);
+				((EnchantmentStorageMeta) meta).addStoredEnchant(Enchantment.DURABILITY, 3, false);
 			} else {
 				meta.addEnchant(Enchantment.DURABILITY, 3, false);
 			}
@@ -224,7 +237,14 @@ public class Enchantments extends Module<Enchantments> {
 		}
 
 		// Create new recipe
-		final var new_recipe = new MerchantRecipe(update_enchanted_item(result, true), recipe.getUses(), recipe.getMaxUses(), recipe.hasExperienceReward(), recipe.getVillagerExperience(), recipe.getPriceMultiplier());
+		final var new_recipe = new MerchantRecipe(
+			update_enchanted_item(result, true),
+			recipe.getUses(),
+			recipe.getMaxUses(),
+			recipe.hasExperienceReward(),
+			recipe.getVillagerExperience(),
+			recipe.getPriceMultiplier()
+		);
 		recipe.getIngredients().forEach(i -> new_recipe.addIngredient(i));
 		return new_recipe;
 	}
@@ -241,7 +261,7 @@ public class Enchantments extends Module<Enchantments> {
 			return;
 		}
 
-		final var merchant = (Merchant)entity;
+		final var merchant = (Merchant) entity;
 		final var recipes = new ArrayList<MerchantRecipe>();
 
 		// Check all recipes

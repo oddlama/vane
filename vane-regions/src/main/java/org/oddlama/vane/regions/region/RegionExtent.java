@@ -12,8 +12,9 @@ import org.oddlama.vane.external.json.JSONObject;
 import org.oddlama.vane.util.LazyBlock;
 
 public class RegionExtent {
+
 	public static Object serialize(@NotNull final Object o) throws IOException {
-		final var region_extent = (RegionExtent)o;
+		final var region_extent = (RegionExtent) o;
 		final var json = new JSONObject();
 		json.put("min", to_json(LazyBlock.class, region_extent.min));
 		json.put("max", to_json(LazyBlock.class, region_extent.max));
@@ -21,7 +22,7 @@ public class RegionExtent {
 	}
 
 	public static RegionExtent deserialize(@NotNull final Object o) throws IOException {
-		final var json = (JSONObject)o;
+		final var json = (JSONObject) o;
 		final var min = from_json(LazyBlock.class, json.get("min"));
 		final var max = from_json(LazyBlock.class, json.get("max"));
 		return new RegionExtent(min, max);
@@ -32,7 +33,7 @@ public class RegionExtent {
 	// Also, coordinates are sorted, so min is always the smaller coordinate on each axis.
 	// For each x,y,z: min.[x,y,z] <= max.[x,y,z]
 	private LazyBlock min; // inclusive
-	private LazyBlock max;   // inclusive
+	private LazyBlock max; // inclusive
 
 	public RegionExtent(final LazyBlock min, final LazyBlock max) {
 		this.min = min;
@@ -45,18 +46,35 @@ public class RegionExtent {
 		}
 
 		// Sort coordinates along axes.
-		this.min = new LazyBlock(from.getWorld().getBlockAt(
-				Math.min(from.getX(), to.getX()),
-				Math.min(from.getY(), to.getY()),
-				Math.min(from.getZ(), to.getZ())));
-		this.max = new LazyBlock(from.getWorld().getBlockAt(
-				Math.max(from.getX(), to.getX()),
-				Math.max(from.getY(), to.getY()),
-				Math.max(from.getZ(), to.getZ())));
+		this.min =
+			new LazyBlock(
+				from
+					.getWorld()
+					.getBlockAt(
+						Math.min(from.getX(), to.getX()),
+						Math.min(from.getY(), to.getY()),
+						Math.min(from.getZ(), to.getZ())
+					)
+			);
+		this.max =
+			new LazyBlock(
+				from
+					.getWorld()
+					.getBlockAt(
+						Math.max(from.getX(), to.getX()),
+						Math.max(from.getY(), to.getY()),
+						Math.max(from.getZ(), to.getZ())
+					)
+			);
 	}
 
-	public Block min() { return min.block(); }
-	public Block max() { return max.block(); }
+	public Block min() {
+		return min.block();
+	}
+
+	public Block max() {
+		return max.block();
+	}
 
 	public boolean is_inside(final Location loc) {
 		if (!loc.getWorld().equals(min().getWorld())) {
@@ -65,9 +83,14 @@ public class RegionExtent {
 
 		final var l = min();
 		final var h = max();
-		return loc.getX() >= l.getX() && loc.getX() < (h.getX() + 1)
-		    && loc.getY() >= l.getY() && loc.getY() < (h.getY() + 1)
-		    && loc.getZ() >= l.getZ() && loc.getZ() < (h.getZ() + 1);
+		return (
+			loc.getX() >= l.getX() &&
+			loc.getX() < (h.getX() + 1) &&
+			loc.getY() >= l.getY() &&
+			loc.getY() < (h.getY() + 1) &&
+			loc.getZ() >= l.getZ() &&
+			loc.getZ() < (h.getZ() + 1)
+		);
 	}
 
 	public boolean is_inside(final Block block) {
@@ -77,9 +100,14 @@ public class RegionExtent {
 
 		final var l = min();
 		final var h = max();
-		return block.getX() >= l.getX() && block.getX() <= h.getX()
-		    && block.getY() >= l.getY() && block.getY() <= h.getY()
-		    && block.getZ() >= l.getZ() && block.getZ() <= h.getZ();
+		return (
+			block.getX() >= l.getX() &&
+			block.getX() <= h.getX() &&
+			block.getY() >= l.getY() &&
+			block.getY() <= h.getY() &&
+			block.getZ() >= l.getZ() &&
+			block.getZ() <= h.getZ()
+		);
 	}
 
 	public boolean intersects_extent(final RegionExtent other) {
@@ -112,9 +140,7 @@ public class RegionExtent {
 
 		// It intersects exactly when:
 		//   for all a in axis: global_extent(a) < individual_extent_sum(a)
-		return extent_global_x < extent_sum_x
-			&& extent_global_y < extent_sum_y
-			&& extent_global_z < extent_sum_z;
+		return extent_global_x < extent_sum_x && extent_global_y < extent_sum_y && extent_global_z < extent_sum_z;
 	}
 
 	public boolean intersects_chunk(final Chunk chunk) {
@@ -145,7 +171,6 @@ public class RegionExtent {
 
 		// It intersects exactly when:
 		//   for all a in axis: global_extent(a) < individual_extent_sum(a)
-		return extent_global_x < extent_sum_x
-			&& extent_global_z < extent_sum_z;
+		return extent_global_x < extent_sum_x && extent_global_z < extent_sum_z;
 	}
 }

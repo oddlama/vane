@@ -1,7 +1,6 @@
 package org.oddlama.vane.core.commands;
 
 import org.bukkit.command.CommandSender;
-
 import org.oddlama.vane.annotation.command.Name;
 import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.core.Core;
@@ -12,15 +11,21 @@ import org.oddlama.vane.core.module.Module;
 
 @Name("vane")
 public class Vane extends Command<Core> {
-	@LangMessage private TranslatedMessage lang_reload_success;
-	@LangMessage private TranslatedMessage lang_reload_fail;
 
-	@LangMessage private TranslatedMessage lang_resource_pack_generate_success;
-	@LangMessage private TranslatedMessage lang_resource_pack_generate_fail;
+	@LangMessage
+	private TranslatedMessage lang_reload_success;
+
+	@LangMessage
+	private TranslatedMessage lang_reload_fail;
+
+	@LangMessage
+	private TranslatedMessage lang_resource_pack_generate_success;
+
+	@LangMessage
+	private TranslatedMessage lang_resource_pack_generate_fail;
 
 	public Vane(Context<Core> context) {
 		super(context);
-
 		// Add help
 		params().fixed("help").ignore_case().exec(this::print_help);
 

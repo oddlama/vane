@@ -8,8 +8,10 @@ import org.oddlama.vane.annotation.config.ConfigBoolean;
  * not be called.
  */
 public class ModuleGroup<T extends Module<T>> extends ModuleContext<T> {
+
 	@ConfigBoolean(def = true, desc = "") // desc is set by #config_enabled_desc()
 	public boolean config_enabled;
+
 	public boolean config_enabled_def = true;
 	private String config_enabled_desc;
 

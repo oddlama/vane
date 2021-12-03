@@ -36,43 +36,48 @@ import org.oddlama.vane.util.BlockUtil;
 import org.oddlama.vane.util.LazyLocation;
 
 public class Portal {
+
 	public static Object serialize(@NotNull final Object o) throws IOException {
-		final var portal = (Portal)o;
+		final var portal = (Portal) o;
 		final var json = new JSONObject();
-		json.put("id",             to_json(UUID.class,              portal.id));
-		json.put("owner",          to_json(UUID.class,              portal.owner));
-		json.put("orientation",    to_json(Orientation.class,       portal.orientation));
-		json.put("spawn",          to_json(LazyLocation.class,      portal.spawn));
+		json.put("id", to_json(UUID.class, portal.id));
+		json.put("owner", to_json(UUID.class, portal.owner));
+		json.put("orientation", to_json(Orientation.class, portal.orientation));
+		json.put("spawn", to_json(LazyLocation.class, portal.spawn));
 		try {
-			json.put("blocks",     to_json(Portal.class.getDeclaredField("blocks"), portal.blocks));
-		} catch (NoSuchFieldException e) { throw new RuntimeException("Invalid field. This is a bug.", e); }
+			json.put("blocks", to_json(Portal.class.getDeclaredField("blocks"), portal.blocks));
+		} catch (NoSuchFieldException e) {
+			throw new RuntimeException("Invalid field. This is a bug.", e);
+		}
 
-		json.put("name",           to_json(String.class,            portal.name));
-		json.put("style",          to_json(NamespacedKey.class,     portal.style));
-		json.put("style_override", to_json(Style.class,             portal.style_override));
-		json.put("icon",           to_json(ItemStack.class,         portal.icon));
-		json.put("visibility",     to_json(Visibility.class,        portal.visibility));
+		json.put("name", to_json(String.class, portal.name));
+		json.put("style", to_json(NamespacedKey.class, portal.style));
+		json.put("style_override", to_json(Style.class, portal.style_override));
+		json.put("icon", to_json(ItemStack.class, portal.icon));
+		json.put("visibility", to_json(Visibility.class, portal.visibility));
 
-		json.put("target_id",      to_json(UUID.class,              portal.target_id));
-		json.put("target_locked",  to_json(boolean.class,           portal.target_locked));
+		json.put("target_id", to_json(UUID.class, portal.target_id));
+		json.put("target_locked", to_json(boolean.class, portal.target_locked));
 		return json;
 	}
 
 	@SuppressWarnings("unchecked")
 	public static Portal deserialize(@NotNull final Object o) throws IOException {
-		final var json = (JSONObject)o;
+		final var json = (JSONObject) o;
 		final var portal = new Portal();
-		portal.id             = from_json(UUID.class,              json.get("id"));
-		portal.owner          = from_json(UUID.class,              json.get("owner"));
-		portal.orientation    = from_json(Orientation.class,       json.get("orientation"));
-		portal.spawn          = from_json(LazyLocation.class,      json.get("spawn"));
+		portal.id = from_json(UUID.class, json.get("id"));
+		portal.owner = from_json(UUID.class, json.get("owner"));
+		portal.orientation = from_json(Orientation.class, json.get("orientation"));
+		portal.spawn = from_json(LazyLocation.class, json.get("spawn"));
 		try {
-			portal.blocks     = (List<PortalBlock>)from_json(Portal.class.getDeclaredField("blocks"), json.get("blocks"));
-		} catch (NoSuchFieldException e) { throw new RuntimeException("Invalid field. This is a bug.", e); }
+			portal.blocks = (List<PortalBlock>) from_json(Portal.class.getDeclaredField("blocks"), json.get("blocks"));
+		} catch (NoSuchFieldException e) {
+			throw new RuntimeException("Invalid field. This is a bug.", e);
+		}
 
-		portal.name           = from_json(String.class,            json.get("name"));
-		portal.style          = from_json(NamespacedKey.class,     json.get("style"));
-		portal.style_override = from_json(Style.class,             json.get("style_override"));
+		portal.name = from_json(String.class, json.get("name"));
+		portal.style = from_json(NamespacedKey.class, json.get("style"));
+		portal.style_override = from_json(Style.class, json.get("style_override"));
 		if (portal.style_override != null) {
 			try {
 				portal.style_override.check_valid();
@@ -80,11 +85,11 @@ public class Portal {
 				portal.style_override = null;
 			}
 		}
-		portal.icon           = from_json(ItemStack.class,         json.get("icon"));
-		portal.visibility     = from_json(Visibility.class,        json.get("visibility"));
+		portal.icon = from_json(ItemStack.class, json.get("icon"));
+		portal.visibility = from_json(Visibility.class, json.get("visibility"));
 
-		portal.target_id      = from_json(UUID.class,              json.get("target_id"));
-		portal.target_locked  = from_json(boolean.class,           json.get("target_locked"));
+		portal.target_id = from_json(UUID.class, json.get("target_id"));
+		portal.target_locked = from_json(boolean.class, json.get("target_locked"));
 		return portal;
 	}
 
@@ -112,16 +117,38 @@ public class Portal {
 		this.spawn = new LazyLocation(spawn.clone());
 	}
 
-	public UUID id() { return id; }
-	public UUID owner() { return owner; }
-	public Orientation orientation() { return orientation; }
-	public Location spawn() { return spawn.location().clone(); }
-	public List<PortalBlock> blocks() { return blocks; }
-	public String name() { return name; }
-	public void name(final String name) { this.name = name; }
+	public UUID id() {
+		return id;
+	}
+
+	public UUID owner() {
+		return owner;
+	}
+
+	public Orientation orientation() {
+		return orientation;
+	}
+
+	public Location spawn() {
+		return spawn.location().clone();
+	}
+
+	public List<PortalBlock> blocks() {
+		return blocks;
+	}
+
+	public String name() {
+		return name;
+	}
+
+	public void name(final String name) {
+		this.name = name;
+	}
+
 	public NamespacedKey style() {
 		return style_override == null ? style : null;
 	}
+
 	public void style(final Style style) {
 		if (style.key() == null) {
 			this.style_override = style;
@@ -129,14 +156,38 @@ public class Portal {
 			this.style = style.key();
 		}
 	}
-	public ItemStack icon() { return icon == null ? null : icon.clone(); }
-	public void icon(final ItemStack icon) { this.icon = icon; }
-	public Visibility visibility() { return visibility; }
-	public void visibility(final Visibility visibility) { this.visibility = visibility; }
-	public UUID target_id() { return target_id; }
-	public void target_id(final UUID target_id) { this.target_id = target_id; }
-	public boolean target_locked() { return target_locked; }
-	public void target_locked(boolean target_locked) { this.target_locked = target_locked; }
+
+	public ItemStack icon() {
+		return icon == null ? null : icon.clone();
+	}
+
+	public void icon(final ItemStack icon) {
+		this.icon = icon;
+	}
+
+	public Visibility visibility() {
+		return visibility;
+	}
+
+	public void visibility(final Visibility visibility) {
+		this.visibility = visibility;
+	}
+
+	public UUID target_id() {
+		return target_id;
+	}
+
+	public void target_id(final UUID target_id) {
+		this.target_id = target_id;
+	}
+
+	public boolean target_locked() {
+		return target_locked;
+	}
+
+	public void target_locked(boolean target_locked) {
+		this.target_locked = target_locked;
+	}
 
 	public PortalBlock portal_block_for(final Block block) {
 		for (final var pb : blocks()) {
@@ -157,7 +208,6 @@ public class Portal {
 			switch (pb.type()) {
 				default:
 					break;
-
 				case ORIGIN:
 				case BOUNDARY_1:
 				case BOUNDARY_2:
@@ -166,7 +216,6 @@ public class Portal {
 				case BOUNDARY_5:
 					controlling_blocks.add(pb.block());
 					break;
-
 				case CONSOLE:
 					controlling_blocks.add(pb.block());
 					controlling_blocks.addAll(Arrays.asList(adjacent_blocks_3d(pb.block())));
@@ -186,13 +235,19 @@ public class Portal {
 					continue;
 				}
 
-				final var lever = (Switch)l.getBlockData();
+				final var lever = (Switch) l.getBlockData();
 				final BlockFace attached_face;
 				switch (lever.getAttachedFace()) {
 					default:
-					case WALL:    attached_face = lever.getFacing().getOppositeFace(); break;
-					case CEILING: attached_face = BlockFace.UP; break;
-					case FLOOR:   attached_face = BlockFace.DOWN; break;
+					case WALL:
+						attached_face = lever.getFacing().getOppositeFace();
+						break;
+					case CEILING:
+						attached_face = BlockFace.UP;
+						break;
+					case FLOOR:
+						attached_face = BlockFace.DOWN;
+						break;
 				}
 
 				// Only when attached to a controlling block
@@ -205,7 +260,7 @@ public class Portal {
 		}
 
 		for (final var l : levers) {
-			final var lever = (Switch)l.getBlockData();
+			final var lever = (Switch) l.getBlockData();
 			lever.setPowered(activated);
 			l.setBlockData(lever);
 		}
@@ -284,7 +339,7 @@ public class Portal {
 			portal_block.block().setType(type);
 			if (type == Material.END_GATEWAY) {
 				// Disable beam
-				final var end_gateway = (EndGateway)portal_block.block().getState(false);
+				final var end_gateway = (EndGateway) portal_block.block().getState(false);
 				end_gateway.setAge(200l);
 			}
 			if (portal_block.type() == PortalBlock.Type.CONSOLE) {
@@ -348,6 +403,7 @@ public class Portal {
 	}
 
 	public static class TargetSelectionComparator implements Comparator<Portal> {
+
 		private World world;
 		private Vector from;
 

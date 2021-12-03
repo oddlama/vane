@@ -2,15 +2,14 @@ package org.oddlama.vane.core.lang;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import java.util.stream.Collectors;
-import org.oddlama.vane.core.module.Module;
-
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import org.oddlama.vane.core.module.Module;
 
 public class TranslatedMessageArray {
+
 	private Module<?> module;
 	private String key;
 	private List<String> default_translation;
@@ -21,8 +20,14 @@ public class TranslatedMessageArray {
 		this.default_translation = default_translation;
 	}
 
-	public int size() { return default_translation.size(); }
-	public String key() { return key; }
+	public int size() {
+		return default_translation.size();
+	}
+
+	public String key() {
+		return key;
+	}
+
 	public List<String> str(Object... args) {
 		try {
 			final var list = new ArrayList<String>();
@@ -37,7 +42,8 @@ public class TranslatedMessageArray {
 
 	public List<Component> format(Object... args) {
 		if (!module.core.config_client_side_translations) {
-			return str(args).stream()
+			return str(args)
+				.stream()
 				.map(s -> LegacyComponentSerializer.legacySection().deserialize(s))
 				.collect(Collectors.toList());
 		}
@@ -47,11 +53,13 @@ public class TranslatedMessageArray {
 			final var list = new ArrayList<ComponentLike>();
 			for (final var o : args) {
 				if (o instanceof ComponentLike) {
-					list.add((ComponentLike)o);
+					list.add((ComponentLike) o);
 				} else if (o instanceof String) {
-					list.add(LegacyComponentSerializer.legacySection().deserialize((String)o));
+					list.add(LegacyComponentSerializer.legacySection().deserialize((String) o));
 				} else {
-					throw new RuntimeException("Error while formatting message '" + key() + "', got invalid argument " + o);
+					throw new RuntimeException(
+						"Error while formatting message '" + key() + "', got invalid argument " + o
+					);
 				}
 			}
 			arr.add(Component.translatable(key + "." + i, list));

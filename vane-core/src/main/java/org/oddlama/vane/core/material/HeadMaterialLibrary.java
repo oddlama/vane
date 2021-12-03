@@ -5,12 +5,11 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.bukkit.NamespacedKey;
-
 import org.json.JSONArray;
 
 public class HeadMaterialLibrary {
+
 	private static final Map<NamespacedKey, HeadMaterial> registry = new HashMap<>();
 	private static final Map<String, List<HeadMaterial>> categories = new HashMap<>();
 	private static final Map<String, List<HeadMaterial>> tags = new HashMap<>();

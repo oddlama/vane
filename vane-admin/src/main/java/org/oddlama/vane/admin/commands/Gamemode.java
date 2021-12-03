@@ -1,9 +1,9 @@
 package org.oddlama.vane.admin.commands;
 
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.GameMode;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
 import org.oddlama.vane.admin.Admin;
 import org.oddlama.vane.annotation.command.Aliases;
 import org.oddlama.vane.annotation.command.Name;
@@ -12,16 +12,15 @@ import org.oddlama.vane.core.command.Command;
 import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Context;
 
-import net.kyori.adventure.text.format.NamedTextColor;
-
 @Name("gamemode")
-@Aliases({"gm"})
+@Aliases({ "gm" })
 public class Gamemode extends Command<Admin> {
-	@LangMessage private TranslatedMessage lang_set;
+
+	@LangMessage
+	private TranslatedMessage lang_set;
 
 	public Gamemode(Context<Admin> context) {
 		super(context);
-
 		// Add help
 		params().fixed("help").ignore_case().exec(this::print_help);
 		// Command parameters
@@ -37,9 +36,7 @@ public class Gamemode extends Command<Admin> {
 	}
 
 	private void toggle_gamemode_player(CommandSender sender, Player player) {
-		set_gamemode(sender, player.getGameMode() == GameMode.CREATIVE
-		                       ? GameMode.SURVIVAL
-		                       : GameMode.CREATIVE, player);
+		set_gamemode(sender, player.getGameMode() == GameMode.CREATIVE ? GameMode.SURVIVAL : GameMode.CREATIVE, player);
 	}
 
 	private void set_gamemode_self(Player player, GameMode mode) {

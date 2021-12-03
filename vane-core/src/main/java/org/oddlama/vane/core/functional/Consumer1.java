@@ -8,11 +8,11 @@ public interface Consumer1<T1> extends ErasedFunctor, GenericsFinder {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	default public Object invoke(List<Object> args) {
+	public default Object invoke(List<Object> args) {
 		if (args.size() != 1) {
 			throw new IllegalArgumentException("Functor needs 1 arguments but got " + args.size() + " arguments");
 		}
-		apply((T1)args.get(0));
+		apply((T1) args.get(0));
 		return null;
 	}
 }

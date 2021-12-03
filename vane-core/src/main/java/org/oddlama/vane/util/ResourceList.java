@@ -2,20 +2,21 @@ package org.oddlama.vane.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
-import java.net.URI;
-import java.net.URISyntaxException;
 
 /**
  * from: forums.devx.com/showthread.php?t=153784
  * list resources available from the jar file of the given class
  */
 public class ResourceList {
+
 	/**
 	 * For all elements of java.class.path get a Collection of resources Pattern
 	 * pattern = Pattern.compile(".*"); gets all resources
@@ -55,7 +56,7 @@ public class ResourceList {
 		}
 		final var e = zf.entries();
 		while (e.hasMoreElements()) {
-			final ZipEntry ze = (ZipEntry)e.nextElement();
+			final ZipEntry ze = (ZipEntry) e.nextElement();
 			final String fileName = ze.getName();
 			final boolean accept = pattern.matcher(fileName).matches();
 			if (accept) {

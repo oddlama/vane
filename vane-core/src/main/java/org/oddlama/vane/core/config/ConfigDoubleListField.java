@@ -1,23 +1,25 @@
 package org.oddlama.vane.core.config;
 
-import java.lang.StringBuilder;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
-
 import org.apache.commons.lang.ArrayUtils;
-
 import org.bukkit.configuration.file.YamlConfiguration;
-
 import org.oddlama.vane.annotation.config.ConfigDoubleList;
 import org.oddlama.vane.core.YamlLoadException;
 
 public class ConfigDoubleListField extends ConfigField<List<Double>> {
+
 	public ConfigDoubleList annotation;
 
-	public ConfigDoubleListField(Object owner, Field field, Function<String, String> map_name, ConfigDoubleList annotation) {
+	public ConfigDoubleListField(
+		Object owner,
+		Field field,
+		Function<String, String> map_name,
+		ConfigDoubleList annotation
+	) {
 		super(owner, field, map_name, "double list", annotation.desc());
 		this.annotation = annotation;
 	}
@@ -68,10 +70,14 @@ public class ConfigDoubleListField extends ConfigField<List<Double>> {
 
 			var val = yaml.getDouble(yaml_path());
 			if (annotation.min() != Double.NaN && val < annotation.min()) {
-				throw new YamlLoadException("Configuration '" + yaml_path() + "' has an invalid value: Value must be >= " + annotation.min());
+				throw new YamlLoadException(
+					"Configuration '" + yaml_path() + "' has an invalid value: Value must be >= " + annotation.min()
+				);
 			}
 			if (annotation.max() != Double.NaN && val > annotation.max()) {
-				throw new YamlLoadException("Configuration '" + yaml_path() + "' has an invalid value: Value must be <= " + annotation.max());
+				throw new YamlLoadException(
+					"Configuration '" + yaml_path() + "' has an invalid value: Value must be <= " + annotation.max()
+				);
 			}
 		}
 	}
@@ -79,7 +85,7 @@ public class ConfigDoubleListField extends ConfigField<List<Double>> {
 	public void load(YamlConfiguration yaml) {
 		final var list = new ArrayList<Double>();
 		for (var obj : yaml.getList(yaml_path())) {
-			list.add(((Number)obj).doubleValue());
+			list.add(((Number) obj).doubleValue());
 		}
 
 		try {
@@ -89,4 +95,3 @@ public class ConfigDoubleListField extends ConfigField<List<Double>> {
 		}
 	}
 }
-

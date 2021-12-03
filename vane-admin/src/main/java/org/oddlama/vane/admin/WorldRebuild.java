@@ -18,15 +18,31 @@ import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.module.Context;
 
 public class WorldRebuild extends Listener<Admin> {
+
 	@ConfigLong(def = 2000, min = 0, desc = "Delay in milliseconds until the world will be rebuilt.")
 	private long config_delay;
-	@ConfigDouble(def = 0.175, min = 0.0, desc = "Determines rebuild speed. Higher falloff means faster transition to quicker rebuild. After n blocks, the delay until the next block will be d_n = delay * exp(-x * delay_falloff). For example 0.0 will result in same delay for every block.")
+
+	@ConfigDouble(
+		def = 0.175,
+		min = 0.0,
+		desc = "Determines rebuild speed. Higher falloff means faster transition to quicker rebuild. After n blocks, the delay until the next block will be d_n = delay * exp(-x * delay_falloff). For example 0.0 will result in same delay for every block."
+	)
 	private double config_delay_falloff;
-	@ConfigLong(def = 50, min = 50, desc = "Minimum delay in milliseconds between rebuilding two blocks. Anything <= 50 milliseconds will be one tick.")
+
+	@ConfigLong(
+		def = 50,
+		min = 50,
+		desc = "Minimum delay in milliseconds between rebuilding two blocks. Anything <= 50 milliseconds will be one tick."
+	)
 	private long config_min_delay;
 
 	public WorldRebuild(Context<Admin> context) {
-		super(context.group("world_rebuild", "Instead of cancelling explosions, the world will regenerate after a short amount of time."));
+		super(
+			context.group(
+				"world_rebuild",
+				"Instead of cancelling explosions, the world will regenerate after a short amount of time."
+			)
+		);
 	}
 
 	private List<Rebuilder> rebuilders = new ArrayList<>();
@@ -57,6 +73,7 @@ public class WorldRebuild extends Listener<Admin> {
 	}
 
 	public class Rebuilder implements Runnable {
+
 		private List<BlockState> states;
 		private BukkitTask task = null;
 		private long amount_rebuild = 0;
@@ -108,7 +125,15 @@ public class WorldRebuild extends Listener<Admin> {
 			state.update(true, false);
 
 			// Play sound
-			block.getWorld().playSound(block.getLocation(), block.getSoundGroup().getPlaceSound(), SoundCategory.BLOCKS, 1.0f, 0.8f);
+			block
+				.getWorld()
+				.playSound(
+					block.getLocation(),
+					block.getSoundGroup().getPlaceSound(),
+					SoundCategory.BLOCKS,
+					1.0f,
+					0.8f
+				);
 		}
 
 		public void finish_now() {
@@ -132,13 +157,16 @@ public class WorldRebuild extends Listener<Admin> {
 				rebuild_next_block();
 
 				// Adjust delay
-				final var delay = ms_to_ticks(Math.max(config_min_delay, (int)(config_delay * Math.exp(-amount_rebuild * config_delay_falloff))));
+				final var delay = ms_to_ticks(
+					Math.max(config_min_delay, (int) (config_delay * Math.exp(-amount_rebuild * config_delay_falloff)))
+				);
 				WorldRebuild.this.get_module().schedule_task(this, delay);
 			}
 		}
 	}
 
 	public static class RebuildComparator implements Comparator<BlockState> {
+
 		private Vector reference_point;
 
 		public RebuildComparator(final Vector reference_point) {

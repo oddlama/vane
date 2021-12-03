@@ -7,6 +7,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 
 public class ExtendedMaterial {
+
 	private NamespacedKey key;
 	private Material material;
 	private HeadMaterial head_material;
@@ -21,7 +22,9 @@ public class ExtendedMaterial {
 		}
 	}
 
-	public NamespacedKey key() { return key; }
+	public NamespacedKey key() {
+		return key;
+	}
 
 	public static ExtendedMaterial from(final NamespacedKey key) {
 		final var mat = new ExtendedMaterial(key);
@@ -35,7 +38,10 @@ public class ExtendedMaterial {
 		return from(material.getKey());
 	}
 
-	public ItemStack item() { return item(1); }
+	public ItemStack item() {
+		return item(1);
+	}
+
 	public ItemStack item(int amount) {
 		if (material == null) {
 			final var item = head_material.item();

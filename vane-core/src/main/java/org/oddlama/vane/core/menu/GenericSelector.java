@@ -1,22 +1,20 @@
 package org.oddlama.vane.core.menu;
 
 import java.util.List;
-
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
-
 import org.oddlama.vane.core.functional.Consumer1;
 import org.oddlama.vane.core.functional.Function1;
 import org.oddlama.vane.core.functional.Function4;
 import org.oddlama.vane.core.menu.Menu.ClickResult;
 import org.oddlama.vane.core.module.Context;
 
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-
 public class GenericSelector<T, F extends Filter<T>> {
+
 	private MenuManager menu_manager;
 	private Function1<T, ItemStack> to_item;
 	private Function4<Player, Menu, T, InventoryClickEvent, ClickResult> on_click;
@@ -32,7 +30,17 @@ public class GenericSelector<T, F extends Filter<T>> {
 
 	private GenericSelector() {}
 
-	public static<T, F extends Filter<T>> Menu create(final Context<?> context, final Player player, final String title, final String filter_title, final List<T> things, final Function1<T, ItemStack> to_item, final F filter, final Function4<Player, Menu, T, InventoryClickEvent, ClickResult> on_click, final Consumer1<Player> on_cancel) {
+	public static <T, F extends Filter<T>> Menu create(
+		final Context<?> context,
+		final Player player,
+		final String title,
+		final String filter_title,
+		final List<T> things,
+		final Function1<T, ItemStack> to_item,
+		final F filter,
+		final Function4<Player, Menu, T, InventoryClickEvent, ClickResult> on_click,
+		final Consumer1<Player> on_cancel
+	) {
 		final var columns = 9;
 
 		final var generic_selector = new GenericSelector<T, F>();
@@ -43,14 +51,18 @@ public class GenericSelector<T, F extends Filter<T>> {
 		generic_selector.filter = filter;
 		generic_selector.page_size = 5 * columns;
 
-		final var generic_selector_menu = new Menu(context, Bukkit.createInventory(null, 6 * columns, LegacyComponentSerializer.legacySection().deserialize(title))) {
+		final var generic_selector_menu = new Menu(
+			context,
+			Bukkit.createInventory(null, 6 * columns, LegacyComponentSerializer.legacySection().deserialize(title))
+		) {
 			@Override
 			public void update(boolean force_update) {
 				if (generic_selector.update_filter) {
 					// Filter list before update
 					generic_selector.filtered_things = generic_selector.filter.filter(generic_selector.things);
 					generic_selector.page = 0;
-					generic_selector.last_page = Math.max(0, generic_selector.filtered_things.size() - 1) / generic_selector.page_size;
+					generic_selector.last_page =
+						Math.max(0, generic_selector.filtered_things.size() - 1) / generic_selector.page_size;
 					generic_selector.update_filter = false;
 				}
 				super.update(force_update);
@@ -61,32 +73,46 @@ public class GenericSelector<T, F extends Filter<T>> {
 		generic_selector_menu.add(new SelectionArea<>(generic_selector, 0));
 
 		// Page selector
-		generic_selector_menu.add(new PageSelector<>(generic_selector, generic_selector.page_size + 1, generic_selector.page_size + 8));
+		generic_selector_menu.add(
+			new PageSelector<>(generic_selector, generic_selector.page_size + 1, generic_selector.page_size + 8)
+		);
 
 		// Filter item
-		generic_selector_menu.add(new MenuItem(generic_selector.page_size + 0, generic_selector.menu_manager.generic_selector_filter.item(), (p, menu, self, event) -> {
-			if (!Menu.is_left_or_right_click(event)) {
-				return ClickResult.INVALID_CLICK;
-			}
+		generic_selector_menu.add(
+			new MenuItem(
+				generic_selector.page_size + 0,
+				generic_selector.menu_manager.generic_selector_filter.item(),
+				(p, menu, self, event) -> {
+					if (!Menu.is_left_or_right_click(event)) {
+						return ClickResult.INVALID_CLICK;
+					}
 
-			if (event.getClick() == ClickType.RIGHT) {
-				generic_selector.filter.reset();
-				generic_selector.update_filter = true;
-				menu.update();
-			} else {
-				menu.close(p);
-				generic_selector.filter.open_filter_settings(context, p, filter_title, menu);
-				generic_selector.update_filter = true;
-			}
-			return ClickResult.SUCCESS;
-		}));
+					if (event.getClick() == ClickType.RIGHT) {
+						generic_selector.filter.reset();
+						generic_selector.update_filter = true;
+						menu.update();
+					} else {
+						menu.close(p);
+						generic_selector.filter.open_filter_settings(context, p, filter_title, menu);
+						generic_selector.update_filter = true;
+					}
+					return ClickResult.SUCCESS;
+				}
+			)
+		);
 
 		// Cancel item
-		generic_selector_menu.add(new MenuItem(generic_selector.page_size + 8, generic_selector.menu_manager.generic_selector_cancel.item(), (p, menu, self) -> {
-			menu.close(p);
-			on_cancel.apply(player);
-			return ClickResult.SUCCESS;
-		}));
+		generic_selector_menu.add(
+			new MenuItem(
+				generic_selector.page_size + 8,
+				generic_selector.menu_manager.generic_selector_cancel.item(),
+				(p, menu, self) -> {
+					menu.close(p);
+					on_cancel.apply(player);
+					return ClickResult.SUCCESS;
+				}
+			)
+		);
 
 		// On natural close call cancel
 		generic_selector_menu.on_natural_close(on_cancel);
@@ -95,6 +121,7 @@ public class GenericSelector<T, F extends Filter<T>> {
 	}
 
 	public static class PageSelector<T, F extends Filter<T>> implements MenuWidget {
+
 		private static final int BIG_JUMP_SIZE = 5;
 
 		private final GenericSelector<T, F> generic_selector;
@@ -125,14 +152,20 @@ public class GenericSelector<T, F extends Filter<T>> {
 				final ItemStack item;
 				if (i == (slot_to - slot_from) / 2) {
 					// Current page indicator
-					item = generic_selector.menu_manager.generic_selector_current_page
-						 .item("§6" + String.valueOf(page + 1),
-							   "§6" + (generic_selector.last_page + 1),
-							   "§6" + generic_selector.filtered_things.size());
+					item =
+						generic_selector.menu_manager.generic_selector_current_page.item(
+							"§6" + String.valueOf(page + 1),
+							"§6" + (generic_selector.last_page + 1),
+							"§6" + generic_selector.filtered_things.size()
+						);
 				} else if (no_op) {
 					item = null;
 				} else {
-					item = generic_selector.menu_manager.generic_selector_page.item_amount(Math.abs(actual_offset), "§6" + String.valueOf(page + 1));
+					item =
+						generic_selector.menu_manager.generic_selector_page.item_amount(
+							Math.abs(actual_offset),
+							"§6" + String.valueOf(page + 1)
+						);
 				}
 
 				menu.inventory().setItem(slot, item);
@@ -164,7 +197,13 @@ public class GenericSelector<T, F extends Filter<T>> {
 		}
 
 		@Override
-		public ClickResult click(final Player player, final Menu menu, final ItemStack item, int slot, final InventoryClickEvent event) {
+		public ClickResult click(
+			final Player player,
+			final Menu menu,
+			final ItemStack item,
+			int slot,
+			final InventoryClickEvent event
+		) {
 			if (slot < slot_from || slot >= slot_to) {
 				return ClickResult.IGNORE;
 			}
@@ -186,6 +225,7 @@ public class GenericSelector<T, F extends Filter<T>> {
 	}
 
 	public static class SelectionArea<T, F extends Filter<T>> implements MenuWidget {
+
 		private final GenericSelector<T, F> generic_selector;
 		private final int first_slot;
 
@@ -201,14 +241,25 @@ public class GenericSelector<T, F extends Filter<T>> {
 				if (idx >= generic_selector.filtered_things.size()) {
 					menu.inventory().setItem(first_slot + i, null);
 				} else {
-					menu.inventory().setItem(first_slot + i, generic_selector.to_item.apply(generic_selector.filtered_things.get(idx)));
+					menu
+						.inventory()
+						.setItem(
+							first_slot + i,
+							generic_selector.to_item.apply(generic_selector.filtered_things.get(idx))
+						);
 				}
 			}
 			return true;
 		}
 
 		@Override
-		public ClickResult click(final Player player, final Menu menu, final ItemStack item, int slot, final InventoryClickEvent event) {
+		public ClickResult click(
+			final Player player,
+			final Menu menu,
+			final ItemStack item,
+			int slot,
+			final InventoryClickEvent event
+		) {
 			if (slot < first_slot || slot >= first_slot + generic_selector.page_size) {
 				return ClickResult.IGNORE;
 			}

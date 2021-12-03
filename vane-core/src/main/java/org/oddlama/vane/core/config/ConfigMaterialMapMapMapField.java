@@ -18,15 +18,29 @@ import org.oddlama.vane.annotation.config.ConfigMaterialMapMapMapEntry;
 import org.oddlama.vane.core.YamlLoadException;
 
 public class ConfigMaterialMapMapMapField extends ConfigField<Map<String, Map<String, Map<String, Material>>>> {
+
 	public ConfigMaterialMapMapMap annotation;
 
-	public ConfigMaterialMapMapMapField(Object owner, Field field, Function<String, String> map_name, ConfigMaterialMapMapMap annotation) {
-		super(owner, field, map_name, "map of string to (map of string to (map of string to material))", annotation.desc());
+	public ConfigMaterialMapMapMapField(
+		Object owner,
+		Field field,
+		Function<String, String> map_name,
+		ConfigMaterialMapMapMap annotation
+	) {
+		super(
+			owner,
+			field,
+			map_name,
+			"map of string to (map of string to (map of string to material))",
+			annotation.desc()
+		);
 		this.annotation = annotation;
 	}
 
 	private void append_map_definition(StringBuilder builder, String indent, String prefix) {
-		def().entrySet().stream()
+		def()
+			.entrySet()
+			.stream()
 			.sorted(Map.Entry.comparingByKey())
 			.forEach(e1 -> {
 				builder.append(indent);
@@ -35,7 +49,10 @@ public class ConfigMaterialMapMapMapField extends ConfigField<Map<String, Map<St
 				builder.append(escape_yaml(e1.getKey()));
 				builder.append(":\n");
 
-				e1.getValue().entrySet().stream()
+				e1
+					.getValue()
+					.entrySet()
+					.stream()
 					.sorted(Map.Entry.comparingByKey())
 					.forEach(e2 -> {
 						builder.append(indent);
@@ -44,7 +61,10 @@ public class ConfigMaterialMapMapMapField extends ConfigField<Map<String, Map<St
 						builder.append(escape_yaml(e2.getKey()));
 						builder.append(":\n");
 
-						e2.getValue().entrySet().stream()
+						e2
+							.getValue()
+							.entrySet()
+							.stream()
 							.sorted(Map.Entry.comparingByKey())
 							.forEach(e3 -> {
 								builder.append(indent);
@@ -56,9 +76,9 @@ public class ConfigMaterialMapMapMapField extends ConfigField<Map<String, Map<St
 								builder.append(":");
 								builder.append(escape_yaml(e3.getValue().getKey().getKey()));
 								builder.append("\"\n");
-						});
-				});
-		});
+							});
+					});
+			});
 	}
 
 	@Override
@@ -67,16 +87,27 @@ public class ConfigMaterialMapMapMapField extends ConfigField<Map<String, Map<St
 		if (override != null) {
 			return override;
 		} else {
-			return Arrays.stream(annotation.def()).collect(
-					Collectors.toMap(ConfigMaterialMapMapMapEntry::key,
-					e1 -> Arrays.stream(e1.value()).collect(
-						Collectors.toMap(ConfigMaterialMapMapEntry::key,
-						e2 -> Arrays.stream(e2.value()).collect(
-							Collectors.toMap(ConfigMaterialMapEntry::key,
-							e3 -> e3.value()
-							))
-						))
-					));
+			return Arrays
+				.stream(annotation.def())
+				.collect(
+					Collectors.toMap(
+						ConfigMaterialMapMapMapEntry::key,
+						e1 ->
+							Arrays
+								.stream(e1.value())
+								.collect(
+									Collectors.toMap(
+										ConfigMaterialMapMapEntry::key,
+										e2 ->
+											Arrays
+												.stream(e2.value())
+												.collect(
+													Collectors.toMap(ConfigMaterialMapEntry::key, e3 -> e3.value())
+												)
+									)
+								)
+					)
+				);
 		}
 	}
 
@@ -125,12 +156,20 @@ public class ConfigMaterialMapMapMapField extends ConfigField<Map<String, Map<St
 					final var str = yaml.getString(key3_path);
 					final var split = str.split(":");
 					if (split.length != 2) {
-						throw new YamlLoadException("Invalid material entry in list '" + key3_path + "': '" + str + "' is not a valid namespaced key");
+						throw new YamlLoadException(
+							"Invalid material entry in list '" +
+							key3_path +
+							"': '" +
+							str +
+							"' is not a valid namespaced key"
+						);
 					}
 
 					final var mat = material_from(namespaced_key(split[0], split[1]));
 					if (mat == null) {
-						throw new YamlLoadException("Invalid material entry in list '" + key3_path + "': '" + str + "' does not exist");
+						throw new YamlLoadException(
+							"Invalid material entry in list '" + key3_path + "': '" + str + "' does not exist"
+						);
 					}
 				}
 			}

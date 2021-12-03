@@ -3,18 +3,15 @@ package org.oddlama.vane.regions;
 import java.util.HashSet;
 import java.util.UUID;
 import java.util.logging.Level;
-
 import org.bukkit.plugin.Plugin;
-
 import org.dynmap.DynmapAPI;
 import org.dynmap.markers.Marker;
 import org.dynmap.markers.MarkerAPI;
 import org.dynmap.markers.MarkerSet;
-
-import org.oddlama.vane.regions.Regions;
 import org.oddlama.vane.regions.region.Region;
 
 public class RegionDynmapLayerDelegate {
+
 	private RegionDynmapLayer parent = null;
 
 	private DynmapAPI dynmap_api = null;
@@ -33,7 +30,7 @@ public class RegionDynmapLayerDelegate {
 
 	public void on_enable(final Plugin plugin) {
 		try {
-			dynmap_api = (DynmapAPI)plugin;
+			dynmap_api = (DynmapAPI) plugin;
 			marker_api = dynmap_api.getMarkerAPI();
 		} catch (Exception e) {
 			get_module().log.log(Level.WARNING, "Error while enabling dynmap integration!", e);
@@ -64,7 +61,8 @@ public class RegionDynmapLayerDelegate {
 		// Create or retrieve layer
 		marker_set = marker_api.getMarkerSet(RegionDynmapLayer.LAYER_ID);
 		if (marker_set == null) {
-			marker_set = marker_api.createMarkerSet(RegionDynmapLayer.LAYER_ID, parent.lang_layer_label.str(), null, false);
+			marker_set =
+				marker_api.createMarkerSet(RegionDynmapLayer.LAYER_ID, parent.lang_layer_label.str(), null, false);
 		}
 
 		if (marker_set == null) {

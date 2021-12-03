@@ -5,15 +5,17 @@ import java.util.Map;
 import java.util.UUID;
 
 public class Util {
+
 	private static Map<Character, Long> time_multiplier;
+
 	static {
 		Map<Character, Long> mult = new HashMap<>();
-		mult.put('s', 1000l);         //seconds
-		mult.put('m', 60000l);        //minutes
-		mult.put('h', 3600000l);      //hours
-		mult.put('d', 86400000l);     //days
-		mult.put('w', 604800000l);    //weeks
-		mult.put('y', 31536000000l);  //years
+		mult.put('s', 1000l); //seconds
+		mult.put('m', 60000l); //minutes
+		mult.put('h', 3600000l); //hours
+		mult.put('d', 86400000l); //days
+		mult.put('w', 604800000l); //weeks
+		mult.put('y', 31536000000l); //years
 		time_multiplier = mult;
 	}
 

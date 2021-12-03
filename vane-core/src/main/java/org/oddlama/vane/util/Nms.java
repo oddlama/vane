@@ -1,27 +1,24 @@
 package org.oddlama.vane.util;
 
-import java.util.Map;
-
 import com.mojang.datafixers.DataFixUtils;
 import com.mojang.datafixers.types.Type;
-
+import java.util.Map;
+import net.minecraft.SharedConstants;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
-import net.minecraft.world.Clearable;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.dedicated.DedicatedServer;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentCategory;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.datafix.DataFixers;
 import net.minecraft.util.datafix.fixes.References;
+import net.minecraft.world.Clearable;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.SharedConstants;
-import net.minecraft.resources.ResourceLocation;
-
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -35,8 +32,9 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 public class Nms {
+
 	public static ServerPlayer get_player(Player player) {
-		return ((CraftPlayer)player).getHandle();
+		return ((CraftPlayer) player).getHandle();
 	}
 
 	public static void register_enchantment(NamespacedKey key, Enchantment enchantment) {
@@ -55,21 +53,36 @@ public class Nms {
 
 	public static EnchantmentCategory enchantment_slot_type(EnchantmentTarget target) {
 		switch (target) {
-			case ARMOR:       return EnchantmentCategory.ARMOR;
-			case ARMOR_FEET:  return EnchantmentCategory.ARMOR_FEET;
-			case ARMOR_HEAD:  return EnchantmentCategory.ARMOR_HEAD;
-			case ARMOR_LEGS:  return EnchantmentCategory.ARMOR_LEGS;
-			case ARMOR_TORSO: return EnchantmentCategory.ARMOR_CHEST;
-			case TOOL:        return EnchantmentCategory.DIGGER;
-			case WEAPON:      return EnchantmentCategory.WEAPON;
-			case BOW:         return EnchantmentCategory.BOW;
-			case FISHING_ROD: return EnchantmentCategory.FISHING_ROD;
-			case BREAKABLE:   return EnchantmentCategory.BREAKABLE;
-			case WEARABLE:    return EnchantmentCategory.WEARABLE;
-			case TRIDENT:     return EnchantmentCategory.TRIDENT;
-			case CROSSBOW:    return EnchantmentCategory.CROSSBOW;
-			case VANISHABLE:  return EnchantmentCategory.VANISHABLE;
-			default:          return null;
+			case ARMOR:
+				return EnchantmentCategory.ARMOR;
+			case ARMOR_FEET:
+				return EnchantmentCategory.ARMOR_FEET;
+			case ARMOR_HEAD:
+				return EnchantmentCategory.ARMOR_HEAD;
+			case ARMOR_LEGS:
+				return EnchantmentCategory.ARMOR_LEGS;
+			case ARMOR_TORSO:
+				return EnchantmentCategory.ARMOR_CHEST;
+			case TOOL:
+				return EnchantmentCategory.DIGGER;
+			case WEAPON:
+				return EnchantmentCategory.WEAPON;
+			case BOW:
+				return EnchantmentCategory.BOW;
+			case FISHING_ROD:
+				return EnchantmentCategory.FISHING_ROD;
+			case BREAKABLE:
+				return EnchantmentCategory.BREAKABLE;
+			case WEARABLE:
+				return EnchantmentCategory.WEARABLE;
+			case TRIDENT:
+				return EnchantmentCategory.TRIDENT;
+			case CROSSBOW:
+				return EnchantmentCategory.CROSSBOW;
+			case VANISHABLE:
+				return EnchantmentCategory.VANISHABLE;
+			default:
+				return null;
 		}
 	}
 
@@ -85,8 +98,8 @@ public class Nms {
 		try {
 			final var handle = CraftItemStack.class.getDeclaredField("handle");
 			handle.setAccessible(true);
-			return (ItemStack)handle.get(item_stack);
-		} catch (NoSuchFieldException |	IllegalAccessException e) {
+			return (ItemStack) handle.get(item_stack);
+		} catch (NoSuchFieldException | IllegalAccessException e) {
 			return null;
 		}
 	}
@@ -95,30 +108,36 @@ public class Nms {
 		if (!(player instanceof CraftPlayer)) {
 			return null;
 		}
-		return ((CraftPlayer)player).getHandle();
+		return ((CraftPlayer) player).getHandle();
 	}
 
 	public static ServerLevel world_handle(org.bukkit.World world) {
-		return ((CraftWorld)world).getHandle();
+		return ((CraftWorld) world).getHandle();
 	}
 
 	public static DedicatedServer server_handle() {
 		final var bukkit_server = Bukkit.getServer();
-		return ((CraftServer)bukkit_server).getServer();
+		return ((CraftServer) bukkit_server).getServer();
 	}
 
-	@SuppressWarnings({"unchecked", "deprecation"})
-	public static void register_entity(final NamespacedKey base_entity_type, final String pseudo_namespace, final String key, final EntityType.Builder<?> builder) {
+	@SuppressWarnings({ "unchecked", "deprecation" })
+	public static void register_entity(
+		final NamespacedKey base_entity_type,
+		final String pseudo_namespace,
+		final String key,
+		final EntityType.Builder<?> builder
+	) {
 		final var id = pseudo_namespace + "_" + key;
 		// From: https://papermc.io/forums/t/register-and-spawn-a-custom-entity-on-1-13-x/293, adapted for 1.18
 		// Get the datafixer
 		final var world_version = SharedConstants.getCurrentVersion().getWorldVersion();
 		final var world_version_key = DataFixUtils.makeKey(world_version);
-		final var data_types = DataFixers.getDataFixer()
+		final var data_types = DataFixers
+			.getDataFixer()
 			.getSchema(world_version_key)
 			.findChoiceType(References.ENTITY)
 			.types();
-		final var data_types_map = (Map<Object,Type<?>>)data_types;
+		final var data_types_map = (Map<Object, Type<?>>) data_types;
 		// Inject the new custom entity (this registers the key/id with the server,
 		// so it will be available in vanilla constructs like the /summon command)
 		data_types_map.put("minecraft:" + id, data_types_map.get(base_entity_type.toString()));

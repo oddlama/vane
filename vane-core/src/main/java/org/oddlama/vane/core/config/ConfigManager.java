@@ -38,6 +38,7 @@ import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.Module;
 
 public class ConfigManager {
+
 	private List<ConfigField<?>> config_fields = new ArrayList<>();
 	private Map<String, String> section_descriptions = new HashMap<>();
 	ConfigVersionField field_version;
@@ -86,41 +87,43 @@ public class ConfigManager {
 
 		// Return correct wrapper object
 		if (atype.equals(ConfigBoolean.class)) {
-			return new ConfigBooleanField(owner, field, map_name, (ConfigBoolean)annotation);
+			return new ConfigBooleanField(owner, field, map_name, (ConfigBoolean) annotation);
 		} else if (atype.equals(ConfigDouble.class)) {
-			return new ConfigDoubleField(owner, field, map_name, (ConfigDouble)annotation);
+			return new ConfigDoubleField(owner, field, map_name, (ConfigDouble) annotation);
 		} else if (atype.equals(ConfigDoubleList.class)) {
-			return new ConfigDoubleListField(owner, field, map_name, (ConfigDoubleList)annotation);
+			return new ConfigDoubleListField(owner, field, map_name, (ConfigDoubleList) annotation);
 		} else if (atype.equals(ConfigExtendedMaterial.class)) {
-			return new ConfigExtendedMaterialField(owner, field, map_name, (ConfigExtendedMaterial)annotation);
+			return new ConfigExtendedMaterialField(owner, field, map_name, (ConfigExtendedMaterial) annotation);
 		} else if (atype.equals(ConfigInt.class)) {
-			return new ConfigIntField(owner, field, map_name, (ConfigInt)annotation);
+			return new ConfigIntField(owner, field, map_name, (ConfigInt) annotation);
 		} else if (atype.equals(ConfigIntList.class)) {
-			return new ConfigIntListField(owner, field, map_name, (ConfigIntList)annotation);
+			return new ConfigIntListField(owner, field, map_name, (ConfigIntList) annotation);
 		} else if (atype.equals(ConfigItemStack.class)) {
-			return new ConfigItemStackField(owner, field, map_name, (ConfigItemStack)annotation);
+			return new ConfigItemStackField(owner, field, map_name, (ConfigItemStack) annotation);
 		} else if (atype.equals(ConfigLong.class)) {
-			return new ConfigLongField(owner, field, map_name, (ConfigLong)annotation);
+			return new ConfigLongField(owner, field, map_name, (ConfigLong) annotation);
 		} else if (atype.equals(ConfigMaterial.class)) {
-			return new ConfigMaterialField(owner, field, map_name, (ConfigMaterial)annotation);
+			return new ConfigMaterialField(owner, field, map_name, (ConfigMaterial) annotation);
 		} else if (atype.equals(ConfigMaterialMapMapMap.class)) {
-			return new ConfigMaterialMapMapMapField(owner, field, map_name, (ConfigMaterialMapMapMap)annotation);
+			return new ConfigMaterialMapMapMapField(owner, field, map_name, (ConfigMaterialMapMapMap) annotation);
 		} else if (atype.equals(ConfigMaterialSet.class)) {
-			return new ConfigMaterialSetField(owner, field, map_name, (ConfigMaterialSet)annotation);
+			return new ConfigMaterialSetField(owner, field, map_name, (ConfigMaterialSet) annotation);
 		} else if (atype.equals(ConfigString.class)) {
-			return new ConfigStringField(owner, field, map_name, (ConfigString)annotation);
+			return new ConfigStringField(owner, field, map_name, (ConfigString) annotation);
 		} else if (atype.equals(ConfigStringList.class)) {
-			return new ConfigStringListField(owner, field, map_name, (ConfigStringList)annotation);
+			return new ConfigStringListField(owner, field, map_name, (ConfigStringList) annotation);
 		} else if (atype.equals(ConfigStringListMap.class)) {
-			return new ConfigStringListMapField(owner, field, map_name, (ConfigStringListMap)annotation);
+			return new ConfigStringListMapField(owner, field, map_name, (ConfigStringListMap) annotation);
 		} else if (atype.equals(ConfigVersion.class)) {
 			if (owner != module) {
 				throw new RuntimeException("@ConfigVersion can only be used inside the main module. This is a bug.");
 			}
 			if (field_version != null) {
-				throw new RuntimeException("There must be exactly one @ConfigVersion field! (found multiple). This is a bug.");
+				throw new RuntimeException(
+					"There must be exactly one @ConfigVersion field! (found multiple). This is a bug."
+				);
 			}
-			return field_version = new ConfigVersionField(owner, field, map_name, (ConfigVersion)annotation);
+			return field_version = new ConfigVersionField(owner, field, map_name, (ConfigVersion) annotation);
 		} else {
 			throw new RuntimeException("Missing ConfigField handler for @" + atype.getName() + ". This is a bug.");
 		}
@@ -133,7 +136,9 @@ public class ConfigManager {
 			if (version == 0) {
 				module.log.severe("Something went wrong while generating or loading the configuration.");
 				module.log.severe("If you are sure your configuration is correct and this isn't a file");
-				module.log.severe("system permission issue, please report this to https://github.com/oddlama/vane/issues");
+				module.log.severe(
+					"system permission issue, please report this to https://github.com/oddlama/vane/issues"
+				);
 			} else if (version < expected_version()) {
 				module.log.severe("This config is for an older version of " + module.getName() + ".");
 				module.log.severe("Please update your configuration. A new default configuration");
@@ -160,10 +165,13 @@ public class ConfigManager {
 	@SuppressWarnings("unchecked")
 	public void compile(Object owner, Function<String, String> map_name) {
 		// Compile all annotated fields
-		config_fields.addAll(getAllFields(owner.getClass()).stream()
-			.filter(this::has_config_annotation)
-			.map(f -> compile_field(owner, f, map_name))
-			.collect(Collectors.toList()));
+		config_fields.addAll(
+			getAllFields(owner.getClass())
+				.stream()
+				.filter(this::has_config_annotation)
+				.map(f -> compile_field(owner, f, map_name))
+				.collect(Collectors.toList())
+		);
 
 		// Sort fields alphabetically, and by precedence (e.g. put version last and lang first)
 		Collections.sort(config_fields);
@@ -208,7 +216,12 @@ public class ConfigManager {
 					// Append section description, if given.
 					final var section_desc = section_descriptions.get(section_path);
 					if (section_desc != null) {
-						final var description_wrapped = WordUtils.wrap(section_desc, Math.max(60, 80 - indent.length()), "\n" + indent + "# ", false);
+						final var description_wrapped = WordUtils.wrap(
+							section_desc,
+							Math.max(60, 80 - indent.length()),
+							"\n" + indent + "# ",
+							false
+						);
 						builder.append(indent);
 						builder.append("# ");
 						builder.append(description_wrapped);

@@ -28,11 +28,13 @@ import org.oddlama.vane.util.LazyLocation;
 
 @VaneItem(name = "unstable_scroll")
 public class UnstableScroll extends CustomItem<Trifles, UnstableScroll> {
+
 	// Last teleport location storage
 	@Persistent
 	private Map<UUID, LazyLocation> storage_last_scroll_teleport = new HashMap<>();
 
 	public static class UnstableScrollVariant extends CustomItemVariant<Trifles, UnstableScroll, SingleVariant> {
+
 		@ConfigInt(def = 6000, min = 0, desc = "Cooldown in milliseconds until another scroll can be used.")
 		private int config_cooldown;
 
@@ -42,12 +44,15 @@ public class UnstableScroll extends CustomItem<Trifles, UnstableScroll> {
 
 		@Override
 		public void register_recipes() {
-			final var ancient_tome_of_knowledge = CustomItem.<AncientTomeOfKnowledge.AncientTomeOfKnowledgeVariant>variant_of(AncientTomeOfKnowledge.class, BookVariant.BOOK).item();
+			final var ancient_tome_of_knowledge = CustomItem
+				.<AncientTomeOfKnowledge.AncientTomeOfKnowledgeVariant>variant_of(
+					AncientTomeOfKnowledge.class,
+					BookVariant.BOOK
+				)
+				.item();
 
 			final var recipe = new ShapedRecipe(recipe_key(), item())
-				.shape("pip",
-				       "cbe",
-				       "plp")
+				.shape("pip", "cbe", "plp")
 				.setIngredient('b', ancient_tome_of_knowledge)
 				.setIngredient('p', Material.MAP)
 				.setIngredient('i', Material.CHORUS_FRUIT)
@@ -63,7 +68,9 @@ public class UnstableScroll extends CustomItem<Trifles, UnstableScroll> {
 			return Material.CARROT_ON_A_STICK;
 		}
 
-		public int cooldown() { return config_cooldown; }
+		public int cooldown() {
+			return config_cooldown;
+		}
 	}
 
 	public UnstableScroll(Context<Trifles> context) {
@@ -92,8 +99,10 @@ public class UnstableScroll extends CustomItem<Trifles, UnstableScroll> {
 		event.setUseItemInHand(Event.Result.DENY);
 
 		switch (event.getAction()) {
-			default: return;
-			case RIGHT_CLICK_AIR: break;
+			default:
+				return;
+			case RIGHT_CLICK_AIR:
+				break;
 			case RIGHT_CLICK_BLOCK:
 				// Require non-cancelled state (so it won't trigger for block-actions like chests)
 				// But allow if the clicked block can't be interacted with in the first place
@@ -122,7 +131,7 @@ public class UnstableScroll extends CustomItem<Trifles, UnstableScroll> {
 		if (get_module().teleport_from_scroll(player, current_location, to_location)) {
 			// Set cooldown
 			final var cooldown = ms_to_ticks(variant.cooldown());
-			player.setCooldown(variant.base(), (int)cooldown);
+			player.setCooldown(variant.base(), (int) cooldown);
 
 			// Damage item
 			damage_item(player, item, 1);

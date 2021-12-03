@@ -1,7 +1,6 @@
 package org.oddlama.vane.admin;
 
 import java.util.List;
-
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -11,7 +10,6 @@ import org.bukkit.event.entity.EntityBreakDoorEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
-
 import org.oddlama.vane.annotation.config.ConfigBoolean;
 import org.oddlama.vane.annotation.config.ConfigStringList;
 import org.oddlama.vane.annotation.lang.LangMessage;
@@ -20,27 +18,43 @@ import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Context;
 
 public class HazardProtection extends Listener<Admin> {
+
 	private WorldRebuild world_rebuild;
 
 	@ConfigBoolean(def = true, desc = "Restrict wither spawning to a list of worlds defined by wither_world_whitelist.")
 	private boolean config_enable_wither_world_whitelist;
-	@ConfigStringList(def = {"world_nether", "world_the_end"}, desc = "A list of worlds in which the wither may be spawned.")
+
+	@ConfigStringList(
+		def = { "world_nether", "world_the_end" },
+		desc = "A list of worlds in which the wither may be spawned."
+	)
 	private List<String> config_wither_world_whitelist;
+
 	@ConfigBoolean(def = true, desc = "Disables explosions from the wither.")
 	private boolean config_disable_wither_explosions;
+
 	@ConfigBoolean(def = true, desc = "Disables explosions from creepers.")
 	private boolean config_disable_creeper_explosions;
+
 	@ConfigBoolean(def = true, desc = "Disables enderman block pickup.")
 	private boolean config_disable_enderman_block_pickup;
+
 	@ConfigBoolean(def = true, desc = "Disables entities from breaking doors (various zombies).")
 	private boolean config_disable_door_breaking;
+
 	@ConfigBoolean(def = true, desc = "Disables fire from lightning.")
 	private boolean config_disable_lightning_fire;
 
-	@LangMessage private TranslatedMessage lang_wither_spawn_prohibited;
+	@LangMessage
+	private TranslatedMessage lang_wither_spawn_prohibited;
 
 	public HazardProtection(Context<Admin> context) {
-		super(context.group("hazard_protection", "Enable hazard protection. The options below allow more fine-grained control over the hazards to protect from."));
+		super(
+			context.group(
+				"hazard_protection",
+				"Enable hazard protection. The options below allow more fine-grained control over the hazards to protect from."
+			)
+		);
 		world_rebuild = new WorldRebuild(get_context());
 	}
 
@@ -50,9 +64,9 @@ public class HazardProtection extends Listener<Admin> {
 				return false;
 			case WITHER:
 			case WITHER_SKULL:
-				 return config_disable_wither_explosions;
+				return config_disable_wither_explosions;
 			case CREEPER:
-				 return config_disable_creeper_explosions;
+				return config_disable_creeper_explosions;
 		}
 	}
 
@@ -93,7 +107,6 @@ public class HazardProtection extends Listener<Admin> {
 		switch (event.getCause()) {
 			default:
 				return;
-
 			case LIGHTNING:
 				if (config_disable_lightning_fire) {
 					event.setCancelled(true);

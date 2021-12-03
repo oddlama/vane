@@ -4,19 +4,23 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
-
 import org.bukkit.configuration.file.YamlConfiguration;
-
 import org.oddlama.vane.annotation.lang.LangMessageArray;
 import org.oddlama.vane.core.ResourcePackGenerator;
 import org.oddlama.vane.core.YamlLoadException;
-import org.oddlama.vane.core.lang.TranslatedMessageArray;
 import org.oddlama.vane.core.module.Module;
 
 public class LangMessageArrayField extends LangField<TranslatedMessageArray> {
+
 	public LangMessageArray annotation;
 
-	public LangMessageArrayField(Module<?> module, Object owner, Field field, Function<String, String> map_name, LangMessageArray annotation) {
+	public LangMessageArrayField(
+		Module<?> module,
+		Object owner,
+		Field field,
+		Function<String, String> map_name,
+		LangMessageArray annotation
+	) {
 		super(module, owner, field, map_name);
 		this.annotation = annotation;
 	}
@@ -39,7 +43,7 @@ public class LangMessageArrayField extends LangField<TranslatedMessageArray> {
 	private List<String> from_yaml(final YamlConfiguration yaml) {
 		final var list = new ArrayList<String>();
 		for (final var obj : yaml.getList(yaml_path())) {
-			list.add((String)obj);
+			list.add((String) obj);
 		}
 		return list;
 	}
@@ -54,16 +58,21 @@ public class LangMessageArrayField extends LangField<TranslatedMessageArray> {
 	}
 
 	@Override
-	public void add_translations(final ResourcePackGenerator pack, final YamlConfiguration yaml, String lang_code) throws YamlLoadException {
+	public void add_translations(final ResourcePackGenerator pack, final YamlConfiguration yaml, String lang_code)
+		throws YamlLoadException {
 		check_loadable(yaml);
 		final var list = from_yaml(yaml);
 		final var loaded_size = get().size();
 		if (list.size() != loaded_size) {
-			throw new YamlLoadException("All translation lists for message arrays must have the exact same size. The loaded language file has " + loaded_size + " entries, while the currently processed file has " + list.size());
+			throw new YamlLoadException(
+				"All translation lists for message arrays must have the exact same size. The loaded language file has " +
+				loaded_size +
+				" entries, while the currently processed file has " +
+				list.size()
+			);
 		}
 		for (int i = 0; i < list.size(); ++i) {
 			pack.translations(namespace(), lang_code).put(key() + "." + i, list.get(i));
 		}
 	}
 }
-

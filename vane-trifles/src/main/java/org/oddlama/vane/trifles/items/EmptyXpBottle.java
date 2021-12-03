@@ -24,7 +24,9 @@ import org.oddlama.vane.trifles.Trifles;
 
 @VaneItem(name = "empty_xp_bottle")
 public class EmptyXpBottle extends CustomItem<Trifles, EmptyXpBottle> {
+
 	public static class EmptyXpBottleVariant extends CustomItemVariant<Trifles, EmptyXpBottle, SingleVariant> {
+
 		public EmptyXpBottleVariant(EmptyXpBottle parent, SingleVariant variant) {
 			super(parent, variant);
 		}
@@ -45,7 +47,12 @@ public class EmptyXpBottle extends CustomItem<Trifles, EmptyXpBottle> {
 		}
 	}
 
-	@ConfigDouble(def = 0.3, min = 0.0, max = 0.999, desc = "Percentage of lost experience while bottling. For 10% loss, bottling 30 levels will require 30 * (1 / (1 - 0.1)) = 33.33 levels")
+	@ConfigDouble(
+		def = 0.3,
+		min = 0.0,
+		max = 0.999,
+		desc = "Percentage of lost experience while bottling. For 10% loss, bottling 30 levels will require 30 * (1 / (1 - 0.1)) = 33.33 levels"
+	)
 	public double config_loss_percentage;
 
 	public EmptyXpBottle(Context<Trifles> context) {
@@ -53,17 +60,16 @@ public class EmptyXpBottle extends CustomItem<Trifles, EmptyXpBottle> {
 	}
 
 	public static int get_total_exp(final Player player) {
-		return level_to_exp(player.getLevel())
-			+ Math.round(player.getExpToLevel() * player.getExp());
+		return level_to_exp(player.getLevel()) + Math.round(player.getExpToLevel() * player.getExp());
 	}
 
 	public static int level_to_exp(int level) {
 		// Formulas taken from: https://minecraft.fandom.com/wiki/Experience#Leveling_up
 		if (level > 30) {
-			return (int)(4.5 * level * level - 162.5 * level + 2220);
+			return (int) (4.5 * level * level - 162.5 * level + 2220);
 		}
 		if (level > 15) {
-			return (int)(2.5 * level * level - 40.5 * level + 360);
+			return (int) (2.5 * level * level - 40.5 * level + 360);
 		}
 		return level * level + 6 * level;
 	}
@@ -86,8 +92,10 @@ public class EmptyXpBottle extends CustomItem<Trifles, EmptyXpBottle> {
 		event.setUseItemInHand(Event.Result.DENY);
 
 		switch (event.getAction()) {
-			default: return;
-			case RIGHT_CLICK_AIR: break;
+			default:
+				return;
+			case RIGHT_CLICK_AIR:
+				break;
 			case RIGHT_CLICK_BLOCK:
 				// Require non-cancelled state (so it won't trigger for block-actions like chests)
 				if (event.useInteractedBlock() != Event.Result.DENY) {
@@ -108,7 +116,9 @@ public class EmptyXpBottle extends CustomItem<Trifles, EmptyXpBottle> {
 		int exp = 0;
 		for (final var xpvar : XpBottle.Variant.values()) {
 			var cur_xp_bottle_variant = CustomItem.<XpBottle.XpBottleVariant>variant_of(XpBottle.class, xpvar);
-			var cur_exp = (int)((1.0 / (1.0 - config_loss_percentage)) * exp_for_level(cur_xp_bottle_variant.config_capacity));
+			var cur_exp = (int) (
+				(1.0 / (1.0 - config_loss_percentage)) * exp_for_level(cur_xp_bottle_variant.config_capacity)
+			);
 
 			// Check if player has enough xp and this variant has more than the last
 			if (get_total_exp(player) >= cur_exp && cur_exp > exp) {
@@ -126,7 +136,9 @@ public class EmptyXpBottle extends CustomItem<Trifles, EmptyXpBottle> {
 		player.giveExp(-exp, false);
 		remove_one_item_from_hand(player, event.getHand());
 		give_item(player, xp_bottle_variant.item());
-		player.getWorld().playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1.0f, 4.0f);
+		player
+			.getWorld()
+			.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1.0f, 4.0f);
 		swing_arm(player, event.getHand());
 	}
 }

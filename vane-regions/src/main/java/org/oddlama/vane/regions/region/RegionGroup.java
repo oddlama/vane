@@ -13,43 +13,68 @@ import org.oddlama.vane.external.json.JSONObject;
 import org.oddlama.vane.regions.Regions;
 
 public class RegionGroup {
+
 	public static Object serialize(@NotNull final Object o) throws IOException {
-		final var region_group = (RegionGroup)o;
+		final var region_group = (RegionGroup) o;
 		final var json = new JSONObject();
-		json.put("id",                 to_json(UUID.class,            region_group.id));
-		json.put("name",               to_json(String.class,          region_group.name));
-		json.put("owner",              to_json(UUID.class,            region_group.owner));
+		json.put("id", to_json(UUID.class, region_group.id));
+		json.put("name", to_json(String.class, region_group.name));
+		json.put("owner", to_json(UUID.class, region_group.owner));
 		try {
-			json.put("roles",          to_json(RegionGroup.class.getDeclaredField("roles"), region_group.roles));
-		} catch (NoSuchFieldException e) { throw new RuntimeException("Invalid field. This is a bug.", e); }
+			json.put("roles", to_json(RegionGroup.class.getDeclaredField("roles"), region_group.roles));
+		} catch (NoSuchFieldException e) {
+			throw new RuntimeException("Invalid field. This is a bug.", e);
+		}
 		try {
-			json.put("player_to_role", to_json(RegionGroup.class.getDeclaredField("player_to_role"), region_group.player_to_role));
-		} catch (NoSuchFieldException e) { throw new RuntimeException("Invalid field. This is a bug.", e); }
-		json.put("role_others",        to_json(UUID.class,            region_group.role_others));
+			json.put(
+				"player_to_role",
+				to_json(RegionGroup.class.getDeclaredField("player_to_role"), region_group.player_to_role)
+			);
+		} catch (NoSuchFieldException e) {
+			throw new RuntimeException("Invalid field. This is a bug.", e);
+		}
+		json.put("role_others", to_json(UUID.class, region_group.role_others));
 		try {
-			json.put("settings",       to_json(RegionGroup.class.getDeclaredField("settings"), region_group.settings));
-		} catch (NoSuchFieldException e) { throw new RuntimeException("Invalid field. This is a bug.", e); }
+			json.put("settings", to_json(RegionGroup.class.getDeclaredField("settings"), region_group.settings));
+		} catch (NoSuchFieldException e) {
+			throw new RuntimeException("Invalid field. This is a bug.", e);
+		}
 
 		return json;
 	}
 
 	@SuppressWarnings("unchecked")
 	public static RegionGroup deserialize(@NotNull final Object o) throws IOException {
-		final var json = (JSONObject)o;
+		final var json = (JSONObject) o;
 		final var region_group = new RegionGroup();
-		region_group.id                 = from_json(UUID.class,            json.get("id"));
-		region_group.name               = from_json(String.class,          json.get("name"));
-		region_group.owner              = from_json(UUID.class,            json.get("owner"));
+		region_group.id = from_json(UUID.class, json.get("id"));
+		region_group.name = from_json(String.class, json.get("name"));
+		region_group.owner = from_json(UUID.class, json.get("owner"));
 		try {
-			region_group.roles          = (Map<UUID, Role>)from_json(RegionGroup.class.getDeclaredField("roles"), json.get("roles"));
-		} catch (NoSuchFieldException e) { throw new RuntimeException("Invalid field. This is a bug.", e); }
+			region_group.roles =
+				(Map<UUID, Role>) from_json(RegionGroup.class.getDeclaredField("roles"), json.get("roles"));
+		} catch (NoSuchFieldException e) {
+			throw new RuntimeException("Invalid field. This is a bug.", e);
+		}
 		try {
-			region_group.player_to_role = (Map<UUID, UUID>)from_json(RegionGroup.class.getDeclaredField("player_to_role"), json.get("player_to_role"));
-		} catch (NoSuchFieldException e) { throw new RuntimeException("Invalid field. This is a bug.", e); }
-		region_group.role_others        = from_json(UUID.class,            json.get("role_others"));
+			region_group.player_to_role =
+				(Map<UUID, UUID>) from_json(
+					RegionGroup.class.getDeclaredField("player_to_role"),
+					json.get("player_to_role")
+				);
+		} catch (NoSuchFieldException e) {
+			throw new RuntimeException("Invalid field. This is a bug.", e);
+		}
+		region_group.role_others = from_json(UUID.class, json.get("role_others"));
 		try {
-			region_group.settings       = (Map<EnvironmentSetting, Boolean>)from_json(RegionGroup.class.getDeclaredField("settings"), json.get("settings"));
-		} catch (NoSuchFieldException e) { throw new RuntimeException("Invalid field. This is a bug.", e); }
+			region_group.settings =
+				(Map<EnvironmentSetting, Boolean>) from_json(
+					RegionGroup.class.getDeclaredField("settings"),
+					json.get("settings")
+				);
+		} catch (NoSuchFieldException e) {
+			throw new RuntimeException("Invalid field. This is a bug.", e);
+		}
 		return region_group;
 	}
 
@@ -63,7 +88,8 @@ public class RegionGroup {
 
 	private Map<EnvironmentSetting, Boolean> settings = new HashMap<>();
 
-	private RegionGroup() { }
+	private RegionGroup() {}
+
 	public RegionGroup(final String name, final UUID owner) {
 		this.id = UUID.randomUUID();
 		this.name = name;
@@ -95,11 +121,26 @@ public class RegionGroup {
 		}
 	}
 
-	public UUID id() { return id; }
-	public String name() { return name; }
-	public void name(final String name) { this.name = name; }
-	public UUID owner() { return owner; }
-	public Map<EnvironmentSetting, Boolean> settings() { return settings; }
+	public UUID id() {
+		return id;
+	}
+
+	public String name() {
+		return name;
+	}
+
+	public void name(final String name) {
+		this.name = name;
+	}
+
+	public UUID owner() {
+		return owner;
+	}
+
+	public Map<EnvironmentSetting, Boolean> settings() {
+		return settings;
+	}
+
 	public boolean get_setting(final EnvironmentSetting setting) {
 		return settings.getOrDefault(setting, setting.default_value());
 	}
@@ -108,7 +149,10 @@ public class RegionGroup {
 		this.roles.put(role.id(), role);
 	}
 
-	public Map<UUID, UUID> player_to_role() { return player_to_role; }
+	public Map<UUID, UUID> player_to_role() {
+		return player_to_role;
+	}
+
 	public Role get_role(final UUID player) {
 		return roles.get(player_to_role.getOrDefault(player, role_others));
 	}
@@ -123,8 +167,6 @@ public class RegionGroup {
 	}
 
 	public boolean is_orphan(final Regions regions) {
-		return !regions.all_regions()
-			.stream()
-			.anyMatch(r -> id.equals(r.region_group_id()));
+		return !regions.all_regions().stream().anyMatch(r -> id.equals(r.region_group_id()));
 	}
 }

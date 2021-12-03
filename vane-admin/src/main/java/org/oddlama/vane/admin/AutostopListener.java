@@ -6,11 +6,12 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-
 import org.oddlama.vane.core.Listener;
 
 public class AutostopListener extends Listener<Admin> {
+
 	AutostopGroup autostop;
+
 	public AutostopListener(AutostopGroup context) {
 		super(context);
 		this.autostop = context;

@@ -15,23 +15,29 @@ import org.oddlama.vane.util.Nms;
  * All logic will be forwarded to the CustomEnchantment instance.
  */
 public class NativeEnchantmentWrapper extends Enchantment {
+
 	private CustomEnchantment<?> enchantment;
 
 	public NativeEnchantmentWrapper(CustomEnchantment<?> enchantment) {
-		super(Enchantment.Rarity.VERY_RARE, enchantment_slot_type(enchantment.target()), new EquipmentSlot[] { });
+		super(Enchantment.Rarity.VERY_RARE, enchantment_slot_type(enchantment.target()), new EquipmentSlot[] {});
 		this.enchantment = enchantment;
 	}
 
 	@Override
-    public Enchantment.Rarity getRarity() {
+	public Enchantment.Rarity getRarity() {
 		switch (enchantment.rarity()) {
-			case COMMON:    return Enchantment.Rarity.COMMON;
-			case UNCOMMON:  return Enchantment.Rarity.UNCOMMON;
-			case RARE:      return Enchantment.Rarity.RARE;
-			case VERY_RARE: return Enchantment.Rarity.VERY_RARE;
-			default:        return Enchantment.Rarity.VERY_RARE;
+			case COMMON:
+				return Enchantment.Rarity.COMMON;
+			case UNCOMMON:
+				return Enchantment.Rarity.UNCOMMON;
+			case RARE:
+				return Enchantment.Rarity.RARE;
+			case VERY_RARE:
+				return Enchantment.Rarity.VERY_RARE;
+			default:
+				return Enchantment.Rarity.VERY_RARE;
 		}
-    }
+	}
 
 	@Override
 	public int getMinLevel() {

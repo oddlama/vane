@@ -2,19 +2,23 @@ package org.oddlama.vane.core.lang;
 
 import java.lang.reflect.Field;
 import java.util.function.Function;
-
 import org.bukkit.configuration.file.YamlConfiguration;
-
 import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.core.ResourcePackGenerator;
 import org.oddlama.vane.core.YamlLoadException;
-import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Module;
 
 public class LangMessageField extends LangField<TranslatedMessage> {
+
 	public LangMessage annotation;
 
-	public LangMessageField(Module<?> module, Object owner, Field field, Function<String, String> map_name, LangMessage annotation) {
+	public LangMessageField(
+		Module<?> module,
+		Object owner,
+		Field field,
+		Function<String, String> map_name,
+		LangMessage annotation
+	) {
 		super(module, owner, field, map_name);
 		this.annotation = annotation;
 	}
@@ -42,9 +46,9 @@ public class LangMessageField extends LangField<TranslatedMessage> {
 	}
 
 	@Override
-	public void add_translations(final ResourcePackGenerator pack, final YamlConfiguration yaml, String lang_code) throws YamlLoadException {
+	public void add_translations(final ResourcePackGenerator pack, final YamlConfiguration yaml, String lang_code)
+		throws YamlLoadException {
 		check_loadable(yaml);
 		pack.translations(namespace(), lang_code).put(key(), from_yaml(yaml));
 	}
 }
-
