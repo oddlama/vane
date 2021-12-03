@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
-import net.minecraft.core.BlockPosition;
+import net.minecraft.core.BlockPos;
 import org.bukkit.Chunk;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -240,7 +240,7 @@ public class Regions extends Module<Regions> {
 	private static final DustOptions visualize_dust_invalid = new DustOptions(Color.fromRGB(230, 60, 11), 1.0f);
 	private static final DustOptions visualize_dust_valid = new DustOptions(Color.fromRGB(120, 220, 60), 1.0f);
 
-	private void visualize_edge(final World world, final BlockPosition c1, final BlockPosition c2, final boolean valid) {
+	private void visualize_edge(final World world, final BlockPos c1, final BlockPos c2, final boolean valid) {
 		// Unfortunately, particle spawns are normal distributed.
 		// To still have a good visualization, we need to calculate a stddev that looks
 		// good. Empirically we chose a 1/2 of the radius.
@@ -314,14 +314,14 @@ public class Regions extends Module<Regions> {
 			final var hz = Math.max(selection.primary.getZ(), selection.secondary.getZ());
 
 			// Corners
-			final var A = new BlockPosition(lx, ly, lz);
-			final var B = new BlockPosition(hx, ly, lz);
-			final var C = new BlockPosition(hx, hy, lz);
-			final var D = new BlockPosition(lx, hy, lz);
-			final var E = new BlockPosition(lx, ly, hz);
-			final var F = new BlockPosition(hx, ly, hz);
-			final var G = new BlockPosition(hx, hy, hz);
-			final var H = new BlockPosition(lx, hy, hz);
+			final var A = new BlockPos(lx, ly, lz);
+			final var B = new BlockPos(hx, ly, lz);
+			final var C = new BlockPos(hx, hy, lz);
+			final var D = new BlockPos(lx, hy, lz);
+			final var E = new BlockPos(lx, ly, hz);
+			final var F = new BlockPos(hx, ly, hz);
+			final var G = new BlockPos(hx, hy, hz);
+			final var H = new BlockPos(lx, hy, hz);
 
 			// Visualize each edge
 			visualize_edge(world, A, B, valid);

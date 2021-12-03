@@ -74,8 +74,9 @@ public class Bedtime extends Module<Bedtime> {
 
 		// Wakeup players as if they were actually sleeping through the night
 		world.getPlayers().stream().filter(Player::isSleeping).forEach(p -> {
-			// flag0 false = set ticks sleeping to 100, flag1 true = recalculate world.everyoneSleeping
-			Nms.get_player(p).wakeup(false, false);
+			// skipSleepTimer = false (-> set sleepCounter to 100)
+			// updateSleepingPlayers = false
+			Nms.get_player(p).stopSleepInBed(false, false);
 		});
 	}
 

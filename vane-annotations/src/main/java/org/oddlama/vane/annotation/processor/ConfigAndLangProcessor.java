@@ -34,7 +34,7 @@ import javax.tools.Diagnostic;
     "org.oddlama.vane.annotation.lang.LangMessageArray",
     "org.oddlama.vane.annotation.lang.LangVersion",
 })
-@SupportedSourceVersion(SourceVersion.RELEASE_11)
+@SupportedSourceVersion(SourceVersion.RELEASE_17)
 public class ConfigAndLangProcessor extends AbstractProcessor {
 	@Override
 	public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment round_env) {

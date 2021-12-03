@@ -18,8 +18,8 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import net.kyori.adventure.text.Component;
-import net.minecraft.world.entity.EntityTypes;
-import net.minecraft.world.entity.EnumCreatureType;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobCategory;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -194,7 +194,7 @@ public class Portals extends Module<Portals> {
 
 	@SuppressWarnings("unchecked")
 	private void register_entities() {
-		register_entity(NamespacedKey.minecraft("item"), namespace(), "floating_item", EntityTypes.Builder.a(FloatingItem::new, EnumCreatureType.MISC).a(0.0f, 0.0f));
+		register_entity(NamespacedKey.minecraft("item"), namespace(), "floating_item", EntityType.Builder.of(FloatingItem::new, MobCategory.MISC).sized(0.0f, 0.0f));
 	}
 
 	@Override
@@ -736,7 +736,7 @@ public class Portals extends Module<Portals> {
 		}
 
 		final var active = is_activated(portal);
-		console_item.setItemStack(item_handle(make_console_item(portal, active)));
+		console_item.setItem(item_handle(make_console_item(portal, active)));
 
 		if (is_new) {
 			console_floating_items.put(block, console_item);
@@ -747,7 +747,7 @@ public class Portals extends Module<Portals> {
 	public void remove_console_item(final Block block) {
 		final var console_item = console_floating_items.remove(block);
 		if (console_item != null) {
-			console_item.die();
+			console_item.discard();
 		}
 	}
 

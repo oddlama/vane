@@ -1,10 +1,10 @@
 plugins {
-	id("com.github.johnrengelman.shadow") version "6.0.0"
+	id("com.github.johnrengelman.shadow") version "7.1.0"
 }
 
 dependencies {
 	implementation(group = "io.github.waterfallmc", name = "waterfall-api", version = "1.18-R0.1-SNAPSHOT")
-	implementation(group = "org.bstats", name = "bstats-bungeecord", version = "1.7")
+	implementation(group = "org.bstats", name = "bstats-bungeecord", version = "1.8")
 	implementation(group = "org.json", name = "json", version = "20200518")
 }
 

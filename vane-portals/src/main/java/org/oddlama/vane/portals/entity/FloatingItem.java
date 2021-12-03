@@ -2,87 +2,61 @@ package org.oddlama.vane.portals.entity;
 
 import static org.oddlama.vane.util.Nms.world_handle;
 
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityTypes;
-import net.minecraft.world.entity.item.EntityItem;
-import net.minecraft.world.entity.player.EntityHuman;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.World;
+import net.minecraft.world.level.Level;
 import org.bukkit.Location;
+import org.bukkit.World;
 
-public class FloatingItem extends EntityItem {
+public class FloatingItem extends ItemEntity {
 	public FloatingItem(final Location location) {
-		this(location.getWorld());
-		setLocation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
+		this(location.getWorld(), location.getX(), location.getY(), location.getZ());
 	}
 
-	public FloatingItem(final org.bukkit.World world, double x, double y, double z) {
-		this(world);
-		setLocation(x, y, z, 0, 0);
+	public FloatingItem(final World world, double x, double y, double z) {
+		this(EntityType.ITEM, world_handle(world));
+		setPos(x, y, z);
 	}
 
-	public FloatingItem(final org.bukkit.World world) {
-		this(world_handle(world));
-	}
-
-	public FloatingItem(final World world) {
-		this(EntityTypes.ITEM, world);
-	}
-
-	public FloatingItem(EntityTypes<EntityItem> entitytypes, World world) {
+	public FloatingItem(EntityType<? extends ItemEntity> entitytypes, Level world) {
 		super(entitytypes, world);
 
 		setSilent(true);
 		setInvulnerable(true);
 		setNoGravity(true);
 		//setSneaking(true); // Names would then only visible on direct line of sight BUT much darker and offset by -0.5 in y direction
-		p(); // setNoPickup(); (same as: pickupDelay = 32767;)
+		setNeverPickUp();
 		persist = false;
-
-		// This cast is necessary so the remapper understands that containerMenu is part of EntityHuman,
-		// otherwise it doesn't recognize that this field needs to be renamed
-		((Entity)this).noPhysics = true;
+		noPhysics = true;
 	}
 
-	@Override public boolean isInteractable() { return false; }
-	@Override public boolean isCollidable() { return false; }
-	@Override public boolean damageEntity(DamageSource damagesource, float f) { return false; }
-	@Override public boolean isInvulnerable(DamageSource source) { return true; }
+	@Override public boolean isAttackable() { return false; }
+	@Override public boolean isCollidable(boolean ignoreClimbing) { return false; }
+	@Override public boolean isInvulnerableTo(DamageSource source) { return true; }
 	@Override public boolean isInvisible() { return true; }
-
-	@Override
-	public void tick() {
-		// Not ticking
-	}
-
-	@Override
-	public void inactiveTick() {
-		// No entity ticking
-	}
+	@Override public boolean fireImmune() { return true; }
+	@Override public void tick() { }
+	@Override public void inactiveTick() { }
 
 	// Don't save or load
-	@Override public void saveData(NBTTagCompound nbttagcompound) {}
-	@Override public void loadData(NBTTagCompound nbttagcompound) {}
-	@Override public boolean d(NBTTagCompound nbttagcompound) { return false; }
-	@Override public boolean e(NBTTagCompound nbttagcompound) { return false; }
-	@Override public NBTTagCompound save(NBTTagCompound nbttagcompound) { return nbttagcompound; }
-	@Override public void load(NBTTagCompound nbttagcompound) {}
+	@Override public void readAdditionalSaveData(CompoundTag nbt) {}
+	@Override public void addAdditionalSaveData(CompoundTag nbt) {}
+	@Override public boolean serializeEntity(CompoundTag nbt) { return false; }
+	@Override public boolean save(CompoundTag nbt) { return false; }
+	@Override public CompoundTag saveWithoutId(CompoundTag nbt) { return nbt; }
+	@Override public void load(CompoundTag nbt) {}
 
 	@Override
-	public void setItemStack(ItemStack itemStack) {
-		super.setItemStack(itemStack);
+	public void setItem(ItemStack itemStack) {
+		super.setItem(itemStack);
 
-		if (itemStack.hasName()) {
+		if (itemStack.hasCustomHoverName()) {
 			setCustomNameVisible(true);
-			setCustomName(itemStack.getName());
+			setCustomName(itemStack.getHoverName());
 		} else
 			setCustomNameVisible(false);
-	}
-
-	@Override
-	public void pickup(EntityHuman entityhuman) {
-		// No pickup
 	}
 }
