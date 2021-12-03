@@ -167,7 +167,7 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 	/**
 	 * The minimum level this enchantment can have. Always fixed to 1.
 	 */
-	public final int start_level() {
+	public final int min_level() {
 		return 1;
 	}
 
@@ -183,7 +183,7 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 	 * Determines the minimum enchanting table level at which this enchantment
 	 * can occur at the given level.
 	 */
-	public int min_enchanting_level(int level) {
+	public int min_cost(int level) {
 		return 1 + level * 10;
 	}
 
@@ -191,8 +191,8 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 	 * Determines the maximum enchanting table level at which this enchantment
 	 * can occur at the given level.
 	 */
-	public int max_enchanting_level(int level) {
-		return min_enchanting_level(level) + 5;
+	public int max_cost(int level) {
+		return min_cost(level) + 5;
 	}
 
 	/**

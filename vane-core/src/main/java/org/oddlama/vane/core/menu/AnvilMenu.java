@@ -2,36 +2,34 @@ package org.oddlama.vane.core.menu;
 
 import static org.oddlama.vane.util.Nms.player_handle;
 
-import net.minecraft.core.BlockPosition;
-import net.minecraft.network.chat.ChatMessage;
-import net.minecraft.network.protocol.game.PacketPlayOutOpenWindow;
-import net.minecraft.server.level.EntityPlayer;
-import net.minecraft.world.IInventory;
-import net.minecraft.world.entity.player.EntityHuman;
-import net.minecraft.world.inventory.ContainerAccess;
-import net.minecraft.world.inventory.ContainerAnvil;
-import org.bukkit.entity.Player;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.protocol.game.ClientboundOpenScreenPacket;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ContainerLevelAccess;
 import org.oddlama.vane.core.module.Context;
 
 public class AnvilMenu extends Menu {
-	private EntityPlayer entity;
+	private ServerPlayer entity;
 	private AnvilContainer container;
 	private int container_id;
 	private String title;
 
-	public AnvilMenu(final Context<?> context, final Player player, final String title) {
+	public AnvilMenu(final Context<?> context, final org.bukkit.entity.Player player, final String title) {
 		super(context);
 
 		this.title = title;
 		this.entity = player_handle(player);
 		this.container_id = entity.nextContainerCounter();
 		this.container = new AnvilContainer(container_id, entity);
-		this.container.setTitle(new ChatMessage(title));
+		this.container.setTitle(new TextComponent(title));
 		this.inventory = container.getBukkitView().getTopInventory();
 	}
 
 	@Override
-	public void open_window(final Player player) {
+	public void open_window(final org.bukkit.entity.Player player) {
 		if (tainted) {
 			return;
 		}
@@ -40,32 +38,29 @@ public class AnvilMenu extends Menu {
 			manager.get_module().log.warning("AnvilMenu.open() was called with a player for whom this inventory wasn't created!");
 		}
 
-		entity.connection.sendPacket(new PacketPlayOutOpenWindow(container_id, container.getType(), new ChatMessage(title)));
+		entity.connection.send(new ClientboundOpenScreenPacket(container_id, container.getType(), new TextComponent(title)));
 		entity.initMenu(container);
-
-		// This cast is necessary so the remapper understands that containerMenu is part of EntityHuman,
-		// otherwise it doesn't recognize that this field needs to be renamed
-		((EntityHuman)entity).containerMenu = container;
+		entity.containerMenu = container;
 	}
 
-	private class AnvilContainer extends ContainerAnvil {
-		public AnvilContainer(int window_id, final EntityHuman entity) {
-			super(window_id, entity.getInventory(), ContainerAccess.at(entity.getWorld(), new BlockPosition(0, 0, 0)));
+	private class AnvilContainer extends net.minecraft.world.inventory.AnvilMenu {
+		public AnvilContainer(int window_id, final Player entity) {
+			super(window_id, entity.getInventory(), ContainerLevelAccess.create(entity.getLevel(), new BlockPos(0, 0, 0)));
 			this.checkReachable = false;
 		}
 
 		@Override
-		public void i() {
-			super.i();
+		public void createResult() {
+			super.createResult();
 			this.cost.set(0);
 		}
 
 		@Override
-		public void b(EntityHuman player) {
+		public void removed(Player player) {
 		}
 
 		@Override
-		protected void a(EntityHuman player, IInventory container) {
+		protected void clearContainer(Player player, Container container) {
 		}
 	}
 }

@@ -4,7 +4,7 @@ import static org.oddlama.vane.core.item.CustomItem.is_custom_item;
 import static org.oddlama.vane.util.Nms.bukkit_enchantment;
 import static org.oddlama.vane.util.Nms.enchantment_slot_type;
 
-import net.minecraft.world.entity.EnumItemSlot;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import org.jetbrains.annotations.NotNull;
@@ -18,13 +18,12 @@ public class NativeEnchantmentWrapper extends Enchantment {
 	private CustomEnchantment<?> enchantment;
 
 	public NativeEnchantmentWrapper(CustomEnchantment<?> enchantment) {
-		super(Enchantment.Rarity.VERY_RARE, enchantment_slot_type(enchantment.target()), new EnumItemSlot[] { });
+		super(Enchantment.Rarity.VERY_RARE, enchantment_slot_type(enchantment.target()), new EquipmentSlot[] { });
 		this.enchantment = enchantment;
 	}
 
-	// rarity()
 	@Override
-    public Enchantment.Rarity d() {
+    public Enchantment.Rarity getRarity() {
 		switch (enchantment.rarity()) {
 			case COMMON:    return Enchantment.Rarity.COMMON;
 			case UNCOMMON:  return Enchantment.Rarity.UNCOMMON;
@@ -35,8 +34,8 @@ public class NativeEnchantmentWrapper extends Enchantment {
     }
 
 	@Override
-	public int getStartLevel() {
-		return enchantment.start_level();
+	public int getMinLevel() {
+		return enchantment.min_level();
 	}
 
 	@Override
@@ -44,32 +43,28 @@ public class NativeEnchantmentWrapper extends Enchantment {
 		return enchantment.max_level();
 	}
 
-	// min_enchanting_level()
 	@Override
-	public int a(int level) {
-		return enchantment.min_enchanting_level(level);
-	}
-
-	// max_enchanting_level()
-	@Override
-	public int b(int level) {
-		return enchantment.max_enchanting_level(level);
+	public int getMinCost(int level) {
+		return enchantment.min_cost(level);
 	}
 
 	@Override
-	public boolean isTreasure() {
+	public int getMaxCost(int level) {
+		return enchantment.max_cost(level);
+	}
+
+	@Override
+	public boolean isTreasureOnly() {
 		return enchantment.is_treasure();
 	}
 
-	// can_generate_in_treasure()
 	@Override
-	public boolean i() {
+	public boolean isDiscoverable() {
 		return enchantment.generate_in_treasure();
 	}
 
-	// is_compatible()
 	@Override
-	public boolean a(@NotNull Enchantment other) {
+	public boolean checkCompatibility(@NotNull Enchantment other) {
 		return this != other && enchantment.is_compatible(bukkit_enchantment(other));
 	}
 

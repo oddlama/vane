@@ -2,7 +2,7 @@ package org.oddlama.vane.enchantments;
 
 import net.minecraft.world.item.enchantment.Enchantment;
 
-import org.bukkit.craftbukkit.v1_17_R1.enchantments.CraftEnchantment;
+import org.bukkit.craftbukkit.v1_18_R1.enchantments.CraftEnchantment;
 
 import org.jetbrains.annotations.NotNull;
 

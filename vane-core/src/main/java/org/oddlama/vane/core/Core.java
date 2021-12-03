@@ -26,7 +26,7 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.block.Skull;
-import org.bukkit.craftbukkit.libs.org.apache.commons.io.IOUtils;
+import org.apache.commons.io.IOUtils;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;

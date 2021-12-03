@@ -19,7 +19,7 @@ import net.minecraft.world.item.Item;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.craftbukkit.v1_17_R1.enchantments.CraftEnchantment;
+import org.bukkit.craftbukkit.v1_18_R1.enchantments.CraftEnchantment;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -42,7 +42,7 @@ public class ItemUtil {
 			return;
 		}
 
-		handle.damage(amount, player_handle(player), x -> {});
+		handle.hurtAndBreak(amount, player_handle(player), onBreak -> {});
 	}
 
 	public static String name_of(final ItemStack item) {
@@ -120,8 +120,8 @@ public class ItemUtil {
 		}
 
 		// Sort by combined rarity (rare = low value) first
-		final var a_rarity = ae.keySet().stream().mapToInt(e -> CraftEnchantment.getRaw(e).d().a()).sum();
-		final var b_rarity = be.keySet().stream().mapToInt(e -> CraftEnchantment.getRaw(e).d().a()).sum();
+		final var a_rarity = ae.keySet().stream().mapToInt(e -> CraftEnchantment.getRaw(e).getRarity().getWeight()).sum();
+		final var b_rarity = be.keySet().stream().mapToInt(e -> CraftEnchantment.getRaw(e).getRarity().getWeight()).sum();
 		if (a_rarity != b_rarity) {
 			return b_rarity - a_rarity;
 		}
@@ -191,7 +191,7 @@ public class ItemUtil {
 			}
 
 			// By damage
-			final var damage_diff = na.getDamage() - nb.getDamage();
+			final var damage_diff = na.getDamageValue() - nb.getDamageValue();
 			if (damage_diff != 0) {
 				return damage_diff;
 			}
