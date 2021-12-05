@@ -50,7 +50,7 @@ public class ChatMessageFormatter extends Listener<Admin> {
 				) {
 					// TODO more sophisticated formatting?
 					final var who = sourceDisplayName.color(NamedTextColor.AQUA);
-					return lang_player_chat_format.format(who, message);
+					return lang_player_chat_format.str_component(who, message);
 				}
 			};
 	}
