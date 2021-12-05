@@ -1,5 +1,7 @@
 package org.oddlama.vane.core;
 
+import java.io.IOException;
+import java.util.Properties;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -7,22 +9,12 @@ import org.bukkit.event.player.PlayerResourcePackStatusEvent;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.oddlama.vane.annotation.config.ConfigBoolean;
-import org.oddlama.vane.annotation.config.ConfigString;
 import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.ModuleGroup;
 
 public class ResourcePackDistributor extends Listener<Core> {
-
-	@ConfigString(
-		def = "https://your-server.tld/path/to/pack.zip",
-		desc = "URL to an resource pack. Will request players to use the specified resource pack. [as of 1.16.2] Beware that the minecraft client currently has issues with webservers that serve resource packs via https and don't allow ssl3. This protocol is considered insecure and therefore should NOT be used. To workaround this issue, you should host the file in a http context. Using http is not a security issue, as the file will be verified via its sha1 sum by the client."
-	)
-	public String config_url;
-
-	@ConfigString(def = "", desc = "Resource pack SHA-1 sum. Required to verify resource pack integrity.")
-	public String config_sha1;
 
 	@ConfigBoolean(
 		def = true,
@@ -36,12 +28,19 @@ public class ResourcePackDistributor extends Listener<Core> {
 	@LangMessage
 	public TranslatedMessage lang_download_failed;
 
+	public String url = null;
+	public String sha1 = null;
+
 	// The permission to bypass the resource pack
 	public final Permission bypass_permission;
+
+	public CustomResourcePackConfig custom_resource_pack_config;
 	public PlayerMessageDelayer player_message_delayer;
 
 	public ResourcePackDistributor(Context<Core> context) {
 		super(context.group("resource_pack", "Enable resource pack distribution."));
+		// Delay messages if this the distributor is active.
+		custom_resource_pack_config = new CustomResourcePackConfig(get_context());
 		// Delay messages if this the distributor is active.
 		player_message_delayer = new PlayerMessageDelayer(get_context());
 
@@ -57,19 +56,38 @@ public class ResourcePackDistributor extends Listener<Core> {
 
 	@Override
 	public void on_enable() {
+		if (((ModuleGroup<Core>) custom_resource_pack_config.get_context()).config_enabled) {
+			get_module().log.info("Serving custom resource pack");
+			url = custom_resource_pack_config.config_url;
+			sha1 = custom_resource_pack_config.config_sha1;
+		} else {
+			get_module().log.info("Serving official vane resource pack");
+			try {
+				Properties properties = new Properties();
+				properties.load(Core.class.getResourceAsStream("/vane-core.properties"));
+				url = properties.getProperty("resource_pack_url");
+				sha1 = properties.getProperty("resource_pack_sha1");
+			} catch (IOException e) {
+				get_module().log.severe("Could not load official resource pack sha1 from included properties file");
+				url = "";
+				sha1 = "";
+			}
+		}
+
 		// Check sha1 sum validity
-		if (config_sha1.length() != 40) {
+		if (sha1.length() != 40) {
 			get_module()
 				.log.warning(
 					"Invalid resource pack SHA-1 sum '" +
-					config_sha1 +
+					sha1 +
 					"', should be 40 characters long but has " +
-					config_sha1.length()
+					sha1.length() +
+					" characters"
 				);
 			get_module().log.warning("Disabling resource pack serving and message delaying");
 
 			// Disable resource pack
-			config_url = "";
+			url = "";
 			// Prevent subcontexts from being enabling
 			// FIXME this can be coded more cleanly. We need a way
 			// to process config changes _before_ the module is enabled.
@@ -78,23 +96,23 @@ public class ResourcePackDistributor extends Listener<Core> {
 			((ModuleGroup<Core>) player_message_delayer.get_context()).config_enabled = false;
 		}
 
-		// Propagate enable after setting our config_url, so the
-		// message delayer can observe the result
+		// Propagate enable after determining whether the player message delayer is active,
+		// so it is only enabled when needed.
 		super.on_enable();
 
-		config_sha1 = config_sha1.toLowerCase();
-		if (!config_url.isEmpty()) {
-			get_module().log.info("Distributing resource pack from '" + config_url + "' with sha1 " + config_sha1);
+		sha1 = sha1.toLowerCase();
+		if (!url.isEmpty()) {
+			get_module().log.info("Distributing resource pack from '" + url + "' with sha1 " + sha1);
 		}
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void on_player_join(final PlayerJoinEvent event) {
-		if (config_url.isEmpty()) {
+		if (url.isEmpty()) {
 			return;
 		}
 
-		event.getPlayer().setResourcePack(config_url, config_sha1);
+		event.getPlayer().setResourcePack(url, sha1);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)

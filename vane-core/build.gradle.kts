@@ -1,3 +1,5 @@
+import java.io.ByteArrayOutputStream
+
 plugins {
 	id("com.github.johnrengelman.shadow") version "7.1.0"
 }
@@ -7,6 +9,14 @@ dependencies {
 	implementation(group = "org.reflections", name = "reflections", version = "0.9.12")
 	implementation(group = "org.json", name = "json", version = "20200518")
 	implementation(project(":vane-annotations"))
+}
+
+val resource_pack_sha1: String = ByteArrayOutputStream().use { outputStream ->
+	project.exec {
+		commandLine("sha1sum", "../docs/resourcepacks/v" + project.version + ".zip")
+		standardOutput = outputStream
+	}
+	outputStream.toString().split(" ")[0]
 }
 
 tasks {
@@ -20,5 +30,11 @@ tasks {
 		relocate("org.bstats", "org.oddlama.vane.external.bstats")
 		relocate("org.reflections", "org.oddlama.vane.external.reflections")
 		relocate("org.json", "org.oddlama.vane.external.json")
+	}
+
+	processResources {
+		filesMatching("vane-core.properties") {
+			expand(project.properties + mapOf("resource_pack_sha1" to resource_pack_sha1))
+		}
 	}
 }

@@ -39,6 +39,12 @@ public interface Context<T extends Module<T>> {
 		return new ModuleGroup<T>(this, group, description);
 	}
 
+	public default ModuleGroup<T> group(String group, String description, boolean default_enabled) {
+		final var g = new ModuleGroup<T>(this, group, description);
+		g.config_enabled_def = default_enabled;
+		return g;
+	}
+
 	/** create a subcontext group */
 	public default ModuleGroup<T> group_default_disabled(String group, String description) {
 		final var g = group(group, description);
