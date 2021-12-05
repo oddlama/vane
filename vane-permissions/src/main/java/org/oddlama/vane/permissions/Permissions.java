@@ -32,7 +32,10 @@ import org.oddlama.vane.core.module.Module;
 public class Permissions extends Module<Permissions> {
 
 	// Configuration
-	@ConfigBoolean(def = true, desc = "Remove all default permissions to start with a clean preset.")
+	@ConfigBoolean(
+		def = false,
+		desc = "Remove all default permissions from ANY SOURCE (including other plugins and minecraft permissions) to start with a clean preset. This will allow you to exactly set which player have which permissions instead of having to resort to volatile stateful changes like negative permissions. This will result in OPped players to lose access to commands, if not explicitly added back via permissions. The wildcard permissions can be viewed using `perms list permissions`. The wildcard permissions `minecraft` and `craftbukkit` may be especially useful."
+	)
 	public boolean config_remove_defaults;
 
 	@ConfigString(
