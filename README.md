@@ -129,21 +129,9 @@ If you don't want a certain feature, simply disable it.
 
 For a comprehensive guide, visit the [Installation Guide](https://github.com/oddlama/vane/wiki/Installation-Guide) on the wiki.
 
-**This plugin requires Java 16!**
-
-To install vane, begin by downloading/compiling and placing all desired module jars into the `plugins/` directory.
-
-1. Start the server to generate configuration files, and edit them to your preference.
-2. Either restart the server, or type `/vane reload` to apply the changes.
-3. Execute `/vane generate_resource_pack`. This will place the required resource pack in the server's working directory.
-4. Copy the resource pack to a publicly accessible webserver and configure the related section in `plugins/vane-core/config.yml`. Beware that minecraft has problems with https connection as outlined below.
-5. Either restart the server again, or type `/vane reload` to apply the changes.
-
-Enjoy playing!
-
-> **[as of 1.16.2]** Beware that the minecraft client currently has issues with webservers that serve resource packs via https and don't allow ssl3.
-> This protocol is considered insecure and therefore should NOT be used. To workaround this issue, you should host the file in a http context.
-> Using http is not a security issue, as the file will be verified via its sha1 sum by the client.
+To install vane, simply downlaod all desired jars files from the [Releases](https://github.com/oddlama/vane/releases/latest) and put them into the `plugins/` directory.
+You can grab the `all-plugins.zip` if you don't want to download each file by hand.
+Then start your server and enjoy playing!
 
 ### Installation (vane-waterfall)
 
