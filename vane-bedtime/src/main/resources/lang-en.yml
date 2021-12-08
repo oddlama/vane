@@ -12,7 +12,7 @@
 
 # DO NOT CHANGE! The version of this language file. Used to determine
 # if the file needs to be updated.
-version: 2
+version: 3
 # The corresponding language code used in resource packs. Used for
 # resource pack generation. Typically this is a combination of the
 # language code (ISO 639) and the country code (ISO 3166).
@@ -38,3 +38,10 @@ dynmap:
   # The label for the dynmap markers
   # %1$s: Player name
   marker_label: "%1$s"
+
+blue_map:
+  # The label for the BlueMap marker set
+  layer_label: "Portals"
+  # The label for the BlueMap bed markers. Supports HTML. Arguments will be escaped properly.
+  # %1$s: Player name
+  marker_label: "<span style=\"color: white\">🏠 %1$s</span>"

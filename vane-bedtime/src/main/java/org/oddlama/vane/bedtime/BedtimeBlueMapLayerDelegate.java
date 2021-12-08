@@ -1,4 +1,4 @@
-package org.oddlama.vane.portals;
+package org.oddlama.vane.bedtime;
 
 import static org.apache.commons.lang.StringEscapeUtils.escapeHtml;
 
@@ -9,22 +9,22 @@ import de.bluecolored.bluemap.api.marker.MarkerSet;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.UUID;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.Plugin;
-import org.oddlama.vane.portals.portal.Portal;
 
-public class PortalBlueMapLayerDelegate {
+public class BedtimeBlueMapLayerDelegate {
 
-	public static final String MARKER_SET_ID = "vane_portals.portals";
+	public static final String MARKER_SET_ID = "vane_bedtime.bedtime";
 
-	private PortalBlueMapLayer parent = null;
+	private BedtimeBlueMapLayer parent = null;
 
 	private boolean bluemap_enabled = false;
 
-	public PortalBlueMapLayerDelegate(final PortalBlueMapLayer parent) {
+	public BedtimeBlueMapLayerDelegate(final BedtimeBlueMapLayer parent) {
 		this.parent = parent;
 	}
 
-	public Portals get_module() {
+	public Bedtime get_module() {
 		return parent.get_module();
 	}
 
@@ -58,22 +58,22 @@ public class PortalBlueMapLayerDelegate {
 		return marker_set;
 	}
 
-	private String id_for(final BlueMapMap map, final UUID portal_id) {
-		return map.getId() + ":" + portal_id.toString();
+	private String id_for(final BlueMapMap map, final UUID player_id) {
+		return map.getId() + ":" + player_id.toString();
 	}
 
-	private String id_for(final BlueMapMap map, final Portal portal) {
-		return id_for(map, portal.id());
+	private String id_for(final BlueMapMap map, final OfflinePlayer player) {
+		return id_for(map, player.getUniqueId());
 	}
 
-	public void update_marker(final Portal portal) {
+	public void update_marker(final OfflinePlayer player) {
 		if (!bluemap_enabled) {
 			return;
 		}
 
-		// Don't show private portals
-		if (portal.visibility() == Portal.Visibility.PRIVATE) {
-			remove_marker(portal.id());
+		final var loc = player.getBedSpawnLocation();
+		if (loc == null) {
+			remove_marker(player.getUniqueId());
 			return;
 		}
 
@@ -82,35 +82,38 @@ public class PortalBlueMapLayerDelegate {
 			.ifPresent(api -> {
 				try {
 					final var marker_api = api.getMarkerAPI();
-					update_marker_no_save(api, get_or_create_marker_set(marker_api), portal);
+					update_marker_no_save(api, get_or_create_marker_set(marker_api), player);
 					marker_api.save();
 				} catch (IOException e) {
 					get_module()
-						.log.warning("Could not retrieve BlueMap marker api when updating portal marker. Skipping.");
+						.log.warning("Could not retrieve BlueMap marker api when updating bed marker. Skipping.");
 				}
 			});
 	}
 
-	private void update_marker_no_save(final BlueMapAPI api, final MarkerSet marker_set, final Portal portal) {
-		final var loc = portal.spawn();
+	private void update_marker_no_save(final BlueMapAPI api, final MarkerSet marker_set, final OfflinePlayer player) {
+		final var loc = player.getBedSpawnLocation();
+		if (loc == null) {
+			return;
+		}
 
 		// Existing markers will be overwritten.
 		final var bm_world = api.getWorld(loc.getWorld().getUID());
 		if (bm_world.isPresent()) {
 			for (final var map : bm_world.get().getMaps()) {
 				final var marker = marker_set.createHtmlMarker(
-					id_for(map, portal),
+					id_for(map, player),
 					map,
 					loc.getX() + 0.5,
 					loc.getY() + 0.5,
 					loc.getZ() + 0.5,
-					parent.lang_marker_label.str(escapeHtml(portal.name()))
+					parent.lang_marker_label.str(escapeHtml(player.getName()))
 				);
 			}
 		}
 	}
 
-	public void remove_marker(final UUID portal_id) {
+	public void remove_marker(final UUID player_id) {
 		if (!bluemap_enabled) {
 			return;
 		}
@@ -121,12 +124,12 @@ public class PortalBlueMapLayerDelegate {
 				try {
 					final var marker_api = api.getMarkerAPI();
 					for (final var map : api.getMaps()) {
-						get_or_create_marker_set(marker_api).removeMarker(id_for(map, portal_id));
+						get_or_create_marker_set(marker_api).removeMarker(id_for(map, player_id));
 					}
 					marker_api.save();
 				} catch (IOException e) {
 					get_module()
-						.log.warning("Could not retrieve BlueMap marker api when updating portal marker. Skipping.");
+						.log.warning("Could not retrieve BlueMap marker api when updating bed marker. Skipping.");
 				}
 			});
 	}
@@ -145,14 +148,18 @@ public class PortalBlueMapLayerDelegate {
 
 					// Update all existing
 					final var id_set = new HashSet<String>();
-					for (final var portal : get_module().all_portals()) {
-						final var bm_world = api.getWorld(portal.spawn().getWorld().getUID());
+					for (final var player : get_module().get_offline_players_with_valid_name()) {
+						final var loc = player.getBedSpawnLocation();
+						if (loc == null) {
+							continue;
+						}
+						final var bm_world = api.getWorld(loc.getWorld().getUID());
 						if (bm_world.isPresent()) {
 							for (final var map : bm_world.get().getMaps()) {
-								id_set.add(id_for(map, portal));
+								id_set.add(id_for(map, player));
 							}
 						}
-						update_marker_no_save(api, marker_set, portal);
+						update_marker_no_save(api, marker_set, player);
 					}
 
 					// Remove orphaned
@@ -166,7 +173,7 @@ public class PortalBlueMapLayerDelegate {
 					marker_api.save();
 				} catch (IOException e) {
 					get_module()
-						.log.warning("Could not retrieve BlueMap marker api when updating portal marker. Skipping.");
+						.log.warning("Could not retrieve BlueMap marker api when updating bed marker. Skipping.");
 				}
 			});
 	}

@@ -12,29 +12,22 @@
 
 # DO NOT CHANGE! The version of this language file. Used to determine
 # if the file needs to be updated.
-version: 2
+version: 3
 # The corresponding language code used in resource packs. Used for
 # resource pack generation. Typically this is a combination of the
 # language code (ISO 639) and the country code (ISO 3166).
 resource_pack_lang_code: 'ru_ru'
 
-# This message is broadcast in the world, when a player enters the bed.
-# %1$s: player name
-# %2$s: percentage of sleeping players
 player_bed_enter: "%1$s§e ложиться спать (%2$s§e)"
 
-# This message is broadcast in the world, when a player leaves the bed early,
-# before time was advanced.
-# %1$s: player name
-# %2$s: percentage of sleeping players
 player_bed_leave: "%1$s§e чувствует себя отдохнувшим (%2$s§e)"
 
-# Message sent when enough players were sleeping and time was advanced.
 sleep_success: "§eНеужели солнце уже встало?"
 
 dynmap:
-  # The label for the dynmap layer
   layer_label: "Beds"
-  # The label for the dynmap markers
-  # %1$s: Player name
   marker_label: "%1$s"
+
+blue_map:
+  layer_label: "Portals"
+  marker_label: "<span style=\"color: white\">🏠 %1$s</span>"
