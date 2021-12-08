@@ -99,3 +99,12 @@ configure(subprojects.filter {
 		implementation(project(path = ":vane-core", configuration = "shadow"))
 	}
 }
+
+configure(subprojects.filter {
+    listOf("vane-bedtime", "vane-portals", "vane-regions").contains(it.name)
+}) {
+	dependencies {
+		implementation(group = "us.dynmap", name = "dynmap-api", version = "3.2-SNAPSHOT")
+		implementation(group = "com.github.BlueMap-Minecraft", name = "BlueMapAPI", version = "v1.7.0")
+	}
+}

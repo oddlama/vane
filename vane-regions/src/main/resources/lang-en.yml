@@ -12,7 +12,7 @@
 
 # DO NOT CHANGE! The version of this language file. Used to determine
 # if the file needs to be updated.
-version: 2
+version: 3
 # The corresponding language code used in resource packs. Used for
 # resource pack generation. Typically this is a combination of the
 # language code (ISO 639) and the country code (ISO 3166).
@@ -40,6 +40,13 @@ command_region:
   help: "Execute to open the region management menu."
 
 dynmap:
+  # The label for the dynmap layer
+  layer_label: "Regions"
+  # The label for the dynmap markers
+  # %1$s: Region name
+  marker_label: "%1$s"
+
+blue_map:
   # The label for the dynmap layer
   layer_label: "Regions"
   # The label for the dynmap markers

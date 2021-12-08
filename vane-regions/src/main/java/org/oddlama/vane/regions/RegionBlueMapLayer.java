@@ -10,24 +10,25 @@ import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.ModuleComponent;
 import org.oddlama.vane.regions.region.Region;
 
-public class RegionDynmapLayer extends ModuleComponent<Regions> {
+public class RegionBlueMapLayer extends ModuleComponent<Regions> {
 
-	public static final String LAYER_ID = "vane_regions.regions";
+	@ConfigBoolean(def = false, desc = "If the marker set should be hidden by default.")
+	public boolean config_hide_by_default;
 
-	@ConfigInt(def = 35, min = 0, desc = "Layer ordering priority.")
-	public int config_layer_priority;
+	@ConfigBoolean(
+		def = true,
+		desc = "Set to false to make the area markers visible through terrain and other objects."
+	)
+	public boolean config_depth_test;
 
-	@ConfigBoolean(def = false, desc = "If the layer should be hidden by default.")
-	public boolean config_layer_hide;
+	@ConfigInt(def = 2, min = 1, desc = "Area marker line width.")
+	public int config_line_width;
 
 	@ConfigInt(def = 0xffb422, min = 0, max = 0xffffff, desc = "Area marker fill color (0xRRGGBB).")
 	public int config_fill_color;
 
-	@ConfigDouble(def = 0.05, min = 0.0, max = 1.0, desc = "Area marker fill opacity.")
+	@ConfigDouble(def = 0.1, min = 0.0, max = 1.0, desc = "Area marker fill opacity.")
 	public double config_fill_opacity;
-
-	@ConfigInt(def = 2, min = 1, desc = "Area marker line weight.")
-	public int config_line_weight;
 
 	@ConfigInt(def = 0xffb422, min = 0, max = 0xffffff, desc = "Area marker line color (0xRRGGBB).")
 	public int config_line_color;
@@ -41,21 +42,19 @@ public class RegionDynmapLayer extends ModuleComponent<Regions> {
 	@LangMessage
 	public TranslatedMessage lang_marker_label;
 
-	private RegionDynmapLayerDelegate delegate = null;
+	private RegionBlueMapLayerDelegate delegate = null;
 
-	public RegionDynmapLayer(final Context<Regions> context) {
-		super(
-			context.group("dynmap", "Enable dynmap integration. Regions will then be shown on a separate dynmap layer.")
-		);
+	public RegionBlueMapLayer(final Context<Regions> context) {
+		super(context.group("blue_map", "Enable BlueMap integration."));
 	}
 
 	public void delayed_on_enable() {
-		final var plugin = get_module().getServer().getPluginManager().getPlugin("dynmap");
+		final var plugin = get_module().getServer().getPluginManager().getPlugin("BlueMap");
 		if (plugin == null) {
 			return;
 		}
 
-		delegate = new RegionDynmapLayerDelegate(this);
+		delegate = new RegionBlueMapLayerDelegate(this);
 		delegate.on_enable(plugin);
 	}
 
@@ -81,12 +80,6 @@ public class RegionDynmapLayer extends ModuleComponent<Regions> {
 	public void remove_marker(final UUID region_id) {
 		if (delegate != null) {
 			delegate.remove_marker(region_id);
-		}
-	}
-
-	public void remove_marker(final String marker_id) {
-		if (delegate != null) {
-			delegate.remove_marker(marker_id);
 		}
 	}
 

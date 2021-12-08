@@ -48,7 +48,7 @@ import org.oddlama.vane.regions.region.RegionSelection;
 import org.oddlama.vane.regions.region.Role;
 import org.oddlama.vane.regions.region.RoleSetting;
 
-@VaneModule(name = "regions", bstats = 8643, config_version = 3, lang_version = 2, storage_version = 1)
+@VaneModule(name = "regions", bstats = 8643, config_version = 4, lang_version = 3, storage_version = 1)
 public class Regions extends Module<Regions> {
 	//
 	//                                                  ┌───────────────────────┐
@@ -159,6 +159,7 @@ public class Regions extends Module<Regions> {
 
 	public RegionMenuGroup menus;
 	public RegionDynmapLayer dynmap_layer;
+	public RegionBlueMapLayer blue_map_layer;
 
 	public RegionEconomyDelegate economy;
 
@@ -171,6 +172,7 @@ public class Regions extends Module<Regions> {
 		new RegionRoleSettingEnforcer(this);
 		new RegionSelectionListener(this);
 		dynmap_layer = new RegionDynmapLayer(this);
+		blue_map_layer = new RegionBlueMapLayer(this);
 
 		// Register admin permission
 		admin_permission =
@@ -491,8 +493,8 @@ public class Regions extends Module<Regions> {
 		// Index region for fast lookup
 		index_add_region(region);
 
-		// Create dynmap marker
-		dynmap_layer.update_marker(region);
+		// Create map marker
+		update_marker(region);
 	}
 
 	public void remove_region(final Region region) {
@@ -519,8 +521,18 @@ public class Regions extends Module<Regions> {
 		// Remove region from index
 		index_remove_region(region);
 
-		// Remove dynmap marker
-		dynmap_layer.remove_marker(region.id());
+		// Remove map marker
+		remove_marker(region.id());
+	}
+
+	public void update_marker(final Region region) {
+		dynmap_layer.update_marker(region);
+		blue_map_layer.update_marker(region);
+	}
+
+	public void remove_marker(final UUID region_id) {
+		dynmap_layer.remove_marker(region_id);
+		blue_map_layer.remove_marker(region_id);
 	}
 
 	private void index_add_region(final Region region) {

@@ -12,26 +12,14 @@
 
 # DO NOT CHANGE! The version of this language file. Used to determine
 # if the file needs to be updated.
-version: 2
+version: 3
 # The corresponding language code used in resource packs. Used for
 # resource pack generation. Typically this is a combination of the
 # language code (ISO 639) and the country code (ISO 3166).
 resource_pack_lang_code: 'ru_ru'
 
-# This message is sent when the player needs to select an area for
-# a new region.
 start_region_selection: "§aВыберите площадь выделив два блока при помощи §bЛКМ§a и §bПКМ§a с пустой рукой."
-# This message is sent when the player selects the primary block
-# for a new region.
-# %1$s: Block X
-# %2$s: Block Y
-# %3$s: Block Z
 select_primary_block: "§aВыбран (%1$s§a, %2$s§a, %3$s§a) как первый блок."
-# This message is sent when the player selects the secondary block
-# for a new region.
-# %1$s: Block X
-# %2$s: Block Y
-# %3$s: Block Z
 select_secondary_block: "§aВыбран (%1$s§a, %2$s§a, %3$s§a) как второй блок."
 
 command_region:
@@ -40,34 +28,26 @@ command_region:
   help: "Выполните чтобы открыть меню управления регионами."
 
 dynmap:
-  # The label for the dynmap layer
   layer_label: "Regions"
-  # The label for the dynmap markers
-  # %1$s: Region name
+  marker_label: "%1$s"
+
+blue_map:
+  layer_label: "Regions"
   marker_label: "%1$s"
 
 menus:
-  # Settings for the region group naming menu.
   enter_region_group_name:
-    # The title for the naming menu.
     title: "§8§lВведите название группы региона"
 
-  # Settings for the region naming menu.
   enter_region_name:
-    # The title for the naming menu.
     title: "§8§lВведите название региона"
 
-  # Settings for the role naming menu.
   enter_role_name:
-    # The title for the naming menu.
     title: "§8§lВведите название роли"
 
-  # Settings for the main menu.
   main:
-    # The title for the main menu.
     title: "§8§lУправление регионами"
 
-    # The item used to start a new region selection.
     create_region_start_selection:
       name: "§a§lСоздать регион"
       lore:
@@ -77,24 +57,6 @@ menus:
         - "§6ПКМ§7 чтобы выбрать второй блок."
         - "§7Площадь между блоками будет регионом."
 
-    # This item is shown when the selection is invalid
-    # %1$s: Checkmark: primary block set
-    # %2$s: Checkmark: secondary block set
-    # %3$s: Checkmark: same world
-    # %4$s: Checkmark: doesn't interact existing region
-    # %5$s: Checkmark: minimum area condition met
-    # %6$s: Checkmark: not bigger than max
-    # %7$s: Checkmark: can afford
-    # %8$s: Selection extent X
-    # %9$s: Selection extent Y
-    # %10$s: Selection extent Z
-    # %11$s: min extent X
-    # %12$s: min extent Y
-    # %13$s: min extent Z
-    # %14$s: max extent X
-    # %15$s: max extent Y
-    # %16$s: max extent Z
-    # %17$s: price and currency
     create_region_invalid_selection:
       name: "§c§lНеправильно выделение"
       lore:
@@ -109,17 +71,6 @@ menus:
         - "§7- %6$s§7 Не больше чем (%14$s§7 x %15$s§7 x %16$s§7)"
         - "§7- %7$s§7 Можете себе позволить (%17$s§7)"
 
-    # This item is shown when the selection is valid
-    # %1$s: Selection extent X
-    # %2$s: Selection extent Y
-    # %3$s: Selection extent Z
-    # %4$s: min extent X
-    # %5$s: min extent Y
-    # %6$s: min extent Z
-    # %7$s: max extent X
-    # %8$s: max extent Y
-    # %9$s: max extent Z
-    # %10$s: price and currency
     create_region_valid_selection:
       name: "§a§lСоздать регион"
       lore:
@@ -135,28 +86,20 @@ menus:
         - "§7- §a✓§7 Не больше чем (%7$s§7 x %8$s§7 x %9$s§7)"
         - "§7- §a✓§7 Можете себе позволить (%10$s§7)"
 
-    # This item is used to cancel a pending selection.
     cancel_selection:
       name: "§c§lОтменить выделение"
       lore: []
 
-    # This item is used to select a region where the player is administrator.
     list_regions:
       name: "§b§lВыбрать регион"
       lore: []
 
-    # The title for the region selection menu
     select_region_title: "§8§lВыбор региона"
-    # The title for the region selection menu filter
     filter_regions_title: "§8§lФильтр регионов"
-    # This item is used to represent a region in the selection menu.
-    # %1$s: Region name
     select_region:
       name: "%1$s"
       lore: []
 
-    # This item is a shortcut to select the region the player is standing in.
-    # %1$s: Region name
     current_region:
       name: "§b§lТекущий регион"
       lore:
@@ -165,7 +108,6 @@ menus:
         - ""
         - "§7Выделияет регион в котором вы стоите."
 
-    # This item is used to create a new region group.
     create_region_group:
       name: "§a§lСоздать группу региона"
       lore:
@@ -175,13 +117,10 @@ menus:
         - "§7при помощи присвоения им ролей. Все регионы"
         - "§7в группе делят эти разрешения"
 
-    # This item is used to select a region group.
     list_region_groups:
       name: "§b§lВыбрать группу региона"
       lore: []
 
-    # This item is a shortcut to select the region group of the region the player is standing in.
-    # %1$s: Region group name
     current_region_group:
       name: "§b§lТекущая группа региона"
       lore:
@@ -193,55 +132,39 @@ menus:
 
     select_region_group_title: "§8§lВыбор группы региона"
     filter_region_groups_title: "§8§lФильтр групп регионов"
-    # This item is used to represent a region group in the selection menu.
-    # %1$s: Region group name
     select_region_group:
       name: "%1$s"
       lore: []
 
-  # Settings for the region menu.
   region:
-    # The title for the region menu.
-    # %1$s: Region name
     title: "§8§lРегион: %1$s"
 
-    # The item used to rename a region.
     rename:
       name: "§b§lПереименовать регион"
       lore: []
 
-    # The item used to delete a region.
     delete:
       name: "§c§lУдалить регион"
       lore: []
-    # The title for the delete confirmation dialog.
     delete_confirm_title: "§c§lУдалить регион?"
-    # The item to accept deleting.
     delete_confirm_accept:
       name: "§c§lУДАЛИТЬ РЕГИОН"
       lore: []
-    # The item to cancel deleting.
     delete_confirm_cancel:
       name: "§a§lОтмена"
       lore: []
 
-    # The item used to open the list of region groups to assign the region to one
     assign_region_group:
       name: "§b§lПрисвоить группу"
       lore: []
 
     select_region_group_title: "§8§lВыбор группы региона"
     filter_region_groups_title: "§8§lФильтр группы регионов"
-    # The item used to represent a region group.
-    # %1$s: Region group name
     select_region_group:
       name: "%1$s"
       lore: []
 
-  # Settings for the region group menu.
   region_group:
-    # The title for the region group menu.
-    # %1$s: Region group name
     title: "§8§lГруппа: %1$s"
 
     setting_toggle_on:
@@ -286,31 +209,24 @@ menus:
         - ""
         - "§7Контроллирует может ли расти лоза в регионе."
 
-    # The item used to rename a region group.
     rename:
       name: "§b§lПереименовать группу"
       lore: []
 
-    # The item used to delete a region group.
-    # %1$s: Checkmark: No region uses this group
     delete:
       name: "§c§lУдалить группу"
       lore:
         - ""
         - "§6Требования к удалению:"
         - "§7- %1$s §7Ни один регион не использует эту группу"
-    # The title for the delete confirmation dialog.
     delete_confirm_title: "§c§lУдалить группу региона?"
-    # The item to accept deleting.
     delete_confirm_accept:
       name: "§c§lУДАЛИТЬ ГРУППУ РЕГИОНА"
       lore: []
-    # The item to cancel deleting.
     delete_confirm_cancel:
       name: "§a§lОтмена"
       lore: []
 
-    # This item is used to create a new role.
     create_role:
       name: "§a§lСоздать роль"
       lore:
@@ -318,23 +234,17 @@ menus:
         - "§7Создаёт новую §bроль§7. роли используются"
         - "§7для установки разрешений в группах игроков."
 
-    # This item is used to open the role menu for a role.
     list_roles:
       name: "§b§lРоли"
       lore: []
 
     select_role_title: "§8§lВыбор роли"
     filter_roles_title: "§8§lФильр ролей"
-    # This item is used to represent a role in the selection menu.
-    # %1$s: Role name
     select_role:
       name: "%1$s"
       lore: []
 
-  # Settings for the role menu.
   role:
-    # The title for the role menu.
-    # %1$s: Role name
     title: "§8§lГруппа: %1$s"
 
     setting_toggle_on:
@@ -374,27 +284,21 @@ menus:
         - ""
         - "§7Разрешает взаимодействовать с порталами."
 
-    # The item used to rename a role.
     rename:
       name: "§b§lПереименовать роль"
       lore: []
 
-    # The item used to delete a role.
     delete:
       name: "§c§lУдалить роль"
       lore: []
-    # The title for the delete confirmation dialog.
     delete_confirm_title: "§c§lУдалить роль?"
-    # The item to accept deleting.
     delete_confirm_accept:
       name: "§c§lУДАЛИТЬ РОЛЬ"
       lore: []
-    # The item to cancel deleting.
     delete_confirm_cancel:
       name: "§a§lОтмена"
       lore: []
 
-    # This item is used to open the player assignment menu for a role.
     assign_player:
       name: "§b§lНазначение игроков"
       lore:
@@ -404,7 +308,6 @@ menus:
         - "§7переназначен на эту роль. Список только показывает"
         - "§7игроков которые ещё не привязаны к этой роли."
         - "§7Вы можете удалять игроков используя меню §bУдаления игроков§7."
-    # This item is used to open the player removing menu for a role.
     remove_player:
       name: "§b§lУдаление игроков"
       lore:
@@ -416,8 +319,6 @@ menus:
     select_assign_player_title: "§8§lНазначение игроков"
     select_remove_player_title: "§8§lУдаление игроков"
     filter_players_title: "§8§lФильтр игроков"
-    # This item is used to represent a player in the selection menu.
-    # %1$s: Player name
     select_player:
       name: "%1$s"
       lore: []
