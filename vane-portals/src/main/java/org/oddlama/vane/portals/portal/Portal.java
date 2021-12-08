@@ -56,6 +56,7 @@ public class Portal {
 		json.put("icon", to_json(ItemStack.class, portal.icon));
 		json.put("visibility", to_json(Visibility.class, portal.visibility));
 
+		json.put("exit_orientation_locked", to_json(boolean.class, portal.exit_orientation_locked));
 		json.put("target_id", to_json(UUID.class, portal.target_id));
 		json.put("target_locked", to_json(boolean.class, portal.target_locked));
 		return json;
@@ -88,6 +89,7 @@ public class Portal {
 		portal.icon = from_json(ItemStack.class, json.get("icon"));
 		portal.visibility = from_json(Visibility.class, json.get("visibility"));
 
+		portal.exit_orientation_locked = from_json(boolean.class, json.optString("exit_orientation_locked", "false"));
 		portal.target_id = from_json(UUID.class, json.get("target_id"));
 		portal.target_locked = from_json(boolean.class, json.get("target_locked"));
 		return portal;
@@ -105,6 +107,7 @@ public class Portal {
 	private ItemStack icon = null;
 	private Visibility visibility = Visibility.PRIVATE;
 
+	private boolean exit_orientation_locked = false;
 	private UUID target_id = null;
 	private boolean target_locked = false;
 
@@ -171,6 +174,14 @@ public class Portal {
 
 	public void visibility(final Visibility visibility) {
 		this.visibility = visibility;
+	}
+
+	public boolean exit_orientation_locked() {
+		return exit_orientation_locked;
+	}
+
+	public void exit_orientation_locked(boolean exit_orientation_locked) {
+		this.exit_orientation_locked = exit_orientation_locked;
 	}
 
 	public UUID target_id() {

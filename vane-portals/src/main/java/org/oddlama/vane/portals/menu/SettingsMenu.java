@@ -33,6 +33,8 @@ public class SettingsMenu extends ModuleComponent<Portals> {
 	public TranslatedItemStack<?> item_rename;
 	public TranslatedItemStack<?> item_select_icon;
 	public TranslatedItemStack<?> item_select_style;
+	public TranslatedItemStack<?> item_exit_orientation_lock_on;
+	public TranslatedItemStack<?> item_exit_orientation_lock_off;
 	public TranslatedItemStack<?> item_visibility_public;
 	public TranslatedItemStack<?> item_visibility_group;
 	public TranslatedItemStack<?> item_visibility_group_internal;
@@ -60,6 +62,22 @@ public class SettingsMenu extends ModuleComponent<Portals> {
 				Material.ITEM_FRAME,
 				1,
 				"Used to change the portal's style."
+			);
+		item_exit_orientation_lock_on =
+			new TranslatedItemStack<>(
+				ctx,
+				"exit_orientation_lock_on",
+				Material.SOUL_TORCH,
+				1,
+				"Used to toggle and indicate enabled exit orientation lock."
+			);
+		item_exit_orientation_lock_off =
+			new TranslatedItemStack<>(
+				ctx,
+				"exit_orientation_lock_off",
+				Material.TORCH,
+				1,
+				"Used to toggle and indicate disabled exit orientation lock."
 			);
 		item_visibility_public =
 			new TranslatedItemStack<>(
@@ -130,6 +148,7 @@ public class SettingsMenu extends ModuleComponent<Portals> {
 		settings_menu.add(menu_item_rename(portal, console));
 		settings_menu.add(menu_item_select_icon(portal));
 		settings_menu.add(menu_item_select_style(portal));
+		settings_menu.add(menu_item_exit_orientation_lock(portal));
 		settings_menu.add(menu_item_visibility(portal));
 		settings_menu.add(menu_item_target_lock(portal));
 		settings_menu.add(menu_item_back(portal, console));
@@ -237,6 +256,35 @@ public class SettingsMenu extends ModuleComponent<Portals> {
 				return ClickResult.SUCCESS;
 			}
 		);
+	}
+
+	private MenuWidget menu_item_exit_orientation_lock(final Portal portal) {
+		return new MenuItem(
+			4,
+			null,
+			(player, menu, self) -> {
+				final var settings_event = new PortalChangeSettingsEvent(player, portal, false);
+				get_module().getServer().getPluginManager().callEvent(settings_event);
+				if (settings_event.isCancelled() && !player.hasPermission(get_module().admin_permission)) {
+					get_module().lang_settings_restricted.send(player);
+					return ClickResult.ERROR;
+				}
+
+				portal.exit_orientation_locked(!portal.exit_orientation_locked());
+				mark_persistent_storage_dirty();
+				menu.update();
+				return ClickResult.SUCCESS;
+			}
+		) {
+			@Override
+			public void item(final ItemStack item) {
+				if (portal.exit_orientation_locked()) {
+					super.item(item_exit_orientation_lock_on.item());
+				} else {
+					super.item(item_exit_orientation_lock_off.item());
+				}
+			}
+		};
 	}
 
 	private MenuWidget menu_item_visibility(final Portal portal) {

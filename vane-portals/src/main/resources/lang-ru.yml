@@ -12,7 +12,7 @@
 
 # DO NOT CHANGE! The version of this language file. Used to determine
 # if the file needs to be updated.
-version: 2
+version: 3
 # The corresponding language code used in resource packs. Used for
 # resource pack generation. Typically this is a combination of the
 # language code (ISO 639) and the country code (ISO 3166).
@@ -127,6 +127,16 @@ menus:
       name: "§b§lВыберите стиль"
       lore: []
 
+    # FIXME: needs translation
+    exit_orientation_lock_on:
+      name: "§b§lToggle Exit Orientation Lock"
+      lore: ["", "§bCurrent: §e§lLocked (always exit front)§r"]
+
+    # FIXME: needs translation
+    exit_orientation_lock_off:
+      name: "§b§lToggle Exit Orientation Lock"
+      lore: ["", "§bCurrent: §a§lUnlocked (exit same side as entered)§r"]
+
     # This item is used to cycle visibility and indicate public visibility.
     visibility_public:
       name: "§b§lПереключить видимость"
@@ -155,7 +165,7 @@ menus:
     # This item is used to change and indicate disabled target lock.
     target_lock_off:
       name: "§b§lПереключить блокировку выбора цели"
-      lore: ["", "§bТекущая: §c§lРазблокировано§r"]
+      lore: ["", "§bТекущая: §a§lРазблокировано§r"]
 
     # This item is used to return to the previous menu.
     back:

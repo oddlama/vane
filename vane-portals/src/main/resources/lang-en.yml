@@ -12,7 +12,7 @@
 
 # DO NOT CHANGE! The version of this language file. Used to determine
 # if the file needs to be updated.
-version: 2
+version: 3
 # The corresponding language code used in resource packs. Used for
 # resource pack generation. Typically this is a combination of the
 # language code (ISO 639) and the country code (ISO 3166).
@@ -127,6 +127,16 @@ menus:
       name: "§b§lSelect Style"
       lore: []
 
+    # This item is used to change and indicate enabled exit orientation lock.
+    exit_orientation_lock_on:
+      name: "§b§lToggle Exit Orientation Lock"
+      lore: ["", "§bCurrent: §e§lLocked (always exit front)§r"]
+
+    # This item is used to change and indicate disabled exit orientation lock.
+    exit_orientation_lock_off:
+      name: "§b§lToggle Exit Orientation Lock"
+      lore: ["", "§bCurrent: §a§lUnlocked (exit same side as entered)§r"]
+
     # This item is used to cycle visibility and indicate public visibility.
     visibility_public:
       name: "§b§lToggle Visibility"
@@ -155,7 +165,7 @@ menus:
     # This item is used to change and indicate disabled target lock.
     target_lock_off:
       name: "§b§lToggle Target Lock"
-      lore: ["", "§bCurrent: §c§lUnlocked§r"]
+      lore: ["", "§bCurrent: §a§lUnlocked§r"]
 
     # This item is used to return to the previous menu.
     back:

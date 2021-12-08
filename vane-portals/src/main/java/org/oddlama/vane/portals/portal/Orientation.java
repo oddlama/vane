@@ -25,21 +25,56 @@ public enum Orientation {
 	}
 
 	public Vector vector() {
-		return vector;
+		return vector.clone();
 	}
 
-	public Location apply(final Orientation reference, final Location location) {
+	public Vector component_mask() {
+		return this.vector().multiply(this.vector);
+	}
+
+	public Orientation flip() {
+		switch (this) {
+			case NEGATIVE_X:
+				return POSITIVE_X;
+			case POSITIVE_X:
+				return NEGATIVE_X;
+			case NEGATIVE_Z:
+				return POSITIVE_Z;
+			case POSITIVE_Z:
+				return NEGATIVE_Z;
+			case NEGATIVE_Y:
+				return POSITIVE_Y;
+			case POSITIVE_Y:
+				return NEGATIVE_Y;
+		}
+
+		// Unreachable
+		throw new RuntimeException("Invalid control flow. This is a bug.");
+	}
+
+	public Location apply(
+		final Orientation reference,
+		final Location location,
+		final boolean flip_source_if_not_opposing
+	) {
 		final var l = location.clone();
-		l.setDirection(apply(reference, location.getDirection()));
+		l.setDirection(apply(reference, location.getDirection(), flip_source_if_not_opposing));
 		return l;
 	}
 
-	public Vector apply(final Orientation reference, final Vector vector) {
+	public Vector apply(final Orientation reference, final Vector vector, final boolean flip_source_if_not_opposing) {
 		final var x = vector.getX();
 		final var y = vector.getY();
 		final var z = vector.getZ();
 
-		switch (this) {
+		var effective_source = this;
+		final var cmask = component_mask();
+		final var opposing = (this.vector.dot(cmask) < 0) != (vector.dot(cmask) < 0);
+		if (flip_source_if_not_opposing && opposing) {
+			effective_source = effective_source.flip();
+		}
+
+		switch (effective_source) {
 			case NEGATIVE_X: // Looking east
 				switch (reference) {
 					case NEGATIVE_X: // west

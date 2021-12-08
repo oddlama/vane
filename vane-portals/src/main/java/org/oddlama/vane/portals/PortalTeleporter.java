@@ -103,9 +103,16 @@ public class PortalTeleporter extends Listener<Portals> {
 			target_location.setPitch(player_location.getPitch());
 			target_location.setYaw(player_location.getYaw());
 
-			// Calculate new pitch, yaw and velocity
-			target_location = portal.orientation().apply(target.orientation(), target_location);
-			final var new_velocity = portal.orientation().apply(target.orientation(), player.getVelocity());
+			// If the exit orientation of the target portal is locked, we make sure that
+			// the orientation of the entered portal is flipped, if a player enters from the back.
+			// We have to flip the source portal orientation, if the vector to be transformed
+			// is NOT opposing the source portal vector (i.e. not pointing against the front).
+			// Calculate new location (pitch, yaw) and velocity.
+			target_location =
+				portal.orientation().apply(target.orientation(), target_location, target.exit_orientation_locked());
+			final var new_velocity = portal
+				.orientation()
+				.apply(target.orientation(), player.getVelocity(), target.exit_orientation_locked());
 
 			// Set new movement location
 			event.setTo(target_location);
