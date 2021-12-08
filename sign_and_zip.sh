@@ -14,5 +14,6 @@ done
 echo "[+] Creating all-plugins.zip"
 cd target \
     || die "Could not cd into target/"
+rm all-plugins.zip &>/dev/null
 zip -r all-plugins.zip vane*.jar -x "vane*waterfall*.jar" \
     || die "Could not create all-plugins.zip"
