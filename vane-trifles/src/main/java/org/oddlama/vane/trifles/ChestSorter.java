@@ -9,6 +9,8 @@ import org.bukkit.Tag;
 import org.bukkit.block.Barrel;
 import org.bukkit.block.Chest;
 import org.bukkit.block.Container;
+import org.bukkit.block.data.Directional;
+import org.bukkit.block.data.FaceAttachable;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -19,6 +21,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.oddlama.vane.annotation.config.ConfigInt;
 import org.oddlama.vane.annotation.config.ConfigLong;
 import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.module.Context;
@@ -29,6 +32,30 @@ public class ChestSorter extends Listener<Trifles> {
 
 	@ConfigLong(def = 1000, min = 0, desc = "Chest sorting cooldown in milliseconds.")
 	public long config_cooldown;
+
+	@ConfigInt(
+		def = 1,
+		min = 0,
+		max = 16,
+		desc = "Chest sorting radius in X-direction from the button (left-right when looking at the button). A radius of 0 means a column of the block including the button. It is advised to NEVER set the three radius values to more than THREE (3), as sorting a huge area of chests can lead to SEVERE lag! Ideally always keep the Z-radius set to 0 or 1, while only adjusting X and Y. You've been warned."
+	)
+	public int config_radius_x;
+
+	@ConfigInt(
+		def = 1,
+		min = 0,
+		max = 16,
+		desc = "Chest sorting radius in Y-direction from the button (up-down when looking at the button - this can be a horizontal direction if the button is on the ground). A radius of 0 means a column of the block including the button. It is advised to NEVER set the three radius values to more than THREE (3), as sorting a huge area of chests can lead to SEVERE lag! Ideally always keep the Z-radius set to 0 or 1, while only adjusting X and Y. You've been warned."
+	)
+	public int config_radius_y;
+
+	@ConfigInt(
+		def = 1,
+		min = 0,
+		max = 16,
+		desc = "Chest sorting radius in Z-direction from the button (into/out-of the attached block). A radius of 0 means a column of the block including the button. It is advised to NEVER set the three radius values to more than THREE (3), as sorting a huge area of chests can lead to SEVERE lag! Ideally always keep the Z-radius set to 0 or 1, while only adjusting X and Y. You've been warned."
+	)
+	public int config_radius_z;
 
 	public ChestSorter(Context<Trifles> context) {
 		super(context.group("chest_sorting", "Enables chest sorting when a nearby button is pressed."));
@@ -138,11 +165,53 @@ public class ChestSorter extends Listener<Trifles> {
 			return;
 		}
 
-		// Find nearby (3x3x3) chests and sort them.
-		final var radius = 1;
-		for (int x = -radius; x <= radius; ++x) {
-			for (int y = -radius; y <= radius; ++y) {
-				for (int z = -radius; z <= radius; ++z) {
+		final var button_state = root_block.getState();
+		final var facing = ((Directional) button_state).getFacing();
+		final var face = ((FaceAttachable) button_state).getAttachedFace();
+
+		int rx = 0;
+		int ry = 0;
+		int rz = 0;
+
+		// Determine relative radius rx, ry, rz as seen from the button.
+		if (face == FaceAttachable.AttachedFace.WALL) {
+			ry = config_radius_y;
+			switch (facing) {
+				case NORTH:
+				case SOUTH:
+					rx = config_radius_x;
+					rz = config_radius_z;
+					break;
+				case EAST:
+				case WEST:
+					rx = config_radius_z;
+					rz = config_radius_x;
+					break;
+				default:
+					break;
+			}
+		} else {
+			ry = config_radius_z;
+			switch (facing) {
+				case NORTH:
+				case SOUTH:
+					rx = config_radius_x;
+					rz = config_radius_y;
+					break;
+				case EAST:
+				case WEST:
+					rx = config_radius_y;
+					rz = config_radius_x;
+					break;
+				default:
+					break;
+			}
+		}
+
+		// Find chests in configured radius and sort them.
+		for (int x = -rx; x <= rx; ++x) {
+			for (int y = -ry; y <= ry; ++y) {
+				for (int z = -rz; z <= rz; ++z) {
 					final var block = root_block.getRelative(x, y, z);
 					final var state = block.getState();
 					if (state instanceof Chest) {
