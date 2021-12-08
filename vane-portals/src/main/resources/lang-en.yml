@@ -98,6 +98,13 @@ dynmap:
   # %1$s: Portal name
   marker_label: "%1$s"
 
+blue_map:
+  # The label for the BlueMap marker set
+  layer_label: "Portals"
+  # The label for the BlueMap portal markers. Supports HTML. Arguments will be escaped properly.
+  # %1$s: Portal name
+  marker_label: "<span style=\"color: white\">🌌 %1$s</span>"
+
 menus:
   # Settings for the portal naming menu.
   enter_name:

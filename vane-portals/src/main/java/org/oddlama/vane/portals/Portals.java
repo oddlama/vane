@@ -216,6 +216,7 @@ public class Portals extends Module<Portals> {
 	public PortalMenuGroup menus;
 	public PortalConstructor constructor;
 	public PortalDynmapLayer dynmap_layer;
+	public PortalBlueMapLayer blue_map_layer;
 
 	public Portals() {
 		register_entities();
@@ -226,6 +227,7 @@ public class Portals extends Module<Portals> {
 		constructor = new PortalConstructor(this);
 		new PortalTeleporter(this);
 		dynmap_layer = new PortalDynmapLayer(this);
+		blue_map_layer = new PortalBlueMapLayer(this);
 
 		// Register admin permission
 		admin_permission =
@@ -393,8 +395,8 @@ public class Portals extends Module<Portals> {
 				}
 			});
 
-		// Remove dynmap marker
-		dynmap_layer.remove_marker(portal.id());
+		// Remove map marker
+		remove_marker(portal.id());
 
 		// Play sound
 		portal
@@ -407,8 +409,8 @@ public class Portals extends Module<Portals> {
 		storage_portals.put(portal.id(), portal);
 		mark_persistent_storage_dirty();
 
-		// Create dynmap marker
-		dynmap_layer.update_marker(portal);
+		// Create map marker
+		update_marker(portal);
 
 		// Play sound
 		portal
@@ -798,8 +800,8 @@ public class Portals extends Module<Portals> {
 	}
 
 	public void update_portal_icon(final Portal portal) {
-		// Update dynmap marker, as name could have changed
-		dynmap_layer.update_marker(portal);
+		// Update map marker, as name could have changed
+		update_marker(portal);
 
 		for (final var active_console : console_floating_items.keySet()) {
 			final var portal_block = portal_block_for(active_console);
@@ -835,8 +837,8 @@ public class Portals extends Module<Portals> {
 				break;
 		}
 
-		// Update dynmap marker
-		dynmap_layer.update_marker(portal);
+		// Update map marker
+		update_marker(portal);
 	}
 
 	public void update_console_item(final Portal portal, final Block block) {
@@ -909,6 +911,16 @@ public class Portals extends Module<Portals> {
 				update_console_item(portal, block);
 			}
 		);
+	}
+
+	public void update_marker(final Portal portal) {
+		dynmap_layer.update_marker(portal);
+		blue_map_layer.update_marker(portal);
+	}
+
+	public void remove_marker(final UUID portal_id) {
+		dynmap_layer.remove_marker(portal_id);
+		blue_map_layer.remove_marker(portal_id);
 	}
 
 	private class PortalDisableRunnable implements Runnable {

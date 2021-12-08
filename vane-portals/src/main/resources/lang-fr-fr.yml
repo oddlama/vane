@@ -55,6 +55,10 @@ dynmap:
   layer_label: "Portails"
   marker_label: "%1$s"
 
+blue_map:
+  layer_label: "Portails"
+  marker_label: "<span style=\"color: white\">🌌 %1$s</span>"
+
 menus:
   enter_name:
     title: "§8§lEntrer le nom du portail"

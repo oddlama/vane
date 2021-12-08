@@ -92,254 +92,170 @@ settings_restricted: "§cУ вас нет доступа к настройкам
 select_target_restricted: "§cВы не можете выбрать пункт назначения для этого портала!"
 
 dynmap:
-  # The label for the dynmap layer
   layer_label: "Portals"
-  # The label for the dynmap markers
-  # %1$s: Portal name
   marker_label: "%1$s"
 
+blue_map:
+  layer_label: "Portals"
+  marker_label: "<span style=\"color: white\">🌌 %1$s</span>"
+
 menus:
-  # Settings for the portal naming menu.
   enter_name:
-    # The title for the naming menu.
     title: "§8§lВыберите название для портала"
 
-  # Settings for the portal settings menu.
   settings:
-    # The title for the settings menu.
-    # %1$s: Portal name
     title: "§8§lНастройки: %1$s"
-    # The title for the icon seletion menu.
     select_icon_title: "§8§lВыберите значок"
 
-    # This item is used to rename the portal.
     rename:
       name: "§b§lПереименовать"
       lore: []
 
-    # This item is used to select the portal's icon.
     select_icon:
       name: "§b§lВыберите значок"
       lore: []
 
-    # This item is used to change the portal's style.
     select_style:
       name: "§b§lВыберите стиль"
       lore: []
 
-    # FIXME: needs translation
     exit_orientation_lock_on:
       name: "§b§lToggle Exit Orientation Lock"
       lore: ["", "§bCurrent: §e§lLocked (always exit front)§r"]
 
-    # FIXME: needs translation
     exit_orientation_lock_off:
       name: "§b§lToggle Exit Orientation Lock"
       lore: ["", "§bCurrent: §a§lUnlocked (exit same side as entered)§r"]
 
-    # This item is used to cycle visibility and indicate public visibility.
     visibility_public:
       name: "§b§lПереключить видимость"
       lore: ["", "§bТекущая: §a§lПубличный§r"]
 
-    # This item is used to cycle visibility and indicate group visibility.
     visibility_group:
       name: "§b§lПереключить видимость"
       lore: ["", "§bТекущая: §e§lГруппа региона (участники)§r"]
 
-    # This item is used to cycle visibility and indicate group visibility.
     visibility_group_internal:
       name: "§b§lПереключить видимость"
       lore: ["", "§bТекущая: §e§lГруппа региона (видимый только внутри)§r"]
 
-    # This item is used to cycle visibility and indicate private visibility.
     visibility_private:
       name: "§b§lПереключить видимость"
       lore: ["", "§bТекущая: §c§lЧастный§r"]
 
-    # This item is used to change and indicate enabled target lock.
     target_lock_on:
       name: "§b§lПереключить блокировку выбора цели"
       lore: ["", "§bТекущая §c§lЗаблокировано§r"]
 
-    # This item is used to change and indicate disabled target lock.
     target_lock_off:
       name: "§b§lПереключить блокировку выбора цели"
       lore: ["", "§bТекущая: §a§lРазблокировано§r"]
 
-    # This item is used to return to the previous menu.
     back:
       name: "§6↩ §lНазад"
       lore: []
 
-  # Settings for the portal style menu.
   style:
-    # The title for the style menu.
-    # %1$s: Portal name
     title: "§8§lСтиль для: %1$s"
-    # The title for the block selector for the active console block.
     select_block_console_active_title:       "Выберите активный блок консоли."
-    # The title for the block selector for the active origin block.
     select_block_origin_active_title:        "Выберите активный основной блок."
-    # The title for the block selector for the active portal block.
     select_block_portal_active_title:        "Выберите активный блок заполнения."
-    # The title for the block selector for the active boundary variant 1 block.
     select_block_boundardy_1_active_title:   "Выберите активную рамку портала - 1 вариант."
-    # The title for the block selector for the active boundary variant 2 block.
     select_block_boundardy_2_active_title:   "Выберите активную рамку портала - 2 вариант."
-    # The title for the block selector for the active boundary variant 3 block.
     select_block_boundardy_3_active_title:   "Выберите активную рамку портала - 3 вариант."
-    # The title for the block selector for the active boundary variant 4 block.
     select_block_boundardy_4_active_title:   "Выберите активную рамку портала - 4 вариант."
-    # The title for the block selector for the active boundary variant 5 block.
     select_block_boundardy_5_active_title:   "Выберите активную рамку портала - 5 вариант."
-    # The title for the block selector for the inactive console block.
     select_block_console_inactive_title:     "Выберите неактивный блок консоли."
-    # The title for the block selector for the inactive origin block.
     select_block_origin_inactive_title:      "Выберите неактивный основной блок."
-    # The title for the block selector for the inactive portal block.
     select_block_portal_inactive_title:      "Выберите неактивный блок заполнения."
-    # The title for the block selector for the inactive boundary variant 1 block.
     select_block_boundardy_1_inactive_title: "Выберите неактивную рамку портала - 1 вариант."
-    # The title for the block selector for the inactive boundary variant 2 block.
     select_block_boundardy_2_inactive_title: "Выберите неактивную рамку портала - 2 вариант."
-    # The title for the block selector for the inactive boundary variant 3 block.
     select_block_boundardy_3_inactive_title: "Выберите неактивную рамку портала - 3 вариант."
-    # The title for the block selector for the inactive boundary variant 4 block.
     select_block_boundardy_4_inactive_title: "Выберите неактивную рамку портала - 4 вариант."
-    # The title for the block selector for the inactive boundary variant 5 block.
     select_block_boundardy_5_inactive_title: "Выберите неактивную рамку портала - 5 вариант."
 
-    # The item used to represent the selected active console block.
-    # %1$s: Building material
     block_console_active:
       name: "§b§lКонсоль §a(активная)"
       lore: []
-    # The item used to represent the selected active origin block.
-    # %1$s: Building material
     block_origin_active:
       name: "§b§lОсновной блок §a(активный)"
       lore: []
-    # The item used to represent the selected active portal block.
-    # %1$s: Building material
     block_portal_active:
       name: "§b§lБлок заполнения §a(активный)"
       lore: []
-    # The item used to represent the selected active boundary variant 1 block.
-    # %1$s: Building material
     block_boundardy_1_active:
       name: "§b§lРамка §a(активная)"
       lore: ["", "§aВариант 1", "§7Строительный материал: %1$s"]
-    # The item used to represent the selected active boundary variant 2 block.
-    # %1$s: Building material
     block_boundardy_2_active:
       name: "§b§lРамка §a(активная)"
       lore: ["", "§aВариант 2", "§7Строительный материал: %1$s"]
-    # The item used to represent the selected active boundary variant 3 block.
-    # %1$s: Building material
     block_boundardy_3_active:
       name: "§b§lРамка §a(активная)"
       lore: ["", "§aВариант 3", "§7Строительный материал: %1$s"]
-    # The item used to represent the selected active boundary variant 4 block.
-    # %1$s: Building material
     block_boundardy_4_active:
       name: "§b§lРамка §a(активная)"
       lore: ["", "§aВариант 4", "§7Строительный материал: %1$s"]
-    # The item used to represent the selected active boundary variant 5 block.
-    # %1$s: Building material
     block_boundardy_5_active:
       name: "§b§lРамка §a(активная)"
       lore: ["", "§aВариант 5", "§7Строительный материал: %1$s"]
-    # The item used to represent the selected inactive console block.
-    # %1$s: Building material
     block_console_inactive:
       name: "§b§lКонсоль §e(неактивная)"
       lore: []
-    # The item used to represent the selected inactive origin block.
-    # %1$s: Building material
     block_origin_inactive:
       name: "§b§lОсновной блок §e(неактивный)"
       lore: []
-    # The item used to represent the selected inactive portal block.
-    # %1$s: Building material
     block_portal_inactive:
       name: "§b§lБлок заполнения §e(Неактиный)"
       lore: []
-    # The item used to represent the selected inactive boundary variant 1 block.
-    # %1$s: Building material
     block_boundardy_1_inactive:
       name: "§b§lРамка §e(неактивная)"
       lore: ["", "§aВариант 1", "§7Строительный материал: %1$s"]
-    # The item used to represent the selected inactive boundary variant 2 block.
-    # %1$s: Building material
     block_boundardy_2_inactive:
       name: "§b§lРамка §e(неактивная)"
       lore: ["", "§aВариант 2", "§7Строительный материал: %1$s"]
-    # The item used to represent the selected inactive boundary variant 3 block.
-    # %1$s: Building material
     block_boundardy_3_inactive:
       name: "§b§lРамка §e(неактивная)"
       lore: ["", "§aВариант 3", "§7Строительный материал: %1$s"]
-    # The item used to represent the selected inactive boundary variant 4 block.
-    # %1$s: Building material
     block_boundardy_4_inactive:
       name: "§b§lРамка §e(неактивная)"
       lore: ["", "§aВариант 4", "§7Строительный материал: %1$s"]
-    # The item used to represent the selected inactive boundary variant 5 block.
-    # %1$s: Building material
     block_boundardy_5_inactive:
       name: "§b§lРамка §e(неактивная)"
       lore: ["", "§aВариант 5", "§7Строительный материал: %1$s"]
 
-    # The item used to apply the style to the portal.
     accept:
       name: "§a§lПрименить стиль"
       lore: []
 
-    # The item used to reset all changes made in this menu.
     reset:
       name: "§6§lСбросить изменения"
       lore: []
 
-    # The title for the predefined style selector.
     select_style_title: "§8§lВыбрать стиль"
-    # The filter title for the predefined style selector.
     filter_styles_title: "§8§lФильтр стилей"
-    # The item used to open the style selector for predefined styles.
     select_defined:
       name: "§b§lВыбрать подготовленный стиль"
       lore: []
-    # The item used to represent a predefined style.
-    # %1$s: Name of the style
     select_style:
       name: "%1$s"
       lore: []
 
-    # The item used to discard any changes and return to the previous menu.
     cancel:
       name: "§6↩ §lСбросить изменения"
       lore: []
 
-  # Settings for the portal console menu.
   console:
-    # The title for the console menu.
-    # %1$s: Portal name
     title: "§8§lПортал: %1$s"
 
-    # The item used to open the portal's settings.
     settings:
       name: "§b§lНастройки"
       lore: []
 
-    # The item used to open the portal's target selector.
-    # %1$s: The currently selected target
     select_target:
       name: "§d§lВыберите цель"
       lore:
         - ""
         - "§7Текущая: %1$s"
-    # The item used to show the current target when the target is locked.
-    # %1$s: The currently selected target
     select_target_locked:
       name: "§d§lВыберите цель"
       lore:
@@ -349,10 +265,6 @@ menus:
 
     select_target_title: "§8§lВыберите цель"
     filter_portals_title: "§8§lФильтр порталов"
-    # The item used to represent a target portal.
-    # %1$s: Portal name
-    # %2$s: Portal distance
-    # %3$s: Portal world
     select_target_portal:
       name: "%1$s"
       lore:
@@ -360,32 +272,24 @@ menus:
         - "§7Расстояние: %2$s§6m"
         - "§7Мир: %3$s"
 
-    # The item used to unlink the current console.
     unlink_console:
       name: "§c§lОтвязать консоль"
       lore: []
-    # The title for the unlink confirmation dialog.
     unlink_console_confirm_title: "§c§lОтвязать консоль?"
-    # The item to accept unlinking.
     unlink_console_confirm_accept:
       name: "§c§lОТВЯЗАТЬ КОНСОЛЬ"
       lore: []
-    # The item to cancel unlinking.
     unlink_console_confirm_cancel:
       name: "§a§lОтмена"
       lore: []
 
-    # The item used to destroy the portal.
     destroy_portal:
       name: "§c§lРазрушить портал"
       lore: []
-    # The title for the destroy portal confirmation dialog.
     destroy_portal_confirm_title: "§c§lРазрушить портал?"
-    # The item to accept destroying.
     destroy_portal_confirm_accept:
       name: "§c§lРАЗРУШИТЬ ПОРТАЛ"
       lore: []
-    # The item to cancel destroying.
     destroy_portal_confirm_cancel:
       name: "§a§lОтмена"
       lore: []

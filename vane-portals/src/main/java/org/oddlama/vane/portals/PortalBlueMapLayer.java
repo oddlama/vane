@@ -2,26 +2,16 @@ package org.oddlama.vane.portals;
 
 import java.util.UUID;
 import org.oddlama.vane.annotation.config.ConfigBoolean;
-import org.oddlama.vane.annotation.config.ConfigInt;
-import org.oddlama.vane.annotation.config.ConfigString;
 import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.ModuleComponent;
 import org.oddlama.vane.portals.portal.Portal;
 
-public class PortalDynmapLayer extends ModuleComponent<Portals> {
+public class PortalBlueMapLayer extends ModuleComponent<Portals> {
 
-	public static final String LAYER_ID = "vane_portals.portals";
-
-	@ConfigInt(def = 29, min = 0, desc = "Layer ordering priority.")
-	public int config_layer_priority;
-
-	@ConfigBoolean(def = false, desc = "If the layer should be hidden by default.")
-	public boolean config_layer_hide;
-
-	@ConfigString(def = "compass", desc = "The dynmap marker icon.")
-	public String config_marker_icon;
+	@ConfigBoolean(def = false, desc = "If the marker set should be hidden by default.")
+	public boolean config_hide_by_default;
 
 	@LangMessage
 	public TranslatedMessage lang_layer_label;
@@ -29,24 +19,19 @@ public class PortalDynmapLayer extends ModuleComponent<Portals> {
 	@LangMessage
 	public TranslatedMessage lang_marker_label;
 
-	private PortalDynmapLayerDelegate delegate = null;
+	private PortalBlueMapLayerDelegate delegate = null;
 
-	public PortalDynmapLayer(final Context<Portals> context) {
-		super(
-			context.group(
-				"dynmap",
-				"Enable dynmap integration. Public portals will then be shown on a separate dynmap layer."
-			)
-		);
+	public PortalBlueMapLayer(final Context<Portals> context) {
+		super(context.group("blue_map", "Enable BlueMap integration to show public portals."));
 	}
 
 	public void delayed_on_enable() {
-		final var plugin = get_module().getServer().getPluginManager().getPlugin("dynmap");
+		final var plugin = get_module().getServer().getPluginManager().getPlugin("BlueMap");
 		if (plugin == null) {
 			return;
 		}
 
-		delegate = new PortalDynmapLayerDelegate(this);
+		delegate = new PortalBlueMapLayerDelegate(this);
 		delegate.on_enable(plugin);
 	}
 
