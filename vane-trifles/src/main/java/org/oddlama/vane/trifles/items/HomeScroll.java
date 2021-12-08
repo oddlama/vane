@@ -6,10 +6,12 @@ import static org.oddlama.vane.util.Util.ms_to_ticks;
 
 import org.bukkit.Material;
 import org.bukkit.Tag;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.RecipeChoice.MaterialChoice;
 import org.bukkit.inventory.ShapedRecipe;
@@ -29,6 +31,13 @@ public class HomeScroll extends CustomItem<Trifles, HomeScroll> {
 
 		@ConfigInt(def = 10000, min = 0, desc = "Cooldown in milliseconds until another scroll can be used.")
 		private int config_cooldown;
+
+		@ConfigInt(
+			def = 15000,
+			min = 0,
+			desc = "A cooldown in milliseconds that is applied when the player takes damage (prevents combat logging). Set to 0 to allow combat logging."
+		)
+		private int config_damage_cooldown;
 
 		public HomeScrollVariant(HomeScroll parent, SingleVariant variant) {
 			super(parent, variant);
@@ -62,6 +71,10 @@ public class HomeScroll extends CustomItem<Trifles, HomeScroll> {
 
 		public int cooldown() {
 			return config_cooldown;
+		}
+
+		public int damage_cooldown() {
+			return config_damage_cooldown;
 		}
 	}
 
@@ -128,5 +141,32 @@ public class HomeScroll extends CustomItem<Trifles, HomeScroll> {
 			damage_item(player, item, 1);
 			swing_arm(player, event.getHand());
 		}
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void on_player_take_damage(final EntityDamageEvent event) {
+		if (!(event.getEntity() instanceof Player)) {
+			return;
+		}
+
+		final var player = (Player) event.getEntity();
+
+		// Get unstable scroll variant
+		final var variant = CustomItem.<HomeScrollVariant>variant_of(
+			HomeScroll.class,
+			CustomItem.SingleVariant.SINGLETON
+		);
+
+		if (variant == null || !variant.enabled()) {
+			return;
+		}
+
+		// Don't decrease cooldown
+		final var damage_cooldown = (int) ms_to_ticks(variant.damage_cooldown());
+		if (player.getCooldown(variant.base()) >= damage_cooldown) {
+			return;
+		}
+
+		player.setCooldown(variant.base(), damage_cooldown);
 	}
 }
