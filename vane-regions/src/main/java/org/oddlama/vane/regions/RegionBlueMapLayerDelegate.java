@@ -76,7 +76,7 @@ public class RegionBlueMapLayerDelegate {
 			.ifPresent(api -> {
 				try {
 					final var marker_api = api.getMarkerAPI();
-					update_marker(api, get_or_create_marker_set(marker_api), region);
+					update_marker_no_save(api, get_or_create_marker_set(marker_api), region);
 					marker_api.save();
 				} catch (IOException e) {
 					get_module()
@@ -106,7 +106,7 @@ public class RegionBlueMapLayerDelegate {
 			});
 	}
 
-	public void update_marker(final BlueMapAPI api, final MarkerSet marker_set, final Region region) {
+	private void update_marker_no_save(final BlueMapAPI api, final MarkerSet marker_set, final Region region) {
 		final var min = region.extent().min();
 		final var max = region.extent().max();
 		final var shape = Shape.createRect(min.getX(), min.getZ(), max.getX() + 1, max.getZ() + 1);
@@ -156,7 +156,7 @@ public class RegionBlueMapLayerDelegate {
 								id_set.add(id_for(map, region));
 							}
 						}
-						update_marker(api, marker_set, region);
+						update_marker_no_save(api, marker_set, region);
 					}
 
 					// Remove orphaned

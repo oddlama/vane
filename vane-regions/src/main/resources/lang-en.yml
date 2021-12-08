@@ -47,9 +47,9 @@ dynmap:
   marker_label: "%1$s"
 
 blue_map:
-  # The label for the dynmap layer
+  # The label for the BlueMap marker set
   layer_label: "Regions"
-  # The label for the dynmap markers
+  # The label for the BlueMap region markers
   # %1$s: Region name
   marker_label: "%1$s"
 
