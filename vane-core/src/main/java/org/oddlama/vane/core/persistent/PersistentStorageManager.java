@@ -7,7 +7,9 @@ import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.CopyOption;
 import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -188,11 +190,21 @@ public class PersistentStorageManager {
 			}
 		}
 
-		// Save to file
+		// Save to tmp file, then move atomically to prevent corruption.
+		final var tmp_file = new File(file.getAbsolutePath() + ".tmp");
 		try {
-			Files.write(file.toPath(), json.toString().getBytes(StandardCharsets.UTF_8));
+			Files.write(tmp_file.toPath(), json.toString().getBytes(StandardCharsets.UTF_8));
 		} catch (IOException e) {
-			module.log.log(Level.SEVERE, "error while saving persistent data!", e);
+			module.log.log(Level.SEVERE, "error while saving persistent data to temporary file!", e);
+			return;
+		}
+
+		// Move atomically to prevent corruption.
+		try {
+			Files.move(tmp_file.toPath(), file.toPath(), StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
+		} catch (IOException e) {
+			module.log.log(Level.SEVERE, "error while atomically replacing storage.json with temporary file (very recent changes might be lost)!", e);
+			return;
 		}
 	}
 }
