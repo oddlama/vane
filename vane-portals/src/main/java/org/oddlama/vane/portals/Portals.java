@@ -62,7 +62,7 @@ import org.oddlama.vane.portals.portal.PortalBlock;
 import org.oddlama.vane.portals.portal.PortalBlockLookup;
 import org.oddlama.vane.portals.portal.Style;
 
-@VaneModule(name = "portals", bstats = 8642, config_version = 3, lang_version = 3, storage_version = 2)
+@VaneModule(name = "portals", bstats = 8642, config_version = 3, lang_version = 4, storage_version = 2)
 public class Portals extends Module<Portals> {
 	// Add (de-)serializers
 	static {
