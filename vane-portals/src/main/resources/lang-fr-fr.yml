@@ -12,7 +12,7 @@
 
 # DO NOT CHANGE! The version of this language file. Used to determine
 # if the file needs to be updated.
-version: 3
+version: 4
 # The corresponding language code used in resource packs. Used for
 # resource pack generation. Typically this is a combination of the
 # language code (ISO 639) and the country code (ISO 3166).
@@ -79,15 +79,13 @@ menus:
       name: "§b§lSélectionner un style de portail"
       lore: []
 
-    # FIXME: needs translation
     exit_orientation_lock_on:
-      name: "§b§lToggle Exit Orientation Lock"
-      lore: ["", "§bCurrent: §e§lLocked (always exit front)§r"]
+      name: "§b§lDéverrouiller l'orientation à la sortie"
+      lore: ["", "§bÉtat: §e§lVerrouillé (toujours sortir par le devant)§r"]
 
-    # FIXME: needs translation
     exit_orientation_lock_off:
-      name: "§b§lToggle Exit Orientation Lock"
-      lore: ["", "§bCurrent: §a§lUnlocked (exit same side as entered)§r"]
+      name: "§b§lVerrouiller l'orientation à la sortie"
+      lore: ["", "§bÉtat: §a§lDéverouillé (sortir du même côté qu'à l'entrée)§r"]
 
     visibility_public:
       name: "§b§lChanger la visibilité"
