@@ -4,6 +4,8 @@ import static org.oddlama.vane.core.item.CustomItem.is_custom_item;
 import static org.oddlama.vane.util.BlockUtil.drop_naturally;
 import static org.oddlama.vane.util.BlockUtil.texture_from_skull;
 import static org.oddlama.vane.util.MaterialUtil.is_tillable;
+import static org.oddlama.vane.util.Util.ms_to_ticks;
+import static org.oddlama.vane.util.Util.read_json_from_url;
 import static org.oddlama.vane.util.Util.resolve_skin;
 
 import com.destroystokyo.paper.MaterialTags;
@@ -16,10 +18,14 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.UUID;
 import java.util.logging.Level;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.apache.commons.io.IOUtils;
 import org.bukkit.Keyed;
@@ -44,6 +50,7 @@ import org.bukkit.loot.Lootable;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.messaging.PluginMessageListener;
+import org.json.JSONException;
 import org.oddlama.vane.annotation.VaneModule;
 import org.oddlama.vane.annotation.config.ConfigBoolean;
 import org.oddlama.vane.annotation.lang.LangMessage;
@@ -128,6 +135,12 @@ public class Core extends Module<Core> implements PluginMessageListener {
 	)
 	public boolean config_client_side_translations;
 
+	@ConfigBoolean(def = true, desc = "Send update notices to OPped player when a new version of vane is available.")
+	public boolean config_update_notices;
+
+	public String current_version = null;
+	public String latest_version = null;
+
 	@ConfigBoolean(
 		def = true,
 		desc = "Prevent players from breaking blocks with loot-tables (like treasure chests) when they first attempt to destroy it. They still can break it, but must do so within a short timeframe."
@@ -155,10 +168,47 @@ public class Core extends Module<Core> implements PluginMessageListener {
 		new CommandHider(this);
 	}
 
+	public void check_for_update() {
+		if (current_version == null) {
+			try {
+				Properties properties = new Properties();
+				properties.load(Core.class.getResourceAsStream("/vane-core.properties"));
+				current_version = "v" + properties.getProperty("version");
+			} catch (IOException e) {
+				log.severe("Could not load current version from included properties file: " + e.toString());
+				return;
+			}
+		}
+
+		try {
+			final var json = read_json_from_url("https://api.github.com/repos/oddlama/vane/releases/latest");
+			latest_version = json.getString("tag_name");
+			if (latest_version != null && !latest_version.equals(current_version)) {
+				log.warning(
+					"A newer version of vane is available online! (current=" +
+					current_version +
+					", new=" +
+					latest_version +
+					")"
+				);
+				log.warning("Please update as soon as possible to get the latest features and fixes.");
+				log.warning("Get the latest release here: https://github.com/oddlama/vane/releases/latest");
+			}
+		} catch (IOException | JSONException e) {
+			log.warning("Could not check for updates: " + e.toString());
+		}
+	}
+
 	@Override
 	public void on_enable() {
 		getServer().getMessenger().registerIncomingPluginChannel(this, CHANNEL_AUTH_MULTIPLEX, this);
 		super.on_enable();
+
+		if (config_update_notices) {
+			// Now, and every hour after that check if a new version is available.
+			// OPs will get a message about this when they join.
+			schedule_task_timer(this::check_for_update, 1l, ms_to_ticks(2 * 60l * 60l * 1000l));
+		}
 	}
 
 	@Override
@@ -408,6 +458,34 @@ public class Core extends Module<Core> implements PluginMessageListener {
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
 	public void on_player_join(PlayerJoinEvent event) {
 		try_init_multiplexed_player_name(event.getPlayer());
+
+		if (config_update_notices) {
+			// Send update message if new version is available and player is OP.
+			if (latest_version != null && !latest_version.equals(current_version) && event.getPlayer().isOp()) {
+				// This message is intentionally not translated to ensure it will
+				// be displayed correctly and so that everyone understands it.
+				event
+					.getPlayer()
+					.sendMessage(
+						Component
+							.text("A new version of vane ", NamedTextColor.GREEN)
+							.append(Component.text("(" + latest_version + ")", NamedTextColor.AQUA))
+							.append(Component.text(" is available!", NamedTextColor.GREEN))
+					);
+				event
+					.getPlayer()
+					.sendMessage(
+						Component.text("Please update soon to get the latest features.", NamedTextColor.GREEN)
+					);
+				event
+					.getPlayer()
+					.sendMessage(
+						Component
+							.text("Click here to go to the download page", NamedTextColor.AQUA)
+							.clickEvent(ClickEvent.openUrl("https://github.com/oddlama/vane/releases/latest"))
+					);
+			}
+		}
 	}
 
 	@Override
