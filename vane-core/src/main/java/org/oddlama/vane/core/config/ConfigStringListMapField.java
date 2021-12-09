@@ -27,23 +27,27 @@ public class ConfigStringListMapField extends ConfigField<Map<String, List<Strin
 		this.annotation = annotation;
 	}
 
-	private void append_string_list_map_definition(StringBuilder builder, String indent, String prefix) {
-		def()
-			.forEach((k, list) -> {
+	private void append_string_list_map_definition(
+		StringBuilder builder,
+		String indent,
+		String prefix,
+		Map<String, List<String>> def
+	) {
+		def.forEach((k, list) -> {
+			builder.append(indent);
+			builder.append(prefix);
+			builder.append("  ");
+			builder.append(escape_yaml(k));
+			builder.append(":\n");
+
+			list.forEach(s -> {
 				builder.append(indent);
 				builder.append(prefix);
-				builder.append("  ");
-				builder.append(escape_yaml(k));
-				builder.append(":\n");
-
-				list.forEach(s -> {
-					builder.append(indent);
-					builder.append(prefix);
-					builder.append("    - ");
-					builder.append(escape_yaml(s));
-					builder.append("\n");
-				});
+				builder.append("    - ");
+				builder.append(escape_yaml(s));
+				builder.append("\n");
 			});
+		});
 	}
 
 	@Override
@@ -59,19 +63,22 @@ public class ConfigStringListMapField extends ConfigField<Map<String, List<Strin
 	}
 
 	@Override
-	public void generate_yaml(StringBuilder builder, String indent) {
+	public void generate_yaml(StringBuilder builder, String indent, YamlConfiguration existing_compatible_config) {
 		append_description(builder, indent);
 
 		// Default
 		builder.append(indent);
 		builder.append("# Default:\n");
-		append_string_list_map_definition(builder, indent, "# ");
+		append_string_list_map_definition(builder, indent, "# ", def());
 
 		// Definition
 		builder.append(indent);
 		builder.append(basename());
 		builder.append(":\n");
-		append_string_list_map_definition(builder, indent, "");
+		final var def = existing_compatible_config.contains(yaml_path())
+			? load_from_yaml(existing_compatible_config)
+			: def();
+		append_string_list_map_definition(builder, indent, "", def);
 	}
 
 	@Override
@@ -96,7 +103,7 @@ public class ConfigStringListMapField extends ConfigField<Map<String, List<Strin
 		}
 	}
 
-	public void load(YamlConfiguration yaml) {
+	public Map<String, List<String>> load_from_yaml(YamlConfiguration yaml) {
 		final var map = new HashMap<String, List<String>>();
 		for (final var list_key : yaml.getConfigurationSection(yaml_path()).getKeys(false)) {
 			final var list_path = yaml_path() + "." + list_key;
@@ -106,9 +113,12 @@ public class ConfigStringListMapField extends ConfigField<Map<String, List<Strin
 				list.add((String) obj);
 			}
 		}
+		return map;
+	}
 
+	public void load(YamlConfiguration yaml) {
 		try {
-			field.set(owner, map);
+			field.set(owner, load_from_yaml(yaml));
 		} catch (IllegalAccessException e) {
 			throw new RuntimeException("Invalid field access on '" + field.getName() + "'. This is a bug.");
 		}

@@ -26,11 +26,14 @@ public class ConfigDoubleField extends ConfigField<Double> {
 	}
 
 	@Override
-	public void generate_yaml(StringBuilder builder, String indent) {
+	public void generate_yaml(StringBuilder builder, String indent, YamlConfiguration existing_compatible_config) {
 		append_description(builder, indent);
 		append_value_range(builder, indent, annotation.min(), annotation.max(), Double.NaN, Double.NaN);
 		append_default_value(builder, indent, def());
-		append_field_definition(builder, indent, def());
+		final var def = existing_compatible_config.contains(yaml_path())
+			? load_from_yaml(existing_compatible_config)
+			: def();
+		append_field_definition(builder, indent, def);
 	}
 
 	@Override
@@ -54,9 +57,13 @@ public class ConfigDoubleField extends ConfigField<Double> {
 		}
 	}
 
+	public double load_from_yaml(YamlConfiguration yaml) {
+		return yaml.getInt(yaml_path());
+	}
+
 	public void load(YamlConfiguration yaml) {
 		try {
-			field.setDouble(owner, yaml.getDouble(yaml_path()));
+			field.setDouble(owner, load_from_yaml(yaml));
 		} catch (IllegalAccessException e) {
 			throw new RuntimeException("Invalid field access on '" + field.getName() + "'. This is a bug.");
 		}

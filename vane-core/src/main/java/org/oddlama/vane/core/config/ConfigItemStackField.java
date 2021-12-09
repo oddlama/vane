@@ -24,28 +24,26 @@ public class ConfigItemStackField extends ConfigField<ItemStack> {
 		this.annotation = annotation;
 	}
 
-	private void append_item_stack_definition(StringBuilder builder, String indent, String prefix) {
-		final var item = def();
-
+	private void append_item_stack_definition(StringBuilder builder, String indent, String prefix, ItemStack def) {
 		// Material
 		builder.append(indent);
 		builder.append(prefix);
 		builder.append("  material: ");
 		final var material =
 			"\"" +
-			escape_yaml(item.getType().getKey().getNamespace()) +
+			escape_yaml(def.getType().getKey().getNamespace()) +
 			":" +
-			escape_yaml(item.getType().getKey().getKey()) +
+			escape_yaml(def.getType().getKey().getKey()) +
 			"\"";
 		builder.append(material);
 		builder.append("\n");
 
 		// Amount
-		if (item.getAmount() != 1) {
+		if (def.getAmount() != 1) {
 			builder.append(indent);
 			builder.append(prefix);
 			builder.append("  amount: ");
-			builder.append(item.getAmount());
+			builder.append(def.getAmount());
 			builder.append("\n");
 		}
 	}
@@ -61,19 +59,22 @@ public class ConfigItemStackField extends ConfigField<ItemStack> {
 	}
 
 	@Override
-	public void generate_yaml(StringBuilder builder, String indent) {
+	public void generate_yaml(StringBuilder builder, String indent, YamlConfiguration existing_compatible_config) {
 		append_description(builder, indent);
 
 		// Default
 		builder.append(indent);
 		builder.append("# Default:\n");
-		append_item_stack_definition(builder, indent, "# ");
+		append_item_stack_definition(builder, indent, "# ", def());
 
 		// Definition
 		builder.append(indent);
 		builder.append(basename());
 		builder.append(":\n");
-		append_item_stack_definition(builder, indent, "");
+		final var def = existing_compatible_config.contains(yaml_path())
+			? load_from_yaml(existing_compatible_config)
+			: def();
+		append_item_stack_definition(builder, indent, "", def);
 	}
 
 	@Override
@@ -125,7 +126,7 @@ public class ConfigItemStackField extends ConfigField<ItemStack> {
 		}
 	}
 
-	public void load(YamlConfiguration yaml) {
+	public ItemStack load_from_yaml(YamlConfiguration yaml) {
 		var material_str = "";
 		var amount = 1;
 		for (var var_key : yaml.getConfigurationSection(yaml_path()).getKeys(false)) {
@@ -147,10 +148,12 @@ public class ConfigItemStackField extends ConfigField<ItemStack> {
 
 		final var split = material_str.split(":");
 		final var material = material_from(namespaced_key(split[0], split[1]));
-		final var item = new ItemStack(material, amount);
+		return new ItemStack(material, amount);
+	}
 
+	public void load(YamlConfiguration yaml) {
 		try {
-			field.set(owner, item);
+			field.set(owner, load_from_yaml(yaml));
 		} catch (IllegalAccessException e) {
 			throw new RuntimeException("Invalid field access on '" + field.getName() + "'. This is a bug.");
 		}

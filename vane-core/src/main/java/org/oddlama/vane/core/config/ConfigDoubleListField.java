@@ -24,8 +24,8 @@ public class ConfigDoubleListField extends ConfigField<List<Double>> {
 		this.annotation = annotation;
 	}
 
-	private void append_double_list_definition(StringBuilder builder, String indent, String prefix) {
-		append_list_definition(builder, indent, prefix, def(), (b, d) -> b.append(d));
+	private void append_double_list_definition(StringBuilder builder, String indent, String prefix, List<Double> def) {
+		append_list_definition(builder, indent, prefix, def, (b, d) -> b.append(d));
 	}
 
 	@Override
@@ -39,20 +39,23 @@ public class ConfigDoubleListField extends ConfigField<List<Double>> {
 	}
 
 	@Override
-	public void generate_yaml(StringBuilder builder, String indent) {
+	public void generate_yaml(StringBuilder builder, String indent, YamlConfiguration existing_compatible_config) {
 		append_description(builder, indent);
 		append_value_range(builder, indent, annotation.min(), annotation.max(), Double.NaN, Double.NaN);
 
 		// Default
 		builder.append(indent);
 		builder.append("# Default:\n");
-		append_double_list_definition(builder, indent, "# ");
+		append_double_list_definition(builder, indent, "# ", def());
 
 		// Definition
 		builder.append(indent);
 		builder.append(basename());
 		builder.append(":\n");
-		append_double_list_definition(builder, indent, "");
+		final var def = existing_compatible_config.contains(yaml_path())
+			? load_from_yaml(existing_compatible_config)
+			: def();
+		append_double_list_definition(builder, indent, "", def);
 	}
 
 	@Override
@@ -82,14 +85,17 @@ public class ConfigDoubleListField extends ConfigField<List<Double>> {
 		}
 	}
 
-	public void load(YamlConfiguration yaml) {
+	public List<Double> load_from_yaml(YamlConfiguration yaml) {
 		final var list = new ArrayList<Double>();
 		for (var obj : yaml.getList(yaml_path())) {
 			list.add(((Number) obj).doubleValue());
 		}
+		return list;
+	}
 
+	public void load(YamlConfiguration yaml) {
 		try {
-			field.set(owner, list);
+			field.set(owner, load_from_yaml(yaml));
 		} catch (IllegalAccessException e) {
 			throw new RuntimeException("Invalid field access on '" + field.getName() + "'. This is a bug.");
 		}

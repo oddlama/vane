@@ -37,8 +37,13 @@ public class ConfigMaterialMapMapMapField extends ConfigField<Map<String, Map<St
 		this.annotation = annotation;
 	}
 
-	private void append_map_definition(StringBuilder builder, String indent, String prefix) {
-		def()
+	private void append_map_definition(
+		StringBuilder builder,
+		String indent,
+		String prefix,
+		Map<String, Map<String, Map<String, Material>>> def
+	) {
+		def
 			.entrySet()
 			.stream()
 			.sorted(Map.Entry.comparingByKey())
@@ -112,19 +117,22 @@ public class ConfigMaterialMapMapMapField extends ConfigField<Map<String, Map<St
 	}
 
 	@Override
-	public void generate_yaml(StringBuilder builder, String indent) {
+	public void generate_yaml(StringBuilder builder, String indent, YamlConfiguration existing_compatible_config) {
 		append_description(builder, indent);
 
 		// Default
 		builder.append(indent);
 		builder.append("# Default:\n");
-		append_map_definition(builder, indent, "# ");
+		append_map_definition(builder, indent, "# ", def());
 
 		// Definition
 		builder.append(indent);
 		builder.append(basename());
 		builder.append(":\n");
-		append_map_definition(builder, indent, "");
+		final var def = existing_compatible_config.contains(yaml_path())
+			? load_from_yaml(existing_compatible_config)
+			: def();
+		append_map_definition(builder, indent, "", def);
 	}
 
 	@Override
@@ -176,7 +184,7 @@ public class ConfigMaterialMapMapMapField extends ConfigField<Map<String, Map<St
 		}
 	}
 
-	public void load(YamlConfiguration yaml) {
+	public Map<String, Map<String, Map<String, Material>>> load_from_yaml(YamlConfiguration yaml) {
 		final var map1 = new HashMap<String, Map<String, Map<String, Material>>>();
 		for (final var key1 : yaml.getConfigurationSection(yaml_path()).getKeys(false)) {
 			final var key1_path = yaml_path() + "." + key1;
@@ -193,9 +201,12 @@ public class ConfigMaterialMapMapMapField extends ConfigField<Map<String, Map<St
 				}
 			}
 		}
+		return map1;
+	}
 
+	public void load(YamlConfiguration yaml) {
 		try {
-			field.set(owner, map1);
+			field.set(owner, load_from_yaml(yaml));
 		} catch (IllegalAccessException e) {
 			throw new RuntimeException("Invalid field access on '" + field.getName() + "'. This is a bug.");
 		}

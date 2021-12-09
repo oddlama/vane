@@ -23,12 +23,12 @@ public class ConfigStringListField extends ConfigField<List<String>> {
 		this.annotation = annotation;
 	}
 
-	private void append_string_list_definition(StringBuilder builder, String indent, String prefix) {
+	private void append_string_list_definition(StringBuilder builder, String indent, String prefix, List<String> def) {
 		append_list_definition(
 			builder,
 			indent,
 			prefix,
-			def(),
+			def,
 			(b, s) -> {
 				b.append("\"");
 				b.append(escape_yaml(s));
@@ -48,19 +48,22 @@ public class ConfigStringListField extends ConfigField<List<String>> {
 	}
 
 	@Override
-	public void generate_yaml(StringBuilder builder, String indent) {
+	public void generate_yaml(StringBuilder builder, String indent, YamlConfiguration existing_compatible_config) {
 		append_description(builder, indent);
 
 		// Default
 		builder.append(indent);
 		builder.append("# Default:\n");
-		append_string_list_definition(builder, indent, "# ");
+		append_string_list_definition(builder, indent, "# ", def());
 
 		// Definition
 		builder.append(indent);
 		builder.append(basename());
 		builder.append(":\n");
-		append_string_list_definition(builder, indent, "");
+		final var def = existing_compatible_config.contains(yaml_path())
+			? load_from_yaml(existing_compatible_config)
+			: def();
+		append_string_list_definition(builder, indent, "", def);
 	}
 
 	@Override
@@ -78,14 +81,17 @@ public class ConfigStringListField extends ConfigField<List<String>> {
 		}
 	}
 
-	public void load(YamlConfiguration yaml) {
-		final var list = new ArrayList<>();
+	public List<String> load_from_yaml(YamlConfiguration yaml) {
+		final var list = new ArrayList<String>();
 		for (var obj : yaml.getList(yaml_path())) {
 			list.add((String) obj);
 		}
+		return list;
+	}
 
+	public void load(YamlConfiguration yaml) {
 		try {
-			field.set(owner, list);
+			field.set(owner, load_from_yaml(yaml));
 		} catch (IllegalAccessException e) {
 			throw new RuntimeException("Invalid field access on '" + field.getName() + "'. This is a bug.");
 		}

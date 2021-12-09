@@ -8,6 +8,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -145,7 +146,7 @@ public class ConfigManager {
 				module.log.severe("has been generated as 'config.yml.new'. Alternatively you can");
 				module.log.severe("delete your configuration to have a new one generated next time.");
 
-				generate_file(new File(module.getDataFolder(), "config.yml.new"));
+				generate_file(new File(module.getDataFolder(), "config.yml.new"), null);
 			} else {
 				module.log.severe("This config is for a future version of " + module.getName() + ".");
 				module.log.severe("Please use the correct file for this version, or delete it and");
@@ -185,8 +186,11 @@ public class ConfigManager {
 		return "  ".repeat(level);
 	}
 
-	public void generate_yaml(StringBuilder builder) {
+	public void generate_yaml(StringBuilder builder, YamlConfiguration existing_compatible_config) {
 		builder.append("# vim: set tabstop=2 softtabstop=0 expandtab shiftwidth=2:\n");
+		builder.append("# This config file will automatically be updated, as long\n");
+		builder.append("# as there are no incompatible changes between versions.\n");
+		builder.append("# This means that additional comments will not be preserved!\n");
 
 		// Use the version field as a neutral field in the root group
 		ConfigField<?> last_field = field_version;
@@ -239,7 +243,7 @@ public class ConfigManager {
 			}
 
 			// Append field yaml
-			f.generate_yaml(builder, indent);
+			f.generate_yaml(builder, indent, existing_compatible_config);
 			last_field = f;
 		}
 	}
@@ -248,16 +252,36 @@ public class ConfigManager {
 		return new File(module.getDataFolder(), "config.yml");
 	}
 
-	public boolean generate_file(File file) {
+	public boolean generate_file(File file, YamlConfiguration existing_compatible_config) {
 		final var builder = new StringBuilder();
-		generate_yaml(builder);
+		generate_yaml(builder, existing_compatible_config);
 		final var content = builder.toString();
 
-		// Save content to file
+		// Save to tmp file, then move atomically to prevent corruption.
+		final var tmp_file = new File(file.getAbsolutePath() + ".tmp");
 		try {
-			Files.write(file.toPath(), content.getBytes(StandardCharsets.UTF_8));
+			Files.write(tmp_file.toPath(), content.getBytes(StandardCharsets.UTF_8));
 		} catch (IOException e) {
-			module.log.log(Level.SEVERE, "Error while writing config file '" + file + "'", e);
+			module.log.log(Level.SEVERE, "error while writing config file '" + file + "'", e);
+			return false;
+		}
+
+		// Move atomically to prevent corruption.
+		try {
+			Files.move(
+				tmp_file.toPath(),
+				file.toPath(),
+				StandardCopyOption.REPLACE_EXISTING,
+				StandardCopyOption.ATOMIC_MOVE
+			);
+		} catch (IOException e) {
+			module.log.log(
+				Level.SEVERE,
+				"error while atomically replacing '" +
+				file +
+				"' with temporary file (very recent changes might be lost)!",
+				e
+			);
 			return false;
 		}
 
@@ -266,13 +290,43 @@ public class ConfigManager {
 
 	public boolean reload(File file) {
 		// Load file
-		final var yaml = YamlConfiguration.loadConfiguration(file);
+		var yaml = YamlConfiguration.loadConfiguration(file);
 
 		// Check version
 		final var version = yaml.getLong("version", -1);
 		if (!verify_version(file, version)) {
 			return false;
 		}
+
+		// Upgrade config to include all necessary keys (version-compatible extensions)
+		final var tmp_file = new File(module.getDataFolder(), "config.yml.tmp");
+		if (!generate_file(tmp_file, yaml)) {
+			return false;
+		}
+
+		// Move atomically to prevent corruption.
+		try {
+			Files.move(
+				tmp_file.toPath(),
+				standard_file().toPath(),
+				StandardCopyOption.REPLACE_EXISTING,
+				StandardCopyOption.ATOMIC_MOVE
+			);
+		} catch (IOException e) {
+			module.log.log(
+				Level.SEVERE,
+				"error while atomically replacing '" +
+				standard_file() +
+				"' with updated version. Please manually resolve the conflict (new file is named '" +
+				tmp_file +
+				"')",
+				e
+			);
+			return false;
+		}
+
+		// Load newly written file
+		yaml = YamlConfiguration.loadConfiguration(file);
 
 		try {
 			// Check configuration for errors

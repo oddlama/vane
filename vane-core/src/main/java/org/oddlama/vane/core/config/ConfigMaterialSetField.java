@@ -27,12 +27,17 @@ public class ConfigMaterialSetField extends ConfigField<Set<Material>> {
 		this.annotation = annotation;
 	}
 
-	private void append_material_set_definition(StringBuilder builder, String indent, String prefix) {
+	private void append_material_set_definition(
+		StringBuilder builder,
+		String indent,
+		String prefix,
+		Set<Material> def
+	) {
 		append_list_definition(
 			builder,
 			indent,
 			prefix,
-			def(),
+			def,
 			(b, m) -> {
 				b.append("\"");
 				b.append(escape_yaml(m.getKey().getNamespace()));
@@ -54,19 +59,22 @@ public class ConfigMaterialSetField extends ConfigField<Set<Material>> {
 	}
 
 	@Override
-	public void generate_yaml(StringBuilder builder, String indent) {
+	public void generate_yaml(StringBuilder builder, String indent, YamlConfiguration existing_compatible_config) {
 		append_description(builder, indent);
 
 		// Default
 		builder.append(indent);
 		builder.append("# Default:\n");
-		append_material_set_definition(builder, indent, "# ");
+		append_material_set_definition(builder, indent, "# ", def());
 
 		// Definition
 		builder.append(indent);
 		builder.append(basename());
 		builder.append(":\n");
-		append_material_set_definition(builder, indent, "");
+		final var def = existing_compatible_config.contains(yaml_path())
+			? load_from_yaml(existing_compatible_config)
+			: def();
+		append_material_set_definition(builder, indent, "", def);
 	}
 
 	@Override
@@ -99,15 +107,18 @@ public class ConfigMaterialSetField extends ConfigField<Set<Material>> {
 		}
 	}
 
-	public void load(YamlConfiguration yaml) {
-		final var set = new HashSet<>();
+	public Set<Material> load_from_yaml(YamlConfiguration yaml) {
+		final var set = new HashSet<Material>();
 		for (var obj : yaml.getList(yaml_path())) {
 			final var split = ((String) obj).split(":");
 			set.add(material_from(namespaced_key(split[0], split[1])));
 		}
+		return set;
+	}
 
+	public void load(YamlConfiguration yaml) {
 		try {
-			field.set(owner, set);
+			field.set(owner, load_from_yaml(yaml));
 		} catch (IllegalAccessException e) {
 			throw new RuntimeException("Invalid field access on '" + field.getName() + "'. This is a bug.");
 		}

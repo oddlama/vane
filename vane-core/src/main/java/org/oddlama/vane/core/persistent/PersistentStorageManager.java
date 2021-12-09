@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.CopyOption;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
@@ -201,9 +200,20 @@ public class PersistentStorageManager {
 
 		// Move atomically to prevent corruption.
 		try {
-			Files.move(tmp_file.toPath(), file.toPath(), StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
+			Files.move(
+				tmp_file.toPath(),
+				file.toPath(),
+				StandardCopyOption.REPLACE_EXISTING,
+				StandardCopyOption.ATOMIC_MOVE
+			);
 		} catch (IOException e) {
-			module.log.log(Level.SEVERE, "error while atomically replacing storage.json with temporary file (very recent changes might be lost)!", e);
+			module.log.log(
+				Level.SEVERE,
+				"error while atomically replacing '" +
+				file +
+				"' with temporary file (very recent changes might be lost)!",
+				e
+			);
 			return;
 		}
 	}

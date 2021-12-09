@@ -216,7 +216,11 @@ public abstract class ConfigField<T> implements Comparable<ConfigField<?>> {
 
 	public abstract T def();
 
-	public abstract void generate_yaml(StringBuilder builder, String indent);
+	public abstract void generate_yaml(
+		StringBuilder builder,
+		String indent,
+		YamlConfiguration existing_compatible_config
+	);
 
 	public abstract void check_loadable(YamlConfiguration yaml) throws YamlLoadException;
 

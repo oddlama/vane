@@ -292,7 +292,7 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 	private boolean try_reload_configuration() {
 		// Generate new file if not existing
 		final var file = config_manager.standard_file();
-		if (!file.exists() && !config_manager.generate_file(file)) {
+		if (!file.exists() && !config_manager.generate_file(file, null)) {
 			return false;
 		}
 

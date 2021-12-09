@@ -44,11 +44,21 @@ public class ConfigExtendedMaterialField extends ConfigField<ExtendedMaterial> {
 	}
 
 	@Override
-	public void generate_yaml(StringBuilder builder, String indent) {
+	public void generate_yaml(StringBuilder builder, String indent, YamlConfiguration existing_compatible_config) {
 		append_description(builder, indent);
-		final var def = "\"" + escape_yaml(def().key().getNamespace()) + ":" + escape_yaml(def().key().getKey()) + "\"";
-		append_default_value(builder, indent, def);
-		append_field_definition(builder, indent, def);
+		append_default_value(
+			builder,
+			indent,
+			"\"" + escape_yaml(def().key().getNamespace()) + ":" + escape_yaml(def().key().getKey()) + "\""
+		);
+		final var def = existing_compatible_config.contains(yaml_path())
+			? load_from_yaml(existing_compatible_config)
+			: def();
+		append_field_definition(
+			builder,
+			indent,
+			"\"" + escape_yaml(def.key().getNamespace()) + ":" + escape_yaml(def.key().getKey()) + "\""
+		);
 	}
 
 	@Override
@@ -79,12 +89,14 @@ public class ConfigExtendedMaterialField extends ConfigField<ExtendedMaterial> {
 		}
 	}
 
-	public void load(YamlConfiguration yaml) {
+	public ExtendedMaterial load_from_yaml(YamlConfiguration yaml) {
 		final var split = yaml.getString(yaml_path()).split(":");
-		final var material = ExtendedMaterial.from(namespaced_key(split[0], split[1]));
+		return ExtendedMaterial.from(namespaced_key(split[0], split[1]));
+	}
 
+	public void load(YamlConfiguration yaml) {
 		try {
-			field.set(owner, material);
+			field.set(owner, load_from_yaml(yaml));
 		} catch (IllegalAccessException e) {
 			throw new RuntimeException("Invalid field access on '" + field.getName() + "'. This is a bug.");
 		}

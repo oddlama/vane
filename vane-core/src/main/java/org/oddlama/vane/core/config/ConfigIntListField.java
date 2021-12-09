@@ -19,8 +19,8 @@ public class ConfigIntListField extends ConfigField<List<Integer>> {
 		this.annotation = annotation;
 	}
 
-	private void append_int_list_definition(StringBuilder builder, String indent, String prefix) {
-		append_list_definition(builder, indent, prefix, def(), (b, i) -> b.append(i));
+	private void append_int_list_definition(StringBuilder builder, String indent, String prefix, List<Integer> def) {
+		append_list_definition(builder, indent, prefix, def, (b, i) -> b.append(i));
 	}
 
 	@Override
@@ -34,20 +34,23 @@ public class ConfigIntListField extends ConfigField<List<Integer>> {
 	}
 
 	@Override
-	public void generate_yaml(StringBuilder builder, String indent) {
+	public void generate_yaml(StringBuilder builder, String indent, YamlConfiguration existing_compatible_config) {
 		append_description(builder, indent);
 		append_value_range(builder, indent, annotation.min(), annotation.max(), Integer.MIN_VALUE, Integer.MAX_VALUE);
 
 		// Default
 		builder.append(indent);
 		builder.append("# Default:\n");
-		append_int_list_definition(builder, indent, "# ");
+		append_int_list_definition(builder, indent, "# ", def());
 
 		// Definition
 		builder.append(indent);
 		builder.append(basename());
 		builder.append(":\n");
-		append_int_list_definition(builder, indent, "");
+		final var def = existing_compatible_config.contains(yaml_path())
+			? load_from_yaml(existing_compatible_config)
+			: def();
+		append_int_list_definition(builder, indent, "", def);
 	}
 
 	@Override
@@ -77,14 +80,17 @@ public class ConfigIntListField extends ConfigField<List<Integer>> {
 		}
 	}
 
-	public void load(YamlConfiguration yaml) {
+	public List<Integer> load_from_yaml(YamlConfiguration yaml) {
 		final var list = new ArrayList<Integer>();
 		for (var obj : yaml.getList(yaml_path())) {
 			list.add(((Number) obj).intValue());
 		}
+		return list;
+	}
 
+	public void load(YamlConfiguration yaml) {
 		try {
-			field.set(owner, list);
+			field.set(owner, load_from_yaml(yaml));
 		} catch (IllegalAccessException e) {
 			throw new RuntimeException("Invalid field access on '" + field.getName() + "'. This is a bug.");
 		}

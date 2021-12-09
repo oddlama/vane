@@ -31,7 +31,7 @@ public class ConfigVersionField extends ConfigField<Long> {
 	}
 
 	@Override
-	public void generate_yaml(StringBuilder builder, String indent) {
+	public void generate_yaml(StringBuilder builder, String indent, YamlConfiguration existing_compatible_config) {
 		append_description(builder, indent);
 		append_field_definition(builder, indent, ((Module<?>) owner).annotation.config_version());
 	}
@@ -50,9 +50,13 @@ public class ConfigVersionField extends ConfigField<Long> {
 		}
 	}
 
+	public long load_from_yaml(YamlConfiguration yaml) {
+		return yaml.getLong(yaml_path());
+	}
+
 	public void load(YamlConfiguration yaml) {
 		try {
-			field.setLong(owner, yaml.getLong(yaml_path()));
+			field.setLong(owner, load_from_yaml(yaml));
 		} catch (IllegalAccessException e) {
 			throw new RuntimeException("Invalid field access on '" + field.getName() + "'. This is a bug.");
 		}
