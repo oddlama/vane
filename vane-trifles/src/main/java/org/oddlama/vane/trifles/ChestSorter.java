@@ -165,9 +165,9 @@ public class ChestSorter extends Listener<Trifles> {
 			return;
 		}
 
-		final var button_state = root_block.getState();
-		final var facing = ((Directional) button_state).getFacing();
-		final var face = ((FaceAttachable) button_state).getAttachedFace();
+		final var button_data = root_block.getState().getBlockData();
+		final var facing = ((Directional) button_data).getFacing();
+		final var face = ((FaceAttachable) button_data).getAttachedFace();
 
 		int rx = 0;
 		int ry = 0;
