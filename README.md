@@ -48,7 +48,7 @@ If you don't want a certain feature, simply disable it.
 
 #### Core features (vane-core)
 
-- [x] Full localization support, currently provides english (default), german and french.
+- [x] Full localization support, currently provides english (default), german, french and russian.
 - [x] Automatically generated resource pack will provide client side translations
 - [x] Inaccessible commands will not be shown to players (sends "Unknown Command" instead)
 
@@ -171,6 +171,7 @@ I would like to thank the following projects and people maintaining them:
 - [PaperMC](https://papermc.io/) for the valuable additions missing from Spigot, and for Waterfall.
 - [ProtocolLib](https://github.com/dmulloy2/ProtocolLib) for the awesome protocol layer library.
 - [DynmapCoreAPI](https://github.com/webbukkit/DynmapCoreAPI) (Apache-2.0), dynmap integration
+- [BlueMapAPI](https://github.com/BlueMap-Minecraft/BlueMapAPI) (MIT), [BlueMap](https://github.com/BlueMap-Minecraft/BlueMap) integration
 
 #### Included software
 
