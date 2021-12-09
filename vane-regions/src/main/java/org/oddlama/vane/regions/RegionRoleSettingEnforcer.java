@@ -268,6 +268,12 @@ public class RegionRoleSettingEnforcer extends Listener<Regions> {
 
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void on_portal_activate(final PortalActivateEvent event) {
+		if (event.getPlayer() == null) {
+			// Activated by redstone -> Always allow. It's the job of the region
+			// owner to prevent redstone interactions if a portal shouldn't be activated.
+			return;
+		}
+
 		if (check_setting_at(event.getPortal().spawn(), event.getPlayer(), RoleSetting.PORTAL, false)) {
 			event.setCancelled(true);
 		}
