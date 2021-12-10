@@ -18,7 +18,7 @@ subprojects {
 	apply(plugin = "com.diffplug.spotless")
 
 	group = "org.oddlama.vane"
-	version = "1.6.3"
+	version = "1.6.4"
 
 	repositories() {
 		mavenCentral()
