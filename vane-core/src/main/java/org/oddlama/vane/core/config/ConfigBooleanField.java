@@ -29,7 +29,7 @@ public class ConfigBooleanField extends ConfigField<Boolean> {
 	public void generate_yaml(StringBuilder builder, String indent, YamlConfiguration existing_compatible_config) {
 		append_description(builder, indent);
 		append_default_value(builder, indent, def());
-		final var def = existing_compatible_config.contains(yaml_path())
+		final var def = existing_compatible_config != null && existing_compatible_config.contains(yaml_path())
 			? load_from_yaml(existing_compatible_config)
 			: def();
 		append_field_definition(builder, indent, def);

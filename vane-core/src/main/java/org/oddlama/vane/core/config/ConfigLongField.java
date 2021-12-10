@@ -30,7 +30,7 @@ public class ConfigLongField extends ConfigField<Long> {
 		append_description(builder, indent);
 		append_value_range(builder, indent, annotation.min(), annotation.max(), Long.MIN_VALUE, Long.MAX_VALUE);
 		append_default_value(builder, indent, def());
-		final var def = existing_compatible_config.contains(yaml_path())
+		final var def = existing_compatible_config != null && existing_compatible_config.contains(yaml_path())
 			? load_from_yaml(existing_compatible_config)
 			: def();
 		append_field_definition(builder, indent, def);

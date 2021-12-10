@@ -42,7 +42,7 @@ public class ConfigMaterialField extends ConfigField<Material> {
 			indent,
 			"\"" + escape_yaml(def().getKey().getNamespace()) + ":" + escape_yaml(def().getKey().getKey()) + "\""
 		);
-		final var def = existing_compatible_config.contains(yaml_path())
+		final var def = existing_compatible_config != null && existing_compatible_config.contains(yaml_path())
 			? load_from_yaml(existing_compatible_config)
 			: def();
 		append_field_definition(

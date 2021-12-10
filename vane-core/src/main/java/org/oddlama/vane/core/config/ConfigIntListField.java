@@ -47,7 +47,7 @@ public class ConfigIntListField extends ConfigField<List<Integer>> {
 		builder.append(indent);
 		builder.append(basename());
 		builder.append(":\n");
-		final var def = existing_compatible_config.contains(yaml_path())
+		final var def = existing_compatible_config != null && existing_compatible_config.contains(yaml_path())
 			? load_from_yaml(existing_compatible_config)
 			: def();
 		append_int_list_definition(builder, indent, "", def);
