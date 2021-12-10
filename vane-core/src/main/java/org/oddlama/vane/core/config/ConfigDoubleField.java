@@ -58,7 +58,7 @@ public class ConfigDoubleField extends ConfigField<Double> {
 	}
 
 	public double load_from_yaml(YamlConfiguration yaml) {
-		return yaml.getInt(yaml_path());
+		return yaml.getDouble(yaml_path());
 	}
 
 	public void load(YamlConfiguration yaml) {
