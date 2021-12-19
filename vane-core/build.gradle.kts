@@ -6,7 +6,7 @@ plugins {
 
 dependencies {
 	implementation(group = "org.bstats", name = "bstats-bukkit", version = "1.8")
-	implementation(group = "org.reflections", name = "reflections", version = "0.9.12")
+	implementation(group = "org.reflections", name = "reflections", version = "0.10.2")
 	implementation(group = "org.json", name = "json", version = "20200518")
 	implementation(project(":vane-annotations"))
 }
