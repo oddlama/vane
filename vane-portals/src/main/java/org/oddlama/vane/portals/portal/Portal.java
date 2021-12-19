@@ -321,8 +321,13 @@ public class Portal {
 		// Activate all controlling levers
 		set_controlling_levers(true);
 
-		// Play sound
-		spawn().getWorld().playSound(spawn(), Sound.BLOCK_END_PORTAL_SPAWN, SoundCategory.BLOCKS, 0.9f, 0.8f);
+		float sound_volume = (float) portals.config_volume_activation;
+		if (sound_volume > 0.0f) {
+			// Play sound
+			spawn()
+				.getWorld()
+				.playSound(spawn(), Sound.BLOCK_END_PORTAL_SPAWN, SoundCategory.BLOCKS, sound_volume, 0.8f);
+		}
 	}
 
 	public void on_disconnect(final Portals portals, final Portal target) {
@@ -332,8 +337,13 @@ public class Portal {
 		// Deactivate all controlling levers
 		set_controlling_levers(false);
 
-		// Play sound
-		spawn().getWorld().playSound(spawn(), Sound.BLOCK_END_PORTAL_FRAME_FILL, SoundCategory.BLOCKS, 1.2f, 0.5f);
+		float sound_volume = (float) portals.config_volume_deactivation;
+		if (sound_volume > 0.0f) {
+			// Play sound
+			spawn()
+				.getWorld()
+				.playSound(spawn(), Sound.BLOCK_END_PORTAL_FRAME_FILL, SoundCategory.BLOCKS, sound_volume, 0.5f);
+		}
 	}
 
 	public void update_blocks(final Portals portals) {
