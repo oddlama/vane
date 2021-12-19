@@ -170,15 +170,15 @@ public class Portals extends Module<Portals> {
 	@ConfigDouble(
 		def = 0.9,
 		min = 0.0,
-		max = 2.0,
+		max = 1.0,
 		desc = "Volume for the portal activation sound effect. 0 to disable."
 	)
 	public double config_volume_activation;
 
 	@ConfigDouble(
-		def = 1.2,
+		def = 1.0,
 		min = 0.0,
-		max = 2.0,
+		max = 1.0,
 		desc = "Volume for the portal deactivation sound effect. 0 to disable."
 	)
 	public double config_volume_deactivation;
