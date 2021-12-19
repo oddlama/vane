@@ -39,6 +39,7 @@ import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.oddlama.vane.annotation.VaneModule;
+import org.oddlama.vane.annotation.config.ConfigDouble;
 import org.oddlama.vane.annotation.config.ConfigExtendedMaterial;
 import org.oddlama.vane.annotation.config.ConfigLong;
 import org.oddlama.vane.annotation.config.ConfigMaterialMapEntry;
@@ -165,6 +166,22 @@ public class Portals extends Module<Portals> {
 		desc = "The default portal icon. Also accepts heads from the head library."
 	)
 	public ExtendedMaterial config_default_icon;
+
+	@ConfigDouble(
+		def = 0.9,
+		min = 0.0,
+		max = 2.0,
+		desc = "Volume for the portal activation sound effect. 0 to disable."
+	)
+	public double config_volume_activation;
+
+	@ConfigDouble(
+		def = 1.2,
+		min = 0.0,
+		max = 2.0,
+		desc = "Volume for the portal deactivation sound effect. 0 to disable."
+	)
+	public double config_volume_deactivation;
 
 	@LangMessage
 	public TranslatedMessage lang_console_display_active;
