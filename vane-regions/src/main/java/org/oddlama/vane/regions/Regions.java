@@ -179,7 +179,7 @@ public class Regions extends Module<Regions> {
 			new Permission(
 				"vane." + get_module().get_name() + ".admin",
 				"Allows administration of any region",
-				PermissionDefault.FALSE
+				PermissionDefault.OP
 			);
 		get_module().register_permission(admin_permission);
 	}

@@ -113,7 +113,7 @@ public abstract class Command<T extends Module<T>> extends ModuleComponent<T> {
 			new Permission(
 				"vane." + get_module().get_name() + ".commands." + name,
 				"Allow access to /" + name,
-				PermissionDefault.FALSE
+				PermissionDefault.OP
 			);
 		get_module().register_permission(permission);
 		permission.addParent(get_module().permission_command_catchall_module, true);

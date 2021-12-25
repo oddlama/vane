@@ -251,7 +251,7 @@ public class Portals extends Module<Portals> {
 			new Permission(
 				"vane." + get_module().get_name() + ".admin",
 				"Allows administration of any portal",
-				PermissionDefault.FALSE
+				PermissionDefault.OP
 			);
 		get_module().register_permission(admin_permission);
 

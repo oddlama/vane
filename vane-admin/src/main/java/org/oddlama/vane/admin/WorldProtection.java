@@ -33,7 +33,7 @@ public class WorldProtection extends Listener<Admin> {
 	private Permission permission = new Permission(
 		PERMISSION_NAME,
 		"Allow player to modify world",
-		PermissionDefault.FALSE
+		PermissionDefault.OP
 	);
 
 	public WorldProtection(Context<Admin> context) {

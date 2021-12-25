@@ -29,7 +29,7 @@ public class SpawnProtection extends Listener<Admin> {
 	private Permission permission = new Permission(
 		PERMISSION_NAME,
 		"Allow player to bypass spawn protection",
-		PermissionDefault.FALSE
+		PermissionDefault.OP
 	);
 
 	@ConfigBoolean(def = true, desc = "Allow interaction events at spawn (buttons, levers, etc.).")
@@ -70,6 +70,7 @@ public class SpawnProtection extends Listener<Admin> {
 		schedule_next_tick(() -> {
 			final var world = get_module().getServer().getWorld(config_world);
 			if (world == null) {
+				todo print error and show valid worlds.
 				spawn_center = null;
 			} else {
 				if (config_use_spawn_location) {
