@@ -1,5 +1,8 @@
 #### Important
 
+
+- Wrong world name in config should issue warning --> hazard protection doesnt do this on wither worlds
+
 - Remove deprecation introduced by 1.17
 - Integrate remapping into build process
 
