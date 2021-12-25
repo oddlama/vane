@@ -70,7 +70,15 @@ public class SpawnProtection extends Listener<Admin> {
 		schedule_next_tick(() -> {
 			final var world = get_module().getServer().getWorld(config_world);
 			if (world == null) {
-				todo print error and show valid worlds.
+				//todo print error and show valid worlds.
+				get_module()
+					.log.warning(
+						"The world \"" + config_world + "\" configured for spawn-protection could not be found."
+					);
+				get_module().log.warning("These are the names of worlds existing on this server:");
+				for (final var w : get_module().getServer().getWorlds()) {
+					get_module().log.warning("  \"" + w.getName() + "\"");
+				}
 				spawn_center = null;
 			} else {
 				if (config_use_spawn_location) {
