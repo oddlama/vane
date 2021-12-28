@@ -1,4 +1,4 @@
-import java.io.ByteArrayOutputStream
+import java.security.MessageDigest;
 
 plugins {
 	id("com.github.johnrengelman.shadow") version "7.1.0"
@@ -11,12 +11,14 @@ dependencies {
 	implementation(project(":vane-annotations"))
 }
 
-val resource_pack_sha1: String = ByteArrayOutputStream().use { outputStream ->
-	project.exec {
-		commandLine("sha1sum", "../docs/resourcepacks/v" + project.version + ".zip")
-		standardOutput = outputStream
-	}
-	outputStream.toString().split(" ")[0]
+val resource_pack_sha1 by lazy {
+	val resourcePack = File("${projectDir}/../docs/resourcepacks/v" + project.version + ".zip")
+	val md = MessageDigest.getInstance("SHA-1")
+	val resourcePackBytes = resourcePack.readBytes()
+	md.update(resourcePackBytes, 0, resourcePackBytes.size)
+	val sha1bytes = md.digest()
+	val sha1hashString = String.format("%040x", BigInteger(1, sha1bytes))
+	sha1hashString
 }
 
 tasks {

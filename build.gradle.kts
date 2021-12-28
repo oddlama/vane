@@ -31,6 +31,7 @@ subprojects {
 
 	tasks.withType<JavaCompile> {
 		options.compilerArgs.addAll(arrayOf("-Xlint:all", "-Xlint:-processing", "-Xdiags:verbose"))
+		options.encoding = "UTF-8"
 	}
 
 	dependencies {
