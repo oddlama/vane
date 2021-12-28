@@ -1,11 +1,11 @@
 plugins {
     `java-library`
 	id("com.diffplug.spotless") version "6.0.1"
-	id("io.papermc.paperweight.userdev") version "1.3.1"
+	id("io.papermc.paperweight.userdev") version "1.3.3"
 }
 
 dependencies {
-	paperDevBundle("1.18-R0.1-SNAPSHOT")
+	paperDevBundle("1.18.1-R0.1-SNAPSHOT")
 }
 
 java {
@@ -54,7 +54,7 @@ configure(subprojects.filter {
 	apply(plugin = "io.papermc.paperweight.userdev")
 
 	dependencies {
-		paperDevBundle("1.18-R0.1-SNAPSHOT")
+		paperDevBundle("1.18.1-R0.1-SNAPSHOT")
 	}
 
 	tasks {
