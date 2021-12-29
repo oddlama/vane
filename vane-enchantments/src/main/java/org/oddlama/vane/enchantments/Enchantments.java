@@ -2,6 +2,7 @@ package org.oddlama.vane.enchantments;
 
 import static net.kyori.adventure.text.event.HoverEvent.Action.SHOW_TEXT;
 
+import com.destroystokyo.paper.event.inventory.PrepareResultEvent;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -14,7 +15,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.event.entity.VillagerAcquireTradeEvent;
-import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.world.LootGenerateEvent;
 import org.bukkit.inventory.ItemStack;
@@ -164,10 +164,6 @@ public class Enchantments extends Module<Enchantments> {
 			)
 			.toList();
 
-		// do not process unless vane has good reason.
-		if (vaneEnchantments.isEmpty()) {
-			return;
-		}
 		var lore = item_stack.lore();
 		if (lore == null) lore = new ArrayList<>();
 
@@ -201,8 +197,9 @@ public class Enchantments extends Module<Enchantments> {
 		return standard.hoverEvent(HoverEvent.showText(SENTINEL_VALUE));
 	}
 
+	// Triggers on Anvils, grindstones, and smithing tables.
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-	public void on_prepare_anvil(final PrepareAnvilEvent event) {
+	public void on_prepare_enchanted_edit(final PrepareResultEvent event) {
 		if (event.getResult() == null) {
 			return;
 		}
