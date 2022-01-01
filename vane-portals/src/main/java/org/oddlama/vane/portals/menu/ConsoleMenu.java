@@ -4,6 +4,7 @@ import static org.oddlama.vane.util.Util.namespaced_key;
 
 import java.util.Objects;
 import java.util.stream.Collectors;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -43,6 +44,18 @@ public class ConsoleMenu extends ModuleComponent<Portals> {
 
 	@LangMessage
 	public TranslatedMessage lang_filter_portals_title;
+
+	@LangMessage
+	public TranslatedMessage lang_select_target_portal_visibility_public;
+
+	@LangMessage
+	public TranslatedMessage lang_select_target_portal_visibility_private;
+
+	@LangMessage
+	public TranslatedMessage lang_select_target_portal_visibility_group;
+
+	@LangMessage
+	public TranslatedMessage lang_select_target_portal_visibility_group_internal;
 
 	public TranslatedItemStack<?> item_settings;
 	public TranslatedItemStack<?> item_select_target;
@@ -184,6 +197,17 @@ public class ConsoleMenu extends ModuleComponent<Portals> {
 		);
 	}
 
+	private Component portal_visibility(Portal.Visibility visibility) {
+		return (
+			switch (visibility) {
+				case PUBLIC -> lang_select_target_portal_visibility_public;
+				case GROUP -> lang_select_target_portal_visibility_group;
+				case GROUP_INTERNAL -> lang_select_target_portal_visibility_group_internal;
+				case PRIVATE -> lang_select_target_portal_visibility_private;
+			}
+		).format();
+	}
+
 	private MenuWidget menu_item_select_target(final Portal portal) {
 		return new MenuItem(
 			4,
@@ -232,7 +256,8 @@ public class ConsoleMenu extends ModuleComponent<Portals> {
 									get_module().icon_for(p),
 									"§a§l" + p.name(),
 									"§6" + String.format("%.1f", dist),
-									"§b" + p.spawn().getWorld().getName()
+									"§b" + p.spawn().getWorld().getName(),
+									portal_visibility(p.visibility())
 								);
 							},
 							filter,
