@@ -70,6 +70,16 @@ public class NativeEnchantmentWrapper extends Enchantment {
 	}
 
 	@Override
+	public boolean isTradeable() {
+		return enchantment.is_tradeable();
+	}
+
+	@Override
+	public boolean isCurse() {
+		return enchantment.is_curse();
+	}
+
+	@Override
 	public boolean checkCompatibility(@NotNull Enchantment other) {
 		return this != other && enchantment.is_compatible(bukkit_enchantment(other));
 	}

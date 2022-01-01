@@ -15,6 +15,10 @@ public @interface VaneEnchantment {
 
 	Rarity rarity() default Rarity.COMMON;
 
+	boolean curse() default false;
+
+	boolean tradeable() default false;
+
 	boolean treasure() default false;
 
 	boolean generate_in_treasure() default false;
