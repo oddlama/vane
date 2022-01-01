@@ -117,8 +117,12 @@ public class PortalTeleporter extends Listener<Portals> {
 			// Set new movement location
 			event.setTo(target_location);
 
-			// Retain velocity
-			player.setVelocity(new_velocity);
+			// Retain velocity, but do so next tick because apparently
+			// the movement event overrides the velocity.
+			// FIXME:ideally this would be done the same tick as the movement.
+			schedule_next_tick(() -> {
+				player.setVelocity(new_velocity);
+			});
 		} else {
 			final var loc = entities_portalling.get(player_id);
 			if (loc == null) {
