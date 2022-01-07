@@ -1,5 +1,5 @@
 plugins {
-    `java-library`
+	`java-library`
 	id("com.diffplug.spotless") version "6.0.1"
 	id("io.papermc.paperweight.userdev") version "1.3.3"
 	id("xyz.jpenilla.run-paper") version "1.0.6" // Adds runServer and runMojangMappedServer tasks for testing
@@ -10,11 +10,11 @@ dependencies {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
+	sourceCompatibility = JavaVersion.VERSION_17
 }
 
 subprojects {
-    apply(plugin = "java-library")
+	apply(plugin = "java-library")
 	apply(plugin = "java")
 	apply(plugin = "com.diffplug.spotless")
 
@@ -51,7 +51,7 @@ subprojects {
 }
 
 configure(subprojects.filter {
-    !listOf("vane-waterfall").contains(it.name)
+	!listOf("vane-waterfall").contains(it.name)
 }) {
 	apply(plugin = "io.papermc.paperweight.userdev")
 
@@ -67,7 +67,7 @@ configure(subprojects.filter {
 }
 
 configure(subprojects.filter {
-    !listOf("vane-annotations", "vane-waterfall").contains(it.name)
+	!listOf("vane-annotations", "vane-waterfall").contains(it.name)
 }) {
 	tasks.create<Copy>("copyJar") {
 		from(tasks.reobfJar)
@@ -103,7 +103,7 @@ configure(subprojects.filter {
 }
 
 configure(subprojects.filter {
-    !listOf("vane-annotations", "vane-core", "vane-waterfall").contains(it.name)
+	!listOf("vane-annotations", "vane-core", "vane-waterfall").contains(it.name)
 }) {
 	dependencies {
 		implementation(project(path = ":vane-core", configuration = "shadow"))
@@ -111,7 +111,7 @@ configure(subprojects.filter {
 }
 
 configure(subprojects.filter {
-    listOf("vane-bedtime", "vane-portals", "vane-regions").contains(it.name)
+	listOf("vane-bedtime", "vane-portals", "vane-regions").contains(it.name)
 }) {
 	dependencies {
 		implementation(group = "us.dynmap", name = "dynmap-api", version = "3.2-SNAPSHOT")
@@ -121,5 +121,4 @@ configure(subprojects.filter {
 
 runPaper {
 	disablePluginJarDetection()
-
 }
