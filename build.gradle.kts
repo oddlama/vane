@@ -2,6 +2,7 @@ plugins {
     `java-library`
 	id("com.diffplug.spotless") version "6.0.1"
 	id("io.papermc.paperweight.userdev") version "1.3.3"
+	id("xyz.jpenilla.run-paper") version "1.0.6" // Adds runServer and runMojangMappedServer tasks for testing
 }
 
 dependencies {
@@ -91,6 +92,14 @@ configure(subprojects.filter {
 		compileOnly(project(":vane-annotations"))
 		annotationProcessor(project(path = ":vane-annotations", configuration = "reobf"))
 	}
+
+	rootProject.tasks.runMojangMappedServer {
+		pluginJars(tasks.named<io.papermc.paperweight.tasks.RemapJar>("reobfJar").flatMap { it.inputJar })
+	}
+
+	rootProject.tasks.runServer {
+		pluginJars(tasks.named<io.papermc.paperweight.tasks.RemapJar>("reobfJar").flatMap { it.outputJar })
+	}
 }
 
 configure(subprojects.filter {
@@ -108,4 +117,9 @@ configure(subprojects.filter {
 		implementation(group = "us.dynmap", name = "dynmap-api", version = "3.2-SNAPSHOT")
 		implementation(group = "com.github.BlueMap-Minecraft", name = "BlueMapAPI", version = "v1.7.0")
 	}
+}
+
+runPaper {
+	disablePluginJarDetection()
+
 }
