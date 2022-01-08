@@ -1,1 +1,7 @@
-theme: jekyll-theme-modernist
+plugins:
+  - jekyll-polyglot
+
+languages: ["en", "fr"]
+default_lang: "en"
+exclude_from_localization: ["css", "images", "resourcepacks", "wiki"]
+parallel_localization: true
