@@ -28,12 +28,15 @@ public class LangVersionField extends LangField<Long> {
 		check_yaml_path(yaml);
 
 		if (!(yaml.get(yaml_path()) instanceof Number)) {
-			throw new YamlLoadException("Invalid type for yaml path '" + yaml_path() + "', expected long");
+			throw new YamlLoadException.Lang("Invalid type for yaml path '" + yaml_path() + "', expected long", this);
 		}
 
 		var val = yaml.getLong(yaml_path());
 		if (val < 1) {
-			throw new YamlLoadException("Entry '" + yaml_path() + "' has an invalid value: Value must be >= 1");
+			throw new YamlLoadException.Lang(
+				"Entry '" + yaml_path() + "' has an invalid value: Value must be >= 1",
+				this
+			);
 		}
 	}
 
