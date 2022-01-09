@@ -1,7 +1,13 @@
 package org.oddlama.vane.core;
 
+import com.google.common.hash.Hashing;
+import com.google.common.io.Files;
+
+import java.io.File;
 import java.io.IOException;
 import java.util.Properties;
+
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -13,8 +19,14 @@ import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.ModuleGroup;
+import org.oddlama.vane.util.Nms;
 
 public class ResourcePackDistributor extends Listener<Core> {
+
+	// Assume debug environment if both add-plugin and vane-debug are defined, until run-paper adds a better way.
+	// https://github.com/jpenilla/run-paper/issues/14
+	private static final boolean localDev =
+		Nms.server_handle().options.hasArgument("add-plugin") && Boolean.getBoolean("disable.watchdog");
 
 	@ConfigBoolean(
 		def = true,
@@ -30,12 +42,15 @@ public class ResourcePackDistributor extends Listener<Core> {
 
 	public String url = null;
 	public String sha1 = null;
+	public int counter = 0;
 
 	// The permission to bypass the resource pack
 	public final Permission bypass_permission;
 
 	public CustomResourcePackConfig custom_resource_pack_config;
 	public PlayerMessageDelayer player_message_delayer;
+	private ResourcePackFileWatcher file_watcher;
+	private ResourcePackDevServer dev_server;
 
 	public ResourcePackDistributor(Context<Core> context) {
 		super(context.group("resource_pack", "Enable resource pack distribution."));
@@ -56,7 +71,19 @@ public class ResourcePackDistributor extends Listener<Core> {
 
 	@Override
 	public void on_enable() {
-		if (((ModuleGroup<Core>) custom_resource_pack_config.get_context()).config_enabled) {
+		if (localDev) {
+			try {
+				var pack_output = new File("vane-resource-pack.zip");
+				file_watcher = new ResourcePackFileWatcher(this, pack_output);
+				dev_server = new ResourcePackDevServer(this, pack_output);
+				dev_server.serve();
+				file_watcher.watch_for_changes();
+			} catch (IOException | InterruptedException ignored) {
+				ignored.printStackTrace();
+			}
+
+			get_module().log.info("Setting up dev lazy server :-)");
+		} else if (((ModuleGroup<Core>) custom_resource_pack_config.get_context()).config_enabled) {
 			get_module().log.info("Serving custom resource pack");
 			url = custom_resource_pack_config.config_url;
 			sha1 = custom_resource_pack_config.config_sha1;
@@ -111,8 +138,16 @@ public class ResourcePackDistributor extends Listener<Core> {
 		if (url.isEmpty()) {
 			return;
 		}
+		send_resource_pack(event.getPlayer());
+	}
 
-		event.getPlayer().setResourcePack(url, sha1);
+	public void send_resource_pack(Player player) {
+		var url2 = url;
+		if (localDev) {
+			url2 = url + "?" + counter;
+			player.sendMessage(url2 + " " + sha1);
+		}
+		player.setResourcePack(url2, sha1);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
@@ -132,4 +167,13 @@ public class ResourcePackDistributor extends Listener<Core> {
 				break;
 		}
 	}
+
+	public void update_sha1(File file) {
+		if (!localDev) return;
+		try {
+			var hash = Files.asByteSource(file).hash(Hashing.sha1());
+			ResourcePackDistributor.this.sha1 = hash.toString();
+		} catch (IOException ignored) {}
+	}
+
 }

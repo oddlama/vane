@@ -9,6 +9,8 @@ import org.oddlama.vane.core.module.Module;
 
 public abstract class LangField<T> {
 
+	public static final String PREFIX = "lang_";
+
 	private Module<?> module;
 	protected Object owner;
 	protected Field field;
@@ -20,7 +22,11 @@ public abstract class LangField<T> {
 		this.module = module;
 		this.owner = owner;
 		this.field = field;
-		this.name = map_name.apply(field.getName().substring("lang_".length()));
+
+		if (!field.getName().contains(PREFIX)) throw new RuntimeException(
+			new YamlLoadException.Lang("field must start with " + PREFIX, this)
+		);
+		this.name = map_name.apply(field.getName().substring(PREFIX.length()));
 		this.namespace = module.namespace();
 		this.key = namespace + "." + yaml_path();
 
@@ -37,7 +43,7 @@ public abstract class LangField<T> {
 
 	protected void check_yaml_path(YamlConfiguration yaml) throws YamlLoadException {
 		if (!yaml.contains(name, true)) {
-			throw new YamlLoadException("yaml is missing entry with path '" + name + "'");
+			throw new YamlLoadException.Lang("yaml is missing entry with path '" + name + "'", this);
 		}
 	}
 
@@ -70,5 +76,10 @@ public abstract class LangField<T> {
 		} catch (IllegalAccessException e) {
 			throw new RuntimeException("Invalid field access on '" + field.getName() + "'. This is a bug.");
 		}
+	}
+
+	@Override
+	public String toString() {
+		return (field.getDeclaringClass().getTypeName() + "::" + field.getName());
 	}
 }
