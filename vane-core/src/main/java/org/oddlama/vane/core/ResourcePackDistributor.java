@@ -2,11 +2,9 @@ package org.oddlama.vane.core;
 
 import com.google.common.hash.Hashing;
 import com.google.common.io.Files;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.Properties;
-
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -175,5 +173,4 @@ public class ResourcePackDistributor extends Listener<Core> {
 			ResourcePackDistributor.this.sha1 = hash.toString();
 		} catch (IOException ignored) {}
 	}
-
 }
