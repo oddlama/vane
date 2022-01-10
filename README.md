@@ -111,7 +111,7 @@ If you don't want a certain feature, simply disable it.
 - [x] Authentication multiplexing: Grant players any amount of additional accounts (e.g. useful for secondary spectator accounts).
       This works by proxying logins from a different port and changing UUIDs.
 - [x] Servers can be started automatically when a player tries to join.
-- [x] `ping` command to check server ping as recieved by the proxy.
+- [x] `ping` command to check server ping as received by the proxy.
 - [x] `maintenance` command to schedule maintenance times. While maintenance is active, players without a bypass permission can't join servers.
 
 #### Remarks
@@ -129,7 +129,7 @@ If you don't want a certain feature, simply disable it.
 
 For a comprehensive guide, visit the [Installation Guide](https://github.com/oddlama/vane/wiki/Installation-Guide) on the wiki.
 
-To install vane, simply downlaod all desired jars files from the [Releases](https://github.com/oddlama/vane/releases/latest) and put them into the `plugins/` directory.
+To install vane, simply download all desired jars files from the [Releases](https://github.com/oddlama/vane/releases/latest) and put them into the `plugins/` directory.
 You can grab the `all-plugins.zip` if you don't want to download each file by hand.
 Then start your server and enjoy playing!
 
