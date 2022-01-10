@@ -4,6 +4,8 @@ import static org.oddlama.vane.util.ItemUtil.damage_item;
 import static org.oddlama.vane.util.PlayerUtil.swing_arm;
 import static org.oddlama.vane.util.Util.ms_to_ticks;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TranslatableComponent;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.entity.Player;
@@ -122,7 +124,15 @@ public class HomeScroll extends CustomItem<Trifles, HomeScroll> {
 		}
 
 		final var to_location = player.getBedSpawnLocation();
+		final var to_potential_location = player.getPotentialBedLocation();
 		if (to_location == null) {
+			if(to_potential_location != null)
+				// The most cursed sentence in minecraft.
+				// "You have no home bed or charged respawn anchor, or it was obstructed"
+				player.sendActionBar(Component.translatable("block.minecraft.spawn.not_valid"));
+			else
+				//"Sleep in a bed to change your respawn point"
+				player.sendActionBar(Component.translatable("advancements.adventure.sleep_in_bed.description"));
 			return;
 		}
 
