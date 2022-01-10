@@ -63,7 +63,7 @@ import org.oddlama.vane.portals.portal.PortalBlock;
 import org.oddlama.vane.portals.portal.PortalBlockLookup;
 import org.oddlama.vane.portals.portal.Style;
 
-@VaneModule(name = "portals", bstats = 8642, config_version = 3, lang_version = 4, storage_version = 2)
+@VaneModule(name = "portals", bstats = 8642, config_version = 3, lang_version = 5, storage_version = 2)
 public class Portals extends Module<Portals> {
 	// Add (de-)serializers
 	static {
@@ -707,15 +707,11 @@ public class Portals extends Module<Portals> {
 		src.on_disconnect(this, dst);
 		dst.on_disconnect(this, src);
 
-		// Reset target id's if the target portal was transient
-		if (dst.visibility().is_transient_target()) {
+		// Reset target id's if the target portal was transient and
+		// the target isn't locked.
+		if (dst.visibility().is_transient_target() && !src.target_locked()) {
 			src.target_id(null);
 			src.update_blocks(this);
-			mark_persistent_storage_dirty();
-		}
-		if (src.visibility().is_transient_target()) {
-			dst.target_id(null);
-			dst.update_blocks(this);
 			mark_persistent_storage_dirty();
 		}
 

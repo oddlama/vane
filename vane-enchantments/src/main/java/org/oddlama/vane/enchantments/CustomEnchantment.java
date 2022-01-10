@@ -207,6 +207,22 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 	}
 
 	/**
+	 * Determines if this enchantment is tradeable with villagers.
+	 * Always reflects the annotation value {@link VaneEnchantment#tradeable()}.
+	 */
+	public final boolean is_tradeable() {
+		return annotation.tradeable();
+	}
+
+	/**
+	 * Determines if this enchantment is a curse.
+	 * Always reflects the annotation value {@link VaneEnchantment#curse()}.
+	 */
+	public final boolean is_curse() {
+		return annotation.curse();
+	}
+
+	/**
 	 * Determines if this enchantment generates on treasure items.
 	 * Always reflects the annotation value {@link VaneEnchantment#generate_in_treasure()}.
 	 */

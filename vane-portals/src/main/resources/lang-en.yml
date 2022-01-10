@@ -12,7 +12,7 @@
 
 # DO NOT CHANGE! The version of this language file. Used to determine
 # if the file needs to be updated.
-version: 4
+version: 5
 # The corresponding language code used in resource packs. Used for
 # resource pack generation. Typically this is a combination of the
 # language code (ISO 639) and the country code (ISO 3166).
@@ -360,12 +360,18 @@ menus:
     # %1$s: Portal name
     # %2$s: Portal distance
     # %3$s: Portal world
+    # %4$s: Portal visibility (defined below, public, private, ...)
     select_target_portal:
       name: "%1$s"
       lore:
         - ""
         - "§7Distance: %2$s§6m"
         - "§7World: %3$s"
+        - "§7%4$s"
+    select_target_portal_visibility_public: "§aPublic"
+    select_target_portal_visibility_group: "§eRegion Group (members)"
+    select_target_portal_visibility_group_internal: "§eRegion Group (only visible internally)"
+    select_target_portal_visibility_private: "§cPrivate"
 
     # The item used to unlink the current console.
     unlink_console:

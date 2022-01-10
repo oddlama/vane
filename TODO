@@ -1,43 +1,28 @@
 #### Important
 
-
 - Wrong world name in config should issue warning --> hazard protection doesnt do this on wither worlds
-
-- Remove deprecation introduced by 1.17
-- Integrate remapping into build process
-
 
 #### IDEAS
 
+- [ ] portals need to be discovered before they can be used. (maybe overridable on a per-portal basis? for admins?)
 - [ ] tab shows ordered by world
 - [ ] angel shift scroll selects level or some percentage.
 - [ ] autostop at certain times. 12am 12pm
-- [ ] cant hit players with snowballs. not sure if caused by vane.
-- [ ] trampelpfad
+- [ ] trampelpfad (a trail of path-block that is created automatically when players take a route often, could get fancy.)
 - [ ] add a mechanic to update in-game maps (e.g. with a custom item, or redstone)
 - [ ] player heads from /heads
-- [ ] set scroll cooldown usage for 5 seconds after damage
 - [ ] lodestone portal scrolls teleport ontop of the stone
-- [ ] double door mechanic is broken for two single doors with opposite hinges after one another (visual two block, actual 0 block distance).
 - [ ] world rebuild check for armorstands and item frames. dont let them be destroyed
-- [ ] minecart speed ++++++ only if player in minecart OR netherite minecart!!!
-- [ ] on first join: map and discord link
-
+- [ ] minecart speed ++++++ only if player in minecart, or maybe with an extra type of minecart. is it time for the netherite minecart?
+- [ ] on first join message: e.g. for link to map and discord link
 
 - permission audit for all players with moderator level
-- add permissions by uuid
 - sleep day -> get night
-- private /msg /tell permission
-- portal scrolls show total uses
+- portal scrolls show total uses since creation
 - ultra infinity for all arrow types (put on arrow?)
 
-
-
-portal domes? projector like setup for full-dome or even sphere!
-
-
-portal selection as big sphere around player with itemsss
-  sneak -> other selection?
+portal domes? projector like setup for full-dome or maybe even a sphere. good that this sentence makes no sense.
+limit range to prevent clutter and require multiple hops (either multiple hops in the menu o.
 
 - [ ] descr level bottle
 - [ ] bottle fill max
@@ -45,12 +30,8 @@ portal selection as big sphere around player with itemsss
 - [ ] better pack icon
 - [ ] github readme banners
 - [ ] crafting recipes in readme
-- [ ] download links
-- [ ] software licenses
-- [ ] region chunk based cache
 - [ ] armor stand poser manipulation by perpendicular intersection between Line of sight and arm
 - [ ] item frame invisibilinator (visible if empty)
-- [ ] custom enchantment book icons
 - [ ] player list footer header configuration
 - [ ] transmutation tool copy pasta with direction awareness
 - [ ] sign editing (a tool ?)

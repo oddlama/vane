@@ -12,7 +12,7 @@
 
 # DO NOT CHANGE! The version of this language file. Used to determine
 # if the file needs to be updated.
-version: 4
+version: 5
 # The corresponding language code used in resource packs. Used for
 # resource pack generation. Typically this is a combination of the
 # language code (ISO 639) and the country code (ISO 3166).
@@ -231,6 +231,11 @@ menus:
         - ""
         - "§7Distanz: %2$s§6m"
         - "§7Welt: %3$s"
+        - "§7%4$s"
+    select_target_portal_visibility_public: "§aÖffentlich"
+    select_target_portal_visibility_group: "§eGruppe (Mitglieder)"
+    select_target_portal_visibility_group_internal: "§eGruppe (Nur intern sichtbar)"
+    select_target_portal_visibility_private: "§cPrivat"
 
     unlink_console:
       name: "§c§lKonsole Entfernen"

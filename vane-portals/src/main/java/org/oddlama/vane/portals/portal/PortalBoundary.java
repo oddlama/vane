@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.Stack;
 import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.oddlama.vane.portals.PortalConstructor;
 
@@ -442,9 +443,16 @@ public class PortalBoundary {
 			return boundary;
 		}
 
+		Set<Material> air_overrides = Set.of(Material.CAVE_AIR, Material.AIR, Material.VOID_AIR);
+
 		// Check area obstruction
 		for (final var block : boundary.portal_area_blocks) {
 			if (block.getType() != portal_constructor.config_material_portal_area) {
+				if (portal_constructor.config_material_portal_area == Material.AIR) {
+					if (air_overrides.contains(block.getType())) {
+						continue;
+					}
+				}
 				boundary.error_state = ErrorState.PORTAL_AREA_OBSTRUCTED;
 				return boundary;
 			}

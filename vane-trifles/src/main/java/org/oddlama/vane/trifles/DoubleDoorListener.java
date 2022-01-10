@@ -31,9 +31,7 @@ public class DoubleDoorListener extends Listener<Trifles> {
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void on_entity_interact(EntityInteractEvent event) {
 		final var block = event.getBlock();
-		if (block != null) {
-			handle_double_door(block);
-		}
+		handle_double_door(block);
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -47,8 +45,11 @@ public class DoubleDoorListener extends Listener<Trifles> {
 	}
 
 	public void handle_double_door(final Block block) {
-		final var first = DoorBlock.get_door(block);
-		final var second = DoorBlock.get_second_door(first);
+		final var first = SingleDoor.create_door_from_block(block);
+		if (first == null) {
+			return;
+		}
+		final var second = first.get_second_door();
 		if (second == null) {
 			return;
 		}
@@ -56,11 +57,11 @@ public class DoubleDoorListener extends Listener<Trifles> {
 		// Update second door state directly after the event (delay 0)
 		schedule_next_tick(() -> {
 			// Make sure to include changes from last tick
-			if (!first.update_state() || !second.update_state()) {
+			if (!first.update_cached_state() || !second.update_cached_state()) {
 				return;
 			}
 
-			second.set_open(first.is_open());
+			second.set_open(first.isOpen());
 		});
 	}
 }

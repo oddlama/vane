@@ -5,10 +5,10 @@ env.sh
 .project
 .settings
 .idea
-gradle.properties
 build
 libs/
 target/
 target-obf/
 external/
 bin/
+run/

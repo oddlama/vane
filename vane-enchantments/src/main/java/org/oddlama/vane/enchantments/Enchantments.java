@@ -196,46 +196,6 @@ public class Enchantments extends Module<Enchantments> {
 	private MerchantRecipe process_recipe(final MerchantRecipe recipe) {
 		var result = recipe.getResult().clone();
 
-		// Get correct enchantment map
-		final var meta = result.getItemMeta();
-		final Map<Enchantment, Integer> enchantments;
-		if (meta instanceof EnchantmentStorageMeta) {
-			enchantments = ((EnchantmentStorageMeta) meta).getStoredEnchants();
-		} else {
-			enchantments = result.getEnchantments();
-		}
-
-		// Remove bad enchants and track if we removed any
-		boolean changed = false;
-		for (final var e : enchantments.keySet()) {
-			if (!(e instanceof BukkitEnchantmentWrapper)) {
-				continue;
-			}
-
-			final var custom = ((BukkitEnchantmentWrapper) e).custom_enchantment();
-			if (!custom.generate_in_treasure()) {
-				if (meta instanceof EnchantmentStorageMeta) {
-					((EnchantmentStorageMeta) meta).removeStoredEnchant(e);
-				} else {
-					meta.removeEnchant(e);
-				}
-				changed = true;
-			}
-		}
-
-		// Update result item if needed
-		if (changed) {
-			// Add Unbreaking III as compensation
-			if (meta instanceof EnchantmentStorageMeta) {
-				((EnchantmentStorageMeta) meta).addStoredEnchant(Enchantment.DURABILITY, 3, false);
-			} else {
-				meta.addEnchant(Enchantment.DURABILITY, 3, false);
-			}
-
-			// Set meta
-			result.setItemMeta(meta);
-		}
-
 		// Create new recipe
 		final var new_recipe = new MerchantRecipe(
 			update_enchanted_item(result, true),

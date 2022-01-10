@@ -66,7 +66,17 @@ public class NativeEnchantmentWrapper extends Enchantment {
 
 	@Override
 	public boolean isDiscoverable() {
-		return enchantment.generate_in_treasure();
+		return enchantment.enabled() && enchantment.generate_in_treasure();
+	}
+
+	@Override
+	public boolean isTradeable() {
+		return enchantment.enabled() && enchantment.is_tradeable();
+	}
+
+	@Override
+	public boolean isCurse() {
+		return enchantment.is_curse();
 	}
 
 	@Override
@@ -81,6 +91,6 @@ public class NativeEnchantmentWrapper extends Enchantment {
 		if (!enchantment.allow_custom() && is_custom_item(bukkit_item)) {
 			return false;
 		}
-		return enchantment.can_enchant(bukkit_item);
+		return enchantment.enabled() && enchantment.can_enchant(bukkit_item);
 	}
 }
