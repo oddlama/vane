@@ -1,7 +1,5 @@
 package org.oddlama.vane.regions.menu;
 
-import static org.oddlama.vane.util.Util.namespaced_key;
-
 import java.util.stream.Collectors;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;

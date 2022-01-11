@@ -2,7 +2,6 @@ package org.oddlama.vane.core.module;
 
 import java.io.IOException;
 import java.util.function.Consumer;
-
 import org.bukkit.NamespacedKey;
 import org.bukkit.scheduler.BukkitTask;
 import org.json.JSONObject;

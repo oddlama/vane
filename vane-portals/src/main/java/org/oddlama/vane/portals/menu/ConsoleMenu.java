@@ -1,7 +1,5 @@
 package org.oddlama.vane.portals.menu;
 
-import static org.oddlama.vane.util.Util.namespaced_key;
-
 import java.util.Objects;
 import java.util.stream.Collectors;
 import net.kyori.adventure.text.Component;

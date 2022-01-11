@@ -1,7 +1,5 @@
 package org.oddlama.vane.portals.menu;
 
-import static org.oddlama.vane.util.Util.namespaced_key;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
