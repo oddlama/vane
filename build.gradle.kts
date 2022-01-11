@@ -12,6 +12,7 @@ java {
 	sourceCompatibility = JavaVersion.VERSION_17
 }
 
+// Common settings to all subprojects.
 subprojects {
 	apply(plugin = "java-library")
 	apply(plugin = "java")
@@ -39,6 +40,7 @@ subprojects {
 	}
 }
 
+// All Paper Plugins + Annotations.
 configure(subprojects.filter {
 	!listOf("vane-waterfall").contains(it.name)
 }) {
@@ -55,6 +57,7 @@ configure(subprojects.filter {
 	 }
 }
 
+// All Projects except waterfall and annotations.
 configure(subprojects.filter {
 	!listOf("vane-annotations", "vane-waterfall").contains(it.name)
 }) {
@@ -83,22 +86,32 @@ configure(subprojects.filter {
 	}
 
 	rootProject.tasks.runMojangMappedServer {
+		// the input to reobf, is the mojmapped jars.
 		pluginJars(tasks.named<io.papermc.paperweight.tasks.RemapJar>("reobfJar").flatMap { it.inputJar })
 	}
 
 	rootProject.tasks.runServer {
+		// the output is the obfuscated jars.
 		pluginJars(tasks.named<io.papermc.paperweight.tasks.RemapJar>("reobfJar").flatMap { it.outputJar })
 	}
 }
 
+// All paper plugins except core.
 configure(subprojects.filter {
 	!listOf("vane-annotations", "vane-core", "vane-waterfall").contains(it.name)
 }) {
 	dependencies {
+		// https://imperceptiblethoughts.com/shadow/multi-project/#depending-on-the-shadow-jar-from-another-project
+		// In a multi-project build there may be one project that applies Shadow and another that requires the shadowed
+		// JAR as a dependency. In this case, use Gradle's normal dependency declaration mechanism to depend on the
+		// shadow configuration of the shadowed project.
 		implementation(project(path = ":vane-core", configuration = "shadow"))
+		// But also depend on core itself.
+		implementation(project(path = ":vane-core"))
 	}
 }
 
+// All plugins with map integration
 configure(subprojects.filter {
 	listOf("vane-bedtime", "vane-portals", "vane-regions").contains(it.name)
 }) {
