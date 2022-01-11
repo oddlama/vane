@@ -15,10 +15,12 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemMendEvent;
 import org.bukkit.inventory.ShapedRecipe;
 import org.oddlama.vane.annotation.config.ConfigInt;
 import org.oddlama.vane.annotation.item.VaneItem;
 import org.oddlama.vane.annotation.persistent.Persistent;
+import org.oddlama.vane.core.data.DurabilityOverrideData;
 import org.oddlama.vane.core.item.CustomItem;
 import org.oddlama.vane.core.item.CustomItemVariant;
 import org.oddlama.vane.core.module.Context;
@@ -47,8 +49,19 @@ public class UnstableScroll extends CustomItem<Trifles, UnstableScroll> {
 		)
 		private int config_damage_cooldown;
 
+		@ConfigInt(def = 25, min = 0, desc = "Base amount of uses a scroll has before breaking")
+		private int config_base_durability;
+
+		private DurabilityOverrideData durability_override;
+
 		public UnstableScrollVariant(UnstableScroll parent, SingleVariant variant) {
 			super(parent, variant);
+		}
+
+		@Override
+		public void on_config_change() {
+			super.on_config_change();
+			durability_override = new DurabilityOverrideData(config_base_durability);
 		}
 
 		@Override
@@ -147,7 +160,7 @@ public class UnstableScroll extends CustomItem<Trifles, UnstableScroll> {
 			player.setCooldown(variant.base(), (int) cooldown);
 
 			// Damage item
-			damage_item(player, item, 1);
+			variant.durability_override.use_item(player, item);
 			swing_arm(player, event.getHand());
 		}
 	}
@@ -183,5 +196,15 @@ public class UnstableScroll extends CustomItem<Trifles, UnstableScroll> {
 	public void on_player_teleport_scroll(final PlayerTeleportScrollEvent event) {
 		storage_last_scroll_teleport.put(event.getPlayer().getUniqueId(), new LazyLocation(event.getFrom()));
 		mark_persistent_storage_dirty();
+	}
+
+
+	@EventHandler(ignoreCancelled = true)
+	public void on_player_item_mend(PlayerItemMendEvent event) {
+		final var variant = this.<UnstableScroll.UnstableScrollVariant>variant_of(event.getItem());
+		if (variant == null || !variant.enabled()) {
+			return;
+		}
+		variant.durability_override.on_mend(event);
 	}
 }
