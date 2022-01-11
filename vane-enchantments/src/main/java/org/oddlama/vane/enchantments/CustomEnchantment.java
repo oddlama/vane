@@ -24,6 +24,7 @@ import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.util.Nms;
+import org.oddlama.vane.util.Util;
 
 public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 
@@ -53,7 +54,7 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 		set_context(context);
 
 		// Create namespaced key
-		key = namespaced_key(get_module().namespace(), name);
+		key = Util.namespaced_key(get_module().namespace(), name);
 
 		// Check if instance is already exists
 		if (instances.get(getClass()) != null) {
@@ -287,9 +288,9 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 	/** Returns a named recipe key */
 	public final NamespacedKey recipe_key(String recipe_name) {
 		if (recipe_name.equals("")) {
-			return namespaced_key(get_module().namespace(), "enchantment_" + name + "_recipe");
+			return Util.namespaced_key(get_module().namespace(), "enchantment_" + name + "_recipe");
 		}
-		return namespaced_key(get_module().namespace(), "enchantment_" + name + "_recipe_" + recipe_name);
+		return Util.namespaced_key(get_module().namespace(), "enchantment_" + name + "_recipe_" + recipe_name);
 	}
 
 	private final void add_recipe_or_throw(NamespacedKey recipe_key, Recipe recipe) {

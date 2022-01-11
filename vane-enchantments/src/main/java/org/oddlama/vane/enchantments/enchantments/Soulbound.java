@@ -33,6 +33,7 @@ import org.oddlama.vane.enchantments.CustomEnchantment;
 import org.oddlama.vane.enchantments.Enchantments;
 import org.oddlama.vane.enchantments.items.AncientTomeOfTheGods;
 import org.oddlama.vane.enchantments.items.BookVariant;
+import org.oddlama.vane.util.Util;
 
 @VaneEnchantment(name = "soulbound", rarity = Rarity.RARE, treasure = true, allow_custom = true)
 public class Soulbound extends CustomEnchantment<Enchantments> {
@@ -44,7 +45,7 @@ public class Soulbound extends CustomEnchantment<Enchantments> {
 	)
 	public long config_cooldown;
 
-	private static final NamespacedKey IGNORE_SOULBOUND_DROP = namespaced_key(
+	private static final NamespacedKey IGNORE_SOULBOUND_DROP = Util.namespaced_key(
 		"vane_enchantments",
 		"ignore_soulbound_drop"
 	);

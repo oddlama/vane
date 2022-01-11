@@ -21,6 +21,7 @@ import org.oddlama.vane.core.module.ModuleComponent;
 import org.oddlama.vane.portals.Portals;
 import org.oddlama.vane.portals.event.PortalChangeSettingsEvent;
 import org.oddlama.vane.portals.portal.Portal;
+import org.oddlama.vane.util.Util;
 
 public class SettingsMenu extends ModuleComponent<Portals> {
 
@@ -51,7 +52,7 @@ public class SettingsMenu extends ModuleComponent<Portals> {
 			new TranslatedItemStack<>(
 				ctx,
 				"select_icon",
-				namespaced_key("vane", "decoration_end_portal_orb"),
+				Util.namespaced_key("vane", "decoration_end_portal_orb"),
 				1,
 				"Used to select the portal's icon."
 			);
