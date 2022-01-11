@@ -1,7 +1,5 @@
 package org.oddlama.vane.enchantments;
 
-import static org.oddlama.vane.util.Util.namespaced_key;
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;

@@ -1,7 +1,5 @@
 package org.oddlama.vane.enchantments.enchantments;
 
-import static org.oddlama.vane.util.Util.namespaced_key;
-
 import java.util.ArrayList;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -193,7 +191,10 @@ public class Soulbound extends CustomEnchantment<Enchantments> {
 			if (inventory.firstEmpty() != -1) {
 				// We still have space in the inventory, so the player tried to drop it with Q.
 				event.setCancelled(true);
-				lang_drop_lock_warning.send_action_bar(event.getPlayer(), event.getItemDrop().getItemStack().displayName());
+				lang_drop_lock_warning.send_action_bar(
+					event.getPlayer(),
+					event.getItemDrop().getItemStack().displayName()
+				);
 			} else {
 				// Inventory is full (e.g. when exiting crafting table with soulbound item in it)
 				// so we drop the first non-soulbound item (if any) instead.
