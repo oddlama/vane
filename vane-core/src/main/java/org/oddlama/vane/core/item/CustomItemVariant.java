@@ -1,7 +1,5 @@
 package org.oddlama.vane.core.item;
 
-import static org.oddlama.vane.util.Util.namespaced_key;
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,6 +15,7 @@ import org.oddlama.vane.core.ResourcePackGenerator;
 import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.core.module.ModuleComponent;
+import org.oddlama.vane.util.Util;
 
 public class CustomItemVariant<T extends Module<T>, V extends CustomItem<T, V>, U extends ItemVariantEnum>
 	extends ModuleComponent<T> {
@@ -50,7 +49,7 @@ public class CustomItemVariant<T extends Module<T>, V extends CustomItem<T, V>, 
 		}
 
 		// Create namespaced_key
-		this.key = namespaced_key(get_module().namespace(), variant_name);
+		this.key = Util.namespaced_key(get_module().namespace(), variant_name);
 
 		// Check for duplicate model data
 		parent.check_valid_model_data(this);
@@ -94,7 +93,7 @@ public class CustomItemVariant<T extends Module<T>, V extends CustomItem<T, V>, 
 	 * Returns the namespaced key for this item with additional suffix.
 	 */
 	public final NamespacedKey key(String suffix) {
-		return namespaced_key(get_module().namespace(), variant_name + "_" + suffix);
+		return Util.namespaced_key(get_module().namespace(), variant_name + "_" + suffix);
 	}
 
 	public final String variant_name() {
@@ -144,9 +143,9 @@ public class CustomItemVariant<T extends Module<T>, V extends CustomItem<T, V>, 
 	/** Returns a named recipe key */
 	public final NamespacedKey recipe_key(String recipe_name) {
 		if (recipe_name.equals("")) {
-			return namespaced_key(get_module().namespace(), variant_name + "_recipe");
+			return Util.namespaced_key(get_module().namespace(), variant_name + "_recipe");
 		}
-		return namespaced_key(get_module().namespace(), variant_name + "_recipe_" + recipe_name);
+		return Util.namespaced_key(get_module().namespace(), variant_name + "_recipe_" + recipe_name);
 	}
 
 	private final void add_recipe_or_throw(NamespacedKey recipe_key, Recipe recipe) {

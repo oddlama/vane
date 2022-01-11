@@ -27,6 +27,7 @@ import org.oddlama.vane.portals.event.PortalDestroyEvent;
 import org.oddlama.vane.portals.event.PortalSelectTargetEvent;
 import org.oddlama.vane.portals.event.PortalUnlinkConsoleEvent;
 import org.oddlama.vane.portals.portal.Portal;
+import org.oddlama.vane.util.Util;
 
 public class ConsoleMenu extends ModuleComponent<Portals> {
 
@@ -101,7 +102,7 @@ public class ConsoleMenu extends ModuleComponent<Portals> {
 			new TranslatedItemStack<>(
 				ctx,
 				"unlink_console",
-				namespaced_key("vane", "decoration_tnt_1"),
+				Util.namespaced_key("vane", "decoration_tnt_1"),
 				1,
 				"Used to unlink the current console."
 			);
@@ -109,7 +110,7 @@ public class ConsoleMenu extends ModuleComponent<Portals> {
 			new TranslatedItemStack<>(
 				ctx,
 				"unlink_console_confirm_accept",
-				namespaced_key("vane", "decoration_tnt_1"),
+				Util.namespaced_key("vane", "decoration_tnt_1"),
 				1,
 				"Used to confirm unlinking the current console."
 			);
