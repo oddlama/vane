@@ -1,11 +1,9 @@
 package org.oddlama.vane.trifles.items;
 
-import static org.oddlama.vane.util.ItemUtil.damage_item;
 import static org.oddlama.vane.util.PlayerUtil.swing_arm;
 import static org.oddlama.vane.util.Util.ms_to_ticks;
 
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TranslatableComponent;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.entity.Player;
@@ -15,10 +13,12 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemMendEvent;
 import org.bukkit.inventory.RecipeChoice.MaterialChoice;
 import org.bukkit.inventory.ShapedRecipe;
 import org.oddlama.vane.annotation.config.ConfigInt;
 import org.oddlama.vane.annotation.item.VaneItem;
+import org.oddlama.vane.core.data.DurabilityOverrideData;
 import org.oddlama.vane.core.item.CustomItem;
 import org.oddlama.vane.core.item.CustomItemVariant;
 import org.oddlama.vane.core.module.Context;
@@ -41,8 +41,19 @@ public class HomeScroll extends CustomItem<Trifles, HomeScroll> {
 		)
 		private int config_damage_cooldown;
 
+		@ConfigInt(def = 25, min = 0, desc = "Base amount of uses a scroll has before breaking")
+		private int config_base_durability;
+
+		private DurabilityOverrideData durability_override;
+
 		public HomeScrollVariant(HomeScroll parent, SingleVariant variant) {
 			super(parent, variant);
+		}
+
+		@Override
+		public void on_config_change() {
+			super.on_config_change();
+			durability_override = new DurabilityOverrideData(config_base_durability);
 		}
 
 		@Override
@@ -126,13 +137,11 @@ public class HomeScroll extends CustomItem<Trifles, HomeScroll> {
 		final var to_location = player.getBedSpawnLocation();
 		final var to_potential_location = player.getPotentialBedLocation();
 		if (to_location == null) {
-			if(to_potential_location != null)
-				// The most cursed sentence in minecraft.
-				// "You have no home bed or charged respawn anchor, or it was obstructed"
-				player.sendActionBar(Component.translatable("block.minecraft.spawn.not_valid"));
-			else
-				//"Sleep in a bed to change your respawn point"
-				player.sendActionBar(Component.translatable("advancements.adventure.sleep_in_bed.description"));
+			if (to_potential_location != null) player.sendActionBar( // "You have no home bed or charged respawn anchor, or it was obstructed" // The most cursed sentence in minecraft.
+				Component.translatable("block.minecraft.spawn.not_valid")
+			); else player.sendActionBar( //"Sleep in a bed to change your respawn point"
+				Component.translatable("advancements.adventure.sleep_in_bed.description")
+			);
 			return;
 		}
 
@@ -148,7 +157,7 @@ public class HomeScroll extends CustomItem<Trifles, HomeScroll> {
 			player.setCooldown(variant.base(), (int) cooldown);
 
 			// Damage item
-			damage_item(player, item, 1);
+			variant.durability_override.use_item(player, item);
 			swing_arm(player, event.getHand());
 		}
 	}
@@ -161,7 +170,7 @@ public class HomeScroll extends CustomItem<Trifles, HomeScroll> {
 
 		final var player = (Player) event.getEntity();
 
-		// Get unstable scroll variant
+		// Get home scroll variant
 		final var variant = CustomItem.<HomeScrollVariant>variant_of(
 			HomeScroll.class,
 			CustomItem.SingleVariant.SINGLETON
@@ -178,5 +187,14 @@ public class HomeScroll extends CustomItem<Trifles, HomeScroll> {
 		}
 
 		player.setCooldown(variant.base(), damage_cooldown);
+	}
+
+	@EventHandler(ignoreCancelled = true)
+	public void on_player_item_mend(PlayerItemMendEvent event) {
+		final var variant = this.<HomeScrollVariant>variant_of(event.getItem());
+		if (variant == null || !variant.enabled()) {
+			return;
+		}
+		variant.durability_override.on_mend(event);
 	}
 }
