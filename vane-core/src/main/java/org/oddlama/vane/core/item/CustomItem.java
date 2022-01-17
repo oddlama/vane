@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
+
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.oddlama.vane.annotation.item.VaneItem;
@@ -20,16 +21,13 @@ import org.oddlama.vane.core.module.Module;
  */
 public class CustomItem<T extends Module<T>, V extends CustomItem<T, V>> extends Listener<T> {
 
-	// Track instances
+	private static final ModelRegistry registry = new ModelRegistry();
 	private static final Map<Class<?>, CustomItem<?, ?>> instances = new HashMap<>();
-	// Reverse lookup model data -> custom item class, variant
-	private static final Map<Integer, ReverseLookupEntry> reverse_lookup = new HashMap<>();
-
-	private VaneItem annotation = getClass().getAnnotation(VaneItem.class);
-	private String name;
-	private Class<? extends ItemVariantEnum> variant_enum_class;
-	private ItemVariantEnum variant_min;
-	private ItemVariantEnum variant_max;
+	private final VaneItem annotation = getClass().getAnnotation(VaneItem.class);
+	private final String name;
+	private final Class<? extends ItemVariantEnum> variant_enum_class;
+	private final ItemVariantEnum variant_min;
+	private final ItemVariantEnum variant_max;
 
 	// Track variants
 	private final List<CustomItemVariant<T, V, ?>> variants = new ArrayList<>();
@@ -67,7 +65,7 @@ public class CustomItem<T extends Module<T>, V extends CustomItem<T, V>> extends
 		variant_max = variant_enum_values[variant_enum_values.length - 1];
 
 		// Check if instance is already exists
-		if (instances.get(getClass()) != null) {
+		if (registry.is_registered(getClass())) {
 			throw new RuntimeException("Cannot create two instances of a custom item!");
 		}
 
@@ -75,9 +73,10 @@ public class CustomItem<T extends Module<T>, V extends CustomItem<T, V>> extends
 		for (var variant : variant_enum_values) {
 			final var v = create_instance.apply((V) this, variant);
 			variants.add(v);
-			reverse_lookup.put(v.model_data(), new ReverseLookupEntry(this, variant));
+			registry.registerVariant(this, v, variant);
 		}
 
+		registry.register(getClass(), this);
 		instances.put(getClass(), this);
 	}
 
@@ -85,26 +84,7 @@ public class CustomItem<T extends Module<T>, V extends CustomItem<T, V>> extends
 	 * Asserts that there is no other item with the same model data
 	 */
 	protected final void check_valid_model_data(CustomItemVariant<T, V, ?> variant) {
-		for (var item : instances.values()) {
-			for (var other_variant : item.variants()) {
-				if (other_variant.base() == variant.base()) {
-					if (other_variant.model_data() == variant.model_data()) {
-						throw new RuntimeException(
-							"Cannot register custom item " +
-							getClass() +
-							" variant " +
-							variant +
-							" with the same base material " +
-							variant.base() +
-							" and model_data as " +
-							item.getClass() +
-							" variant " +
-							other_variant
-						);
-					}
-				}
-			}
-		}
+		registry.check_valid_model_data(this, variant);
 	}
 
 	public final String name() {
@@ -138,8 +118,10 @@ public class CustomItem<T extends Module<T>, V extends CustomItem<T, V>> extends
 
 	/**
 	 * Returns the assigned model data.
+	 * Deprecated, to be migrated to the ModelRegistry
 	 */
 	@SuppressWarnings("unchecked")
+	@Deprecated()
 	public final int model_data(ItemVariantEnum variant) {
 		assert_correct_variant_class(variant);
 		final var cls = get_module().model_data_enum();
@@ -167,6 +149,7 @@ public class CustomItem<T extends Module<T>, V extends CustomItem<T, V>> extends
 	/**
 	 * Returns the lower bound for this custom item.
 	 */
+	@Deprecated
 	private int model_data_range_lower_bound() {
 		return model_data(variant_min);
 	}
@@ -174,24 +157,22 @@ public class CustomItem<T extends Module<T>, V extends CustomItem<T, V>> extends
 	/**
 	 * Returns the upper bound for this custom item.
 	 */
+	@Deprecated
 	private int model_data_range_upper_bound() {
 		return model_data(variant_max);
 	}
 
-	public static boolean is_custom_item(@NotNull ItemStack item) {
+	public static boolean has_custom_model(@NotNull ItemStack item) {
 		return item.hasItemMeta() && item.getItemMeta().hasCustomModelData();
 	}
 
-	public static ReverseLookupEntry from_item(@NotNull ItemStack item) {
+	public static CustomItemVariant from_item(@NotNull ItemStack item) {
 		final var meta = item.getItemMeta();
 		if (!meta.hasCustomModelData()) {
 			return null;
 		}
-		return from_model_data(meta.getCustomModelData());
-	}
 
-	public static ReverseLookupEntry from_model_data(int model_data) {
-		return reverse_lookup.get(model_data);
+		return registry.getVariant(meta.getCustomModelData(), item);
 	}
 
 	/**
@@ -268,16 +249,16 @@ public class CustomItem<T extends Module<T>, V extends CustomItem<T, V>> extends
 		return construct_item_stack(amount, custom_item, custom_item_variant);
 	}
 
-	private static <A extends CustomItem<?, ?>, B extends CustomItemVariant<?, ?, ?>> ItemStack prepare_item_stack(
+	protected <B extends CustomItemVariant<?, ?, ?>> ItemStack prepare(
 		@NotNull ItemStack item_stack,
-		A custom_item,
-		B custom_item_variant
+		B variant
 	) {
 		final var meta = item_stack.getItemMeta();
-		meta.setCustomModelData(custom_item.model_data(custom_item_variant.variant()));
-		meta.displayName(custom_item_variant.display_name());
+		meta.setCustomModelData(this.model_data(variant.variant()));
+		// TODO: This is nuking players custom names probably
+		meta.displayName(variant.display_name());
 		item_stack.setItemMeta(meta);
-		return custom_item.modify_item_stack(custom_item_variant.modify_item_stack(item_stack));
+		return this.modify_item_stack(variant.modify_item_stack(item_stack));
 	}
 
 	private static <A extends CustomItem<?, ?>, B extends CustomItemVariant<?, ?, ?>> ItemStack construct_item_stack(
@@ -286,17 +267,16 @@ public class CustomItem<T extends Module<T>, V extends CustomItem<T, V>> extends
 		B custom_item_variant
 	) {
 		final var item_stack = new ItemStack(custom_item_variant.base(), amount);
-		return prepare_item_stack(item_stack, custom_item, custom_item_variant);
+		return custom_item.prepare(item_stack, custom_item_variant);
 	}
 
-	public static <U extends ItemVariantEnum> ItemStack modify_variant(@NotNull ItemStack item, U variant) {
-		final var item_lookup = from_item(item);
-		final var custom_item = item_lookup.custom_item;
-		custom_item.assert_correct_variant_class(variant);
-		final var custom_item_variant = custom_item.variants().get(variant.ordinal());
+	public <U extends ItemVariantEnum> ItemStack modify_variant(@NotNull ItemStack item, U variant) {
+		final var item_variant = from_item(item);
+		if(item_variant == null) throw new IllegalArgumentException("item must be a valid variant");
+		item_variant.<U>assert_correct_variant_class(variant);
+		final var custom_item_variant = item_variant.as(variant);
 		final var item_stack = item.clone();
-		item_stack.setType(custom_item_variant.base());
-		return prepare_item_stack(item_stack, custom_item, custom_item_variant);
+		return custom_item_variant.prepare(item_stack);
 	}
 
 	/**
@@ -312,7 +292,7 @@ public class CustomItem<T extends Module<T>, V extends CustomItem<T, V>> extends
 		final var item_stack = item.clone();
 		final var custom_item_variant = custom_item.variants().get(variant.ordinal());
 		item_stack.setType(custom_item_variant.base());
-		return prepare_item_stack(item_stack, custom_item, custom_item_variant);
+		return custom_item.prepare(item_stack, custom_item_variant);
 	}
 
 	/**

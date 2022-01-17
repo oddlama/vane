@@ -10,6 +10,7 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
+import org.jetbrains.annotations.Nullable;
 import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.core.ResourcePackGenerator;
 import org.oddlama.vane.core.lang.TranslatedMessage;
@@ -219,5 +220,38 @@ public class CustomItemVariant<T extends Module<T>, V extends CustomItem<T, V>, 
 				predicate.put("custom_model_data", model_data());
 			}
 		);
+	}
+
+	public boolean has_netherite_conversion() {
+		return parent.has_netherite_conversion();
+	}
+
+	public ItemVariantEnum netherite_conversion_from() {
+		return parent.netherite_conversion_from();
+	}
+
+	public ItemVariantEnum netherite_conversion_to() {
+		return parent.netherite_conversion_to();
+	}
+
+	public CustomItem<T, V> parent() {
+		return parent;
+	}
+
+	public <U extends ItemVariantEnum> void assert_correct_variant_class(U variant) {
+		parent.<U>assert_correct_variant_class(variant);
+	}
+
+	public <U extends ItemVariantEnum> CustomItemVariant<T, V, ?> as(U variant) {
+		return parent.variants().get(variant.ordinal());
+	}
+
+	public ItemStack prepare(ItemStack item_stack) {
+		item_stack.setType(this.base());
+		return parent.prepare(item_stack, this);
+	}
+
+	public @Nullable ItemStack modify_variant(ItemStack item, ItemVariantEnum variant_to) {
+		return parent.modify_variant(item, variant_to);
 	}
 }

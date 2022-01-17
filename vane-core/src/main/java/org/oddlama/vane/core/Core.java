@@ -1,6 +1,6 @@
 package org.oddlama.vane.core;
 
-import static org.oddlama.vane.core.item.CustomItem.is_custom_item;
+import static org.oddlama.vane.core.item.CustomItem.has_custom_model;
 import static org.oddlama.vane.util.BlockUtil.drop_naturally;
 import static org.oddlama.vane.util.BlockUtil.texture_from_skull;
 import static org.oddlama.vane.util.MaterialUtil.is_tillable;
@@ -256,10 +256,10 @@ public class Core extends Module<Core> implements PluginMessageListener {
 		}
 
 		final var player = (Player) event.getTarget();
-		if (!is_custom_item(player.getInventory().getItemInMainHand())) {
+		if (!has_custom_model(player.getInventory().getItemInMainHand())) {
 			return;
 		}
-		if (!is_custom_item(player.getInventory().getItemInOffHand())) {
+		if (!has_custom_model(player.getInventory().getItemInOffHand())) {
 			return;
 		}
 
@@ -282,7 +282,7 @@ public class Core extends Module<Core> implements PluginMessageListener {
 		// Only when using a custom item that is a hoe
 		final var player = event.getPlayer();
 		final var item = player.getEquipment().getItem(event.getHand());
-		if (is_custom_item(item) && MaterialTags.HOES.isTagged(item)) {
+		if (has_custom_model(item) && MaterialTags.HOES.isTagged(item)) {
 			event.setCancelled(true);
 		}
 	}
@@ -313,7 +313,7 @@ public class Core extends Module<Core> implements PluginMessageListener {
 				continue;
 			}
 
-			if (is_custom_item(item)) {
+			if (has_custom_model(item)) {
 				event.getInventory().setResult(null);
 				return;
 			}
@@ -328,13 +328,13 @@ public class Core extends Module<Core> implements PluginMessageListener {
 			return;
 		}
 
-		if (is_custom_item(item)) {
+		if (has_custom_model(item)) {
 			event.setResult(null);
 		}
 
 		// Try to add automatic netherite conversion
 		final var item_lookup = CustomItem.from_item(item);
-		if (item_lookup == null || !item_lookup.custom_item.has_netherite_conversion()) {
+		if (item_lookup == null || !item_lookup.has_netherite_conversion()) {
 			return;
 		}
 
@@ -345,14 +345,14 @@ public class Core extends Module<Core> implements PluginMessageListener {
 		}
 
 		// Check matching input variant
-		final var variant_from = item_lookup.custom_item.netherite_conversion_from();
-		if (!item_lookup.variant.equals(variant_from)) {
+		final var variant_from = item_lookup.netherite_conversion_from();
+		if (!item_lookup.variant().equals(variant_from)) {
 			return;
 		}
 
 		// Create new item
-		final var variant_to = item_lookup.custom_item.netherite_conversion_to();
-		event.setResult(CustomItem.modify_variant(item, variant_to));
+		final var variant_to = item_lookup.netherite_conversion_to();
+		event.setResult(item_lookup.modify_variant(item, variant_to));
 	}
 
 	// Prevent netherite items from burning, as they are made of netherite
@@ -380,12 +380,12 @@ public class Core extends Module<Core> implements PluginMessageListener {
 
 		final var item = ((Item) entity).getItemStack();
 		final var item_lookup = CustomItem.from_item(item);
-		if (item_lookup == null || !item_lookup.custom_item.has_netherite_conversion()) {
+		if (item_lookup == null || !item_lookup.has_netherite_conversion()) {
 			return;
 		}
 
 		// Only if we deal with the netherite variant
-		if (item_lookup.variant != item_lookup.custom_item.netherite_conversion_to()) {
+		if (item_lookup.variant() != item_lookup.netherite_conversion_to()) {
 			return;
 		}
 

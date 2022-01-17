@@ -169,6 +169,7 @@ public class ResourcePackDistributor extends Listener<Core> {
 	public void update_sha1(File file) {
 		if (!localDev) return;
 		try {
+			//noinspection UnstableApiUsage
 			var hash = Files.asByteSource(file).hash(Hashing.sha1());
 			ResourcePackDistributor.this.sha1 = hash.toString();
 		} catch (IOException ignored) {}
