@@ -19,7 +19,7 @@ import org.oddlama.vane.core.module.ModuleComponent;
 import org.oddlama.vane.util.Util;
 
 public class CustomItemVariant<T extends Module<T>, V extends CustomItem<T, V>, U extends ItemVariantEnum>
-	extends ModuleComponent<T> {
+	extends ModuleComponent<T> implements Model {
 
 	private CustomItem<T, V> parent;
 

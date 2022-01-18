@@ -17,8 +17,8 @@ import org.bukkit.inventory.Merchant;
 import org.bukkit.inventory.MerchantRecipe;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.oddlama.vane.annotation.VaneModule;
-import org.oddlama.vane.core.Core;
 import org.oddlama.vane.core.item.ModelDataEnum;
+import org.oddlama.vane.core.item.LegacyModelRegistry;
 import org.oddlama.vane.core.module.Module;
 
 @VaneModule(name = "enchantments", bstats = 8640, config_version = 1, lang_version = 1, storage_version = 1)
@@ -65,7 +65,7 @@ public class Enchantments extends Module<Enchantments> {
 
 	@Override
 	public int model_data(int item_id, int variant_id) {
-		return Core.model_data(1, item_id, variant_id);
+		return LegacyModelRegistry.calculate_model_key(LegacyModelRegistry.Section.Enchantments, item_id, variant_id);
 	}
 
 	public ItemStack update_enchanted_item(ItemStack item_stack) {

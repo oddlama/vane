@@ -1,11 +1,9 @@
 package org.oddlama.vane.core.item;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
-
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.oddlama.vane.annotation.item.VaneItem;
@@ -19,10 +17,9 @@ import org.oddlama.vane.core.module.Module;
  * Remember that you should never reuse id's previously in use. Use the disabled tag for this to prevent
  * recipes from registering and events from being processed.
  */
-public class CustomItem<T extends Module<T>, V extends CustomItem<T, V>> extends Listener<T> {
+public abstract class CustomItem<T extends Module<T>, V extends CustomItem<T, V>> extends Listener<T> implements Model {
 
-	private static final ModelRegistry registry = new ModelRegistry();
-	private static final Map<Class<?>, CustomItem<?, ?>> instances = new HashMap<>();
+	private static final LegacyModelRegistry registry = new LegacyModelRegistry();
 	private final VaneItem annotation = getClass().getAnnotation(VaneItem.class);
 	private final String name;
 	private final Class<? extends ItemVariantEnum> variant_enum_class;
@@ -77,8 +74,10 @@ public class CustomItem<T extends Module<T>, V extends CustomItem<T, V>> extends
 		}
 
 		registry.register(getClass(), this);
-		instances.put(getClass(), this);
+		instances().put(getClass(), this);
 	}
+
+	abstract Map<Class<?>, CustomItem<T, V>> instances();
 
 	/**
 	 * Asserts that there is no other item with the same model data
@@ -121,7 +120,7 @@ public class CustomItem<T extends Module<T>, V extends CustomItem<T, V>> extends
 	 * Deprecated, to be migrated to the ModelRegistry
 	 */
 	@SuppressWarnings("unchecked")
-	@Deprecated()
+	@Deprecated
 	public final int model_data(ItemVariantEnum variant) {
 		assert_correct_variant_class(variant);
 		final var cls = get_module().model_data_enum();
@@ -233,8 +232,8 @@ public class CustomItem<T extends Module<T>, V extends CustomItem<T, V>> extends
 	 * Returns the variant for the given registered item and variant enum.
 	 */
 	@SuppressWarnings("unchecked")
-	public static <U> U variant_of(Class<?> cls, ItemVariantEnum variant) {
-		final var custom_item = instances.get(cls);
+	public <U> U variant_of(Class<?> cls, ItemVariantEnum variant) {
+		final var custom_item = instances().get(cls);
 		custom_item.assert_correct_variant_class(variant);
 		return (U) custom_item.variants().get(variant.ordinal());
 	}
@@ -242,17 +241,14 @@ public class CustomItem<T extends Module<T>, V extends CustomItem<T, V>> extends
 	/**
 	 * Returns an itemstack for the given custom item with the given amount
 	 */
-	public static <U extends ItemVariantEnum> ItemStack item(Class<?> cls, U variant, int amount) {
-		final var custom_item = instances.get(cls);
+	public <U extends ItemVariantEnum> ItemStack item(Class<?> cls, U variant, int amount) {
+		final var custom_item = instances().get(cls);
 		custom_item.assert_correct_variant_class(variant);
 		final var custom_item_variant = custom_item.variants().get(variant.ordinal());
 		return construct_item_stack(amount, custom_item, custom_item_variant);
 	}
 
-	protected <B extends CustomItemVariant<?, ?, ?>> ItemStack prepare(
-		@NotNull ItemStack item_stack,
-		B variant
-	) {
+	protected <B extends CustomItemVariant<?, ?, ?>> ItemStack prepare(@NotNull ItemStack item_stack, B variant) {
 		final var meta = item_stack.getItemMeta();
 		meta.setCustomModelData(this.model_data(variant.variant()));
 		// TODO: This is nuking players custom names probably
@@ -272,7 +268,7 @@ public class CustomItem<T extends Module<T>, V extends CustomItem<T, V>> extends
 
 	public <U extends ItemVariantEnum> ItemStack modify_variant(@NotNull ItemStack item, U variant) {
 		final var item_variant = from_item(item);
-		if(item_variant == null) throw new IllegalArgumentException("item must be a valid variant");
+		if (item_variant == null) throw new IllegalArgumentException("item must be a valid variant");
 		item_variant.<U>assert_correct_variant_class(variant);
 		final var custom_item_variant = item_variant.as(variant);
 		final var item_stack = item.clone();
@@ -314,17 +310,6 @@ public class CustomItem<T extends Module<T>, V extends CustomItem<T, V>> extends
 		@Override
 		public boolean enabled() {
 			return true;
-		}
-	}
-
-	public static class ReverseLookupEntry {
-
-		public CustomItem<?, ?> custom_item;
-		public ItemVariantEnum variant;
-
-		public ReverseLookupEntry(CustomItem<?, ?> custom_item, ItemVariantEnum variant) {
-			this.custom_item = custom_item;
-			this.variant = variant;
 		}
 	}
 }

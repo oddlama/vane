@@ -48,7 +48,9 @@ import org.oddlama.vane.core.item.ModelDataEnum;
 import org.oddlama.vane.core.lang.LangManager;
 import org.oddlama.vane.core.persistent.PersistentStorageManager;
 
-public abstract class Module<T extends Module<T>> extends JavaPlugin implements Context<T>, org.bukkit.event.Listener {
+public abstract class Module<T extends Module<T>>
+	extends JavaPlugin
+	implements Context<T>, org.bukkit.event.Listener, ModelHolder {
 
 	public final VaneModule annotation = getClass().getAnnotation(VaneModule.class);
 	public Core core;
@@ -466,6 +468,7 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 	 * Returns a enumeration managing model data. Enum members must be named
 	 * like the corresponding item names, but uppercase.
 	 */
+	@Override
 	public Class<? extends ModelDataEnum> model_data_enum() {
 		throw new RuntimeException(
 			"A module must override 'model_data_enum()', if it want's to register custom items!"
@@ -473,10 +476,11 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 	}
 
 	/**
-	 * Returns a globally unique identifier for a given per-plugin unqiue model id.
+	 * Returns a globally unique identifier for a given per-plugin unique model id.
 	 * [As of 1.16.2]: Unfortunately this is basically a magic value, and must be
 	 * unique per base material across all plugins. That sucks.
 	 */
+	@Override
 	public int model_data(int item_id, int variant_id) {
 		throw new RuntimeException(
 			"A module must override 'model_data(int, int)', if it want's to register custom items!"

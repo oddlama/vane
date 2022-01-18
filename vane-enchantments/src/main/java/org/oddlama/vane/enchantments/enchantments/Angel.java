@@ -52,13 +52,13 @@ public class Angel extends CustomEnchantment<Enchantments> {
 
 	@Override
 	public void register_recipes() {
-		final var ancient_tome_of_the_gods_enchanted = CustomItem
-			.<AncientTomeOfTheGods.AncientTomeOfTheGodsVariant>variant_of(
+		final var ancient_tome_of_the_gods_enchanted =
+			AncientTomeOfTheGods.variant_of(
 				AncientTomeOfTheGods.class,
 				BookVariant.ENCHANTED_BOOK
 			)
 			.item();
-		final var ancient_tome_of_the_gods = CustomItem
+		final var ancient_tome_of_the_gods = AncientTomeOfTheGods
 			.<AncientTomeOfTheGods.AncientTomeOfTheGodsVariant>variant_of(AncientTomeOfTheGods.class, BookVariant.BOOK)
 			.item();
 
