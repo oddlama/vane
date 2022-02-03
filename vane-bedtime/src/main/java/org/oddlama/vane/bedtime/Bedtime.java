@@ -21,7 +21,7 @@ import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.util.Nms;
 
-@VaneModule(name = "bedtime", bstats = 8639, config_version = 3, lang_version = 3, storage_version = 1)
+@VaneModule(name = "bedtime", bstats = 8639, config_version = 3, lang_version = 5, storage_version = 1)
 public class Bedtime extends Module<Bedtime> {
 
 	// One set of sleeping players per world, to keep track
