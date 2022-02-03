@@ -27,7 +27,7 @@ import org.oddlama.vane.core.Core;
 import org.oddlama.vane.core.item.ModelDataEnum;
 import org.oddlama.vane.core.module.Module;
 
-@VaneModule(name = "enchantments", bstats = 8640, config_version = 1, lang_version = 1, storage_version = 1)
+@VaneModule(name = "enchantments", bstats = 8640, config_version = 1, lang_version = 2, storage_version = 1)
 public class Enchantments extends Module<Enchantments> {
 
 	public Enchantments() {
@@ -180,7 +180,6 @@ public class Enchantments extends Module<Enchantments> {
 	private final TextComponent SENTINEL_VALUE = Component.text(namespace() + ":lore");
 
 	private boolean is_enchantment_lore(final Component component) {
-		System.out.println("is_enchantment_lore? " + component);
 		// If the component begins with a translated lore from vane enchantments, it is always from us. (needed for backward compatibility)
 		if (
 			component instanceof TranslatableComponent &&
