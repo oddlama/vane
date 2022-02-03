@@ -12,7 +12,7 @@
 
 # DO NOT CHANGE! The version of this language file. Used to determine
 # if the file needs to be updated.
-version: 2
+version: 3
 # The corresponding language code used in resource packs. Used for
 # resource pack generation. Typically this is a combination of the
 # language code (ISO 639) and the country code (ISO 3166).
@@ -56,7 +56,8 @@ command_vane:
 resource_pack:
   # This kick message is used when a mandatory resource pack was declined by a player.
   declined: "You need to accept the resource pack to play on this server.\n\
-    It is needed for localization and textures."
+    It is needed for localization and textures. In case you declined accidentally,\n\
+    you can change this by editing this server's entry in your server list."
   # This kick message is used when a mandatory resource pack failed to download for  player.
   download_failed: "§cYour resource pack download seems to have failed.§r\n\
     §7(You have been disconnected to prevent display errors)\n\

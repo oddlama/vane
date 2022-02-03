@@ -14,7 +14,7 @@
 
 # DO NOT CHANGE! The version of this language file. Used to determine
 # if the file needs to be updated.
-version: 2
+version: 3
 # The corresponding language code used in resource packs. Used for
 # resource pack generation. Typically this is a combination of the
 # language code (ISO 639) and the country code (ISO 3166).
@@ -44,7 +44,8 @@ command_vane:
 
 resource_pack:
   declined: "Du musst das Ressourcenpaket akzeptieren um auf diesem Server zu spielen.\n\
-    Es wird für Übersetzungen und Texturen benötigt."
+    Es wird für Übersetzungen und Texturen benötigt. Falls du es aus Versehen abgelehnt hast,\n\
+    kannst du dies ändern indem du den entsprechenden Eintrag in der Serverliste bearbeitest."
   download_failed: "§cEs gab einen Fehler beim Herunterladen des Ressourcenpakets.§r\n\
     §7(Deine Verbindung wurde unterbrochen, um Anzeigefehler zu vermeiden)\n\
     \n\

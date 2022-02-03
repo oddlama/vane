@@ -63,7 +63,7 @@ import org.oddlama.vane.core.menu.MenuManager;
 import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.core.module.ModuleComponent;
 
-@VaneModule(name = "core", bstats = 8637, config_version = 6, lang_version = 2, storage_version = 1)
+@VaneModule(name = "core", bstats = 8637, config_version = 6, lang_version = 3, storage_version = 1)
 public class Core extends Module<Core> implements PluginMessageListener {
 
 	/** The base offset for any model data used by vane plugins. */
