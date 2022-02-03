@@ -31,7 +31,7 @@ command_customitem:
 command_vane:
   reload_success: "%1$s§7: §arechargé avec succès"
   reload_fail: "%1$s§7: §céchec du rechargement"
-  resource_pack_generate_success: "§aPack de ressources généré avec succès"
+  resource_pack_generate_success: "§aPack de ressources généré avec succès: %1$s"
   resource_pack_generate_fail: "§cUne erreur est survenue pendant la génération du pack de ressources"
   usage: "%1$s §7<§areload§7|§agenerate_resource_pack§7>"
   description: "Gère les plugins de vane."

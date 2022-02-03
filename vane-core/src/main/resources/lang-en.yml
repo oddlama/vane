@@ -45,6 +45,7 @@ command_vane:
   # %1$s: module
   reload_fail: "%1$s§7: §creload failed"
   # This message is sent when the resource_pack has been successfully generated.
+  # %1$s: path to the resource pack file
   resource_pack_generate_success: "§aResource pack generated successfully: %1$s"
   # This message is sent when the resource_pack could not be generated.
   resource_pack_generate_fail: "§cAn error has occurred while generating the resource pack"
