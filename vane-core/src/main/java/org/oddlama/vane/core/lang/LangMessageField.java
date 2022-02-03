@@ -28,7 +28,7 @@ public class LangMessageField extends LangField<TranslatedMessage> {
 		check_yaml_path(yaml);
 
 		if (!yaml.isString(yaml_path())) {
-			throw new YamlLoadException("Invalid type for yaml path '" + yaml_path() + "', expected string");
+			throw new YamlLoadException.Lang("Invalid type for yaml path '" + yaml_path() + "', expected string", this);
 		}
 	}
 

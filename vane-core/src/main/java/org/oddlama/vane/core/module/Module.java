@@ -278,10 +278,12 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 			.forEach(lang_file -> {
 				final var yaml = YamlConfiguration.loadConfiguration(lang_file);
 				try {
-					lang_manager.generate_resource_pack(pack, yaml);
+					lang_manager.generate_resource_pack(pack, yaml, lang_file);
 				} catch (Exception e) {
-					log.severe("Error while generating language for '" + lang_file + "' of module " + get_name());
-					throw e;
+					throw new RuntimeException(
+						"Error while generating language for '" + lang_file + "' of module " + get_name(),
+						e
+					);
 				}
 			});
 

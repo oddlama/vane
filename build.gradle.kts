@@ -111,3 +111,42 @@ configure(subprojects.filter {
 runPaper {
 	disablePluginJarDetection()
 }
+
+tasks.create<Delete>("cleanVaneRuntimeTranslations") {
+	group = "run paper"
+	delete(fileTree("run").matching {
+		include("plugins/vane-*/lang-*.yml")
+	})
+}
+
+tasks.create<Delete>("cleanVaneConfigurations") {
+	group = "run paper"
+	delete(fileTree("run").matching {
+		include("plugins/vane-*/config.yml")
+	})
+}
+
+tasks.create<Delete>("cleanVaneStorage") {
+	group = "run paper"
+	delete(fileTree("run").matching {
+		include("plugins/vane-*/storage.json")
+	})
+}
+
+tasks.create<Delete>("cleanVane") {
+	group = "run paper"
+	delete(fileTree("run").matching {
+		include("plugins/vane-*/")
+	})
+}
+
+tasks.create<Delete>("cleanWorld") {
+	group = "run paper"
+	delete(fileTree("run").matching {
+		include(
+			"world",
+			"world_nether",
+			"world_the_end"
+		)
+	})
+}

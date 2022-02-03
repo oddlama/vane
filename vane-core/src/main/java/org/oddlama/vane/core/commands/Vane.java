@@ -1,6 +1,7 @@
 package org.oddlama.vane.core.commands;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.oddlama.vane.annotation.command.Name;
 import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.core.Core;
@@ -52,10 +53,16 @@ public class Vane extends Command<Core> {
 	}
 
 	private void generate_resource_pack(CommandSender sender) {
-		if (get_module().generate_resource_pack()) {
-			lang_resource_pack_generate_success.send(sender);
+		var file = get_module().generate_resource_pack();
+		if (file != null) {
+			lang_resource_pack_generate_success.send(sender, file.getAbsolutePath());
 		} else {
 			lang_resource_pack_generate_fail.send(sender);
+		}
+		if (sender instanceof Player) {
+			var dist = get_module().resource_pack_distributor;
+			dist.update_sha1(file);
+			dist.send_resource_pack((Player) sender);
 		}
 	}
 }
