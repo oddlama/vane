@@ -27,5 +27,5 @@ dynmap:
   marker_label: "%1$s"
 
 blue_map:
-  layer_label: "Portails"
+  layer_label: "Lits"
   marker_label: "<span style=\"color: white\">🏠 %1$s</span>"

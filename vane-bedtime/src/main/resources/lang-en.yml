@@ -41,7 +41,7 @@ dynmap:
 
 blue_map:
   # The label for the BlueMap marker set
-  layer_label: "Portals"
+  layer_label: "Beds"
   # The label for the BlueMap bed markers. Supports HTML. Arguments will be escaped properly.
   # %1$s: Player name
   marker_label: "<span style=\"color: white\">🏠 %1$s</span>"
