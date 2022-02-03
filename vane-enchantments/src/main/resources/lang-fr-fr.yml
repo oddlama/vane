@@ -59,6 +59,9 @@ enchantment_seeding:
 
 enchantment_soulbound:
   name: "Lié à l'âme"
+  drop_lock_warning: "Soulbound Items can only be dropped using mouse"
+  drop_cooldown: "Drop again to confirm drop"
+  dropped_notification: "Soulbound Item Dropped: %1$s"
 
 enchantment_take_off:
   name: "Décollage"
