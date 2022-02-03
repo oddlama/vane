@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.TranslatableComponent;
 import net.kyori.adventure.text.event.HoverEvent;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.EventHandler;
@@ -153,7 +154,7 @@ public class Enchantments extends Module<Enchantments> {
 	private void update_lore(ItemStack item_stack, Map<Enchantment, Integer> enchantments) {
 		// Create lore by converting enchantment name and level to string
 		// and prepend rarity color (can be overwritten in description)
-		final var vaneEnchantments = enchantments
+		final var vane_enchantments = enchantments
 			.entrySet()
 			.stream()
 			.filter(p -> p.getKey() instanceof BukkitEnchantmentWrapper)
@@ -167,8 +168,8 @@ public class Enchantments extends Module<Enchantments> {
 		var lore = item_stack.lore();
 		if (lore == null) lore = new ArrayList<>();
 
-		lore.removeIf(this::isPrefixed);
-		lore.addAll(0, vaneEnchantments.stream().map(this::asPrefixedLore).toList());
+		lore.removeIf(this::is_enchantment_lore);
+		lore.addAll(0, vane_enchantments.stream().map(this::lore_for_enchantment).toList());
 
 		// Set lore
 		final var meta = item_stack.getItemMeta();
@@ -176,10 +177,19 @@ public class Enchantments extends Module<Enchantments> {
 		item_stack.setItemMeta(meta);
 	}
 
-	private final TextComponent SENTINEL_VALUE = Component.text("vane-enchant:lore");
+	private final TextComponent SENTINEL_VALUE = Component.text(namespace() + ":lore");
 
-	// Whether the lore line is prefixed with a sentinel value marking this lore line as a vane-enchantment owned lore.
-	private boolean isPrefixed(Component component) {
+	private boolean is_enchantment_lore(final Component component) {
+		System.out.println("is_enchantment_lore? " + component);
+		// If the component begins with a translated lore from vane enchantments, it is always from us. (needed for backward compatibility)
+		if (
+			component instanceof TranslatableComponent &&
+			((TranslatableComponent) component).key().startsWith(namespace() + ".")
+		) {
+			return true;
+		}
+
+		// Whether the lore line is prefixed with a sentinel value marking this lore line as a vane-enchantment owned lore.
 		final HoverEvent<?> hover = component.hoverEvent();
 		if (hover == null) return false;
 		final var hoverValue = hover.value();
@@ -191,9 +201,8 @@ public class Enchantments extends Module<Enchantments> {
 		return false;
 	}
 
-	private Component asPrefixedLore(Map.Entry<Enchantment, Integer> p) {
-		var standard = ((BukkitEnchantmentWrapper) p.getKey()).custom_enchantment().display_name(p.getValue());
-
+	private Component lore_for_enchantment(final Map.Entry<Enchantment, Integer> ench) {
+		var standard = ((BukkitEnchantmentWrapper) ench.getKey()).custom_enchantment().display_name(ench.getValue());
 		return standard.hoverEvent(HoverEvent.showText(SENTINEL_VALUE));
 	}
 
