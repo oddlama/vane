@@ -11,4 +11,6 @@ public @interface ConfigStringListMap {
 	ConfigStringListMapEntry[] def();
 
 	String desc();
+
+	boolean metrics() default false;
 }

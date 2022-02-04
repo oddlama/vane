@@ -34,6 +34,16 @@ public class ConfigIntListField extends ConfigField<List<Integer>> {
 	}
 
 	@Override
+	public boolean metrics() {
+		final var override = overridden_metrics();
+		if (override != null) {
+			return override;
+		} else {
+			return annotation.metrics();
+		}
+	}
+
+	@Override
 	public void generate_yaml(StringBuilder builder, String indent, YamlConfiguration existing_compatible_config) {
 		append_description(builder, indent);
 		append_value_range(builder, indent, annotation.min(), annotation.max(), Integer.MIN_VALUE, Integer.MAX_VALUE);

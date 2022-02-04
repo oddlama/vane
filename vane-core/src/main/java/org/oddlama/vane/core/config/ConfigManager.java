@@ -18,6 +18,7 @@ import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 import org.apache.commons.lang.WordUtils;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.oddlama.vane.annotation.config.ConfigBoolean;
 import org.oddlama.vane.annotation.config.ConfigDouble;
@@ -200,7 +201,6 @@ public class ConfigManager {
 			builder.append("\n");
 
 			if (!ConfigField.same_group(last_field, f)) {
-				final var last_indent_level = last_field.group_count();
 				final var new_indent_level = f.group_count();
 				final var common_indent_level = ConfigField.common_group_count(last_field, f);
 
@@ -341,6 +341,16 @@ public class ConfigManager {
 			module.log.log(Level.SEVERE, "error while loading '" + file.getName() + "'", e);
 			return false;
 		}
+
 		return true;
+	}
+
+	public void register_metrics(Metrics metrics) {
+		// Track config values. Fields automatically know whether they want to be tracked or not via the annotation.
+		// By default, annotations use sensible defaults, so e.g. no strings will be tracked automatically, except
+		// when explicitly requested (e.g. language).
+		for (var f : config_fields) {
+			f.register_metrics(metrics);
+		}
 	}
 }

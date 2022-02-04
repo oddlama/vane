@@ -15,4 +15,6 @@ public @interface ConfigInt {
 	int max() default Integer.MAX_VALUE;
 
 	String desc();
+
+	boolean metrics() default true;
 }

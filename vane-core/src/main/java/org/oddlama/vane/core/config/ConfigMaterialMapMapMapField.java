@@ -117,6 +117,16 @@ public class ConfigMaterialMapMapMapField extends ConfigField<Map<String, Map<St
 	}
 
 	@Override
+	public boolean metrics() {
+		final var override = overridden_metrics();
+		if (override != null) {
+			return override;
+		} else {
+			return annotation.metrics();
+		}
+	}
+
+	@Override
 	public void generate_yaml(StringBuilder builder, String indent, YamlConfiguration existing_compatible_config) {
 		append_description(builder, indent);
 

@@ -11,4 +11,6 @@ public @interface ConfigMaterialMapMapMap {
 	ConfigMaterialMapMapMapEntry[] def();
 
 	String desc();
+
+	boolean metrics() default false;
 }

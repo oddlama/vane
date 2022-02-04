@@ -81,13 +81,14 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 	// Base configuration
 	@ConfigString(
 		def = "inherit",
-		desc = "The language for this module. The corresponding language file must be named lang-{lang}.yml. Specifying 'inherit' will load the value set for vane-core."
+		desc = "The language for this module. The corresponding language file must be named lang-{lang}.yml. Specifying 'inherit' will load the value set for vane-core.",
+		metrics = true
 	)
 	public String config_lang;
 
 	@ConfigBoolean(
 		def = true,
-		desc = "Enable plugin metrics via bStats. You can opt-out here or via the global bStats configuration."
+		desc = "Enable plugin metrics via bStats. You can opt-out here or via the global bStats configuration. All collected information is completely anonymous and publicly available."
 	)
 	public boolean config_metrics_enabled;
 
@@ -161,7 +162,7 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 	public ProtocolManager protocol_manager;
 
 	// bStats
-	private Metrics metrics;
+	public Metrics metrics;
 
 	public Module() {
 		// Get core plugin reference, important for inherited configuration
@@ -247,6 +248,7 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 			var id = annotation.bstats();
 			if (id != -1) {
 				metrics = new Metrics(this, id);
+				config_manager.register_metrics(metrics);
 			}
 		}
 		on_enable();

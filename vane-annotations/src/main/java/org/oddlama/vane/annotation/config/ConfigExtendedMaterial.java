@@ -11,4 +11,6 @@ public @interface ConfigExtendedMaterial {
 	String def();
 
 	String desc();
+
+	boolean metrics() default true;
 }

@@ -31,6 +31,11 @@ public class ConfigVersionField extends ConfigField<Long> {
 	}
 
 	@Override
+	public boolean metrics() {
+		return true;
+	}
+
+	@Override
 	public void generate_yaml(StringBuilder builder, String indent, YamlConfiguration existing_compatible_config) {
 		append_description(builder, indent);
 		append_field_definition(builder, indent, ((Module<?>) owner).annotation.config_version());

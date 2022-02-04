@@ -11,4 +11,6 @@ public @interface ConfigBoolean {
 	boolean def();
 
 	String desc();
+
+	boolean metrics() default true;
 }

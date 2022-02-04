@@ -15,4 +15,6 @@ public @interface ConfigDoubleList {
 	double max() default Double.NaN;
 
 	String desc();
+
+	boolean metrics() default true;
 }

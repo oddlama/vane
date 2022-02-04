@@ -12,4 +12,6 @@ public @interface ConfigMaterial {
 	Material def();
 
 	String desc();
+
+	boolean metrics() default true;
 }

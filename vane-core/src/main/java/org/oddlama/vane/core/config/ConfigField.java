@@ -5,6 +5,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.function.Function;
 import org.apache.commons.lang.WordUtils;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.oddlama.vane.core.YamlLoadException;
 import org.oddlama.vane.core.functional.Consumer2;
@@ -83,6 +84,24 @@ public abstract class ConfigField<T> implements Comparable<ConfigField<?>> {
 				"." +
 				field.getName() +
 				"_def() to override default value",
+				e
+			);
+		}
+	}
+
+	protected Boolean overridden_metrics() {
+		try {
+			return (Boolean)owner.getClass().getMethod(field.getName() + "_metrics").invoke(owner);
+		} catch (NoSuchMethodException e) {
+			// Ignore, field wasn't overridden
+			return null;
+		} catch (InvocationTargetException | IllegalAccessException e) {
+			throw new RuntimeException(
+				"Could not call " +
+				owner.getClass().getName() +
+				"." +
+				field.getName() +
+				"_metrics() to override metrics status",
 				e
 			);
 		}
@@ -216,6 +235,11 @@ public abstract class ConfigField<T> implements Comparable<ConfigField<?>> {
 
 	public abstract T def();
 
+	// Disabled by default, fields must explicitly support this!
+	public boolean metrics() {
+		return false;
+	}
+
 	public abstract void generate_yaml(
 		StringBuilder builder,
 		String indent,
@@ -233,6 +257,11 @@ public abstract class ConfigField<T> implements Comparable<ConfigField<?>> {
 		} catch (IllegalAccessException e) {
 			throw new RuntimeException("Invalid field access on '" + field.getName() + "'. This is a bug.");
 		}
+	}
+
+	public void register_metrics(Metrics metrics) {
+		if (!metrics()) return;
+		metrics.addCustomChart(new Metrics.SimplePie(yaml_path(), () -> get().toString()));
 	}
 
 	public String[] components() {

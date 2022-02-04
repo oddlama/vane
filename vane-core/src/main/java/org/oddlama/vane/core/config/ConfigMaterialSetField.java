@@ -5,9 +5,12 @@ import static org.oddlama.vane.util.Util.namespaced_key;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Function;
+
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.oddlama.vane.annotation.config.ConfigMaterialSet;
@@ -56,6 +59,28 @@ public class ConfigMaterialSetField extends ConfigField<Set<Material>> {
 		} else {
 			return new HashSet<>(Arrays.asList(annotation.def()));
 		}
+	}
+
+	@Override
+	public boolean metrics() {
+		final var override = overridden_metrics();
+		if (override != null) {
+			return override;
+		} else {
+			return annotation.metrics();
+		}
+	}
+
+	@Override
+	public void register_metrics(Metrics metrics) {
+		if (!this.metrics()) return;
+		metrics.addCustomChart(new Metrics.AdvancedPie(yaml_path(), () -> {
+            final var values = new HashMap<String, Integer>();
+			for (final var v : get()) {
+				values.put(v.getKey().toString(), 1);
+			}
+            return values;
+		}));
 	}
 
 	@Override

@@ -25,7 +25,7 @@ public class Vouch extends Command<Permissions> {
 	@LangMessage
 	private TranslatedMessage lang_already_vouched;
 
-	@ConfigString(def = "user", desc = "The group to assign to players when someone vouches for them.")
+	@ConfigString(def = "user", desc = "The group to assign to players when someone vouches for them.", metrics = true)
 	private String config_vouch_group;
 
 	// Persistent storage

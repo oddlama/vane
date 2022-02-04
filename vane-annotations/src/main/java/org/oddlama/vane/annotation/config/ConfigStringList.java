@@ -11,4 +11,6 @@ public @interface ConfigStringList {
 	String[] def();
 
 	String desc();
+
+	boolean metrics() default false;
 }

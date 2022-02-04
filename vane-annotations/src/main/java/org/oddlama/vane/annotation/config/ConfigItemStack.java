@@ -11,4 +11,6 @@ public @interface ConfigItemStack {
 	ConfigItemStackDef def();
 
 	String desc();
+
+	boolean metrics() default true;
 }

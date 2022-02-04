@@ -26,6 +26,16 @@ public class ConfigStringField extends ConfigField<String> {
 	}
 
 	@Override
+	public boolean metrics() {
+		final var override = overridden_metrics();
+		if (override != null) {
+			return override;
+		} else {
+			return annotation.metrics();
+		}
+	}
+
+	@Override
 	public void generate_yaml(StringBuilder builder, String indent, YamlConfiguration existing_compatible_config) {
 		append_description(builder, indent);
 		append_default_value(builder, indent, "\"" + escape_yaml(def()) + "\"");

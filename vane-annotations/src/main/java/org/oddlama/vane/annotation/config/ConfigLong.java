@@ -15,4 +15,6 @@ public @interface ConfigLong {
 	long max() default Long.MAX_VALUE;
 
 	String desc();
+
+	boolean metrics() default true;
 }
