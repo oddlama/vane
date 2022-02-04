@@ -1,5 +1,6 @@
 package org.oddlama.vane.core.data;
 
+import static net.kyori.adventure.text.event.HoverEvent.Action.SHOW_TEXT;
 import static org.oddlama.vane.util.ItemUtil.damage_item;
 
 import com.google.common.collect.Lists;
@@ -7,7 +8,9 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.TranslatableComponent;
+import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -25,6 +28,8 @@ import org.oddlama.vane.util.Util;
 public class DurabilityOverrideData {
 	private static final PersistentDataType<Integer, Integer> type_max = PersistentDataType.INTEGER;
 	private static final PersistentDataType<Integer, Integer> type_damage = PersistentDataType.INTEGER;
+
+	private final TextComponent SENTINEL_VALUE = Component.text("vane:durability_override_lore");
 
 	private final NamespacedKey key_max;
 	private final NamespacedKey key_damage;
@@ -125,7 +130,7 @@ public class DurabilityOverrideData {
 
 	private void update_lore(ItemMeta itemMeta1, int dmg, int max) {
 		var lore = itemMeta1.lore();
-		final boolean found_lore = lore != null && lore.stream().anyMatch(this::matches);
+		final boolean found_lore = lore != null && lore.stream().anyMatch(this::is_durability_lore);
 
 		List<Component> new_lore = lore;
 		if (new_lore == null) new_lore = Lists.newArrayList();
@@ -133,7 +138,7 @@ public class DurabilityOverrideData {
 		if (found_lore) {
 			new_lore = lore.stream()
 				.flatMap(l -> {
-					if (matches(l)) {
+					if (is_durability_lore(l)) {
 						if (itemMeta1.isUnbreakable() || tooltip == null) return Stream.empty();
 						// Stop those pesky overshoots looking so derpy.
 						// only possible with desyncs / config changes anyway.
@@ -152,13 +157,22 @@ public class DurabilityOverrideData {
 
 	protected Component tooltip_lore(int uses_remaining, int max) {
 		if (tooltip == null) return null;
-		return tooltip.args(Component.text(uses_remaining), Component.text(max));
+		final var standard = tooltip.args(Component.text(uses_remaining), Component.text(max));
+		return standard.hoverEvent(HoverEvent.showText(SENTINEL_VALUE));
 	}
 
-	protected boolean matches(Component a) {
-		if (tooltip == null) return false;
-		if (!(a instanceof TranslatableComponent a_as_TC)) return false;
-		return tooltip.key().equals(a_as_TC.key());
+	protected boolean is_durability_lore(Component component) {
+		// Whether the lore line is prefixed with a sentinel value marking this lore line as a vane-enchantment owned lore.
+		final HoverEvent<?> hover = component.hoverEvent();
+		if (hover == null) return false;
+		final var hoverValue = hover.value();
+		if (hoverValue instanceof TextComponent) {
+			return (
+				hover.action() == SHOW_TEXT && SENTINEL_VALUE.content().equals(((TextComponent) hoverValue).content())
+			);
+		}
+
+		return false;
 	}
 
 	/**
