@@ -54,9 +54,6 @@ public class Bedtime extends Module<Bedtime> {
 	@LangMessage
 	private TranslatedMessage lang_player_bed_leave;
 
-	@LangMessage
-	private TranslatedMessage lang_sleep_success;
-
 	public BedtimeDynmapLayer dynmap_layer;
 	public BedtimeBlueMapLayer blue_map_layer;
 
@@ -88,9 +85,6 @@ public class Bedtime extends Module<Bedtime> {
 		change_time_smoothly(world, this, config_target_time, config_interpolation_ticks);
 		world.setStorm(false);
 		world.setThundering(false);
-
-		// Send message
-		lang_sleep_success.broadcast_world(world);
 
 		// Clear sleepers
 		reset_sleepers(world);
@@ -181,7 +175,7 @@ public class Bedtime extends Module<Bedtime> {
 
 		// Broadcast sleeping message
 		var percent = get_percentage_sleeping(world);
-		lang_player_bed_enter.broadcast_world(world, "§6" + player.getName(), "§6" + percentage_str(percent));
+		lang_player_bed_enter.broadcast_world_action_bar(world, "§6" + player.getName(), "§6" + percentage_str(percent));
 	}
 
 	private void remove_sleeping(Player player) {
@@ -198,7 +192,7 @@ public class Bedtime extends Module<Bedtime> {
 		if (sleepers.remove(player.getUniqueId())) {
 			// Broadcast sleeping message
 			var percent = get_percentage_sleeping(world);
-			lang_player_bed_leave.broadcast_world(world, "§6" + player.getName(), "§6" + percentage_str(percent));
+			lang_player_bed_leave.broadcast_world_action_bar(world, "§6" + player.getName(), "§6" + percentage_str(percent));
 		}
 	}
 

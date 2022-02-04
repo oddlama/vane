@@ -89,6 +89,13 @@ public class TranslatedMessage {
 		}
 	}
 
+	public void broadcast_world_action_bar(final World world, Object... args) {
+		final var component = format(args);
+		for (var player : world.getPlayers()) {
+			player.sendActionBar(component);
+		}
+	}
+
 	public void send(final CommandSender sender, Object... args) {
 		if (sender == null || sender == module.getServer().getConsoleSender()) {
 			module.log.info(str(args));

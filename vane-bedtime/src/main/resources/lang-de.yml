@@ -18,9 +18,8 @@ version: 5
 # language code (ISO 639) and the country code (ISO 3166).
 resource_pack_lang_code: 'de_de'
 
-player_bed_enter: "%1$s§e schläft jetzt (%2$s§e)"
-player_bed_leave: "%1$s§e fühlt sich ausgeschlafen (%2$s§e)"
-sleep_success: "§ePlopp. Sonne."
+player_bed_enter: "%1$s schläft jetzt %3$s/%4$s"
+player_bed_leave: "%1$s fühlt sich ausgeschlafen %3$s/%4$s"
 
 dynmap:
   layer_label: "Betten"

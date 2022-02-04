@@ -101,7 +101,7 @@ public class BedtimeBlueMapLayerDelegate {
 		final var bm_world = api.getWorld(loc.getWorld().getUID());
 		if (bm_world.isPresent()) {
 			for (final var map : bm_world.get().getMaps()) {
-				final var marker = marker_set.createHtmlMarker(
+				marker_set.createHtmlMarker(
 					id_for(map, player),
 					map,
 					loc.getX() + 0.5,

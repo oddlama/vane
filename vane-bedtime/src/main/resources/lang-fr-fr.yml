@@ -18,9 +18,8 @@ version: 5
 # language code (ISO 639) and the country code (ISO 3166).
 resource_pack_lang_code: 'fr_fr'
 
-player_bed_enter: "%1$s§e est endormi·e (%2$s§e)"
-player_bed_leave: "%1$s§e se sent reposé·e (%2$s§e)"
-sleep_success: "§eEt boum, le soleil se lève !"
+player_bed_enter: "%1$s est endormi·e %3$s/%4$s"
+player_bed_leave: "%1$s se sent reposé·e %3$s/%4$s"
 
 dynmap:
   layer_label: "Lits"

@@ -21,16 +21,19 @@ resource_pack_lang_code: 'en_us'
 # This message is broadcast in the world, when a player enters the bed.
 # %1$s: player name
 # %2$s: percentage of sleeping players
-player_bed_enter: "%1$s§e is now sleeping (%2$s§e)"
+# %3$s: current count of sleeping players in the relevant world
+# %4$s: required amount of sleeping players to advance time
+# %5$s: world name
+player_bed_enter: "%1$s is sleeping %3$s/%4$s"
 
 # This message is broadcast in the world, when a player leaves the bed early,
 # before time was advanced.
 # %1$s: player name
-# %2$s: percentage of sleeping players
-player_bed_leave: "%1$s§e feels rested (%2$s§e)"
-
-# Message sent when enough players were sleeping and time was advanced.
-sleep_success: "§eSun go brrrr"
+# %2$s: percentage of remaining sleeping players
+# %3$s: current count of sleeping players in the relevant world
+# %4$s: required amount of sleeping players to advance time
+# %5$s: world name
+player_bed_leave: "%1$s feels rested %3$s/%4$s"
 
 dynmap:
   # The label for the dynmap layer

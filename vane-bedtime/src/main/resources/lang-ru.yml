@@ -18,11 +18,8 @@ version: 5
 # language code (ISO 639) and the country code (ISO 3166).
 resource_pack_lang_code: 'ru_ru'
 
-player_bed_enter: "%1$s§e ложиться спать (%2$s§e)"
-
-player_bed_leave: "%1$s§e чувствует себя отдохнувшим (%2$s§e)"
-
-sleep_success: "§eНеужели солнце уже встало?"
+player_bed_enter: "%1$s ложиться спать %3$s/%4$s"
+player_bed_leave: "%1$s чувствует себя отдохнувшим %3$s/%4$s"
 
 dynmap:
   layer_label: "Beds"
