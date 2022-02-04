@@ -28,12 +28,13 @@ public class DurabilityOverrideData {
 	private final NamespacedKey key_damage;
 	private static final PersistentDataType<Integer, Integer> type_damage = PersistentDataType.INTEGER;
 	private final int max_durability;
-	private static final Style TOOLTIP_STYLE = Style
+
+	private static final Style DEFAULT_TOOLTIP_STYLE = Style
 		.style(NamedTextColor.WHITE)
 		.decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE);
-	private static final TranslatableComponent DURABILITY_TOOLTIP = Component
+	private static final TranslatableComponent DEFAULT_DURABILITY_TOOLTIP = Component
 		.translatable("item.durability")
-		.style(TOOLTIP_STYLE);
+		.style(DEFAULT_TOOLTIP_STYLE);
 
 	public DurabilityOverrideData(int max_durability) {
 		this(
@@ -43,7 +44,7 @@ public class DurabilityOverrideData {
 		);
 	}
 
-	DurabilityOverrideData(NamespacedKey key_max, NamespacedKey key_damage, int max_durability) {
+	public DurabilityOverrideData(NamespacedKey key_max, NamespacedKey key_damage, int max_durability) {
 		this.key_max = key_max;
 		this.key_damage = key_damage;
 		this.max_durability = max_durability;
@@ -100,10 +101,10 @@ public class DurabilityOverrideData {
 		// track the 'real' dmg
 		int new_damage = fake_damage + diff;
 		damage(stack, new_damage);
-		var technically_correct_percent = float_division(new_damage, fake_individual_max);
+		var technically_correct_percent = ((float)new_damage) / fake_individual_max;
 		float dangerous_interpolated_damage = technically_correct_percent * real_global_max;
 		// We need to clamp it above 0, so the item doesn't randomly break.
-		var safe_damage = custom_clamp(new_damage, fake_individual_max, dangerous_interpolated_damage, real_global_max);
+		var safe_damage = damage_clamp(new_damage, fake_individual_max, dangerous_interpolated_damage, real_global_max);
 		final Damageable itemMeta1 = ((Damageable) stack.getItemMeta());
 		itemMeta1.setDamage(safe_damage);
 		update_lore(itemMeta1, new_damage, fake_individual_max);
@@ -138,7 +139,7 @@ public class DurabilityOverrideData {
 	}
 
 	protected Component create_lore(int uses_remaining, int max) {
-		return DURABILITY_TOOLTIP.args(Component.text(uses_remaining), Component.text(max));
+		return DEFAULT_DURABILITY_TOOLTIP.args(Component.text(uses_remaining), Component.text(max));
 	}
 
 	protected Component update_lore(Component lore, int uses_remaining, int max) {
@@ -150,7 +151,7 @@ public class DurabilityOverrideData {
 
 	protected boolean matches(Component a) {
 		if (!(a instanceof TranslatableComponent a_as_TC)) return false;
-		return DURABILITY_TOOLTIP.key().equals(a_as_TC.key());
+		return DEFAULT_DURABILITY_TOOLTIP.key().equals(a_as_TC.key());
 	}
 
 	/**
@@ -160,23 +161,19 @@ public class DurabilityOverrideData {
 	 * If the item is consumed, the output is max.
 	 * This is to support better emulation of modded client side warnings or datapacks if the tool is about to break etc.
 	 */
-	private int custom_clamp(int fake_damage, int fake_max, float dangerous_interpolated_damage, short max) {
+	private int damage_clamp(int fake_damage, int fake_max, float dangerous_interpolated_damage, short max) {
 		// This can only happen in weird edgecases, in which case we recover by breaking the item the next time
 		// the player uses it. Much better then showing negative values in the fake durability lore.
 		if (fake_damage >= fake_max) return max - 1;
 		if (fake_damage == fake_max) return max;
 		if (fake_damage == fake_max - 1) return max - 1;
 		if (fake_damage == 0) return 0;
-		return clamp(dangerous_interpolated_damage, 1, max - 2);
+		return rounded_clamp(dangerous_interpolated_damage, 1, max - 2);
 	}
 
-	private static int clamp(float f, int min, int max) {
+	private static int rounded_clamp(float f, int min, int max) {
 		var out = Math.round(f);
 		return Math.min(max, Math.max(min, out));
-	}
-
-	private static float float_division(float top, float bottom) {
-		return top / bottom;
 	}
 
 	public void clear(final ItemStack itemStack) {
@@ -188,7 +185,7 @@ public class DurabilityOverrideData {
 			}
 		);
 		var lore = itemStack.lore();
-		if (lore != null) lore.remove(DURABILITY_TOOLTIP);
+		if (lore != null) lore.remove(DEFAULT_DURABILITY_TOOLTIP);
 		itemStack.lore(lore);
 	}
 
