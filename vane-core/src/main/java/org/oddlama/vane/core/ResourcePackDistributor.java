@@ -127,6 +127,13 @@ public class ResourcePackDistributor extends Listener<Core> {
 
 		sha1 = sha1.toLowerCase();
 		if (!url.isEmpty()) {
+			// Check if the server has a manually configured resource pack.
+			// This would conflict.
+			final var server_properties_rp = Nms.server_handle().settings.getProperties().resourcePack;
+			if (server_properties_rp != null && !server_properties_rp.trim().isEmpty()) {
+				get_module().log.warning("You have manually configured a resource pack in your server.properties. This cannot be used together with vane, as servers only allow serving a single resource pack.");
+			}
+
 			get_module().log.info("Distributing resource pack from '" + url + "' with sha1 " + sha1);
 		}
 	}
