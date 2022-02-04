@@ -1,7 +1,5 @@
 package org.oddlama.vane.trifles.items;
 
-import static org.oddlama.vane.core.item.CustomItem.convert_existing;
-
 import java.io.IOException;
 import java.util.UUID;
 import org.bukkit.Material;
