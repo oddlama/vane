@@ -22,30 +22,40 @@ import org.bukkit.persistence.PersistentDataType;
 import org.oddlama.vane.util.Util;
 
 public class DurabilityOverrideData {
+	private static final PersistentDataType<Integer, Integer> type_max = PersistentDataType.INTEGER;
+	private static final PersistentDataType<Integer, Integer> type_damage = PersistentDataType.INTEGER;
 
 	private final NamespacedKey key_max;
-	private static final PersistentDataType<Integer, Integer> type_max = PersistentDataType.INTEGER;
 	private final NamespacedKey key_damage;
-	private static final PersistentDataType<Integer, Integer> type_damage = PersistentDataType.INTEGER;
 	private final int max_durability;
+	private final TranslatableComponent tooltip;
 
 	private static final Style DEFAULT_TOOLTIP_STYLE = Style
 		.style(NamedTextColor.WHITE)
 		.decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE);
-	private static final TranslatableComponent DEFAULT_DURABILITY_TOOLTIP = Component
+	private static final TranslatableComponent DEFAULT_TOOLTIP = Component
 		.translatable("item.durability")
 		.style(DEFAULT_TOOLTIP_STYLE);
 
 	public DurabilityOverrideData(int max_durability) {
 		this(
-			Util.namespaced_key("vane", "durability.max"),
-			Util.namespaced_key("vane", "durability.damage"),
-			max_durability
+			max_durability,
+			DEFAULT_TOOLTIP
 		);
 	}
 
-	public DurabilityOverrideData(NamespacedKey key_max, NamespacedKey key_damage, int max_durability) {
+	public DurabilityOverrideData(int max_durability, TranslatableComponent tooltip) {
+		this(
+			max_durability,
+			tooltip,
+			Util.namespaced_key("vane", "durability.max"),
+			Util.namespaced_key("vane", "durability.damage")
+		);
+	}
+
+	public DurabilityOverrideData(int max_durability, TranslatableComponent tooltip, NamespacedKey key_max, NamespacedKey key_damage) {
 		this.key_max = key_max;
+		this.tooltip = tooltip;
 		this.key_damage = key_damage;
 		this.max_durability = max_durability;
 	}
@@ -120,18 +130,16 @@ public class DurabilityOverrideData {
 		if (new_lore == null) new_lore = Lists.newArrayList();
 
 		if (found_lore) {
-			new_lore =
-				lore
-					.stream()
-					.flatMap(l -> {
-						if (matches(l)) {
-							if (itemMeta1.isUnbreakable()) return Stream.empty();
-							return Stream.of(update_lore(l, max - dmg, max));
-						} else {
-							return Stream.of(l);
-						}
-					})
-					.toList();
+			new_lore = lore.stream()
+				.flatMap(l -> {
+					if (matches(l)) {
+						if (itemMeta1.isUnbreakable()) return Stream.empty();
+						return Stream.of(update_lore(max - dmg, max));
+					} else {
+						return Stream.of(l);
+					}
+				})
+				.toList();
 		} else {
 			new_lore.add(create_lore(max - dmg, max));
 		}
@@ -139,19 +147,19 @@ public class DurabilityOverrideData {
 	}
 
 	protected Component create_lore(int uses_remaining, int max) {
-		return DEFAULT_DURABILITY_TOOLTIP.args(Component.text(uses_remaining), Component.text(max));
+		return tooltip.args(Component.text(uses_remaining), Component.text(max));
 	}
 
-	protected Component update_lore(Component lore, int uses_remaining, int max) {
+	protected Component update_lore(int uses_remaining, int max) {
 		// Stop those pesky overshoots looking so derpy.
 		// only possible with desyncs / config changes anyway.
 		uses_remaining = Math.max(1, Math.min(uses_remaining, max));
-		return ((TranslatableComponent) lore).args(Component.text(uses_remaining), Component.text(max));
+		return tooltip.args(Component.text(uses_remaining), Component.text(max));
 	}
 
 	protected boolean matches(Component a) {
 		if (!(a instanceof TranslatableComponent a_as_TC)) return false;
-		return DEFAULT_DURABILITY_TOOLTIP.key().equals(a_as_TC.key());
+		return tooltip.key().equals(a_as_TC.key());
 	}
 
 	/**
@@ -185,7 +193,7 @@ public class DurabilityOverrideData {
 			}
 		);
 		var lore = itemStack.lore();
-		if (lore != null) lore.remove(DEFAULT_DURABILITY_TOOLTIP);
+		if (lore != null) lore.remove(tooltip);
 		itemStack.lore(lore);
 	}
 
