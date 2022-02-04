@@ -63,7 +63,7 @@ import org.oddlama.vane.core.menu.MenuManager;
 import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.core.module.ModuleComponent;
 
-@VaneModule(name = "core", bstats = 8637, config_version = 6, lang_version = 2, storage_version = 1)
+@VaneModule(name = "core", bstats = 8637, config_version = 6, lang_version = 3, storage_version = 1)
 public class Core extends Module<Core> implements PluginMessageListener {
 
 	/** The base offset for any model data used by vane plugins. */
@@ -99,6 +99,8 @@ public class Core extends Module<Core> implements PluginMessageListener {
 
 	// Module registry
 	private SortedSet<Module<?>> vane_modules = new TreeSet<>((a, b) -> a.get_name().compareTo(b.get_name()));
+
+	public final ResourcePackDistributor resource_pack_distributor;
 
 	public void register_module(Module<?> module) {
 		vane_modules.add(module);
@@ -164,7 +166,7 @@ public class Core extends Module<Core> implements PluginMessageListener {
 		new org.oddlama.vane.core.commands.Vane(this);
 		new org.oddlama.vane.core.commands.CustomItem(this);
 		menu_manager = new MenuManager(this);
-		new ResourcePackDistributor(this);
+		resource_pack_distributor = new ResourcePackDistributor(this);
 		new CommandHider(this);
 	}
 
@@ -217,8 +219,9 @@ public class Core extends Module<Core> implements PluginMessageListener {
 		getServer().getMessenger().unregisterIncomingPluginChannel(this, CHANNEL_AUTH_MULTIPLEX, this);
 	}
 
-	public boolean generate_resource_pack() {
+	public File generate_resource_pack() {
 		try {
+			var file = new File("vane-resource-pack.zip");
 			var pack = new ResourcePackGenerator();
 			pack.set_description("Vane plugin resource pack");
 			pack.set_icon_png(getResource("pack.png"));
@@ -227,12 +230,12 @@ public class Core extends Module<Core> implements PluginMessageListener {
 				m.generate_resource_pack(pack);
 			}
 
-			pack.write(new File("vane-resource-pack.zip"));
+			pack.write(file);
+			return file;
 		} catch (Exception e) {
 			log.log(Level.SEVERE, "Error while generating resourcepack", e);
-			return false;
+			return null;
 		}
-		return true;
 	}
 
 	public void for_all_module_components(final Consumer1<ModuleComponent<?>> f) {

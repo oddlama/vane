@@ -1,7 +1,6 @@
 package org.oddlama.vane.trifles;
 
 import static org.oddlama.vane.util.ItemUtil.ItemStackComparator;
-import static org.oddlama.vane.util.Util.namespaced_key;
 
 import java.util.Arrays;
 import org.bukkit.NamespacedKey;
@@ -19,19 +18,21 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.DoubleChestInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.persistence.PersistentDataType;
 import org.oddlama.vane.annotation.config.ConfigInt;
 import org.oddlama.vane.annotation.config.ConfigLong;
 import org.oddlama.vane.core.Listener;
+import org.oddlama.vane.core.data.CooldownData;
 import org.oddlama.vane.core.module.Context;
+import org.oddlama.vane.util.Util;
 
 public class ChestSorter extends Listener<Trifles> {
 
-	private static final NamespacedKey LAST_SORT_TIME = namespaced_key("vane_trifles", "last_sort_time");
+	public static final NamespacedKey LAST_SORT_TIME = Util.namespaced_key("vane_trifles", "last_sort_time");
 
 	@ConfigLong(def = 1000, min = 0, desc = "Chest sorting cooldown in milliseconds.")
 	public long config_cooldown;
+
+	private CooldownData cooldown_data = null;
 
 	@ConfigInt(
 		def = 1,
@@ -61,15 +62,10 @@ public class ChestSorter extends Listener<Trifles> {
 		super(context.group("chest_sorting", "Enables chest sorting when a nearby button is pressed."));
 	}
 
-	private boolean check_or_update_cooldown(final PersistentDataContainer persistent_data) {
-		final var last_sort = persistent_data.getOrDefault(LAST_SORT_TIME, PersistentDataType.LONG, 0l);
-		final var now = System.currentTimeMillis();
-		if (now - last_sort < config_cooldown) {
-			return false;
-		}
-
-		persistent_data.set(LAST_SORT_TIME, PersistentDataType.LONG, now);
-		return true;
+	@Override
+	protected void on_config_change() {
+		super.on_config_change();
+		this.cooldown_data = new CooldownData(LAST_SORT_TIME, config_cooldown);
 	}
 
 	private void sort_inventory(final Inventory inventory) {
@@ -113,7 +109,7 @@ public class ChestSorter extends Listener<Trifles> {
 
 	private void sort_container(final Container container) {
 		// Check cooldown
-		if (!check_or_update_cooldown(container.getPersistentDataContainer())) {
+		if (!cooldown_data.check_or_update_cooldown(container)) {
 			return;
 		}
 
@@ -136,7 +132,7 @@ public class ChestSorter extends Listener<Trifles> {
 		}
 
 		// Check cooldown
-		if (!check_or_update_cooldown(persistent_chest.getPersistentDataContainer())) {
+		if (!cooldown_data.check_or_update_cooldown(persistent_chest)) {
 			return;
 		}
 

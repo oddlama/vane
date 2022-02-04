@@ -12,7 +12,7 @@
 
 # DO NOT CHANGE! The version of this language file. Used to determine
 # if the file needs to be updated.
-version: 4
+version: 5
 # The corresponding language code used in resource packs. Used for
 # resource pack generation. Typically this is a combination of the
 # language code (ISO 639) and the country code (ISO 3166).
@@ -27,5 +27,5 @@ dynmap:
   marker_label: "%1$s"
 
 blue_map:
-  layer_label: "Portails"
+  layer_label: "Lits"
   marker_label: "<span style=\"color: white\">🏠 %1$s</span>"

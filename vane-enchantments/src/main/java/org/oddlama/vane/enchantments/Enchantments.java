@@ -1,15 +1,21 @@
 package org.oddlama.vane.enchantments;
 
+import static net.kyori.adventure.text.event.HoverEvent.Action.SHOW_TEXT;
+
+import com.destroystokyo.paper.event.inventory.PrepareResultEvent;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.TranslatableComponent;
+import net.kyori.adventure.text.event.HoverEvent;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.event.entity.VillagerAcquireTradeEvent;
-import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.world.LootGenerateEvent;
 import org.bukkit.inventory.ItemStack;
@@ -21,7 +27,7 @@ import org.oddlama.vane.core.Core;
 import org.oddlama.vane.core.item.ModelDataEnum;
 import org.oddlama.vane.core.module.Module;
 
-@VaneModule(name = "enchantments", bstats = 8640, config_version = 1, lang_version = 1, storage_version = 1)
+@VaneModule(name = "enchantments", bstats = 8640, config_version = 1, lang_version = 2, storage_version = 1)
 public class Enchantments extends Module<Enchantments> {
 
 	public Enchantments() {
@@ -148,21 +154,22 @@ public class Enchantments extends Module<Enchantments> {
 	private void update_lore(ItemStack item_stack, Map<Enchantment, Integer> enchantments) {
 		// Create lore by converting enchantment name and level to string
 		// and prepend rarity color (can be overwritten in description)
-		final var lore = new ArrayList<Component>();
-		enchantments
+		final var vane_enchantments = enchantments
 			.entrySet()
 			.stream()
 			.filter(p -> p.getKey() instanceof BukkitEnchantmentWrapper)
 			.sorted(
 				Map.Entry
-					.<Enchantment, Integer>comparingByKey((a, b) ->
-						a.getKey().toString().compareTo(b.getKey().toString())
-					)
-					.thenComparing(Map.Entry.<Enchantment, Integer>comparingByValue())
+					.<Enchantment, Integer>comparingByKey(Comparator.comparing(x -> x.getKey().toString()))
+					.thenComparing(Map.Entry.comparingByValue())
 			)
-			.forEach(p ->
-				lore.add(((BukkitEnchantmentWrapper) p.getKey()).custom_enchantment().display_name(p.getValue()))
-			);
+			.toList();
+
+		var lore = item_stack.lore();
+		if (lore == null) lore = new ArrayList<>();
+
+		lore.removeIf(this::is_enchantment_lore);
+		lore.addAll(0, vane_enchantments.stream().map(this::lore_for_enchantment).toList());
 
 		// Set lore
 		final var meta = item_stack.getItemMeta();
@@ -170,8 +177,37 @@ public class Enchantments extends Module<Enchantments> {
 		item_stack.setItemMeta(meta);
 	}
 
+	private final TextComponent SENTINEL_VALUE = Component.text(namespace() + ":lore");
+
+	private boolean is_enchantment_lore(final Component component) {
+		// If the component begins with a translated lore from vane enchantments, it is always from us. (needed for backward compatibility)
+		if (
+			component instanceof TranslatableComponent &&
+			((TranslatableComponent) component).key().startsWith(namespace() + ".")
+		) {
+			return true;
+		}
+
+		// Whether the lore line is prefixed with a sentinel value marking this lore line as a vane-enchantment owned lore.
+		final HoverEvent<?> hover = component.hoverEvent();
+		if (hover == null) return false;
+		final var hoverValue = hover.value();
+		if (hoverValue instanceof TextComponent) {
+			return (
+				hover.action() == SHOW_TEXT && SENTINEL_VALUE.content().equals(((TextComponent) hoverValue).content())
+			);
+		}
+		return false;
+	}
+
+	private Component lore_for_enchantment(final Map.Entry<Enchantment, Integer> ench) {
+		var standard = ((BukkitEnchantmentWrapper) ench.getKey()).custom_enchantment().display_name(ench.getValue());
+		return standard.hoverEvent(HoverEvent.showText(SENTINEL_VALUE));
+	}
+
+	// Triggers on Anvils, grindstones, and smithing tables.
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-	public void on_prepare_anvil(final PrepareAnvilEvent event) {
+	public void on_prepare_enchanted_edit(final PrepareResultEvent event) {
 		if (event.getResult() == null) {
 			return;
 		}

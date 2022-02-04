@@ -30,12 +30,15 @@ public class LangMessageArrayField extends LangField<TranslatedMessageArray> {
 		check_yaml_path(yaml);
 
 		if (!yaml.isList(yaml_path())) {
-			throw new YamlLoadException("Invalid type for yaml path '" + yaml_path() + "', expected list");
+			throw new YamlLoadException.Lang("Invalid type for yaml path '" + yaml_path() + "', expected list", this);
 		}
 
 		for (final var obj : yaml.getList(yaml_path())) {
 			if (!(obj instanceof String)) {
-				throw new YamlLoadException("Invalid type for yaml path '" + yaml_path() + "', expected string");
+				throw new YamlLoadException.Lang(
+					"Invalid type for yaml path '" + yaml_path() + "', expected string",
+					this
+				);
 			}
 		}
 	}
@@ -64,11 +67,12 @@ public class LangMessageArrayField extends LangField<TranslatedMessageArray> {
 		final var list = from_yaml(yaml);
 		final var loaded_size = get().size();
 		if (list.size() != loaded_size) {
-			throw new YamlLoadException(
+			throw new YamlLoadException.Lang(
 				"All translation lists for message arrays must have the exact same size. The loaded language file has " +
 				loaded_size +
 				" entries, while the currently processed file has " +
-				list.size()
+				list.size(),
+				this
 			);
 		}
 		for (int i = 0; i < list.size(); ++i) {

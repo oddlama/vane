@@ -97,6 +97,14 @@ public class TranslatedMessage {
 		}
 	}
 
+	public void send_action_bar(final CommandSender sender, Object... args) {
+		if (sender == null || sender == module.getServer().getConsoleSender()) {
+			module.log.info(str(args));
+		} else {
+			sender.sendActionBar(format(args));
+		}
+	}
+
 	public void send_and_log(final CommandSender sender, Object... args) {
 		module.log.info(str(args));
 

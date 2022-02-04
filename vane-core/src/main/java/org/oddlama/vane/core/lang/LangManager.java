@@ -6,6 +6,7 @@ import java.io.File;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.logging.Level;
@@ -161,23 +162,39 @@ public class LangManager {
 				f.load(module.namespace(), yaml);
 			}
 		} catch (YamlLoadException e) {
-			module.log.log(Level.SEVERE, "error while loading '" + file.getName() + "'", e);
+			module.log.log(Level.SEVERE, "error while loading '" + file.getAbsolutePath() + "'", e);
 			return false;
 		}
 		return true;
 	}
 
-	public void generate_resource_pack(final ResourcePackGenerator pack, YamlConfiguration yaml) {
+	public void generate_resource_pack(final ResourcePackGenerator pack, YamlConfiguration yaml, File lang_file) {
 		var lang_code = yaml.getString("resource_pack_lang_code");
 		if (lang_code == null) {
 			throw new RuntimeException("Missing yaml key: resource_pack_lang_code");
 		}
+		var errors = new LinkedList<YamlLoadException.Lang>();
 		for (var f : lang_fields) {
 			try {
 				f.add_translations(pack, yaml, lang_code);
+			} catch (YamlLoadException.Lang e) {
+				errors.add(e);
 			} catch (YamlLoadException e) {
-				throw new RuntimeException("Could not load translations, see below for error details.", e);
+				module.log.log(Level.SEVERE, "Unexpected YAMLLoadException: ", e);
 			}
+		}
+		if (errors.size() > 0) {
+			final String errored_lang_nodes = errors
+				.stream()
+				.map(Throwable::getMessage)
+				.collect(Collectors.joining("\n\t\t"));
+			module.log.log(
+				Level.SEVERE,
+				"The following errors were identified while adding translations from \n\t" +
+				lang_file.getAbsolutePath() +
+				" \n\t\t" +
+				errored_lang_nodes
+			);
 		}
 	}
 }
