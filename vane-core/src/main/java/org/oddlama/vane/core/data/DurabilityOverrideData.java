@@ -19,6 +19,7 @@ import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.Nullable;
 import org.oddlama.vane.util.Util;
 
 public class DurabilityOverrideData {
@@ -28,7 +29,7 @@ public class DurabilityOverrideData {
 	private final NamespacedKey key_max;
 	private final NamespacedKey key_damage;
 	private final int max_durability;
-	private final TranslatableComponent tooltip;
+	@Nullable private final TranslatableComponent tooltip;
 
 	private static final Style DEFAULT_TOOLTIP_STYLE = Style
 		.style(NamedTextColor.WHITE)
@@ -44,7 +45,7 @@ public class DurabilityOverrideData {
 		);
 	}
 
-	public DurabilityOverrideData(int max_durability, TranslatableComponent tooltip) {
+	public DurabilityOverrideData(int max_durability, @Nullable TranslatableComponent tooltip) {
 		this(
 			max_durability,
 			tooltip,
@@ -53,7 +54,7 @@ public class DurabilityOverrideData {
 		);
 	}
 
-	public DurabilityOverrideData(int max_durability, TranslatableComponent tooltip, NamespacedKey key_max, NamespacedKey key_damage) {
+	public DurabilityOverrideData(int max_durability, @Nullable TranslatableComponent tooltip, NamespacedKey key_max, NamespacedKey key_damage) {
 		this.key_max = key_max;
 		this.tooltip = tooltip;
 		this.key_damage = key_damage;
@@ -133,31 +134,29 @@ public class DurabilityOverrideData {
 			new_lore = lore.stream()
 				.flatMap(l -> {
 					if (matches(l)) {
-						if (itemMeta1.isUnbreakable()) return Stream.empty();
-						return Stream.of(update_lore(max - dmg, max));
+						if (itemMeta1.isUnbreakable() || tooltip == null) return Stream.empty();
+						// Stop those pesky overshoots looking so derpy.
+						// only possible with desyncs / config changes anyway.
+						final var uses_remaining = Math.max(1, Math.min(max - dmg, max));
+						return Stream.of(tooltip_lore(uses_remaining, max));
 					} else {
 						return Stream.of(l);
 					}
 				})
 				.toList();
-		} else {
-			new_lore.add(create_lore(max - dmg, max));
+		} else if (tooltip != null) {
+			new_lore.add(tooltip_lore(max - dmg, max));
 		}
 		itemMeta1.lore(new_lore);
 	}
 
-	protected Component create_lore(int uses_remaining, int max) {
-		return tooltip.args(Component.text(uses_remaining), Component.text(max));
-	}
-
-	protected Component update_lore(int uses_remaining, int max) {
-		// Stop those pesky overshoots looking so derpy.
-		// only possible with desyncs / config changes anyway.
-		uses_remaining = Math.max(1, Math.min(uses_remaining, max));
+	protected Component tooltip_lore(int uses_remaining, int max) {
+		if (tooltip == null) return null;
 		return tooltip.args(Component.text(uses_remaining), Component.text(max));
 	}
 
 	protected boolean matches(Component a) {
+		if (tooltip == null) return false;
 		if (!(a instanceof TranslatableComponent a_as_TC)) return false;
 		return tooltip.key().equals(a_as_TC.key());
 	}
