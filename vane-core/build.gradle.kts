@@ -5,7 +5,8 @@ plugins {
 }
 
 dependencies {
-	implementation(group = "org.bstats", name = "bstats-bukkit", version = "1.8")
+	implementation(group = "org.bstats", name = "bstats-base", version = "3.0.0")
+	implementation(group = "org.bstats", name = "bstats-bukkit", version = "3.0.0")
 	implementation(group = "org.reflections", name = "reflections", version = "0.10.2")
 	implementation(group = "org.json", name = "json", version = "20200518")
 	implementation(project(":vane-annotations"))
@@ -24,6 +25,7 @@ val resource_pack_sha1 by lazy {
 tasks {
 	shadowJar {
 		dependencies {
+			include(dependency("org.bstats:bstats-base"))
 			include(dependency("org.bstats:bstats-bukkit"))
 			include(dependency("org.reflections:reflections"))
 			include(dependency("org.json:json"))

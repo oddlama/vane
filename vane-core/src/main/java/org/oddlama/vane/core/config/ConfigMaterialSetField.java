@@ -11,6 +11,7 @@ import java.util.Set;
 import java.util.function.Function;
 
 import org.bstats.bukkit.Metrics;
+import org.bstats.charts.AdvancedPie;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.oddlama.vane.annotation.config.ConfigMaterialSet;
@@ -74,7 +75,7 @@ public class ConfigMaterialSetField extends ConfigField<Set<Material>> {
 	@Override
 	public void register_metrics(Metrics metrics) {
 		if (!this.metrics()) return;
-		metrics.addCustomChart(new Metrics.AdvancedPie(yaml_path(), () -> {
+		metrics.addCustomChart(new AdvancedPie(yaml_path(), () -> {
             final var values = new HashMap<String, Integer>();
 			for (final var v : get()) {
 				values.put(v.getKey().toString(), 1);

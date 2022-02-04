@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.function.Function;
 import org.apache.commons.lang.WordUtils;
 import org.bstats.bukkit.Metrics;
+import org.bstats.charts.SimplePie;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.oddlama.vane.core.YamlLoadException;
 import org.oddlama.vane.core.functional.Consumer2;
@@ -261,7 +262,7 @@ public abstract class ConfigField<T> implements Comparable<ConfigField<?>> {
 
 	public void register_metrics(Metrics metrics) {
 		if (!metrics()) return;
-		metrics.addCustomChart(new Metrics.SimplePie(yaml_path(), () -> get().toString()));
+		metrics.addCustomChart(new SimplePie(yaml_path(), () -> get().toString()));
 	}
 
 	public String[] components() {
