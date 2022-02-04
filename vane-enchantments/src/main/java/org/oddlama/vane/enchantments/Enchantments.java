@@ -177,7 +177,7 @@ public class Enchantments extends Module<Enchantments> {
 		item_stack.setItemMeta(meta);
 	}
 
-	private final TextComponent SENTINEL_VALUE = Component.text(namespace() + ":lore");
+	private final TextComponent SENTINEL_VALUE = Component.text("vane:enchantment_lore");
 
 	private boolean is_enchantment_lore(final Component component) {
 		// If the component begins with a translated lore from vane enchantments, it is always from us. (needed for backward compatibility)
