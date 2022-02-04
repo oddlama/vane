@@ -1,10 +1,16 @@
 package org.oddlama.vane.core.item;
 
-public interface ItemVariantEnum {
+import org.bukkit.Keyed;
+
+public interface ItemVariantEnum<T extends Enum<T> & Keyed> {
 	/**
 	 * The variant ordinal.
 	 */
 	public int ordinal();
+
+	default int legacy_model_key() {
+		return ordinal();
+	}
 
 	/**
 	 * The variant name.

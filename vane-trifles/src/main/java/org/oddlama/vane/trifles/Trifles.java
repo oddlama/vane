@@ -9,10 +9,9 @@ import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.oddlama.vane.annotation.VaneModule;
-import org.oddlama.vane.core.item.ModelDataEnum;
 import org.oddlama.vane.core.item.LegacyModelRegistry;
+import org.oddlama.vane.core.item.ModelDataEnum;
 import org.oddlama.vane.core.module.Module;
-import org.oddlama.vane.core.x;
 import org.oddlama.vane.trifles.event.PlayerTeleportScrollEvent;
 
 @VaneModule(name = "trifles", bstats = 8644, config_version = 4, lang_version = 2, storage_version = 1)

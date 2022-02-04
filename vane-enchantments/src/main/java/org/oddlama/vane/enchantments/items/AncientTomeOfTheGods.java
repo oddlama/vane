@@ -22,7 +22,7 @@ public class AncientTomeOfTheGods extends CustomItem<Enchantments, AncientTomeOf
 
 		@Override
 		public void register_recipes() {
-			if (variant() == BookVariant.BOOK) {
+				if (variant() == BookVariant.BOOK) {
 				final var recipe_key = recipe_key();
 				final var item = item();
 

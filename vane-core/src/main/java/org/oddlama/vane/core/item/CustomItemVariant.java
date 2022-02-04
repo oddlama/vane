@@ -10,6 +10,7 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.core.ResourcePackGenerator;
@@ -18,8 +19,15 @@ import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.core.module.ModuleComponent;
 import org.oddlama.vane.util.Util;
 
+/**
+ * A multi-ton instance that 'pairs' with an associated
+ * @param <T>
+ * @param <V>
+ * @param <U>
+ */
 public class CustomItemVariant<T extends Module<T>, V extends CustomItem<T, V>, U extends ItemVariantEnum>
-	extends ModuleComponent<T> implements Model {
+	extends ModuleComponent<T>
+	implements Model, Keyed {
 
 	private CustomItem<T, V> parent;
 
@@ -86,7 +94,8 @@ public class CustomItemVariant<T extends Module<T>, V extends CustomItem<T, V>, 
 	/**
 	 * Returns the namespaced key for this item.
 	 */
-	public final NamespacedKey key() {
+	@Override
+	public @NotNull NamespacedKey getKey() {
 		return key;
 	}
 
@@ -113,6 +122,11 @@ public class CustomItemVariant<T extends Module<T>, V extends CustomItem<T, V>, 
 	 */
 	public final ItemStack item() {
 		return parent.item(this, 1);
+	}
+
+	@Override
+	public int custom_model_data() {
+		return model_data();
 	}
 
 	/**

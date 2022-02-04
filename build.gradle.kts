@@ -1,3 +1,7 @@
+if(!JavaVersion.VERSION_17.isCompatibleWith(JavaVersion.current())){
+	throw GradleException("This build must be run with java 17 or above found: " + JavaVersion.current())
+}
+
 plugins {
 	`java-library`
 	id("com.diffplug.spotless") version "6.0.1"
@@ -10,7 +14,9 @@ dependencies {
 }
 
 java {
-	sourceCompatibility = JavaVersion.VERSION_17
+	toolchain {
+		languageVersion.set(JavaLanguageVersion.of(17))
+	}
 }
 
 // Common settings to all subprojects.
@@ -18,6 +24,12 @@ subprojects {
 	apply(plugin = "java-library")
 	apply(plugin = "java")
 	apply(plugin = "com.diffplug.spotless")
+
+	java {
+		toolchain {
+			languageVersion.set(JavaLanguageVersion.of(17))
+		}
+	}
 
 	group = "org.oddlama.vane"
 	version = "1.6.7"
@@ -34,6 +46,7 @@ subprojects {
 	tasks.withType<JavaCompile> {
 		options.compilerArgs.addAll(arrayOf("-Xlint:all", "-Xlint:-processing", "-Xdiags:verbose"))
 		options.encoding = "UTF-8"
+		options.release.set(17)
 	}
 
 	dependencies {
@@ -53,7 +66,7 @@ subprojects {
 
 // All Paper Plugins + Annotations.
 configure(subprojects.filter {
-	!listOf("vane-waterfall").contains(it.name)
+	!listOf("vane-waterfall", "prototype-item-api", "prototype-item-consumer").contains(it.name)
 }) {
 	apply(plugin = "io.papermc.paperweight.userdev")
 
@@ -70,7 +83,7 @@ configure(subprojects.filter {
 
 // All Projects except waterfall and annotations.
 configure(subprojects.filter {
-	!listOf("vane-annotations", "vane-waterfall").contains(it.name)
+	!listOf("vane-annotations", "vane-waterfall", "prototype-item-api", "prototype-item-consumer").contains(it.name)
 }) {
 	tasks.create<Copy>("copyJar") {
 		from(tasks.reobfJar)
@@ -109,7 +122,7 @@ configure(subprojects.filter {
 
 // All paper plugins except core.
 configure(subprojects.filter {
-	!listOf("vane-annotations", "vane-core", "vane-waterfall").contains(it.name)
+	!listOf("vane-annotations", "vane-core", "vane-waterfall", "prototype-item-api", "prototype-item-consumer").contains(it.name)
 }) {
 	dependencies {
 		// https://imperceptiblethoughts.com/shadow/multi-project/#depending-on-the-shadow-jar-from-another-project

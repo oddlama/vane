@@ -17,8 +17,9 @@ import org.bukkit.inventory.Merchant;
 import org.bukkit.inventory.MerchantRecipe;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.oddlama.vane.annotation.VaneModule;
-import org.oddlama.vane.core.item.ModelDataEnum;
+import org.oddlama.vane.core.item.CustomItemRegistry;
 import org.oddlama.vane.core.item.LegacyModelRegistry;
+import org.oddlama.vane.core.item.ModelDataEnum;
 import org.oddlama.vane.core.module.Module;
 
 @VaneModule(name = "enchantments", bstats = 8640, config_version = 1, lang_version = 1, storage_version = 1)
@@ -34,10 +35,7 @@ public class Enchantments extends Module<Enchantments> {
 			getServer().shutdown();
 		}
 
-		new org.oddlama.vane.enchantments.items.AncientTome(this);
-		new org.oddlama.vane.enchantments.items.AncientTomeOfKnowledge(this);
-		new org.oddlama.vane.enchantments.items.AncientTomeOfTheGods(this);
-
+		new CustomItemRegistry(this);
 		new org.oddlama.vane.enchantments.commands.Enchant(this);
 		new org.oddlama.vane.enchantments.enchantments.Angel(this);
 		new org.oddlama.vane.enchantments.enchantments.Careless(this);

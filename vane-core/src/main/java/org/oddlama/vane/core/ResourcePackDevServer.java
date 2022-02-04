@@ -24,7 +24,8 @@ public class ResourcePackDevServer implements HttpHandler {
 	public void serve() {
 		try {
 			final HttpServer httpServer = HttpServer.create(new InetSocketAddress(9000), 0);
-			//noinspection deprecation
+
+			@SuppressWarnings({ "deprecation", "UnstableApiUsage" })
 			var hash = com.google.common.io.Files.asByteSource(this.file).hash(Hashing.sha1());
 			resource_pack_distributor.sha1 = hash.toString();
 			resource_pack_distributor.url = "http://localhost:9000/vane-resource-pack.zip";

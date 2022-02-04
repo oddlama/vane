@@ -10,6 +10,8 @@ import org.oddlama.vane.core.item.CustomItemVariant;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.enchantments.Enchantments;
 
+import java.util.Map;
+
 @VaneItem(name = "ancient_tome_of_knowledge")
 public class AncientTomeOfKnowledge extends CustomItem<Enchantments, AncientTomeOfKnowledge> {
 

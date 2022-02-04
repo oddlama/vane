@@ -1,7 +1,9 @@
 package org.oddlama.vane.enchantments.items;
 
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.loot.LootTables;
+import org.jetbrains.annotations.NotNull;
 import org.oddlama.vane.annotation.item.VaneItem;
 import org.oddlama.vane.core.LootTable.LootTableEntry;
 import org.oddlama.vane.core.item.CustomItem;

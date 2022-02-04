@@ -16,7 +16,6 @@ import org.oddlama.vane.annotation.config.ConfigDoubleList;
 import org.oddlama.vane.annotation.enchantment.Rarity;
 import org.oddlama.vane.annotation.enchantment.VaneEnchantment;
 import org.oddlama.vane.core.LootTable.LootTableEntry;
-import org.oddlama.vane.core.item.CustomItem;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.enchantments.CustomEnchantment;
 import org.oddlama.vane.enchantments.Enchantments;
@@ -52,11 +51,8 @@ public class Angel extends CustomEnchantment<Enchantments> {
 
 	@Override
 	public void register_recipes() {
-		final var ancient_tome_of_the_gods_enchanted =
-			AncientTomeOfTheGods.variant_of(
-				AncientTomeOfTheGods.class,
-				BookVariant.ENCHANTED_BOOK
-			)
+		final var ancient_tome_of_the_gods_enchanted = AncientTomeOfTheGods
+			.variant_of(AncientTomeOfTheGods.class, BookVariant.ENCHANTED_BOOK)
 			.item();
 		final var ancient_tome_of_the_gods = AncientTomeOfTheGods
 			.<AncientTomeOfTheGods.AncientTomeOfTheGodsVariant>variant_of(AncientTomeOfTheGods.class, BookVariant.BOOK)

@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
+
+import org.bukkit.Keyed;
+import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.oddlama.vane.annotation.item.VaneItem;
@@ -13,11 +16,17 @@ import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.Module;
 
 /**
+ *
  * Represents a custom item. A custom item can have different variants (e.g. stone, iron, golden, ...)
  * Remember that you should never reuse id's previously in use. Use the disabled tag for this to prevent
  * recipes from registering and events from being processed.
+ *
+ * @param <ModuleT> Module Type
+ * @param <ItemT> Item Self Type
  */
-public abstract class CustomItem<T extends Module<T>, V extends CustomItem<T, V>> extends Listener<T> implements Model {
+public class CustomItem<ModuleT extends Module<ModuleT>, ItemT extends CustomItem<ModuleT, ItemT>>
+	extends Listener<ModuleT>
+	implements Model<CustomItem<ModuleT, ItemT>>, Keyed {
 
 	private static final LegacyModelRegistry registry = new LegacyModelRegistry();
 	private final VaneItem annotation = getClass().getAnnotation(VaneItem.class);
@@ -27,14 +36,15 @@ public abstract class CustomItem<T extends Module<T>, V extends CustomItem<T, V>
 	private final ItemVariantEnum variant_max;
 
 	// Track variants
-	private final List<CustomItemVariant<T, V, ?>> variants = new ArrayList<>();
+	private final List<CustomItemVariant<ModuleT, ItemT, ?>> variants = new ArrayList<>();
+	private NamespacedKey key;
 
 	/**
 	 * Single variant item constructor.
 	 */
 	public CustomItem(
-		Context<T> context,
-		Function2<V, SingleVariant, CustomItemVariant<T, V, SingleVariant>> create_instance
+		Context<ModuleT> context,
+		Function2<ItemT, SingleVariant, CustomItemVariant<ModuleT, ItemT, SingleVariant>> create_instance
 	) {
 		this(context, SingleVariant.class, SingleVariant.values(), create_instance);
 	}
@@ -44,10 +54,10 @@ public abstract class CustomItem<T extends Module<T>, V extends CustomItem<T, V>
 	 */
 	@SuppressWarnings("unchecked")
 	public <U extends ItemVariantEnum> CustomItem(
-		Context<T> context,
+		Context<ModuleT> context,
 		Class<U> variant_enum_class,
 		U[] variant_enum_values,
-		Function2<V, U, CustomItemVariant<T, V, U>> create_instance
+		Function2<ItemT, U, CustomItemVariant<ModuleT, ItemT, U>> create_instance
 	) {
 		super(null);
 		this.variant_enum_class = variant_enum_class;
@@ -68,7 +78,7 @@ public abstract class CustomItem<T extends Module<T>, V extends CustomItem<T, V>
 
 		// Create variants
 		for (var variant : variant_enum_values) {
-			final var v = create_instance.apply((V) this, variant);
+			final var v = create_instance.apply((ItemT) this, variant);
 			variants.add(v);
 			registry.registerVariant(this, v, variant);
 		}
@@ -77,12 +87,12 @@ public abstract class CustomItem<T extends Module<T>, V extends CustomItem<T, V>
 		instances().put(getClass(), this);
 	}
 
-	abstract Map<Class<?>, CustomItem<T, V>> instances();
+	abstract Map<Class<?>, CustomItem<ModuleT, ItemT>> instances();
 
 	/**
 	 * Asserts that there is no other item with the same model data
 	 */
-	protected final void check_valid_model_data(CustomItemVariant<T, V, ?> variant) {
+	protected final void check_valid_model_data(CustomItemVariant<ModuleT, ItemT, ?> variant) {
 		registry.check_valid_model_data(this, variant);
 	}
 
@@ -141,7 +151,7 @@ public abstract class CustomItem<T extends Module<T>, V extends CustomItem<T, V>
 	/**
 	 * Returns all variants of this item.
 	 */
-	public final List<CustomItemVariant<T, V, ?>> variants() {
+	public final List<CustomItemVariant<ModuleT, ItemT, ?>> variants() {
 		return variants;
 	}
 
@@ -216,14 +226,14 @@ public abstract class CustomItem<T extends Module<T>, V extends CustomItem<T, V>
 	/**
 	 * Returns an itemstack of this item with the given variant.
 	 */
-	public <U extends ItemVariantEnum> ItemStack item(CustomItemVariant<T, V, U> variant) {
+	public <U extends ItemVariantEnum> ItemStack item(CustomItemVariant<ModuleT, ItemT, U> variant) {
 		return item(variant, 1);
 	}
 
 	/**
 	 * Returns an itemstack of this item with the given variant and amount.
 	 */
-	public <U extends ItemVariantEnum> ItemStack item(CustomItemVariant<T, V, U> variant, int amount) {
+	public <U extends ItemVariantEnum> ItemStack item(CustomItemVariant<ModuleT, ItemT, U> variant, int amount) {
 		assert_correct_variant_class(variant.variant());
 		return construct_item_stack(amount, this, variant);
 	}
@@ -299,6 +309,16 @@ public abstract class CustomItem<T extends Module<T>, V extends CustomItem<T, V>
 		return item_stack;
 	}
 
+	@Override
+	public ItemStack item() {
+		return variants.get(0).item();
+	}
+
+	@Override
+	public int custom_model_data() {
+		return variants.get(0).custom_model_data();
+	}
+
 	public static enum SingleVariant implements ItemVariantEnum {
 		SINGLETON;
 
@@ -311,5 +331,10 @@ public abstract class CustomItem<T extends Module<T>, V extends CustomItem<T, V>
 		public boolean enabled() {
 			return true;
 		}
+	}
+
+	@Override
+	public @NotNull NamespacedKey getKey() {
+		return key;
 	}
 }
