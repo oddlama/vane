@@ -5,7 +5,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public abstract class EntityMoveEvent extends Event {
+public class EntityMoveEvent extends Event {
 	private static final HandlerList handlers = new HandlerList();
 	private Entity entity;
 	private Location from;

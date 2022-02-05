@@ -58,6 +58,7 @@ import org.oddlama.vane.annotation.VaneModule;
 import org.oddlama.vane.annotation.config.ConfigBoolean;
 import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.annotation.persistent.Persistent;
+import org.oddlama.vane.core.event.EntityMoveEvent;
 import org.oddlama.vane.core.functional.Consumer1;
 import org.oddlama.vane.core.item.CustomItem;
 import org.oddlama.vane.core.lang.TranslatedMessage;
@@ -606,16 +607,21 @@ public class Core extends Module<Core> implements PluginMessageListener {
 	// We use 15ms threshold time, and 50ms would be 1 tick.
 	private static final long move_event_max_nanoseconds_per_tick = 15000000l;
 
-	private static boolean same_location(final Location l1, final Location l2) {
-		return l1.getWorld() == l2.getWorld()
-			&& l1.getX()     == l2.getX()
-			&& l1.getY()     == l2.getY()
-			&& l1.getZ()     == l2.getZ()
-			&& l1.getPitch() == l2.getPitch()
-			&& l1.getYaw()   == l2.getYaw();
+	private static boolean is_movement(final Location l1, final Location l2) {
+		// Different worlds = not a movement event.
+		return l1.getWorld() == l2.getWorld() && (
+			   l1.getX()     != l2.getX()
+			|| l1.getY()     != l2.getY()
+			|| l1.getZ()     != l2.getZ()
+			|| l1.getPitch() != l2.getPitch()
+			|| l1.getYaw()   != l2.getYaw());
 	}
 
 	private void process_entity_movements() {
+		// This custom event detector is necessary as PaperMC's entity move events trigger for LivingEntites,
+		// but we need move events for all entities. Wanna throw that potion through the portal?
+		// Yes. Shoot players through a portal? Ohh, definitely. Throw junk right into their bases? Abso-fucking-lutely.
+
 		// This implementation uses a priority queue and a small
 		// scheduling algorithm to prevent this function from ever causing lags.
 		// Lags caused by other plugins or external means will inherently cause
@@ -650,7 +656,7 @@ public class Core extends Module<Core> implements PluginMessageListener {
 					move_event_processing_queue.keySet())) {
 			final var old_entity_and_loc = move_event_old_positions.get(eid);
 			final var new_entity_and_loc = move_event_current_positions.get(eid);
-			if (old_entity_and_loc == null || new_entity_and_loc == null || same_location(old_entity_and_loc.getRight(), new_entity_and_loc.getRight())) {
+			if (old_entity_and_loc == null || new_entity_and_loc == null || !is_movement(old_entity_and_loc.getRight(), new_entity_and_loc.getRight())) {
 				continue;
 			}
 
@@ -668,17 +674,16 @@ public class Core extends Module<Core> implements PluginMessageListener {
 		// --------------------------------------------
 
 		final var time_begin = System.nanoTime();
-
-		final var iter = move_event_processing_queue.iterator();
-		int i = 0;
+		final var pm = getServer().getPluginManager();
+		final var iter = move_event_processing_queue.entrySet().iterator();
 		while (iter.hasNext()) {
-			final var e_and_old_loc = iter.next();
+			final var e_and_old_loc = iter.next().getValue();
 			iter.remove();
 
 			// Dispatch event.
-			final var event = new EntityMo(player2, console, portal, false);
-			get_module().getServer().getPluginManager().callEvent(event);
-			++i;
+			final var entity = e_and_old_loc.getLeft();
+			final var event = new EntityMoveEvent(entity, e_and_old_loc.getRight(), entity.getLocation());
+			pm.callEvent(event);
 
 			// Abort if we exceed the threshold time
 			final var time_now = System.nanoTime();
@@ -686,10 +691,5 @@ public class Core extends Module<Core> implements PluginMessageListener {
 				break;
 			}
 		}
-
-		final var time_now = System.nanoTime();
-		System.out.println("Processing " + i + " entities (" +
-				move_event_processing_queue.size() + " leftover) took " +
-				((time_now - time_begin) / 1000l) + "us");
 	}
 }
