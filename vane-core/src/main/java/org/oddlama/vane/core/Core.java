@@ -8,8 +8,6 @@ import static org.oddlama.vane.util.Util.ms_to_ticks;
 import static org.oddlama.vane.util.Util.read_json_from_url;
 import static org.oddlama.vane.util.Util.resolve_skin;
 
-import com.destroystokyo.paper.MaterialTags;
-import com.destroystokyo.paper.profile.ProfileProperty;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.File;
@@ -17,22 +15,27 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.UUID;
 import java.util.logging.Level;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.event.ClickEvent;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+
+import com.destroystokyo.paper.MaterialTags;
+import com.destroystokyo.paper.profile.ProfileProperty;
+import com.google.common.collect.Sets;
+
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.Keyed;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.block.Skull;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -62,6 +65,11 @@ import org.oddlama.vane.core.material.HeadMaterialLibrary;
 import org.oddlama.vane.core.menu.MenuManager;
 import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.core.module.ModuleComponent;
+
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
 @VaneModule(name = "core", bstats = 8637, config_version = 6, lang_version = 3, storage_version = 1)
 public class Core extends Module<Core> implements PluginMessageListener {
@@ -211,6 +219,11 @@ public class Core extends Module<Core> implements PluginMessageListener {
 			// OPs will get a message about this when they join.
 			schedule_task_timer(this::check_for_update, 1l, ms_to_ticks(2 * 60l * 60l * 1000l));
 		}
+
+		// Each tick we need to recalculate whether entities moved.
+		// This is uses a scheduling algorithm (see function implementation) to
+		// keep it lightweight and to prevent lags.
+		schedule_task_timer(this::process_entity_movements, 1l, 1l);
 	}
 
 	@Override
@@ -574,5 +587,109 @@ public class Core extends Module<Core> implements PluginMessageListener {
 
 		lang_break_loot_block_prevented.send(player);
 		event.setCancelled(true);
+	}
+
+	// This is the queue of entity move events that need processing.
+	// It is a linked hash map, so we can update moved entity positions
+	// without changing iteration order. Processed entries will be removed from
+	// the front and new entities are added to the back. If an entity moves twice
+	// but wasn't processed, we don't need to update it. This ensures that no entities
+	// will be accidentally skipped when we are struggling to keep up.
+	// This stores entity_id -> (entity, old location).
+	private LinkedHashMap<UUID, Pair<Entity, Location>> move_event_processing_queue = new LinkedHashMap<>();
+
+	// Two hash maps to store old and current positions for each entity.
+	private HashMap<UUID, Pair<Entity, Location>> move_event_current_positions = new HashMap<>();
+	private HashMap<UUID, Pair<Entity, Location>> move_event_old_positions = new HashMap<>();
+
+	// Never process entity-move events for more than ~30% of a tick.
+	// We use 15ms threshold time, and 50ms would be 1 tick.
+	private static final long move_event_max_nanoseconds_per_tick = 15000000l;
+
+	private static boolean same_location(final Location l1, final Location l2) {
+		return l1.getWorld() == l2.getWorld()
+			&& l1.getX()     == l2.getX()
+			&& l1.getY()     == l2.getY()
+			&& l1.getZ()     == l2.getZ()
+			&& l1.getPitch() == l2.getPitch()
+			&& l1.getYaw()   == l2.getYaw();
+	}
+
+	private void process_entity_movements() {
+		// This implementation uses a priority queue and a small
+		// scheduling algorithm to prevent this function from ever causing lags.
+		// Lags caused by other plugins or external means will inherently cause
+		// the entity movement event tickrate to be slowed down.
+		//
+		// This function is called every tick and has two main phases.
+		//
+		// 1. Detect entity movement and queue entities for processing.
+		// 2. Iterate through entities that moved in FIFO order
+		//    and call event handlers, but make sure to immediately abort
+		//    processing after exceeding a threshold time. This ensures
+		//    that it will alawys at least process one entity, but never
+		//    hog any performance from other tasks.
+
+		// Phase 1 - Movement detection
+		// --------------------------------------------
+
+		// Store current positions for each entity
+		for (final var world : getServer().getWorlds()) {
+			for (final var entity : world.getEntities()) {
+				move_event_current_positions.put(entity.getUniqueId(), Pair.of(entity, entity.getLocation()));
+			}
+		}
+
+		// For each entity that has an old position (computed efficiently via Sets.intersection),
+		// but isn't already contained in the entities to process, we check whether the position
+		// has changed. If so, we add the entity to the processing queue.
+		// If the processing queue already contained the enitity, we remove it before iterating
+		// as there is nothing to do - we simply lose information about the intermediate position.
+		for (final var eid : Sets.difference(
+					Sets.intersection(move_event_old_positions.keySet(), move_event_current_positions.keySet()),
+					move_event_processing_queue.keySet())) {
+			final var old_entity_and_loc = move_event_old_positions.get(eid);
+			final var new_entity_and_loc = move_event_current_positions.get(eid);
+			if (old_entity_and_loc == null || new_entity_and_loc == null || same_location(old_entity_and_loc.getRight(), new_entity_and_loc.getRight())) {
+				continue;
+			}
+
+			move_event_processing_queue.put(eid, Pair.of(old_entity_and_loc));
+		}
+
+		// Swap old and current position hash maps, and only retain the now-old positions.
+		// This avoids unnecessary allocations.
+		final var tmp = move_event_current_positions;
+		move_event_current_positions = move_event_old_positions;
+		move_event_old_positions = tmp;
+		move_event_current_positions.clear();
+
+		// Phase 2 - Event dispatching
+		// --------------------------------------------
+
+		final var time_begin = System.nanoTime();
+
+		final var iter = move_event_processing_queue.iterator();
+		int i = 0;
+		while (iter.hasNext()) {
+			final var e_and_old_loc = iter.next();
+			iter.remove();
+
+			// Dispatch event.
+			final var event = new EntityMo(player2, console, portal, false);
+			get_module().getServer().getPluginManager().callEvent(event);
+			++i;
+
+			// Abort if we exceed the threshold time
+			final var time_now = System.nanoTime();
+			if (time_now - time_begin > move_event_max_nanoseconds_per_tick) {
+				break;
+			}
+		}
+
+		final var time_now = System.nanoTime();
+		System.out.println("Processing " + i + " entities (" +
+				move_event_processing_queue.size() + " leftover) took " +
+				((time_now - time_begin) / 1000l) + "us");
 	}
 }
