@@ -13,13 +13,16 @@ dependencies {
 }
 
 val resource_pack_sha1 by lazy {
-	val resourcePack = File("${projectDir}/../docs/resourcepacks/v" + project.version + ".zip")
+	val resource_pack = File("${projectDir}/../docs/resourcepacks/v" + project.version + ".zip")
+	if (!resource_pack.exists()) {
+		throw GradleException("The resource pack file " + resource_pack + " is missing.")
+	}
 	val md = MessageDigest.getInstance("SHA-1")
-	val resourcePackBytes = resourcePack.readBytes()
-	md.update(resourcePackBytes, 0, resourcePackBytes.size)
-	val sha1bytes = md.digest()
-	val sha1hashString = String.format("%040x", BigInteger(1, sha1bytes))
-	sha1hashString
+	val resource_pack_bytes = resource_pack.readBytes()
+	md.update(resource_pack_bytes, 0, resource_pack_bytes.size)
+	val sha1_bytes = md.digest()
+	val sha1_hash_string = String.format("%040x", BigInteger(1, sha1_bytes))
+	sha1_hash_string
 }
 
 tasks {
