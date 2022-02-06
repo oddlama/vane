@@ -10,6 +10,7 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
+import org.oddlama.vane.annotation.config.ConfigBoolean;
 import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.core.ResourcePackGenerator;
 import org.oddlama.vane.core.lang.TranslatedMessage;
@@ -28,6 +29,9 @@ public class CustomItemVariant<T extends Module<T>, V extends CustomItem<T, V>, 
 
 	// All associated recipes
 	private Map<NamespacedKey, Recipe> recipes = new HashMap<>();
+
+	@ConfigBoolean(def = true, desc = "Whether recipes for this item variant should be registered (if any. Only disable this if you want to have the item itself enabled, but want to use something else to make it accessible to your players")
+	public boolean config_register_recipes;
 
 	// Language
 	@LangMessage
@@ -193,7 +197,9 @@ public class CustomItemVariant<T extends Module<T>, V extends CustomItem<T, V>, 
 		recipes.clear();
 
 		if (enabled()) {
-			register_recipes();
+			if (config_register_recipes) {
+				register_recipes();
+			}
 			recipes.values().forEach(get_module().getServer()::addRecipe);
 		}
 	}

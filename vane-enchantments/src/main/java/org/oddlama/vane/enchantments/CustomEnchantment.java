@@ -14,6 +14,7 @@ import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.jetbrains.annotations.NotNull;
+import org.oddlama.vane.annotation.config.ConfigBoolean;
 import org.oddlama.vane.annotation.enchantment.Rarity;
 import org.oddlama.vane.annotation.enchantment.VaneEnchantment;
 import org.oddlama.vane.annotation.lang.LangMessage;
@@ -36,6 +37,11 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 	private BukkitEnchantmentWrapper bukkit_wrapper;
 
 	private final Set<Enchantment> supersedes = new HashSet<>();
+
+	@ConfigBoolean(def = true, desc = "Whether recipes for this enchantment should be registered (if any). Only disable this if you want to have the enchantment itself enabled, but want to use something else to make it accessible to your players.")
+	public boolean config_register_recipes;
+	@ConfigBoolean(def = true, desc = "Whether loot tables for this enchantment should be registered (if any).")
+	public boolean config_register_loot_tables;
 
 	// Language
 	@LangMessage
@@ -278,6 +284,13 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 	 */
 	public void register_recipes() {}
 
+	/**
+	 * Override this and add your related loot table generation here.
+	 * This is separate from the "generate_in_treasure" property, which
+	 * would add this enchantment to other default treasure items.
+	 */
+	public void register_loot_tables() {}
+
 	/** Returns the main recipe key */
 	public final NamespacedKey recipe_key() {
 		return recipe_key("");
@@ -321,7 +334,12 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 		recipes.clear();
 
 		if (enabled()) {
-			register_recipes();
+			if (config_register_recipes) {
+				register_recipes();
+			}
+			if (config_register_loot_tables) {
+				register_loot_tables();
+			}
 			recipes.values().forEach(get_module().getServer()::addRecipe);
 		}
 
