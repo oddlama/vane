@@ -178,8 +178,13 @@ public class Bedtime extends Module<Bedtime> {
 		// Broadcast sleeping message
 		var percent = get_percentage_sleeping(world);
 		var count_sleeping = get_amount_sleeping(world);
-		var count_required = Math.ceil(get_potential_sleepers_in_world(world) * config_sleep_threshold);
-		lang_player_bed_enter.broadcast_world_action_bar(world, "§6" + player.getName(), "§6" + percentage_str(percent), count_sleeping, count_required, "§6" + world.getName());
+		var count_required = (int)Math.ceil(get_potential_sleepers_in_world(world) * config_sleep_threshold);
+		lang_player_bed_enter.broadcast_world_action_bar(world,
+				"§6" + player.getName(),
+				"§6" + percentage_str(percent),
+				String.valueOf(count_sleeping),
+				String.valueOf(count_required),
+				"§6" + world.getName());
 	}
 
 	private void remove_sleeping(Player player) {
@@ -197,8 +202,13 @@ public class Bedtime extends Module<Bedtime> {
 			// Broadcast sleeping message
 			var percent = get_percentage_sleeping(world);
 			var count_sleeping = get_amount_sleeping(world);
-			var count_required = Math.ceil(get_potential_sleepers_in_world(world) * config_sleep_threshold);
-			lang_player_bed_leave.broadcast_world_action_bar(world, "§6" + player.getName(), "§6" + percentage_str(percent), count_sleeping, count_required, "§6" + world.getName());
+			var count_required = (int)Math.ceil(get_potential_sleepers_in_world(world) * config_sleep_threshold);
+			lang_player_bed_leave.broadcast_world_action_bar(world,
+					"§6" + player.getName(),
+					"§6" + percentage_str(percent),
+					String.valueOf(count_sleeping),
+					String.valueOf(count_required),
+					"§6" + world.getName());
 		}
 	}
 
