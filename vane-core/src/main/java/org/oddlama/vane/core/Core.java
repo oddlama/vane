@@ -16,6 +16,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.SortedSet;
@@ -66,7 +67,15 @@ import org.oddlama.vane.core.material.HeadMaterialLibrary;
 import org.oddlama.vane.core.menu.MenuManager;
 import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.core.module.ModuleComponent;
+import org.oddlama.vane.util.Nms;
 
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelHandler;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelInboundHandler;
+import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.channel.ChannelInitializer;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -225,6 +234,31 @@ public class Core extends Module<Core> implements PluginMessageListener {
 		// This is uses a scheduling algorithm (see function implementation) to
 		// keep it lightweight and to prevent lags.
 		schedule_task_timer(this::process_entity_movements, 1l, 1l);
+
+		// FIXME: remove! WIPPEST WIP YOU'VE EVER SEEN
+		final ChannelInboundHandler beginInitProtocol = new ChannelInitializer<Channel>() {
+			@Override
+			protected void initChannel(Channel channel) throws Exception {
+				channel.pipeline().addFirst(new PacketHttpInterceptor());
+			}
+		};
+		final ChannelHandler connectionHandler = new ChannelInboundHandlerAdapter() {
+			@Override
+			public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+				Channel channel = (Channel)msg;
+				channel.pipeline().addFirst(beginInitProtocol);
+				ctx.fireChannelRead(msg);
+			}
+		};
+		final var server_connection = Nms.server_handle().getConnection();
+		try {
+			final var field_channels = server_connection.getClass().getDeclaredField("f");
+			field_channels.setAccessible(true);
+			final var channels = (List<ChannelFuture>)field_channels.get(server_connection);
+			channels.get(0).channel().pipeline().addFirst("Vane Protocol Injector", connectionHandler);
+		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
