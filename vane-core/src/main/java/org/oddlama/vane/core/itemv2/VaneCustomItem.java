@@ -12,34 +12,39 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.oddlama.vane.annotation.item.VaneItem;
+import org.oddlama.vane.annotation.item.VaneItemv2;
+import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.functional.Function2;
 import org.oddlama.vane.core.itemv2.api.CustomItem;
+import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.Module;
+import org.oddlama.vane.util.Util;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TranslatableComponent;
+import net.kyori.adventure.text.format.TextDecoration;
 
 public class VaneCustomItem<T extends Module<T>> extends Listener<T> implements CustomItem {
-	private VaneItem annotation = getClass().getAnnotation(VaneItem.class);
-
+	private VaneItemv2 annotation = getClass().getAnnotation(VaneItemv2.class);
 	public NamespacedKey key;
-	public Material baseMaterial;
-	public int customModelData;
-	public Component displayName;
+
+	// Language
+	@LangMessage
+	public TranslatedMessage lang_name;
 
 	public VaneCustomItem(Context<T> context) {
 		super(null);
 		// Set namespace delayed, as we need to access instance methods to do so.
-		context = context.group("item_" + name(), "Enable item " + name());
+		context = context.group("item_" + annotation.name(), "Enable item " + annotation.name());
 		set_context(context);
 
-		recipes = new RecipeConfig(this, context).default_recipes(this::default_recipes);
-	}
+		this.key = Util.namespaced_key(get_module().namespace(), annotation.name());
+		recipes = new Recipes(this, () -> annotation.recipes());
 
-	public final String name() {
-		return annotation.name();
+		// Register custom model data
+		// TODO: get_module().core().model_data_registry().reserve(customModelData())
 	}
 
 	@Override
@@ -48,31 +53,29 @@ public class VaneCustomItem<T extends Module<T>> extends Listener<T> implements 
 	}
 
 	@Override
-	public final boolean enabled() {
-		// parent.enabled() is the base custom-item.
-		// super.enabled() is the actual item variant config setting.
-		// variant.enabled() is the developer override (→ mostly just true).
-		return super.enabled();
+	public boolean enabled() {
+		// Explicitly stated to not be forgotten, as enabled() is also part of Listener<T>.
+		return annotation.enabled() && super.enabled();
 	}
 
 	@Override
 	public int version() {
-		return 0;
+		return annotation.version();
 	}
 
 	@Override
 	public Material baseMaterial() {
-		return baseMaterial;
+		return annotation.base();
 	}
 
 	@Override
 	public int customModelData() {
-		return customModelData;
+		return annotation.model_data();
 	}
 
 	@Override
 	public Component displayName() {
-		return displayName;
+		return lang_name.format().decoration(TextDecoration.ITALIC, false);
 	}
 
 	@Override
@@ -82,7 +85,7 @@ public class VaneCustomItem<T extends Module<T>> extends Listener<T> implements 
 
 	@Override
 	public int durability() {
-		return 0;
+		return annotation.durability();
 	}
 
 	@Override
@@ -102,16 +105,14 @@ public class VaneCustomItem<T extends Module<T>> extends Listener<T> implements 
 		//);
 	}
 
-	public void add_default_recipes() {}
-
 	@Override
 	public void on_config_change() {
 		// Recipes are processed in on_config_change and not in on_disable() / on_enable(),
 		// as they could change even if an item is new disabled but the plugin is still
 		// enabled and was reloaded.
-		recipes.deregister();
+		recipes.deregister(get_module());
 		if (enabled()) {
-			recipes.register();
+			recipes.register(get_module());
 		}
 	}
 }
