@@ -3,10 +3,8 @@ package org.oddlama.vane.core.itemv2.api;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.oddlama.vane.util.Util;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TranslatableComponent;
@@ -77,16 +75,6 @@ public interface CustomItem {
 	public @Nullable Component displayName();
 
 	/**
-	 * Return true to use a custom durability. This will require a base item with durability, and
-	 * will use its durability bar solely as an indicative value of the actual stored durability.
-	 * Changes to the item's durability by classical means are automatically reflected properly.
-	 * By default custom durability is enabled when {@link #durability()} returns a value > 0.
-	 */
-	public default boolean usesCustomDurability() {
-		return durability() > 0;
-	}
-
-	/**
 	 * A custom translation key that will be used to display durability on the item.
 	 * Return null to disable durability lore. Arguments to the translatable component
 	 * that will be supplied are the current durability (%1$s) and max durability (%2$s).
@@ -114,7 +102,7 @@ public interface CustomItem {
 	 * to add the item's texture, translation strings or any other client side resources to a pack
 	 * that can/will be distributed to players.
 	 */
-	public void onResourcePackGenerate(/*final ResourcePackGenerator rp*/);
+	public void addResources(/*final ResourcePackGenerator rp*/);
 
 	/**
 	 * This function will be called when a custom item of this type is newly created,
@@ -122,31 +110,7 @@ public interface CustomItem {
 	 * no base information actually changed, but an item still is considered to
 	 * be updated, for example anvil results.
 	 */
-	default public ItemStack onUpdateItemStack(@NotNull final ItemStack itemStack) {
+	default public ItemStack updateItemStack(@NotNull final ItemStack itemStack) {
 		return itemStack;
-	}
-
-	/**
-	 * Creates a new item stack with a single item of this custom item.
-	 */
-	default public ItemStack newStack() {
-		return CustomItemHelper.newStack(this);
-	}
-
-	/**
-	 * Creates a new item stack with the given amount of items of this custom item.
-	 */
-	default public ItemStack newStack(final int amount) {
-		return CustomItemHelper.newStack(this, amount);
-	}
-
-	/**
-	 * This function is called to convert an existing item stack of any
-	 * form to this custom item type, without losing metadata such as name, enchantments, etc.
-	 * This is for example useful to convert a diamond something into a netherite something,
-	 * when those two items are different CustomItem definitions but otherwise share attributes and functionality.
-	 */
-	default public ItemStack convertExistingStack(ItemStack itemStack) {
-		return CustomItemHelper.convertExistingStack(this, itemStack);
 	}
 }

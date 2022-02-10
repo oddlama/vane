@@ -11,7 +11,7 @@ public interface CustomItemRegistry {
 	/**
 	 * Returns true if a custom item with the given resourceKey has been registered.
 	 */
-	public @Nullable CustomItem has(NamespacedKey resourceKey);
+	public @Nullable boolean has(NamespacedKey resourceKey);
 
 	/**
 	 * Tries to retrieve a custom item definition by resource key.

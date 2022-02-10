@@ -5,7 +5,7 @@ import org.bukkit.NamespacedKey;
 
 import net.kyori.adventure.text.Component;
 
-public abstract class SimpleCustomItem implements CustomItemSpec {
+public abstract class SimpleCustomItem implements CustomItem {
 	public NamespacedKey key;
 	public Material baseMaterial;
 	public int customModelData;
@@ -37,11 +37,6 @@ public abstract class SimpleCustomItem implements CustomItemSpec {
 	@Override
 	public Component displayName() {
 		return displayName;
-	}
-
-	@Override
-	public boolean usesCustomDurability() {
-		return false;
 	}
 
 	@Override

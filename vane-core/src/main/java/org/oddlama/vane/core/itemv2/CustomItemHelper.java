@@ -1,15 +1,13 @@
-package org.oddlama.vane.core.itemv2.api;
+package org.oddlama.vane.core.itemv2;
 
-import org.bukkit.Material;
+import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.oddlama.vane.core.itemv2.api.CustomItem;
 import org.oddlama.vane.util.Util;
-
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TranslatableComponent;
 
 public class CustomItemHelper {
 	/**
@@ -34,7 +32,30 @@ public class CustomItemHelper {
 			meta.setCustomModelData(customItem.customModelData());
 		});
 
-		return customItem.onUpdateItemStack(itemStack);
+		return customItem.updateItemStack(itemStack);
+	}
+
+	/**
+	 * Returns the resourceKey key and version number of the stored custom item
+	 * tag on the given item, if any. Returns null if none was found or the given item stack was null.
+	 */
+	public static Pair<NamespacedKey, Integer> customItemTagsFromItemStack(@Nullable final ItemStack itemStack) {
+		if (itemStack == null) {
+			return null;
+		}
+
+		final var data = itemStack.getItemMeta().getPersistentDataContainer();
+		final var key = data.get(CUSTOM_ITEM_IDENTIFIER, PersistentDataType.STRING);
+		final var version = data.get(CUSTOM_ITEM_VERSION, PersistentDataType.INTEGER);
+		if (key == null || version == null) {
+			return null;
+		}
+
+		final var parts = key.split(":");
+		if (parts.length != 2) {
+			throw new IllegalStateException("Invalid namespaced key '" + key + "'");
+		}
+		return Pair.of(Util.namespaced_key(parts[0], parts[1]), version);
 	}
 
 	/**
