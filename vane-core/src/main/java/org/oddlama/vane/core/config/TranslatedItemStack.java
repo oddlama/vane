@@ -23,7 +23,7 @@ public class TranslatedItemStack<T extends Module<T>> extends ModuleComponent<T>
 
 	@ConfigExtendedMaterial(
 		def = "minecraft:barrier",
-		desc = "The item stack material. Also accepts heads from the head library."
+		desc = "The item stack material. Also accepts heads from the head library or from defined custom items."
 	)
 	public ExtendedMaterial config_material;
 

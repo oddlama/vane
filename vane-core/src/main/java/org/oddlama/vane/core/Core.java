@@ -56,14 +56,21 @@ import org.bukkit.plugin.messaging.PluginMessageListener;
 import org.json.JSONException;
 import org.oddlama.vane.annotation.VaneModule;
 import org.oddlama.vane.annotation.config.ConfigBoolean;
+import org.oddlama.vane.annotation.item.VaneItemv2;
 import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.annotation.persistent.Persistent;
+import org.oddlama.vane.core.config.recipes.RecipeList;
+import org.oddlama.vane.core.config.recipes.ShapedRecipeDefinition;
 import org.oddlama.vane.core.event.EntityMoveEvent;
 import org.oddlama.vane.core.functional.Consumer1;
 import org.oddlama.vane.core.item.CustomItem;
+import org.oddlama.vane.core.itemv2.VaneCustomItem;
+import org.oddlama.vane.core.itemv2.VaneCustomItemRegistry;
+import org.oddlama.vane.core.itemv2.api.CustomItemRegistry;
 import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.material.HeadMaterialLibrary;
 import org.oddlama.vane.core.menu.MenuManager;
+import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.core.module.ModuleComponent;
 
@@ -74,7 +81,6 @@ import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
 @VaneModule(name = "core", bstats = 8637, config_version = 6, lang_version = 3, storage_version = 1)
 public class Core extends Module<Core> implements PluginMessageListener {
-
 	/** The base offset for any model data used by vane plugins. */
 	// "vane" = 0x76616e65, but the value will be saved as float (json...), so only -2^24 - 2^24 can accurately be represented.
 	// therefore we use 0x76616e as the base value.
@@ -83,6 +89,8 @@ public class Core extends Module<Core> implements PluginMessageListener {
 	public static final int ITEM_DATA_SECTION_SIZE = 0x10000; // 0x10000 = 65k
 	/** The amount of reserved model data id's per section (usually one section per plugin). */
 	public static final int ITEM_VARIANT_SECTION_SIZE = (1 << 6); // 65k total → 1024 (items) * 64 (variants per item)
+
+	public VaneCustomItemRegistry item_registry;
 
 	/** Returns the item model data given the section and id */
 	public static int model_data(int section, int item_id, int variant_id) {
@@ -177,6 +185,29 @@ public class Core extends Module<Core> implements PluginMessageListener {
 		menu_manager = new MenuManager(this);
 		resource_pack_distributor = new ResourcePackDistributor(this);
 		new CommandHider(this);
+		item_registry = new VaneCustomItemRegistry();
+		item_registry.register(new ItemTest(this));
+	}
+
+	@VaneItemv2(name = "test", base = Material.COMPASS, model_data = 12345, version = 1)
+	private class ItemTest extends VaneCustomItem<Core> {
+		public ItemTest(Context<Core> context) {
+			super(context);
+		}
+
+		@Override
+		public RecipeList default_recipes() {
+			return RecipeList.of(new ShapedRecipeDefinition("recipe1")
+					.shape(" a ", "b b", " x ")
+					.add_ingredient('a', "minecraft:stick")
+					.add_ingredient('b', "minecraft:stick{Enchantments:[{id:knockback,lvl:1000}]}")
+					.add_ingredient('x', "vane_core:test")
+					.result("vane_core:test"));
+		}
+	}
+
+	public CustomItemRegistry item_registry() {
+		return item_registry;
 	}
 
 	public void check_for_update() {

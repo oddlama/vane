@@ -4,6 +4,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.function.Function;
+import java.util.function.Supplier;
+
 import org.apache.commons.lang.WordUtils;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
@@ -22,7 +24,7 @@ public abstract class ConfigField<T> implements Comparable<ConfigField<?>> {
 	private String[] yaml_path_components;
 	private String yaml_group_path;
 	private String basename;
-	private String description;
+	private Supplier<String> description;
 
 	public ConfigField(
 		Object owner,
@@ -54,21 +56,23 @@ public abstract class ConfigField<T> implements Comparable<ConfigField<?>> {
 		field.setAccessible(true);
 
 		// Dynamic description
-		try {
-			this.description = (String) owner.getClass().getMethod(field.getName() + "_desc").invoke(owner);
-		} catch (NoSuchMethodException e) {
-			// Ignore, field wasn't overridden
-			this.description = description;
-		} catch (InvocationTargetException | IllegalAccessException e) {
-			throw new RuntimeException(
-				"Could not call " +
-				owner.getClass().getName() +
-				"." +
-				field.getName() +
-				"_desc() to override description value",
-				e
-			);
-		}
+		this.description = () -> {
+			try {
+				return (String) owner.getClass().getMethod(field.getName() + "_desc").invoke(owner);
+			} catch (NoSuchMethodException e) {
+				// Ignore, field wasn't overridden
+				return description;
+			} catch (InvocationTargetException | IllegalAccessException e) {
+				throw new RuntimeException(
+					"Could not call " +
+					owner.getClass().getName() +
+					"." +
+					field.getName() +
+					"_desc() to override description value",
+					e
+				);
+			}
+		};
 	}
 
 	@SuppressWarnings("unchecked")
@@ -156,7 +160,7 @@ public abstract class ConfigField<T> implements Comparable<ConfigField<?>> {
 		final var description_wrapped =
 			indent +
 			"# " +
-			WordUtils.wrap(description, Math.max(60, 80 - indent.length()), "\n" + indent + "# ", false);
+			WordUtils.wrap(description.get(), Math.max(60, 80 - indent.length()), "\n" + indent + "# ", false);
 		builder.append(description_wrapped);
 		builder.append("\n");
 	}

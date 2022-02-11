@@ -7,7 +7,6 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import org.oddlama.vane.core.itemv2.api.CustomItem;
 import org.oddlama.vane.core.itemv2.api.CustomItemRegistry;
-import org.oddlama.vane.core.itemv2.api.CustomModelDataRegistry;
 
 public class VaneCustomItemRegistry implements CustomItemRegistry {
 	private final HashMap<NamespacedKey, CustomItem> items = new HashMap<>();
@@ -37,6 +36,12 @@ public class VaneCustomItemRegistry implements CustomItemRegistry {
 		//if (!core.custom_items().model_data_registry().has())
 		// TODO core.custom_items().model_data_registry().registerUsage()
 		// TODO core.custom_items().model_data_registry().removeUsage()
+		// TODO what happens on reload? we must provide a way to unregister then.
+		// or say reload is unsupported.
+		if (has(customItem.key())) {
+			throw new IllegalArgumentException("A custom item with the same key '" + customItem.key() + "' has already been registered");
+		}
+		items.put(customItem.key(), customItem);
 	}
 
 	@Override

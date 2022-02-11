@@ -1,21 +1,13 @@
 package org.oddlama.vane.core.itemv2;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.oddlama.vane.annotation.item.VaneItem;
 import org.oddlama.vane.annotation.item.VaneItemv2;
 import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.core.Listener;
-import org.oddlama.vane.core.functional.Function2;
+import org.oddlama.vane.core.config.recipes.RecipeList;
+import org.oddlama.vane.core.config.recipes.Recipes;
 import org.oddlama.vane.core.itemv2.api.CustomItem;
 import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Context;
@@ -30,6 +22,8 @@ public class VaneCustomItem<T extends Module<T>> extends Listener<T> implements 
 	private VaneItemv2 annotation = getClass().getAnnotation(VaneItemv2.class);
 	public NamespacedKey key;
 
+	public Recipes<T> recipes;
+
 	// Language
 	@LangMessage
 	public TranslatedMessage lang_name;
@@ -41,7 +35,7 @@ public class VaneCustomItem<T extends Module<T>> extends Listener<T> implements 
 		set_context(context);
 
 		this.key = Util.namespaced_key(get_module().namespace(), annotation.name());
-		recipes = new Recipes(this, () -> annotation.recipes());
+		recipes = new Recipes<T>(get_context(), this.key, this::default_recipes);
 
 		// Register custom model data
 		// TODO: get_module().core().model_data_registry().reserve(customModelData())
@@ -88,6 +82,10 @@ public class VaneCustomItem<T extends Module<T>> extends Listener<T> implements 
 		return annotation.durability();
 	}
 
+	public RecipeList default_recipes() {
+		return RecipeList.of();
+	}
+
 	@Override
 	public void addResources() {
 		//final var resource_name = "items/" + variant_name + ".png";
@@ -103,16 +101,5 @@ public class VaneCustomItem<T extends Module<T>> extends Listener<T> implements 
 		//		predicate.put("custom_model_data", model_data());
 		//	}
 		//);
-	}
-
-	@Override
-	public void on_config_change() {
-		// Recipes are processed in on_config_change and not in on_disable() / on_enable(),
-		// as they could change even if an item is new disabled but the plugin is still
-		// enabled and was reloaded.
-		recipes.deregister(get_module());
-		if (enabled()) {
-			recipes.register(get_module());
-		}
 	}
 }
