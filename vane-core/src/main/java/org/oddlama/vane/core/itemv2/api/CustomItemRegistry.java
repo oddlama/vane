@@ -1,8 +1,12 @@
 package org.oddlama.vane.core.itemv2.api;
 
+import java.util.Optional;
+
+import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
+import org.oddlama.vane.core.Core;
 
 /**
  * This is the registry with which you can register your custom items.
@@ -43,4 +47,16 @@ public interface CustomItemRegistry {
 	 * as a way for plugins to queue removal of items from old plugin versions.
 	 */
 	public void removePermanently(NamespacedKey key);
+
+	/**
+	 * Retrieves the global registry instance from the running vane-core instance, if any.
+	 */
+	public default Optional<CustomItemRegistry> instance() {
+		final var core = Bukkit.getServer().getPluginManager().getPlugin("vane-core");
+		if (core == null) {
+			return Optional.empty();
+		}
+
+		return Optional.of(((Core)core).item_registry());
+	}
 }
