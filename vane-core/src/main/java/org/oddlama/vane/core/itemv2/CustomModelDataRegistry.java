@@ -4,9 +4,8 @@ import java.util.HashMap;
 
 import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.Nullable;
-import org.oddlama.vane.core.itemv2.api.CustomModelDataRegistry;
 
-public class VaneCustomModelDataRegistry implements CustomModelDataRegistry {
+public class CustomModelDataRegistry implements org.oddlama.vane.core.itemv2.api.CustomModelDataRegistry {
 	private final HashMap<NamespacedKey, Range> reserved_ranges = new HashMap<>();
 
 	@Override

@@ -49,6 +49,11 @@ public interface CustomItemRegistry {
 	public void removePermanently(NamespacedKey key);
 
 	/**
+	 * Returns the custom model data registry.
+	 */
+	public CustomModelDataRegistry dataRegistry();
+
+	/**
 	 * Retrieves the global registry instance from the running vane-core instance, if any.
 	 */
 	public default Optional<CustomItemRegistry> instance() {

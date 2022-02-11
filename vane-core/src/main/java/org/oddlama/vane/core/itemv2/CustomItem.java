@@ -8,7 +8,6 @@ import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.config.recipes.RecipeList;
 import org.oddlama.vane.core.config.recipes.Recipes;
-import org.oddlama.vane.core.itemv2.api.CustomItem;
 import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.Module;
@@ -18,7 +17,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TranslatableComponent;
 import net.kyori.adventure.text.format.TextDecoration;
 
-public class VaneCustomItem<T extends Module<T>> extends Listener<T> implements CustomItem {
+public class CustomItem<T extends Module<T>> extends Listener<T> implements org.oddlama.vane.core.itemv2.api.CustomItem {
 	private VaneItemv2 annotation = getClass().getAnnotation(VaneItemv2.class);
 	public NamespacedKey key;
 
@@ -28,7 +27,7 @@ public class VaneCustomItem<T extends Module<T>> extends Listener<T> implements 
 	@LangMessage
 	public TranslatedMessage lang_name;
 
-	public VaneCustomItem(Context<T> context) {
+	public CustomItem(Context<T> context) {
 		super(null);
 		// Set namespace delayed, as we need to access instance methods to do so.
 		context = context.group("item_" + annotation.name(), "Enable item " + annotation.name());

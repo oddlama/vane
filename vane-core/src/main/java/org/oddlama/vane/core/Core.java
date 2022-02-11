@@ -64,9 +64,6 @@ import org.oddlama.vane.core.config.recipes.ShapedRecipeDefinition;
 import org.oddlama.vane.core.event.EntityMoveEvent;
 import org.oddlama.vane.core.functional.Consumer1;
 import org.oddlama.vane.core.item.CustomItem;
-import org.oddlama.vane.core.itemv2.VaneCustomItem;
-import org.oddlama.vane.core.itemv2.VaneCustomItemRegistry;
-import org.oddlama.vane.core.itemv2.api.CustomItemRegistry;
 import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.material.HeadMaterialLibrary;
 import org.oddlama.vane.core.menu.MenuManager;
@@ -90,7 +87,8 @@ public class Core extends Module<Core> implements PluginMessageListener {
 	/** The amount of reserved model data id's per section (usually one section per plugin). */
 	public static final int ITEM_VARIANT_SECTION_SIZE = (1 << 6); // 65k total → 1024 (items) * 64 (variants per item)
 
-	public VaneCustomItemRegistry item_registry;
+	public org.oddlama.vane.core.itemv2.CustomModelDataRegistry model_data_registry;
+	public org.oddlama.vane.core.itemv2.CustomItemRegistry item_registry;
 
 	/** Returns the item model data given the section and id */
 	public static int model_data(int section, int item_id, int variant_id) {
@@ -185,12 +183,13 @@ public class Core extends Module<Core> implements PluginMessageListener {
 		menu_manager = new MenuManager(this);
 		resource_pack_distributor = new ResourcePackDistributor(this);
 		new CommandHider(this);
-		item_registry = new VaneCustomItemRegistry();
+		model_data_registry = new org.oddlama.vane.core.itemv2.CustomModelDataRegistry();
+		item_registry = new org.oddlama.vane.core.itemv2.CustomItemRegistry(model_data_registry);
 		item_registry.register(new ItemTest(this));
 	}
 
 	@VaneItemv2(name = "test", base = Material.COMPASS, model_data = 12345, version = 1)
-	private class ItemTest extends VaneCustomItem<Core> {
+	private class ItemTest extends org.oddlama.vane.core.itemv2.CustomItem<Core> {
 		public ItemTest(Context<Core> context) {
 			super(context);
 		}
@@ -206,7 +205,7 @@ public class Core extends Module<Core> implements PluginMessageListener {
 		}
 	}
 
-	public CustomItemRegistry item_registry() {
+	public org.oddlama.vane.core.itemv2.CustomItemRegistry item_registry() {
 		return item_registry;
 	}
 
