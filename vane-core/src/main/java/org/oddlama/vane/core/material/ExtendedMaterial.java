@@ -5,6 +5,8 @@ import static org.oddlama.vane.util.MaterialUtil.material_from;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
+import org.oddlama.vane.core.Core;
+import org.oddlama.vane.core.itemv2.CustomItemHelper;
 import org.oddlama.vane.core.itemv2.api.CustomItem;
 
 public class ExtendedMaterial {
@@ -58,7 +60,11 @@ public class ExtendedMaterial {
 			return new ItemStack(material, amount);
 		}
 
-		// TODO get custom item
-		throw new IllegalStateException("No custom item found with key '" + key + "'");
+		final var custom_item = Core.instance().item_registry().get(key);
+		if (custom_item == null) {
+			throw new IllegalStateException("ExtendedMaterial '" + key + "' is neither a classic material, a head nor a custom item!");
+		}
+
+		return CustomItemHelper.newStack(custom_item);
 	}
 }

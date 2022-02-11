@@ -80,7 +80,7 @@ public class ResourcePackDistributor extends Listener<Core> {
 				ignored.printStackTrace();
 			}
 
-			get_module().log.info("Setting up dev lazy server :-)");
+			get_module().log.info("Setting up dev lazy server");
 		} else if (((ModuleGroup<Core>) custom_resource_pack_config.get_context()).config_enabled) {
 			get_module().log.info("Serving custom resource pack");
 			url = custom_resource_pack_config.config_url;

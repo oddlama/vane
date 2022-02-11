@@ -52,10 +52,8 @@ public interface CustomItem {
 	 * on a stick that doesn't attract pigs, you generally will have to listen
 	 * for the corresponding event yourself and cancel it. For some commonly
 	 * used base items, vane provides helpers that disable the vanilla functionality
-	 * for you (see TODO).
+	 * for you (see TODO CustomItemFunctionalityProvider interface for registration).
 	 */
-	// TODO: intercept brewing stand events. hoe events, shovel tilling etc. Is this too much? We will certainly miss certain things.
-	// TODO: maybe recommend just using the most mundane, fitting item (no durability -> paper, durability -> warped fungus on a stick), now that we have custom durability, this might be the best way.
 	public Material baseMaterial();
 
 	/**
@@ -91,11 +89,6 @@ public interface CustomItem {
 	 * the affected items will be updated and keep their current durability, but clamped to the new maximum.
 	 */
 	public int durability();
-
-	// TODO make onItemMend proportional by default. can be disabled by items by catching the event and cancelling it.
-	// TODO catch PlayerItemBreakEvent and PlayerItemDamageEvent to modify custom durability.
-	// TODO check if handle.hurtAndBreak calls these.
-	// TODO make a simple json format to add custom items without code.
 
 	/**
 	 * This function will be called when the resource pack is generated, and allows you

@@ -35,9 +35,6 @@ public class CustomItem<T extends Module<T>> extends Listener<T> implements org.
 
 		this.key = Util.namespaced_key(get_module().namespace(), annotation.name());
 		recipes = new Recipes<T>(get_context(), this.key, this::default_recipes);
-
-		// Register custom model data
-		// TODO: get_module().core().model_data_registry().reserve(customModelData())
 	}
 
 	@Override

@@ -87,6 +87,12 @@ public class Core extends Module<Core> implements PluginMessageListener {
 	/** The amount of reserved model data id's per section (usually one section per plugin). */
 	public static final int ITEM_VARIANT_SECTION_SIZE = (1 << 6); // 65k total → 1024 (items) * 64 (variants per item)
 
+	/** Use sparingly. */
+	private static Core INSTANCE = null;
+	public static Core instance() {
+		return INSTANCE;
+	}
+
 	public org.oddlama.vane.core.itemv2.CustomModelDataRegistry model_data_registry;
 	public org.oddlama.vane.core.itemv2.CustomItemRegistry item_registry;
 
@@ -165,6 +171,11 @@ public class Core extends Module<Core> implements PluginMessageListener {
 	public boolean config_warn_breaking_loot_blocks;
 
 	public Core() {
+		if (INSTANCE != null) {
+			throw new IllegalStateException("Cannot instanciate Core twice.");
+		}
+		INSTANCE = this;
+
 		// Create global command catch-all permission
 		register_permission(permission_command_catchall);
 

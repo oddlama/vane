@@ -47,6 +47,7 @@ public class CustomItemRegistry implements org.oddlama.vane.core.itemv2.api.Cust
 
 	@Override
 	public void removePermanently(final NamespacedKey key) {
+		// TODO
 	}
 
 	@Override
