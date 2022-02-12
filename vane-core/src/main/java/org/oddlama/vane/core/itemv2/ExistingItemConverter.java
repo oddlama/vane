@@ -1,4 +1,4 @@
-package org.oddlama.vane.core;
+package org.oddlama.vane.core.itemv2;
 
 import org.bukkit.block.Container;
 import org.bukkit.event.EventHandler;
@@ -7,7 +7,8 @@ import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
-import org.oddlama.vane.core.itemv2.CustomItemHelper;
+import org.oddlama.vane.core.Core;
+import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.module.Context;
 
 public class ExistingItemConverter extends Listener<Core> {
@@ -19,7 +20,6 @@ public class ExistingItemConverter extends Listener<Core> {
 		final var contents = inventory.getContents();
 		int changed = 0;
 
-		// Custom item related processing
 		for (int i = 0; i < contents.length; ++i) {
 			final var is = contents[i];
 			final var custom_item = get_module().item_registry().get(is);

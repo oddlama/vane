@@ -1,9 +1,11 @@
-package org.oddlama.vane.core;
+package org.oddlama.vane.core.misc;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.oddlama.vane.core.Core;
+import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.module.Context;
 
 public class CommandHider extends Listener<Core> {

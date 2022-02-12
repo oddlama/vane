@@ -1,5 +1,7 @@
 package org.oddlama.vane.core.itemv2.api;
 
+import java.util.EnumSet;
+
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
@@ -47,12 +49,10 @@ public interface CustomItem {
 	 * For crafting ingredients, we recommend using an item that has no other use than in crafting.
 	 * Generally it is a good idea to pick materials that have an item with similar properties.
 	 *
-	 * No attempts will be made to remove the vanilla behavior of the base items.
-	 * If you require for example a hoe that doesn't till blocks or a carrot
-	 * on a stick that doesn't attract pigs, you generally will have to listen
-	 * for the corresponding event yourself and cancel it. For some commonly
-	 * used base items, vane provides helpers that disable the vanilla functionality
-	 * for you (see TODO CustomItemFunctionalityProvider interface for registration).
+	 * By default, no attempts will be made to remove the vanilla behavior of the base items,
+	 * except for inhibiting use in crafting recipes that require the base material.
+	 * See {@link #inhibitedBehaviors()} for more information. If you require other
+	 * behaviors to be inhibited, you need to write your own event listeners.
 	 */
 	public Material baseMaterial();
 
@@ -90,6 +90,25 @@ public interface CustomItem {
 	 * the affected items will be updated and keep their current durability, but clamped to the new maximum.
 	 */
 	public int durability();
+
+	/**
+	 * Specifies which vanilla behaviors should be inhibited for this custom item.
+	 *
+	 * By default, any _vanilla_ crafting recipe (i.e. "minecraft" is the associated key's namespace)
+	 * will be disabled when this custom item is used in the recipe's inputs, as well as any
+	 * smithing recipe with this item as any input.
+	 *
+	 * So a custom item based with paper as the base material cannot be used to craft
+	 * for example books (which require paper as an ingredient), or a diamond hoe
+	 * based item will not be converted to a vanilla netherite hoe in the smithing table.
+	 *
+	 * If you require a hoe that doesn't till blocks or a carrot/fungus on a stick
+	 * that doesn't attract certain entities, you can override {@link #inhibitedBehaviors()}
+	 * to specify what should be prohibited. Anything else must be handeled by the user.
+	 */
+	default public EnumSet<InhibitBehavior> inhibitedBehaviors() {
+		return EnumSet.of(InhibitBehavior.USE_IN_VANILLA_CRAFTING_RECIPE, InhibitBehavior.USE_IN_SMITHING_RECIPE);
+	}
 
 	/**
 	 * This function will be called when the resource pack is generated, and allows you
