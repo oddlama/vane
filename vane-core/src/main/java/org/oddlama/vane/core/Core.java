@@ -93,8 +93,9 @@ public class Core extends Module<Core> implements PluginMessageListener {
 		return INSTANCE;
 	}
 
-	public org.oddlama.vane.core.itemv2.CustomModelDataRegistry model_data_registry;
-	public org.oddlama.vane.core.itemv2.CustomItemRegistry item_registry;
+	private org.oddlama.vane.core.itemv2.CustomModelDataRegistry model_data_registry;
+	private org.oddlama.vane.core.itemv2.CustomItemRegistry item_registry;
+	public ExistingItemConverter existing_item_converter;
 
 	/** Returns the item model data given the section and id */
 	public static int model_data(int section, int item_id, int variant_id) {
@@ -195,7 +196,8 @@ public class Core extends Module<Core> implements PluginMessageListener {
 		resource_pack_distributor = new ResourcePackDistributor(this);
 		new CommandHider(this);
 		model_data_registry = new org.oddlama.vane.core.itemv2.CustomModelDataRegistry();
-		item_registry = new org.oddlama.vane.core.itemv2.CustomItemRegistry(model_data_registry);
+		item_registry = new org.oddlama.vane.core.itemv2.CustomItemRegistry();
+		existing_item_converter = new ExistingItemConverter(this);
 		item_registry.register(new ItemTest(this));
 	}
 
@@ -218,6 +220,10 @@ public class Core extends Module<Core> implements PluginMessageListener {
 
 	public org.oddlama.vane.core.itemv2.CustomItemRegistry item_registry() {
 		return item_registry;
+	}
+
+	public org.oddlama.vane.core.itemv2.CustomModelDataRegistry model_data_registry() {
+		return model_data_registry;
 	}
 
 	public void check_for_update() {

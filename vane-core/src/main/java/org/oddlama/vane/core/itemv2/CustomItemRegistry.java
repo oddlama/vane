@@ -1,19 +1,22 @@
 package org.oddlama.vane.core.itemv2;
 
 import java.util.HashMap;
+import java.util.HashSet;
 
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
+import org.oddlama.vane.core.Core;
 import org.oddlama.vane.core.itemv2.api.CustomItem;
 import org.oddlama.vane.core.itemv2.api.CustomModelDataRegistry;
 
 public class CustomItemRegistry implements org.oddlama.vane.core.itemv2.api.CustomItemRegistry {
 	private final HashMap<NamespacedKey, CustomItem> items = new HashMap<>();
+	private final HashSet<NamespacedKey> items_to_remove = new HashSet<>();
 	private CustomModelDataRegistry model_data_registry;
 
-	public CustomItemRegistry(final CustomModelDataRegistry model_data_registry) {
-		this.model_data_registry = model_data_registry;
+	public CustomItemRegistry() {
+		this.model_data_registry = Core.instance().model_data_registry();
 	}
 
 	@Override
@@ -27,7 +30,7 @@ public class CustomItemRegistry implements org.oddlama.vane.core.itemv2.api.Cust
 	}
 
 	@Override
-	public @Nullable CustomItem get(final ItemStack itemStack) {
+	public @Nullable CustomItem get(@Nullable final ItemStack itemStack) {
 		final var key_and_version = CustomItemHelper.customItemTagsFromItemStack(itemStack);
 		if (key_and_version == null) {
 			return null;
@@ -47,7 +50,12 @@ public class CustomItemRegistry implements org.oddlama.vane.core.itemv2.api.Cust
 
 	@Override
 	public void removePermanently(final NamespacedKey key) {
-		// TODO
+		items_to_remove.add(key);
+	}
+
+	@Override
+	public boolean shouldRemove(NamespacedKey key) {
+		return items_to_remove.contains(key);
 	}
 
 	@Override

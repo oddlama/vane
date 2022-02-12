@@ -30,7 +30,7 @@ public interface CustomItemRegistry {
 	 */
 	// TODO: make command /clearcustomitems namespace:key that queues an item for deletion even if the original plugin is gone now. Maybe even allow clearing a whole namespace.
 	// TODO: for an immediate operation on a whole world, NBTExplorer can be used together with a removal filter filtering on the custom item id.
-	public @Nullable CustomItem get(ItemStack itemStack);
+	public @Nullable CustomItem get(@Nullable ItemStack itemStack);
 
 	/**
 	 * Registers a new custom item. Throws an IllegalArgumentException if an
@@ -47,6 +47,11 @@ public interface CustomItemRegistry {
 	 * as a way for plugins to queue removal of items from old plugin versions.
 	 */
 	public void removePermanently(NamespacedKey key);
+
+	/**
+	 * Returns true if the associated key was queued for removal using {@link #removePermanently(NamespacedKey)}.
+	 */
+	public boolean shouldRemove(NamespacedKey key);
 
 	/**
 	 * Returns the custom model data registry.

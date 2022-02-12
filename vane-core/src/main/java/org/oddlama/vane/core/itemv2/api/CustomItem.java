@@ -67,8 +67,9 @@ public interface CustomItem {
 
 	/**
 	 * Returns the display name for newly created items of this type.
-	 * This will NOT be updated on existing items. If you want that behavior, you
+	 * This will only NOT be updated on existing items. If you want that behavior, you
 	 * can easily implement it by overriding {@link #updateItemStack(ItemStack)}.
+	 * By using translatable components, there's no need to update this except when changing the translation key.
 	 */
 	public @Nullable Component displayName();
 
