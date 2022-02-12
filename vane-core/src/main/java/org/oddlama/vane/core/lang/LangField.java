@@ -3,7 +3,7 @@ package org.oddlama.vane.core.lang;
 import java.lang.reflect.Field;
 import java.util.function.Function;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.oddlama.vane.core.ResourcePackGenerator;
+import org.oddlama.vane.core.resourcepack.ResourcePackGenerator;
 import org.oddlama.vane.core.YamlLoadException;
 import org.oddlama.vane.core.module.Module;
 

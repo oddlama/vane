@@ -70,6 +70,8 @@ import org.oddlama.vane.core.menu.MenuManager;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.core.module.ModuleComponent;
+import org.oddlama.vane.core.resourcepack.ResourcePackDistributor;
+import org.oddlama.vane.core.resourcepack.ResourcePackGenerator;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;

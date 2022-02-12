@@ -1,4 +1,4 @@
-package org.oddlama.vane.core;
+package org.oddlama.vane.core.resourcepack;
 
 import com.google.common.hash.Hashing;
 import com.google.common.io.Files;
@@ -14,6 +14,8 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.oddlama.vane.annotation.config.ConfigBoolean;
 import org.oddlama.vane.annotation.lang.LangMessage;
+import org.oddlama.vane.core.Core;
+import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.ModuleGroup;

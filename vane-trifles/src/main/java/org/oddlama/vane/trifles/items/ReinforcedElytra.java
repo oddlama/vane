@@ -17,7 +17,7 @@ import org.bukkit.inventory.RecipeChoice.MaterialChoice;
 import org.bukkit.inventory.SmithingRecipe;
 import org.oddlama.vane.annotation.config.ConfigDouble;
 import org.oddlama.vane.annotation.item.VaneItem;
-import org.oddlama.vane.core.ResourcePackGenerator;
+import org.oddlama.vane.core.resourcepack.ResourcePackGenerator;
 import org.oddlama.vane.core.item.CustomItem;
 import org.oddlama.vane.core.item.CustomItemVariant;
 import org.oddlama.vane.core.item.ItemVariantEnum;

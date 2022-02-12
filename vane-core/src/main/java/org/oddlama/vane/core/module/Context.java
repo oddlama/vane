@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.function.Consumer;
 import org.bukkit.scheduler.BukkitTask;
 import org.json.JSONObject;
-import org.oddlama.vane.core.ResourcePackGenerator;
+import org.oddlama.vane.core.resourcepack.ResourcePackGenerator;
 import org.oddlama.vane.core.functional.Consumer1;
 
 /**

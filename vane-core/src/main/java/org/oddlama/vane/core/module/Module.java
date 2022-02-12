@@ -40,7 +40,7 @@ import org.oddlama.vane.annotation.lang.LangVersion;
 import org.oddlama.vane.annotation.persistent.Persistent;
 import org.oddlama.vane.core.Core;
 import org.oddlama.vane.core.LootTable;
-import org.oddlama.vane.core.ResourcePackGenerator;
+import org.oddlama.vane.core.resourcepack.ResourcePackGenerator;
 import org.oddlama.vane.core.command.Command;
 import org.oddlama.vane.core.config.ConfigManager;
 import org.oddlama.vane.core.functional.Consumer1;

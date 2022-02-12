@@ -1,4 +1,4 @@
-package org.oddlama.vane.core;
+package org.oddlama.vane.core.resourcepack;
 
 import java.io.File;
 import java.io.FileOutputStream;

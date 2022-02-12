@@ -1,4 +1,4 @@
-package org.oddlama.vane.core;
+package org.oddlama.vane.core.resourcepack;
 
 import com.google.common.hash.Hashing;
 import com.sun.net.httpserver.HttpExchange;

@@ -1,4 +1,4 @@
-package org.oddlama.vane.core;
+package org.oddlama.vane.core.resourcepack;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.ListenerPriority;
@@ -19,6 +19,8 @@ import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerResourcePackStatusEvent;
+import org.oddlama.vane.core.Core;
+import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.packet.WrapperPlayServerChat;
 

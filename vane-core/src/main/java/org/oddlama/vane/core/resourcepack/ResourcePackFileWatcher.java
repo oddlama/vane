@@ -1,4 +1,4 @@
-package org.oddlama.vane.core;
+package org.oddlama.vane.core.resourcepack;
 
 import static java.nio.file.StandardWatchEventKinds.*;
 
@@ -16,7 +16,6 @@ public class ResourcePackFileWatcher {
 	private final ResourcePackDistributor resource_pack_distributor;
 	private final File file;
 
-	@SuppressWarnings("unchecked")
 	public ResourcePackFileWatcher(ResourcePackDistributor resource_pack_distributor, File file)
 		throws IOException, InterruptedException {
 		this.resource_pack_distributor = resource_pack_distributor;

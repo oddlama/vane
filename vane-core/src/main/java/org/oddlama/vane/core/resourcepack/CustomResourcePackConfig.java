@@ -1,6 +1,7 @@
-package org.oddlama.vane.core;
+package org.oddlama.vane.core.resourcepack;
 
 import org.oddlama.vane.annotation.config.ConfigString;
+import org.oddlama.vane.core.Core;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.ModuleComponent;
 
