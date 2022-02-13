@@ -74,13 +74,6 @@ public class CustomItem<T extends Module<T>> extends Listener<T> implements org.
 	}
 
 	@Override
-	public @Nullable TranslatableComponent durabilityLore() {
-		return Component.translatable("item.durability")
-			.color(NamedTextColor.WHITE)
-			.decoration(TextDecoration.ITALIC, false);
-	}
-
-	@Override
 	public int durability() {
 		return annotation.durability();
 	}
@@ -95,6 +88,7 @@ public class CustomItem<T extends Module<T>> extends Listener<T> implements org.
 
 	@Override
 	public void addResources() {
+		//TODO
 		//final var resource_name = "items/" + variant_name + ".png";
 		//final var resource = get_module().getResource(resource_name);
 		//if (resource == null) {

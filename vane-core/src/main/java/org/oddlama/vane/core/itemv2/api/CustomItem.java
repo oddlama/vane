@@ -10,6 +10,8 @@ import org.jetbrains.annotations.Nullable;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TranslatableComponent;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 
 /**
  * This is the CustomItem specification that all custom items must implement to be registered with the vane custom-item API.
@@ -78,7 +80,11 @@ public interface CustomItem {
 	 * Return null to disable durability lore. Arguments to the translatable component
 	 * that will be supplied are the current durability (%1$s) and max durability (%2$s).
 	 */
-	public @Nullable TranslatableComponent durabilityLore();
+	default public @Nullable TranslatableComponent durabilityLore() {
+		return Component.translatable("item.durability")
+			.color(NamedTextColor.WHITE)
+			.decoration(TextDecoration.ITALIC, false);
+	}
 
 	/**
 	 * The item's effective maximum durability. If this returns 0, no changes will be made to the base
