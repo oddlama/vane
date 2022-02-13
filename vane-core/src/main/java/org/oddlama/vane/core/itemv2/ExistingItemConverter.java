@@ -1,8 +1,10 @@
 package org.oddlama.vane.core.itemv2;
 
+import org.bukkit.NamespacedKey;
 import org.bukkit.block.Container;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.inventory.Inventory;
@@ -19,15 +21,38 @@ public class ExistingItemConverter extends Listener<Core> {
 		super(context.namespace("existing_item_converter"));
 	}
 
-	// TODO legacy convert old items based on custom model data.
 	private CustomItem from_old_item(final ItemStack item_stack) {
 		final var meta = item_stack.getItemMeta();
 		if (!meta.hasCustomModelData()) {
 			return null;
 		}
 
+		// If lookups fail, we return null and nothing will be done.
 		switch (meta.getCustomModelData()) {
-			case 1111: break;
+			case 7758190: return get_module().item_registry().get(NamespacedKey.fromString("vane_trifles:wooden_sickle"));
+			// 7758190: org.oddlama.vane.trifles.items.Sickle variant org.oddlama.vane.trifles.items.Sickle$SickleVariant@7423691e with base material WOODEN_HOE and model_data
+			// 7758191: org.oddlama.vane.trifles.items.Sickle variant org.oddlama.vane.trifles.items.Sickle$SickleVariant@7f49b82b with base material STONE_HOE and model_data
+			// 7758192: org.oddlama.vane.trifles.items.Sickle variant org.oddlama.vane.trifles.items.Sickle$SickleVariant@39de5c61 with base material IRON_HOE and model_data
+			// 7758193: org.oddlama.vane.trifles.items.Sickle variant org.oddlama.vane.trifles.items.Sickle$SickleVariant@3c7defc4 with base material GOLDEN_HOE and model_data
+			// 7758194: org.oddlama.vane.trifles.items.Sickle variant org.oddlama.vane.trifles.items.Sickle$SickleVariant@53f91acc with base material DIAMOND_HOE and model_data
+			// 7758195: org.oddlama.vane.trifles.items.Sickle variant org.oddlama.vane.trifles.items.Sickle$SickleVariant@61c36878 with base material NETHERITE_HOE and model_data
+			// 7758254: org.oddlama.vane.trifles.items.File variant org.oddlama.vane.trifles.items.File$FileVariant@1d9dcc5b with base material WOODEN_HOE and model_data
+			// 7758255: org.oddlama.vane.trifles.items.File variant org.oddlama.vane.trifles.items.File$FileVariant@8b31007 with base material STONE_HOE and model_data
+			// 7758256: org.oddlama.vane.trifles.items.File variant org.oddlama.vane.trifles.items.File$FileVariant@2e626887 with base material IRON_HOE and model_data
+			// 7758257: org.oddlama.vane.trifles.items.File variant org.oddlama.vane.trifles.items.File$FileVariant@53141b43 with base material GOLDEN_HOE and model_data
+			// 7758258: org.oddlama.vane.trifles.items.File variant org.oddlama.vane.trifles.items.File$FileVariant@2018ea6e with base material DIAMOND_HOE and model_data
+			// 7758259: org.oddlama.vane.trifles.items.File variant org.oddlama.vane.trifles.items.File$FileVariant@303bf542 with base material NETHERITE_HOE and model_data
+			// 7758318: org.oddlama.vane.trifles.items.EmptyXpBottle variant org.oddlama.vane.trifles.items.EmptyXpBottle$EmptyXpBottleVariant@3e3ea4ab with base material GLASS_BOTTLE and model_data
+			// 7758382: org.oddlama.vane.trifles.items.XpBottle variant org.oddlama.vane.trifles.items.XpBottle$XpBottleVariant@109d018b with base material HONEY_BOTTLE and model_data
+			// 7758383: org.oddlama.vane.trifles.items.XpBottle variant org.oddlama.vane.trifles.items.XpBottle$XpBottleVariant@46e696d with base material HONEY_BOTTLE and model_data
+			// 7758384: org.oddlama.vane.trifles.items.XpBottle variant org.oddlama.vane.trifles.items.XpBottle$XpBottleVariant@126316e1 with base material HONEY_BOTTLE and model_data
+			// 7758446: org.oddlama.vane.trifles.items.HomeScroll variant org.oddlama.vane.trifles.items.HomeScroll$HomeScrollVariant@7e2cc665 with base material CARROT_ON_A_STICK and model_data
+			// 7758510: org.oddlama.vane.trifles.items.UnstableScroll variant org.oddlama.vane.trifles.items.UnstableScroll$UnstableScrollVariant@73a35ad4 with base material CARROT_ON_A_STICK and model_data
+			// 7758574: org.oddlama.vane.trifles.items.ReinforcedElytra variant org.oddlama.vane.trifles.items.ReinforcedElytra$ReinforcedElytraVariant@8fccdba with base material ELYTRA and model_data
+			// 7823790: org.oddlama.vane.enchantments.items.AncientTomeOfKnowledge variant org.oddlama.vane.enchantments.items.AncientTomeOfKnowledge$AncientTomeOfKnowledgeVariant@27a64533 with base material BOOK and model_data
+			// 7823791: org.oddlama.vane.enchantments.items.AncientTomeOfKnowledge variant org.oddlama.vane.enchantments.items.AncientTomeOfKnowledge$AncientTomeOfKnowledgeVariant@605af50d with base material ENCHANTED_BOOK and model_data
+			// 7823854: org.oddlama.vane.enchantments.items.AncientTomeOfTheGods variant org.oddlama.vane.enchantments.items.AncientTomeOfTheGods$AncientTomeOfTheGodsVariant@242cd56 with base material BOOK and model_data
+			// 7823855: org.oddlama.vane.enchantments.items.AncientTomeOfTheGods variant org.oddlama.vane.enchantments.items.AncientTomeOfTheGods$AncientTomeOfTheGodsVariant@26bda869 with base material ENCHANTED_BOOK and model_data
 		}
 
 		return null;
@@ -94,10 +119,15 @@ public class ExistingItemConverter extends Listener<Core> {
 		process_inventory(event.getPlayer().getInventory());
 	}
 
-	// TODO also on open inventory, to catch ender chest. careful: chest menus.
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void on_inventory_open(final InventoryOpenEvent event) {
+		// Catches enderchests, and inventories by other plugins
+		process_inventory(event.getInventory());
+	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void on_chunk_load(final ChunkLoadEvent event) {
+		// Pre-processes chunks to quickly get rid of any items.
 		final var chunk = event.getChunk();
 		for (final var te : chunk.getTileEntities()) {
 			if (te instanceof Container container) {
