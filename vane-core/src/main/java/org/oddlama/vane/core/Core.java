@@ -12,6 +12,7 @@ import java.util.TreeSet;
 import java.util.logging.Level;
 
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -22,6 +23,8 @@ import org.oddlama.vane.annotation.VaneModule;
 import org.oddlama.vane.annotation.config.ConfigBoolean;
 import org.oddlama.vane.annotation.item.VaneItemv2;
 import org.oddlama.vane.annotation.lang.LangMessage;
+import org.oddlama.vane.core.config.loot.LootDefinition;
+import org.oddlama.vane.core.config.loot.LootTableList;
 import org.oddlama.vane.core.config.recipes.RecipeList;
 import org.oddlama.vane.core.config.recipes.ShapedRecipeDefinition;
 import org.oddlama.vane.core.functional.Consumer1;
@@ -202,6 +205,17 @@ public class Core extends Module<Core> {
 					.add_ingredient('b', "minecraft:stick{Enchantments:[{id:knockback,lvl:1000}]}")
 					.add_ingredient('x', "vane_core:test")
 					.result("vane_core:test"));
+		}
+
+		@Override
+		public LootTableList default_loot_tables() {
+			return LootTableList.of(
+				new LootDefinition("generic")
+					.in(NamespacedKey.minecraft("bastion"))
+					.in(NamespacedKey.minecraft("nether"))
+					.in(NamespacedKey.minecraft("dude"))
+					.add(0.01, 1, 3, "minecraft:stick")
+					.add(0.0000012345, 1, 1, "minecraft:stick{Enchantments:[{id:knockback,lvl:1000}]}"));
 		}
 	}
 

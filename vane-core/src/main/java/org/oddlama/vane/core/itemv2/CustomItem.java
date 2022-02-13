@@ -2,7 +2,6 @@ package org.oddlama.vane.core.itemv2;
 
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.jetbrains.annotations.Nullable;
 import org.oddlama.vane.annotation.item.VaneItemv2;
 import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.core.Listener;
@@ -16,8 +15,6 @@ import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.util.Util;
 
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TranslatableComponent;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 
 public class CustomItem<T extends Module<T>> extends Listener<T> implements org.oddlama.vane.core.itemv2.api.CustomItem {

@@ -12,8 +12,8 @@ public interface CustomModelDataRegistry {
 			if (from >= to) {
 				throw new IllegalArgumentException("A range must contain at least one integer");
 			}
-			if (from <= (1 << 24)) {
-				throw new IllegalArgumentException("A range cannot contain a number <= 2^24, as these cannot be accurately represented in JSON.");
+			if (from <= -(1 << 24)) {
+				throw new IllegalArgumentException("A range cannot contain a number <= -2^24, as these cannot be accurately represented in JSON.");
 			}
 			if (to >= (1 << 24)) {
 				throw new IllegalArgumentException("A range cannot contain a number >= 2^24, as these cannot be accurately represented in JSON.");

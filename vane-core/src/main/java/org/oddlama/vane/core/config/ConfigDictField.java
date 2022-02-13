@@ -95,8 +95,12 @@ public class ConfigDictField extends ConfigField<ConfigDictSerializable> {
 	@SuppressWarnings("unchecked")
 	private void append_dict(final StringBuilder builder, final String indent, final String dict_key, final Map<String, Object> dict, final boolean is_list_entry) {
 		builder.append(indent);
-		builder.append(dict_key);
-		builder.append(is_list_entry ? "-" : ":");
+		if (is_list_entry) {
+			builder.append("-");
+		} else {
+			builder.append(dict_key);
+			builder.append(":");
+		}
 		if (dict.isEmpty()) {
 			builder.append(" {}\n");
 		} else {
