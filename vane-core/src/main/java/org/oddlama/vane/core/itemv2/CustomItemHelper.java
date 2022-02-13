@@ -10,14 +10,10 @@ import org.oddlama.vane.core.itemv2.api.CustomItem;
 import org.oddlama.vane.util.Util;
 
 public class CustomItemHelper {
-	/**
-	 * Used in persistent item storage to identify custom items.
-	 */
-	public static final NamespacedKey CUSTOM_ITEM_IDENTIFIER = Util.namespaced_key("vane_api", "custom_item_identifier");
-	/**
-	 * Used in persistent item storage to store custom item version.
-	 */
-	public static final NamespacedKey CUSTOM_ITEM_VERSION = Util.namespaced_key("vane_api", "custom_item_version");
+	/** Used in persistent item storage to identify custom items. */
+	public static final NamespacedKey CUSTOM_ITEM_IDENTIFIER = Util.namespaced_key("vane", "custom_item_identifier");
+	/** Used in persistent item storage to store custom item version. */
+	public static final NamespacedKey CUSTOM_ITEM_VERSION = Util.namespaced_key("vane", "custom_item_version");
 
 	/**
 	 * Internal function. Used as a dispatcher to update internal information and then call
@@ -32,6 +28,7 @@ public class CustomItemHelper {
 			meta.setCustomModelData(customItem.customModelData());
 		});
 
+		DurabilityManager.initialize_or_update_max(customItem, itemStack);
 		return customItem.updateItemStack(itemStack);
 	}
 

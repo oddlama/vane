@@ -15,6 +15,7 @@ import org.oddlama.vane.util.Util;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TranslatableComponent;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 
 public class CustomItem<T extends Module<T>> extends Listener<T> implements org.oddlama.vane.core.itemv2.api.CustomItem {
@@ -70,7 +71,9 @@ public class CustomItem<T extends Module<T>> extends Listener<T> implements org.
 
 	@Override
 	public @Nullable TranslatableComponent durabilityLore() {
-		return null;
+		return Component.translatable("item.durability")
+			.color(NamedTextColor.WHITE)
+			.decoration(TextDecoration.ITALIC, false);
 	}
 
 	@Override

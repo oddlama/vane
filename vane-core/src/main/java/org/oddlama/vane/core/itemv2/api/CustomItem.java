@@ -81,7 +81,7 @@ public interface CustomItem {
 	public @Nullable TranslatableComponent durabilityLore();
 
 	/**
-	 * The items effective maximum durability. If this returns 0, no changes will be made to the base
+	 * The item's effective maximum durability. If this returns 0, no changes will be made to the base
 	 * item's durability mechanic. If this is set to a value > 0, it requires a base item with durability.
 	 * The durability bar of the base item then acts solely as an indicative value of a separately stored durability.
 	 * Changes to the item's durability by classical means are automatically reflected in this property.

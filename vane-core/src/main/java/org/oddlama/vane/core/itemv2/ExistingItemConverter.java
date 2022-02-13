@@ -6,6 +6,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.oddlama.vane.core.Core;
 import org.oddlama.vane.core.Listener;
@@ -41,12 +42,16 @@ public class ExistingItemConverter extends Listener<Core> {
 				is.getType() != custom_item.baseMaterial() ||
 				key_and_version.getRight() != custom_item.version()
 			) {
+				// Also includes durability max update.
 				contents[i] = CustomItemHelper.convertExistingStack(custom_item, is);
 				++changed;
 				continue;
 			}
 
-			// TODO durability max change
+			// Update maximum durability on existing items if changed.
+			if (meta.getPersistentDataContainer().getOrDefault(DurabilityManager.ITEM_DURABILITY_MAX, PersistentDataType.INTEGER, -1) != custom_item.durability()) {
+				DurabilityManager.initialize_or_update_max(custom_item, contents[i]);
+			}
 		}
 
 		if (changed > 0) {

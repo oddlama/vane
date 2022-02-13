@@ -27,6 +27,7 @@ import org.oddlama.vane.core.config.recipes.ShapedRecipeDefinition;
 import org.oddlama.vane.core.functional.Consumer1;
 import org.oddlama.vane.core.itemv2.CustomItemRegistry;
 import org.oddlama.vane.core.itemv2.CustomModelDataRegistry;
+import org.oddlama.vane.core.itemv2.DurabilityManager;
 import org.oddlama.vane.core.itemv2.ExistingItemConverter;
 import org.oddlama.vane.core.itemv2.VanillaFunctionalityInhibitor;
 import org.oddlama.vane.core.lang.TranslatedMessage;
@@ -137,6 +138,7 @@ public class Core extends Module<Core> {
 		new AuthMultiplexer(this);
 		new LootChestProtector(this);
 		new VanillaFunctionalityInhibitor(this);
+		new DurabilityManager(this);
 		new org.oddlama.vane.core.commands.Vane(this);
 		new org.oddlama.vane.core.commands.CustomItem(this);
 		menu_manager = new MenuManager(this);
