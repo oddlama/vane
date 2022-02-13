@@ -7,20 +7,14 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import com.mojang.brigadier.StringReader;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Tag;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.RecipeChoice;
 import org.jetbrains.annotations.NotNull;
-import org.oddlama.vane.core.material.ExtendedMaterial;
+import org.oddlama.vane.util.ItemUtil;
 import org.oddlama.vane.util.Util;
-
-import net.minecraft.commands.arguments.item.ItemParser;
 
 public abstract class RecipeDefinition {
 	public String name;
@@ -34,7 +28,7 @@ public abstract class RecipeDefinition {
 	}
 
 	public NamespacedKey key(final NamespacedKey base_key) {
-		return Util.namespaced_key(base_key.namespace(), base_key.value() + "_" + name);
+		return Util.namespaced_key(base_key.namespace(), base_key.value() + "." + name);
 	}
 
 	public abstract Recipe to_recipe(final NamespacedKey base_key);
@@ -64,44 +58,6 @@ public abstract class RecipeDefinition {
 		}
 
 		throw new IllegalArgumentException("Unknown recipe type '" + str_type + "'");
-	}
-
-	public static @NotNull ItemStack itemstack(final String definition) {
-		// namespace:key or namespace:key{nbtdata}, where the key can reference a material, head material or customitem.
-		final var nbt_delim = definition.indexOf('{');
-		NamespacedKey key;
-		if (nbt_delim == -1) {
-			key = NamespacedKey.fromString(definition);
-		} else {
-			key = NamespacedKey.fromString(definition.substring(0, nbt_delim));
-		}
-
-		final var emat = ExtendedMaterial.from(key);
-		if (emat == null) {
-			throw new IllegalArgumentException("Invalid extended material definition: " + definition);
-		}
-
-		// First create the itemstack as if we had no NBT information.
-		var item_stack = emat.item();
-		if (nbt_delim == -1) {
-			// There is no NBT information, we can return here.
-			return item_stack;
-		}
-
-		// Parse the NBT by using minecraft's internal paerser with the base material
-		// of whatever the extended material gave us.
-		final var vanilla_definition = item_stack.getType().key().toString() + definition.substring(nbt_delim - 1);
-		try {
-			final var mojang_nbt = new ItemParser(new StringReader(vanilla_definition), false).parse().getNbt();
-
-			System.out.println("moj: " + mojang_nbt.toString());
-			System.out.println("ext: " + org.oddlama.vane.util.Nms.item_handle(item_stack).getTag().toString());
-			// TODO
-			// Now apply the NBT be parsed by minecraft's internal parser to the itemstack.
-			return item_stack;
-		} catch (CommandSyntaxException e) {
-			throw new IllegalArgumentException("Could not parse NBT of item definition: " + definition, e);
-		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -140,6 +96,6 @@ public abstract class RecipeDefinition {
 		}
 
 		// Exact choice of itemstack including NBT
-		return new RecipeChoice.ExactChoice(itemstack(definition));
+		return new RecipeChoice.ExactChoice(ItemUtil.itemstack_from_string(definition));
 	}
 }

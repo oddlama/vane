@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
+import org.oddlama.vane.util.ItemUtil;
 
 public class ShapedRecipeDefinition extends RecipeDefinition {
 	private List<String> shape = new ArrayList<>();
@@ -80,7 +81,7 @@ public class ShapedRecipeDefinition extends RecipeDefinition {
 
 	@Override
 	public Recipe to_recipe(NamespacedKey base_key) {
-		final var recipe = new ShapedRecipe(key(base_key), RecipeDefinition.itemstack(this.result));
+		final var recipe = new ShapedRecipe(key(base_key), ItemUtil.itemstack_from_string(this.result));
 		recipe.shape(this.shape.toArray(new String[0]));
 		this.ingredients.forEach((name, definition) -> recipe.setIngredient(name.charAt(0), RecipeDefinition.recipe_choice(definition)));
 		return recipe;

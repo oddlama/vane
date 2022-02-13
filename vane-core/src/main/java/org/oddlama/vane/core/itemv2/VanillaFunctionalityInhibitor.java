@@ -110,6 +110,8 @@ public class VanillaFunctionalityInhibitor extends Listener<Core> {
 		}
 	}
 
+	// TODO prevent repair with non-custom-item base material
+
 	// Prevent netherite items from burning, as they are made of netherite
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void on_item_burn(final EntityDamageEvent event) {

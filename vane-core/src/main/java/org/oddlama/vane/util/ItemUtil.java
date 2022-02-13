@@ -7,6 +7,9 @@ import static org.oddlama.vane.util.Nms.item_handle;
 import static org.oddlama.vane.util.Nms.player_handle;
 
 import com.destroystokyo.paper.profile.ProfileProperty;
+import com.mojang.brigadier.StringReader;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -19,6 +22,7 @@ import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import net.minecraft.commands.arguments.item.ItemParser;
 import net.minecraft.world.item.Item;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -30,6 +34,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.jetbrains.annotations.NotNull;
+import org.oddlama.vane.core.material.ExtendedMaterial;
 
 public class ItemUtil {
 
@@ -287,5 +293,43 @@ public class ItemUtil {
 
 	public static Component add_sentinel(final Component component, final NamespacedKey sentinel) {
 		return component.hoverEvent(HoverEvent.showText(Component.text(sentinel.toString())));
+	}
+
+	public static @NotNull ItemStack itemstack_from_string(final String definition) {
+		// namespace:key or namespace:key{nbtdata}, where the key can reference a material, head material or customitem.
+		final var nbt_delim = definition.indexOf('{');
+		NamespacedKey key;
+		if (nbt_delim == -1) {
+			key = NamespacedKey.fromString(definition);
+		} else {
+			key = NamespacedKey.fromString(definition.substring(0, nbt_delim));
+		}
+
+		final var emat = ExtendedMaterial.from(key);
+		if (emat == null) {
+			throw new IllegalArgumentException("Invalid extended material definition: " + definition);
+		}
+
+		// First create the itemstack as if we had no NBT information.
+		var item_stack = emat.item();
+		if (nbt_delim == -1) {
+			// There is no NBT information, we can return here.
+			return item_stack;
+		}
+
+		// Parse the NBT by using minecraft's internal paerser with the base material
+		// of whatever the extended material gave us.
+		final var vanilla_definition = item_stack.getType().key().toString() + definition.substring(nbt_delim - 1);
+		try {
+			final var mojang_nbt = new ItemParser(new StringReader(vanilla_definition), false).parse().getNbt();
+
+			System.out.println("moj: " + mojang_nbt.toString());
+			System.out.println("ext: " + org.oddlama.vane.util.Nms.item_handle(item_stack).getTag().toString());
+			// TODO
+			// Now apply the NBT be parsed by minecraft's internal parser to the itemstack.
+			return item_stack;
+		} catch (CommandSyntaxException e) {
+			throw new IllegalArgumentException("Could not parse NBT of item definition: " + definition, e);
+		}
 	}
 }

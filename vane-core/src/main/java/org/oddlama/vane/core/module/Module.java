@@ -470,15 +470,19 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 	 */
 	public Class<? extends ModelDataEnum> model_data_enum() {
 		throw new RuntimeException(
+	// TODO remove
+	//
 			"A module must override 'model_data_enum()', if it want's to register custom items!"
 		);
 	}
 
 	/**
 	 * Returns a globally unique identifier for a given per-plugin unqiue model id.
-	 * [As of 1.16.2]: Unfortunately this is basically a magic value, and must be
+	 * [As of at least 1.16]: Unfortunately this is basically a magic value, and must be
 	 * unique per base material across all plugins. That sucks.
 	 */
+	// TODO remove
+	// TODO remove
 	public int model_data(int item_id, int variant_id) {
 		throw new RuntimeException(
 			"A module must override 'model_data(int, int)', if it want's to register custom items!"

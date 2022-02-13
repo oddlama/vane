@@ -6,6 +6,8 @@ import org.jetbrains.annotations.Nullable;
 import org.oddlama.vane.annotation.item.VaneItemv2;
 import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.core.Listener;
+import org.oddlama.vane.core.config.loot.LootTableList;
+import org.oddlama.vane.core.config.loot.LootTables;
 import org.oddlama.vane.core.config.recipes.RecipeList;
 import org.oddlama.vane.core.config.recipes.Recipes;
 import org.oddlama.vane.core.lang.TranslatedMessage;
@@ -23,6 +25,7 @@ public class CustomItem<T extends Module<T>> extends Listener<T> implements org.
 	public NamespacedKey key;
 
 	public Recipes<T> recipes;
+	public LootTables<T> loot_tables;
 
 	// Language
 	@LangMessage
@@ -36,6 +39,7 @@ public class CustomItem<T extends Module<T>> extends Listener<T> implements org.
 
 		this.key = Util.namespaced_key(get_module().namespace(), annotation.name());
 		recipes = new Recipes<T>(get_context(), this.key, this::default_recipes);
+		loot_tables = new LootTables<T>(get_context(), this.key, this::default_loot_tables);
 	}
 
 	@Override
@@ -83,6 +87,10 @@ public class CustomItem<T extends Module<T>> extends Listener<T> implements org.
 
 	public RecipeList default_recipes() {
 		return RecipeList.of();
+	}
+
+	public LootTableList default_loot_tables() {
+		return LootTableList.of();
 	}
 
 	@Override
