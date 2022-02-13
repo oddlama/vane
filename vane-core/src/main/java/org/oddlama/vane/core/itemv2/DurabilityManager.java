@@ -1,7 +1,5 @@
 package org.oddlama.vane.core.itemv2;
 
-import static net.kyori.adventure.text.event.HoverEvent.Action.SHOW_TEXT;
-
 import java.util.ArrayList;
 
 import org.bukkit.NamespacedKey;
@@ -16,17 +14,16 @@ import org.oddlama.vane.core.Core;
 import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.itemv2.api.CustomItem;
 import org.oddlama.vane.core.module.Context;
+import org.oddlama.vane.util.ItemUtil;
 import org.oddlama.vane.util.Util;
 
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
-import net.kyori.adventure.text.event.HoverEvent;
 
 public class DurabilityManager extends Listener<Core> {
 	public static final NamespacedKey ITEM_DURABILITY_MAX = Util.namespaced_key("vane", "durability.max");
 	public static final NamespacedKey ITEM_DURABILITY_DAMAGE = Util.namespaced_key("vane", "durability.damage");
 
-	private static final TextComponent SENTINEL_VALUE = Component.text("vane:durability_override_lore");
+	private static final NamespacedKey SENTINEL = Util.namespaced_key("vane", "durability_override_lore");
 
 	public DurabilityManager(final Context<Core> context) {
 		super(context);
@@ -44,21 +41,7 @@ public class DurabilityManager extends Listener<Core> {
 	 * Returns true if the given component is associated to our custom durabiltiy.
 	 */
 	private static boolean is_durability_lore(final Component component) {
-		if (component == null) {
-			return false;
-		}
-
-		// Whether the lore line is prefixed with a sentinel value marking this lore line as a vane-enchantment owned lore.
-		final var hover = component.hoverEvent();
-		if (hover == null) {
-			return false;
-		}
-
-		if (hover.value() instanceof TextComponent hover_text) {
-			return hover.action() == SHOW_TEXT && SENTINEL_VALUE.content().equals(hover_text.content());
-		} else {
-			return false;
-		}
+		return ItemUtil.has_sentinel(component, SENTINEL);
 	}
 
 	/**
@@ -96,9 +79,7 @@ public class DurabilityManager extends Listener<Core> {
 			final var max = data.getOrDefault(ITEM_DURABILITY_MAX, PersistentDataType.INTEGER, 0);
 			final var damage = data.getOrDefault(ITEM_DURABILITY_MAX, PersistentDataType.INTEGER, custom_item.durability());
 			final var remaining_uses = Math.max(1, Math.min(max - damage, max));
-			lore.add(lore_component
-					.args(Component.text(remaining_uses), Component.text(max))
-					.hoverEvent(HoverEvent.showText(SENTINEL_VALUE)));
+			lore.add(ItemUtil.add_sentinel(lore_component.args(Component.text(remaining_uses), Component.text(max)), SENTINEL));
 		}
 
 		item_stack.lore(lore);

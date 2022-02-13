@@ -1,5 +1,7 @@
 package org.oddlama.vane.util;
 
+import static net.kyori.adventure.text.event.HoverEvent.Action.SHOW_TEXT;
+
 import static org.oddlama.vane.util.Nms.creative_tab_id;
 import static org.oddlama.vane.util.Nms.item_handle;
 import static org.oddlama.vane.util.Nms.player_handle;
@@ -12,12 +14,15 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.minecraft.world.item.Item;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.craftbukkit.v1_18_R1.enchantments.CraftEnchantment;
 import org.bukkit.enchantments.Enchantment;
@@ -258,5 +263,29 @@ public class ItemUtil {
 		meta.setPlayerProfile(profile);
 		item.setItemMeta(meta);
 		return item;
+	}
+
+	/**
+	 * Returns true if the given component is guared by the given sentinel.
+	 */
+	public static boolean has_sentinel(final Component component, final NamespacedKey sentiel) {
+		if (component == null) {
+			return false;
+		}
+
+		final var hover = component.hoverEvent();
+		if (hover == null) {
+			return false;
+		}
+
+		if (hover.value() instanceof TextComponent hover_text) {
+			return hover.action() == SHOW_TEXT && sentiel.toString().equals(hover_text.content());
+		} else {
+			return false;
+		}
+	}
+
+	public static Component add_sentinel(final Component component, final NamespacedKey sentinel) {
+		return component.hoverEvent(HoverEvent.showText(Component.text(sentinel.toString())));
 	}
 }
