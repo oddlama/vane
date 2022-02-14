@@ -1,26 +1,20 @@
 package org.oddlama.vane.trifles.items;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.oddlama.vane.annotation.persistent.Persistent;
 import org.oddlama.vane.core.config.recipes.RecipeList;
 import org.oddlama.vane.core.config.recipes.ShapedRecipeDefinition;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.trifles.Trifles;
 import org.oddlama.vane.trifles.event.PlayerTeleportScrollEvent;
-import org.oddlama.vane.util.LazyLocation;
+import org.oddlama.vane.util.Util;
 
 public class UnstableScroll extends Scroll {
-	// Last teleport location storage
-	@Persistent
-	private Map<UUID, LazyLocation> storage_last_scroll_teleport = new HashMap<>();
+	public static final NamespacedKey LAST_SCROLL_TELEPORT_LOCATION = Util.namespaced_key("vane", "last_scroll_teleport_location");
 
 	public UnstableScroll(Context<Trifles> context) {
 		super(context, "unstable_scroll", 6000);
@@ -42,15 +36,11 @@ public class UnstableScroll extends Scroll {
 
 	@Override
 	public Location teleport_location(Player player, boolean imminent_teleport) {
-		if (storage_last_scroll_teleport.containsKey(player.getUniqueId())) {
-			return storage_last_scroll_teleport.get(player.getUniqueId()).location();
-		}
-		return null;
+		return Util.storage_get_location(player.getPersistentDataContainer(), LAST_SCROLL_TELEPORT_LOCATION, null);
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void on_player_teleport_scroll(final PlayerTeleportScrollEvent event) {
-		storage_last_scroll_teleport.put(event.getPlayer().getUniqueId(), new LazyLocation(event.getFrom()));
-		mark_persistent_storage_dirty();
+		Util.storage_set_location(event.getPlayer().getPersistentDataContainer(), LAST_SCROLL_TELEPORT_LOCATION, event.getFrom());
 	}
 }
