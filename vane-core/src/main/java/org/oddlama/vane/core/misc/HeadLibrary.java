@@ -32,14 +32,6 @@ public class HeadLibrary extends Listener<Core> {
 		}
 	}
 
-	@Override
-	protected void on_enable() {
-	}
-
-	@Override
-	protected void on_disable() {
-	}
-
 	// Restore correct head item from head library when broken
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void on_block_break(final BlockBreakEvent event) {

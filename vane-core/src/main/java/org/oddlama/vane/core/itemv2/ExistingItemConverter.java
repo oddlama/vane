@@ -5,6 +5,7 @@ import org.bukkit.block.Container;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.inventory.Inventory;
@@ -23,14 +24,14 @@ public class ExistingItemConverter extends Listener<Core> {
 
 	private CustomItem from_old_item(final ItemStack item_stack) {
 		final var meta = item_stack.getItemMeta();
-		if (!meta.hasCustomModelData()) {
+		if (meta == null || !meta.hasCustomModelData()) {
 			return null;
 		}
 
 		// If lookups fail, we return null and nothing will be done.
 		switch (meta.getCustomModelData()) {
-			case 7758190: return get_module().item_registry().get(NamespacedKey.fromString("vane_trifles:wooden_sickle"));
 			// 7758190: org.oddlama.vane.trifles.items.Sickle variant org.oddlama.vane.trifles.items.Sickle$SickleVariant@7423691e with base material WOODEN_HOE and model_data
+			case 7758190: return get_module().item_registry().get(NamespacedKey.fromString("vane_trifles:wooden_sickle"));
 			// 7758191: org.oddlama.vane.trifles.items.Sickle variant org.oddlama.vane.trifles.items.Sickle$SickleVariant@7f49b82b with base material STONE_HOE and model_data
 			// 7758192: org.oddlama.vane.trifles.items.Sickle variant org.oddlama.vane.trifles.items.Sickle$SickleVariant@39de5c61 with base material IRON_HOE and model_data
 			// 7758193: org.oddlama.vane.trifles.items.Sickle variant org.oddlama.vane.trifles.items.Sickle$SickleVariant@3c7defc4 with base material GOLDEN_HOE and model_data
@@ -47,6 +48,7 @@ public class ExistingItemConverter extends Listener<Core> {
 			// 7758383: org.oddlama.vane.trifles.items.XpBottle variant org.oddlama.vane.trifles.items.XpBottle$XpBottleVariant@46e696d with base material HONEY_BOTTLE and model_data
 			// 7758384: org.oddlama.vane.trifles.items.XpBottle variant org.oddlama.vane.trifles.items.XpBottle$XpBottleVariant@126316e1 with base material HONEY_BOTTLE and model_data
 			// 7758446: org.oddlama.vane.trifles.items.HomeScroll variant org.oddlama.vane.trifles.items.HomeScroll$HomeScrollVariant@7e2cc665 with base material CARROT_ON_A_STICK and model_data
+			case 7758446: return get_module().item_registry().get(NamespacedKey.fromString("vane_trifles:home_scroll"));
 			// 7758510: org.oddlama.vane.trifles.items.UnstableScroll variant org.oddlama.vane.trifles.items.UnstableScroll$UnstableScrollVariant@73a35ad4 with base material CARROT_ON_A_STICK and model_data
 			// 7758574: org.oddlama.vane.trifles.items.ReinforcedElytra variant org.oddlama.vane.trifles.items.ReinforcedElytra$ReinforcedElytraVariant@8fccdba with base material ELYTRA and model_data
 			// 7823790: org.oddlama.vane.enchantments.items.AncientTomeOfKnowledge variant org.oddlama.vane.enchantments.items.AncientTomeOfKnowledge$AncientTomeOfKnowledgeVariant@27a64533 with base material BOOK and model_data
@@ -64,6 +66,10 @@ public class ExistingItemConverter extends Listener<Core> {
 
 		for (int i = 0; i < contents.length; ++i) {
 			final var is = contents[i];
+			if (is == null || !is.hasItemMeta()) {
+				continue;
+			}
+
 			final var custom_item = get_module().item_registry().get(is);
 			if (custom_item == null) {
 				// Determine if the item stack should be converted to a custom item from a legacy definition
@@ -115,7 +121,7 @@ public class ExistingItemConverter extends Listener<Core> {
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void on_player_login(final PlayerLoginEvent event) {
+	public void on_player_join(final PlayerJoinEvent event) {
 		process_inventory(event.getPlayer().getInventory());
 	}
 
@@ -123,16 +129,5 @@ public class ExistingItemConverter extends Listener<Core> {
 	public void on_inventory_open(final InventoryOpenEvent event) {
 		// Catches enderchests, and inventories by other plugins
 		process_inventory(event.getInventory());
-	}
-
-	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void on_chunk_load(final ChunkLoadEvent event) {
-		// Pre-processes chunks to quickly get rid of any items.
-		final var chunk = event.getChunk();
-		for (final var te : chunk.getTileEntities()) {
-			if (te instanceof Container container) {
-				process_inventory(container.getInventory());
-			}
-		}
 	}
 }

@@ -103,16 +103,6 @@ public class CustomItem<T extends Module<T>, V extends CustomItem<T, V>> extends
 						);
 					}
 				}
-				System.out.println(
-						"Register legacy custom item " +
-						getClass() +
-						" variant " +
-						variant +
-						" with base material " +
-						variant.base() +
-						" and model_data " +
-						variant.model_data()
-						);
 			}
 		}
 	}

@@ -37,7 +37,7 @@ public class CustomItemHelper {
 	 * tag on the given item, if any. Returns null if none was found or the given item stack was null.
 	 */
 	public static Pair<NamespacedKey, Integer> customItemTagsFromItemStack(@Nullable final ItemStack itemStack) {
-		if (itemStack == null) {
+		if (itemStack == null || !itemStack.hasItemMeta()) {
 			return null;
 		}
 

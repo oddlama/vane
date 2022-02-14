@@ -1,5 +1,6 @@
 package org.oddlama.vane.core.itemv2.api;
 
+import java.io.IOException;
 import java.util.EnumSet;
 
 import org.bukkit.Material;
@@ -7,6 +8,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.oddlama.vane.core.resourcepack.ResourcePackGenerator;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TranslatableComponent;
@@ -121,7 +123,7 @@ public interface CustomItem {
 	 * to add the item's texture, translation strings or any other client side resources to a pack
 	 * that can/will be distributed to players.
 	 */
-	public void addResources(/*final ResourcePackGenerator rp*/);
+	public void addResources(final ResourcePackGenerator rp) throws IOException;
 
 	/**
 	 * This function will be called when a custom item of this type is newly created,
@@ -131,5 +133,12 @@ public interface CustomItem {
 	 */
 	default public ItemStack updateItemStack(@NotNull final ItemStack itemStack) {
 		return itemStack;
+	}
+
+	/**
+	 * Returns true if the given itemstack is an "instance" this custom item.
+	 */
+	default public boolean isInstance(@Nullable final ItemStack itemStack) {
+		return CustomItemRegistry.instance().get(itemStack) == this;
 	}
 }

@@ -319,13 +319,13 @@ public class ItemUtil {
 
 		// Parse the NBT by using minecraft's internal paerser with the base material
 		// of whatever the extended material gave us.
-		final var vanilla_definition = item_stack.getType().key().toString() + definition.substring(nbt_delim - 1);
+		final var vanilla_definition = item_stack.getType().key().toString() + definition.substring(nbt_delim);
 		try {
 			final var mojang_nbt = new ItemParser(new StringReader(vanilla_definition), false).parse().getNbt();
 
-			System.out.println("moj: " + mojang_nbt.toString());
-			System.out.println("ext: " + org.oddlama.vane.util.Nms.item_handle(item_stack).getTag().toString());
-			// TODO
+			//System.out.println("moj: " + mojang_nbt.toString());
+			//System.out.println("ext: " + org.oddlama.vane.util.Nms.item_handle(item_stack).getTag().toString());
+			// TODO aaaaaaaaaaaaaaaaa
 			// Now apply the NBT be parsed by minecraft's internal parser to the itemstack.
 			return item_stack;
 		} catch (CommandSyntaxException e) {

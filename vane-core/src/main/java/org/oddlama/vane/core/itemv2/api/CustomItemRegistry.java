@@ -1,5 +1,6 @@
 package org.oddlama.vane.core.itemv2.api;
 
+import java.util.Collection;
 import java.util.Optional;
 
 import org.bukkit.Bukkit;
@@ -16,6 +17,11 @@ public interface CustomItemRegistry {
 	 * Returns true if a custom item with the given resourceKey has been registered.
 	 */
 	public @Nullable boolean has(NamespacedKey resourceKey);
+
+	/**
+	 * Returns all registered custom items.
+	 */
+	public @Nullable Collection<CustomItem> all();
 
 	/**
 	 * Tries to retrieve a custom item definition by resource key.
@@ -61,12 +67,13 @@ public interface CustomItemRegistry {
 	/**
 	 * Retrieves the global registry instance from the running vane-core instance, if any.
 	 */
-	public default Optional<CustomItemRegistry> instance() {
-		final var core = Bukkit.getServer().getPluginManager().getPlugin("vane-core");
-		if (core == null) {
-			return Optional.empty();
-		}
+	public static CustomItemRegistry instance() {
+		return Core.instance().item_registry();
+		//final var core = Bukkit.getServer().getPluginManager().getPlugin("vane-core");
+		//if (core == null) {
+		//	return Optional.empty();
+		//}
 
-		return Optional.of(((Core)core).item_registry());
+		//return Optional.of(((Core)core).item_registry());
 	}
 }

@@ -40,11 +40,13 @@ public class AuthMultiplexer extends Listener<Core> implements PluginMessageList
 
 	@Override
 	protected void on_enable() {
+		super.on_enable();
 		get_module().getServer().getMessenger().registerIncomingPluginChannel(get_module(), CHANNEL_AUTH_MULTIPLEX, this);
 	}
 
 	@Override
 	protected void on_disable() {
+		super.on_disable();
 		get_module().getServer().getMessenger().unregisterIncomingPluginChannel(get_module(), CHANNEL_AUTH_MULTIPLEX, this);
 	}
 

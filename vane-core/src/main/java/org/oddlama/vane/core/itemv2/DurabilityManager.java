@@ -7,6 +7,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.event.player.PlayerItemMendEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.persistence.PersistentDataType;
@@ -29,14 +30,6 @@ public class DurabilityManager extends Listener<Core> {
 		super(context);
 	}
 
-	@Override
-	protected void on_enable() {
-	}
-
-	@Override
-	protected void on_disable() {
-	}
-
 	/**
 	 * Returns true if the given component is associated to our custom durabiltiy.
 	 */
@@ -51,11 +44,11 @@ public class DurabilityManager extends Listener<Core> {
 		final var lore = item_stack.lore();
 		if (lore != null) {
 			lore.removeIf(DurabilityManager::is_durability_lore);
-		}
-		if (lore.size() > 0) {
-			item_stack.lore(lore);
-		} else {
-			item_stack.lore(null);
+			if (lore.size() > 0) {
+				item_stack.lore(lore);
+			} else {
+				item_stack.lore(null);
+			}
 		}
 	}
 
@@ -76,9 +69,9 @@ public class DurabilityManager extends Listener<Core> {
 		final var lore_component = custom_item.durabilityLore();
 		if (lore_component != null) {
 			final var data = item_stack.getItemMeta().getPersistentDataContainer();
-			final var max = data.getOrDefault(ITEM_DURABILITY_MAX, PersistentDataType.INTEGER, 0);
-			final var damage = data.getOrDefault(ITEM_DURABILITY_MAX, PersistentDataType.INTEGER, custom_item.durability());
-			final var remaining_uses = Math.max(1, Math.min(max - damage, max));
+			final var max = data.getOrDefault(ITEM_DURABILITY_MAX, PersistentDataType.INTEGER, custom_item.durability());
+			final var damage = data.getOrDefault(ITEM_DURABILITY_DAMAGE, PersistentDataType.INTEGER, 0);
+			final var remaining_uses = Math.max(0, Math.min(max - damage, max));
 			lore.add(ItemUtil.add_sentinel(lore_component.args(Component.text(remaining_uses), Component.text(max)), SENTINEL));
 		}
 
@@ -101,7 +94,8 @@ public class DurabilityManager extends Listener<Core> {
 			return visual_max;
 		} else {
 			final var damage_percentage = (double)actual_damage / actual_max;
-			return (int)(damage_percentage * visual_max);
+			// Never allow the calculation to show the item as 0 visual durability,
+			return Math.min(visual_max - 1, (int)(damage_percentage * visual_max));
 		}
 	}
 
@@ -125,7 +119,7 @@ public class DurabilityManager extends Listener<Core> {
 		item_stack.editMeta(meta -> {
 			final var data = meta.getPersistentDataContainer();
 			data.set(ITEM_DURABILITY_DAMAGE, PersistentDataType.INTEGER, actual_damage);
-			if (!data.has(ITEM_DURABILITY_MAX)) {
+			if (!data.has(ITEM_DURABILITY_MAX, PersistentDataType.INTEGER)) {
 				data.set(ITEM_DURABILITY_MAX, PersistentDataType.INTEGER, actual_max);
 			}
 		});
@@ -186,7 +180,7 @@ public class DurabilityManager extends Listener<Core> {
 	 * Negative amounts repair the item.
 	 */
 	private static void damage_and_update_item(final CustomItem custom_item, final ItemStack item_stack, final int amount) {
-		if (!item_stack.getItemMeta().getPersistentDataContainer().has(ITEM_DURABILITY_DAMAGE)) {
+		if (!item_stack.getItemMeta().getPersistentDataContainer().has(ITEM_DURABILITY_DAMAGE, PersistentDataType.INTEGER)) {
 			initialize_or_update_max(custom_item, item_stack);
 		}
 
@@ -194,7 +188,7 @@ public class DurabilityManager extends Listener<Core> {
 		set_damage_and_update_item(custom_item, item_stack, damage + amount);
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void on_item_damage(final PlayerItemDamageEvent event) {
 		final var item = event.getItem();
 		final var custom_item = get_module().item_registry().get(item);
@@ -205,9 +199,19 @@ public class DurabilityManager extends Listener<Core> {
 		}
 
 		damage_and_update_item(custom_item, item, event.getDamage());
+
+		// Wow this is hacky but the only workaround to prevent recusivly
+		// calling this event. We always increase the visual durability by 1
+		// and let the server implementation decrease it again to
+		// allow the item to break.
+		item.editMeta(Damageable.class, damage_meta -> {
+			damage_meta.setDamage(damage_meta.getDamage() - 1);
+		});
+		event.setDamage(1);
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void on_item_mend(final PlayerItemMendEvent event) {
 		// TODO: Durability Overridden items can not yet support mending effectively.
 		// see: https://github.com/PaperMC/Paper/issues/7313

@@ -11,8 +11,6 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.logging.Level;
 
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -21,12 +19,7 @@ import org.bukkit.permissions.PermissionDefault;
 import org.json.JSONException;
 import org.oddlama.vane.annotation.VaneModule;
 import org.oddlama.vane.annotation.config.ConfigBoolean;
-import org.oddlama.vane.annotation.item.VaneItemv2;
 import org.oddlama.vane.annotation.lang.LangMessage;
-import org.oddlama.vane.core.config.loot.LootDefinition;
-import org.oddlama.vane.core.config.loot.LootTableList;
-import org.oddlama.vane.core.config.recipes.RecipeList;
-import org.oddlama.vane.core.config.recipes.ShapedRecipeDefinition;
 import org.oddlama.vane.core.functional.Consumer1;
 import org.oddlama.vane.core.itemv2.CustomItemRegistry;
 import org.oddlama.vane.core.itemv2.CustomModelDataRegistry;
@@ -40,7 +33,6 @@ import org.oddlama.vane.core.misc.CommandHider;
 import org.oddlama.vane.core.misc.EntityMoveProcessor;
 import org.oddlama.vane.core.misc.HeadLibrary;
 import org.oddlama.vane.core.misc.LootChestProtector;
-import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.core.module.ModuleComponent;
 import org.oddlama.vane.core.resourcepack.ResourcePackDistributor;
@@ -69,7 +61,6 @@ public class Core extends Module<Core> {
 
 	private CustomModelDataRegistry model_data_registry;
 	private CustomItemRegistry item_registry;
-	public ExistingItemConverter existing_item_converter;
 
 	/** Returns the item model data given the section and id */
 	public static int model_data(int section, int item_id, int variant_id) {
@@ -149,8 +140,7 @@ public class Core extends Module<Core> {
 		new CommandHider(this);
 		model_data_registry = new CustomModelDataRegistry();
 		item_registry = new CustomItemRegistry();
-		existing_item_converter = new ExistingItemConverter(this);
-		item_registry.register(new ItemTest(this));
+		new ExistingItemConverter(this);
 	}
 
 	@Override
@@ -169,12 +159,17 @@ public class Core extends Module<Core> {
 	public File generate_resource_pack() {
 		try {
 			var file = new File("vane-resource-pack.zip");
+			// TODO pack version number here. warn if merging lower.
 			var pack = new ResourcePackGenerator();
 			pack.set_description("Vane plugin resource pack");
 			pack.set_icon_png(getResource("pack.png"));
 
 			for (var m : vane_modules) {
 				m.generate_resource_pack(pack);
+			}
+
+			for (final var custom_item : item_registry().all()) {
+				custom_item.addResources(pack);
 			}
 
 			pack.write(file);
@@ -188,34 +183,6 @@ public class Core extends Module<Core> {
 	public void for_all_module_components(final Consumer1<ModuleComponent<?>> f) {
 		for (var m : vane_modules) {
 			m.for_each_module_component(f);
-		}
-	}
-
-	@VaneItemv2(name = "test", base = Material.COMPASS, model_data = 12345, version = 1)
-	private class ItemTest extends org.oddlama.vane.core.itemv2.CustomItem<Core> {
-		public ItemTest(Context<Core> context) {
-			super(context);
-		}
-
-		@Override
-		public RecipeList default_recipes() {
-			return RecipeList.of(new ShapedRecipeDefinition("recipe1")
-					.shape(" a ", "b b", " x ")
-					.add_ingredient('a', "minecraft:stick")
-					.add_ingredient('b', "minecraft:stick{Enchantments:[{id:knockback,lvl:1000}]}")
-					.add_ingredient('x', "vane_core:test")
-					.result("vane_core:test"));
-		}
-
-		@Override
-		public LootTableList default_loot_tables() {
-			return LootTableList.of(
-				new LootDefinition("generic")
-					.in(NamespacedKey.minecraft("bastion"))
-					.in(NamespacedKey.minecraft("nether"))
-					.in(NamespacedKey.minecraft("dude"))
-					.add(0.01, 1, 3, "minecraft:stick")
-					.add(0.0000012345, 1, 1, "minecraft:stick{Enchantments:[{id:knockback,lvl:1000}]}"));
 		}
 	}
 

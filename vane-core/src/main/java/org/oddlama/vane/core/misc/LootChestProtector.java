@@ -35,14 +35,6 @@ public class LootChestProtector extends Listener<Core> {
 		super(context);
 	}
 
-	@Override
-	protected void on_enable() {
-	}
-
-	@Override
-	protected void on_disable() {
-	}
-
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void on_break_loot_chest(final BlockBreakEvent event) {
 		if (!config_warn_breaking_loot_blocks) {

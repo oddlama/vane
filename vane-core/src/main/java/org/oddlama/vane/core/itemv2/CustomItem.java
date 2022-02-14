@@ -1,7 +1,10 @@
 package org.oddlama.vane.core.itemv2;
 
+import java.io.IOException;
+
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.oddlama.vane.annotation.config.ConfigInt;
 import org.oddlama.vane.annotation.item.VaneItemv2;
 import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.core.Listener;
@@ -12,6 +15,7 @@ import org.oddlama.vane.core.config.recipes.Recipes;
 import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.Module;
+import org.oddlama.vane.core.resourcepack.ResourcePackGenerator;
 import org.oddlama.vane.util.Util;
 
 import net.kyori.adventure.text.Component;
@@ -28,6 +32,9 @@ public class CustomItem<T extends Module<T>> extends Listener<T> implements org.
 	@LangMessage
 	public TranslatedMessage lang_name;
 
+	@ConfigInt(def = 0, min = 0, desc = "The durability of this item. Set to 0 to use the durability properties of whatever base material the item is made of.")
+	private int config_durability;
+
 	public CustomItem(Context<T> context) {
 		super(null);
 		// Set namespace delayed, as we need to access instance methods to do so.
@@ -37,6 +44,9 @@ public class CustomItem<T extends Module<T>> extends Listener<T> implements org.
 		this.key = Util.namespaced_key(get_module().namespace(), annotation.name());
 		recipes = new Recipes<T>(get_context(), this.key, this::default_recipes);
 		loot_tables = new LootTables<T>(get_context(), this.key, this::default_loot_tables);
+
+		// Register item
+		get_module().core.item_registry().register(this);
 	}
 
 	@Override
@@ -70,9 +80,13 @@ public class CustomItem<T extends Module<T>> extends Listener<T> implements org.
 		return lang_name.format().decoration(TextDecoration.ITALIC, false);
 	}
 
+	public int config_durability_def() {
+		return annotation.durability();
+	}
+
 	@Override
 	public int durability() {
-		return annotation.durability();
+		return config_durability;
 	}
 
 	public RecipeList default_recipes() {
@@ -84,20 +98,15 @@ public class CustomItem<T extends Module<T>> extends Listener<T> implements org.
 	}
 
 	@Override
-	public void addResources() {
-		//TODO
-		//final var resource_name = "items/" + variant_name + ".png";
-		//final var resource = get_module().getResource(resource_name);
-		//if (resource == null) {
-		//	throw new RuntimeException("Missing resource '" + resource_name + "'. This is a bug.");
-		//}
-		//pack.add_item_model(key, resource);
-		//pack.add_item_override(
-		//	base().getKey(),
-		//	key,
-		//	predicate -> {
-		//		predicate.put("custom_model_data", model_data());
-		//	}
-		//);
+	public void addResources(final ResourcePackGenerator rp) throws IOException {
+		final var resource_name = "items/" + key.value() + ".png";
+		final var resource = get_module().getResource(resource_name);
+		if (resource == null) {
+			throw new RuntimeException("Missing resource '" + resource_name + "'. This is a bug.");
+		}
+		rp.add_item_model(key, resource);
+		rp.add_item_override(baseMaterial().getKey(), key, predicate -> {
+			predicate.put("custom_model_data", customModelData());
+		});
 	}
 }

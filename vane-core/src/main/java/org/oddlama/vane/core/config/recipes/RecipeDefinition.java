@@ -70,7 +70,7 @@ public abstract class RecipeDefinition {
 				if (Modifier.isStatic(f.getModifiers()) && f.getType() == Tag.class) {
 					try {
 						final var tag = (Tag<?>)f.get(null);
-						if (tag.getValues().toArray() instanceof Material[] && tag.key().toString().equals(definition.substring(1))) {
+						if (tag.key().toString().equals(definition.substring(1))) {
 							return new RecipeChoice.MaterialChoice((Tag<Material>)tag);
 						}
 					} catch (IllegalArgumentException | IllegalAccessException e) {

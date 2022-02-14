@@ -27,14 +27,6 @@ public class VanillaFunctionalityInhibitor extends Listener<Core> {
 		super(context);
 	}
 
-	@Override
-	protected void on_enable() {
-	}
-
-	@Override
-	protected void on_disable() {
-	}
-
 	private boolean inhibit(CustomItem custom_item, InhibitBehavior behavior) {
 		return custom_item != null && custom_item.enabled() && custom_item.inhibitedBehaviors().contains(behavior);
 	}

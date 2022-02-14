@@ -6,7 +6,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Tag;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
 import org.oddlama.vane.util.ItemUtil;
@@ -28,6 +30,14 @@ public class ShapedRecipeDefinition extends RecipeDefinition {
 	public ShapedRecipeDefinition add_ingredient(char id, String ingredient) {
 		this.ingredients.put("" + id, ingredient);
 		return this;
+	}
+
+	public ShapedRecipeDefinition add_ingredient(char id, final Tag<?> tag) {
+		return add_ingredient(id, "#" + tag.key().toString());
+	}
+
+	public ShapedRecipeDefinition add_ingredient(char id, Material material) {
+		return add_ingredient(id, material.key().toString());
 	}
 
 	public ShapedRecipeDefinition result(String result) {

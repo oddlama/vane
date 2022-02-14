@@ -1,5 +1,6 @@
 package org.oddlama.vane.core.itemv2;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -22,6 +23,11 @@ public class CustomItemRegistry implements org.oddlama.vane.core.itemv2.api.Cust
 	@Override
 	public @Nullable boolean has(final NamespacedKey resourceKey) {
 		return items.containsKey(resourceKey);
+	}
+
+	@Override
+	public @Nullable Collection<CustomItem> all() {
+		return items.values();
 	}
 
 	@Override

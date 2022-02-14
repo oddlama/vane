@@ -33,7 +33,7 @@ public abstract class SimpleCustomItem implements CustomItem {
 		return customModelData;
 	}
 
-	// return Component.translatable("vane:item_test").decoration(TextDecoration.ITALIC, false);
+	// TODO return Component.translatable("vane:item_test").decoration(TextDecoration.ITALIC, false);
 	@Override
 	public Component displayName() {
 		return displayName;

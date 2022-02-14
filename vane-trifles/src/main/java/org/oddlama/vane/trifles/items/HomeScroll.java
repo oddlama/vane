@@ -1,9 +1,11 @@
 package org.oddlama.vane.trifles.items;
 
+import static org.oddlama.vane.util.ItemUtil.damage_item;
 import static org.oddlama.vane.util.PlayerUtil.swing_arm;
 import static org.oddlama.vane.util.Util.ms_to_ticks;
 
-import net.kyori.adventure.text.Component;
+import java.util.EnumSet;
+
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.entity.Player;
@@ -13,87 +15,48 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerItemMendEvent;
-import org.bukkit.inventory.RecipeChoice.MaterialChoice;
-import org.bukkit.inventory.ShapedRecipe;
 import org.oddlama.vane.annotation.config.ConfigInt;
-import org.oddlama.vane.annotation.item.VaneItem;
-import org.oddlama.vane.core.data.DurabilityOverrideData;
-import org.oddlama.vane.core.item.CustomItem;
-import org.oddlama.vane.core.item.CustomItemVariant;
+import org.oddlama.vane.annotation.item.VaneItemv2;
+import org.oddlama.vane.core.config.recipes.RecipeList;
+import org.oddlama.vane.core.config.recipes.ShapedRecipeDefinition;
+import org.oddlama.vane.core.itemv2.CustomItem;
+import org.oddlama.vane.core.itemv2.api.InhibitBehavior;
 import org.oddlama.vane.core.module.Context;
-import org.oddlama.vane.enchantments.items.AncientTomeOfKnowledge;
-import org.oddlama.vane.enchantments.items.BookVariant;
 import org.oddlama.vane.trifles.Trifles;
 
-@VaneItem(name = "home_scroll")
-public class HomeScroll extends CustomItem<Trifles, HomeScroll> {
+import net.kyori.adventure.text.Component;
 
-	public static class HomeScrollVariant extends CustomItemVariant<Trifles, HomeScroll, SingleVariant> {
+// TODO scroll base class
+@VaneItemv2(name = "home_scroll", base = Material.WARPED_FUNGUS_ON_A_STICK, durability = 25, model_data = 7758446, version = 1)
+public class HomeScroll extends CustomItem<Trifles> {
+	@ConfigInt(def = 10000, min = 0, desc = "Cooldown in milliseconds until another scroll can be used.")
+	private int config_cooldown;
 
-		@ConfigInt(def = 10000, min = 0, desc = "Cooldown in milliseconds until another scroll can be used.")
-		private int config_cooldown;
-
-		@ConfigInt(
-			def = 15000,
-			min = 0,
-			desc = "A cooldown in milliseconds that is applied when the player takes damage (prevents combat logging). Set to 0 to allow combat logging."
-		)
-		private int config_damage_cooldown;
-
-		@ConfigInt(def = 25, min = 0, desc = "Base amount of uses a scroll has before breaking")
-		private int config_base_durability;
-
-		private DurabilityOverrideData durability_override;
-
-		public HomeScrollVariant(HomeScroll parent, SingleVariant variant) {
-			super(parent, variant);
-		}
-
-		@Override
-		public void on_config_change() {
-			super.on_config_change();
-			durability_override = new DurabilityOverrideData(config_base_durability);
-		}
-
-		@Override
-		public void register_recipes() {
-			final var ancient_tome_of_knowledge = CustomItem
-				.<AncientTomeOfKnowledge.AncientTomeOfKnowledgeVariant>variant_of(
-					AncientTomeOfKnowledge.class,
-					BookVariant.BOOK
-				)
-				.item();
-
-			final var recipe = new ShapedRecipe(recipe_key(), item())
-				.shape("pip", "cbe", "plp")
-				.setIngredient('b', ancient_tome_of_knowledge)
-				.setIngredient('p', Material.MAP)
-				.setIngredient('i', new MaterialChoice(Tag.BEDS))
-				.setIngredient('c', Material.COMPASS)
-				.setIngredient('e', Material.ENDER_PEARL)
-				.setIngredient('l', Material.CLOCK);
-
-			add_recipe(recipe);
-		}
-
-		@Override
-		public Material base() {
-			return Material.CARROT_ON_A_STICK;
-		}
-
-		public int cooldown() {
-			return config_cooldown;
-		}
-
-		public int damage_cooldown() {
-			return config_damage_cooldown;
-		}
-	}
+	@ConfigInt(def = 15000, min = 0, desc = "A cooldown in milliseconds that is applied when the player takes damage (prevents combat logging). Set to 0 to allow combat logging.")
+	private int config_damage_cooldown;
 
 	public HomeScroll(Context<Trifles> context) {
-		super(context, HomeScrollVariant::new);
+		super(context);
 	}
+
+	@Override
+	public RecipeList default_recipes() {
+		return RecipeList.of(new ShapedRecipeDefinition("generic")
+			.shape("pip", "cbe", "plp")
+			// TODO BADDDDDDDDDDDDDDDDDDDDDDDDDDDD TEST REMOVEEEEEEEEEEEEEEEEE
+			.add_ingredient('b', "minecraft:stick{Enchantments:[{id:knockback,lvl:1000}]}")
+			.add_ingredient('p', Material.MAP)
+			.add_ingredient('i', Tag.BEDS)
+			.add_ingredient('c', Material.COMPASS)
+			.add_ingredient('e', Material.ENDER_PEARL)
+			.add_ingredient('l', Material.CLOCK)
+			.result(key().toString()));
+	}
+
+	//@Override
+	//public LootTableList default_loot_tables() {
+	//	// TODO spawn scroll with 1 usage! possible with nbt nice.
+	//}
 
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = false) // ignoreCancelled = false to catch right-click-air events
 	public void on_player_right_click(final PlayerInteractEvent event) {
@@ -105,11 +68,11 @@ public class HomeScroll extends CustomItem<Trifles, HomeScroll> {
 			return;
 		}
 
-		// Get item variant
+		// Assert this is a matching custom item
 		final var player = event.getPlayer();
 		final var item = player.getEquipment().getItem(event.getHand());
-		final var variant = this.<HomeScrollVariant>variant_of(item);
-		if (variant == null || !variant.enabled()) {
+		if (!isInstance(item)) {
+			// TODO enabled check when making a baseclass
 			return;
 		}
 
@@ -137,27 +100,30 @@ public class HomeScroll extends CustomItem<Trifles, HomeScroll> {
 		final var to_location = player.getBedSpawnLocation();
 		final var to_potential_location = player.getPotentialBedLocation();
 		if (to_location == null) {
-			if (to_potential_location != null) player.sendActionBar( // "You have no home bed or charged respawn anchor, or it was obstructed" // The most cursed sentence in minecraft.
-				Component.translatable("block.minecraft.spawn.not_valid")
-			); else player.sendActionBar( //"Sleep in a bed to change your respawn point"
-				Component.translatable("advancements.adventure.sleep_in_bed.description")
-			);
+			if (to_potential_location != null) {
+				// "You have no home bed or charged respawn anchor, or it was obstructed"
+				// The most cursed sentence in minecraft.
+				player.sendActionBar(Component.translatable("block.minecraft.spawn.not_valid"));
+			} else {
+				// "Sleep in a bed to change your respawn point"
+				player.sendActionBar(Component.translatable("advancements.adventure.sleep_in_bed.description"));
+			}
 			return;
 		}
 
 		// Check cooldown
-		if (player.getCooldown(variant.base()) > 0) {
+		if (player.getCooldown(baseMaterial()) > 0) {
 			return;
 		}
 
 		final var current_location = player.getLocation();
 		if (get_module().teleport_from_scroll(player, current_location, to_location)) {
 			// Set cooldown
-			final var cooldown = ms_to_ticks(variant.cooldown());
-			player.setCooldown(variant.base(), (int) cooldown);
+			final var cooldown = ms_to_ticks(config_cooldown);
+			player.setCooldown(baseMaterial(), (int) cooldown);
 
 			// Damage item
-			variant.durability_override.use_item(player, item);
+			damage_item(player, item, 1);
 			swing_arm(player, event.getHand());
 		}
 	}
@@ -169,32 +135,19 @@ public class HomeScroll extends CustomItem<Trifles, HomeScroll> {
 		}
 
 		final var player = (Player) event.getEntity();
-
-		// Get home scroll variant
-		final var variant = CustomItem.<HomeScrollVariant>variant_of(
-			HomeScroll.class,
-			CustomItem.SingleVariant.SINGLETON
-		);
-
-		if (variant == null || !variant.enabled()) {
-			return;
-		}
+		// TODO enabled check when making a baseclass
 
 		// Don't decrease cooldown
-		final var damage_cooldown = (int) ms_to_ticks(variant.damage_cooldown());
-		if (player.getCooldown(variant.base()) >= damage_cooldown) {
+		final var damage_cooldown = (int) ms_to_ticks(config_damage_cooldown);
+		if (player.getCooldown(baseMaterial()) >= damage_cooldown) {
 			return;
 		}
 
-		player.setCooldown(variant.base(), damage_cooldown);
+		player.setCooldown(baseMaterial(), damage_cooldown);
 	}
 
-	@EventHandler(ignoreCancelled = true)
-	public void on_player_item_mend(PlayerItemMendEvent event) {
-		final var variant = this.<HomeScrollVariant>variant_of(event.getItem());
-		if (variant == null || !variant.enabled()) {
-			return;
-		}
-		variant.durability_override.on_mend(event);
+	@Override
+	public EnumSet<InhibitBehavior> inhibitedBehaviors() {
+		return EnumSet.of(InhibitBehavior.USE_IN_VANILLA_CRAFTING_RECIPE, InhibitBehavior.USE_IN_SMITHING_RECIPE, InhibitBehavior.TEMPT);
 	}
 }
