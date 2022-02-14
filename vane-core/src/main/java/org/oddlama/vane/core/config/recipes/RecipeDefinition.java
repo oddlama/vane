@@ -52,8 +52,8 @@ public abstract class RecipeDefinition {
 			case "furnace":      // fallthrough
 			case "campfire":     // fallthrough
 			case "smoking":      return new CookingRecipeDefinition(name, str_type).from_dict(dict);
-			//case "smithing":     return new SmithingRecipeDefinition(name).from_dict(dict);
-			//case "stonecutting": return new StonecuttingRecipeDefinition(name).from_dict(dict);
+			case "smithing":     return new SmithingRecipeDefinition(name).from_dict(dict);
+			case "stonecutting": return new StonecuttingRecipeDefinition(name).from_dict(dict);
 			default: break;
 		}
 
