@@ -27,17 +27,17 @@ public class ShapedRecipeDefinition extends RecipeDefinition {
 		return this;
 	}
 
-	public ShapedRecipeDefinition add_ingredient(char id, String ingredient) {
+	public ShapedRecipeDefinition set_ingredient(char id, String ingredient) {
 		this.ingredients.put("" + id, ingredient);
 		return this;
 	}
 
-	public ShapedRecipeDefinition add_ingredient(char id, final Tag<?> tag) {
-		return add_ingredient(id, "#" + tag.key().toString());
+	public ShapedRecipeDefinition set_ingredient(char id, final Tag<?> tag) {
+		return set_ingredient(id, "#" + tag.key().toString());
 	}
 
-	public ShapedRecipeDefinition add_ingredient(char id, Material material) {
-		return add_ingredient(id, material.key().toString());
+	public ShapedRecipeDefinition set_ingredient(char id, Material material) {
+		return set_ingredient(id, material.key().toString());
 	}
 
 	public ShapedRecipeDefinition result(String result) {
@@ -83,7 +83,7 @@ public class ShapedRecipeDefinition extends RecipeDefinition {
 		if (dict_map.get("result") instanceof String result) {
 			this.result = result;
 		} else {
-			throw new IllegalArgumentException("Invalid shaped recipe dictionary: resutl must be a string");
+			throw new IllegalArgumentException("Invalid shaped recipe dictionary: result must be a string");
 		}
 
 		return this;

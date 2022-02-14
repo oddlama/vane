@@ -47,11 +47,11 @@ public abstract class RecipeDefinition {
 		final var str_type = (String)type;
 		switch (str_type) {
 			case "shaped":       return new ShapedRecipeDefinition(name).from_dict(dict);
-			//case "shapeless":    return new ShapelessRecipeDefinition(name).from_dict(dict);
-			//case "blasting":     // fallthrough
-			//case "furnace":      // fallthrough
-			//case "campfire":     // fallthrough
-			//case "smoking":      return new CookingRecipeDefinition(name, str_type).from_dict(dict);
+			case "shapeless":    return new ShapelessRecipeDefinition(name).from_dict(dict);
+			case "blasting":     // fallthrough
+			case "furnace":      // fallthrough
+			case "campfire":     // fallthrough
+			case "smoking":      return new CookingRecipeDefinition(name, str_type).from_dict(dict);
 			//case "smithing":     return new SmithingRecipeDefinition(name).from_dict(dict);
 			//case "stonecutting": return new StonecuttingRecipeDefinition(name).from_dict(dict);
 			default: break;
@@ -95,7 +95,25 @@ public abstract class RecipeDefinition {
 			return new RecipeChoice.MaterialChoice(parts);
 		}
 
+		// Check if amount is included
+		final var mult = definition.indexOf('*');
+		int amount = 1;
+		if (mult != -1) {
+			final var amount_str = definition.substring(0, mult).strip();
+			try {
+				amount = Integer.parseInt(amount_str);
+				if (amount <= 0) {
+					amount = 1;
+				}
+
+				// Remove amount from definition for parsing
+				definition = definition.substring(mult + 1).strip();
+			} catch (NumberFormatException e) { }
+		}
+
 		// Exact choice of itemstack including NBT
-		return new RecipeChoice.ExactChoice(ItemUtil.itemstack_from_string(definition));
+		final var is = ItemUtil.itemstack_from_string(definition);
+		is.setAmount(amount);
+		return new RecipeChoice.ExactChoice(is);
 	}
 }

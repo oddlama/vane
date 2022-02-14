@@ -44,12 +44,12 @@ public class HomeScroll extends CustomItem<Trifles> {
 		return RecipeList.of(new ShapedRecipeDefinition("generic")
 			.shape("pip", "cbe", "plp")
 			// TODO BADDDDDDDDDDDDDDDDDDDDDDDDDDDD TEST REMOVEEEEEEEEEEEEEEEEE
-			.add_ingredient('b', "minecraft:stick{Enchantments:[{id:knockback,lvl:1000}]}")
-			.add_ingredient('p', Material.MAP)
-			.add_ingredient('i', Tag.BEDS)
-			.add_ingredient('c', Material.COMPASS)
-			.add_ingredient('e', Material.ENDER_PEARL)
-			.add_ingredient('l', Material.CLOCK)
+			.set_ingredient('b', "minecraft:stick{Enchantments:[{id:knockback,lvl:1000}]}")
+			.set_ingredient('p', Material.MAP)
+			.set_ingredient('i', Tag.BEDS)
+			.set_ingredient('c', Material.COMPASS)
+			.set_ingredient('e', Material.ENDER_PEARL)
+			.set_ingredient('l', Material.CLOCK)
 			.result(key().toString()));
 	}
 

@@ -1,9 +1,7 @@
 package org.oddlama.vane.core.itemv2.api;
 
 import java.util.Collection;
-import java.util.Optional;
 
-import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
