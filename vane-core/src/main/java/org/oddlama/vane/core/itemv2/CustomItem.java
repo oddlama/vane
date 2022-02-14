@@ -38,10 +38,10 @@ public class CustomItem<T extends Module<T>> extends Listener<T> implements org.
 	public CustomItem(Context<T> context) {
 		super(null);
 		// Set namespace delayed, as we need to access instance methods to do so.
-		context = context.group("item_" + annotation.name(), "Enable item " + annotation.name());
+		context = context.group("item_" + name(), "Enable item " + name());
 		set_context(context);
 
-		this.key = Util.namespaced_key(get_module().namespace(), annotation.name());
+		this.key = Util.namespaced_key(get_module().namespace(), name());
 		recipes = new Recipes<T>(get_context(), this.key, this::default_recipes);
 		loot_tables = new LootTables<T>(get_context(), this.key, this::default_loot_tables);
 
@@ -52,6 +52,10 @@ public class CustomItem<T extends Module<T>> extends Listener<T> implements org.
 	@Override
 	public NamespacedKey key() {
 		return key;
+	}
+
+	public String name() {
+		return annotation.name();
 	}
 
 	@Override
