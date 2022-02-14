@@ -12,6 +12,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
+import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.inventory.PrepareSmithingEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -93,7 +94,7 @@ public class VanillaFunctionalityInhibitor extends Listener<Core> {
 		}
 	}
 
-	// Prevent custom items from forming netherite variants, or delegate event to custom item
+	// Prevent custom items from being used in smiting by default. They have to override this event to allow it.
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void on_prepare_smithing(final PrepareSmithingEvent event) {
 		final var item = event.getInventory().getInputEquipment();
@@ -102,7 +103,25 @@ public class VanillaFunctionalityInhibitor extends Listener<Core> {
 		}
 	}
 
-	// TODO prevent repair with non-custom-item base material
+	// Always prevent custom item repair with the custom item base material
+	// if it is not also a matching custom item.
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void on_prepare_anvil(final PrepareAnvilEvent event) {
+		final var a = event.getInventory().getFirstItem();
+		final var b = event.getInventory().getSecondItem();
+
+		// If both items are not of the same material, there is nothing to do.
+		if (a == null || b == null || a.getType() != b.getType()) {
+			return;
+		}
+
+		// Disable the result unless a and b are instances of the same custom item.
+		final var custom_item_a = get_module().item_registry().get(a);
+		final var custom_item_b = get_module().item_registry().get(b);
+		if (custom_item_a != null && custom_item_a != custom_item_b) {
+			event.getInventory().setResult(null);
+		}
+	}
 
 	// Prevent netherite items from burning, as they are made of netherite
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
