@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.event.player.PlayerItemMendEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.persistence.PersistentDataType;
@@ -53,6 +53,23 @@ public class DurabilityManager extends Listener<Core> {
 	}
 
 	/**
+	 * Returns the remaining uses for a given item, if it has custom durability.
+	 * Returns -1 otherwise.
+	 */
+	private static int remaining_uses(final ItemStack item_stack) {
+		if (item_stack == null || !item_stack.hasItemMeta()) {
+			return -1;
+		}
+		final var data = item_stack.getItemMeta().getPersistentDataContainer();
+		final var max = data.getOrDefault(ITEM_DURABILITY_MAX, PersistentDataType.INTEGER, -1);
+		if (max == -1) {
+			return -1;
+		}
+		final var damage = data.getOrDefault(ITEM_DURABILITY_DAMAGE, PersistentDataType.INTEGER, 0);
+		return Math.max(0, Math.min(max - damage, max));
+	}
+
+	/**
 	 * Updates lore on an item. Both persistent data field should exist,
 	 * otherwise result is unspecified.
 	 */
@@ -68,10 +85,8 @@ public class DurabilityManager extends Listener<Core> {
 		// Add new component only if requested
 		final var lore_component = custom_item.durabilityLore();
 		if (lore_component != null) {
-			final var data = item_stack.getItemMeta().getPersistentDataContainer();
-			final var max = data.getOrDefault(ITEM_DURABILITY_MAX, PersistentDataType.INTEGER, custom_item.durability());
-			final var damage = data.getOrDefault(ITEM_DURABILITY_DAMAGE, PersistentDataType.INTEGER, 0);
-			final var remaining_uses = Math.max(0, Math.min(max - damage, max));
+			final var max = item_stack.getItemMeta().getPersistentDataContainer().getOrDefault(ITEM_DURABILITY_MAX, PersistentDataType.INTEGER, custom_item.durability());
+			final var remaining_uses = remaining_uses(item_stack);
 			lore.add(ItemUtil.add_sentinel(lore_component.args(Component.text(remaining_uses), Component.text(max)), SENTINEL));
 		}
 
@@ -138,7 +153,7 @@ public class DurabilityManager extends Listener<Core> {
 	 * Initialized damage tags on the item, or removes them if custom durability
 	 * is disabled for the given custom item.
 	 */
-	public static void initialize_or_update_max(final CustomItem custom_item, final ItemStack item_stack) {
+	public static boolean initialize_or_update_max(final CustomItem custom_item, final ItemStack item_stack) {
 		// Remember damage if set.
 		var old_damage = item_stack.getItemMeta().getPersistentDataContainer().getOrDefault(ITEM_DURABILITY_DAMAGE, PersistentDataType.INTEGER, -1);
 
@@ -152,7 +167,7 @@ public class DurabilityManager extends Listener<Core> {
 		// The item has no durability anymore. Remove leftover lore and return.
 		if (custom_item.durability() <= 0) {
 			remove_lore(item_stack);
-			return;
+			return false;
 		}
 
 		final int actual_damage;
@@ -173,6 +188,7 @@ public class DurabilityManager extends Listener<Core> {
 		}
 
 		set_damage_and_update_item(custom_item, item_stack, actual_damage);
+		return true;
 	}
 
 	/**
@@ -181,7 +197,9 @@ public class DurabilityManager extends Listener<Core> {
 	 */
 	private static void damage_and_update_item(final CustomItem custom_item, final ItemStack item_stack, final int amount) {
 		if (!item_stack.getItemMeta().getPersistentDataContainer().has(ITEM_DURABILITY_DAMAGE, PersistentDataType.INTEGER)) {
-			initialize_or_update_max(custom_item, item_stack);
+			if (!initialize_or_update_max(custom_item, item_stack)) {
+				return;
+			}
 		}
 
 		final var damage = item_stack.getItemMeta().getPersistentDataContainer().getOrDefault(ITEM_DURABILITY_DAMAGE, PersistentDataType.INTEGER, 0);
@@ -228,5 +246,35 @@ public class DurabilityManager extends Listener<Core> {
 
 		// Never let the server do any repairing, our durability bar is our percentage indicator.
 		event.setCancelled(true);
+	}
+
+	// TODO: what about inventory based item repair?
+	// Update durability on result items.
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	public void on_prepare_anvil(final PrepareAnvilEvent event) {
+		if (event.getResult() == null) {
+			return;
+		}
+
+		final var r = event.getResult();
+		final var custom_item_r = get_module().item_registry().get(r);
+		if (custom_item_r == null) {
+			return;
+		}
+
+		if (custom_item_r.durability() <= 0) {
+			// Remove leftover components
+			damage_and_update_item(custom_item_r, r, 0);
+		} else {
+			final var uses_a = remaining_uses(event.getInventory().getFirstItem());
+			final var uses_b = remaining_uses(event.getInventory().getSecondItem());
+
+			final var max = r.getItemMeta().getPersistentDataContainer().getOrDefault(ITEM_DURABILITY_MAX, PersistentDataType.INTEGER, custom_item_r.durability());
+			if (uses_a >= 0 && uses_b >= 0) {
+				set_damage_and_update_item(custom_item_r, r, max - (uses_a + uses_b));
+			}
+		}
+
+		event.setResult(r);
 	}
 }

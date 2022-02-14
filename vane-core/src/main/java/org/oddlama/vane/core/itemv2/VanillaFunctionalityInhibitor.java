@@ -103,6 +103,7 @@ public class VanillaFunctionalityInhibitor extends Listener<Core> {
 		}
 	}
 
+	// TODO: what about inventory based item repair?
 	// Always prevent custom item repair with the custom item base material
 	// if it is not also a matching custom item.
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
@@ -119,7 +120,7 @@ public class VanillaFunctionalityInhibitor extends Listener<Core> {
 		final var custom_item_a = get_module().item_registry().get(a);
 		final var custom_item_b = get_module().item_registry().get(b);
 		if (custom_item_a != null && custom_item_a != custom_item_b) {
-			event.getInventory().setResult(null);
+			event.setResult(null);
 		}
 	}
 
