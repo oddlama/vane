@@ -29,6 +29,7 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.craftbukkit.v1_18_R1.enchantments.CraftEnchantment;
+import org.bukkit.craftbukkit.v1_18_R1.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -321,13 +322,12 @@ public class ItemUtil {
 		// of whatever the extended material gave us.
 		final var vanilla_definition = item_stack.getType().key().toString() + definition.substring(nbt_delim);
 		try {
-			final var mojang_nbt = new ItemParser(new StringReader(vanilla_definition), false).parse().getNbt();
-
-			//System.out.println("moj: " + mojang_nbt.toString());
-			//System.out.println("ext: " + org.oddlama.vane.util.Nms.item_handle(item_stack).getTag().toString());
-			// TODO aaaaaaaaaaaaaaaaa
+			final var parsed_nbt = new ItemParser(new StringReader(vanilla_definition), false).parse().getNbt();
+			final var inherent_nbt = CraftItemStack.asNMSCopy(item_stack).getOrCreateTag();
 			// Now apply the NBT be parsed by minecraft's internal parser to the itemstack.
-			return item_stack;
+			final var nms_item = item_handle(item_stack).copy();
+			nms_item.setTag(inherent_nbt.merge(parsed_nbt));
+			return CraftItemStack.asCraftMirror(nms_item);
 		} catch (CommandSyntaxException e) {
 			throw new IllegalArgumentException("Could not parse NBT of item definition: " + definition, e);
 		}
