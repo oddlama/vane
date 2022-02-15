@@ -1,4 +1,4 @@
-package org.oddlama.vane.trifles;
+package org.oddlama.vane.trifles.items;
 
 import static org.oddlama.vane.util.ItemUtil.damage_item;
 import static org.oddlama.vane.util.PlayerUtil.swing_arm;
@@ -7,7 +7,11 @@ import static org.oddlama.vane.util.Util.ms_to_ticks;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -15,11 +19,12 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.oddlama.vane.annotation.config.ConfigInt;
 import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.module.Context;
-import org.oddlama.vane.trifles.items.HomeScroll;
-import org.oddlama.vane.trifles.items.Scroll;
+import org.oddlama.vane.trifles.Trifles;
+import org.oddlama.vane.trifles.event.PlayerTeleportScrollEvent;
 
 public class Scrolls extends Listener<Trifles> {
 	private Set<Scroll> scrolls = new HashSet<>();
@@ -31,6 +36,7 @@ public class Scrolls extends Listener<Trifles> {
 	public Scrolls(Context<Trifles> context) {
 		super(context.group("scrolls", "Several scrolls that allow player teleportation, and related behavior."));
 		scrolls.add(new HomeScroll(get_context()));
+		scrolls.add(new UnstableScroll(get_context()));
 
 		// Accumulate base materials so the cooldown can be applied to all scrolls regardless of base material.
 		for (final var scroll : scrolls) {
@@ -88,7 +94,7 @@ public class Scrolls extends Listener<Trifles> {
 		}
 
 		final var current_location = player.getLocation();
-		if (get_module().teleport_from_scroll(player, current_location, to_location)) {
+		if (teleport_from_scroll(player, current_location, to_location)) {
 			// Set cooldown
 			cooldown_all(player, scroll.config_cooldown);
 
@@ -96,6 +102,31 @@ public class Scrolls extends Listener<Trifles> {
 			damage_item(player, item, 1);
 			swing_arm(player, event.getHand());
 		}
+	}
+
+	public boolean teleport_from_scroll(final Player player, final Location from, final Location to) {
+		// Send scroll teleport event
+		final var teleport_scroll_event = new PlayerTeleportScrollEvent(player, from, to);
+		get_module().getServer().getPluginManager().callEvent(teleport_scroll_event);
+		if (teleport_scroll_event.isCancelled()) {
+			return false;
+		}
+
+		// Teleport
+		player.teleport(to, PlayerTeleportEvent.TeleportCause.PLUGIN);
+
+		// Play sounds
+		from.getWorld().playSound(from, Sound.ITEM_CHORUS_FRUIT_TELEPORT, SoundCategory.PLAYERS, 1.0f, 1.1f);
+		to.getWorld().playSound(to, Sound.ITEM_CHORUS_FRUIT_TELEPORT, SoundCategory.PLAYERS, 1.0f, 1.1f);
+		from.getWorld().playSound(from, Sound.BLOCK_END_PORTAL_FRAME_FILL, SoundCategory.PLAYERS, 1.0f, 1.0f);
+		to.getWorld().playSound(to, Sound.BLOCK_END_PORTAL_FRAME_FILL, SoundCategory.PLAYERS, 1.0f, 1.0f);
+
+		// Create particles
+		from.getWorld().spawnParticle(Particle.PORTAL, from.clone().add(0.5, 0.5, 0.5), 50, 0.0, 0.0, 0.0, 1.0);
+		from.getWorld().spawnParticle(Particle.PORTAL, from.clone().add(0.5, 1.5, 0.5), 50, 0.0, 0.0, 0.0, 1.0);
+		to.getWorld().spawnParticle(Particle.PORTAL, to.clone().add(0.5, 0.5, 0.5), 50, 0.0, 0.0, 0.0, 1.0);
+		to.getWorld().spawnParticle(Particle.PORTAL, to.clone().add(0.5, 1.5, 0.5), 50, 0.0, 0.0, 0.0, 1.0);
+		return true;
 	}
 
 	public void cooldown_all(final Player player, int cooldown_ms) {

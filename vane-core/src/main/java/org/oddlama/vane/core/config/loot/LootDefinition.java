@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.bukkit.NamespacedKey;
+import org.bukkit.loot.LootTables;
 import org.oddlama.vane.core.LootTable.LootTableEntry;
 import org.oddlama.vane.util.ItemUtil;
 import org.oddlama.vane.util.Util;
@@ -63,6 +64,10 @@ public class LootDefinition {
 		return this;
 	}
 
+	public LootDefinition in(final LootTables table) {
+		return in(table.getKey());
+	}
+
 	private LootDefinition add(Entry entry) {
 		entries.add(entry);
 		return this;
@@ -111,7 +116,7 @@ public class LootDefinition {
 
 	public List<LootTableEntry> entries() {
 		return entries.stream()
-			.map(e -> new LootTableEntry(e.chance, ItemUtil.itemstack_from_string(e.item_definition), e.amount_min, e.amount_max))
+			.map(e -> new LootTableEntry(e.chance, ItemUtil.itemstack_from_string(e.item_definition).getLeft(), e.amount_min, e.amount_max))
 			.toList();
 	}
 }

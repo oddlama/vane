@@ -12,7 +12,7 @@
 
 # DO NOT CHANGE! The version of this language file. Used to determine
 # if the file needs to be updated.
-version: 2
+version: 3
 # The corresponding language code used in resource packs. Used for
 # resource pack generation. Typically this is a combination of the
 # language code (ISO 639) and the country code (ISO 3166).
@@ -34,15 +34,8 @@ item_xp_bottle:
 item_empty_xp_bottle:
   name: "Fiole d'Expérience vide"
 
-item_home_scroll:
-  name: "Parchemin de Rappel (Foyer)"
-
 item_reinforced_elytra:
-  netherite:
-    name: "Élytres en netherite"
-
-item_unstable_scroll:
-  name: "Parchemin de Rappel (instable)"
+  name: "Élytres en netherite"
 
 item_file:
   wooden:
@@ -71,3 +64,10 @@ item_sickle:
     name: "Faucille en diamant"
   netherite:
     name: "Faucille en netherite"
+
+scrolls:
+  item_home_scroll:
+    name: "Parchemin de Rappel (Foyer)"
+
+  item_unstable_scroll:
+    name: "Parchemin de Rappel (instable)"

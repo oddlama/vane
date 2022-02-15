@@ -3,31 +3,22 @@ package org.oddlama.vane.trifles.items;
 import java.util.EnumSet;
 
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.oddlama.vane.annotation.config.ConfigInt;
-import org.oddlama.vane.annotation.item.VaneItemv2;
 import org.oddlama.vane.core.itemv2.CustomItem;
 import org.oddlama.vane.core.itemv2.api.InhibitBehavior;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.trifles.Trifles;
 
-@VaneItemv2(name = "<overwritten below>", base = Material.WARPED_FUNGUS_ON_A_STICK, durability = 25, model_data = 0, version = 1)
 public abstract class Scroll extends CustomItem<Trifles> {
 	@ConfigInt(def = 0, min = 0, desc = "Cooldown in milliseconds until another scroll can be used.")
 	public int config_cooldown;
 
-	private String name;
 	private int default_cooldown;
 
-	public Scroll(Context<Trifles> context, String name, int default_cooldown) {
+	public Scroll(Context<Trifles> context, int default_cooldown) {
 		super(context);
-		this.name = name;
 		this.default_cooldown = default_cooldown;
-	}
-
-	public String name() {
-		return name;
 	}
 
 	public int config_cooldown_def() {
@@ -46,6 +37,6 @@ public abstract class Scroll extends CustomItem<Trifles> {
 
 	@Override
 	public EnumSet<InhibitBehavior> inhibitedBehaviors() {
-		return EnumSet.of(InhibitBehavior.USE_IN_VANILLA_CRAFTING_RECIPE, InhibitBehavior.USE_IN_SMITHING_RECIPE, InhibitBehavior.TEMPT);
+		return EnumSet.of(InhibitBehavior.USE_IN_VANILLA_RECIPE, InhibitBehavior.TEMPT);
 	}
 }

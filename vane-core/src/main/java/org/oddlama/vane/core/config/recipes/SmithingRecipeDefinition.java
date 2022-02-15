@@ -38,6 +38,11 @@ public class SmithingRecipeDefinition extends RecipeDefinition {
 		return this;
 	}
 
+	public SmithingRecipeDefinition copy_nbt(boolean copy_nbt) {
+		this.copy_nbt = copy_nbt;
+		return this;
+	}
+
 	public SmithingRecipeDefinition addition(final Tag<?> tag) {
 		return addition("#" + tag.key().toString());
 	}
@@ -97,6 +102,6 @@ public class SmithingRecipeDefinition extends RecipeDefinition {
 
 	@Override
 	public Recipe to_recipe(NamespacedKey base_key) {
-		return new SmithingRecipe(key(base_key), ItemUtil.itemstack_from_string(this.result), RecipeDefinition.recipe_choice(base), RecipeDefinition.recipe_choice(addition), copy_nbt);
+		return new SmithingRecipe(key(base_key), ItemUtil.itemstack_from_string(this.result).getLeft(), RecipeDefinition.recipe_choice(base), RecipeDefinition.recipe_choice(addition), copy_nbt);
 	}
 }

@@ -68,7 +68,7 @@ public class StonecuttingRecipeDefinition extends RecipeDefinition {
 
 	@Override
 	public Recipe to_recipe(NamespacedKey base_key) {
-		final var out = ItemUtil.itemstack_from_string(this.result);
+		final var out = ItemUtil.itemstack_from_string(this.result).getLeft();
 		final var in = RecipeDefinition.recipe_choice(input);
 		return new StonecuttingRecipe(key(base_key), out, in);
 	}

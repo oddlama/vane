@@ -1,9 +1,10 @@
 package org.oddlama.vane.core.itemv2;
 
 import static org.oddlama.vane.util.MaterialUtil.is_tillable;
+import static org.oddlama.vane.util.Nms.item_handle;
 
 import org.bukkit.Keyed;
-import org.bukkit.NamespacedKey;
+import org.bukkit.craftbukkit.v1_18_R1.inventory.CraftItemStack;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -16,6 +17,7 @@ import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.inventory.PrepareSmithingEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.SmithingRecipe;
 import org.oddlama.vane.core.Core;
 import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.itemv2.api.CustomItem;
@@ -70,24 +72,17 @@ public class VanillaFunctionalityInhibitor extends Listener<Core> {
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void on_prepare_item_craft(final PrepareItemCraftEvent event) {
 		final var recipe = event.getRecipe();
-		if (recipe == null) {
-			return;
-		}
-
-		final NamespacedKey key;
-		if (recipe instanceof Keyed) {
-			key = ((Keyed) recipe).getKey();
-		} else {
+		if (recipe == null || !(recipe instanceof Keyed keyed)) {
 			return;
 		}
 
 		// Only consider to cancel minecraft's recipes
-		if (!key.getNamespace().equals("minecraft")) {
+		if (!keyed.getKey().getNamespace().equals("minecraft")) {
 			return;
 		}
 
 		for (final var item : event.getInventory().getMatrix()) {
-			if (inhibit(get_module().item_registry().get(item), InhibitBehavior.USE_IN_VANILLA_CRAFTING_RECIPE)) {
+			if (inhibit(get_module().item_registry().get(item), InhibitBehavior.USE_IN_VANILLA_RECIPE)) {
 				event.getInventory().setResult(null);
 				return;
 			}
@@ -98,9 +93,43 @@ public class VanillaFunctionalityInhibitor extends Listener<Core> {
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void on_prepare_smithing(final PrepareSmithingEvent event) {
 		final var item = event.getInventory().getInputEquipment();
-		if (inhibit(get_module().item_registry().get(item), InhibitBehavior.USE_IN_SMITHING_RECIPE)) {
+		final var recipe = event.getInventory().getRecipe();
+		if (recipe == null || !(recipe instanceof Keyed keyed)) {
+			return;
+		}
+
+		// Only consider to cancel minecraft's recipes
+		if (!keyed.getKey().getNamespace().equals("minecraft")) {
+			return;
+		}
+
+		if (inhibit(get_module().item_registry().get(item), InhibitBehavior.USE_IN_VANILLA_RECIPE)) {
 			event.getInventory().setResult(null);
 		}
+	}
+
+	// If the result of a smithing recipe is a custom item, copy and merge input NBT data.
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+	public void on_prepare_smithing_copy_nbt(final PrepareSmithingEvent event) {
+		var result = event.getResult();
+		final var recipe = event.getInventory().getRecipe();
+		if (result == null || recipe == null || !(recipe instanceof SmithingRecipe smithing_recipe) || !smithing_recipe.willCopyNbt()) {
+			return;
+		}
+
+        // Actually use recipe result, as copynbt has already modified the result
+		result = recipe.getResult();
+		final var custom_item_result = get_module().item_registry().get(result);
+		if (custom_item_result == null) {
+			return;
+		}
+
+		final var input = event.getInventory().getInputEquipment();
+		final var input_nbt = CraftItemStack.asNMSCopy(input).getOrCreateTag();
+		final var result_nbt = CraftItemStack.asNMSCopy(result).getOrCreateTag();
+		final var nms_result = item_handle(result).copy();
+		nms_result.setTag(result_nbt.merge(input_nbt));
+		event.setResult(CustomItemHelper.convertExistingStack(custom_item_result, CraftItemStack.asCraftMirror(nms_result)));
 	}
 
 	// TODO: what about inventory based item repair?

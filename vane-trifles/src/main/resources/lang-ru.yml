@@ -12,7 +12,7 @@
 
 # DO NOT CHANGE! The version of this language file. Used to determine
 # if the file needs to be updated.
-version: 2
+version: 3
 # The corresponding language code used in resource packs. Used for
 # resource pack generation. Typically this is a combination of the
 # language code (ISO 639) and the country code (ISO 3166).
@@ -38,18 +38,9 @@ item_empty_xp_bottle:
   # The display name of this item variant.
   name: "Пустая бутылка опыта"
 
-item_home_scroll:
-  # The display name of this item variant.
-  name: "Свиток телепортации (Домой)"
-
 item_reinforced_elytra:
-  netherite:
-    # The display name of this item variant.
-    name: "Незеритовая элитра"
-
-item_unstable_scroll:
   # The display name of this item variant.
-  name: "Свиток телепортации (Нестабильный)"
+  name: "Незеритовая элитра"
 
 item_file:
   wooden:
@@ -90,3 +81,12 @@ item_sickle:
   netherite:
     # The display name of this item variant.
     name: "Незеритовый Серп"
+
+scrolls:
+  item_home_scroll:
+    # The display name of this item variant.
+    name: "Свиток телепортации (Домой)"
+
+  item_unstable_scroll:
+    # The display name of this item variant.
+    name: "Свиток телепортации (Нестабильный)"

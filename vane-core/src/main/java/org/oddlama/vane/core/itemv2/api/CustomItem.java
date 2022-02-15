@@ -115,7 +115,7 @@ public interface CustomItem {
 	 * to specify what should be prohibited. Anything else must be handeled by the user.
 	 */
 	default public EnumSet<InhibitBehavior> inhibitedBehaviors() {
-		return EnumSet.of(InhibitBehavior.USE_IN_VANILLA_CRAFTING_RECIPE, InhibitBehavior.USE_IN_SMITHING_RECIPE);
+		return EnumSet.of(InhibitBehavior.USE_IN_VANILLA_RECIPE);
 	}
 
 	/**

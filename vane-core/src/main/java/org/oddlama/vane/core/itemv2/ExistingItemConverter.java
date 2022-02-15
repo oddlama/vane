@@ -26,35 +26,39 @@ public class ExistingItemConverter extends Listener<Core> {
 		}
 
 		// If lookups fail, we return null and nothing will be done.
+		String new_item_key = null;
 		switch (meta.getCustomModelData()) {
-			// 7758190: org.oddlama.vane.trifles.items.Sickle variant org.oddlama.vane.trifles.items.Sickle$SickleVariant@7423691e with base material WOODEN_HOE and model_data
-			case 7758190: return get_module().item_registry().get(NamespacedKey.fromString("vane_trifles:wooden_sickle"));
-			// 7758191: org.oddlama.vane.trifles.items.Sickle variant org.oddlama.vane.trifles.items.Sickle$SickleVariant@7f49b82b with base material STONE_HOE and model_data
-			// 7758192: org.oddlama.vane.trifles.items.Sickle variant org.oddlama.vane.trifles.items.Sickle$SickleVariant@39de5c61 with base material IRON_HOE and model_data
-			// 7758193: org.oddlama.vane.trifles.items.Sickle variant org.oddlama.vane.trifles.items.Sickle$SickleVariant@3c7defc4 with base material GOLDEN_HOE and model_data
-			// 7758194: org.oddlama.vane.trifles.items.Sickle variant org.oddlama.vane.trifles.items.Sickle$SickleVariant@53f91acc with base material DIAMOND_HOE and model_data
-			// 7758195: org.oddlama.vane.trifles.items.Sickle variant org.oddlama.vane.trifles.items.Sickle$SickleVariant@61c36878 with base material NETHERITE_HOE and model_data
-			// 7758254: org.oddlama.vane.trifles.items.File variant org.oddlama.vane.trifles.items.File$FileVariant@1d9dcc5b with base material WOODEN_HOE and model_data
-			// 7758255: org.oddlama.vane.trifles.items.File variant org.oddlama.vane.trifles.items.File$FileVariant@8b31007 with base material STONE_HOE and model_data
-			// 7758256: org.oddlama.vane.trifles.items.File variant org.oddlama.vane.trifles.items.File$FileVariant@2e626887 with base material IRON_HOE and model_data
-			// 7758257: org.oddlama.vane.trifles.items.File variant org.oddlama.vane.trifles.items.File$FileVariant@53141b43 with base material GOLDEN_HOE and model_data
-			// 7758258: org.oddlama.vane.trifles.items.File variant org.oddlama.vane.trifles.items.File$FileVariant@2018ea6e with base material DIAMOND_HOE and model_data
-			// 7758259: org.oddlama.vane.trifles.items.File variant org.oddlama.vane.trifles.items.File$FileVariant@303bf542 with base material NETHERITE_HOE and model_data
-			// 7758318: org.oddlama.vane.trifles.items.EmptyXpBottle variant org.oddlama.vane.trifles.items.EmptyXpBottle$EmptyXpBottleVariant@3e3ea4ab with base material GLASS_BOTTLE and model_data
-			// 7758382: org.oddlama.vane.trifles.items.XpBottle variant org.oddlama.vane.trifles.items.XpBottle$XpBottleVariant@109d018b with base material HONEY_BOTTLE and model_data
-			// 7758383: org.oddlama.vane.trifles.items.XpBottle variant org.oddlama.vane.trifles.items.XpBottle$XpBottleVariant@46e696d with base material HONEY_BOTTLE and model_data
-			// 7758384: org.oddlama.vane.trifles.items.XpBottle variant org.oddlama.vane.trifles.items.XpBottle$XpBottleVariant@126316e1 with base material HONEY_BOTTLE and model_data
-			// 7758446: org.oddlama.vane.trifles.items.HomeScroll variant org.oddlama.vane.trifles.items.HomeScroll$HomeScrollVariant@7e2cc665 with base material CARROT_ON_A_STICK and model_data
-			case 7758446: return get_module().item_registry().get(NamespacedKey.fromString("vane_trifles:home_scroll"));
-			// 7758510: org.oddlama.vane.trifles.items.UnstableScroll variant org.oddlama.vane.trifles.items.UnstableScroll$UnstableScrollVariant@73a35ad4 with base material CARROT_ON_A_STICK and model_data
-			// 7758574: org.oddlama.vane.trifles.items.ReinforcedElytra variant org.oddlama.vane.trifles.items.ReinforcedElytra$ReinforcedElytraVariant@8fccdba with base material ELYTRA and model_data
-			// 7823790: org.oddlama.vane.enchantments.items.AncientTomeOfKnowledge variant org.oddlama.vane.enchantments.items.AncientTomeOfKnowledge$AncientTomeOfKnowledgeVariant@27a64533 with base material BOOK and model_data
-			// 7823791: org.oddlama.vane.enchantments.items.AncientTomeOfKnowledge variant org.oddlama.vane.enchantments.items.AncientTomeOfKnowledge$AncientTomeOfKnowledgeVariant@605af50d with base material ENCHANTED_BOOK and model_data
-			// 7823854: org.oddlama.vane.enchantments.items.AncientTomeOfTheGods variant org.oddlama.vane.enchantments.items.AncientTomeOfTheGods$AncientTomeOfTheGodsVariant@242cd56 with base material BOOK and model_data
-			// 7823855: org.oddlama.vane.enchantments.items.AncientTomeOfTheGods variant org.oddlama.vane.enchantments.items.AncientTomeOfTheGods$AncientTomeOfTheGodsVariant@26bda869 with base material ENCHANTED_BOOK and model_data
+			case 7758190: new_item_key = "vane_trifles:wooden_sickle"; break;
+			case 7758191: new_item_key = "vane_trifles:stone_sickle"; break;
+			case 7758192: new_item_key = "vane_trifles:iron_sickle"; break;
+			case 7758193: new_item_key = "vane_trifles:golden_sickle"; break;
+			case 7758194: new_item_key = "vane_trifles:diamond_sickle"; break;
+			case 7758195: new_item_key = "vane_trifles:netherite_sickle"; break;
+			case 7758254: // fallthrough
+			case 7758255: // fallthrough
+			case 7758256: // fallthrough
+			case 7758257: // fallthrough
+			case 7758258: // fallthrough
+			case 7758259: new_item_key = "vane_trifles:file"; break;
+			case 7758318: new_item_key = "vane_trifles:empty_xp_bottle"; break;
+			case 7758382: new_item_key = "vane_trifles:small_xp_bottle"; break;
+			case 7758383: new_item_key = "vane_trifles:medium_xp_bottle"; break;
+			case 7758384: new_item_key = "vane_trifles:large_xp_bottle"; break;
+			case 7758446: new_item_key = "vane_trifles:home_scroll"; break;
+			case 7758510: new_item_key = "vane_trifles:unstable_scroll"; break;
+			case 7758574: new_item_key = "vane_trifles:reinforced_elytra"; break;
+			case 7823726: new_item_key = "vane_enchantments:ancient_tome"; break;
+			case 7823727: new_item_key = "vane_enchantments:ancient_tome"; break;
+			case 7823790: new_item_key = "vane_enchantments:ancient_tome_of_knowledge"; break;
+			case 7823791: new_item_key = "vane_enchantments:ancient_tome_of_knowledge"; break;
+			case 7823854: new_item_key = "vane_enchantments:ancient_tome_of_the_gods"; break;
+			case 7823855: new_item_key = "vane_enchantments:ancient_tome_of_the_gods"; break;
 		}
 
-		return null;
+		if (new_item_key == null) {
+			return null;
+		}
+		return get_module().item_registry().get(NamespacedKey.fromString(new_item_key));
 	}
 
 	private void process_inventory(@NotNull Inventory inventory) {

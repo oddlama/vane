@@ -24,6 +24,8 @@ import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.minecraft.commands.arguments.item.ItemParser;
 import net.minecraft.world.item.Item;
+
+import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -296,7 +298,8 @@ public class ItemUtil {
 		return component.hoverEvent(HoverEvent.showText(Component.text(sentinel.toString())));
 	}
 
-	public static @NotNull ItemStack itemstack_from_string(final String definition) {
+	/** Returns the itemstack and a boolean indicating whether it was just as simlpe material. */
+	public static @NotNull Pair<ItemStack, Boolean> itemstack_from_string(final String definition) {
 		// namespace:key or namespace:key{nbtdata}, where the key can reference a material, head material or customitem.
 		final var nbt_delim = definition.indexOf('{');
 		NamespacedKey key;
@@ -315,7 +318,7 @@ public class ItemUtil {
 		var item_stack = emat.item();
 		if (nbt_delim == -1) {
 			// There is no NBT information, we can return here.
-			return item_stack;
+			return Pair.of(item_stack, emat.is_simple_material());
 		}
 
 		// Parse the NBT by using minecraft's internal paerser with the base material
@@ -327,7 +330,7 @@ public class ItemUtil {
 			// Now apply the NBT be parsed by minecraft's internal parser to the itemstack.
 			final var nms_item = item_handle(item_stack).copy();
 			nms_item.setTag(inherent_nbt.merge(parsed_nbt));
-			return CraftItemStack.asCraftMirror(nms_item);
+			return Pair.of(CraftItemStack.asCraftMirror(nms_item), false);
 		} catch (CommandSyntaxException e) {
 			throw new IllegalArgumentException("Could not parse NBT of item definition: " + definition, e);
 		}

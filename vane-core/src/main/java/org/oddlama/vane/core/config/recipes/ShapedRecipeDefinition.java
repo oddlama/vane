@@ -91,7 +91,7 @@ public class ShapedRecipeDefinition extends RecipeDefinition {
 
 	@Override
 	public Recipe to_recipe(NamespacedKey base_key) {
-		final var recipe = new ShapedRecipe(key(base_key), ItemUtil.itemstack_from_string(this.result));
+		final var recipe = new ShapedRecipe(key(base_key), ItemUtil.itemstack_from_string(this.result).getLeft());
 		recipe.shape(this.shape.toArray(new String[0]));
 		this.ingredients.forEach((name, definition) -> recipe.setIngredient(name.charAt(0), RecipeDefinition.recipe_choice(definition)));
 		return recipe;

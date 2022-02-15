@@ -29,6 +29,10 @@ public class ExtendedMaterial {
 		return key;
 	}
 
+	public boolean is_simple_material() {
+		return material != null;
+	}
+
 	public static ExtendedMaterial from(final NamespacedKey key) {
 		final var mat = new ExtendedMaterial(key);
 		if (mat.material == null && mat.head_material == null && key.namespace() == "minecraft") {

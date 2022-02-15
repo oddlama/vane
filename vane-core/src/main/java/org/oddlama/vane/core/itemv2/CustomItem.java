@@ -22,7 +22,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 
 public class CustomItem<T extends Module<T>> extends Listener<T> implements org.oddlama.vane.core.itemv2.api.CustomItem {
-	private VaneItemv2 annotation = getClass().getAnnotation(VaneItemv2.class);
+	private VaneItemv2 annotation;
 	public NamespacedKey key;
 
 	public Recipes<T> recipes;
@@ -34,9 +34,28 @@ public class CustomItem<T extends Module<T>> extends Listener<T> implements org.
 
 	@ConfigInt(def = 0, min = 0, desc = "The durability of this item. Set to 0 to use the durability properties of whatever base material the item is made of.")
 	private int config_durability;
+	private String name_override = null;
+	private Integer custom_model_data_override = null;
 
 	public CustomItem(Context<T> context) {
+		this(context, null, null);
+	}
+
+	public CustomItem(Context<T> context, String name_override, Integer custom_model_data_override) {
 		super(null);
+
+		Class<?> cls = getClass();
+		while (this.annotation == null && cls != null) {
+			this.annotation = cls.getAnnotation(VaneItemv2.class);
+			cls = cls.getSuperclass();
+		}
+		if (this.annotation == null) {
+			throw new IllegalStateException("Could not find @VaneItem annotation on " + getClass());
+		}
+
+		this.name_override = name_override;
+		this.custom_model_data_override = custom_model_data_override;
+
 		// Set namespace delayed, as we need to access instance methods to do so.
 		context = context.group("item_" + name(), "Enable item " + name());
 		set_context(context);
@@ -55,6 +74,9 @@ public class CustomItem<T extends Module<T>> extends Listener<T> implements org.
 	}
 
 	public String name() {
+		if (name_override != null) {
+			return name_override;
+		}
 		return annotation.name();
 	}
 
@@ -76,6 +98,9 @@ public class CustomItem<T extends Module<T>> extends Listener<T> implements org.
 
 	@Override
 	public int customModelData() {
+		if (custom_model_data_override != null) {
+			return custom_model_data_override;
+		}
 		return annotation.model_data();
 	}
 
@@ -103,13 +128,13 @@ public class CustomItem<T extends Module<T>> extends Listener<T> implements org.
 
 	@Override
 	public void addResources(final ResourcePackGenerator rp) throws IOException {
-		final var resource_name = "items/" + key.value() + ".png";
+		final var resource_name = "items/" + key().value() + ".png";
 		final var resource = get_module().getResource(resource_name);
 		if (resource == null) {
 			throw new RuntimeException("Missing resource '" + resource_name + "'. This is a bug.");
 		}
-		rp.add_item_model(key, resource);
-		rp.add_item_override(baseMaterial().getKey(), key, predicate -> {
+		rp.add_item_model(key(), resource);
+		rp.add_item_override(baseMaterial().getKey(), key(), predicate -> {
 			predicate.put("custom_model_data", customModelData());
 		});
 	}

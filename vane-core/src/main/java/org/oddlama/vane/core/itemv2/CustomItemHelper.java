@@ -6,6 +6,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.oddlama.vane.core.Core;
 import org.oddlama.vane.core.itemv2.api.CustomItem;
 import org.oddlama.vane.util.Util;
 
@@ -53,6 +54,20 @@ public class CustomItemHelper {
 			throw new IllegalStateException("Invalid namespaced key '" + key + "'");
 		}
 		return Pair.of(Util.namespaced_key(parts[0], parts[1]), version);
+	}
+
+	/**
+	 * Creates a new item stack with a single item of this custom item.
+	 */
+	public static ItemStack newStack(final String custom_item_key) {
+		return CustomItemHelper.newStack(custom_item_key, 1);
+	}
+
+	/**
+	 * Creates a new item stack with the given amount of items of this custom item.
+	 */
+	public static ItemStack newStack(final String custom_item_key, final int amount) {
+		return CustomItemHelper.newStack(Core.instance().item_registry().get(NamespacedKey.fromString(custom_item_key)), amount);
 	}
 
 	/**

@@ -112,8 +112,14 @@ public abstract class RecipeDefinition {
 		}
 
 		// Exact choice of itemstack including NBT
-		final var is = ItemUtil.itemstack_from_string(definition);
-		is.setAmount(amount);
-		return new RecipeChoice.ExactChoice(is);
+		final var item_stack_and_is_simple_mat = ItemUtil.itemstack_from_string(definition);
+		final var item_stack = item_stack_and_is_simple_mat.getLeft();
+		final var is_simple_mat = item_stack_and_is_simple_mat.getRight();
+		if (is_simple_mat && amount == 1) {
+			return new RecipeChoice.MaterialChoice(item_stack.getType());
+		}
+
+		item_stack.setAmount(amount);
+		return new RecipeChoice.ExactChoice(item_stack);
 	}
 }

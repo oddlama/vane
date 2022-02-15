@@ -6,14 +6,16 @@ import org.bukkit.Tag;
 import org.bukkit.entity.Player;
 import org.oddlama.vane.core.config.recipes.RecipeList;
 import org.oddlama.vane.core.config.recipes.ShapedRecipeDefinition;
+import org.oddlama.vane.annotation.item.VaneItemv2;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.trifles.Trifles;
 
 import net.kyori.adventure.text.Component;
 
+@VaneItemv2(name = "home_scroll", base = Material.WARPED_FUNGUS_ON_A_STICK, durability = 25, model_data = 0x760000, version = 1)
 public class HomeScroll extends Scroll {
 	public HomeScroll(Context<Trifles> context) {
-		super(context, "home_scroll", 10000);
+		super(context, 10000);
 	}
 
 	@Override
