@@ -82,7 +82,13 @@ public class Enchant extends Command<Enchantments> {
 		try {
 			// Convert book if necessary
 			if (item_stack.getType() == Material.BOOK) {
-				item_stack.setType(Material.ENCHANTED_BOOK);/* fallthrough */
+				// FIXME this technically yields wrong items when this was a tome,
+				// as just changing the base item is not equivalent to custom item conversion.
+				// The custom model data and item tag will still be those of a book.
+				// The fix is not straightforward without hardcoding tome identifiers,
+				// so for now we leave it as is.
+				item_stack.setType(Material.ENCHANTED_BOOK);
+				/* fallthrough */
 			}
 
 			if (item_stack.getType() == Material.ENCHANTED_BOOK) {

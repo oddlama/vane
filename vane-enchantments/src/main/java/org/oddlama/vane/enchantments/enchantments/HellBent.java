@@ -27,46 +27,20 @@ public class HellBent extends CustomEnchantment<Enchantments> {
 	}
 
 	@Override
-	public void register_recipes() {
-		final var ancient_tome_of_knowledge_enchanted = CustomItem
-			.<AncientTomeOfKnowledge.AncientTomeOfKnowledgeVariant>variant_of(
-				AncientTomeOfKnowledge.class,
-				BookVariant.ENCHANTED_BOOK
-			)
-			.item();
-		final var ancient_tome_of_knowledge = CustomItem
-			.<AncientTomeOfKnowledge.AncientTomeOfKnowledgeVariant>variant_of(
-				AncientTomeOfKnowledge.class,
-				BookVariant.BOOK
-			)
-			.item();
-
-		final var recipe_key = recipe_key();
-		final var item = ancient_tome_of_knowledge_enchanted.clone();
-		final var meta = (EnchantmentStorageMeta) item.getItemMeta();
-		meta.addStoredEnchant(bukkit(), 1, false);
-		item.setItemMeta(meta);
-		get_module().update_enchanted_item(item);
-
-		final var recipe = new ShapedRecipe(recipe_key, item)
-			.shape(" m ", " b ", " t ")
-			.setIngredient('b', ancient_tome_of_knowledge)
-			.setIngredient('t', Material.TURTLE_HELMET)
-			.setIngredient('m', Material.MUSIC_DISC_PIGSTEP);
-
-		add_recipe(recipe);
-
+	public RecipeList default_recipes() {
+		return RecipeList.of(new ShapedRecipeDefinition("generic")
+			.shape("m", "b", "t")
+			.set_ingredient('b', "vane_enchantments:ancient_tome_of_knowledge")
+			.set_ingredient('t', Material.TURTLE_HELMET)
+			.set_ingredient('m', Material.MUSIC_DISC_PIGSTEP)
+			.result("vane_enchantments:enchanted_ancient_tome_of_knowledge"));
+	}
 		// Loot generation
 		final var entry = new LootTableEntry(50, item);
-		for (final var table : new LootTables[] {
 			LootTables.BASTION_BRIDGE,
 			LootTables.BASTION_HOGLIN_STABLE,
 			LootTables.BASTION_OTHER,
 			LootTables.BASTION_TREASURE,
-		}) {
-			get_module().loot_table(table).put(recipe_key, entry);
-		}
-	}
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void on_player_damage(final EntityDamageEvent event) {

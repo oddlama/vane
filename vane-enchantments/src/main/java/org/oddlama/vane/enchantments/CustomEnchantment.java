@@ -4,29 +4,31 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextDecoration;
-import org.bukkit.Keyed;
+
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.Recipe;
 import org.jetbrains.annotations.NotNull;
-import org.oddlama.vane.annotation.config.ConfigBoolean;
 import org.oddlama.vane.annotation.enchantment.Rarity;
 import org.oddlama.vane.annotation.enchantment.VaneEnchantment;
 import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.core.Listener;
+import org.oddlama.vane.core.config.loot.LootTableList;
+import org.oddlama.vane.core.config.loot.LootTables;
+import org.oddlama.vane.core.config.recipes.RecipeList;
+import org.oddlama.vane.core.config.recipes.Recipes;
 import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.util.Nms;
 import org.oddlama.vane.util.Util;
 
-public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 
+public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 	// Track instances
 	private static final Map<Class<?>, CustomEnchantment<?>> instances = new HashMap<>();
 
@@ -38,17 +40,12 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 
 	private final Set<Enchantment> supersedes = new HashSet<>();
 
-	@ConfigBoolean(def = true, desc = "Whether recipes for this enchantment should be registered (if any). Only disable this if you want to have the enchantment itself enabled, but want to use something else to make it accessible to your players.")
-	public boolean config_register_recipes;
-	@ConfigBoolean(def = true, desc = "Whether loot tables for this enchantment should be registered (if any).")
-	public boolean config_register_loot_tables;
+	public Recipes<T> recipes;
+	public LootTables<T> loot_tables;
 
 	// Language
 	@LangMessage
 	public TranslatedMessage lang_name;
-
-	// All associated recipes
-	private Map<NamespacedKey, Recipe> recipes = new HashMap<>();
 
 	public CustomEnchantment(Context<T> context) {
 		super(null);
@@ -73,6 +70,10 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 		// After registering in NMS we can create a wrapper for bukkit
 		bukkit_wrapper = new BukkitEnchantmentWrapper(this, native_wrapper);
 		Enchantment.registerEnchantment(bukkit_wrapper);
+
+		// Automatic recipes and loot table config and registration
+		recipes = new Recipes<T>(get_context(), this.key, this::default_recipes);
+		loot_tables = new LootTables<T>(get_context(), this.key, this::default_loot_tables);
 	}
 
 	/**
@@ -279,70 +280,11 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 		return annotation.target().includes(item_stack);
 	}
 
-	/**
-	 * Override this and add your related recipes here.
-	 */
-	public void register_recipes() {}
-
-	/**
-	 * Override this and add your related loot table generation here.
-	 * This is separate from the "generate_in_treasure" property, which
-	 * would add this enchantment to other default treasure items.
-	 */
-	public void register_loot_tables() {}
-
-	/** Returns the main recipe key */
-	public final NamespacedKey recipe_key() {
-		return recipe_key("");
+	public RecipeList default_recipes() {
+		return RecipeList.of();
 	}
 
-	/** Returns a named recipe key */
-	public final NamespacedKey recipe_key(String recipe_name) {
-		if (recipe_name.equals("")) {
-			return Util.namespaced_key(get_module().namespace(), "enchantment_" + name + "_recipe");
-		}
-		return Util.namespaced_key(get_module().namespace(), "enchantment_" + name + "_recipe_" + recipe_name);
-	}
-
-	private final void add_recipe_or_throw(NamespacedKey recipe_key, Recipe recipe) {
-		if (recipes.containsKey(recipe_key)) {
-			throw new RuntimeException("A recipe with the same key ('" + recipe_key + "') is already defined!");
-		}
-		recipes.put(recipe_key, recipe);
-	}
-
-	/**
-	 * Adds a related recipe to this item.
-	 * Useful if you need non-standard recipes.
-	 */
-	public final Recipe add_recipe(NamespacedKey recipe_key, Recipe recipe) {
-		add_recipe_or_throw(recipe_key, recipe);
-		return recipe;
-	}
-
-	public final <R extends Recipe & Keyed> Recipe add_recipe(R recipe) {
-		add_recipe_or_throw(((Keyed) recipe).getKey(), recipe);
-		return recipe;
-	}
-
-	@Override
-	public void on_config_change() {
-		// Recipes are processed in on-config-change and not in on_disable() / on_enable(),
-		// as they could change even e.g. an item is disabled but the plugin is still
-		// enabled and was reloaded.
-		recipes.keySet().forEach(get_module().getServer()::removeRecipe);
-		recipes.clear();
-
-		if (enabled()) {
-			if (config_register_recipes) {
-				register_recipes();
-			}
-			if (config_register_loot_tables) {
-				register_loot_tables();
-			}
-			recipes.values().forEach(get_module().getServer()::addRecipe);
-		}
-
-		super.on_config_change();
+	public LootTableList default_loot_tables() {
+		return LootTableList.of();
 	}
 }

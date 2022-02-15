@@ -13,7 +13,6 @@ public class BukkitEnchantmentWrapper extends CraftEnchantment {
 		this.custom_enchantment = custom_enchantment;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Deprecated
 	@NotNull
 	@Override

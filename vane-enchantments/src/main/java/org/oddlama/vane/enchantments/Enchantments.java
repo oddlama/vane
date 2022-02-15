@@ -1,16 +1,13 @@
 package org.oddlama.vane.enchantments;
 
-import static net.kyori.adventure.text.event.HoverEvent.Action.SHOW_TEXT;
-
-import com.destroystokyo.paper.event.inventory.PrepareResultEvent;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
-import net.kyori.adventure.text.TranslatableComponent;
-import net.kyori.adventure.text.event.HoverEvent;
+
+import com.destroystokyo.paper.event.inventory.PrepareResultEvent;
+
+import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -23,12 +20,16 @@ import org.bukkit.inventory.Merchant;
 import org.bukkit.inventory.MerchantRecipe;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.oddlama.vane.annotation.VaneModule;
-import org.oddlama.vane.core.Core;
-import org.oddlama.vane.core.item.ModelDataEnum;
 import org.oddlama.vane.core.module.Module;
+import org.oddlama.vane.util.ItemUtil;
+import org.oddlama.vane.util.Util;
+
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TranslatableComponent;
 
 @VaneModule(name = "enchantments", bstats = 8640, config_version = 1, lang_version = 2, storage_version = 1)
 public class Enchantments extends Module<Enchantments> {
+	private static final NamespacedKey SENTINEL = Util.namespaced_key("vane", "enchantment_lore");
 
 	public Enchantments() {
 		try {
@@ -40,9 +41,7 @@ public class Enchantments extends Module<Enchantments> {
 			getServer().shutdown();
 		}
 
-		new org.oddlama.vane.enchantments.items.AncientTome(this);
-		new org.oddlama.vane.enchantments.items.AncientTomeOfKnowledge(this);
-		new org.oddlama.vane.enchantments.items.AncientTomeOfTheGods(this);
+		new org.oddlama.vane.enchantments.items.Tomes(this);
 
 		new org.oddlama.vane.enchantments.commands.Enchant(this);
 		new org.oddlama.vane.enchantments.enchantments.Angel(this);
@@ -62,16 +61,6 @@ public class Enchantments extends Module<Enchantments> {
 	public void on_load() {
 		// Give custom enchantments a chance to add superseding enchantments
 		CustomEnchantment.call_register_superseding();
-	}
-
-	@Override
-	public Class<? extends ModelDataEnum> model_data_enum() {
-		return org.oddlama.vane.enchantments.items.ModelData.class;
-	}
-
-	@Override
-	public int model_data(int item_id, int variant_id) {
-		return Core.model_data(1, item_id, variant_id);
 	}
 
 	public ItemStack update_enchanted_item(ItemStack item_stack) {
@@ -158,51 +147,32 @@ public class Enchantments extends Module<Enchantments> {
 			.entrySet()
 			.stream()
 			.filter(p -> p.getKey() instanceof BukkitEnchantmentWrapper)
-			.sorted(
-				Map.Entry
-					.<Enchantment, Integer>comparingByKey(Comparator.comparing(x -> x.getKey().toString()))
-					.thenComparing(Map.Entry.comparingByValue())
+			.sorted(Map.Entry.<Enchantment, Integer>comparingByKey(Comparator.comparing(x -> x.getKey().toString()))
+				.thenComparing(Map.Entry.comparingByValue())
 			)
 			.toList();
 
 		var lore = item_stack.lore();
-		if (lore == null) lore = new ArrayList<>();
+		if (lore == null) {
+			lore = new ArrayList<Component>();
+		}
 
 		lore.removeIf(this::is_enchantment_lore);
-		lore.addAll(0, vane_enchantments.stream().map(this::lore_for_enchantment).toList());
+		lore.addAll(0, vane_enchantments.stream().map(ench ->
+			ItemUtil.add_sentinel(((BukkitEnchantmentWrapper) ench.getKey()).custom_enchantment().display_name(ench.getValue()), SENTINEL)
+		).toList());
 
 		// Set lore
-		final var meta = item_stack.getItemMeta();
-		meta.lore(lore.isEmpty() ? null : lore);
-		item_stack.setItemMeta(meta);
+		item_stack.lore(lore.isEmpty() ? null : lore);
 	}
-
-	private final TextComponent SENTINEL_VALUE = Component.text("vane:enchantment_lore");
 
 	private boolean is_enchantment_lore(final Component component) {
 		// If the component begins with a translated lore from vane enchantments, it is always from us. (needed for backward compatibility)
-		if (
-			component instanceof TranslatableComponent &&
-			((TranslatableComponent) component).key().startsWith(namespace() + ".")
-		) {
+		if (component instanceof TranslatableComponent && ((TranslatableComponent)component).key().startsWith(namespace() + ".")) {
 			return true;
 		}
 
-		// Whether the lore line is prefixed with a sentinel value marking this lore line as a vane-enchantment owned lore.
-		final HoverEvent<?> hover = component.hoverEvent();
-		if (hover == null) return false;
-		final var hoverValue = hover.value();
-		if (hoverValue instanceof TextComponent) {
-			return (
-				hover.action() == SHOW_TEXT && SENTINEL_VALUE.content().equals(((TextComponent) hoverValue).content())
-			);
-		}
-		return false;
-	}
-
-	private Component lore_for_enchantment(final Map.Entry<Enchantment, Integer> ench) {
-		var standard = ((BukkitEnchantmentWrapper) ench.getKey()).custom_enchantment().display_name(ench.getValue());
-		return standard.hoverEvent(HoverEvent.showText(SENTINEL_VALUE));
+		return ItemUtil.has_sentinel(component, SENTINEL);
 	}
 
 	// Triggers on Anvils, grindstones, and smithing tables.

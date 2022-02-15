@@ -44,7 +44,6 @@ import org.oddlama.vane.core.resourcepack.ResourcePackGenerator;
 import org.oddlama.vane.core.command.Command;
 import org.oddlama.vane.core.config.ConfigManager;
 import org.oddlama.vane.core.functional.Consumer1;
-import org.oddlama.vane.core.item.ModelDataEnum;
 import org.oddlama.vane.core.lang.LangManager;
 import org.oddlama.vane.core.persistent.PersistentStorageManager;
 
@@ -462,31 +461,6 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 
 	public void unregister_permission(Permission permission) {
 		getServer().getPluginManager().removePermission(permission);
-	}
-
-	/**
-	 * Returns a enumeration managing model data. Enum members must be named
-	 * like the corresponding item names, but uppercase.
-	 */
-	public Class<? extends ModelDataEnum> model_data_enum() {
-		throw new RuntimeException(
-	// TODO remove
-	//
-			"A module must override 'model_data_enum()', if it want's to register custom items!"
-		);
-	}
-
-	/**
-	 * Returns a globally unique identifier for a given per-plugin unqiue model id.
-	 * [As of at least 1.16]: Unfortunately this is basically a magic value, and must be
-	 * unique per base material across all plugins. That sucks.
-	 */
-	// TODO remove
-	// TODO remove
-	public int model_data(int item_id, int variant_id) {
-		throw new RuntimeException(
-			"A module must override 'model_data(int, int)', if it want's to register custom items!"
-		);
 	}
 
 	public LootTable loot_table(final LootTables table) {

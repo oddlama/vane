@@ -48,11 +48,11 @@ public class ExistingItemConverter extends Listener<Core> {
 			case 7758510: new_item_key = "vane_trifles:unstable_scroll"; break;
 			case 7758574: new_item_key = "vane_trifles:reinforced_elytra"; break;
 			case 7823726: new_item_key = "vane_enchantments:ancient_tome"; break;
-			case 7823727: new_item_key = "vane_enchantments:ancient_tome"; break;
+			case 7823727: new_item_key = "vane_enchantments:enchanted_ancient_tome"; break;
 			case 7823790: new_item_key = "vane_enchantments:ancient_tome_of_knowledge"; break;
-			case 7823791: new_item_key = "vane_enchantments:ancient_tome_of_knowledge"; break;
+			case 7823791: new_item_key = "vane_enchantments:enchanted_ancient_tome_of_knowledge"; break;
 			case 7823854: new_item_key = "vane_enchantments:ancient_tome_of_the_gods"; break;
-			case 7823855: new_item_key = "vane_enchantments:ancient_tome_of_the_gods"; break;
+			case 7823855: new_item_key = "vane_enchantments:enchanted_ancient_tome_of_the_gods"; break;
 		}
 
 		if (new_item_key == null) {
