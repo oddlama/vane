@@ -1,11 +1,7 @@
 package org.oddlama.vane.enchantments.enchantments;
 
-import java.util.ArrayList;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -14,24 +10,25 @@ import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.loot.LootTables;
 import org.oddlama.vane.annotation.config.ConfigLong;
 import org.oddlama.vane.annotation.enchantment.Rarity;
 import org.oddlama.vane.annotation.enchantment.VaneEnchantment;
 import org.oddlama.vane.annotation.lang.LangMessage;
-import org.oddlama.vane.core.LootTable.LootTableEntry;
+import org.oddlama.vane.core.config.loot.LootDefinition;
+import org.oddlama.vane.core.config.loot.LootTableList;
+import org.oddlama.vane.core.config.recipes.RecipeList;
+import org.oddlama.vane.core.config.recipes.ShapedRecipeDefinition;
 import org.oddlama.vane.core.data.CooldownData;
-import org.oddlama.vane.core.item.CustomItem;
 import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.enchantments.CustomEnchantment;
 import org.oddlama.vane.enchantments.Enchantments;
-import org.oddlama.vane.enchantments.items.AncientTomeOfTheGods;
-import org.oddlama.vane.enchantments.items.BookVariant;
 import org.oddlama.vane.util.Util;
+
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 
 @VaneEnchantment(name = "soulbound", rarity = Rarity.RARE, treasure = true, allow_custom = true)
 public class Soulbound extends CustomEnchantment<Enchantments> {
@@ -69,65 +66,25 @@ public class Soulbound extends CustomEnchantment<Enchantments> {
 	}
 
 	@Override
-	public void register_recipes() {
-		final var ancient_tome_of_the_gods_enchanted = CustomItem
-			.<AncientTomeOfTheGods.AncientTomeOfTheGodsVariant>variant_of(
-				AncientTomeOfTheGods.class,
-				BookVariant.ENCHANTED_BOOK
-			)
-			.item();
-		final var ancient_tome_of_the_gods = CustomItem
-			.<AncientTomeOfTheGods.AncientTomeOfTheGodsVariant>variant_of(AncientTomeOfTheGods.class, BookVariant.BOOK)
-			.item();
-
-		final var recipe_key = recipe_key();
-		final var item = ancient_tome_of_the_gods_enchanted.clone();
-		final var meta = (EnchantmentStorageMeta) item.getItemMeta();
-		meta.addStoredEnchant(bukkit(), 1, false);
-		item.setItemMeta(meta);
-		get_module().update_enchanted_item(item);
-
-		final var curse_of_binding = new ItemStack(Material.ENCHANTED_BOOK);
-		final var curse_meta = (EnchantmentStorageMeta) curse_of_binding.getItemMeta();
-		curse_meta.addStoredEnchant(Enchantment.BINDING_CURSE, 1, false);
-		curse_of_binding.setItemMeta(curse_meta);
-
-		final var recipe = new ShapedRecipe(recipe_key, item)
+	public RecipeList default_recipes() {
+		return RecipeList.of(new ShapedRecipeDefinition("generic")
 			.shape("cqc", "obe", "rgt")
-			.setIngredient('b', ancient_tome_of_the_gods)
-			.setIngredient('c', Material.CHAIN)
-			.setIngredient('q', Material.WRITABLE_BOOK)
-			.setIngredient('o', Material.BONE)
-			.setIngredient('r', curse_of_binding)
-			.setIngredient('g', Material.GHAST_TEAR)
-			.setIngredient('t', Material.TOTEM_OF_UNDYING)
-			.setIngredient('e', Material.ENDER_EYE);
+			.set_ingredient('b', "vane_enchantments:ancient_tome_of_the_gods")
+			.set_ingredient('c', Material.CHAIN)
+			.set_ingredient('q', Material.WRITABLE_BOOK)
+			.set_ingredient('o', Material.BONE)
+			.set_ingredient('r', "minecraft:enchanted_book{StoredEnchantments:[{id:\"minecraft:binding_curse\",lvl:1}]}")
+			.set_ingredient('g', Material.GHAST_TEAR)
+			.set_ingredient('t', Material.TOTEM_OF_UNDYING)
+			.set_ingredient('e', Material.ENDER_EYE)
+			.result(on("vane_enchantments:enchanted_ancient_tome_of_the_gods")));
+	}
 
-		add_recipe(recipe);
-
-		// Alternate recipe with empty lore (for backwards compatibility)
-		final var curse_of_binding_empty_lore = new ItemStack(Material.ENCHANTED_BOOK);
-		final var curse_meta_empty_lore = (EnchantmentStorageMeta) curse_of_binding_empty_lore.getItemMeta();
-		curse_meta_empty_lore.addStoredEnchant(Enchantment.BINDING_CURSE, 1, false);
-		curse_meta_empty_lore.lore(new ArrayList<Component>());
-		curse_of_binding_empty_lore.setItemMeta(curse_meta_empty_lore);
-
-		final var recipe_key_empty_lore = recipe_key("empty_lore");
-		final var recipe_empty_lore = new ShapedRecipe(recipe_key_empty_lore, item)
-			.shape("cqc", "obe", "rgt")
-			.setIngredient('b', ancient_tome_of_the_gods)
-			.setIngredient('c', Material.CHAIN)
-			.setIngredient('q', Material.WRITABLE_BOOK)
-			.setIngredient('o', Material.BONE)
-			.setIngredient('r', curse_of_binding_empty_lore)
-			.setIngredient('g', Material.GHAST_TEAR)
-			.setIngredient('t', Material.TOTEM_OF_UNDYING)
-			.setIngredient('e', Material.ENDER_EYE);
-
-		add_recipe(recipe_empty_lore);
-
-		// Loot generation
-		get_module().loot_table(LootTables.BASTION_TREASURE).put(recipe_key, new LootTableEntry(15, item));
+	@Override
+	public LootTableList default_loot_tables() {
+		return LootTableList.of(new LootDefinition("generic")
+			.in(LootTables.BASTION_TREASURE)
+			.add(1.0 / 15, 1, 1, on("vane_enchantments:enchanted_ancient_tome_of_the_gods")));
 	}
 
 	@Override

@@ -4,7 +4,6 @@ import org.bukkit.entity.Player;
 import org.oddlama.vane.annotation.command.Name;
 import org.oddlama.vane.core.Core;
 import org.oddlama.vane.core.command.Command;
-import org.oddlama.vane.core.itemv2.CustomItemHelper;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.util.PlayerUtil;
 
@@ -34,6 +33,6 @@ public class CustomItem extends Command<Core> {
 	}
 
 	private void give_custom_item(final Player player, final org.oddlama.vane.core.itemv2.api.CustomItem custom_item) {
-		PlayerUtil.give_item(player, CustomItemHelper.newStack(custom_item));
+		PlayerUtil.give_item(player, custom_item.newStack());
 	}
 }

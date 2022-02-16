@@ -12,29 +12,29 @@
 
 # DO NOT CHANGE! The version of this language file. Used to determine
 # if the file needs to be updated.
-version: 2
+version: 3
 # The corresponding language code used in resource packs. Used for
 # resource pack generation. Typically this is a combination of the
 # language code (ISO 639) and the country code (ISO 3166).
 resource_pack_lang_code: 'fr_fr'
 
 item_ancient_tome:
-  book:
-    name: "Grimoire antique"
-  enchanted_book:
-    name: "Grimoire antique"
+  name: "Grimoire antique"
+
+item_enchanted_ancient_tome:
+  name: "Grimoire antique"
 
 item_ancient_tome_of_knowledge:
-  book:
-    name: "Grimoire antique de Connaissance"
-  enchanted_book:
-    name: "Grimoire antique de Connaissance"
+  name: "Grimoire antique de Connaissance"
+
+item_enchanted_ancient_tome_of_knowledge:
+  name: "Grimoire antique de Connaissance"
 
 item_ancient_tome_of_the_gods:
-  book:
-    name: "Grimoire antique des Dieux"
-  enchanted_book:
-    name: "Grimoire antique des Dieux"
+  name: "Grimoire antique des Dieux"
+
+item_enchanted_ancient_tome_of_the_gods:
+  name: "Grimoire antique des Dieux"
 
 enchantment_angel:
   name: "Ange"

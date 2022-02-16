@@ -1,6 +1,5 @@
 package org.oddlama.vane.enchantments;
 
-import static org.oddlama.vane.core.item.CustomItem.is_custom_item;
 import static org.oddlama.vane.util.Nms.bukkit_enchantment;
 import static org.oddlama.vane.util.Nms.enchantment_slot_type;
 
@@ -88,7 +87,7 @@ public class NativeEnchantmentWrapper extends Enchantment {
 	public boolean canEnchant(ItemStack itemstack) {
 		// Custom item pre-check
 		final var bukkit_item = Nms.bukkit_item_stack(itemstack);
-		if (!enchantment.allow_custom() && is_custom_item(bukkit_item)) {
+		if (!enchantment.allow_custom() && enchantment.get_module().core.item_registry().get(bukkit_item) != null) {
 			return false;
 		}
 		return enchantment.enabled() && enchantment.can_enchant(bukkit_item);

@@ -23,14 +23,14 @@ command_heads:
   description: "Get heads from the head library."
   help: "Execute to open the head library."
 
-item_xp_bottle:
-  small:
+xp_bottles:
+  item_small_xp_bottle:
     # The display name of this item variant.
     name: "Small Experience Bottle"
-  medium:
+  item_medium_xp_bottle:
     # The display name of this item variant.
     name: "Medium Experience Bottle"
-  large:
+  item_large_xp_bottle:
     # The display name of this item variant.
     name: "Large Experience Bottle"
 
@@ -43,42 +43,26 @@ item_reinforced_elytra:
   name: "Netherite Elytra"
 
 item_file:
-  wooden:
-    # The display name of this item variant.
-    name: "Wooden File"
-  stone:
-    # The display name of this item variant.
-    name: "Stone File"
-  iron:
-    # The display name of this item variant.
-    name: "Iron File"
-  golden:
-    # The display name of this item variant.
-    name: "Golden File"
-  diamond:
-    # The display name of this item variant.
-    name: "Diamond File"
-  netherite:
-    # The display name of this item variant.
-    name: "Netherite File"
+  # The display name of this item variant.
+  name: "File"
 
-item_sickle:
-  wooden:
+sickles:
+  item_wooden_sickle:
     # The display name of this item variant.
     name: "Wooden Sickle"
-  stone:
+  item_stone_sickle:
     # The display name of this item variant.
     name: "Stone Sickle"
-  iron:
+  item_iron_sickle:
     # The display name of this item variant.
     name: "Iron Sickle"
-  golden:
+  item_golden_sickle:
     # The display name of this item variant.
     name: "Golden Sickle"
-  diamond:
+  item_diamond_sickle:
     # The display name of this item variant.
     name: "Diamond Sickle"
-  netherite:
+  item_netherite_sickle:
     # The display name of this item variant.
     name: "Netherite Sickle"
 

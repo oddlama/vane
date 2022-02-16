@@ -21,7 +21,6 @@ import org.oddlama.vane.annotation.item.VaneItemv2;
 import org.oddlama.vane.core.config.recipes.RecipeList;
 import org.oddlama.vane.core.config.recipes.ShapelessRecipeDefinition;
 import org.oddlama.vane.core.itemv2.CustomItem;
-import org.oddlama.vane.core.itemv2.CustomItemHelper;
 import org.oddlama.vane.core.itemv2.api.InhibitBehavior;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.trifles.Trifles;
@@ -122,7 +121,7 @@ public class EmptyXpBottle extends CustomItem<Trifles> {
 		// Take xp, take item, play sound, give item.
 		player.giveExp(-exp, false);
 		remove_one_item_from_hand(player, event.getHand());
-		give_item(player, CustomItemHelper.newStack(xp_bottle));
+		give_item(player, xp_bottle.newStack());
 		player.getWorld().playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1.0f, 4.0f);
 		swing_arm(player, event.getHand());
 	}

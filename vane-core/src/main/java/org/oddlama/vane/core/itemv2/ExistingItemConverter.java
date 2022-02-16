@@ -79,7 +79,11 @@ public class ExistingItemConverter extends Listener<Core> {
 					continue;
 				}
 
-				contents[i] = CustomItemHelper.convertExistingStack(convert_to_custom_item, is);
+				contents[i] = convert_to_custom_item.convertExistingStack(is);
+				contents[i].editMeta(meta -> {
+					meta.displayName(convert_to_custom_item.displayName());
+				});
+				get_module().update_enchanted_item(contents[i]);
 				get_module().log.info("Converted legacy item to " + convert_to_custom_item.key());
 				++changed;
 				continue;
@@ -101,14 +105,14 @@ public class ExistingItemConverter extends Listener<Core> {
 				key_and_version.getRight() != custom_item.version()
 			) {
 				// Also includes durability max update.
-				contents[i] = CustomItemHelper.convertExistingStack(custom_item, is);
+				contents[i] = custom_item.convertExistingStack(is);
 				get_module().log.info("Updated item " + custom_item.key());
 				++changed;
 				continue;
 			}
 
 			// Update maximum durability on existing items if changed.
-			if (meta.getPersistentDataContainer().getOrDefault(DurabilityManager.ITEM_DURABILITY_MAX, PersistentDataType.INTEGER, -1) != custom_item.durability()) {
+			if (meta.getPersistentDataContainer().getOrDefault(DurabilityManager.ITEM_DURABILITY_MAX, PersistentDataType.INTEGER, 0) != custom_item.durability()) {
 				get_module().log.info("Updated item durability " + custom_item.key());
 				DurabilityManager.initialize_or_update_max(custom_item, contents[i]);
 				++changed;

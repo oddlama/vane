@@ -7,7 +7,7 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -130,28 +130,25 @@ public class ResourcePackGenerator {
 		}
 	}
 
-	private static int compare_item_overrides(JSONObject o1, JSONObject o2) {
-		if (o1.has("custom_model_data")) {
-			if (o2.has("custom_model_data")) {
-				return o1.getInt("custom_model_data") - o2.getInt("custom_model_data");
-			}
-			return -1;
-		} else {
-			if (o2.has("custom_model_data")) {
-				return 1;
-			}
-			return 0;
-		}
-	}
-
 	private void write_item_overrides(final ZipOutputStream zip) throws IOException {
 		for (var entry : item_overrides.entrySet()) {
 			final var key = entry.getKey();
 
-			// Create sorted JSONArray
-			Collections.sort(entry.getValue(), ResourcePackGenerator::compare_item_overrides);
 			final var overrides = new JSONArray();
-			entry.getValue().forEach(o -> overrides.put(o));
+			// Be sure to iterate in sorted order, as predicates must
+			// be sorted in the final json. otherwise minecraft will
+			// select wrong items.
+			entry.getValue().stream().sorted(Comparator.comparing(o -> {
+				final var jo = (JSONObject)o;
+				if (!jo.has("predicate")) {
+					return 0;
+				}
+				final var pred = jo.getJSONObject("predicate");
+				if (!pred.has("custom_model_data")) {
+					return 0;
+				}
+				return pred.getInt("custom_model_data");
+			})).forEach(overrides::put);
 
 			// Create model json
 			final var model = create_item_model_handheld(key);

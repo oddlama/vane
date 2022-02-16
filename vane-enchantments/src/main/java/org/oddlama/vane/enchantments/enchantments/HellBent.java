@@ -6,18 +6,16 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.loot.LootTables;
 import org.oddlama.vane.annotation.enchantment.Rarity;
 import org.oddlama.vane.annotation.enchantment.VaneEnchantment;
-import org.oddlama.vane.core.LootTable.LootTableEntry;
-import org.oddlama.vane.core.item.CustomItem;
+import org.oddlama.vane.core.config.loot.LootDefinition;
+import org.oddlama.vane.core.config.loot.LootTableList;
+import org.oddlama.vane.core.config.recipes.RecipeList;
+import org.oddlama.vane.core.config.recipes.ShapedRecipeDefinition;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.enchantments.CustomEnchantment;
 import org.oddlama.vane.enchantments.Enchantments;
-import org.oddlama.vane.enchantments.items.AncientTomeOfKnowledge;
-import org.oddlama.vane.enchantments.items.BookVariant;
 
 @VaneEnchantment(name = "hell_bent", rarity = Rarity.COMMON, treasure = true, target = EnchantmentTarget.ARMOR_HEAD)
 public class HellBent extends CustomEnchantment<Enchantments> {
@@ -33,14 +31,18 @@ public class HellBent extends CustomEnchantment<Enchantments> {
 			.set_ingredient('b', "vane_enchantments:ancient_tome_of_knowledge")
 			.set_ingredient('t', Material.TURTLE_HELMET)
 			.set_ingredient('m', Material.MUSIC_DISC_PIGSTEP)
-			.result("vane_enchantments:enchanted_ancient_tome_of_knowledge"));
+			.result(on("vane_enchantments:enchanted_ancient_tome_of_knowledge")));
 	}
-		// Loot generation
-		final var entry = new LootTableEntry(50, item);
-			LootTables.BASTION_BRIDGE,
-			LootTables.BASTION_HOGLIN_STABLE,
-			LootTables.BASTION_OTHER,
-			LootTables.BASTION_TREASURE,
+
+	@Override
+	public LootTableList default_loot_tables() {
+		return LootTableList.of(new LootDefinition("generic")
+			.in(LootTables.BASTION_BRIDGE)
+			.in(LootTables.BASTION_HOGLIN_STABLE)
+			.in(LootTables.BASTION_OTHER)
+			.in(LootTables.BASTION_TREASURE)
+			.add(1.0 / 50, 1, 1, on("vane_enchantments:enchanted_ancient_tome_of_knowledge")));
+	}
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void on_player_damage(final EntityDamageEvent event) {

@@ -27,7 +27,7 @@ import org.oddlama.vane.util.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TranslatableComponent;
 
-@VaneModule(name = "enchantments", bstats = 8640, config_version = 1, lang_version = 2, storage_version = 1)
+@VaneModule(name = "enchantments", bstats = 8640, config_version = 1, lang_version = 3, storage_version = 1)
 public class Enchantments extends Module<Enchantments> {
 	private static final NamespacedKey SENTINEL = Util.namespaced_key("vane", "enchantment_lore");
 
@@ -61,6 +61,8 @@ public class Enchantments extends Module<Enchantments> {
 	public void on_load() {
 		// Give custom enchantments a chance to add superseding enchantments
 		CustomEnchantment.call_register_superseding();
+		// TODO this is temporary, until the enchantment API moves to core.
+		core.item_stack_enchantment_updaters.add(this::update_enchanted_item);
 	}
 
 	public ItemStack update_enchanted_item(ItemStack item_stack) {

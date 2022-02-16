@@ -60,7 +60,7 @@ public class Tomes extends ModuleGroup<Enchantments> {
 		public EnchantedAncientTome(Context<Enchantments> context) { super(context); }
 	}
 
-	@VaneItemv2(name = "ancient_tome_of_knowledge", base = Material.BOOK, model_data = 0x770000, version = 1)
+	@VaneItemv2(name = "ancient_tome_of_knowledge", base = Material.BOOK, model_data = 0x770002, version = 1)
 	public static class AncientTomeOfKnowledge extends CustomItem<Enchantments> {
 		public AncientTomeOfKnowledge(Context<Enchantments> context) { super(context); }
 
@@ -92,12 +92,12 @@ public class Tomes extends ModuleGroup<Enchantments> {
 		}
 	}
 
-	@VaneItemv2(name = "enchanted_ancient_tome_of_knowledge", base = Material.ENCHANTED_BOOK, model_data = 0x770001, version = 1)
+	@VaneItemv2(name = "enchanted_ancient_tome_of_knowledge", base = Material.ENCHANTED_BOOK, model_data = 0x770003, version = 1)
 	public static class EnchantedAncientTomeOfKnowledge extends CustomItem<Enchantments> {
 		public EnchantedAncientTomeOfKnowledge(Context<Enchantments> context) { super(context); }
 	}
 
-	@VaneItemv2(name = "ancient_tome_of_the_gods", base = Material.BOOK, model_data = 0x770000, version = 1)
+	@VaneItemv2(name = "ancient_tome_of_the_gods", base = Material.BOOK, model_data = 0x770004, version = 1)
 	public static class AncientTomeOfTheGods extends CustomItem<Enchantments> {
 		public AncientTomeOfTheGods(Context<Enchantments> context) { super(context); }
 
@@ -123,7 +123,7 @@ public class Tomes extends ModuleGroup<Enchantments> {
 		}
 	}
 
-	@VaneItemv2(name = "enchanted_ancient_tome_of_the_gods", base = Material.ENCHANTED_BOOK, model_data = 0x770001, version = 1)
+	@VaneItemv2(name = "enchanted_ancient_tome_of_the_gods", base = Material.ENCHANTED_BOOK, model_data = 0x770005, version = 1)
 	public static class EnchantedAncientTomeOfTheGods extends CustomItem<Enchantments> {
 		public EnchantedAncientTomeOfTheGods(Context<Enchantments> context) { super(context); }
 	}

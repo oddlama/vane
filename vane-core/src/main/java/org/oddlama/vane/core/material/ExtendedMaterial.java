@@ -6,7 +6,6 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.oddlama.vane.core.Core;
-import org.oddlama.vane.core.itemv2.CustomItemHelper;
 import org.oddlama.vane.core.itemv2.api.CustomItem;
 
 public class ExtendedMaterial {
@@ -69,6 +68,6 @@ public class ExtendedMaterial {
 			throw new IllegalStateException("ExtendedMaterial '" + key + "' is neither a classic material, a head nor a custom item!");
 		}
 
-		return CustomItemHelper.newStack(custom_item);
+		return custom_item.newStack();
 	}
 }

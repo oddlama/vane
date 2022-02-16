@@ -129,7 +129,7 @@ public class VanillaFunctionalityInhibitor extends Listener<Core> {
 		final var result_nbt = CraftItemStack.asNMSCopy(result).getOrCreateTag();
 		final var nms_result = item_handle(result).copy();
 		nms_result.setTag(result_nbt.merge(input_nbt));
-		event.setResult(CustomItemHelper.convertExistingStack(custom_item_result, CraftItemStack.asCraftMirror(nms_result)));
+		event.setResult(custom_item_result.convertExistingStack(CraftItemStack.asCraftMirror(nms_result)));
 	}
 
 	// TODO: what about inventory based item repair?

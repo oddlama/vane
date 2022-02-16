@@ -58,8 +58,7 @@ public class Angel extends CustomEnchantment<Enchantments> {
 			.set_ingredient('d', Material.DRAGON_BREATH)
 			.set_ingredient('p', Material.PUFFERFISH_BUCKET)
 			.set_ingredient('r', Material.FIREWORK_ROCKET)
-			// TODO
-			.result("vane_enchantments:enchanted_ancient_tome_of_the_gods#enchants[vane_enchantments:wings#1]"));
+			.result(on("vane_enchantments:enchanted_ancient_tome_of_the_gods")));
 	}
 
 	@Override
@@ -71,8 +70,7 @@ public class Angel extends CustomEnchantment<Enchantments> {
 			.in(LootTables.STRONGHOLD_LIBRARY)
 			.in(LootTables.UNDERWATER_RUIN_BIG)
 			.in(LootTables.VILLAGE_TEMPLE)
-			// TODO
-			.add(1.0 / 250, 1, 1, "TODO"));
+			.add(1.0 / 250, 1, 1, on("vane_enchantments:enchanted_ancient_tome_of_the_gods")));
 	}
 
 	@Override

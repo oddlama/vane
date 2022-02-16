@@ -287,4 +287,13 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 	public LootTableList default_loot_tables() {
 		return LootTableList.of();
 	}
+
+	/** Applies this enchant to the given string item definition. */
+	protected String on(String item_definition) {
+		return on(item_definition, 1);
+	}
+
+	protected String on(String item_definition, int level) {
+		return item_definition + "#enchants{" + key + "*" + level + "}";
+	}
 }

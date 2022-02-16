@@ -52,7 +52,7 @@ public class XpBottles extends Listener<Trifles> {
 		public int config_capacity_def() { return 20; }
 	}
 
-	@VaneItemv2(name = "small_xp_bottle", base = Material.HONEY_BOTTLE, model_data = 0x76000d, version = 1)
+	@VaneItemv2(name = "large_xp_bottle", base = Material.HONEY_BOTTLE, model_data = 0x76000d, version = 1)
 	public static class LargeXpBottle extends XpBottle {
 		public LargeXpBottle(Context<Trifles> context) { super(context); }
 		public int config_capacity_def() { return 30; }

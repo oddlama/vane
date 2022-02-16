@@ -5,15 +5,18 @@ import static org.oddlama.vane.util.Util.read_json_from_url;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Properties;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.function.Consumer;
 import java.util.logging.Level;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.json.JSONException;
@@ -240,5 +243,13 @@ public class Core extends Module<Core> {
 						.clickEvent(ClickEvent.openUrl("https://github.com/oddlama/vane/releases/latest"))
 				);
 		}
+	}
+
+	public final ArrayList<Consumer<ItemStack>> item_stack_enchantment_updaters = new ArrayList<>();
+	// Allows any plugin to update a freshly enchated item to
+	// add lore for custom enchantments without depending on
+	// vane-enchantments.
+	public void update_enchanted_item(final ItemStack item_stack) {
+		item_stack_enchantment_updaters.forEach(x -> x.accept(item_stack));
 	}
 }

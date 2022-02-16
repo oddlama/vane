@@ -8,6 +8,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.oddlama.vane.core.itemv2.CustomItemHelper;
 import org.oddlama.vane.core.resourcepack.ResourcePackGenerator;
 
 import net.kyori.adventure.text.Component;
@@ -140,5 +141,17 @@ public interface CustomItem {
 	 */
 	default public boolean isInstance(@Nullable final ItemStack itemStack) {
 		return CustomItemRegistry.instance().get(itemStack) == this;
+	}
+
+	public default ItemStack newStack() {
+		return CustomItemHelper.newStack(this);
+	}
+
+	public default ItemStack newStack(final int amount) {
+		return CustomItemHelper.newStack(this, amount);
+	}
+
+	public default ItemStack convertExistingStack(final ItemStack item_stack) {
+		return CustomItemHelper.convertExistingStack(this, item_stack);
 	}
 }

@@ -1,13 +1,12 @@
 package org.oddlama.vane.enchantments.enchantments;
 
 import java.util.List;
+
 import org.bukkit.Material;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerFishEvent;
-import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.util.Vector;
 import org.oddlama.vane.annotation.config.ConfigDouble;
 import org.oddlama.vane.annotation.config.ConfigDoubleList;
@@ -15,12 +14,9 @@ import org.oddlama.vane.annotation.enchantment.Rarity;
 import org.oddlama.vane.annotation.enchantment.VaneEnchantment;
 import org.oddlama.vane.core.config.recipes.RecipeList;
 import org.oddlama.vane.core.config.recipes.ShapedRecipeDefinition;
-import org.oddlama.vane.core.item.CustomItem;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.enchantments.CustomEnchantment;
 import org.oddlama.vane.enchantments.Enchantments;
-import org.oddlama.vane.enchantments.items.AncientTomeOfKnowledge;
-import org.oddlama.vane.enchantments.items.BookVariant;
 
 @VaneEnchantment(
 	name = "grappling_hook",
@@ -56,7 +52,7 @@ public class GrapplingHook extends CustomEnchantment<Enchantments> {
 			.set_ingredient('b', "vane_enchantments:ancient_tome_of_knowledge")
 			.set_ingredient('l', Material.LEAD)
 			.set_ingredient('h', Material.TRIPWIRE_HOOK)
-			.result("vane_enchantments:enchanted_ancient_tome_of_knowledge"));
+			.result(on("vane_enchantments:enchanted_ancient_tome_of_knowledge")));
 	}
 
 	private double get_strength(int level) {

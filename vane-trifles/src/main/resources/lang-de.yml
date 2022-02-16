@@ -23,12 +23,12 @@ command_heads:
   description: "Kaufe Köpfe zur Dekoration."
   help: "Führe den Befehl aus um das Köpfe-Menü zu öffnen."
 
-item_xp_bottle:
-  small:
+xp_bottles:
+  item_small_xp_bottle:
     name: "Kleine Erfahrungsflasche"
-  medium:
+  item_medium_xp_bottle:
     name: "Mittlere Erfahrungsflasche"
-  large:
+  item_large_xp_bottle:
     name: "Große Erfahrungsflasche"
 
 item_empty_xp_bottle:
@@ -38,31 +38,20 @@ item_reinforced_elytra:
   name: "Netherit Elytren"
 
 item_file:
-  wooden:
-    name: "Holzfeile"
-  stone:
-    name: "Steinfeile"
-  iron:
-    name: "Eisenfeile"
-  golden:
-    name: "Goldfeile"
-  diamond:
-    name: "Diamantfeile"
-  netherite:
-    name: "Netheritfeile"
+  name: "Feile"
 
-item_sickle:
-  wooden:
+sickles:
+  item_wooden_sickle:
     name: "Holzsichel"
-  stone:
+  item_stone_sickle:
     name: "Steinsichel"
-  iron:
+  item_iron_sickle:
     name: "Eisensichel"
-  golden:
+  item_golden_sickle:
     name: "Goldsichel"
-  diamond:
+  item_diamond_sickle:
     name: "Diamantsichel"
-  netherite:
+  item_netherite_sickle:
     name: "Netheritsichel"
 
 scrolls:
