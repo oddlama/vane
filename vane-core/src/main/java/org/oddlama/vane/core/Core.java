@@ -43,7 +43,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 
-@VaneModule(name = "core", bstats = 8637, config_version = 6, lang_version = 3, storage_version = 1)
+@VaneModule(name = "core", bstats = 8637, config_version = 6, lang_version = 4, storage_version = 1)
 public class Core extends Module<Core> {
 	/** Use sparingly. */
 	private static Core INSTANCE = null;

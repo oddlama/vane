@@ -88,20 +88,3 @@ enchantment_unbreakable:
 enchantment_wings:
   # The display name of this enchantment. Will be packed into a resource pack.
   name: "Wings"
-
-command_enchant:
-  # This message is sent when an enchantment level is given that is too low for the chosen enchantment.
-  # %1$s: Given level
-  # %2$s: Minimum level
-  level_too_low: "§cerror:§6 level %1$s§6 is too low, must be at least %2$s"
-  # This message is sent when an enchantment level is given that is too high for the chosen enchantment.
-  # %1$s: Given level
-  # %2$s: Maximum level
-  level_too_high: "§cerror:§6 level %1$s§6 is too high, must be at most %2$s"
-  # This message is sent when the selected enchantment cannot be applied to the item in hand.
-  # %1$s: Enchantment
-  # %2$s: Item in hand
-  invalid_enchantment: "§cerror: %1$s§6 cannot be applied to %2$s"
-  usage: "%1$s §benchantment §7[§blevel§7]"
-  description: "Enchants the item in your hand."
-  help: "Enchants the item in your hand."

@@ -14,7 +14,7 @@
 
 # DO NOT CHANGE! The version of this language file. Used to determine
 # if the file needs to be updated.
-version: 3
+version: 4
 # The corresponding language code used in resource packs. Used for
 # resource pack generation. Typically this is a combination of the
 # language code (ISO 639) and the country code (ISO 3166).
@@ -31,6 +31,14 @@ command_customitem:
   usage: "%1$s §agive §7<§bitem§7>"
   description: "Gibt dem Spieler ein spezifisches Custom-Item."
   help: "§agive §7<§bitem§7>:§r Gibt dem Spieler ein spezifisches Custom-Item."
+
+command_enchant:
+  level_too_low: "§cerror:§6 Level %1$s§6 ist zu niedrig, benötigt mindestens Level %2$s"
+  level_too_high: "§cerror:§6 Level %1$s§6 is zu hoch, benötigt maximal Level %2$s"
+  invalid_enchantment: "§cerror: %2$s§c kann nicht mit %1$s§6 verzaubert werden"
+  usage: "%1$s §benchantment §7[§blevel§7]"
+  description: "Verzaubert das Item in deiner Hand."
+  help: "Verzaubert das Item in deiner Hand."
 
 command_vane:
   reload_success: "%1$s§7: §areload erfolgreich"

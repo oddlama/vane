@@ -63,8 +63,8 @@ public class ShapedRecipeDefinition extends RecipeDefinition {
 		final var dict_map = (Map<?,?>)dict;
 		if (dict_map.get("shape") instanceof List<?> shape) {
 			this.shape = shape.stream().map(row -> (String)row).toList();
-			if (this.shape.size() != 2 && this.shape.size() != 3) {
-				throw new IllegalArgumentException("Invalid shaped recipe dictionary: shape must be a list of 2 or 3 strings");
+			if (this.shape.size() < 1 && this.shape.size() > 3) {
+				throw new IllegalArgumentException("Invalid shaped recipe dictionary: shape must be a list of 1 to 3 strings");
 			}
 		} else {
 			throw new IllegalArgumentException("Invalid shaped recipe dictionary: shape must be a list of strings");
