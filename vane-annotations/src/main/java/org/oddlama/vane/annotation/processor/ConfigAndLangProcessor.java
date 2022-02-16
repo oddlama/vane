@@ -17,6 +17,7 @@ import javax.tools.Diagnostic;
 @SupportedAnnotationTypes(
 	{
 		"org.oddlama.vane.annotation.config.ConfigBoolean",
+		"org.oddlama.vane.annotation.config.ConfigDict",
 		"org.oddlama.vane.annotation.config.ConfigDouble",
 		"org.oddlama.vane.annotation.config.ConfigDoubleList",
 		"org.oddlama.vane.annotation.config.ConfigExtendedMaterial",
@@ -53,6 +54,7 @@ public class ConfigAndLangProcessor extends AbstractProcessor {
 	static {
 		Map<String, String> map = new HashMap<>();
 		map.put("org.oddlama.vane.annotation.config.ConfigBoolean", "boolean");
+		map.put("org.oddlama.vane.annotation.config.ConfigDict", "<any>");
 		map.put("org.oddlama.vane.annotation.config.ConfigDouble", "double");
 		map.put("org.oddlama.vane.annotation.config.ConfigDoubleList", "java.util.List<java.lang.Double>");
 		map.put(
@@ -99,7 +101,7 @@ public class ConfigAndLangProcessor extends AbstractProcessor {
 					" has no required_type mapping! This is a bug."
 				);
 		} else {
-			if (!required_type.equals(type)) {
+			if (required_type != "<any>" && !required_type.equals(type)) {
 				processingEnv
 					.getMessager()
 					.printMessage(

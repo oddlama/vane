@@ -6,14 +6,13 @@ import static org.oddlama.vane.util.Util.ms_to_ticks;
 
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.loot.LootTables;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
@@ -21,13 +20,13 @@ import org.oddlama.vane.annotation.config.ConfigDoubleList;
 import org.oddlama.vane.annotation.config.ConfigIntList;
 import org.oddlama.vane.annotation.enchantment.Rarity;
 import org.oddlama.vane.annotation.enchantment.VaneEnchantment;
-import org.oddlama.vane.core.LootTable.LootTableEntry;
-import org.oddlama.vane.core.item.CustomItem;
+import org.oddlama.vane.core.config.loot.LootDefinition;
+import org.oddlama.vane.core.config.loot.LootTableList;
+import org.oddlama.vane.core.config.recipes.RecipeList;
+import org.oddlama.vane.core.config.recipes.ShapedRecipeDefinition;
 import org.oddlama.vane.core.module.Context;
-import org.oddlama.vane.enchantments.CustomEnchantment;
+import org.oddlama.vane.core.enchantments.CustomEnchantment;
 import org.oddlama.vane.enchantments.Enchantments;
-import org.oddlama.vane.enchantments.items.AncientTomeOfKnowledge;
-import org.oddlama.vane.enchantments.items.BookVariant;
 
 @VaneEnchantment(name = "wings", max_level = 4, rarity = Rarity.RARE, treasure = true, allow_custom = true)
 public class Wings extends CustomEnchantment<Enchantments> {
@@ -47,53 +46,34 @@ public class Wings extends CustomEnchantment<Enchantments> {
 	}
 
 	@Override
-	public void register_recipes() {
-		final var ancient_tome_of_knowledge_enchanted = CustomItem
-			.<AncientTomeOfKnowledge.AncientTomeOfKnowledgeVariant>variant_of(
-				AncientTomeOfKnowledge.class,
-				BookVariant.ENCHANTED_BOOK
-			)
-			.item();
-		final var ancient_tome_of_knowledge = CustomItem
-			.<AncientTomeOfKnowledge.AncientTomeOfKnowledgeVariant>variant_of(
-				AncientTomeOfKnowledge.class,
-				BookVariant.BOOK
-			)
-			.item();
-
-		final var recipe_key = recipe_key();
-		final var item = ancient_tome_of_knowledge_enchanted.clone();
-		final var meta = (EnchantmentStorageMeta) item.getItemMeta();
-		meta.addStoredEnchant(bukkit(), 1, false);
-		item.setItemMeta(meta);
-		get_module().update_enchanted_item(item);
-
-		final var recipe = new ShapedRecipe(recipe_key, item)
+	public RecipeList default_recipes() {
+		return RecipeList.of(new ShapedRecipeDefinition("generic")
 			.shape("m m", "dbd", "r r")
-			.setIngredient('b', ancient_tome_of_knowledge)
-			.setIngredient('m', Material.PHANTOM_MEMBRANE)
-			.setIngredient('d', Material.DISPENSER)
-			.setIngredient('r', Material.FIREWORK_ROCKET);
+			.set_ingredient('b', "vane_enchantments:ancient_tome_of_knowledge")
+			.set_ingredient('m', Material.PHANTOM_MEMBRANE)
+			.set_ingredient('d', Material.DISPENSER)
+			.set_ingredient('r', Material.FIREWORK_ROCKET)
+			.result(on("vane_enchantments:enchanted_ancient_tome_of_knowledge")));
+	}
 
-		add_recipe(recipe);
-
-		// Loot generation
-		final var entry = new LootTableEntry(110, item);
-		for (final var table : new LootTables[] {
-			LootTables.BURIED_TREASURE,
-			LootTables.PILLAGER_OUTPOST,
-			LootTables.RUINED_PORTAL,
-			LootTables.SHIPWRECK_TREASURE,
-			LootTables.STRONGHOLD_LIBRARY,
-			LootTables.UNDERWATER_RUIN_BIG,
-			LootTables.UNDERWATER_RUIN_SMALL,
-			LootTables.VILLAGE_TEMPLE,
-			LootTables.WOODLAND_MANSION,
-		}) {
-			get_module().loot_table(table).put(recipe_key, entry);
-		}
-
-		get_module().loot_table(LootTables.BASTION_TREASURE).put(recipe_key, new LootTableEntry(10, item));
+	@Override
+	public LootTableList default_loot_tables() {
+		return LootTableList.of(
+			new LootDefinition("generic")
+				.in(LootTables.BURIED_TREASURE)
+				.in(LootTables.PILLAGER_OUTPOST)
+				.in(LootTables.RUINED_PORTAL)
+				.in(LootTables.SHIPWRECK_TREASURE)
+				.in(LootTables.STRONGHOLD_LIBRARY)
+				.in(LootTables.UNDERWATER_RUIN_BIG)
+				.in(LootTables.UNDERWATER_RUIN_SMALL)
+				.in(LootTables.VILLAGE_TEMPLE)
+				.in(LootTables.WOODLAND_MANSION)
+				.add(1.0 / 110, 1, 1, on("vane_enchantments:enchanted_ancient_tome_of_knowledge")),
+			new LootDefinition("bastion")
+				.in(LootTables.BASTION_TREASURE)
+				.add(1.0 / 10, 1, 1, on("vane_enchantments:enchanted_ancient_tome_of_knowledge"))
+			);
 	}
 
 	@Override

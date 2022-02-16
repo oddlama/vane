@@ -12,7 +12,7 @@
 
 # DO NOT CHANGE! The version of this language file. Used to determine
 # if the file needs to be updated.
-version: 2
+version: 3
 # The corresponding language code used in resource packs. Used for
 # resource pack generation. Typically this is a combination of the
 # language code (ISO 639) and the country code (ISO 3166).
@@ -23,70 +23,40 @@ command_heads:
   description: "Получить голову из библиотеки голов."
   help: "Активируйте чтобы открыть библиотеку голов."
 
-item_xp_bottle:
-  small:
-    # The display name of this item variant.
+xp_bottles:
+  item_small_xp_bottle:
     name: "Маленькая бутылка опыта"
-  medium:
-    # The display name of this item variant.
+  item_medium_xp_bottle:
     name: "Средняя бутылка опыта"
-  large:
-    # The display name of this item variant.
+  item_large_xp_bottle:
     name: "Большая бутылка опыта"
 
 item_empty_xp_bottle:
-  # The display name of this item variant.
   name: "Пустая бутылка опыта"
 
-item_home_scroll:
-  # The display name of this item variant.
-  name: "Свиток телепортации (Домой)"
-
 item_reinforced_elytra:
-  netherite:
-    # The display name of this item variant.
-    name: "Незеритовая элитра"
-
-item_unstable_scroll:
-  # The display name of this item variant.
-  name: "Свиток телепортации (Нестабильный)"
+  name: "Незеритовая элитра"
 
 item_file:
-  wooden:
-    # The display name of this item variant.
-    name: "Деревянный Напильник"
-  stone:
-    # The display name of this item variant.
-    name: "Каменный Напильник"
-  iron:
-    # The display name of this item variant.
-    name: "Железный Напильник"
-  golden:
-    # The display name of this item variant.
-    name: "Золотой Напильник"
-  diamond:
-    # The display name of this item variant.
-    name: "Алмазный Напильник"
-  netherite:
-    # The display name of this item variant.
-    name: "Незеритовый Напильник"
+  name: "Напильник"
 
-item_sickle:
-  wooden:
-    # The display name of this item variant.
+sickles:
+  item_wooden_sickle:
     name: "Деревянный Серп"
-  stone:
-    # The display name of this item variant.
+  item_stone_sickle:
     name: "Каменный Серп"
-  iron:
-    # The display name of this item variant.
+  item_iron_sickle:
     name: "Железный Серп"
-  golden:
-    # The display name of this item variant.
+  item_golden_sickle:
     name: "Золотой Серп"
-  diamond:
-    # The display name of this item variant.
+  item_diamond_sickle:
     name: "Алмазный Серп"
-  netherite:
-    # The display name of this item variant.
+  item_netherite_sickle:
     name: "Незеритовый Серп"
+
+scrolls:
+  item_home_scroll:
+    name: "Свиток телепортации (Домой)"
+
+  item_unstable_scroll:
+    name: "Свиток телепортации (Нестабильный)"

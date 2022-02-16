@@ -12,38 +12,35 @@
 
 # DO NOT CHANGE! The version of this language file. Used to determine
 # if the file needs to be updated.
-version: 2
+version: 3
 # The corresponding language code used in resource packs. Used for
 # resource pack generation. Typically this is a combination of the
 # language code (ISO 639) and the country code (ISO 3166).
 resource_pack_lang_code: 'de_de'
 
 item_ancient_tome:
-  book:
-    # The display name of this item variant.
-    name: "Antiker Foliant"
+  # The display name of this item variant.
+  name: "Antiker Foliant"
 
-  enchanted_book:
-    # The display name of this item variant.
-    name: "Antiker Foliant"
+item_enchanted_ancient_tome:
+  # The display name of this item variant.
+  name: "Antiker Foliant"
 
 item_ancient_tome_of_knowledge:
-  book:
-    # The display name of this item variant.
-    name: "Antiker Foliant des Wissens"
+  # The display name of this item variant.
+  name: "Antiker Foliant des Wissens"
 
-  enchanted_book:
-    # The display name of this item variant.
-    name: "Antiker Foliant des Wissens"
+item_enchanted_ancient_tome_of_knowledge:
+  # The display name of this item variant.
+  name: "Antiker Foliant des Wissens"
 
 item_ancient_tome_of_the_gods:
-  book:
-    # The display name of this item variant.
-    name: "Antiker Foliant der Götter"
+  # The display name of this item variant.
+  name: "Antiker Foliant der Götter"
 
-  enchanted_book:
-    # The display name of this item variant.
-    name: "Antiker Foliant der Götter"
+item_enchanted_ancient_tome_of_the_gods:
+  # The display name of this item variant.
+  name: "Antiker Foliant der Götter"
 
 enchantment_angel:
   name: "Engel"
@@ -80,11 +77,3 @@ enchantment_unbreakable:
 
 enchantment_wings:
   name: "Flügel"
-
-command_enchant:
-  level_too_low: "§cerror:§6 Level %1$s§6 ist zu niedrig, benötigt mindestens Level %2$s"
-  level_too_high: "§cerror:§6 Level %1$s§6 is zu hoch, benötigt maximal Level %2$s"
-  invalid_enchantment: "§cerror: %2$s§c kann nicht mit %1$s§6 verzaubert werden"
-  usage: "%1$s §benchantment §7[§blevel§7]"
-  description: "Verzaubert das Item in deiner Hand."
-  help: "Verzaubert das Item in deiner Hand."

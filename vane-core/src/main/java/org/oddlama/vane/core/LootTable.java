@@ -11,19 +11,31 @@ import org.oddlama.vane.core.functional.Consumer2;
 public class LootTable {
 
 	private Random random = new Random();
-	private Map<NamespacedKey, LootTableEntry> possible_loot = new HashMap<>();
+	private Map<NamespacedKey, List<LootTableEntry>> possible_loot = new HashMap<>();
 
 	public LootTable() {}
 
 	public LootTable put(final NamespacedKey key, final LootTableEntry entry) {
-		possible_loot.put(key, entry);
+		possible_loot.put(key, List.of(entry));
+		return this;
+	}
+
+	public LootTable put(final NamespacedKey key, final List<LootTableEntry> entries) {
+		possible_loot.put(key, entries);
+		return this;
+	}
+
+	public LootTable remove(final NamespacedKey key) {
+		possible_loot.remove(key);
 		return this;
 	}
 
 	public void generate_loot(final List<ItemStack> output) {
-		for (final var loot : possible_loot.values()) {
-			if (loot.evaluate_chance(random)) {
-				loot.add_sample(output, random);
+		for (final var set : possible_loot.values()) {
+			for (final var loot : set) {
+				if (loot.evaluate_chance(random)) {
+					loot.add_sample(output, random);
+				}
 			}
 		}
 	}
@@ -41,7 +53,7 @@ public class LootTable {
 			this(1.0 / rarity_expected_chests, item.clone(), amount_min, amount_max);
 		}
 
-		private LootTableEntry(double chance, final ItemStack item, int amount_min, int amount_max) {
+		public LootTableEntry(double chance, final ItemStack item, int amount_min, int amount_max) {
 			this(
 				chance,
 				(list, random) -> {

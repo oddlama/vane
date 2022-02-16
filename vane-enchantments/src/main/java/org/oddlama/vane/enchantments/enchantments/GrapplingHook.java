@@ -1,24 +1,22 @@
 package org.oddlama.vane.enchantments.enchantments;
 
 import java.util.List;
+
 import org.bukkit.Material;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerFishEvent;
-import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.util.Vector;
 import org.oddlama.vane.annotation.config.ConfigDouble;
 import org.oddlama.vane.annotation.config.ConfigDoubleList;
 import org.oddlama.vane.annotation.enchantment.Rarity;
 import org.oddlama.vane.annotation.enchantment.VaneEnchantment;
-import org.oddlama.vane.core.item.CustomItem;
+import org.oddlama.vane.core.config.recipes.RecipeList;
+import org.oddlama.vane.core.config.recipes.ShapedRecipeDefinition;
 import org.oddlama.vane.core.module.Context;
-import org.oddlama.vane.enchantments.CustomEnchantment;
+import org.oddlama.vane.core.enchantments.CustomEnchantment;
 import org.oddlama.vane.enchantments.Enchantments;
-import org.oddlama.vane.enchantments.items.AncientTomeOfKnowledge;
-import org.oddlama.vane.enchantments.items.BookVariant;
 
 @VaneEnchantment(
 	name = "grappling_hook",
@@ -48,34 +46,13 @@ public class GrapplingHook extends CustomEnchantment<Enchantments> {
 	}
 
 	@Override
-	public void register_recipes() {
-		final var ancient_tome_of_knowledge_enchanted = CustomItem
-			.<AncientTomeOfKnowledge.AncientTomeOfKnowledgeVariant>variant_of(
-				AncientTomeOfKnowledge.class,
-				BookVariant.ENCHANTED_BOOK
-			)
-			.item();
-		final var ancient_tome_of_knowledge = CustomItem
-			.<AncientTomeOfKnowledge.AncientTomeOfKnowledgeVariant>variant_of(
-				AncientTomeOfKnowledge.class,
-				BookVariant.BOOK
-			)
-			.item();
-
-		final var recipe_key = recipe_key();
-		final var item = ancient_tome_of_knowledge_enchanted.clone();
-		final var meta = (EnchantmentStorageMeta) item.getItemMeta();
-		meta.addStoredEnchant(bukkit(), 1, false);
-		item.setItemMeta(meta);
-		get_module().update_enchanted_item(item);
-
-		final var recipe = new ShapedRecipe(recipe_key, item)
-			.shape(" h ", " l ", " b ")
-			.setIngredient('b', ancient_tome_of_knowledge)
-			.setIngredient('l', Material.LEAD)
-			.setIngredient('h', Material.TRIPWIRE_HOOK);
-
-		add_recipe(recipe);
+	public RecipeList default_recipes() {
+		return RecipeList.of(new ShapedRecipeDefinition("generic")
+			.shape("h", "l", "b")
+			.set_ingredient('b', "vane_enchantments:ancient_tome_of_knowledge")
+			.set_ingredient('l', Material.LEAD)
+			.set_ingredient('h', Material.TRIPWIRE_HOOK)
+			.result(on("vane_enchantments:enchanted_ancient_tome_of_knowledge")));
 	}
 
 	private double get_strength(int level) {

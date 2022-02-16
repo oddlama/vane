@@ -1,6 +1,7 @@
 package org.oddlama.vane.enchantments.enchantments;
 
 import com.destroystokyo.paper.MaterialTags;
+
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
@@ -12,17 +13,14 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.jetbrains.annotations.NotNull;
 import org.oddlama.vane.annotation.enchantment.Rarity;
 import org.oddlama.vane.annotation.enchantment.VaneEnchantment;
-import org.oddlama.vane.core.item.CustomItem;
+import org.oddlama.vane.core.config.recipes.RecipeList;
+import org.oddlama.vane.core.config.recipes.ShapedRecipeDefinition;
 import org.oddlama.vane.core.module.Context;
-import org.oddlama.vane.enchantments.CustomEnchantment;
+import org.oddlama.vane.core.enchantments.CustomEnchantment;
 import org.oddlama.vane.enchantments.Enchantments;
-import org.oddlama.vane.enchantments.items.AncientTomeOfKnowledge;
-import org.oddlama.vane.enchantments.items.BookVariant;
 
 @VaneEnchantment(name = "leafchopper", rarity = Rarity.COMMON, treasure = true, target = EnchantmentTarget.TOOL)
 public class Leafchopper extends CustomEnchantment<Enchantments> {
@@ -32,33 +30,12 @@ public class Leafchopper extends CustomEnchantment<Enchantments> {
 	}
 
 	@Override
-	public void register_recipes() {
-		final var ancient_tome_of_knowledge_enchanted = CustomItem
-			.<AncientTomeOfKnowledge.AncientTomeOfKnowledgeVariant>variant_of(
-				AncientTomeOfKnowledge.class,
-				BookVariant.ENCHANTED_BOOK
-			)
-			.item();
-		final var ancient_tome_of_knowledge = CustomItem
-			.<AncientTomeOfKnowledge.AncientTomeOfKnowledgeVariant>variant_of(
-				AncientTomeOfKnowledge.class,
-				BookVariant.BOOK
-			)
-			.item();
-
-		final var recipe_key = recipe_key();
-		final var item = ancient_tome_of_knowledge_enchanted.clone();
-		final var meta = (EnchantmentStorageMeta) item.getItemMeta();
-		meta.addStoredEnchant(bukkit(), 1, false);
-		item.setItemMeta(meta);
-		get_module().update_enchanted_item(item);
-
-		final var recipe = new ShapedRecipe(recipe_key, item)
+	public RecipeList default_recipes() {
+		return RecipeList.of(new ShapedRecipeDefinition("generic")
 			.shape(" s ", "sbs", " s ")
-			.setIngredient('b', ancient_tome_of_knowledge)
-			.setIngredient('s', Material.SHEARS);
-
-		add_recipe(recipe);
+			.set_ingredient('b', "vane_enchantments:ancient_tome_of_knowledge")
+			.set_ingredient('s', Material.SHEARS)
+			.result(on("vane_enchantments:enchanted_ancient_tome_of_knowledge")));
 	}
 
 	@Override

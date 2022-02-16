@@ -5,6 +5,7 @@ import static org.oddlama.vane.util.PlayerUtil.apply_elytra_boost;
 
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;
@@ -12,21 +13,19 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityToggleGlideEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.loot.LootTables;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.oddlama.vane.annotation.config.ConfigDoubleList;
 import org.oddlama.vane.annotation.enchantment.Rarity;
 import org.oddlama.vane.annotation.enchantment.VaneEnchantment;
-import org.oddlama.vane.core.LootTable.LootTableEntry;
-import org.oddlama.vane.core.item.CustomItem;
+import org.oddlama.vane.core.config.loot.LootDefinition;
+import org.oddlama.vane.core.config.loot.LootTableList;
+import org.oddlama.vane.core.config.recipes.RecipeList;
+import org.oddlama.vane.core.config.recipes.ShapedRecipeDefinition;
 import org.oddlama.vane.core.module.Context;
-import org.oddlama.vane.enchantments.CustomEnchantment;
+import org.oddlama.vane.core.enchantments.CustomEnchantment;
 import org.oddlama.vane.enchantments.Enchantments;
-import org.oddlama.vane.enchantments.items.AncientTomeOfTheGods;
-import org.oddlama.vane.enchantments.items.BookVariant;
 
 @VaneEnchantment(name = "take_off", max_level = 3, rarity = Rarity.UNCOMMON, treasure = true, allow_custom = true)
 public class TakeOff extends CustomEnchantment<Enchantments> {
@@ -39,48 +38,29 @@ public class TakeOff extends CustomEnchantment<Enchantments> {
 	}
 
 	@Override
-	public void register_recipes() {
-		final var ancient_tome_of_the_gods_enchanted = CustomItem
-			.<AncientTomeOfTheGods.AncientTomeOfTheGodsVariant>variant_of(
-				AncientTomeOfTheGods.class,
-				BookVariant.ENCHANTED_BOOK
-			)
-			.item();
-		final var ancient_tome_of_the_gods = CustomItem
-			.<AncientTomeOfTheGods.AncientTomeOfTheGodsVariant>variant_of(AncientTomeOfTheGods.class, BookVariant.BOOK)
-			.item();
-
-		final var recipe_key = recipe_key();
-		final var item = ancient_tome_of_the_gods_enchanted.clone();
-		final var meta = (EnchantmentStorageMeta) item.getItemMeta();
-		meta.addStoredEnchant(bukkit(), 1, false);
-		item.setItemMeta(meta);
-		get_module().update_enchanted_item(item);
-
-		final var recipe = new ShapedRecipe(recipe_key, item)
+	public RecipeList default_recipes() {
+		return RecipeList.of(new ShapedRecipeDefinition("generic")
 			.shape("mbm", "psp")
-			.setIngredient('b', ancient_tome_of_the_gods)
-			.setIngredient('m', Material.PHANTOM_MEMBRANE)
-			.setIngredient('p', Material.PISTON)
-			.setIngredient('s', Material.SLIME_BLOCK);
+			.set_ingredient('b', "vane_enchantments:ancient_tome_of_the_gods")
+			.set_ingredient('m', Material.PHANTOM_MEMBRANE)
+			.set_ingredient('p', Material.PISTON)
+			.set_ingredient('s', Material.SLIME_BLOCK)
+			.result(on("vane_enchantments:enchanted_ancient_tome_of_the_gods")));
+	}
 
-		add_recipe(recipe);
-
-		// Loot generation
-		final var entry = new LootTableEntry(150, item);
-		for (final var table : new LootTables[] {
-			LootTables.BURIED_TREASURE,
-			LootTables.PILLAGER_OUTPOST,
-			LootTables.RUINED_PORTAL,
-			LootTables.SHIPWRECK_TREASURE,
-			LootTables.STRONGHOLD_LIBRARY,
-			LootTables.UNDERWATER_RUIN_BIG,
-			LootTables.UNDERWATER_RUIN_SMALL,
-			LootTables.VILLAGE_TEMPLE,
-			LootTables.WOODLAND_MANSION,
-		}) {
-			get_module().loot_table(table).put(recipe_key, entry);
-		}
+	@Override
+	public LootTableList default_loot_tables() {
+		return LootTableList.of(new LootDefinition("generic")
+			.in(LootTables.BURIED_TREASURE)
+			.in(LootTables.PILLAGER_OUTPOST)
+			.in(LootTables.RUINED_PORTAL)
+			.in(LootTables.SHIPWRECK_TREASURE)
+			.in(LootTables.STRONGHOLD_LIBRARY)
+			.in(LootTables.UNDERWATER_RUIN_BIG)
+			.in(LootTables.UNDERWATER_RUIN_SMALL)
+			.in(LootTables.VILLAGE_TEMPLE)
+			.in(LootTables.WOODLAND_MANSION)
+			.add(1.0 / 150, 1, 1, on("vane_enchantments:enchanted_ancient_tome_of_the_gods")));
 	}
 
 	@Override

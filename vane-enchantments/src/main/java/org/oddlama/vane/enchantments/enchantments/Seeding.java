@@ -9,6 +9,7 @@ import static org.oddlama.vane.util.PlayerUtil.seed_block;
 import static org.oddlama.vane.util.PlayerUtil.swing_arm;
 
 import com.destroystokyo.paper.MaterialTags;
+
 import org.bukkit.Material;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.event.EventHandler;
@@ -16,17 +17,14 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.jetbrains.annotations.NotNull;
 import org.oddlama.vane.annotation.enchantment.Rarity;
 import org.oddlama.vane.annotation.enchantment.VaneEnchantment;
-import org.oddlama.vane.core.item.CustomItem;
+import org.oddlama.vane.core.config.recipes.RecipeList;
+import org.oddlama.vane.core.config.recipes.ShapedRecipeDefinition;
 import org.oddlama.vane.core.module.Context;
-import org.oddlama.vane.enchantments.CustomEnchantment;
+import org.oddlama.vane.core.enchantments.CustomEnchantment;
 import org.oddlama.vane.enchantments.Enchantments;
-import org.oddlama.vane.enchantments.items.AncientTomeOfKnowledge;
-import org.oddlama.vane.enchantments.items.BookVariant;
 
 @VaneEnchantment(
 	name = "seeding",
@@ -42,39 +40,18 @@ public class Seeding extends CustomEnchantment<Enchantments> {
 	}
 
 	@Override
-	public void register_recipes() {
-		final var ancient_tome_of_knowledge_enchanted = CustomItem
-			.<AncientTomeOfKnowledge.AncientTomeOfKnowledgeVariant>variant_of(
-				AncientTomeOfKnowledge.class,
-				BookVariant.ENCHANTED_BOOK
-			)
-			.item();
-		final var ancient_tome_of_knowledge = CustomItem
-			.<AncientTomeOfKnowledge.AncientTomeOfKnowledgeVariant>variant_of(
-				AncientTomeOfKnowledge.class,
-				BookVariant.BOOK
-			)
-			.item();
-
-		final var recipe_key = recipe_key();
-		final var item = ancient_tome_of_knowledge_enchanted.clone();
-		final var meta = (EnchantmentStorageMeta) item.getItemMeta();
-		meta.addStoredEnchant(bukkit(), 1, false);
-		item.setItemMeta(meta);
-		get_module().update_enchanted_item(item);
-
-		final var recipe = new ShapedRecipe(recipe_key, item)
+	public RecipeList default_recipes() {
+		return RecipeList.of(new ShapedRecipeDefinition("generic")
 			.shape("1 7", "2b6", "345")
-			.setIngredient('b', ancient_tome_of_knowledge)
-			.setIngredient('1', Material.PUMPKIN_SEEDS)
-			.setIngredient('2', Material.CARROT)
-			.setIngredient('3', Material.WHEAT_SEEDS)
-			.setIngredient('4', Material.NETHER_WART)
-			.setIngredient('5', Material.BEETROOT_SEEDS)
-			.setIngredient('6', Material.POTATO)
-			.setIngredient('7', Material.MELON_SEEDS);
-
-		add_recipe(recipe);
+			.set_ingredient('b', "vane_enchantments:ancient_tome_of_knowledge")
+			.set_ingredient('1', Material.PUMPKIN_SEEDS)
+			.set_ingredient('2', Material.CARROT)
+			.set_ingredient('3', Material.WHEAT_SEEDS)
+			.set_ingredient('4', Material.NETHER_WART)
+			.set_ingredient('5', Material.BEETROOT_SEEDS)
+			.set_ingredient('6', Material.POTATO)
+			.set_ingredient('7', Material.MELON_SEEDS)
+			.result(on("vane_enchantments:enchanted_ancient_tome_of_knowledge")));
 	}
 
 	@Override

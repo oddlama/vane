@@ -5,6 +5,8 @@ import static org.oddlama.vane.util.PlayerUtil.remove_one_item_from_hand;
 import static org.oddlama.vane.util.PlayerUtil.swing_arm;
 import static org.oddlama.vane.util.Util.exp_for_level;
 
+import java.util.EnumSet;
+
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
@@ -14,49 +16,37 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.ShapelessRecipe;
 import org.oddlama.vane.annotation.config.ConfigDouble;
 import org.oddlama.vane.annotation.item.VaneItem;
+import org.oddlama.vane.core.config.recipes.RecipeList;
+import org.oddlama.vane.core.config.recipes.ShapelessRecipeDefinition;
 import org.oddlama.vane.core.item.CustomItem;
-import org.oddlama.vane.core.item.CustomItemVariant;
+import org.oddlama.vane.core.item.api.InhibitBehavior;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.trifles.Trifles;
+import org.oddlama.vane.trifles.items.XpBottles.XpBottle;
 
-@VaneItem(name = "empty_xp_bottle")
-public class EmptyXpBottle extends CustomItem<Trifles, EmptyXpBottle> {
-
-	public static class EmptyXpBottleVariant extends CustomItemVariant<Trifles, EmptyXpBottle, SingleVariant> {
-
-		public EmptyXpBottleVariant(EmptyXpBottle parent, SingleVariant variant) {
-			super(parent, variant);
-		}
-
-		@Override
-		public void register_recipes() {
-			final var recipe = new ShapelessRecipe(recipe_key(), item())
-				.addIngredient(Material.EXPERIENCE_BOTTLE)
-				.addIngredient(Material.GLASS_BOTTLE)
-				.addIngredient(Material.GOLD_NUGGET);
-
-			add_recipe(recipe);
-		}
-
-		@Override
-		public Material base() {
-			return Material.GLASS_BOTTLE;
-		}
-	}
-
-	@ConfigDouble(
-		def = 0.3,
-		min = 0.0,
-		max = 0.999,
-		desc = "Percentage of lost experience while bottling. For 10% loss, bottling 30 levels will require 30 * (1 / (1 - 0.1)) = 33.33 levels"
-	)
+@VaneItem(name = "empty_xp_bottle", base = Material.GLASS_BOTTLE, model_data = 0x76000a, version = 1)
+public class EmptyXpBottle extends CustomItem<Trifles> {
+	@ConfigDouble(def = 0.3, min = 0.0, max = 0.999, desc = "Percentage of experience lost when bottling. For 10% loss, bottling 30 levels will require 30 * (1 / (1 - 0.1)) = 33.33 levels")
 	public double config_loss_percentage;
 
 	public EmptyXpBottle(Context<Trifles> context) {
-		super(context, EmptyXpBottleVariant::new);
+		super(context);
+	}
+
+	@Override
+	public RecipeList default_recipes() {
+		return RecipeList.of(new ShapelessRecipeDefinition("generic")
+			.add_ingredient(Material.EXPERIENCE_BOTTLE)
+			.add_ingredient(Material.GLASS_BOTTLE)
+			.add_ingredient(Material.GOLD_NUGGET)
+			.result(key().toString()));
+	}
+
+	@Override
+	public EnumSet<InhibitBehavior> inhibitedBehaviors() {
+		return EnumSet.of(InhibitBehavior.USE_IN_VANILLA_RECIPE, InhibitBehavior.TEMPT);
 	}
 
 	public static int get_total_exp(final Player player) {
@@ -83,8 +73,7 @@ public class EmptyXpBottle extends CustomItem<Trifles, EmptyXpBottle> {
 		// Get item variant
 		final var player = event.getPlayer();
 		final var item = player.getEquipment().getItem(event.getHand());
-		final var variant = this.<EmptyXpBottleVariant>variant_of(item);
-		if (variant == null || !variant.enabled()) {
+		if (!isInstance(item)) {
 			return;
 		}
 
@@ -112,33 +101,28 @@ public class EmptyXpBottle extends CustomItem<Trifles, EmptyXpBottle> {
 		}
 
 		// Find maximum fitting capacity
-		XpBottle.XpBottleVariant xp_bottle_variant = null;
+		XpBottle xp_bottle = null;
 		int exp = 0;
-		for (final var xpvar : XpBottle.Variant.values()) {
-			var cur_xp_bottle_variant = CustomItem.<XpBottle.XpBottleVariant>variant_of(XpBottle.class, xpvar);
-			var cur_exp = (int) (
-				(1.0 / (1.0 - config_loss_percentage)) * exp_for_level(cur_xp_bottle_variant.config_capacity)
-			);
+		for (final var bottle : get_module().xp_bottles.bottles) {
+			var cur_exp = (int)((1.0 / (1.0 - config_loss_percentage)) * exp_for_level(bottle.config_capacity));
 
 			// Check if player has enough xp and this variant has more than the last
 			if (get_total_exp(player) >= cur_exp && cur_exp > exp) {
 				exp = cur_exp;
-				xp_bottle_variant = cur_xp_bottle_variant;
+				xp_bottle = bottle;
 			}
 		}
 
 		// Check if there was a fitting bottle
-		if (xp_bottle_variant == null) {
+		if (xp_bottle == null) {
 			return;
 		}
 
 		// Take xp, take item, play sound, give item.
 		player.giveExp(-exp, false);
 		remove_one_item_from_hand(player, event.getHand());
-		give_item(player, xp_bottle_variant.item());
-		player
-			.getWorld()
-			.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1.0f, 4.0f);
+		give_item(player, xp_bottle.newStack());
+		player.getWorld().playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1.0f, 4.0f);
 		swing_arm(player, event.getHand());
 	}
 }

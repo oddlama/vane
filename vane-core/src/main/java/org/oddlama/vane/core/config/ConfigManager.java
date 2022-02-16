@@ -21,6 +21,7 @@ import org.apache.commons.lang.WordUtils;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.oddlama.vane.annotation.config.ConfigBoolean;
+import org.oddlama.vane.annotation.config.ConfigDict;
 import org.oddlama.vane.annotation.config.ConfigDouble;
 import org.oddlama.vane.annotation.config.ConfigDoubleList;
 import org.oddlama.vane.annotation.config.ConfigExtendedMaterial;
@@ -90,6 +91,8 @@ public class ConfigManager {
 		// Return correct wrapper object
 		if (atype.equals(ConfigBoolean.class)) {
 			return new ConfigBooleanField(owner, field, map_name, (ConfigBoolean) annotation);
+		} else if (atype.equals(ConfigDict.class)) {
+			return new ConfigDictField(owner, field, map_name, (ConfigDict) annotation);
 		} else if (atype.equals(ConfigDouble.class)) {
 			return new ConfigDoubleField(owner, field, map_name, (ConfigDouble) annotation);
 		} else if (atype.equals(ConfigDoubleList.class)) {

@@ -1,10 +1,15 @@
 package org.oddlama.vane.util;
 
+import static net.kyori.adventure.text.event.HoverEvent.Action.SHOW_TEXT;
+
 import static org.oddlama.vane.util.Nms.creative_tab_id;
 import static org.oddlama.vane.util.Nms.item_handle;
 import static org.oddlama.vane.util.Nms.player_handle;
 
 import com.destroystokyo.paper.profile.ProfileProperty;
+import com.mojang.brigadier.StringReader;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -12,19 +17,30 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import net.minecraft.commands.arguments.item.ItemParser;
 import net.minecraft.world.item.Item;
+
+import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.craftbukkit.v1_18_R1.enchantments.CraftEnchantment;
+import org.bukkit.craftbukkit.v1_18_R1.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.oddlama.vane.core.Core;
+import org.oddlama.vane.core.material.ExtendedMaterial;
 
 public class ItemUtil {
 
@@ -37,7 +53,7 @@ public class ItemUtil {
 		"FA233E1C-4180-4865-B01B-BCCE9785ACA3"
 	);
 
-	public static void damage_item(final Player player, ItemStack item_stack, int amount) {
+	public static void damage_item(final Player player, final ItemStack item_stack, final int amount) {
 		if (amount <= 0) {
 			return;
 		}
@@ -178,7 +194,7 @@ public class ItemUtil {
 			}
 
 			// Level
-			int level_diff = b_el.getValue() - a_el.getValue();
+			final int level_diff = b_el.getValue() - a_el.getValue();
 			if (level_diff != 0) {
 				return level_diff;
 			}
@@ -258,5 +274,122 @@ public class ItemUtil {
 		meta.setPlayerProfile(profile);
 		item.setItemMeta(meta);
 		return item;
+	}
+
+	/**
+	 * Returns true if the given component is guared by the given sentinel.
+	 */
+	public static boolean has_sentinel(final Component component, final NamespacedKey sentiel) {
+		if (component == null) {
+			return false;
+		}
+
+		final var hover = component.hoverEvent();
+		if (hover == null) {
+			return false;
+		}
+
+		if (hover.value() instanceof final TextComponent hover_text) {
+			return hover.action() == SHOW_TEXT && sentiel.toString().equals(hover_text.content());
+		} else {
+			return false;
+		}
+	}
+
+	public static Component add_sentinel(final Component component, final NamespacedKey sentinel) {
+		return component.hoverEvent(HoverEvent.showText(Component.text(sentinel.toString())));
+	}
+
+	/**
+	 * Applies enchantments to the item given in the form "{<namespace:enchant>[*<level>][,<namespace:enchant>[*<level>]]...}".
+	 * Throws IllegalArgumentException if an enchantment cannot be found.
+	 */
+	private static ItemStack apply_enchants(final ItemStack item_stack, @Nullable String enchants) {
+		if (enchants == null) {
+			return item_stack;
+		}
+
+		enchants = enchants.trim();
+		if (!enchants.startsWith("{") || !enchants.endsWith("}")) {
+			throw new IllegalArgumentException("enchantments must be of form {<namespace:enchant>[*<level>][,<namespace:enchant>[*<level>]]...}");
+		}
+
+		final var parts = enchants.substring(1, enchants.length() - 1).split(",");
+		for (var part : parts) {
+			part = part.trim();
+
+			String key = part;
+			int level = 1;
+			final int level_delim = key.indexOf('*');
+			if (level_delim != -1) {
+				level = Integer.parseInt(key.substring(level_delim + 1));
+				key = key.substring(0, level_delim);
+			}
+
+			final var ench = Enchantment.getByKey(NamespacedKey.fromString(key));
+			if (ench == null) {
+				throw new IllegalArgumentException("Cannot apply unknown enchantment '" + key + "' to item '" + item_stack + "'");
+			}
+
+			if (item_stack.getType() == Material.ENCHANTED_BOOK) {
+				final var flevel = level;
+				item_stack.editMeta(EnchantmentStorageMeta.class, meta -> {
+					meta.addStoredEnchant(ench, flevel, false);
+				});
+			} else {
+				item_stack.addEnchantment(ench, level);
+			}
+		}
+
+		if (parts.length > 0) {
+			Core.instance().enchantment_manager.update_enchanted_item(item_stack);
+		}
+		return item_stack;
+	}
+
+	/** Returns the itemstack and a boolean indicating whether it was just as simlpe material. */
+	public static @NotNull Pair<ItemStack, Boolean> itemstack_from_string(String definition) {
+		// namespace:key[{nbtdata}][#enchants{}], where the key can reference a material, head material or customitem.
+		final var enchants_delim = definition.indexOf("#enchants{");
+		String enchants = null;
+		if (enchants_delim != -1) {
+			enchants = definition.substring(enchants_delim + 9); // Let it start at '{'
+			definition = definition.substring(0, enchants_delim);
+		}
+
+		final var nbt_delim = definition.indexOf('{');
+		NamespacedKey key;
+		if (nbt_delim == -1) {
+			key = NamespacedKey.fromString(definition);
+		} else {
+			key = NamespacedKey.fromString(definition.substring(0, nbt_delim));
+		}
+
+		final var emat = ExtendedMaterial.from(key);
+		if (emat == null) {
+			throw new IllegalArgumentException("Invalid extended material definition: " + definition);
+		}
+
+		// First create the itemstack as if we had no NBT information.
+		final var item_stack = emat.item();
+
+		// If there is no NBT information, we can return here.
+		if (nbt_delim == -1) {
+			return Pair.of(apply_enchants(item_stack, enchants), emat.is_simple_material() && enchants == null);
+		}
+
+		// Parse the NBT by using minecraft's internal parser with the base material
+		// of whatever the extended material gave us.
+		final var vanilla_definition = item_stack.getType().key().toString() + definition.substring(nbt_delim);
+		try {
+			final var parsed_nbt = new ItemParser(new StringReader(vanilla_definition), false).parse().getNbt();
+			final var inherent_nbt = CraftItemStack.asNMSCopy(item_stack).getOrCreateTag();
+			// Now apply the NBT be parsed by minecraft's internal parser to the itemstack.
+			final var nms_item = item_handle(item_stack).copy();
+			nms_item.setTag(inherent_nbt.merge(parsed_nbt));
+			return Pair.of(apply_enchants(CraftItemStack.asCraftMirror(nms_item), enchants), false);
+		} catch (final CommandSyntaxException e) {
+			throw new IllegalArgumentException("Could not parse NBT of item definition: " + definition, e);
+		}
 	}
 }

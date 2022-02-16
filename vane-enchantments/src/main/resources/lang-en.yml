@@ -12,38 +12,35 @@
 
 # DO NOT CHANGE! The version of this language file. Used to determine
 # if the file needs to be updated.
-version: 2
+version: 3
 # The corresponding language code used in resource packs. Used for
 # resource pack generation. Typically this is a combination of the
 # language code (ISO 639) and the country code (ISO 3166).
 resource_pack_lang_code: 'en_us'
 
 item_ancient_tome:
-  book:
-    # The display name of this item variant.
-    name: "Ancient Tome"
+  # The display name of this item variant.
+  name: "Ancient Tome"
 
-  enchanted_book:
-    # The display name of this item variant.
-    name: "Ancient Tome"
+item_enchanted_ancient_tome:
+  # The display name of this item variant.
+  name: "Ancient Tome"
 
 item_ancient_tome_of_knowledge:
-  book:
-    # The display name of this item variant.
-    name: "Ancient Tome of Knowledge"
+  # The display name of this item variant.
+  name: "Ancient Tome of Knowledge"
 
-  enchanted_book:
-    # The display name of this item variant.
-    name: "Ancient Tome of Knowledge"
+item_enchanted_ancient_tome_of_knowledge:
+  # The display name of this item variant.
+  name: "Ancient Tome of Knowledge"
 
 item_ancient_tome_of_the_gods:
-  book:
-    # The display name of this item variant.
-    name: "Ancient Tome of The Gods"
+  # The display name of this item variant.
+  name: "Ancient Tome of The Gods"
 
-  enchanted_book:
-    # The display name of this item variant.
-    name: "Ancient Tome of The Gods"
+item_enchanted_ancient_tome_of_the_gods:
+  # The display name of this item variant.
+  name: "Ancient Tome of The Gods"
 
 enchantment_angel:
   # The display name of this enchantment. Will be packed into a resource pack.
@@ -91,20 +88,3 @@ enchantment_unbreakable:
 enchantment_wings:
   # The display name of this enchantment. Will be packed into a resource pack.
   name: "Wings"
-
-command_enchant:
-  # This message is sent when an enchantment level is given that is too low for the chosen enchantment.
-  # %1$s: Given level
-  # %2$s: Minimum level
-  level_too_low: "§cerror:§6 level %1$s§6 is too low, must be at least %2$s"
-  # This message is sent when an enchantment level is given that is too high for the chosen enchantment.
-  # %1$s: Given level
-  # %2$s: Maximum level
-  level_too_high: "§cerror:§6 level %1$s§6 is too high, must be at most %2$s"
-  # This message is sent when the selected enchantment cannot be applied to the item in hand.
-  # %1$s: Enchantment
-  # %2$s: Item in hand
-  invalid_enchantment: "§cerror: %1$s§6 cannot be applied to %2$s"
-  usage: "%1$s §benchantment §7[§blevel§7]"
-  description: "Enchants the item in your hand."
-  help: "Enchants the item in your hand."

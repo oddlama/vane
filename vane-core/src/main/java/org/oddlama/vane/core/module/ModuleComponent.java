@@ -5,7 +5,7 @@ import java.util.function.Consumer;
 import org.bukkit.NamespacedKey;
 import org.bukkit.scheduler.BukkitTask;
 import org.json.JSONObject;
-import org.oddlama.vane.core.ResourcePackGenerator;
+import org.oddlama.vane.core.resourcepack.ResourcePackGenerator;
 
 public abstract class ModuleComponent<T extends Module<T>> {
 

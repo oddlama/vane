@@ -3,17 +3,12 @@ package org.oddlama.vane.core.data;
 import static net.kyori.adventure.text.event.HoverEvent.Action.SHOW_TEXT;
 import static org.oddlama.vane.util.ItemUtil.damage_item;
 
-import com.google.common.collect.Lists;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
-import net.kyori.adventure.text.TranslatableComponent;
-import net.kyori.adventure.text.event.HoverEvent;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.Style;
-import net.kyori.adventure.text.format.TextDecoration;
+
+import com.google.common.collect.Lists;
+
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerItemMendEvent;
@@ -24,6 +19,14 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.Nullable;
 import org.oddlama.vane.util.Util;
+
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.TranslatableComponent;
+import net.kyori.adventure.text.event.HoverEvent;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.Style;
+import net.kyori.adventure.text.format.TextDecoration;
 
 public class DurabilityOverrideData {
 	private static final PersistentDataType<Integer, Integer> type_max = PersistentDataType.INTEGER;
@@ -43,14 +46,14 @@ public class DurabilityOverrideData {
 		.translatable("item.durability")
 		.style(DEFAULT_TOOLTIP_STYLE);
 
-	public DurabilityOverrideData(int max_durability) {
+	public DurabilityOverrideData(final int max_durability) {
 		this(
 			max_durability,
 			DEFAULT_TOOLTIP
 		);
 	}
 
-	public DurabilityOverrideData(int max_durability, @Nullable TranslatableComponent tooltip) {
+	public DurabilityOverrideData(final int max_durability, @Nullable final TranslatableComponent tooltip) {
 		this(
 			max_durability,
 			tooltip,
@@ -59,34 +62,34 @@ public class DurabilityOverrideData {
 		);
 	}
 
-	public DurabilityOverrideData(int max_durability, @Nullable TranslatableComponent tooltip, NamespacedKey key_max, NamespacedKey key_damage) {
-		this.key_max = key_max;
-		this.tooltip = tooltip;
-		this.key_damage = key_damage;
+	public DurabilityOverrideData(final int max_durability, @Nullable final TranslatableComponent tooltip, final NamespacedKey key_max, final NamespacedKey key_damage) {
 		this.max_durability = max_durability;
+		this.tooltip = tooltip;
+		this.key_max = key_max;
+		this.key_damage = key_damage;
 	}
 
 	public int max(final ItemStack stack) {
 		return stack.getItemMeta().getPersistentDataContainer().getOrDefault(key_max, type_max, max_durability);
 	}
 
-	public void max(final ItemStack stack, int max) {
+	public void max(final ItemStack stack, final int max) {
 		modifying(stack, pdc -> pdc.set(key_max, type_max, max));
 	}
 
 	public int damage(final ItemStack stack) {
-		Damageable dmg = stack.getItemMeta() instanceof Damageable ? (Damageable) stack.getItemMeta() : null;
-		var default_value = dmg == null ? 0 : dmg.getDamage();
+		final Damageable dmg = stack.getItemMeta() instanceof Damageable ? (Damageable) stack.getItemMeta() : null;
+		final var default_value = dmg == null ? 0 : dmg.getDamage();
 		return stack.getItemMeta().getPersistentDataContainer().getOrDefault(key_damage, type_damage, default_value);
 	}
 
-	public void damage(final ItemStack stack, int current) {
+	public void damage(final ItemStack stack, final int current) {
 		modifying(stack, pdc -> pdc.set(key_damage, type_damage, current));
 	}
 
-	private static void modifying(ItemStack stack, Consumer<PersistentDataContainer> worker) {
-		var meta = stack.getItemMeta();
-		var pdc = meta.getPersistentDataContainer();
+	private static void modifying(final ItemStack stack, final Consumer<PersistentDataContainer> worker) {
+		final var meta = stack.getItemMeta();
+		final var pdc = meta.getPersistentDataContainer();
 		worker.accept(pdc);
 		stack.setItemMeta(meta);
 	}
@@ -100,10 +103,10 @@ public class DurabilityOverrideData {
 		final ItemMeta itemMeta = stack.getItemMeta();
 		if (!(itemMeta instanceof Damageable)) return false;
 
-		var real_global_max = stack.getType().getMaxDurability();
-		var before_damage = ((Damageable) stack.getItemMeta()).getDamage();
-		var fake_individual_max = this.max(stack);
-		var fake_damage = this.damage(stack);
+		final var real_global_max = stack.getType().getMaxDurability();
+		final var before_damage = ((Damageable) stack.getItemMeta()).getDamage();
+		final var fake_individual_max = this.max(stack);
+		final var fake_damage = this.damage(stack);
 
 		damage_item(player, stack, 1);
 
@@ -113,14 +116,14 @@ public class DurabilityOverrideData {
 		}
 		if (after_damage == null) return true; //Thing broke.
 
-		var diff = after_damage - before_damage;
+		final var diff = after_damage - before_damage;
 		// track the 'real' dmg
-		int new_damage = fake_damage + diff;
+		final int new_damage = fake_damage + diff;
 		damage(stack, new_damage);
-		var technically_correct_percent = ((float)new_damage) / fake_individual_max;
-		float dangerous_interpolated_damage = technically_correct_percent * real_global_max;
+		final var technically_correct_percent = ((float)new_damage) / fake_individual_max;
+		final float dangerous_interpolated_damage = technically_correct_percent * real_global_max;
 		// We need to clamp it above 0, so the item doesn't randomly break.
-		var safe_damage = damage_clamp(new_damage, fake_individual_max, dangerous_interpolated_damage, real_global_max);
+		final var safe_damage = damage_clamp(new_damage, fake_individual_max, dangerous_interpolated_damage, real_global_max);
 		final Damageable itemMeta1 = ((Damageable) stack.getItemMeta());
 		itemMeta1.setDamage(safe_damage);
 		update_lore(itemMeta1, new_damage, fake_individual_max);
@@ -128,8 +131,8 @@ public class DurabilityOverrideData {
 		return diff != 0;
 	}
 
-	private void update_lore(ItemMeta itemMeta1, int dmg, int max) {
-		var lore = itemMeta1.lore();
+	private void update_lore(final ItemMeta itemMeta1, final int dmg, final int max) {
+		final var lore = itemMeta1.lore();
 		final boolean found_lore = lore != null && lore.stream().anyMatch(this::is_durability_lore);
 
 		List<Component> new_lore = lore;
@@ -155,13 +158,13 @@ public class DurabilityOverrideData {
 		itemMeta1.lore(new_lore);
 	}
 
-	protected Component tooltip_lore(int uses_remaining, int max) {
+	protected Component tooltip_lore(final int uses_remaining, final int max) {
 		if (tooltip == null) return null;
 		final var standard = tooltip.args(Component.text(uses_remaining), Component.text(max));
 		return standard.hoverEvent(HoverEvent.showText(SENTINEL_VALUE));
 	}
 
-	protected boolean is_durability_lore(Component component) {
+	protected boolean is_durability_lore(final Component component) {
 		// Whether the lore line is prefixed with a sentinel value marking this lore line as a vane-enchantment owned lore.
 		final HoverEvent<?> hover = component.hoverEvent();
 		if (hover == null) return false;
@@ -182,7 +185,7 @@ public class DurabilityOverrideData {
 	 * If the item is consumed, the output is max.
 	 * This is to support better emulation of modded client side warnings or datapacks if the tool is about to break etc.
 	 */
-	private int damage_clamp(int fake_damage, int fake_max, float dangerous_interpolated_damage, short max) {
+	private int damage_clamp(final int fake_damage, final int fake_max, final float dangerous_interpolated_damage, final short max) {
 		// This can only happen in weird edgecases, in which case we recover by breaking the item the next time
 		// the player uses it. Much better then showing negative values in the fake durability lore.
 		if (fake_damage >= fake_max) return max - 1;
@@ -192,8 +195,8 @@ public class DurabilityOverrideData {
 		return rounded_clamp(dangerous_interpolated_damage, 1, max - 2);
 	}
 
-	private static int rounded_clamp(float f, int min, int max) {
-		var out = Math.round(f);
+	private static int rounded_clamp(final float f, final int min, final int max) {
+		final var out = Math.round(f);
 		return Math.min(max, Math.max(min, out));
 	}
 
@@ -205,12 +208,12 @@ public class DurabilityOverrideData {
 				pdc.remove(key_max);
 			}
 		);
-		var lore = itemStack.lore();
+		final var lore = itemStack.lore();
 		if (lore != null) lore.remove(tooltip);
 		itemStack.lore(lore);
 	}
 
-	public void on_mend(PlayerItemMendEvent mend) {
+	public void on_mend(final PlayerItemMendEvent mend) {
 		// TODO: Durability Overridden items can not yet support mending effectively.
 		// see: https://github.com/PaperMC/Paper/issues/7313
 		mend.setCancelled(true);

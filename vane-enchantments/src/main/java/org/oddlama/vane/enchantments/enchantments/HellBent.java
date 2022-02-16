@@ -6,18 +6,16 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.loot.LootTables;
 import org.oddlama.vane.annotation.enchantment.Rarity;
 import org.oddlama.vane.annotation.enchantment.VaneEnchantment;
-import org.oddlama.vane.core.LootTable.LootTableEntry;
-import org.oddlama.vane.core.item.CustomItem;
+import org.oddlama.vane.core.config.loot.LootDefinition;
+import org.oddlama.vane.core.config.loot.LootTableList;
+import org.oddlama.vane.core.config.recipes.RecipeList;
+import org.oddlama.vane.core.config.recipes.ShapedRecipeDefinition;
 import org.oddlama.vane.core.module.Context;
-import org.oddlama.vane.enchantments.CustomEnchantment;
+import org.oddlama.vane.core.enchantments.CustomEnchantment;
 import org.oddlama.vane.enchantments.Enchantments;
-import org.oddlama.vane.enchantments.items.AncientTomeOfKnowledge;
-import org.oddlama.vane.enchantments.items.BookVariant;
 
 @VaneEnchantment(name = "hell_bent", rarity = Rarity.COMMON, treasure = true, target = EnchantmentTarget.ARMOR_HEAD)
 public class HellBent extends CustomEnchantment<Enchantments> {
@@ -27,45 +25,23 @@ public class HellBent extends CustomEnchantment<Enchantments> {
 	}
 
 	@Override
-	public void register_recipes() {
-		final var ancient_tome_of_knowledge_enchanted = CustomItem
-			.<AncientTomeOfKnowledge.AncientTomeOfKnowledgeVariant>variant_of(
-				AncientTomeOfKnowledge.class,
-				BookVariant.ENCHANTED_BOOK
-			)
-			.item();
-		final var ancient_tome_of_knowledge = CustomItem
-			.<AncientTomeOfKnowledge.AncientTomeOfKnowledgeVariant>variant_of(
-				AncientTomeOfKnowledge.class,
-				BookVariant.BOOK
-			)
-			.item();
+	public RecipeList default_recipes() {
+		return RecipeList.of(new ShapedRecipeDefinition("generic")
+			.shape("m", "b", "t")
+			.set_ingredient('b', "vane_enchantments:ancient_tome_of_knowledge")
+			.set_ingredient('t', Material.TURTLE_HELMET)
+			.set_ingredient('m', Material.MUSIC_DISC_PIGSTEP)
+			.result(on("vane_enchantments:enchanted_ancient_tome_of_knowledge")));
+	}
 
-		final var recipe_key = recipe_key();
-		final var item = ancient_tome_of_knowledge_enchanted.clone();
-		final var meta = (EnchantmentStorageMeta) item.getItemMeta();
-		meta.addStoredEnchant(bukkit(), 1, false);
-		item.setItemMeta(meta);
-		get_module().update_enchanted_item(item);
-
-		final var recipe = new ShapedRecipe(recipe_key, item)
-			.shape(" m ", " b ", " t ")
-			.setIngredient('b', ancient_tome_of_knowledge)
-			.setIngredient('t', Material.TURTLE_HELMET)
-			.setIngredient('m', Material.MUSIC_DISC_PIGSTEP);
-
-		add_recipe(recipe);
-
-		// Loot generation
-		final var entry = new LootTableEntry(50, item);
-		for (final var table : new LootTables[] {
-			LootTables.BASTION_BRIDGE,
-			LootTables.BASTION_HOGLIN_STABLE,
-			LootTables.BASTION_OTHER,
-			LootTables.BASTION_TREASURE,
-		}) {
-			get_module().loot_table(table).put(recipe_key, entry);
-		}
+	@Override
+	public LootTableList default_loot_tables() {
+		return LootTableList.of(new LootDefinition("generic")
+			.in(LootTables.BASTION_BRIDGE)
+			.in(LootTables.BASTION_HOGLIN_STABLE)
+			.in(LootTables.BASTION_OTHER)
+			.in(LootTables.BASTION_TREASURE)
+			.add(1.0 / 50, 1, 1, on("vane_enchantments:enchanted_ancient_tome_of_knowledge")));
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)

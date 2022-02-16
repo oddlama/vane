@@ -1,209 +1,48 @@
 package org.oddlama.vane.trifles.items;
 
-import static org.oddlama.vane.util.PlayerUtil.swing_arm;
-import static org.oddlama.vane.util.Util.ms_to_ticks;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerItemMendEvent;
-import org.bukkit.inventory.ShapedRecipe;
-import org.oddlama.vane.annotation.config.ConfigInt;
-import org.oddlama.vane.annotation.item.VaneItem;
-import org.oddlama.vane.annotation.persistent.Persistent;
-import org.oddlama.vane.core.data.DurabilityOverrideData;
-import org.oddlama.vane.core.item.CustomItem;
-import org.oddlama.vane.core.item.CustomItemVariant;
+import org.oddlama.vane.core.config.recipes.RecipeList;
+import org.oddlama.vane.core.config.recipes.ShapedRecipeDefinition;
 import org.oddlama.vane.core.module.Context;
-import org.oddlama.vane.enchantments.items.AncientTomeOfKnowledge;
-import org.oddlama.vane.enchantments.items.BookVariant;
 import org.oddlama.vane.trifles.Trifles;
+import org.oddlama.vane.annotation.item.VaneItem;
 import org.oddlama.vane.trifles.event.PlayerTeleportScrollEvent;
-import org.oddlama.vane.util.LazyLocation;
+import org.oddlama.vane.util.Util;
 
-@VaneItem(name = "unstable_scroll")
-public class UnstableScroll extends CustomItem<Trifles, UnstableScroll> {
-
-	// Last teleport location storage
-	@Persistent
-	private Map<UUID, LazyLocation> storage_last_scroll_teleport = new HashMap<>();
-
-	public static class UnstableScrollVariant extends CustomItemVariant<Trifles, UnstableScroll, SingleVariant> {
-
-		@ConfigInt(def = 6000, min = 0, desc = "Cooldown in milliseconds until another scroll can be used.")
-		private int config_cooldown;
-
-		@ConfigInt(
-			def = 15000,
-			min = 0,
-			desc = "A cooldown in milliseconds that is applied when the player takes damage (prevents combat logging). Set to 0 to allow combat logging."
-		)
-		private int config_damage_cooldown;
-
-		@ConfigInt(def = 25, min = 0, desc = "Base amount of uses a scroll has before breaking")
-		private int config_base_durability;
-
-		private DurabilityOverrideData durability_override;
-
-		public UnstableScrollVariant(UnstableScroll parent, SingleVariant variant) {
-			super(parent, variant);
-		}
-
-		@Override
-		public void on_config_change() {
-			super.on_config_change();
-			durability_override = new DurabilityOverrideData(config_base_durability);
-		}
-
-		@Override
-		public void register_recipes() {
-			final var ancient_tome_of_knowledge = CustomItem
-				.<AncientTomeOfKnowledge.AncientTomeOfKnowledgeVariant>variant_of(
-					AncientTomeOfKnowledge.class,
-					BookVariant.BOOK
-				)
-				.item();
-
-			final var recipe = new ShapedRecipe(recipe_key(), item())
-				.shape("pip", "cbe", "plp")
-				.setIngredient('b', ancient_tome_of_knowledge)
-				.setIngredient('p', Material.MAP)
-				.setIngredient('i', Material.CHORUS_FRUIT)
-				.setIngredient('c', Material.COMPASS)
-				.setIngredient('e', Material.ENDER_PEARL)
-				.setIngredient('l', Material.CLOCK);
-
-			add_recipe(recipe);
-		}
-
-		@Override
-		public Material base() {
-			return Material.CARROT_ON_A_STICK;
-		}
-
-		public int cooldown() {
-			return config_cooldown;
-		}
-
-		public int damage_cooldown() {
-			return config_damage_cooldown;
-		}
-	}
+@VaneItem(name = "unstable_scroll", base = Material.WARPED_FUNGUS_ON_A_STICK, durability = 25, model_data = 0x760001, version = 1)
+public class UnstableScroll extends Scroll {
+	public static final NamespacedKey LAST_SCROLL_TELEPORT_LOCATION = Util.namespaced_key("vane", "last_scroll_teleport_location");
 
 	public UnstableScroll(Context<Trifles> context) {
-		super(context, UnstableScrollVariant::new);
+		super(context, 6000);
 	}
 
-	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = false) // ignoreCancelled = false to catch right-click-air events
-	public void on_player_right_click(final PlayerInteractEvent event) {
-		if (event.getAction() != Action.RIGHT_CLICK_BLOCK && event.getAction() != Action.RIGHT_CLICK_AIR) {
-			return;
-		}
-
-		if (event.useItemInHand() == Event.Result.DENY) {
-			return;
-		}
-
-		// Get item variant
-		final var player = event.getPlayer();
-		final var item = player.getEquipment().getItem(event.getHand());
-		final var variant = this.<UnstableScrollVariant>variant_of(item);
-		if (variant == null || !variant.enabled()) {
-			return;
-		}
-
-		// Never actually use the base item if it's custom!
-		event.setUseItemInHand(Event.Result.DENY);
-
-		switch (event.getAction()) {
-			default:
-				return;
-			case RIGHT_CLICK_AIR:
-				break;
-			case RIGHT_CLICK_BLOCK:
-				// Require non-cancelled state (so it won't trigger for block-actions like chests)
-				// But allow if the clicked block can't be interacted with in the first place
-				if (event.useInteractedBlock() != Event.Result.DENY) {
-					final var block = event.getClickedBlock();
-					if (block.getType().isInteractable()) {
-						return;
-					}
-					event.setUseInteractedBlock(Event.Result.DENY);
-				}
-				break;
-		}
-
-		// Find last
-		final var to_location = storage_last_scroll_teleport.get(player.getUniqueId()).location();
-		if (to_location == null) {
-			return;
-		}
-
-		// Check cooldown
-		if (player.getCooldown(variant.base()) > 0) {
-			return;
-		}
-
-		final var current_location = player.getLocation();
-		if (get_module().teleport_from_scroll(player, current_location, to_location)) {
-			// Set cooldown
-			final var cooldown = ms_to_ticks(variant.cooldown());
-			player.setCooldown(variant.base(), (int) cooldown);
-
-			// Damage item
-			variant.durability_override.use_item(player, item);
-			swing_arm(player, event.getHand());
-		}
+	@Override
+	public RecipeList default_recipes() {
+		return RecipeList.of(new ShapedRecipeDefinition("generic")
+			.shape("pip", "cbe", "plp")
+			// TODO BADDDDDDDDDDDDDDDDDDDDDDDDDDDD TEST REMOVEEEEEEEEEEEEEEEEE
+			.set_ingredient('b', "minecraft:stick{Enchantments:[{id:knockback,lvl:1000}]}")
+			.set_ingredient('p', Material.MAP)
+			.set_ingredient('i', Material.CHORUS_FRUIT)
+			.set_ingredient('c', Material.COMPASS)
+			.set_ingredient('e', Material.ENDER_PEARL)
+			.set_ingredient('l', Material.CLOCK)
+			.result(key().toString()));
 	}
 
-	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void on_player_take_damage(final EntityDamageEvent event) {
-		if (!(event.getEntity() instanceof Player)) {
-			return;
-		}
-
-		final var player = (Player) event.getEntity();
-
-		// Get unstable scroll variant
-		final var variant = CustomItem.<UnstableScrollVariant>variant_of(
-			UnstableScroll.class,
-			CustomItem.SingleVariant.SINGLETON
-		);
-
-		if (variant == null || !variant.enabled()) {
-			return;
-		}
-
-		// Don't decrease cooldown
-		final var damage_cooldown = (int) ms_to_ticks(variant.damage_cooldown());
-		if (player.getCooldown(variant.base()) >= damage_cooldown) {
-			return;
-		}
-
-		player.setCooldown(variant.base(), damage_cooldown);
+	@Override
+	public Location teleport_location(Player player, boolean imminent_teleport) {
+		return Util.storage_get_location(player.getPersistentDataContainer(), LAST_SCROLL_TELEPORT_LOCATION, null);
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void on_player_teleport_scroll(final PlayerTeleportScrollEvent event) {
-		storage_last_scroll_teleport.put(event.getPlayer().getUniqueId(), new LazyLocation(event.getFrom()));
-		mark_persistent_storage_dirty();
-	}
-
-
-	@EventHandler(ignoreCancelled = true)
-	public void on_player_item_mend(PlayerItemMendEvent event) {
-		final var variant = this.<UnstableScroll.UnstableScrollVariant>variant_of(event.getItem());
-		if (variant == null || !variant.enabled()) {
-			return;
-		}
-		variant.durability_override.on_mend(event);
+		Util.storage_set_location(event.getPlayer().getPersistentDataContainer(), LAST_SCROLL_TELEPORT_LOCATION, event.getFrom());
 	}
 }
