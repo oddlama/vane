@@ -23,7 +23,7 @@ import org.oddlama.vane.core.config.recipes.ShapedRecipeDefinition;
 import org.oddlama.vane.core.data.CooldownData;
 import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Context;
-import org.oddlama.vane.enchantments.CustomEnchantment;
+import org.oddlama.vane.core.enchantments.CustomEnchantment;
 import org.oddlama.vane.enchantments.Enchantments;
 import org.oddlama.vane.util.Util;
 

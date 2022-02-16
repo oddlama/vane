@@ -1,4 +1,4 @@
-package org.oddlama.vane.enchantments;
+package org.oddlama.vane.core.enchantments;
 
 import net.minecraft.world.item.enchantment.Enchantment;
 import org.bukkit.craftbukkit.v1_18_R1.enchantments.CraftEnchantment;

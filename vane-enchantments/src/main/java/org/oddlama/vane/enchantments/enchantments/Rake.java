@@ -20,7 +20,7 @@ import org.oddlama.vane.annotation.enchantment.VaneEnchantment;
 import org.oddlama.vane.core.config.recipes.RecipeList;
 import org.oddlama.vane.core.config.recipes.ShapedRecipeDefinition;
 import org.oddlama.vane.core.module.Context;
-import org.oddlama.vane.enchantments.CustomEnchantment;
+import org.oddlama.vane.core.enchantments.CustomEnchantment;
 import org.oddlama.vane.enchantments.Enchantments;
 
 @VaneEnchantment(name = "rake", max_level = 4, rarity = Rarity.COMMON, treasure = true, target = EnchantmentTarget.TOOL)

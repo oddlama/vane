@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import org.oddlama.vane.annotation.enchantment.Rarity;
 import org.oddlama.vane.annotation.enchantment.VaneEnchantment;
 import org.oddlama.vane.core.module.Context;
-import org.oddlama.vane.enchantments.CustomEnchantment;
+import org.oddlama.vane.core.enchantments.CustomEnchantment;
 import org.oddlama.vane.enchantments.Enchantments;
 
 @VaneEnchantment(name = "careless", rarity = Rarity.COMMON, treasure = true, target = EnchantmentTarget.TOOL)

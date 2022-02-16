@@ -24,7 +24,7 @@ import org.oddlama.vane.core.config.loot.LootTableList;
 import org.oddlama.vane.core.config.recipes.RecipeList;
 import org.oddlama.vane.core.config.recipes.ShapedRecipeDefinition;
 import org.oddlama.vane.core.module.Context;
-import org.oddlama.vane.enchantments.CustomEnchantment;
+import org.oddlama.vane.core.enchantments.CustomEnchantment;
 import org.oddlama.vane.enchantments.Enchantments;
 
 @VaneEnchantment(name = "take_off", max_level = 3, rarity = Rarity.UNCOMMON, treasure = true, allow_custom = true)

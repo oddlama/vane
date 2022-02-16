@@ -5,24 +5,22 @@ import static org.oddlama.vane.util.Util.read_json_from_url;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Properties;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import java.util.function.Consumer;
 import java.util.logging.Level;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.json.JSONException;
 import org.oddlama.vane.annotation.VaneModule;
 import org.oddlama.vane.annotation.config.ConfigBoolean;
 import org.oddlama.vane.annotation.lang.LangMessage;
+import org.oddlama.vane.core.enchantments.EnchantmentManager;
 import org.oddlama.vane.core.functional.Consumer1;
 import org.oddlama.vane.core.item.CustomItemRegistry;
 import org.oddlama.vane.core.item.CustomModelDataRegistry;
@@ -53,6 +51,7 @@ public class Core extends Module<Core> {
 		return INSTANCE;
 	}
 
+	public EnchantmentManager enchantment_manager;
 	private CustomModelDataRegistry model_data_registry;
 	private CustomItemRegistry item_registry;
 
@@ -114,6 +113,7 @@ public class Core extends Module<Core> {
 		register_permission(permission_command_catchall);
 
 		// Components
+		enchantment_manager = new EnchantmentManager(this);
 		new HeadLibrary(this);
 		new EntityMoveProcessor(this);
 		new AuthMultiplexer(this);
@@ -122,6 +122,7 @@ public class Core extends Module<Core> {
 		new DurabilityManager(this);
 		new org.oddlama.vane.core.commands.Vane(this);
 		new org.oddlama.vane.core.commands.CustomItem(this);
+		new org.oddlama.vane.core.commands.Enchant(this);
 		menu_manager = new MenuManager(this);
 		resource_pack_distributor = new ResourcePackDistributor(this);
 		new CommandHider(this);
@@ -243,13 +244,5 @@ public class Core extends Module<Core> {
 						.clickEvent(ClickEvent.openUrl("https://github.com/oddlama/vane/releases/latest"))
 				);
 		}
-	}
-
-	public final ArrayList<Consumer<ItemStack>> item_stack_enchantment_updaters = new ArrayList<>();
-	// Allows any plugin to update a freshly enchated item to
-	// add lore for custom enchantments without depending on
-	// vane-enchantments.
-	public void update_enchanted_item(final ItemStack item_stack) {
-		item_stack_enchantment_updaters.forEach(x -> x.accept(item_stack));
 	}
 }

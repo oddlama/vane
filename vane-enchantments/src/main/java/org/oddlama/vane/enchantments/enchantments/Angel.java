@@ -19,7 +19,7 @@ import org.oddlama.vane.core.config.loot.LootTableList;
 import org.oddlama.vane.core.config.recipes.RecipeList;
 import org.oddlama.vane.core.config.recipes.ShapedRecipeDefinition;
 import org.oddlama.vane.core.module.Context;
-import org.oddlama.vane.enchantments.CustomEnchantment;
+import org.oddlama.vane.core.enchantments.CustomEnchantment;
 import org.oddlama.vane.enchantments.Enchantments;
 
 @VaneEnchantment(name = "angel", max_level = 5, rarity = Rarity.VERY_RARE, treasure = true, allow_custom = true)
@@ -42,11 +42,7 @@ public class Angel extends CustomEnchantment<Enchantments> {
 
 	public Angel(Context<Enchantments> context) {
 		super(context);
-	}
-
-	@Override
-	public void register_superseding() {
-		supersedes(bukkit(Wings.class));
+		supersedes(namespaced_key("wings"));
 	}
 
 	@Override

@@ -1,4 +1,4 @@
-package org.oddlama.vane.enchantments;
+package org.oddlama.vane.core.enchantments;
 
 import static org.oddlama.vane.util.Nms.bukkit_enchantment;
 import static org.oddlama.vane.util.Nms.enchantment_slot_type;

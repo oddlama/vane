@@ -342,7 +342,7 @@ public class ItemUtil {
 		}
 
 		if (parts.length > 0) {
-			Core.instance().update_enchanted_item(item_stack);
+			Core.instance().enchantment_manager.update_enchanted_item(item_stack);
 		}
 		return item_stack;
 	}

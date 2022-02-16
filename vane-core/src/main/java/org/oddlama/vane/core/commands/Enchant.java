@@ -1,4 +1,4 @@
-package org.oddlama.vane.enchantments.commands;
+package org.oddlama.vane.core.commands;
 
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
@@ -7,13 +7,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.oddlama.vane.annotation.command.Name;
 import org.oddlama.vane.annotation.lang.LangMessage;
+import org.oddlama.vane.core.Core;
 import org.oddlama.vane.core.command.Command;
 import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Context;
-import org.oddlama.vane.enchantments.Enchantments;
 
 @Name("enchant")
-public class Enchant extends Command<Enchantments> {
+public class Enchant extends Command<Core> {
 
 	@LangMessage
 	private TranslatedMessage lang_level_too_low;
@@ -24,7 +24,7 @@ public class Enchant extends Command<Enchantments> {
 	@LangMessage
 	private TranslatedMessage lang_invalid_enchantment;
 
-	public Enchant(Context<Enchantments> context) {
+	public Enchant(Context<Core> context) {
 		super(context);
 		// Add help
 		params().fixed("help").ignore_case().exec(this::print_help);
@@ -99,7 +99,7 @@ public class Enchant extends Command<Enchantments> {
 				item_stack.addEnchantment(enchantment, level);
 			}
 
-			get_module().update_enchanted_item(item_stack);
+			get_module().enchantment_manager.update_enchanted_item(item_stack);
 		} catch (Exception e) {
 			lang_invalid_enchantment.send(
 				player,

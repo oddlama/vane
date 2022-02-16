@@ -14,7 +14,7 @@ import org.oddlama.vane.core.config.loot.LootTableList;
 import org.oddlama.vane.core.config.recipes.RecipeList;
 import org.oddlama.vane.core.config.recipes.ShapedRecipeDefinition;
 import org.oddlama.vane.core.module.Context;
-import org.oddlama.vane.enchantments.CustomEnchantment;
+import org.oddlama.vane.core.enchantments.CustomEnchantment;
 import org.oddlama.vane.enchantments.Enchantments;
 
 @VaneEnchantment(name = "unbreakable", rarity = Rarity.RARE, treasure = true, allow_custom = true)
@@ -22,10 +22,6 @@ public class Unbreakable extends CustomEnchantment<Enchantments> {
 
 	public Unbreakable(Context<Enchantments> context) {
 		super(context);
-	}
-
-	@Override
-	public void register_superseding() {
 		supersedes(Enchantment.DURABILITY);
 		supersedes(Enchantment.MENDING);
 	}

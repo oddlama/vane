@@ -83,7 +83,7 @@ public class ExistingItemConverter extends Listener<Core> {
 				contents[i].editMeta(meta -> {
 					meta.displayName(convert_to_custom_item.displayName());
 				});
-				get_module().update_enchanted_item(contents[i]);
+				get_module().enchantment_manager.update_enchanted_item(contents[i]);
 				get_module().log.info("Converted legacy item to " + convert_to_custom_item.key());
 				++changed;
 				continue;

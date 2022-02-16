@@ -40,7 +40,7 @@ public class VaneEnchantmentProcessor extends AbstractProcessor {
 	private void verify_extends_module(Element element) {
 		var t = (TypeElement) element;
 		while (true) {
-			if (t.asType().toString().startsWith("org.oddlama.vane.enchantments.CustomEnchantment<")) {
+			if (t.asType().toString().startsWith("org.oddlama.vane.core.enchantments.CustomEnchantment<")) {
 				return;
 			}
 			if (t.getSuperclass() instanceof DeclaredType) {
@@ -55,7 +55,7 @@ public class VaneEnchantmentProcessor extends AbstractProcessor {
 			.printMessage(
 				Diagnostic.Kind.ERROR,
 				element.asType().toString() +
-				": @VaneEnchantment must be applied to a class inheriting from org.oddlama.vane.enchantments.CustomEnchantment"
+				": @VaneEnchantment must be applied to a class inheriting from org.oddlama.vane.core.enchantments.CustomEnchantment"
 			);
 	}
 }

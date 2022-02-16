@@ -1,4 +1,4 @@
-package org.oddlama.vane.enchantments;
+package org.oddlama.vane.core.enchantments;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -38,7 +38,7 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 	private NativeEnchantmentWrapper native_wrapper;
 	private BukkitEnchantmentWrapper bukkit_wrapper;
 
-	private final Set<Enchantment> supersedes = new HashSet<>();
+	private final Set<NamespacedKey> supersedes = new HashSet<>();
 
 	public Recipes<T> recipes;
 	public LootTables<T> loot_tables;
@@ -77,20 +77,6 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 	}
 
 	/**
-	 * May be overridden to reigster superseding enchantments.
-	 */
-	public void register_superseding() {}
-
-	/**
-	 * Calls register_superseding() on all custom enchantment instances.
-	 * This allows them to add superseding enchantments while having access
-	 * to every other custom enchantment instance.
-	 */
-	public static void call_register_superseding() {
-		instances.values().forEach(CustomEnchantment::register_superseding);
-	}
-
-	/**
 	 * Returns the bukkit wrapper for the given custom enchantment.
 	 */
 	public static BukkitEnchantmentWrapper bukkit(Class<? extends CustomEnchantment<?>> cls) {
@@ -107,7 +93,7 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 	/**
 	 * Returns all enchantments that are superseded by this enchantment.
 	 */
-	public final Set<Enchantment> supersedes() {
+	public final Set<NamespacedKey> supersedes() {
 		return supersedes;
 	}
 
@@ -115,8 +101,16 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 	 * Adds a superseded enchantment. Superseded enchantments will be removed
 	 * from the item when this enchantment is added.
 	 */
-	public final void supersedes(Enchantment e) {
+	public final void supersedes(NamespacedKey e) {
 		supersedes.add(e);
+	}
+
+	/**
+	 * Adds a superseded enchantment. Superseded enchantments will be removed
+	 * from the item when this enchantment is added.
+	 */
+	public final void supersedes(Enchantment e) {
+		supersedes(e.getKey());
 	}
 
 	/**
