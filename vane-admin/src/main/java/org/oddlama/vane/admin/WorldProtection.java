@@ -42,7 +42,7 @@ public class WorldProtection extends Listener<Admin> {
 				"world_protection",
 				"Enable world protection. This will prevent anyone from modifying the world if they don't have the permission '" +
 				PERMISSION_NAME +
-				"'."
+				"'.", false
 			)
 		);
 		get_module().register_permission(permission);
