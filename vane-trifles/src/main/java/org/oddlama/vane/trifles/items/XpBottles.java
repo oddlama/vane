@@ -15,10 +15,10 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.oddlama.vane.annotation.config.ConfigInt;
-import org.oddlama.vane.annotation.item.VaneItemv2;
+import org.oddlama.vane.annotation.item.VaneItem;
 import org.oddlama.vane.core.Listener;
-import org.oddlama.vane.core.itemv2.CustomItem;
-import org.oddlama.vane.core.itemv2.CustomItemHelper;
+import org.oddlama.vane.core.item.CustomItem;
+import org.oddlama.vane.core.item.CustomItemHelper;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.trifles.Trifles;
 
@@ -40,19 +40,19 @@ public class XpBottles extends Listener<Trifles> {
 		}
 	}
 
-	@VaneItemv2(name = "small_xp_bottle", base = Material.HONEY_BOTTLE, model_data = 0x76000b, version = 1)
+	@VaneItem(name = "small_xp_bottle", base = Material.HONEY_BOTTLE, model_data = 0x76000b, version = 1)
 	public static class SmallXpBottle extends XpBottle {
 		public SmallXpBottle(Context<Trifles> context) { super(context); }
 		public int config_capacity_def() { return 10; }
 	}
 
-	@VaneItemv2(name = "medium_xp_bottle", base = Material.HONEY_BOTTLE, model_data = 0x76000c, version = 1)
+	@VaneItem(name = "medium_xp_bottle", base = Material.HONEY_BOTTLE, model_data = 0x76000c, version = 1)
 	public static class MediumXpBottle extends XpBottle {
 		public MediumXpBottle(Context<Trifles> context) { super(context); }
 		public int config_capacity_def() { return 20; }
 	}
 
-	@VaneItemv2(name = "large_xp_bottle", base = Material.HONEY_BOTTLE, model_data = 0x76000d, version = 1)
+	@VaneItem(name = "large_xp_bottle", base = Material.HONEY_BOTTLE, model_data = 0x76000d, version = 1)
 	public static class LargeXpBottle extends XpBottle {
 		public LargeXpBottle(Context<Trifles> context) { super(context); }
 		public int config_capacity_def() { return 30; }

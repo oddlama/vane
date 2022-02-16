@@ -30,16 +30,16 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.oddlama.vane.annotation.item.VaneItemv2;
+import org.oddlama.vane.annotation.item.VaneItem;
 import org.oddlama.vane.core.config.recipes.RecipeList;
 import org.oddlama.vane.core.config.recipes.ShapedRecipeDefinition;
-import org.oddlama.vane.core.itemv2.CustomItem;
-import org.oddlama.vane.core.itemv2.api.InhibitBehavior;
+import org.oddlama.vane.core.item.CustomItem;
+import org.oddlama.vane.core.item.api.InhibitBehavior;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.trifles.Trifles;
 import org.oddlama.vane.util.BlockUtil;
 
-@VaneItemv2(name = "file", base = Material.WARPED_FUNGUS_ON_A_STICK, durability = 4000, model_data = 0x760003, version = 1)
+@VaneItem(name = "file", base = Material.WARPED_FUNGUS_ON_A_STICK, durability = 4000, model_data = 0x760003, version = 1)
 public class File extends CustomItem<Trifles> {
 	public File(Context<Trifles> context) {
 		super(context);

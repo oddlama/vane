@@ -1,4 +1,4 @@
-package org.oddlama.vane.core.itemv2;
+package org.oddlama.vane.core.item;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.NamespacedKey;
@@ -7,7 +7,7 @@ import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.oddlama.vane.core.Core;
-import org.oddlama.vane.core.itemv2.api.CustomItem;
+import org.oddlama.vane.core.item.api.CustomItem;
 import org.oddlama.vane.util.Util;
 
 public class CustomItemHelper {

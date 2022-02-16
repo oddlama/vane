@@ -1,4 +1,4 @@
-package org.oddlama.vane.core.itemv2;
+package org.oddlama.vane.core.item;
 
 import static org.oddlama.vane.util.MaterialUtil.is_tillable;
 import static org.oddlama.vane.util.Nms.item_handle;
@@ -20,8 +20,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.SmithingRecipe;
 import org.oddlama.vane.core.Core;
 import org.oddlama.vane.core.Listener;
-import org.oddlama.vane.core.itemv2.api.CustomItem;
-import org.oddlama.vane.core.itemv2.api.InhibitBehavior;
+import org.oddlama.vane.core.item.api.CustomItem;
+import org.oddlama.vane.core.item.api.InhibitBehavior;
 import org.oddlama.vane.core.module.Context;
 
 // TODO recipe book click event

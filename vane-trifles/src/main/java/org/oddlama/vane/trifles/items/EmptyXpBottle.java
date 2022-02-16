@@ -17,16 +17,16 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.oddlama.vane.annotation.config.ConfigDouble;
-import org.oddlama.vane.annotation.item.VaneItemv2;
+import org.oddlama.vane.annotation.item.VaneItem;
 import org.oddlama.vane.core.config.recipes.RecipeList;
 import org.oddlama.vane.core.config.recipes.ShapelessRecipeDefinition;
-import org.oddlama.vane.core.itemv2.CustomItem;
-import org.oddlama.vane.core.itemv2.api.InhibitBehavior;
+import org.oddlama.vane.core.item.CustomItem;
+import org.oddlama.vane.core.item.api.InhibitBehavior;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.trifles.Trifles;
 import org.oddlama.vane.trifles.items.XpBottles.XpBottle;
 
-@VaneItemv2(name = "empty_xp_bottle", base = Material.GLASS_BOTTLE, model_data = 0x76000a, version = 1)
+@VaneItem(name = "empty_xp_bottle", base = Material.GLASS_BOTTLE, model_data = 0x76000a, version = 1)
 public class EmptyXpBottle extends CustomItem<Trifles> {
 	@ConfigDouble(def = 0.3, min = 0.0, max = 0.999, desc = "Percentage of experience lost when bottling. For 10% loss, bottling 30 levels will require 30 * (1 / (1 - 0.1)) = 33.33 levels")
 	public double config_loss_percentage;

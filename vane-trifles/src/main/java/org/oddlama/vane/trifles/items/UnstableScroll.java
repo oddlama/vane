@@ -10,11 +10,11 @@ import org.oddlama.vane.core.config.recipes.RecipeList;
 import org.oddlama.vane.core.config.recipes.ShapedRecipeDefinition;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.trifles.Trifles;
-import org.oddlama.vane.annotation.item.VaneItemv2;
+import org.oddlama.vane.annotation.item.VaneItem;
 import org.oddlama.vane.trifles.event.PlayerTeleportScrollEvent;
 import org.oddlama.vane.util.Util;
 
-@VaneItemv2(name = "unstable_scroll", base = Material.WARPED_FUNGUS_ON_A_STICK, durability = 25, model_data = 0x760001, version = 1)
+@VaneItem(name = "unstable_scroll", base = Material.WARPED_FUNGUS_ON_A_STICK, durability = 25, model_data = 0x760001, version = 1)
 public class UnstableScroll extends Scroll {
 	public static final NamespacedKey LAST_SCROLL_TELEPORT_LOCATION = Util.namespaced_key("vane", "last_scroll_teleport_location");
 

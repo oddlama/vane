@@ -1,4 +1,4 @@
-package org.oddlama.vane.core.itemv2;
+package org.oddlama.vane.core.item;
 
 import java.util.ArrayList;
 
@@ -13,7 +13,7 @@ import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.persistence.PersistentDataType;
 import org.oddlama.vane.core.Core;
 import org.oddlama.vane.core.Listener;
-import org.oddlama.vane.core.itemv2.api.CustomItem;
+import org.oddlama.vane.core.item.api.CustomItem;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.util.ItemUtil;
 import org.oddlama.vane.util.Util;

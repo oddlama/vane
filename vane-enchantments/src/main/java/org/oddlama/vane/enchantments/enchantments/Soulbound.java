@@ -73,7 +73,7 @@ public class Soulbound extends CustomEnchantment<Enchantments> {
 			.set_ingredient('c', Material.CHAIN)
 			.set_ingredient('q', Material.WRITABLE_BOOK)
 			.set_ingredient('o', Material.BONE)
-			.set_ingredient('r', "minecraft:enchanted_book{StoredEnchantments:[{id:\"minecraft:binding_curse\",lvl:1}]}")
+			.set_ingredient('r', "minecraft:enchanted_book#enchants{minecraft:binding_curse*1}")
 			.set_ingredient('g', Material.GHAST_TEAR)
 			.set_ingredient('t', Material.TOTEM_OF_UNDYING)
 			.set_ingredient('e', Material.ENDER_EYE)

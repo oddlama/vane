@@ -15,7 +15,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.oddlama.vane.annotation.item.VaneItemv2;
+import org.oddlama.vane.annotation.item.VaneItem;
 import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.config.recipes.RecipeList;
 import org.oddlama.vane.core.config.recipes.ShapedRecipeDefinition;
@@ -25,7 +25,7 @@ import org.oddlama.vane.trifles.Trifles;
 import org.oddlama.vane.util.BlockUtil;
 
 public class Sickles extends Listener<Trifles> {
-	@VaneItemv2(name = "wooden_sickle", base = Material.WOODEN_HOE, model_data = 0x760004, version = 1)
+	@VaneItem(name = "wooden_sickle", base = Material.WOODEN_HOE, model_data = 0x760004, version = 1)
 	public static class WoodenSickle extends Sickle {
 		public WoodenSickle(Context<Trifles> context) { super(context); }
 
@@ -43,7 +43,7 @@ public class Sickles extends Listener<Trifles> {
 		}
 	}
 
-	@VaneItemv2(name = "stone_sickle", base = Material.STONE_HOE, model_data = 0x760005, version = 1)
+	@VaneItem(name = "stone_sickle", base = Material.STONE_HOE, model_data = 0x760005, version = 1)
 	public static class StoneSickle extends Sickle {
 		public StoneSickle(Context<Trifles> context) { super(context); }
 
@@ -61,7 +61,7 @@ public class Sickles extends Listener<Trifles> {
 		}
 	}
 
-	@VaneItemv2(name = "iron_sickle", base = Material.IRON_HOE, model_data = 0x760006, version = 1)
+	@VaneItem(name = "iron_sickle", base = Material.IRON_HOE, model_data = 0x760006, version = 1)
 	public static class IronSickle extends Sickle {
 		public IronSickle(Context<Trifles> context) { super(context); }
 
@@ -79,7 +79,7 @@ public class Sickles extends Listener<Trifles> {
 		}
 	}
 
-	@VaneItemv2(name = "golden_sickle", base = Material.GOLDEN_HOE, model_data = 0x760007, version = 1)
+	@VaneItem(name = "golden_sickle", base = Material.GOLDEN_HOE, model_data = 0x760007, version = 1)
 	public static class GoldenSickle extends Sickle {
 		public GoldenSickle(Context<Trifles> context) { super(context); }
 
@@ -97,7 +97,7 @@ public class Sickles extends Listener<Trifles> {
 		}
 	}
 
-	@VaneItemv2(name = "diamond_sickle", base = Material.DIAMOND_HOE, model_data = 0x760008, version = 1)
+	@VaneItem(name = "diamond_sickle", base = Material.DIAMOND_HOE, model_data = 0x760008, version = 1)
 	public static class DiamondSickle extends Sickle {
 		public DiamondSickle(Context<Trifles> context) { super(context); }
 
@@ -115,7 +115,7 @@ public class Sickles extends Listener<Trifles> {
 		}
 	}
 
-	@VaneItemv2(name = "netherite_sickle", base = Material.NETHERITE_HOE, model_data = 0x760009, version = 1)
+	@VaneItem(name = "netherite_sickle", base = Material.NETHERITE_HOE, model_data = 0x760009, version = 1)
 	public static class NetheriteSickle extends Sickle {
 		public NetheriteSickle(Context<Trifles> context) { super(context); }
 

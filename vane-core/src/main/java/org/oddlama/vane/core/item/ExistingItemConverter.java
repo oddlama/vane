@@ -1,4 +1,4 @@
-package org.oddlama.vane.core.itemv2;
+package org.oddlama.vane.core.item;
 
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.EventHandler;
@@ -11,7 +11,7 @@ import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.oddlama.vane.core.Core;
 import org.oddlama.vane.core.Listener;
-import org.oddlama.vane.core.itemv2.api.CustomItem;
+import org.oddlama.vane.core.item.api.CustomItem;
 import org.oddlama.vane.core.module.Context;
 
 public class ExistingItemConverter extends Listener<Core> {

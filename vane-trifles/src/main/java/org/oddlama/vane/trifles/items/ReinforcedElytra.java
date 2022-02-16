@@ -10,17 +10,17 @@ import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.oddlama.vane.annotation.config.ConfigDouble;
-import org.oddlama.vane.annotation.item.VaneItemv2;
+import org.oddlama.vane.annotation.item.VaneItem;
 import org.oddlama.vane.core.config.recipes.RecipeList;
 import org.oddlama.vane.core.config.recipes.SmithingRecipeDefinition;
-import org.oddlama.vane.core.itemv2.CustomItem;
-import org.oddlama.vane.core.itemv2.api.InhibitBehavior;
+import org.oddlama.vane.core.item.CustomItem;
+import org.oddlama.vane.core.item.api.InhibitBehavior;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.resourcepack.ResourcePackGenerator;
 import org.oddlama.vane.trifles.Trifles;
 import org.oddlama.vane.util.Util;
 
-@VaneItemv2(name = "reinforced_elytra", base = Material.ELYTRA, durability = 864, model_data = 0x760002, version = 1)
+@VaneItem(name = "reinforced_elytra", base = Material.ELYTRA, durability = 864, model_data = 0x760002, version = 1)
 public class ReinforcedElytra extends CustomItem<Trifles> {
 	public static final UUID MODIFIER_UUID_REINFORCED_ELYTRA_DEFENSE = UUID.fromString("8d3a5a3c-06d4-40c5-be66-41ebf6a46435"); // Self-generated; Must always be the same!
 

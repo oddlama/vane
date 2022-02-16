@@ -139,11 +139,10 @@ public class ResourcePackGenerator {
 			// be sorted in the final json. otherwise minecraft will
 			// select wrong items.
 			entry.getValue().stream().sorted(Comparator.comparing(o -> {
-				final var jo = (JSONObject)o;
-				if (!jo.has("predicate")) {
+				if (!o.has("predicate")) {
 					return 0;
 				}
-				final var pred = jo.getJSONObject("predicate");
+				final var pred = o.getJSONObject("predicate");
 				if (!pred.has("custom_model_data")) {
 					return 0;
 				}

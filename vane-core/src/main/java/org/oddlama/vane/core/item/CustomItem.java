@@ -1,11 +1,11 @@
-package org.oddlama.vane.core.itemv2;
+package org.oddlama.vane.core.item;
 
 import java.io.IOException;
 
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.oddlama.vane.annotation.config.ConfigInt;
-import org.oddlama.vane.annotation.item.VaneItemv2;
+import org.oddlama.vane.annotation.item.VaneItem;
 import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.config.loot.LootTableList;
@@ -21,8 +21,8 @@ import org.oddlama.vane.util.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 
-public class CustomItem<T extends Module<T>> extends Listener<T> implements org.oddlama.vane.core.itemv2.api.CustomItem {
-	private VaneItemv2 annotation;
+public class CustomItem<T extends Module<T>> extends Listener<T> implements org.oddlama.vane.core.item.api.CustomItem {
+	private VaneItem annotation;
 	public NamespacedKey key;
 
 	public Recipes<T> recipes;
@@ -46,7 +46,7 @@ public class CustomItem<T extends Module<T>> extends Listener<T> implements org.
 
 		Class<?> cls = getClass();
 		while (this.annotation == null && cls != null) {
-			this.annotation = cls.getAnnotation(VaneItemv2.class);
+			this.annotation = cls.getAnnotation(VaneItem.class);
 			cls = cls.getSuperclass();
 		}
 		if (this.annotation == null) {

@@ -1,4 +1,4 @@
-package org.oddlama.vane.core.itemv2.api;
+package org.oddlama.vane.core.item.api;
 
 import java.io.IOException;
 import java.util.EnumSet;
@@ -8,7 +8,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.oddlama.vane.core.itemv2.CustomItemHelper;
+import org.oddlama.vane.core.item.CustomItemHelper;
 import org.oddlama.vane.core.resourcepack.ResourcePackGenerator;
 
 import net.kyori.adventure.text.Component;

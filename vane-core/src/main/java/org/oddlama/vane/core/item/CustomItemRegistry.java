@@ -1,4 +1,4 @@
-package org.oddlama.vane.core.itemv2;
+package org.oddlama.vane.core.item;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -8,10 +8,10 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import org.oddlama.vane.core.Core;
-import org.oddlama.vane.core.itemv2.api.CustomItem;
-import org.oddlama.vane.core.itemv2.api.CustomModelDataRegistry;
+import org.oddlama.vane.core.item.api.CustomItem;
+import org.oddlama.vane.core.item.api.CustomModelDataRegistry;
 
-public class CustomItemRegistry implements org.oddlama.vane.core.itemv2.api.CustomItemRegistry {
+public class CustomItemRegistry implements org.oddlama.vane.core.item.api.CustomItemRegistry {
 	private final HashMap<NamespacedKey, CustomItem> items = new HashMap<>();
 	private final HashSet<NamespacedKey> items_to_remove = new HashSet<>();
 	private CustomModelDataRegistry model_data_registry;

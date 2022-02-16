@@ -9,7 +9,7 @@ import org.bukkit.Material;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface VaneItemv2 {
+public @interface VaneItem {
 	String name();
 	Material base();
 	int model_data();

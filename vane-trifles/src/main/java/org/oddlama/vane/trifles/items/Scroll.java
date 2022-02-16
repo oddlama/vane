@@ -5,8 +5,8 @@ import java.util.EnumSet;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.oddlama.vane.annotation.config.ConfigInt;
-import org.oddlama.vane.core.itemv2.CustomItem;
-import org.oddlama.vane.core.itemv2.api.InhibitBehavior;
+import org.oddlama.vane.core.item.CustomItem;
+import org.oddlama.vane.core.item.api.InhibitBehavior;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.trifles.Trifles;
 

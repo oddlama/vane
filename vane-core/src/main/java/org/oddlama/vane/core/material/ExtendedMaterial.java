@@ -6,7 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.oddlama.vane.core.Core;
-import org.oddlama.vane.core.itemv2.api.CustomItem;
+import org.oddlama.vane.core.item.api.CustomItem;
 
 public class ExtendedMaterial {
 

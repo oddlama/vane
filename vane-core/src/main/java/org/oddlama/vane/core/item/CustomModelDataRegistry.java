@@ -1,11 +1,11 @@
-package org.oddlama.vane.core.itemv2;
+package org.oddlama.vane.core.item;
 
 import java.util.HashMap;
 
 import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.Nullable;
 
-public class CustomModelDataRegistry implements org.oddlama.vane.core.itemv2.api.CustomModelDataRegistry {
+public class CustomModelDataRegistry implements org.oddlama.vane.core.item.api.CustomModelDataRegistry {
 	private final HashMap<NamespacedKey, Range> reserved_ranges = new HashMap<>();
 
 	@Override

@@ -32,7 +32,7 @@ public class CustomItem extends Command<Core> {
 			.exec_player(this::give_custom_item);
 	}
 
-	private void give_custom_item(final Player player, final org.oddlama.vane.core.itemv2.api.CustomItem custom_item) {
+	private void give_custom_item(final Player player, final org.oddlama.vane.core.item.api.CustomItem custom_item) {
 		PlayerUtil.give_item(player, custom_item.newStack());
 	}
 }
