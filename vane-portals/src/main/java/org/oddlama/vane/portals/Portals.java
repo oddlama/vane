@@ -9,32 +9,47 @@ import static org.oddlama.vane.util.Nms.spawn;
 import static org.oddlama.vane.util.Util.ms_to_ticks;
 import static org.oddlama.vane.util.Util.namespaced_key;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.stream.Collectors;
+
+import com.google.common.collect.Sets;
+
 import net.kyori.adventure.text.Component;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
+
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
+import org.bukkit.event.world.WorldLoadEvent;
+import org.bukkit.event.world.WorldUnloadEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -211,10 +226,12 @@ public class Portals extends Module<Portals> {
 	// Primary storage for all portals (portal_id → portal)
 	@Persistent
 	private Map<UUID, Portal> storage_portals = new HashMap<>();
+	private Map<UUID, Portal> portals = new HashMap<>();
 
 	// Primary storage for all portal blocks (world_id → chunk key → block key → portal block)
 	@Persistent
 	private Map<UUID, Map<Long, Map<Long, PortalBlockLookup>>> storage_portal_blocks_in_chunk_in_world = new HashMap<>();
+	private Map<UUID, Map<Long, Map<Long, PortalBlockLookup>>> portal_blocks_in_chunk_in_world = new HashMap<>();
 
 	// All loaded styles
 	public Map<NamespacedKey, Style> styles = new HashMap<>();
@@ -255,6 +272,7 @@ public class Portals extends Module<Portals> {
 			);
 		get_module().register_permission(admin_permission);
 
+		// TODO legacy, remove in v2.
 		persistent_storage_manager.add_migration_to(
 			2,
 			"Portal visibility GROUP_INTERNAL was added. This is a no-op.",
@@ -376,7 +394,7 @@ public class Portals extends Module<Portals> {
 		}
 
 		// Remove portal from storage
-		if (storage_portals.remove(portal.id()) == null) {
+		if (portals.remove(portal.id()) == null) {
 			// Was already removed
 			return;
 		}
@@ -386,7 +404,7 @@ public class Portals extends Module<Portals> {
 
 		// Replace references to the portal everywhere
 		// and update all changed portal consoles.
-		for (final var other : storage_portals.values()) {
+		for (final var other : portals.values()) {
 			if (Objects.equals(other.target_id(), portal.id())) {
 				other.target_id(null);
 				other
@@ -398,11 +416,11 @@ public class Portals extends Module<Portals> {
 			}
 		}
 
-		mark_persistent_storage_dirty();
+		// Force update storage now, as a precaution.
+		update_persistent_data();
 
 		// Close and taint all related open menus
-		get_module()
-			.core.menu_manager.for_each_open((player, menu) -> {
+		get_module().core.menu_manager.for_each_open((player, menu) -> {
 				if (
 					menu.tag() instanceof PortalMenuTag &&
 					Objects.equals(((PortalMenuTag) menu.tag()).portal_id(), portal.id())
@@ -423,8 +441,11 @@ public class Portals extends Module<Portals> {
 	}
 
 	public void add_portal(final Portal portal) {
-		storage_portals.put(portal.id(), portal);
-		mark_persistent_storage_dirty();
+		portals.put(portal.id(), portal);
+		portal.invalidated = true;
+
+		// Force update storage now, as a precaution.
+		update_persistent_data();
 
 		// Create map marker
 		update_marker(portal);
@@ -437,36 +458,20 @@ public class Portals extends Module<Portals> {
 	}
 
 	public Collection<Portal> all_portals() {
-		return storage_portals.values();
+		return portals.values();
 	}
 
 	public void remove_portal_block(final PortalBlock portal_block) {
 		// Restore original block
 		switch (portal_block.type()) {
-			case ORIGIN:
-				portal_block.block().setType(constructor.config_material_origin);
-				break;
-			case CONSOLE:
-				portal_block.block().setType(constructor.config_material_console);
-				break;
-			case BOUNDARY_1:
-				portal_block.block().setType(constructor.config_material_boundary_1);
-				break;
-			case BOUNDARY_2:
-				portal_block.block().setType(constructor.config_material_boundary_2);
-				break;
-			case BOUNDARY_3:
-				portal_block.block().setType(constructor.config_material_boundary_3);
-				break;
-			case BOUNDARY_4:
-				portal_block.block().setType(constructor.config_material_boundary_4);
-				break;
-			case BOUNDARY_5:
-				portal_block.block().setType(constructor.config_material_boundary_5);
-				break;
-			case PORTAL:
-				portal_block.block().setType(constructor.config_material_portal_area);
-				break;
+			case ORIGIN:     portal_block.block().setType(constructor.config_material_origin); break;
+			case CONSOLE:    portal_block.block().setType(constructor.config_material_console); break;
+			case BOUNDARY_1: portal_block.block().setType(constructor.config_material_boundary_1); break;
+			case BOUNDARY_2: portal_block.block().setType(constructor.config_material_boundary_2); break;
+			case BOUNDARY_3: portal_block.block().setType(constructor.config_material_boundary_3); break;
+			case BOUNDARY_4: portal_block.block().setType(constructor.config_material_boundary_4); break;
+			case BOUNDARY_5: portal_block.block().setType(constructor.config_material_boundary_5); break;
+			case PORTAL:     portal_block.block().setType(constructor.config_material_portal_area); break;
 		}
 
 		// Remove console item if block is a console
@@ -476,7 +481,7 @@ public class Portals extends Module<Portals> {
 
 		// Remove from acceleration structure
 		final var block = portal_block.block();
-		final var portal_blocks_in_chunk = storage_portal_blocks_in_chunk_in_world.get(block.getWorld().getUID());
+		final var portal_blocks_in_chunk = portal_blocks_in_chunk_in_world.get(block.getWorld().getUID());
 		if (portal_blocks_in_chunk == null) {
 			return;
 		}
@@ -489,22 +494,11 @@ public class Portals extends Module<Portals> {
 
 		final var block_key = block.getBlockKey();
 		block_to_portal_block.remove(block_key);
-		mark_persistent_storage_dirty();
 
 		// Spawn effect if not portal area
 		if (portal_block.type() != PortalBlock.Type.PORTAL) {
-			portal_block
-				.block()
-				.getWorld()
-				.spawnParticle(
-					Particle.ENCHANTMENT_TABLE,
-					portal_block.block().getLocation().add(0.5, 0.5, 0.5),
-					50,
-					0.0,
-					0.0,
-					0.0,
-					1.0
-				);
+			portal_block.block().getWorld()
+				.spawnParticle(Particle.ENCHANTMENT_TABLE, portal_block.block().getLocation().add(0.5, 0.5, 0.5), 50, 0.0, 0.0, 0.0, 1.0);
 		}
 	}
 
@@ -519,14 +513,15 @@ public class Portals extends Module<Portals> {
 	public void add_portal_block(final Portal portal, final PortalBlock portal_block) {
 		// Add to portal
 		portal.blocks().add(portal_block);
+		portal.invalidated = true;
 
 		// Add to acceleration structure
 		final var block = portal_block.block();
 		final var world_id = block.getWorld().getUID();
-		var portal_blocks_in_chunk = storage_portal_blocks_in_chunk_in_world.get(world_id);
+		var portal_blocks_in_chunk = portal_blocks_in_chunk_in_world.get(world_id);
 		if (portal_blocks_in_chunk == null) {
 			portal_blocks_in_chunk = new HashMap<Long, Map<Long, PortalBlockLookup>>();
-			storage_portal_blocks_in_chunk_in_world.put(world_id, portal_blocks_in_chunk);
+			portal_blocks_in_chunk_in_world.put(world_id, portal_blocks_in_chunk);
 		}
 
 		final var chunk_key = block.getChunk().getChunkKey();
@@ -538,27 +533,16 @@ public class Portals extends Module<Portals> {
 
 		final var block_key = block.getBlockKey();
 		block_to_portal_block.put(block_key, portal_block.lookup(portal.id()));
-		mark_persistent_storage_dirty();
 
 		// Spawn effect if not portal area
 		if (portal_block.type() != PortalBlock.Type.PORTAL) {
-			portal_block
-				.block()
-				.getWorld()
-				.spawnParticle(
-					Particle.PORTAL,
-					portal_block.block().getLocation().add(0.5, 0.5, 0.5),
-					50,
-					0.0,
-					0.0,
-					0.0,
-					1.0
-				);
+			portal_block.block().getWorld()
+				.spawnParticle(Particle.PORTAL, portal_block.block().getLocation().add(0.5, 0.5, 0.5), 50, 0.0, 0.0, 0.0, 1.0);
 		}
 	}
 
 	public PortalBlockLookup portal_block_for(final Block block) {
-		final var portal_blocks_in_chunk = storage_portal_blocks_in_chunk_in_world.get(block.getWorld().getUID());
+		final var portal_blocks_in_chunk = portal_blocks_in_chunk_in_world.get(block.getWorld().getUID());
 		if (portal_blocks_in_chunk == null) {
 			return null;
 		}
@@ -576,11 +560,11 @@ public class Portals extends Module<Portals> {
 	}
 
 	public Portal portal_for(@NotNull final PortalBlockLookup block) {
-		return storage_portals.get(block.portal_id());
+		return portals.get(block.portal_id());
 	}
 
 	public Portal portal_for(@Nullable final UUID uuid) {
-		return storage_portals.get(uuid);
+		return portals.get(uuid);
 	}
 
 	public Portal portal_for(final Block block) {
@@ -593,7 +577,7 @@ public class Portals extends Module<Portals> {
 	}
 
 	public boolean is_portal_block(final Block block) {
-		final var portal_blocks_in_chunk = storage_portal_blocks_in_chunk_in_world.get(block.getWorld().getUID());
+		final var portal_blocks_in_chunk = portal_blocks_in_chunk_in_world.get(block.getWorld().getUID());
 		if (portal_blocks_in_chunk == null) {
 			return false;
 		}
@@ -712,7 +696,6 @@ public class Portals extends Module<Portals> {
 		if (dst.visibility().is_transient_target() && !src.target_locked()) {
 			src.target_id(null);
 			src.update_blocks(this);
-			mark_persistent_storage_dirty();
 		}
 
 		// Remove automatic disable task if existing
@@ -832,7 +815,7 @@ public class Portals extends Module<Portals> {
 			case PRIVATE:
 			case GROUP:
 				// Not visible from outside, these are transient.
-				for (final var other : storage_portals.values()) {
+				for (final var other : portals.values()) {
 					if (Objects.equals(other.target_id(), portal.id())) {
 						other.target_id(null);
 					}
@@ -840,7 +823,7 @@ public class Portals extends Module<Portals> {
 				break;
 			case GROUP_INTERNAL:
 				// Remove from portals outside of the group
-				for (final var other : storage_portals.values()) {
+				for (final var other : portals.values()) {
 					if (Objects.equals(other.target_id(), portal.id()) && !is_in_same_region_group(other, portal)) {
 						other.target_id(null);
 					}
@@ -885,7 +868,7 @@ public class Portals extends Module<Portals> {
 		final Chunk chunk,
 		final Consumer2<Block, PortalBlockLookup> consumer
 	) {
-		final var portal_blocks_in_chunk = storage_portal_blocks_in_chunk_in_world.get(chunk.getWorld().getUID());
+		final var portal_blocks_in_chunk = portal_blocks_in_chunk_in_world.get(chunk.getWorld().getUID());
 		if (portal_blocks_in_chunk == null) {
 			return;
 		}
@@ -926,6 +909,17 @@ public class Portals extends Module<Portals> {
 		);
 	}
 
+	@EventHandler
+	public void on_load_world(final WorldLoadEvent event) {
+		// TODO
+	}
+
+	@EventHandler
+	public void on_unload_world(final WorldUnloadEvent event) {
+		// Save data before unloading
+		update_persistent_data(event.getWorld());
+	}
+
 	public void update_marker(final Portal portal) {
 		dynmap_layer.update_marker(portal);
 		blue_map_layer.update_marker(portal);
@@ -934,6 +928,48 @@ public class Portals extends Module<Portals> {
 	public void remove_marker(final UUID portal_id) {
 		dynmap_layer.remove_marker(portal_id);
 		blue_map_layer.remove_marker(portal_id);
+	}
+
+	public void update_persistent_data() {
+		for (final var world : getServer().getWorlds()) {
+			update_persistent_data(world);
+		}
+	}
+
+	public static final NamespacedKey STORAGE_PORTALS = namespaced_key("vane_portals", "portals");
+
+	public void update_persistent_data(final World world) {
+		final var data = world.getPersistentDataContainer();
+		final var storage_portal_prefix = STORAGE_PORTALS.toString() + ".";
+
+		// Update invalidated portals
+		portals.values().stream()
+			.filter(x -> x.invalidated)
+			.forEach(portal -> {
+				System.out.println("update / add portal " + portal.id());
+				try {
+					final var json = PersistentSerializer.to_json(Portal.class, portal);
+					data.set(NamespacedKey.fromString(storage_portal_prefix + portal.id().toString()),
+						PersistentDataType.BYTE_ARRAY, json.toString().getBytes());
+				} catch (IOException e) {
+					log.log(Level.SEVERE, "error while serializing persistent data!", e);
+				}
+
+				portal.invalidated = false;
+			});
+
+		// Get all currently stored portals.
+		final var stored_portals = data.getKeys().stream()
+			.filter(key -> key.toString().startsWith(storage_portal_prefix))
+			.map(key -> StringUtils.removeStart(key.toString(), storage_portal_prefix))
+			.map(uuid -> UUID.fromString(uuid))
+			.collect(Collectors.toSet());
+
+		// Remove all portals that no longer exist
+		Sets.difference(stored_portals, portals.keySet()).forEach(id -> {
+			System.out.println("remove portal " + id + " from storage");
+			data.remove(NamespacedKey.fromString(storage_portal_prefix + id.toString()));
+		});
 	}
 
 	private class PortalDisableRunnable implements Runnable {
