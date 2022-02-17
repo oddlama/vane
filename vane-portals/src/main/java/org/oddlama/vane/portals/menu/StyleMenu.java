@@ -557,7 +557,6 @@ public class StyleMenu extends ModuleComponent<Portals> {
 
 				portal.style(style_container.style);
 				portal.update_blocks(get_module());
-				mark_persistent_storage_dirty();
 				previous.open(player);
 				return ClickResult.SUCCESS;
 			}

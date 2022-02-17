@@ -3,8 +3,6 @@ plugins {
 }
 
 dependencies {
-	implementation(project(":vane-portals"))
-	compileOnly(group = "com.github.MilkBowl", name = "VaultAPI", version = "1.7")
 	compileOnly(group = "org.json", name = "json", version = "20200518")
 }
 

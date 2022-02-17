@@ -27,7 +27,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.oddlama.vane.external.json.JSONObject;
+import org.json.JSONObject;
 import org.oddlama.vane.portals.Portals;
 import org.oddlama.vane.portals.event.PortalActivateEvent;
 import org.oddlama.vane.portals.event.PortalDeactivateEvent;

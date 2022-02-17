@@ -10,7 +10,7 @@ import java.util.Map;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.NotNull;
-import org.oddlama.vane.external.json.JSONObject;
+import org.json.JSONObject;
 
 public class Style {
 

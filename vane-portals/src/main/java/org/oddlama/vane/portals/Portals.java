@@ -11,23 +11,17 @@ import static org.oddlama.vane.util.Util.namespaced_key;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 import com.google.common.collect.Sets;
-
-import net.kyori.adventure.text.Component;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobCategory;
 
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Chunk;
@@ -44,15 +38,16 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.event.world.WorldLoadEvent;
+import org.bukkit.event.world.WorldSaveEvent;
 import org.bukkit.event.world.WorldUnloadEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
-import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.json.JSONObject;
 import org.oddlama.vane.annotation.VaneModule;
 import org.oddlama.vane.annotation.config.ConfigDouble;
 import org.oddlama.vane.annotation.config.ConfigExtendedMaterial;
@@ -77,6 +72,10 @@ import org.oddlama.vane.portals.portal.Portal;
 import org.oddlama.vane.portals.portal.PortalBlock;
 import org.oddlama.vane.portals.portal.PortalBlockLookup;
 import org.oddlama.vane.portals.portal.Style;
+
+import net.kyori.adventure.text.Component;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobCategory;
 
 @VaneModule(name = "portals", bstats = 8642, config_version = 3, lang_version = 5, storage_version = 2)
 public class Portals extends Module<Portals> {
@@ -288,6 +287,12 @@ public class Portals extends Module<Portals> {
 		);
 	}
 
+	private long block_key(final Block block) {
+		return (block.getY() << 8)
+			| ((block.getX() & 0xF) << 4)
+			| ((block.getZ() & 0xF));
+	}
+
 	@Override
 	public void on_config_change() {
 		styles.clear();
@@ -442,8 +447,8 @@ public class Portals extends Module<Portals> {
 		portals.put(portal.id(), portal);
 		portal.invalidated = true;
 
-		// Create map marker
-		update_marker(portal);
+		// Index the new portal
+		index_portal(portal);
 
 		// Play sound
 		portal
@@ -497,8 +502,7 @@ public class Portals extends Module<Portals> {
 			return;
 		}
 
-		final var block_key = block.getBlockKey();
-		block_to_portal_block.remove(block_key);
+		block_to_portal_block.remove(block_key(block));
 
 		// Spawn effect if not portal area
 		if (portal_block.type() != PortalBlock.Type.PORTAL) {
@@ -546,8 +550,7 @@ public class Portals extends Module<Portals> {
 			portal_blocks_in_chunk.put(chunk_key, block_to_portal_block);
 		}
 
-		final var block_key = block.getBlockKey();
-		block_to_portal_block.put(block_key, portal_block.lookup(portal.id()));
+		block_to_portal_block.put(block_key(block), portal_block.lookup(portal.id()));
 	}
 
 	public PortalBlockLookup portal_block_for(final Block block) {
@@ -562,18 +565,19 @@ public class Portals extends Module<Portals> {
 			return null;
 		}
 
-		// getBlockKey stores more information than the location in the chunk,
-		// but this is okay here as we only need a unique key for every block in the chunk.
-		final var block_key = block.getBlockKey();
-		return block_to_portal_block.get(block_key);
-	}
-
-	public Portal portal_for(@NotNull final PortalBlockLookup block) {
-		return portals.get(block.portal_id());
+		return block_to_portal_block.get(block_key(block));
 	}
 
 	public Portal portal_for(@Nullable final UUID uuid) {
-		return portals.get(uuid);
+		final var portal = portals.get(uuid);
+		if (!portal.spawn().isWorldLoaded()) {
+			return null;
+		}
+		return portal;
+	}
+
+	public Portal portal_for(@NotNull final PortalBlockLookup block) {
+		return portal_for(block.portal_id());
 	}
 
 	public Portal portal_for(final Block block) {
@@ -597,10 +601,7 @@ public class Portals extends Module<Portals> {
 			return false;
 		}
 
-		// getBlockKey stores more information than the location in the chunk,
-		// but this is okay here as we only need a unique key for every block in the chunk.
-		final var block_key = block.getBlockKey();
-		return block_to_portal_block.containsKey(block_key);
+		return block_to_portal_block.containsKey(block_key(block));
 	}
 
 	public Portal controlled_portal(final Block block) {
@@ -750,6 +751,8 @@ public class Portals extends Module<Portals> {
 			}
 		}
 
+		// Save data
+		update_persistent_data();
 		super.on_disable();
 	}
 
@@ -919,13 +922,18 @@ public class Portals extends Module<Portals> {
 	}
 
 	@EventHandler
+	public void on_save_world(final WorldSaveEvent event) {
+		update_persistent_data(event.getWorld());
+	}
+
+	@EventHandler
 	public void on_load_world(final WorldLoadEvent event) {
-		// TODO
+		load_persistent_data(event.getWorld());
 	}
 
 	@EventHandler
 	public void on_unload_world(final WorldUnloadEvent event) {
-		// Save data before unloading
+		// Save data before unloading a world (not called on stop)
 		update_persistent_data(event.getWorld());
 	}
 
@@ -952,34 +960,30 @@ public class Portals extends Module<Portals> {
 		final var storage_portal_prefix = STORAGE_PORTALS.toString() + ".";
 
 		// Load all currently stored portals.
-		final var stored_portals = data.getKeys().stream()
+		final var pdc_portals = data.getKeys().stream()
 			.filter(key -> key.toString().startsWith(storage_portal_prefix))
 			.map(key -> StringUtils.removeStart(key.toString(), storage_portal_prefix))
 			.map(uuid -> UUID.fromString(uuid))
 			.collect(Collectors.toSet());
 
-		// TODO ...........
-		System.out.println("portals stored correctly for world " + world.getUID() + ":");
-		stored_portals.forEach(System.out::println);
-		// TODO ...........
-
-		for (final var portal_id : stored_portals) {
+		for (final var portal_id : pdc_portals) {
 			final var json_bytes = data.get(NamespacedKey.fromString(storage_portal_prefix + portal_id.toString()),
 				PersistentDataType.BYTE_ARRAY);
 			try {
-				final var portal = PersistentSerializer.from_json(Portal.class, new String(json_bytes));
+				final var portal = PersistentSerializer.from_json(Portal.class, new JSONObject(new String(json_bytes)));
 				index_portal(portal);
-				System.out.println("loaded portal " + portal_id + " in world " + world.getUID());
 			} catch (IOException e) {
 				log.log(Level.SEVERE, "error while serializing persistent data!", e);
-				return;
+				continue;
 			}
 		}
+		log.log(Level.INFO, "Loaded " + pdc_portals.size() + " portals for world " + world.getName() + "(" + world.getUID() + ")");
 
 		// Convert portals from legacy storage
 		final Set<UUID> remove_from_legacy_storage = new HashSet<>();
+		int converted = 0;
 		for (final var portal : storage_portals.values()) {
-			if (portal.spawn_world() != world.getUID()) {
+			if (!portal.spawn_world().equals(world.getUID())) {
 				continue;
 			}
 
@@ -988,13 +992,21 @@ public class Portals extends Module<Portals> {
 				continue;
 			}
 
-			System.out.println("converting legacy portal " + portal.id() + " in world " + world.getUID());
 			index_portal(portal);
 			portal.invalidated = true;
+			converted += 1;
 		}
 
 		// Remove any portal that was successfully loaded from the new storage.
 		remove_from_legacy_storage.forEach(storage_portals::remove);
+		if (remove_from_legacy_storage.size() > 0) {
+			mark_persistent_storage_dirty();
+		}
+
+		// Save if we had any conversions
+		if (converted > 0) {
+			update_persistent_data();
+		}
 	}
 
 	public void update_persistent_data(final World world) {
@@ -1003,9 +1015,8 @@ public class Portals extends Module<Portals> {
 
 		// Update invalidated portals
 		portals.values().stream()
-			.filter(x -> x.invalidated && x.spawn_world() == world.getUID())
+			.filter(x -> x.invalidated && x.spawn_world().equals(world.getUID()))
 			.forEach(portal -> {
-				System.out.println("update / add portal " + portal.id() + " to world " + world.getUID());
 				try {
 					final var json = PersistentSerializer.to_json(Portal.class, portal);
 					data.set(NamespacedKey.fromString(storage_portal_prefix + portal.id().toString()),
@@ -1027,7 +1038,6 @@ public class Portals extends Module<Portals> {
 
 		// Remove all portals that no longer exist
 		Sets.difference(stored_portals, portals.keySet()).forEach(id -> {
-			System.out.println("remove portal " + id + " from storage");
 			data.remove(NamespacedKey.fromString(storage_portal_prefix + id.toString()));
 		});
 	}

@@ -8,7 +8,7 @@ import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
-import org.oddlama.vane.external.json.JSONObject;
+import org.json.JSONObject;
 import org.oddlama.vane.util.LazyBlock;
 
 public class RegionExtent {

@@ -277,7 +277,6 @@ public class ConsoleMenu extends ModuleComponent<Portals> {
 
 								// Update portal block to reflect new target on consoles
 								portal.update_blocks(get_module());
-								mark_persistent_storage_dirty();
 								return ClickResult.SUCCESS;
 							},
 							player2 -> {

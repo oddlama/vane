@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import org.jetbrains.annotations.NotNull;
-import org.oddlama.vane.external.json.JSONObject;
+import org.json.JSONObject;
 
 public class Role {
 

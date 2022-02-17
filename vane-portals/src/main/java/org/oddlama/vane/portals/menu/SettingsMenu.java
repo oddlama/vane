@@ -182,7 +182,6 @@ public class SettingsMenu extends ModuleComponent<Portals> {
 
 							// Update portal icons to reflect new name
 							get_module().update_portal_icon(portal);
-							mark_persistent_storage_dirty();
 
 							// Open new menu because of possibly changed title
 							get_module().menus.settings_menu.create(portal, player2, console).open(player2);
@@ -223,7 +222,6 @@ public class SettingsMenu extends ModuleComponent<Portals> {
 
 							portal.icon(item);
 							get_module().update_portal_icon(portal);
-							mark_persistent_storage_dirty();
 							menu.open(player2);
 							return ClickResult.SUCCESS;
 						},
@@ -270,7 +268,6 @@ public class SettingsMenu extends ModuleComponent<Portals> {
 				}
 
 				portal.exit_orientation_locked(!portal.exit_orientation_locked());
-				mark_persistent_storage_dirty();
 				menu.update();
 				return ClickResult.SUCCESS;
 			}
@@ -310,7 +307,6 @@ public class SettingsMenu extends ModuleComponent<Portals> {
 
 				portal.visibility(new_vis);
 				get_module().update_portal_visibility(portal);
-				mark_persistent_storage_dirty();
 				menu.update();
 				return ClickResult.SUCCESS;
 			}
@@ -348,7 +344,6 @@ public class SettingsMenu extends ModuleComponent<Portals> {
 				}
 
 				portal.target_locked(!portal.target_locked());
-				mark_persistent_storage_dirty();
 				menu.update();
 				return ClickResult.SUCCESS;
 			}
