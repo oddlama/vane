@@ -228,9 +228,7 @@ public class Portals extends Module<Portals> {
 	private Map<UUID, Portal> storage_portals = new HashMap<>();
 	private Map<UUID, Portal> portals = new HashMap<>();
 
-	// Primary storage for all portal blocks (world_id → chunk key → block key → portal block)
-	@Persistent
-	private Map<UUID, Map<Long, Map<Long, PortalBlockLookup>>> storage_portal_blocks_in_chunk_in_world = new HashMap<>();
+	// Index for all portal blocks (world_id → chunk key → block key → portal block)
 	private Map<UUID, Map<Long, Map<Long, PortalBlockLookup>>> portal_blocks_in_chunk_in_world = new HashMap<>();
 
 	// All loaded styles
@@ -440,12 +438,9 @@ public class Portals extends Module<Portals> {
 			.playSound(portal.spawn(), Sound.ENTITY_ENDER_EYE_DEATH, SoundCategory.BLOCKS, 1.0f, 1.0f);
 	}
 
-	public void add_portal(final Portal portal) {
+	public void add_new_portal(final Portal portal) {
 		portals.put(portal.id(), portal);
 		portal.invalidated = true;
-
-		// Force update storage now, as a precaution.
-		update_persistent_data();
 
 		// Create map marker
 		update_marker(portal);
@@ -457,8 +452,18 @@ public class Portals extends Module<Portals> {
 			.playSound(portal.spawn(), Sound.ENTITY_ENDER_EYE_DEATH, SoundCategory.BLOCKS, 1.0f, 2.0f);
 	}
 
-	public Collection<Portal> all_portals() {
-		return portals.values();
+	public void index_portal(final Portal portal) {
+		portals.put(portal.id(), portal);
+		portal.blocks().forEach(b -> index_portal_block(portal, b));
+
+		// Create map marker
+		update_marker(portal);
+	}
+
+	public Collection<Portal> all_available_portals() {
+		return portals.values().stream()
+			.filter(p -> p.spawn().isWorldLoaded())
+			.collect(Collectors.toList());
 	}
 
 	public void remove_portal_block(final PortalBlock portal_block) {
@@ -510,11 +515,21 @@ public class Portals extends Module<Portals> {
 		remove_portal_block(portal_block);
 	}
 
-	public void add_portal_block(final Portal portal, final PortalBlock portal_block) {
+	public void add_new_portal_block(final Portal portal, final PortalBlock portal_block) {
 		// Add to portal
 		portal.blocks().add(portal_block);
 		portal.invalidated = true;
 
+		index_portal_block(portal, portal_block);
+
+		// Spawn effect if not portal area
+		if (portal_block.type() != PortalBlock.Type.PORTAL) {
+			portal_block.block().getWorld()
+				.spawnParticle(Particle.PORTAL, portal_block.block().getLocation().add(0.5, 0.5, 0.5), 50, 0.0, 0.0, 0.0, 1.0);
+		}
+	}
+
+	public void index_portal_block(final Portal portal, final PortalBlock portal_block) {
 		// Add to acceleration structure
 		final var block = portal_block.block();
 		final var world_id = block.getWorld().getUID();
@@ -533,12 +548,6 @@ public class Portals extends Module<Portals> {
 
 		final var block_key = block.getBlockKey();
 		block_to_portal_block.put(block_key, portal_block.lookup(portal.id()));
-
-		// Spawn effect if not portal area
-		if (portal_block.type() != PortalBlock.Type.PORTAL) {
-			portal_block.block().getWorld()
-				.spawnParticle(Particle.PORTAL, portal_block.block().getLocation().add(0.5, 0.5, 0.5), 50, 0.0, 0.0, 0.0, 1.0);
-		}
 	}
 
 	public PortalBlockLookup portal_block_for(final Block block) {
@@ -938,21 +947,72 @@ public class Portals extends Module<Portals> {
 
 	public static final NamespacedKey STORAGE_PORTALS = namespaced_key("vane_portals", "portals");
 
+	public void load_persistent_data(final World world) {
+		final var data = world.getPersistentDataContainer();
+		final var storage_portal_prefix = STORAGE_PORTALS.toString() + ".";
+
+		// Load all currently stored portals.
+		final var stored_portals = data.getKeys().stream()
+			.filter(key -> key.toString().startsWith(storage_portal_prefix))
+			.map(key -> StringUtils.removeStart(key.toString(), storage_portal_prefix))
+			.map(uuid -> UUID.fromString(uuid))
+			.collect(Collectors.toSet());
+
+		// TODO ...........
+		System.out.println("portals stored correctly for world " + world.getUID() + ":");
+		stored_portals.forEach(System.out::println);
+		// TODO ...........
+
+		for (final var portal_id : stored_portals) {
+			final var json_bytes = data.get(NamespacedKey.fromString(storage_portal_prefix + portal_id.toString()),
+				PersistentDataType.BYTE_ARRAY);
+			try {
+				final var portal = PersistentSerializer.from_json(Portal.class, new String(json_bytes));
+				index_portal(portal);
+				System.out.println("loaded portal " + portal_id + " in world " + world.getUID());
+			} catch (IOException e) {
+				log.log(Level.SEVERE, "error while serializing persistent data!", e);
+				return;
+			}
+		}
+
+		// Convert portals from legacy storage
+		final Set<UUID> remove_from_legacy_storage = new HashSet<>();
+		for (final var portal : storage_portals.values()) {
+			if (portal.spawn_world() != world.getUID()) {
+				continue;
+			}
+
+			if (portals.containsKey(portal.id())) {
+				remove_from_legacy_storage.add(portal.id());
+				continue;
+			}
+
+			System.out.println("converting legacy portal " + portal.id() + " in world " + world.getUID());
+			index_portal(portal);
+			portal.invalidated = true;
+		}
+
+		// Remove any portal that was successfully loaded from the new storage.
+		remove_from_legacy_storage.forEach(storage_portals::remove);
+	}
+
 	public void update_persistent_data(final World world) {
 		final var data = world.getPersistentDataContainer();
 		final var storage_portal_prefix = STORAGE_PORTALS.toString() + ".";
 
 		// Update invalidated portals
 		portals.values().stream()
-			.filter(x -> x.invalidated)
+			.filter(x -> x.invalidated && x.spawn_world() == world.getUID())
 			.forEach(portal -> {
-				System.out.println("update / add portal " + portal.id());
+				System.out.println("update / add portal " + portal.id() + " to world " + world.getUID());
 				try {
 					final var json = PersistentSerializer.to_json(Portal.class, portal);
 					data.set(NamespacedKey.fromString(storage_portal_prefix + portal.id().toString()),
 						PersistentDataType.BYTE_ARRAY, json.toString().getBytes());
 				} catch (IOException e) {
 					log.log(Level.SEVERE, "error while serializing persistent data!", e);
+					return;
 				}
 
 				portal.invalidated = false;

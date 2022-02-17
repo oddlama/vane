@@ -145,7 +145,7 @@ public class PortalBlueMapLayerDelegate {
 
 					// Update all existing
 					final var id_set = new HashSet<String>();
-					for (final var portal : get_module().all_portals()) {
+					for (final var portal : get_module().all_available_portals()) {
 						final var bm_world = api.getWorld(portal.spawn().getWorld().getUID());
 						if (bm_world.isPresent()) {
 							for (final var map : bm_world.get().getMaps()) {

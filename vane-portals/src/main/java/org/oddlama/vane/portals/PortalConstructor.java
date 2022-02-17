@@ -264,7 +264,7 @@ public class PortalConstructor extends Listener<Portals> {
 		}
 
 		// Add portal block
-		get_module().add_portal_block(portal, create_portal_block(console));
+		get_module().add_new_portal_block(portal, create_portal_block(console));
 
 		// Update block blocks
 		portal.update_blocks(get_module());
@@ -437,16 +437,19 @@ public class PortalConstructor extends Listener<Portals> {
 
 					// Construct portal
 					final var portal = new Portal(p.getUniqueId(), orientation, boundary.spawn());
-					get_module().add_portal(portal);
 					portal.name(name);
+					get_module().add_new_portal(portal);
 
 					// Add portal blocks
 					for (final var block : boundary.all_blocks()) {
-						get_module().add_portal_block(portal, create_portal_block(block));
+						get_module().add_new_portal_block(portal, create_portal_block(block));
 					}
 
 					// Link console
 					link_console(p, console, portal);
+
+					// Force update storage now, as a precaution.
+					get_module().update_persistent_data();
 
 					// Update portal blocks once
 					portal.update_blocks(get_module());

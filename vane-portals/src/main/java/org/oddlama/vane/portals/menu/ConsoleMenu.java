@@ -217,7 +217,7 @@ public class ConsoleMenu extends ModuleComponent<Portals> {
 				} else {
 					menu.close(player);
 					final var all_portals = get_module()
-						.all_portals()
+						.all_available_portals()
 						.stream()
 						.filter(p -> {
 							switch (p.visibility()) {

@@ -136,6 +136,10 @@ public class Portal {
 		return orientation;
 	}
 
+	public UUID spawn_world() {
+		return spawn.world_id();
+	}
+
 	public Location spawn() {
 		return spawn.location().clone();
 	}

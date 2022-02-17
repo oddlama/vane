@@ -151,7 +151,7 @@ public class PortalDynmapLayerDelegate {
 
 		// Update all existing
 		final var id_set = new HashSet<String>();
-		for (final var portal : get_module().all_portals()) {
+		for (final var portal : get_module().all_available_portals()) {
 			id_set.add(id_for(portal));
 			update_marker(portal);
 		}
