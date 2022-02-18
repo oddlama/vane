@@ -55,6 +55,9 @@ public class Core extends Module<Core> {
 	private CustomModelDataRegistry model_data_registry;
 	private CustomItemRegistry item_registry;
 
+	@ConfigBoolean(def = true, desc = "Allow loading of player heads in relevant menus. Disabling this will show all player heads using the Steve skin, which may perform better on low-performance servers and clients.")
+	public boolean config_player_heads_in_menus;
+
 	@LangMessage
 	public TranslatedMessage lang_command_not_a_player;
 

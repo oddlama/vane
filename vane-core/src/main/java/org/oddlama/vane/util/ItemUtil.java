@@ -252,11 +252,11 @@ public class ItemUtil {
 		}
 	}
 
-	public static ItemStack skull_for_player(final OfflinePlayer player) {
+	public static ItemStack skull_for_player(final OfflinePlayer player, final boolean is_for_menu) {
 		final var item = new ItemStack(Material.PLAYER_HEAD);
-		final var meta = (SkullMeta) item.getItemMeta();
-		meta.setOwningPlayer(player);
-		item.setItemMeta(meta);
+		if (!is_for_menu || Core.instance().config_player_heads_in_menus) {
+			item.editMeta(SkullMeta.class, meta -> meta.setOwningPlayer(player));
+		}
 		return item;
 	}
 

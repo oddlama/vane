@@ -287,7 +287,7 @@ public class RoleMenu extends ModuleComponent<Regions> {
 						lang_select_assign_player_title.str(),
 						lang_filter_players_title.str(),
 						all_players,
-						p -> item_select_player.alternative(ItemUtil.skull_for_player(p), "§a§l" + p.getName()),
+						p -> item_select_player.alternative(ItemUtil.skull_for_player(p, true), "§a§l" + p.getName()),
 						filter,
 						(player2, m, p) -> {
 							all_players.remove(p);
@@ -334,7 +334,7 @@ public class RoleMenu extends ModuleComponent<Regions> {
 						lang_select_remove_player_title.str(),
 						lang_filter_players_title.str(),
 						all_players,
-						p -> item_select_player.alternative(ItemUtil.skull_for_player(p), "§a§l" + p.getName()),
+						p -> item_select_player.alternative(ItemUtil.skull_for_player(p, true), "§a§l" + p.getName()),
 						filter,
 						(player2, m, p) -> {
 							all_players.remove(p);
