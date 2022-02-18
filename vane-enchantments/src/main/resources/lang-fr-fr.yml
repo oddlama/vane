@@ -39,9 +39,6 @@ item_enchanted_ancient_tome_of_the_gods:
 enchantment_angel:
   name: "Ange"
 
-enchantment_careless:
-  name: "Débroussaillage"
-
 enchantment_grappling_hook:
   name: "Grappin"
 

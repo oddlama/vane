@@ -9,7 +9,6 @@ public class Enchantments extends Module<Enchantments> {
 		new org.oddlama.vane.enchantments.items.Tomes(this);
 
 		new org.oddlama.vane.enchantments.enchantments.Angel(this);
-		new org.oddlama.vane.enchantments.enchantments.Careless(this);
 		new org.oddlama.vane.enchantments.enchantments.GrapplingHook(this);
 		new org.oddlama.vane.enchantments.enchantments.HellBent(this);
 		new org.oddlama.vane.enchantments.enchantments.Leafchopper(this);

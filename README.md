@@ -81,7 +81,6 @@ If you don't want a certain feature, simply disable it.
 - [x] *Wings*: Occasionally boost your elytra mid-air by sneaking.
 - [x] *Soulbound*: Soulbound items will be kept on death. Also prevents yeeting your best tool out of existence.
 - [x] *Rake*: Tilling farmland again will till the nearest block around it. Use repeatedly on farmland to create a circle.
-- [x] *Careless*: Tilling long grass will remove it and till the block below. Useful in combination with *Rake* to automatically till grass with long grass on top.
 - [x] *Seeding*: Right click your crops to plant crops of the same type around them. Use multiple times to create a circle.
 - [x] *Takeoff*: Double jump to start gliding with your elytra and receive a small boost.
 - [x] *Hell Bent*: Don't hurt your head when flying into a wall. Again.

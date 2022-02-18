@@ -64,8 +64,7 @@ public class Rake extends CustomEnchantment<Enchantments> {
 		}
 
 		// Get tillable block
-		final var careless = item.getEnchantmentLevel(CustomEnchantment.bukkit(Careless.class)) > 0;
-		final var tillable = next_tillable_block(event.getClickedBlock(), level, careless);
+		final var tillable = next_tillable_block(event.getClickedBlock(), level, true);
 		if (tillable == null) {
 			return;
 		}

@@ -153,8 +153,7 @@ public class BlockUtil {
 				// If the block above is air, we can till the block.
 				return block;
 			} else if (careless && is_replaceable_grass(above.getType())) {
-				// If the item has the careless enchantment, and the block above
-				// is replaceable grass, delete it and return the block.
+				// If the block above is replaceable grass, delete it and return the block.
 				above.setType(Material.AIR);
 				return block;
 			}

@@ -46,10 +46,6 @@ enchantment_angel:
   # The display name of this enchantment. Will be packed into a resource pack.
   name: "Ангел"
 
-enchantment_careless:
-  # The display name of this enchantment. Will be packed into a resource pack.
-  name: "Неосторожность"
-
 enchantment_grappling_hook:
   # The display name of this enchantment. Will be packed into a resource pack.
   name: "Абардажный крюк"

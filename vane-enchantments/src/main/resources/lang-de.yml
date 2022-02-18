@@ -45,9 +45,6 @@ item_enchanted_ancient_tome_of_the_gods:
 enchantment_angel:
   name: "Engel"
 
-enchantment_careless:
-  name: "Achtlos"
-
 enchantment_grappling_hook:
   name: "Greifhaken"
 
