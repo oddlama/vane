@@ -29,5 +29,6 @@ public class Trifles extends Module<Trifles> {
 		new org.oddlama.vane.trifles.items.Sickles(this);
 		new org.oddlama.vane.trifles.items.EmptyXpBottle(this);
 		xp_bottles = new org.oddlama.vane.trifles.items.XpBottles(this);
+		new org.oddlama.vane.trifles.items.Trowel(this);
 	}
 }

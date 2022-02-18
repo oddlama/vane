@@ -56,7 +56,7 @@ public class File extends CustomItem<Trifles> {
 
 	@Override
 	public EnumSet<InhibitBehavior> inhibitedBehaviors() {
-		return EnumSet.of(InhibitBehavior.USE_IN_VANILLA_RECIPE, InhibitBehavior.TEMPT);
+		return EnumSet.of(InhibitBehavior.USE_IN_VANILLA_RECIPE, InhibitBehavior.TEMPT, InhibitBehavior.USE_OFFHAND);
 	}
 
 	private BlockFace next_facing(Set<BlockFace> allowed_faces, BlockFace face) {

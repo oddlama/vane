@@ -8,6 +8,7 @@ import org.bukkit.craftbukkit.v1_18_R1.inventory.CraftItemStack;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
@@ -17,6 +18,7 @@ import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.inventory.PrepareSmithingEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.SmithingRecipe;
 import org.oddlama.vane.core.Core;
 import org.oddlama.vane.core.Listener;
@@ -178,6 +180,21 @@ public class VanillaFunctionalityInhibitor extends Listener<Core> {
 		final var item = ((Item)entity).getItemStack();
 		if (inhibit(get_module().item_registry().get(item), InhibitBehavior.ITEM_BURN)) {
 			event.setCancelled(true);
+		}
+	}
+
+	// Deny off-hand usage if main hand is a custom item that inhibits off-hand usage.
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void on_player_right_click(final PlayerInteractEvent event) {
+		if (event.getHand() != EquipmentSlot.OFF_HAND) {
+			return;
+		}
+
+		final var player = event.getPlayer();
+		final var main_item = player.getEquipment().getItem(EquipmentSlot.HAND);
+		final var main_custom_item = get_module().item_registry().get(main_item);
+		if (main_custom_item.inhibitedBehaviors().contains(InhibitBehavior.USE_OFFHAND)) {
+			event.setUseItemInHand(Event.Result.DENY);
 		}
 	}
 }

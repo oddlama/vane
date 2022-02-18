@@ -5,6 +5,7 @@ import static org.oddlama.vane.util.PlayerUtil.remove_one_item_from_hand;
 import static org.oddlama.vane.util.Util.exp_for_level;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 
 import org.bukkit.Material;
@@ -19,6 +20,7 @@ import org.oddlama.vane.annotation.item.VaneItem;
 import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.item.CustomItem;
 import org.oddlama.vane.core.item.CustomItemHelper;
+import org.oddlama.vane.core.item.api.InhibitBehavior;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.trifles.Trifles;
 
@@ -37,6 +39,11 @@ public class XpBottles extends Listener<Trifles> {
 		@Override
 		public Component displayName() {
 			return super.displayName().color(NamedTextColor.YELLOW);
+		}
+
+		@Override
+		public EnumSet<InhibitBehavior> inhibitedBehaviors() {
+			return EnumSet.of(InhibitBehavior.USE_IN_VANILLA_RECIPE, InhibitBehavior.USE_OFFHAND);
 		}
 	}
 

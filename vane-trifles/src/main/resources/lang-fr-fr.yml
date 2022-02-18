@@ -40,6 +40,9 @@ item_reinforced_elytra:
 item_file:
   name: "Lime"
 
+item_trowel:
+  name: "Truelle"
+
 sickles:
   item_wooden_sickle:
     name: "Faucille en bois"

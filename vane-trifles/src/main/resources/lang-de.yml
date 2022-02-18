@@ -40,6 +40,9 @@ item_reinforced_elytra:
 item_file:
   name: "Feile"
 
+item_trowel:
+  name: "Kelle"
+
 sickles:
   item_wooden_sickle:
     name: "Holzsichel"

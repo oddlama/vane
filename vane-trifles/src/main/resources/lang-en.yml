@@ -46,6 +46,10 @@ item_file:
   # The display name of this item variant.
   name: "File"
 
+item_trowel:
+  # The display name of this item variant.
+  name: "Trowel"
+
 sickles:
   item_wooden_sickle:
     # The display name of this item variant.

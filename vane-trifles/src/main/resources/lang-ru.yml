@@ -40,6 +40,10 @@ item_reinforced_elytra:
 item_file:
   name: "Напильник"
 
+# FIXME: translation missing
+item_trowel:
+  name: "Trowel"
+
 sickles:
   item_wooden_sickle:
     name: "Деревянный Серп"

@@ -15,4 +15,6 @@ public enum InhibitBehavior {
 	ITEM_BURN,
 	/** Prevents hoes from creating farmland. */
 	HOE_TILL,
+	/** Prevents players from using the offhand item when holding this in the main hand. */
+	USE_OFFHAND,
 }
