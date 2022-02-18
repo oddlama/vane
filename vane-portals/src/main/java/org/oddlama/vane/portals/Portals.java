@@ -450,7 +450,6 @@ public class Portals extends Module<Portals> {
 	}
 
 	public void add_new_portal(final Portal portal) {
-		portals.put(portal.id(), portal);
 		portal.invalidated = true;
 
 		// Index the new portal
@@ -1006,6 +1005,19 @@ public class Portals extends Module<Portals> {
 		remove_from_legacy_storage.forEach(storage_portals::remove);
 		if (remove_from_legacy_storage.size() > 0) {
 			mark_persistent_storage_dirty();
+		}
+
+		// Update all consoles in the loaded world. These
+		// might be missed by chunk load event as it runs asynchronous
+		// to this function, and it can't be synchronized without annoying the server.
+		for (final var chunk : world.getLoadedChunks()) {
+			for_each_console_block_in_chunk(
+				chunk,
+				(block, console) -> {
+					final var portal = portal_for(console.portal_id());
+					update_console_item(portal, block);
+				}
+			);
 		}
 
 		// Save if we had any conversions

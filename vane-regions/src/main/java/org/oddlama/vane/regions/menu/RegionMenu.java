@@ -124,7 +124,6 @@ public class RegionMenu extends ModuleComponent<Regions> {
 						region.name(),
 						(player2, name) -> {
 							region.name(name);
-							mark_persistent_storage_dirty();
 
 							// Update map marker
 							get_module().update_marker(region);

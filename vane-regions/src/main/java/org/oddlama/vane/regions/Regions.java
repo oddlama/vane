@@ -797,4 +797,11 @@ public class Regions extends Module<Regions> {
 			data.remove(NamespacedKey.fromString(storage_region_prefix + id.toString()));
 		});
 	}
+
+	@Override
+	public void on_disable() {
+		// Save data
+		update_persistent_data();
+		super.on_disable();
+	}
 }
