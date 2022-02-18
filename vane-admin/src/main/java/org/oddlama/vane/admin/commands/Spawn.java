@@ -19,7 +19,7 @@ public class Spawn extends Command<Admin> {
 	}
 
 	private void tp_spawn(Player player) {
-		if (get_module().storage_spawn_location != null) {
+		if (get_module().storage_spawn_location != null && get_module().storage_spawn_location.location().isWorldLoaded()) {
 			player.teleport(get_module().storage_spawn_location.location(), TeleportCause.COMMAND);
 		}
 	}
