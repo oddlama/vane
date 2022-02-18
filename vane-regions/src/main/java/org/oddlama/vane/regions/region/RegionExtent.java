@@ -4,6 +4,8 @@ import static org.oddlama.vane.core.persistent.PersistentSerializer.from_json;
 import static org.oddlama.vane.core.persistent.PersistentSerializer.to_json;
 
 import java.io.IOException;
+import java.util.UUID;
+
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -66,6 +68,10 @@ public class RegionExtent {
 						Math.max(from.getZ(), to.getZ())
 					)
 			);
+	}
+
+	public UUID world() {
+		return min.world_id();
 	}
 
 	public Block min() {

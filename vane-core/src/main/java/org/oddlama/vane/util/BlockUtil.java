@@ -134,13 +134,6 @@ public class BlockUtil {
 		return block.getRelative(relative.getBlockX(), relative.getBlockY(), relative.getBlockZ());
 	}
 
-	public static Block unpack(final Chunk chunk, long block_key) {
-		int x = (int) ((block_key << 37) >> 37) & 0x0f;
-		int y = (int) (block_key >>> 54) & 0xff;
-		int z = (int) ((block_key << 10) >> 37) & 0x0f;
-		return chunk.getBlock(x, y, z);
-	}
-
 	public static Block next_tillable_block(final Block root_block, int radius, boolean careless) {
 		for (final var relative_pos : NEAREST_RELATIVE_BLOCKS_FOR_RADIUS.get(radius)) {
 			final var block = relative(root_block, relative_pos);

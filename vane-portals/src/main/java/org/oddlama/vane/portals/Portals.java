@@ -1,7 +1,6 @@
 package org.oddlama.vane.portals;
 
 import static org.oddlama.vane.util.BlockUtil.adjacent_blocks_3d;
-import static org.oddlama.vane.util.BlockUtil.unpack;
 import static org.oddlama.vane.util.ItemUtil.name_item;
 import static org.oddlama.vane.util.Nms.item_handle;
 import static org.oddlama.vane.util.Nms.register_entity;
@@ -287,10 +286,17 @@ public class Portals extends Module<Portals> {
 		);
 	}
 
-	private long block_key(final Block block) {
+	private static long block_key(final Block block) {
 		return (block.getY() << 8)
 			| ((block.getX() & 0xF) << 4)
 			| ((block.getZ() & 0xF));
+	}
+
+	private static Block unpack_block_key(final Chunk chunk, long block_key) {
+		int y = (int)(block_key >> 8);
+		int x = (int)((block_key >> 4) & 0xF);
+		int z = (int)(block_key & 0xF);
+		return chunk.getBlock(x, y, z);
 	}
 
 	@Override
@@ -570,7 +576,7 @@ public class Portals extends Module<Portals> {
 
 	public Portal portal_for(@Nullable final UUID uuid) {
 		final var portal = portals.get(uuid);
-		if (!portal.spawn().isWorldLoaded()) {
+		if (portal == null || !portal.spawn().isWorldLoaded()) {
 			return null;
 		}
 		return portal;
@@ -893,8 +899,7 @@ public class Portals extends Module<Portals> {
 
 		block_to_portal_block.forEach((k, v) -> {
 			if (v.type() == PortalBlock.Type.CONSOLE) {
-				final var block = unpack(chunk, k);
-				consumer.apply(block, v);
+				consumer.apply(unpack_block_key(chunk, k), v);
 			}
 		});
 	}
@@ -921,6 +926,16 @@ public class Portals extends Module<Portals> {
 		);
 	}
 
+	public void update_marker(final Portal portal) {
+		dynmap_layer.update_marker(portal);
+		blue_map_layer.update_marker(portal);
+	}
+
+	public void remove_marker(final UUID portal_id) {
+		dynmap_layer.remove_marker(portal_id);
+		blue_map_layer.remove_marker(portal_id);
+	}
+
 	@EventHandler
 	public void on_save_world(final WorldSaveEvent event) {
 		update_persistent_data(event.getWorld());
@@ -935,16 +950,6 @@ public class Portals extends Module<Portals> {
 	public void on_unload_world(final WorldUnloadEvent event) {
 		// Save data before unloading a world (not called on stop)
 		update_persistent_data(event.getWorld());
-	}
-
-	public void update_marker(final Portal portal) {
-		dynmap_layer.update_marker(portal);
-		blue_map_layer.update_marker(portal);
-	}
-
-	public void remove_marker(final UUID portal_id) {
-		dynmap_layer.remove_marker(portal_id);
-		blue_map_layer.remove_marker(portal_id);
 	}
 
 	public void update_persistent_data() {

@@ -50,6 +50,8 @@ public class Region {
 	private RegionExtent extent;
 	private UUID region_group;
 
+	public boolean invalidated = true;
+
 	public UUID id() {
 		return id;
 	}
@@ -60,6 +62,7 @@ public class Region {
 
 	public void name(final String name) {
 		this.name = name;
+		this.invalidated = true;
 	}
 
 	public UUID owner() {
@@ -79,6 +82,7 @@ public class Region {
 	public void region_group_id(final UUID region_group) {
 		this.region_group = region_group;
 		this.cached_region_group = null;
+		this.invalidated = true;
 	}
 
 	public RegionGroup region_group(final Regions regions) {

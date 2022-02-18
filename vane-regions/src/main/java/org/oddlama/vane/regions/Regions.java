@@ -2,18 +2,27 @@ package org.oddlama.vane.regions;
 
 import static org.oddlama.vane.util.PlayerUtil.take_items;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
-import net.minecraft.core.BlockPos;
+import java.util.logging.Level;
+import java.util.stream.Collectors;
+
+import com.google.common.collect.Sets;
+
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Chunk;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.Particle.DustOptions;
 import org.bukkit.World;
@@ -22,10 +31,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.world.WorldLoadEvent;
+import org.bukkit.event.world.WorldSaveEvent;
+import org.bukkit.event.world.WorldUnloadEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
+import org.json.JSONObject;
 import org.oddlama.vane.annotation.VaneModule;
 import org.oddlama.vane.annotation.config.ConfigBoolean;
 import org.oddlama.vane.annotation.config.ConfigDouble;
@@ -47,6 +61,9 @@ import org.oddlama.vane.regions.region.RegionGroup;
 import org.oddlama.vane.regions.region.RegionSelection;
 import org.oddlama.vane.regions.region.Role;
 import org.oddlama.vane.regions.region.RoleSetting;
+import org.oddlama.vane.util.Util;
+
+import net.minecraft.core.BlockPos;
 
 @VaneModule(name = "regions", bstats = 8643, config_version = 4, lang_version = 3, storage_version = 1)
 public class Regions extends Module<Regions> {
@@ -133,6 +150,7 @@ public class Regions extends Module<Regions> {
 	// Primary storage for all regions (region.id → region)
 	@Persistent
 	private Map<UUID, Region> storage_regions = new HashMap<>();
+	private Map<UUID, Region> regions = new HashMap<>();
 
 	// Primary storage for all region_groups (region_group.id → region_group)
 	@Persistent
@@ -185,10 +203,6 @@ public class Regions extends Module<Regions> {
 	}
 
 	public void delayed_on_enable() {
-		for (var region : storage_regions.values()) {
-			index_add_region(region);
-		}
-
 		if (config_economy_as_currency) {
 			if (!setup_economy()) {
 				config_economy_as_currency = false;
@@ -245,7 +259,9 @@ public class Regions extends Module<Regions> {
 	}
 
 	public Collection<Region> all_regions() {
-		return storage_regions.values();
+		return regions.values().stream()
+			.filter(p -> getServer().getWorld(p.extent().world()) != null)
+			.collect(Collectors.toList());
 	}
 
 	public Collection<RegionGroup> all_region_groups() {
@@ -400,7 +416,7 @@ public class Regions extends Module<Regions> {
 		}
 
 		// If any region uses this group, we can't remove it.
-		if (storage_regions.values().stream().anyMatch(r -> r.region_group_id().equals(group.id()))) {
+		if (regions.values().stream().anyMatch(r -> r.region_group_id().equals(group.id()))) {
 			return false;
 		}
 
@@ -473,7 +489,7 @@ public class Regions extends Module<Regions> {
 
 		final var def_region_group = get_or_create_default_region_group(player);
 		final var region = new Region(name, player.getUniqueId(), selection.extent(), def_region_group.id());
-		add_region(region);
+		add_new_region(region);
 		cancel_region_selection(player);
 		return true;
 	}
@@ -486,25 +502,21 @@ public class Regions extends Module<Regions> {
 		}
 	}
 
-	public void add_region(final Region region) {
-		storage_regions.put(region.id(), region);
-		mark_persistent_storage_dirty();
-
+	public void add_new_region(final Region region) {
+		region.invalidated = true;
 		// Index region for fast lookup
-		index_add_region(region);
-
-		// Create map marker
-		update_marker(region);
+		index_region(region);
 	}
 
 	public void remove_region(final Region region) {
 		// Remove region from storage
-		if (storage_regions.remove(region.id()) == null) {
+		if (regions.remove(region.id()) == null) {
 			// Was already removed
 			return;
 		}
 
-		mark_persistent_storage_dirty();
+		// Force update storage now, as a precaution.
+		update_persistent_data();
 
 		// Close and taint all related open menus
 		get_module()
@@ -535,7 +547,9 @@ public class Regions extends Module<Regions> {
 		blue_map_layer.remove_marker(region_id);
 	}
 
-	private void index_add_region(final Region region) {
+	private void index_region(final Region region) {
+		regions.put(region.id(), region);
+
 		// Adds the region to the lookup map at all intersecting chunks
 		final var min = region.extent().min();
 		final var max = region.extent().max();
@@ -562,6 +576,9 @@ public class Regions extends Module<Regions> {
 				possible_regions.add(region);
 			}
 		}
+
+		// Create map marker
+		update_marker(region);
 	}
 
 	private void index_remove_region(final Region region) {
@@ -668,5 +685,116 @@ public class Regions extends Module<Regions> {
 	public void on_player_quit(final PlayerQuitEvent event) {
 		// Remove pending selection
 		cancel_region_selection(event.getPlayer());
+	}
+
+	@EventHandler
+	public void on_save_world(final WorldSaveEvent event) {
+		update_persistent_data(event.getWorld());
+	}
+
+	@EventHandler
+	public void on_load_world(final WorldLoadEvent event) {
+		load_persistent_data(event.getWorld());
+	}
+
+	@EventHandler
+	public void on_unload_world(final WorldUnloadEvent event) {
+		// Save data before unloading a world (not called on stop)
+		update_persistent_data(event.getWorld());
+	}
+
+	public static final NamespacedKey STORAGE_REGIONS = Util.namespaced_key("vane_regions", "regions");
+
+	public void load_persistent_data(final World world) {
+		final var data = world.getPersistentDataContainer();
+		final var storage_region_prefix = STORAGE_REGIONS.toString() + ".";
+
+		// Load all currently stored regions.
+		final var pdc_regions = data.getKeys().stream()
+			.filter(key -> key.toString().startsWith(storage_region_prefix))
+			.map(key -> StringUtils.removeStart(key.toString(), storage_region_prefix))
+			.map(uuid -> UUID.fromString(uuid))
+			.collect(Collectors.toSet());
+
+		for (final var region_id : pdc_regions) {
+			final var json_bytes = data.get(NamespacedKey.fromString(storage_region_prefix + region_id.toString()),
+				PersistentDataType.BYTE_ARRAY);
+			try {
+				final var region = PersistentSerializer.from_json(Region.class, new JSONObject(new String(json_bytes)));
+				index_region(region);
+			} catch (IOException e) {
+				log.log(Level.SEVERE, "error while serializing persistent data!", e);
+				continue;
+			}
+		}
+		log.log(Level.INFO, "Loaded " + pdc_regions.size() + " regions for world " + world.getName() + "(" + world.getUID() + ")");
+
+		// Convert regions from legacy storage
+		final Set<UUID> remove_from_legacy_storage = new HashSet<>();
+		int converted = 0;
+		for (final var region : storage_regions.values()) {
+			if (!region.extent().world().equals(world.getUID())) {
+				continue;
+			}
+
+			if (regions.containsKey(region.id())) {
+				remove_from_legacy_storage.add(region.id());
+				continue;
+			}
+
+			index_region(region);
+			region.invalidated = true;
+			converted += 1;
+		}
+
+		// Remove any region that was successfully loaded from the new storage.
+		remove_from_legacy_storage.forEach(storage_regions::remove);
+		if (remove_from_legacy_storage.size() > 0) {
+			mark_persistent_storage_dirty();
+		}
+
+		// Save if we had any conversions
+		if (converted > 0) {
+			update_persistent_data();
+		}
+	}
+
+	public void update_persistent_data() {
+		for (final var world : getServer().getWorlds()) {
+			update_persistent_data(world);
+		}
+	}
+
+	public void update_persistent_data(final World world) {
+		final var data = world.getPersistentDataContainer();
+		final var storage_region_prefix = STORAGE_REGIONS.toString() + ".";
+
+		// Update invalidated regions
+		regions.values().stream()
+			.filter(x -> x.invalidated && x.extent().world().equals(world.getUID()))
+			.forEach(region -> {
+				try {
+					final var json = PersistentSerializer.to_json(Region.class, region);
+					data.set(NamespacedKey.fromString(storage_region_prefix + region.id().toString()),
+						PersistentDataType.BYTE_ARRAY, json.toString().getBytes());
+				} catch (IOException e) {
+					log.log(Level.SEVERE, "error while serializing persistent data!", e);
+					return;
+				}
+
+				region.invalidated = false;
+			});
+
+		// Get all currently stored regions.
+		final var stored_regions = data.getKeys().stream()
+			.filter(key -> key.toString().startsWith(storage_region_prefix))
+			.map(key -> StringUtils.removeStart(key.toString(), storage_region_prefix))
+			.map(uuid -> UUID.fromString(uuid))
+			.collect(Collectors.toSet());
+
+		// Remove all regions that no longer exist
+		Sets.difference(stored_regions, regions.keySet()).forEach(id -> {
+			data.remove(NamespacedKey.fromString(storage_region_prefix + id.toString()));
+		});
 	}
 }
