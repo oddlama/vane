@@ -13,12 +13,16 @@ import org.bukkit.block.Skull;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.oddlama.vane.annotation.config.ConfigBoolean;
 import org.oddlama.vane.core.Core;
 import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.material.HeadMaterialLibrary;
 import org.oddlama.vane.core.module.Context;
 
 public class HeadLibrary extends Listener<Core> {
+	@ConfigBoolean(def = true, desc = "When a player head is broken by a player that exists in /heads, drop the correctly named item as seen in /heads. You can disable this if it interferes with similarily textured heads from other plugins.")
+	public boolean config_player_head_drops;
+
 	public HeadLibrary(Context<Core> context) {
 		super(context);
 
@@ -30,12 +34,15 @@ public class HeadLibrary extends Listener<Core> {
 			get_module().log.log(Level.SEVERE, "Error while loading head_library.json! Shutting down.", e);
 			get_module().getServer().shutdown();
 		}
-		// TODO
 	}
 
 	// Restore correct head item from head library when broken
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void on_block_break(final BlockBreakEvent event) {
+		if (!config_player_head_drops) {
+			return;
+		}
+
 		final var block = event.getBlock();
 		if (block.getType() != Material.PLAYER_HEAD && block.getType() != Material.PLAYER_WALL_HEAD) {
 			return;
