@@ -30,6 +30,7 @@ public class HeadLibrary extends Listener<Core> {
 			get_module().log.log(Level.SEVERE, "Error while loading head_library.json! Shutting down.", e);
 			get_module().getServer().shutdown();
 		}
+		// TODO
 	}
 
 	// Restore correct head item from head library when broken

@@ -6,6 +6,7 @@ import static org.oddlama.vane.util.Util.read_json_from_url;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.IdentityHashMap;
 import java.util.Properties;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -42,6 +43,10 @@ import org.oddlama.vane.core.resourcepack.ResourcePackGenerator;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.minecraft.core.Holder;
+import net.minecraft.core.MappedRegistry;
+import net.minecraft.core.Registry;
+import net.minecraft.world.entity.EntityType;
 
 @VaneModule(name = "core", bstats = 8637, config_version = 6, lang_version = 4, storage_version = 1)
 public class Core extends Module<Core> {
@@ -115,6 +120,9 @@ public class Core extends Module<Core> {
 		// Create global command catch-all permission
 		register_permission(permission_command_catchall);
 
+		// Allow registration of new enchantments and entities
+		unfreeze_registries();
+
 		// Components
 		enchantment_manager = new EnchantmentManager(this);
 		new HeadLibrary(this);
@@ -141,6 +149,34 @@ public class Core extends Module<Core> {
 			// OPs will get a message about this when they join.
 			schedule_task_timer(this::check_for_update, 1l, ms_to_ticks(2 * 60l * 60l * 1000l));
 		}
+
+		schedule_next_tick(() -> {
+			freeze_registries();
+		});
+	}
+
+	private void unfreeze_registries() {
+		// NOTE: MAGIC VALUES! Intruduced for 1.18.2 when registries were frozen. Sad, no workaround at the time.
+		try {
+			// Make relevant fields accessible
+			final var frozen = MappedRegistry.class.getDeclaredField("bL" /* frozen */);
+			frozen.setAccessible(true);
+			final var intrusive_holder_cache = MappedRegistry.class.getDeclaredField("bN" /* intrusiveHolderCache */);
+			intrusive_holder_cache.setAccessible(true);
+
+			// Unfreeze required registries
+			frozen.set(Registry.ENTITY_TYPE, false);
+			frozen.set(Registry.ENCHANTMENT, false);
+			intrusive_holder_cache.set(Registry.ENTITY_TYPE, new IdentityHashMap<EntityType<?>, Holder.Reference<EntityType<?>>>());
+			intrusive_holder_cache.set(Registry.ENCHANTMENT, new IdentityHashMap<EntityType<?>, Holder.Reference<EntityType<?>>>());
+		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void freeze_registries() {
+		Registry.ENTITY_TYPE.freeze();
+		Registry.ENCHANTMENT.freeze();
 	}
 
 	@Override
