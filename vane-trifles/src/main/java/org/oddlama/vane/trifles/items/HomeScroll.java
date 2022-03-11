@@ -22,8 +22,7 @@ public class HomeScroll extends Scroll {
 	public RecipeList default_recipes() {
 		return RecipeList.of(new ShapedRecipeDefinition("generic")
 			.shape("pip", "cbe", "plp")
-			// TODO BADDDDDDDDDDDDDDDDDDDDDDDDDDDD TEST REMOVEEEEEEEEEEEEEEEEE
-			.set_ingredient('b', "minecraft:stick{Enchantments:[{id:knockback,lvl:1000}]}")
+			.set_ingredient('b', Material.NETHERITE_SCRAP)
 			.set_ingredient('p', Material.MAP)
 			.set_ingredient('i', Tag.BEDS)
 			.set_ingredient('c', Material.COMPASS)
