@@ -193,7 +193,7 @@ public class VanillaFunctionalityInhibitor extends Listener<Core> {
 		final var player = event.getPlayer();
 		final var main_item = player.getEquipment().getItem(EquipmentSlot.HAND);
 		final var main_custom_item = get_module().item_registry().get(main_item);
-		if (main_custom_item.inhibitedBehaviors().contains(InhibitBehavior.USE_OFFHAND)) {
+		if (main_custom_item != null && main_custom_item.inhibitedBehaviors().contains(InhibitBehavior.USE_OFFHAND)) {
 			event.setUseItemInHand(Event.Result.DENY);
 		}
 	}
