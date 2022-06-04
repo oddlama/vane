@@ -9,12 +9,14 @@ import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.player.PlayerToggleSneakEvent; //shouldnt need this
+import org.bukkit.event.player.PlayerToggleSneakEvent; 
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.loot.LootTables;
 import org.bukkit.util.Vector;
 import org.bukkit.WeatherType;
+import org.bukkit.enchantments.EnchantmentTarget;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.oddlama.vane.annotation.config.ConfigDoubleList;
 import org.oddlama.vane.annotation.config.ConfigIntList;
@@ -28,52 +30,66 @@ import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.enchantments.CustomEnchantment;
 import org.oddlama.vane.enchantments.Enchantments;
 
-@VaneEnchantment(name = "lightning", max_level = max_level = 1, rarity = rarity.RARE, treasure = true, allow_custom = true)
-public class Ligtning extends CustomEnchantment<Enchantments> {
+import com.destroystokyo.paper.MaterialTags;
 
-    // @ConfigIntList(
-    //     def = ,
-    //     min = 0,
-    //     desc = "Boost cooldown in milliseconds for each enchantment level."
-    // )
+@VaneEnchantment(
+    name = "lightning", 
+    max_level = 1, 
+    rarity = Rarity.RARE, 
+    treasure = true, 
+    target = EnchantmentTarget.WEAPON
+)
+public class Lightning extends CustomEnchantment<Enchantments> {
 
-    public Ligtning(Context<Enchantments> context) {
+    public Lightning(Context<Enchantments> context) {
         super(context);
     }
 
     @Override
     public RecipeList default_recipes() {
-        return RecipeList.of(new SHapedRecipeDefinition("generic")
+        return RecipeList.of(new ShapedRecipeDefinition("generic")
         .shape("r r","utu"," b ")
         .set_ingredient('r', Material.LIGHTNING_ROD)
-        .set_ingredient('t', "vane_enchantments:anchient_tome_of_knowledge")
+        .set_ingredient('t', "vane_enchantments:ancient_tome_of_knowledge")
         .set_ingredient('b', Material.BEACON)
         .set_ingredient('u', Material.TOTEM_OF_UNDYING)
-        .result(on("vane_enchantments:enchanted_ancient_tome_of_knowledge"));
-        )
+        .result(on("vane_enchantments:enchanted_ancient_tome_of_knowledge")));
     }
-
-    //Do I need loot tables? Does that add it to the wild?
 
     @Override
     public boolean can_enchant(@NotNull ItemStack item_stack) {
-        return item_stack.getType() == Material.sword;
+        return MaterialTags.SWORDS.isTagged(item_stack);
     }
 
-    @EventHandler(priority = EvnetPriority.NORMAL, ignoreCancelled = true)
-    //on damage event
-    public void EntityDamageByEntityEvent(Entity damager, Entity damagee, EntityDamageEvent.DamageCause cause, double damage) {
-    //test if it is storming or raining
-        if(WeatherType.valueOf() == "DOWNFALL"){
-            
-            //test if the user can see the sky
-            if(damager.getLocation().getBlockY() < damager.getWorld().getHighestBlockYAt(damager.getLocation())){
-
-                //Add a cooldown? 5s-10s?
-
-                //hit the target with lightning
-                world.strikeLightning(damagee.getLocation);
-            }
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    public void on_sword_attack(final EntityDamageByEntityEvent event) {
+        
+        // Only strike when entity is a player
+        if(!(event.getDamager() instanceof Player)){
+            return;
         }
+        Player damager = (Player) event.getDamager();
+        final var damagee = event.getEntity();
+        final var world = damager.getWorld();
+        final var item = damager.getEquipment().getItemInMainHand();
+        final var level = item.getEnchantmentLevel(this.bukkit());
+
+        // Get enchantment level
+        if (level == 0){
+            return;
+        }
+
+        // Get Storm status
+        if(!world.hasStorm()){
+            return;
+        }
+
+        // Test if sky is visible
+        if(damager.getLocation().getBlockY() < world.getHighestBlockYAt(damager.getLocation()))  {
+            return;
+        }
+
+        // Execute
+        world.strikeLightning(damagee.getLocation());
     }    
 }
