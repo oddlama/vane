@@ -42,7 +42,7 @@ public class Lightning extends CustomEnchantment<Enchantments> {
         max = 20,
         desc = "Damage modifier for the lightning enchant"
     )
-    private double config_lightning_damage;
+    private int config_lightning_damage;
 
     @Override
     public RecipeList default_recipes() {
@@ -90,6 +90,6 @@ public class Lightning extends CustomEnchantment<Enchantments> {
 
         // Execute
         world.strikeLightning(damagee.getLocation());
-        event.setDamage(event.getDamage() + 4);
+        event.setDamage(event.getDamage() + config_lightning_damage);
     }    
 }
