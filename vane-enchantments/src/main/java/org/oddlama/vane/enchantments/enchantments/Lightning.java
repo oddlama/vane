@@ -71,7 +71,7 @@ public class Lightning extends CustomEnchantment<Enchantments> {
         }
 
         // Test if sky is visible
-        if(damager.getLocation().getBlockY() < world.getHighestBlockYAt(damager.getLocation()))  {
+        if(damagee.getLocation().getBlockY() < world.getHighestBlockYAt(damagee.getLocation()))  {
             return;
         }
 
