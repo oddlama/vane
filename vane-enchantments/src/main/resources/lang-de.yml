@@ -54,6 +54,10 @@ enchantment_hell_bent:
 enchantment_leafchopper:
   name: "Blattschneider"
 
+# FIXME: translation missing
+enchantment_lightning:
+  name: "Blitzschlag"
+
 enchantment_rake:
   name: "Harke"
 

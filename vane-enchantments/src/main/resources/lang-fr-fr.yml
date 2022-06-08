@@ -48,6 +48,10 @@ enchantment_hell_bent:
 enchantment_leafchopper:
   name: "Taille-feuille"
 
+# FIXME: translation missing
+enchantment_lightning:
+  name: "Lightning"
+
 enchantment_rake:
   name: "Rateau"
 
