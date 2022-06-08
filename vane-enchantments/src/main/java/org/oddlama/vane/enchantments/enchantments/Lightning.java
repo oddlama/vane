@@ -31,6 +31,10 @@ public class Lightning extends CustomEnchantment<Enchantments> {
         super(context);
     }
 
+    public boolean config_enabled_def() {
+        return false;
+    }
+
     @Override
     public RecipeList default_recipes() {
         return RecipeList.of(new ShapedRecipeDefinition("generic")
