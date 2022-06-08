@@ -8,6 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.oddlama.vane.annotation.config.ConfigInt;
 import org.oddlama.vane.annotation.enchantment.Rarity;
 import org.oddlama.vane.annotation.enchantment.VaneEnchantment;
 import org.oddlama.vane.core.config.recipes.RecipeList;
@@ -34,6 +35,14 @@ public class Lightning extends CustomEnchantment<Enchantments> {
     public boolean config_enabled_def() {
         return false;
     }
+
+    @ConfigInt(
+        def = 4,
+        min = 0,
+        max = 20,
+        desc = "Damage modifier for the lightning enchant"
+    )
+    private double config_lightning_damage;
 
     @Override
     public RecipeList default_recipes() {
