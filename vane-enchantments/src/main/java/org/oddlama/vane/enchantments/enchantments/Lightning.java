@@ -1,29 +1,15 @@
 package org.oddlama.vane.enchantments.enchantments;
 
-import static org.oddlama.vane.util.ItemUtil.damage_item;
-
-import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
-
 import org.bukkit.Material;
-import org.bukkit.Particle;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.player.PlayerToggleSneakEvent; 
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.loot.LootTables;
-import org.bukkit.util.Vector;
-import org.bukkit.WeatherType;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.oddlama.vane.annotation.config.ConfigDoubleList;
-import org.oddlama.vane.annotation.config.ConfigIntList;
 import org.oddlama.vane.annotation.enchantment.Rarity;
 import org.oddlama.vane.annotation.enchantment.VaneEnchantment;
-import org.oddlama.vane.core.config.loot.LootDefinition;
-import org.oddlama.vane.core.config.loot.LootTableList;
 import org.oddlama.vane.core.config.recipes.RecipeList;
 import org.oddlama.vane.core.config.recipes.ShapedRecipeDefinition;
 import org.oddlama.vane.core.module.Context;
