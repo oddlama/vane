@@ -58,6 +58,11 @@ enchantment_leafchopper:
   # The display name of this enchantment. Will be packed into a resource pack.
   name: "Листорез"
 
+# FIXME: translation missing
+enchantment_lightning:
+  # The display name of this enchantment. Will be packed into a resource pack.  
+  name: "Lightning"
+
 enchantment_rake:
   # The display name of this enchantment. Will be packed into a resource pack.
   name: "Грабли"
