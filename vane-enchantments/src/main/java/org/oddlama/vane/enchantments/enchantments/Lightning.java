@@ -89,7 +89,7 @@ public class Lightning extends CustomEnchantment<Enchantments> {
         }
 
         // Execute
-        world.strikeLightning(damagee.getLocation());
         event.setDamage(event.getDamage() + config_lightning_damage);
+        world.strikeLightning(damagee.getLocation()); 
     }    
 }
