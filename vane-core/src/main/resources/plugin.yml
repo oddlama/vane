@@ -10,5 +10,5 @@ depend: [ProtocolLib]
 main: org.oddlama.vane.core.Core
 database: false
 
-api-version: 1.18
+api-version: 1.19
 load: STARTUP

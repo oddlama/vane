@@ -156,12 +156,12 @@ public class Core extends Module<Core> {
 	}
 
 	private void unfreeze_registries() {
-		// NOTE: MAGIC VALUES! Intruduced for 1.18.2 when registries were frozen. Sad, no workaround at the time.
+		// NOTE: MAGIC VALUES! Introduced for 1.18.2 when registries were frozen. Sad, no workaround at the time.
 		try {
 			// Make relevant fields accessible
-			final var frozen = MappedRegistry.class.getDeclaredField("bL" /* frozen */);
+			final var frozen = MappedRegistry.class.getDeclaredField("ca" /* frozen */);
 			frozen.setAccessible(true);
-			final var intrusive_holder_cache = MappedRegistry.class.getDeclaredField("bN" /* intrusiveHolderCache */);
+			final var intrusive_holder_cache = MappedRegistry.class.getDeclaredField("cc" /* intrusiveHolderCache */);
 			intrusive_holder_cache.setAccessible(true);
 
 			// Unfreeze required registries

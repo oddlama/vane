@@ -10,5 +10,5 @@ depend: [vane-core]
 main: org.oddlama.vane.permissions.Permissions
 database: false
 
-api-version: 1.18
+api-version: 1.19
 load: STARTUP
