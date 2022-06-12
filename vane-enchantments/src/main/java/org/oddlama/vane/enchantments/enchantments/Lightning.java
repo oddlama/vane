@@ -4,6 +4,8 @@ import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.entity.Player;
@@ -58,6 +60,26 @@ public class Lightning extends CustomEnchantment<Enchantments> {
     @Override
     public boolean can_enchant(@NotNull ItemStack item_stack) {
         return MaterialTags.SWORDS.isTagged(item_stack);
+    }
+
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    public void on_lightning_attack(final EntityDamageEvent event) {
+
+        // Check if entity is a player
+        if(!(event.getEntity() instanceof Player)) return;
+
+        // Check to see if they were struck by lightning
+        if(!(event.getCause() == DamageCause.LIGHTNING)) return;
+
+        Player player = (Player) event.getEntity();
+        final var item = player.getEquipment().getItemInMainHand();
+        final var level = item.getEnchantmentLevel(this.bukkit());
+        
+        // If they are not holding a lightning sword, they still take the damage
+        if(level == 0) return;
+
+        // Cancel the damage to the event
+        event.setCancelled(true);
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
