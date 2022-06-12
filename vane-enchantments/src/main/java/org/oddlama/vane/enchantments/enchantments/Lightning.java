@@ -38,6 +38,7 @@ public class Lightning extends CustomEnchantment<Enchantments> {
     public boolean config_enabled_def() {
         return true;
     }
+    
     @ConfigBoolean(
         def = true,
         desc = "Toggle lightning enchantment to cancel lightning damage for wielders of the enchant"
