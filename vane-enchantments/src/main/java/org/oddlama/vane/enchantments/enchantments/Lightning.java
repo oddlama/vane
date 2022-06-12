@@ -10,6 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.oddlama.vane.annotation.config.ConfigBoolean;
 import org.oddlama.vane.annotation.config.ConfigInt;
 import org.oddlama.vane.annotation.enchantment.Rarity;
 import org.oddlama.vane.annotation.enchantment.VaneEnchantment;
@@ -37,6 +38,11 @@ public class Lightning extends CustomEnchantment<Enchantments> {
     public boolean config_enabled_def() {
         return false;
     }
+    @ConfigBoolean(
+        def = true,
+        desc = "Toggle lightning enchantment to cancel lightning damage for wielders of the enchant"
+    )
+    private boolean config_lightning_protection;
 
     @ConfigInt(
         def = 4,
@@ -70,6 +76,9 @@ public class Lightning extends CustomEnchantment<Enchantments> {
 
         // Check to see if they were struck by lightning
         if(!(event.getCause() == DamageCause.LIGHTNING)) return;
+
+        // Check to see if lightning protection is off
+        if(!config_lightning_protection) return;
 
         Player player = (Player) event.getEntity();
         final var item = player.getEquipment().getItemInMainHand();
