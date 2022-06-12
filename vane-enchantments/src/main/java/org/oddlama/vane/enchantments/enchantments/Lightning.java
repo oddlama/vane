@@ -36,7 +36,7 @@ public class Lightning extends CustomEnchantment<Enchantments> {
     }
 
     public boolean config_enabled_def() {
-        return false;
+        return true;
     }
     @ConfigBoolean(
         def = true,
