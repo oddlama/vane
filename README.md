@@ -88,6 +88,7 @@ If you don't want a certain feature, simply disable it.
 - [x] *Leafchopper*: Remove leaves instantly with your axe. Leaves will drop items as if they decayed naturally.
 - [x] *Angel*: A legendary enchantment to accelerate your elytra while pressing shift! Gives a more natural feeling than using rockets. Elytra go brrrr! (Replaces *Wings*)
 - [x] *Unbreakable*: Well... A legendary enchantment for truly unbreakable items. Extremely expensive. (Replaces *Unbreaking* and *Mending*)
+- [x] *Lightning*: Strike lightning on your targets during a storm with this enchantment for swords.
 
 #### Portals (vane-portals)
 
