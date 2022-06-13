@@ -129,7 +129,7 @@ public class WorldRebuild extends Listener<Admin> {
 				.getWorld()
 				.playSound(
 					block.getLocation(),
-					block.getSoundGroup().getPlaceSound(),
+					block.getBlockSoundGroup().getPlaceSound(),
 					SoundCategory.BLOCKS,
 					1.0f,
 					0.8f

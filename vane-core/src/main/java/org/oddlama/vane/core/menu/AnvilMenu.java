@@ -3,7 +3,7 @@ package org.oddlama.vane.core.menu;
 import static org.oddlama.vane.util.Nms.player_handle;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundOpenScreenPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
@@ -24,7 +24,7 @@ public class AnvilMenu extends Menu {
 		this.entity = player_handle(player);
 		this.container_id = entity.nextContainerCounter();
 		this.container = new AnvilContainer(container_id, entity);
-		this.container.setTitle(new TextComponent(title));
+		this.container.setTitle(Component.literal(title));
 		this.inventory = container.getBukkitView().getTopInventory();
 	}
 
@@ -41,7 +41,7 @@ public class AnvilMenu extends Menu {
 		}
 
 		entity.connection.send(
-			new ClientboundOpenScreenPacket(container_id, container.getType(), new TextComponent(title))
+			new ClientboundOpenScreenPacket(container_id, container.getType(), Component.literal(title))
 		);
 		entity.initMenu(container);
 		entity.containerMenu = container;
