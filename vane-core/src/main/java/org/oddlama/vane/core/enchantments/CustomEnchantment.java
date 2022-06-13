@@ -48,10 +48,14 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 	public TranslatedMessage lang_name;
 
 	public CustomEnchantment(Context<T> context) {
+		this(context, true);
+	}
+
+	public CustomEnchantment(Context<T> context, boolean default_enabled) {
 		super(null);
 		// Make namespace
 		name = annotation.name();
-		context = context.group("enchantment_" + name, "Enable enchantment " + name);
+		context = context.group("enchantment_" + name, "Enable enchantment " + name, default_enabled);
 		set_context(context);
 
 		// Create namespaced key
