@@ -92,9 +92,8 @@ public class Lightning extends CustomEnchantment<Enchantments> {
     public void on_sword_attack(final EntityDamageByEntityEvent event) {
         
         // Only strike when entity is a player
-        if(!(event.getDamager() instanceof Player)){
-            return;
-        }
+        if(!(event.getDamager() instanceof Player)) return;
+
         Player damager = (Player) event.getDamager();
         final var damagee = event.getEntity();
         final var world = damager.getWorld();
@@ -102,19 +101,13 @@ public class Lightning extends CustomEnchantment<Enchantments> {
         final var level = item.getEnchantmentLevel(this.bukkit());
 
         // Get enchantment level
-        if (level == 0){
-            return;
-        }
+        if (level == 0) return;
 
         // Get Storm status
-        if(!world.hasStorm()){
-            return;
-        }
+        if(!world.hasStorm()) return;
 
         // Test if sky is visible
-        if(damagee.getLocation().getBlockY() < world.getHighestBlockYAt(damagee.getLocation()))  {
-            return;
-        }
+        if(damagee.getLocation().getBlockY() < world.getHighestBlockYAt(damagee.getLocation())) return;
 
         // Execute
         event.setDamage(event.getDamage() + config_lightning_damage);
