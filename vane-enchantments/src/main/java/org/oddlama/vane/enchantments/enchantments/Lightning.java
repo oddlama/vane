@@ -32,11 +32,7 @@ import com.destroystokyo.paper.MaterialTags;
 public class Lightning extends CustomEnchantment<Enchantments> {
 
     public Lightning(Context<Enchantments> context) {
-        super(context);
-    }
-
-    public boolean config_enabled_def() {
-        return true;
+        super(context, false);
     }
     
     @ConfigBoolean(
