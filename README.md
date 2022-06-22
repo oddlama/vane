@@ -19,6 +19,12 @@ These plugins follow a **strict no-nonsense** rule:
 - [x] Additions should actually be useful
 - [x] Augments the classic vanilla experience, and doesn't try to replace it.
 
+## Automatic installer
+
+If you want to setup a personal minecraft server with vane,
+be sure to check out [this simple but fully-featured minecraft server installer](https://github.com/oddlama/minecraft-server).
+It comes with autostart, 3d online map, vane, account multiplexing, update script and more.
+
 ## Features
 
 <b>[For a full overview and explanation of all features, visit the online overview.](https://oddlama.github.io/vane/)</b>
@@ -122,10 +128,6 @@ To install vane, simply download all desired jars files from the [Releases](http
 Grab the `all-plugins.zip` if you don't want to download each file by hand.
 You also need the newest version of [ProtocolLib](https://ci.dmulloy2.net/job/ProtocolLib/).
 Then start your server and enjoy playing!
-
-🚀 Have a look at the [minecraft-server](https://github.com/oddlama/minecraft-server) project if you want
-to properly deploy a minecraft with just one simple command. It includes vane, autostart, backups, sandboxing
-and more useful features.
 
 ### Installation (vane-waterfall)
 
