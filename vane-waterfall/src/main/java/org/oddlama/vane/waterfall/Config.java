@@ -93,7 +93,7 @@ public class Config {
 			"#     display_name: \"§6> §6§lMy Minecraft Server§6 <\"\n" +
 			"#     # The server favicon (absolute path or relative to proxy directory)\n" +
 			"#     # %SERVER%: The server identifier\n" +
-			"#     favicon: \"../%SERVER%/favicon.png\"\n" +
+			"#     favicon: \"../%SERVER%/server-icon.png\"\n" +
 			"#     # A list of quotes for substitutions\n" +
 			"#     quotes:\n" +
 			"#       online:\n" +
