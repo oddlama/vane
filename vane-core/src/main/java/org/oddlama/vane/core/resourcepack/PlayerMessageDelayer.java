@@ -5,7 +5,6 @@ import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -123,11 +122,7 @@ public class PlayerMessageDelayer extends Listener<Core> {
 			return;
 		}
 		for (final var packet : queue) {
-			try {
-				get_module().protocol_manager.sendServerPacket(player, packet);
-			} catch (InvocationTargetException e) {
-				get_module().log.log(Level.WARNING, "Could not send queued message packet " + packet, e);
-			}
+			get_module().protocol_manager.sendServerPacket(player, packet);
 		}
 	}
 
