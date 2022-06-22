@@ -114,24 +114,18 @@ If you don't want a certain feature, simply disable it.
 - [x] `ping` command to check server ping as received by the proxy.
 - [x] `maintenance` command to schedule maintenance times. While maintenance is active, players without a bypass permission can't join servers.
 
-#### Remarks
-
-> **[as of 1.16.2]** Showing enchantment names inside the enchantment table doesn't work due to protocol limitations.
-> Custom enchantments will be shown without any tooltip, and therefore cannot be distinguished from one another.
-
-> **[as of 1.16.2]** Vane technically supports enchantments to be acquired using the enchanting table, but all enchantments from this plugin will be acquired by treasure or crafting.
-> The reason is that adding all these enchantments at high levels would not work out well regarding the relative probability of common and rare enchantments.
-> At the time of writing, there are only 4 rarity categories, and the vanilla rarities cannot be conveniently modified. So as the custom enchantments are
-> on average more powerful than the vanilla ones, we would need more categories to balance the enchanting process.
-> This system is not suited for giving out valuable traits (like *Angel* or *Unbreakable*), so we decided to create crafting recipes and modify loot tables instead.
-
 ## Installation
 
 For a comprehensive guide, visit the [Installation Guide](https://github.com/oddlama/vane/wiki/Installation-Guide) on the wiki.
 
 To install vane, simply download all desired jars files from the [Releases](https://github.com/oddlama/vane/releases/latest) and put them into the `plugins/` directory.
-You can grab the `all-plugins.zip` if you don't want to download each file by hand.
+Grab the `all-plugins.zip` if you don't want to download each file by hand.
+You also need the newest version of [ProtocolLib](https://ci.dmulloy2.net/job/ProtocolLib/).
 Then start your server and enjoy playing!
+
+🚀 Have a look at the [minecraft-server](https://github.com/oddlama/minecraft-server) project if you want
+to properly deploy a minecraft with just one simple command. It includes vane, autostart, backups, sandboxing
+and more useful features.
 
 ### Installation (vane-waterfall)
 
