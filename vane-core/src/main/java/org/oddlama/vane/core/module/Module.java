@@ -41,6 +41,9 @@ import org.oddlama.vane.annotation.persistent.Persistent;
 import org.oddlama.vane.core.Core;
 import org.oddlama.vane.core.LootTable;
 import org.oddlama.vane.core.resourcepack.ResourcePackGenerator;
+
+import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
+
 import org.oddlama.vane.core.command.Command;
 import org.oddlama.vane.core.config.ConfigManager;
 import org.oddlama.vane.core.functional.Consumer1;
@@ -52,6 +55,7 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 	public final VaneModule annotation = getClass().getAnnotation(VaneModule.class);
 	public Core core;
 	public Logger log = getLogger();
+	public ComponentLogger clog = getComponentLogger();
 	private final String namespace = "vane_" + annotation.name().replaceAll("[^a-zA-Z0-9_]", "_");
 
 	// Managers
