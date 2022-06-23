@@ -186,13 +186,13 @@ public class PlayerMessageDelayer extends Listener<Core> {
 			super(
 				PlayerMessageDelayer.this.get_module(),
 				ListenerPriority.HIGHEST,
-				new PacketType[] { PacketType.Play.Server.CHAT }
+				new PacketType[] { PacketType.Play.Server.SYSTEM_CHAT }
 			);
 		}
 
 		@Override
 		public void onPacketSending(final PacketEvent event) {
-			if (event.getPacketType() != PacketType.Play.Server.CHAT) {
+			if (event.getPacketType() != PacketType.Play.Server.SYSTEM_CHAT) {
 				return;
 			}
 
@@ -201,8 +201,7 @@ public class PlayerMessageDelayer extends Listener<Core> {
 				return;
 			}
 
-			final var packet = new WrapperPlayServerChat(event.getPacket());
-			queue.add(packet.getHandle().deepClone());
+			queue.add(event.getPacket());
 			event.setCancelled(true);
 		}
 	}
