@@ -30,28 +30,32 @@ public class Tomes extends ModuleGroup<Enchantments> {
 
 		@Override
 		public LootTableList default_loot_tables() {
-			return LootTableList.of(new LootDefinition("generic")
-				.in(LootTables.ABANDONED_MINESHAFT)
-				.in(LootTables.BASTION_BRIDGE)
-				.in(LootTables.BASTION_HOGLIN_STABLE)
-				.in(LootTables.BASTION_OTHER)
-				.in(LootTables.BASTION_TREASURE)
-				.in(LootTables.BURIED_TREASURE)
-				.in(LootTables.DESERT_PYRAMID)
-				.in(LootTables.END_CITY_TREASURE)
-				.in(LootTables.FISHING_TREASURE)
-				.in(LootTables.IGLOO_CHEST)
-				.in(LootTables.JUNGLE_TEMPLE)
-				.in(LootTables.NETHER_BRIDGE)
-				.in(LootTables.PILLAGER_OUTPOST)
-				.in(LootTables.RUINED_PORTAL)
-				.in(LootTables.SHIPWRECK_TREASURE)
-				.in(LootTables.STRONGHOLD_LIBRARY)
-				.in(LootTables.UNDERWATER_RUIN_BIG)
-				.in(LootTables.UNDERWATER_RUIN_SMALL)
-				.in(LootTables.VILLAGE_TEMPLE)
-				.in(LootTables.WOODLAND_MANSION)
-				.add(1.0 / 5, 0, 2, key().toString()));
+			return LootTableList.of(
+				new LootDefinition("generic")
+					.in(LootTables.ABANDONED_MINESHAFT)
+					.in(LootTables.BASTION_BRIDGE)
+					.in(LootTables.BASTION_HOGLIN_STABLE)
+					.in(LootTables.BASTION_OTHER)
+					.in(LootTables.BASTION_TREASURE)
+					.in(LootTables.BURIED_TREASURE)
+					.in(LootTables.DESERT_PYRAMID)
+					.in(LootTables.END_CITY_TREASURE)
+					.in(LootTables.FISHING_TREASURE)
+					.in(LootTables.IGLOO_CHEST)
+					.in(LootTables.JUNGLE_TEMPLE)
+					.in(LootTables.NETHER_BRIDGE)
+					.in(LootTables.PILLAGER_OUTPOST)
+					.in(LootTables.RUINED_PORTAL)
+					.in(LootTables.SHIPWRECK_TREASURE)
+					.in(LootTables.STRONGHOLD_LIBRARY)
+					.in(LootTables.UNDERWATER_RUIN_BIG)
+					.in(LootTables.UNDERWATER_RUIN_SMALL)
+					.in(LootTables.VILLAGE_TEMPLE)
+					.in(LootTables.WOODLAND_MANSION)
+					.add(1.0 / 5, 0, 2, key().toString()),
+				new LootDefinition("ancientcity")
+					.in(LootTables.ANCIENT_CITY)
+					.add(1.0 / 20, 0, 2, key().toString()));
 		}
 	}
 
@@ -76,19 +80,24 @@ public class Tomes extends ModuleGroup<Enchantments> {
 
 		@Override
 		public LootTableList default_loot_tables() {
-			return LootTableList.of(new LootDefinition("generic")
-				.in(LootTables.ABANDONED_MINESHAFT)
-				.in(LootTables.BASTION_TREASURE)
-				.in(LootTables.BURIED_TREASURE)
-				.in(LootTables.DESERT_PYRAMID)
-				.in(LootTables.NETHER_BRIDGE)
-				.in(LootTables.RUINED_PORTAL)
-				.in(LootTables.SHIPWRECK_TREASURE)
-				.in(LootTables.STRONGHOLD_LIBRARY)
-				.in(LootTables.UNDERWATER_RUIN_BIG)
-				.in(LootTables.VILLAGE_TEMPLE)
-				.in(LootTables.WOODLAND_MANSION)
-				.add(1.0 / 40, 1, 1, key().toString()));
+			return LootTableList.of(
+				new LootDefinition("generic")
+					.in(LootTables.ABANDONED_MINESHAFT)
+					.in(LootTables.BASTION_TREASURE)
+					.in(LootTables.BURIED_TREASURE)
+					.in(LootTables.DESERT_PYRAMID)
+					.in(LootTables.NETHER_BRIDGE)
+					.in(LootTables.RUINED_PORTAL)
+					.in(LootTables.SHIPWRECK_TREASURE)
+					.in(LootTables.STRONGHOLD_LIBRARY)
+					.in(LootTables.UNDERWATER_RUIN_BIG)
+					.in(LootTables.VILLAGE_TEMPLE)
+					.in(LootTables.WOODLAND_MANSION)
+					.add(1.0 / 40, 1, 1, key().toString()),
+				new LootDefinition("ancientcity")
+					.in(LootTables.ANCIENT_CITY)
+					.add(1.0 / 30, 1, 1, key().toString())  //duplicate for more consistent spawn
+					.add(1.0 / 30, 1, 1, key().toString()));
 		}
 	}
 
@@ -114,12 +123,16 @@ public class Tomes extends ModuleGroup<Enchantments> {
 
 		@Override
 		public LootTableList default_loot_tables() {
-			return LootTableList.of(new LootDefinition("generic")
-				.in(LootTables.BASTION_TREASURE)
-				.in(LootTables.BURIED_TREASURE)
-				.in(LootTables.SHIPWRECK_TREASURE)
-				.in(LootTables.UNDERWATER_RUIN_BIG)
-				.add(1.0 / 200, 1, 1, key().toString()));
+			return LootTableList.of(
+				new LootDefinition("generic")
+					.in(LootTables.BASTION_TREASURE)
+					.in(LootTables.BURIED_TREASURE)
+					.in(LootTables.SHIPWRECK_TREASURE)
+					.in(LootTables.UNDERWATER_RUIN_BIG)
+					.add(1.0 / 200, 1, 1, key().toString()),
+				new LootDefinition("ancientcity")
+					.in(LootTables.ANCIENT_CITY)
+					.add(1.0 / 150, 1, 1, key().toString()));
 		}
 	}
 
