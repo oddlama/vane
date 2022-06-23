@@ -4,14 +4,13 @@
 [![Join us on Discord](https://img.shields.io/discord/907277628816388106.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/RueJ6A59x2)
 
 [![Overview](https://img.shields.io/badge/link-Overview-informational.svg)](https://oddlama.github.io/vane/)
-[![Overview](https://img.shields.io/badge/wiki-Installation-informational.svg)](https://github.com/oddlama/vane/wiki/Installation-Guide)
-[![Overview](https://img.shields.io/badge/wiki-FAQ-informational.svg)](https://github.com/oddlama/vane/wiki/FAQ)
+[![Installation Guide](https://img.shields.io/badge/wiki-Installation-informational.svg)](https://github.com/oddlama/vane/wiki/Installation-Guide)
+[![FAQ](https://img.shields.io/badge/wiki-FAQ-informational.svg)](https://github.com/oddlama/vane/wiki/FAQ)
 
 # About vane
 
-Vane is a group of plugins which provide many
-immersive and lore friendly extensions for vanilla minecraft.
-It runs on any [papermc](https://papermc.io) based server.
+Vane is a plugin-suite which provides many immersive and lore friendly additions to vanilla minecraft.
+It runs on any [PaperMC](https://papermc.io) based server.
 
 These plugins follow a **strict no-nonsense** rule:
 - [x] If you dislike any feature, you can disable it individually.
