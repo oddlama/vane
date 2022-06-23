@@ -79,7 +79,7 @@ public class TranslatedMessage {
 		for (var player : module.getServer().getOnlinePlayers()) {
 			player.sendMessage(component);
 		}
-		module.log.info("[broadcast] " + str(args));
+		module.clog.info(Component.text("[broadcast] ").append(str_component(args)));
 	}
 
 	public void broadcast_world(final World world, Object... args) {
@@ -98,7 +98,7 @@ public class TranslatedMessage {
 
 	public void send(final CommandSender sender, Object... args) {
 		if (sender == null || sender == module.getServer().getConsoleSender()) {
-			module.log.info(str(args));
+			module.getServer().getConsoleSender().sendMessage(str_component(args));
 		} else {
 			sender.sendMessage(format(args));
 		}
@@ -106,14 +106,14 @@ public class TranslatedMessage {
 
 	public void send_action_bar(final CommandSender sender, Object... args) {
 		if (sender == null || sender == module.getServer().getConsoleSender()) {
-			module.log.info(str(args));
+			// no-op
 		} else {
 			sender.sendActionBar(format(args));
 		}
 	}
 
 	public void send_and_log(final CommandSender sender, Object... args) {
-		module.log.info(str(args));
+		module.clog.info(str_component(args));
 
 		// Also send to sender if it's not the console
 		if (sender == null || sender == module.getServer().getConsoleSender()) {

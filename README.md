@@ -4,20 +4,25 @@
 [![Join us on Discord](https://img.shields.io/discord/907277628816388106.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/RueJ6A59x2)
 
 [![Overview](https://img.shields.io/badge/link-Overview-informational.svg)](https://oddlama.github.io/vane/)
-[![Overview](https://img.shields.io/badge/wiki-Installation-informational.svg)](https://github.com/oddlama/vane/wiki/Installation-Guide)
-[![Overview](https://img.shields.io/badge/wiki-FAQ-informational.svg)](https://github.com/oddlama/vane/wiki/FAQ)
+[![Installation Guide](https://img.shields.io/badge/wiki-Installation-informational.svg)](https://github.com/oddlama/vane/wiki/Installation-Guide)
+[![FAQ](https://img.shields.io/badge/wiki-FAQ-informational.svg)](https://github.com/oddlama/vane/wiki/FAQ)
 
 # About vane
 
-Vane is a group of plugins which provide many
-immersive and lore friendly extensions for vanilla minecraft.
-It runs on any [papermc](https://papermc.io) based server.
+Vane is a plugin-suite which provides many immersive and lore friendly additions to vanilla minecraft.
+It runs on any [PaperMC](https://papermc.io) based server.
 
 These plugins follow a **strict no-nonsense** rule:
 - [x] If you dislike any feature, you can disable it individually.
 - [x] Features must be lore friendly, properly integrated and unobtrusive
 - [x] Additions should actually be useful
 - [x] Augments the classic vanilla experience, and doesn't try to replace it.
+
+## Automatic installer
+
+If you want to setup a personal minecraft server with vane,
+be sure to check out [this simple but fully-featured minecraft server installer](https://github.com/oddlama/minecraft-server).
+It comes with autostart, 3d online map, vane, account multiplexing, update script and more.
 
 ## Features
 
@@ -114,23 +119,13 @@ If you don't want a certain feature, simply disable it.
 - [x] `ping` command to check server ping as received by the proxy.
 - [x] `maintenance` command to schedule maintenance times. While maintenance is active, players without a bypass permission can't join servers.
 
-#### Remarks
-
-> **[as of 1.16.2]** Showing enchantment names inside the enchantment table doesn't work due to protocol limitations.
-> Custom enchantments will be shown without any tooltip, and therefore cannot be distinguished from one another.
-
-> **[as of 1.16.2]** Vane technically supports enchantments to be acquired using the enchanting table, but all enchantments from this plugin will be acquired by treasure or crafting.
-> The reason is that adding all these enchantments at high levels would not work out well regarding the relative probability of common and rare enchantments.
-> At the time of writing, there are only 4 rarity categories, and the vanilla rarities cannot be conveniently modified. So as the custom enchantments are
-> on average more powerful than the vanilla ones, we would need more categories to balance the enchanting process.
-> This system is not suited for giving out valuable traits (like *Angel* or *Unbreakable*), so we decided to create crafting recipes and modify loot tables instead.
-
 ## Installation
 
 For a comprehensive guide, visit the [Installation Guide](https://github.com/oddlama/vane/wiki/Installation-Guide) on the wiki.
 
 To install vane, simply download all desired jars files from the [Releases](https://github.com/oddlama/vane/releases/latest) and put them into the `plugins/` directory.
-You can grab the `all-plugins.zip` if you don't want to download each file by hand.
+Grab the `all-plugins.zip` if you don't want to download each file by hand.
+You also need the newest version of [ProtocolLib](https://ci.dmulloy2.net/job/ProtocolLib/).
 Then start your server and enjoy playing!
 
 ### Installation (vane-waterfall)

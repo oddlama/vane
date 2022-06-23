@@ -86,37 +86,38 @@ public class Config {
 			"\n" +
 			"# A dictionary of managed servers, which will be started on demand.\n" +
 			"# Example:\n" +
-			"# # Name of server as defined in proxy's config.yml\n" +
-			"# my_server:\n" +
-			"#   # The server display name (used for messages and substitutions)\n" +
-			"#   display_name: \"§6> §6§lMy Minecraft Server§6 <\"\n" +
-			"#   # The server favicon (absolute path or relative to proxy directory)\n" +
-			"#   # %SERVER%: The server identifier\n" +
-			"#   favicon: \"../%SERVER%/favicon.png\"\n" +
-			"#   # A list of quotes for substitutions\n" +
-			"#   quotes:\n" +
-			"#     online:\n" +
-			"#       - \"Ah, yes.\"\n" +
-			"#     offline:\n" +
-			"#       - \"Paniik!\"\n" +
-			"#   # The motd for the server list (up to two lines)\n" +
-			"#   motd:\n" +
-			"#     # %SERVER_DISPLAY_NAME%: The server display name\n" +
-			"#     online: \"%SERVER_DISPLAY_NAME%\\n\\\n" +
-			"#       §aowo§7 | %QUOTE%\"\n" +
-			"#     # %SERVER_DISPLAY_NAME%: The server display name\n" +
-			"#     offline: \"%SERVER_DISPLAY_NAME%\\n\\\n" +
-			"#       §cowo§7 | %QUOTE%\"\n" +
-			"#   # Automatic start settings\n" +
-			"#   start:\n" +
-			"#     # The command to execute when the first player joins while the server is offline\n" +
+			"# managed_servers:\n" +
+			"#   # Name of server as defined in proxy's config.yml\n" +
+			"#   my_server:\n" +
+			"#     # The server display name (used for messages and substitutions)\n" +
+			"#     display_name: \"§6> §6§lMy Minecraft Server§6 <\"\n" +
+			"#     # The server favicon (absolute path or relative to proxy directory)\n" +
 			"#     # %SERVER%: The server identifier\n" +
-			"#     cmd: [\"/path/to/startscript\", \"arg1\", \"will also subsitute %SERVER%\"]\n" +
-			"#     # The kick message to send to the player that started the server\n" +
-			"#     # %SERVER%: The server identifier\n" +
-			"#     # %SERVER_DISPLAY_NAME%: The server display name\n" +
-			"#     kick_msg: \"%SERVER_DISPLAY_NAME% §7is being started.\\n\\\n" +
-			"#       §7Try again in §b10 Seconds§7 \\\\(^-^)/\"\n" +
+			"#     favicon: \"../%SERVER%/server-icon.png\"\n" +
+			"#     # A list of quotes for substitutions\n" +
+			"#     quotes:\n" +
+			"#       online:\n" +
+			"#         - \"Ah, yes.\"\n" +
+			"#       offline:\n" +
+			"#         - \"Paniik!\"\n" +
+			"#     # The motd for the server list (up to two lines)\n" +
+			"#     motd:\n" +
+			"#       # %SERVER_DISPLAY_NAME%: The server display name\n" +
+			"#       online: \"%SERVER_DISPLAY_NAME%\\n\\\n" +
+			"#         §aowo§7 | %QUOTE%\"\n" +
+			"#       # %SERVER_DISPLAY_NAME%: The server display name\n" +
+			"#       offline: \"%SERVER_DISPLAY_NAME%\\n\\\n" +
+			"#         §cowo§7 | %QUOTE%\"\n" +
+			"#     # Automatic start settings\n" +
+			"#     start:\n" +
+			"#       # The command to execute when the first player joins while the server is offline\n" +
+			"#       # %SERVER%: The server identifier\n" +
+			"#       cmd: [\"/path/to/startscript\", \"arg1\", \"will also subsitute %SERVER%\"]\n" +
+			"#       # The kick message to send to the player that started the server\n" +
+			"#       # %SERVER%: The server identifier\n" +
+			"#       # %SERVER_DISPLAY_NAME%: The server display name\n" +
+			"#       kick_msg: \"%SERVER_DISPLAY_NAME% §7is being started.\\n\\\n" +
+			"#         §7Try again in §b10 Seconds§7 \\\\(^-^)/\"\n" +
 			"# Default:\n" +
 			"# managed_servers: {}\n" +
 			"managed_servers: {}\n";
