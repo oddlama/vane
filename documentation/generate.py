@@ -3,6 +3,7 @@
 import argparse
 import markdown
 import os
+import shutil
 import toml
 import zipfile
 from dataclasses import dataclass, field
@@ -25,6 +26,7 @@ class Context:
     categories: dict[str, Any] = field(default_factory=dict)
     templates: dict[str, str] = field(default_factory=dict)
     required_minecraft_assets: set[str] = field(default_factory=set)
+    required_project_assets: set[tuple[str, str]] = field(default_factory=set)
 
 context = Context()
 
@@ -52,9 +54,15 @@ def load_feature_markdown(markdown_file: Path, default_slug: str) -> Feature:
         metadata["slug"] = default_slug
     assert metadata["category"] in context.categories
 
-    if metadata["icon"].startswith("minecraft:"):
-        metadata["icon"] = "minecraft/" + metadata["icon"].removeprefix("minecraft:")
-        context.required_minecraft_assets.add(metadata["icon"])
+    if ":" in metadata["icon"]:
+        namespace, key = metadata["icon"].split(":", maxsplit=1)
+        if namespace == "minecraft":
+            metadata["icon"] = "minecraft/" + key
+            context.required_minecraft_assets.add(metadata["icon"])
+        elif namespace.startswith("vane-"):
+            metadata["icon"] = f"{namespace}/{key}"
+            context.required_project_assets.add((namespace, key))
+
     return Feature(metadata=metadata,
                    html_content=markdown.markdown(content))
 
@@ -120,7 +128,7 @@ def generate_docs() -> None:
     with open(context.build_path / "index.html", "w") as f:
         f.write(index_content)
 
-def extract_collected_assets(client_jar: str) -> None:
+def collect_assets(client_jar: str) -> None:
     print(f"Collecting {len(context.required_minecraft_assets)} required assets from client jar...")
     with zipfile.ZipFile(client_jar) as zf:
         for asset in context.required_minecraft_assets:
@@ -128,6 +136,12 @@ def extract_collected_assets(client_jar: str) -> None:
             out.parent.mkdir(parents=True, exist_ok=True)
             with open(out, "wb") as f:
                 f.write(zf.read("assets/" + asset))
+
+    print(f"Collecting {len(context.required_project_assets)} required assets from this project...")
+    for namespace, key in context.required_project_assets:
+        out = context.assets_path / namespace / key
+        out.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(Path("..") / namespace / "src/main/resources" / key, out)
 
 def main():
     parser = argparse.ArgumentParser(description="Generates the documentation page.")
@@ -149,7 +163,7 @@ def main():
     context.templates = load_templates()
 
     generate_docs()
-    extract_collected_assets(args.client_jar)
+    collect_assets(args.client_jar)
 
 if __name__ == "__main__":
     main()

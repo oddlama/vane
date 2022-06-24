@@ -1,7 +1,7 @@
 ```toml
 [feature]
-title = "AAAAAAAAAA bafeij oaoiajrgoi jarg"
-icon = "minecraft:textures/item/tipped_arrow_head.png"
+title = "Double-doors open simultaneously"
+icon = "vane-trifles:items/golden_sickle.png"
 category = "gameplay"
 module = "admin"
 ```
