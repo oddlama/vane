@@ -22,7 +22,7 @@ class Context:
     build_path: Path = Path("build")
     assets_path: Path = Path("build/assets")
     content_settings: dict[str, Any] = field(default_factory=dict)
-    features: list[Feature] = field(default_factory=list)
+    features: dict[str, list[Feature]] = field(default_factory=dict)
     categories: dict[str, Any] = field(default_factory=dict)
     templates: dict[str, str] = field(default_factory=dict)
     required_minecraft_assets: set[str] = field(default_factory=set)
@@ -76,15 +76,14 @@ def replace_feature_variables(s: str, feature: Feature):
         s = s.replace(f"{{{{ feature.metadata.{k} }}}}", v)
     s = s.replace("{{ feature.html_content }}", feature.html_content)
     s = s.replace("{{ feature.icon }}", f"assets/{feature.metadata['icon']}")
-    module_badge = context.templates["module-badge"].replace("{{ text }}", "vane-" + feature.metadata["module"])
+    module_badge = context.templates["module-badge"].replace("{{ text }}", feature.metadata["module"])
     s = s.replace("{{ feature.badge }}", module_badge)
     return s
 
 def render_category_index(category: dict[str, Any]) -> str:
     # Pre-render features
     features_html = []
-    fs = [f for f in context.features if f.metadata["category"] == category["id"]]
-    for f in fs:
+    for f in context.features[category["id"]]:
         features_html.append(replace_feature_variables(context.templates["feature-index"], f))
 
     html = context.templates["category-index"]
@@ -95,13 +94,13 @@ def render_category_index(category: dict[str, Any]) -> str:
 def render_category_content(category: dict[str, Any]) -> str:
     # Pre-render features
     features_html = []
-    fs = list([f for f in context.features if f.metadata["category"] == category["id"]])
+    fs = context.features[category["id"]]
     for i,f in enumerate(fs):
         f_html = context.templates["feature-content"]
         f_html = replace_feature_variables(f_html, f)
         is_last = i == len(fs) - 1
-        f_html = f_html.replace("{{ accordion.heading }}", "border " + (""           if is_last else "border-b-0") + ("rounded-t-xl" if i == 0 else ""))
-        f_html = f_html.replace("{{ accordion.body }}",    "border " + ("border-t-0" if is_last else "border-b-0"))
+        f_html = f_html.replace("{{ accordion.heading }}", "border" + (""            if is_last else " border-b-0 ") + (" rounded-t-xl" if i == 0 else ""))
+        f_html = f_html.replace("{{ accordion.body }}",    "border" + (" border-t-0" if is_last else " border-b-0"))
         features_html.append(f_html)
 
     html = context.templates["category-content"]
@@ -111,16 +110,21 @@ def render_category_content(category: dict[str, Any]) -> str:
 
 def generate_docs() -> None:
     # Load features
-    for i in glob("content/**/*.md", recursive=True):
-        print(f"Processing {i}")
-        context.features.append(load_feature_markdown(Path(i),
-            default_slug="feature-" + i.removeprefix("content/").removesuffix(".md").replace("/", ".")))
+    for c in context.content_settings["categories"]:
+        fs = []
+        for i in c["content"]:
+            print(f"Processing {i}")
+            fs.append(load_feature_markdown(Path("content") / i,
+            default_slug="feature-" + i.removeprefix("content/").removesuffix(".md").replace("/", "--")))
+        context.features[c["id"]] = fs
 
     print(f"Rendering index.html")
     index_content = context.templates["index"]
-    index_content = index_content.replace("{{ each_category_index }}", "\n".join(
-        render_category_index(c) for c in context.content_settings["categories"]
-    ))
+    # index_content = index_content.replace("{{ each_category_index }}", "\n".join(
+    #     render_category_index(c) for c in context.content_settings["categories"]
+    # ))
+    # HINT: disabled for now. Didn't add much value but added clutter.
+    index_content = index_content.replace("{{ each_category_index }}", "")
     index_content = index_content.replace("{{ each_category_content }}", "\n".join(
         render_category_content(c) for c in context.content_settings["categories"]
     ))

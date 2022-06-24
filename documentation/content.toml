@@ -1,19 +1,61 @@
 [[categories]]
 id = "gameplay"
 title = "Gameplay"
+content = [
+	"vane-trifles/double_doors.md",
+	"vane-trifles/simple_harvest.md",
+	"vane-trifles/chest_sorting.md",
+	"vane-trifles/grass_paths.md",
+	"vane-trifles/decorative_heads.md",
+	"vane-bedtime/night_to_day.md",
+]
 
 [[categories]]
 id = "custom_items"
 title = "Custom Items"
+content = [
+	"vane-trifles/sickle.md",
+	"vane-trifles/file.md",
+	"vane-trifles/portal_scroll_home.md",
+	"vane-trifles/portal_scroll_unstable.md",
+	"vane-trifles/xp_bottles.md",
+	"vane-trifles/netherite_elytra.md",
+	"vane-enchantments/ancient_tome.md",
+	"vane-enchantments/ancient_tome_of_knowledge.md",
+	"vane-enchantments/ancient_tome_of_the_gods.md",
+]
 
 [[categories]]
 id = "enchantments"
 title = "Enchantments"
+content = [
+	"vane-enchantments/angel.md",
+	"vane-enchantments/grappling_hook.md",
+	"vane-enchantments/hell_bent.md",
+	"vane-enchantments/leafchopper.md",
+	"vane-enchantments/rake.md",
+	"vane-enchantments/seeding.md",
+	"vane-enchantments/soulbound.md",
+	"vane-enchantments/takeoff.md",
+	"vane-enchantments/unbreakable.md",
+	"vane-enchantments/wings.md",
+]
 
 [[categories]]
 id = "mechanics"
 title = "Mechanics"
+content = [
+	"vane-portals/portals.md",
+	"vane-portals/portal_construction.md",
+	"vane-portals/portal_settings.md",
+	"vane-regions/regions.md",
+	"vane-regions/create_regions.md",
+]
 
 [[categories]]
 id = "administrative"
 title = "Administrative Features"
+content = [
+	"vane-admin/translations.md",
+	"vane-admin/creeper_protection.md",
+]
