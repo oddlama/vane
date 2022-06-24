@@ -6,6 +6,7 @@ function die() { echo "[1;31merror:[m $*" >&2; exit 1; }
 	|| die "Please copy a recent minecraft client jar file to ./minecraft-client.jar. It is required for item assets."
 
 echo "Generating content..."
+rm -r ../docs/assets/minecraft &>/dev/null
 ./generate.py --client-jar minecraft-client.jar -o ../docs
 
 echo "Generating css..."

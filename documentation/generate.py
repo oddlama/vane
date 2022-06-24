@@ -24,7 +24,7 @@ class Context:
     features: list[Feature] = field(default_factory=list)
     categories: dict[str, Any] = field(default_factory=dict)
     templates: dict[str, str] = field(default_factory=dict)
-    required_minecraft_assets: list[str] = field(default_factory=list)
+    required_minecraft_assets: set[str] = field(default_factory=set)
 
 context = Context()
 
@@ -52,6 +52,9 @@ def load_feature_markdown(markdown_file: Path, default_slug: str) -> Feature:
         metadata["slug"] = default_slug
     assert metadata["category"] in context.categories
 
+    if metadata["icon"].startswith("minecraft:"):
+        metadata["icon"] = "minecraft/" + metadata["icon"].removeprefix("minecraft:")
+        context.required_minecraft_assets.add(metadata["icon"])
     return Feature(metadata=metadata,
                    html_content=markdown.markdown(content))
 
@@ -64,7 +67,7 @@ def replace_feature_variables(s: str, feature: Feature):
     for k,v in feature.metadata.items():
         s = s.replace(f"{{{{ feature.metadata.{k} }}}}", v)
     s = s.replace("{{ feature.html_content }}", feature.html_content)
-    s = s.replace("{{ feature.icon }}", "assets/2.png")
+    s = s.replace("{{ feature.icon }}", f"assets/{feature.metadata['icon']}")
     module_badge = context.templates["module-badge"].replace("{{ text }}", "vane-" + feature.metadata["module"])
     s = s.replace("{{ feature.badge }}", module_badge)
     return s
@@ -121,7 +124,10 @@ def extract_collected_assets(client_jar: str) -> None:
     print(f"Collecting {len(context.required_minecraft_assets)} required assets from client jar...")
     with zipfile.ZipFile(client_jar) as zf:
         for asset in context.required_minecraft_assets:
-            zf.extract("assets/" + asset, context.assets_path / asset)
+            out = context.assets_path / asset
+            out.parent.mkdir(parents=True, exist_ok=True)
+            with open(out, "wb") as f:
+                f.write(zf.read("assets/" + asset))
 
 def main():
     parser = argparse.ArgumentParser(description="Generates the documentation page.")

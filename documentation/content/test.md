@@ -1,7 +1,7 @@
 ```toml
 [feature]
 title = "AAAAAAAAAA bafeij oaoiajrgoi jarg"
-icon = "minecraft:head"
+icon = "minecraft:textures/item/tipped_arrow_head.png"
 category = "gameplay"
 module = "admin"
 ```
