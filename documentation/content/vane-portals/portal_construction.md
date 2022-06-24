@@ -2,7 +2,6 @@
 [feature]
 title = "Portal Construction"
 icon = "minecraft:textures/block/obsidian.png"
-category = "mechanics"
 module = "vane-portals"
 ```
 ---

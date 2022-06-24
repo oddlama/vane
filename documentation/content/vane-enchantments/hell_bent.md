@@ -2,7 +2,6 @@
 [feature]
 title = "Hell Bent [I]"
 icon = "minecraft:textures/item/barrier.png"
-category = "enchantments"
 module = "vane-enchantments"
 ```
 ---

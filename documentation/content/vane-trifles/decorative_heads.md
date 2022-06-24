@@ -2,7 +2,6 @@
 [feature]
 title = "Decorative Heads"
 icon = "minecraft:textures/item/barrier.png"
-category = "gameplay"
 module = "vane-trifles"
 ```
 ---

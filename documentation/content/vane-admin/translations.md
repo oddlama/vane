@@ -2,7 +2,6 @@
 [feature]
 title = "Translations"
 icon = "minecraft:textures/item/barrier.png"
-category = "administrative"
 module = "vane-admin"
 ```
 ---

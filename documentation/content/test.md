@@ -2,7 +2,6 @@
 [feature]
 title = "Double-doors open simultaneously"
 icon = "vane-trifles:items/golden_sickle.png"
-category = "gameplay"
 module = "admin"
 ```
 ---

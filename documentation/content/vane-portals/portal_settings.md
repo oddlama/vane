@@ -2,7 +2,6 @@
 [feature]
 title = "Portal Settings"
 icon = "minecraft:textures/item/barrier.png"
-category = "mechanics"
 module = "vane-portals"
 ```
 ---

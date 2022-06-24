@@ -2,7 +2,6 @@
 [feature]
 title = "Ancient Tome"
 icon = "vane-enchantments:items/ancient_tome.png"
-category = "custom_items"
 module = "vane-enchantments"
 ```
 ---

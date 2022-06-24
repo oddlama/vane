@@ -2,7 +2,6 @@
 [feature]
 title = "Portals"
 icon = "minecraft:textures/item/ender_pearl.png"
-category = "mechanics"
 module = "vane-portals"
 ```
 ---

@@ -2,7 +2,6 @@
 [feature]
 title = "Soulbound [I]"
 icon = "minecraft:textures/item/barrier.png"
-category = "enchantments"
 module = "vane-enchantments"
 ```
 ---

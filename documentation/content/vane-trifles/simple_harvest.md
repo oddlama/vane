@@ -2,7 +2,6 @@
 [feature]
 title = "Simple Harvest"
 icon = "minecraft:textures/item/wheat.png"
-category = "gameplay"
 module = "vane-trifles"
 ```
 ---

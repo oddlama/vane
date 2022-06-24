@@ -2,7 +2,6 @@
 [feature]
 title = "Chest Sorting"
 icon = "minecraft:textures/item/barrier.png"
-category = "gameplay"
 module = "vane-trifles"
 ```
 ---

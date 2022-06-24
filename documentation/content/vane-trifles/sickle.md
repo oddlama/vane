@@ -2,7 +2,6 @@
 [feature]
 title = "Mass Harvest"
 icon = "vane-trifles:items/golden_sickle.png"
-category = "gameplay"
 module = "vane-trifles"
 ```
 ---

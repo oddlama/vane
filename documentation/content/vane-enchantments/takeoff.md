@@ -2,7 +2,6 @@
 [feature]
 title = "Takeoff [I-III]"
 icon = "minecraft:textures/item/barrier.png"
-category = "enchantments"
 module = "vane-enchantments"
 ```
 ---

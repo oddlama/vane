@@ -2,7 +2,6 @@
 [feature]
 title = "XP Bottles"
 icon = "vane-trifles:items/medium_xp_bottle.png"
-category = "custom_items"
 module = "vane-trifles"
 ```
 ---

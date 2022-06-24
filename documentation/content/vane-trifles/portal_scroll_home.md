@@ -2,7 +2,6 @@
 [feature]
 title = "Portal Scroll - Home"
 icon = "vane-trifles:items/home_scroll.png"
-category = "custom_items"
 module = "vane-trifles"
 ```
 ---

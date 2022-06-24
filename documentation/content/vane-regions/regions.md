@@ -2,7 +2,6 @@
 [feature]
 title = "Regions"
 icon = "minecraft:textures/item/compass_19.png"
-category = "mechanics"
 module = "vane-regions"
 ```
 ---

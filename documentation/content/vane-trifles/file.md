@@ -2,7 +2,6 @@
 [feature]
 title = "File"
 icon = "vane-trifles:items/file.png"
-category = "custom_items"
 module = "vane-trifles"
 ```
 ---

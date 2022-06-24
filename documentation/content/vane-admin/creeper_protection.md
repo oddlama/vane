@@ -2,7 +2,6 @@
 [feature]
 title = "Creeper protection"
 icon = "minecraft:textures/item/barrier.png"
-category = "gameplay"
 module = "vane-admin"
 ```
 ---

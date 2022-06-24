@@ -2,7 +2,6 @@
 [feature]
 title = "Ancient Tome of Knowledge"
 icon = "vane-enchantments:items/ancient_tome_of_knowledge.png"
-category = "custom_items"
 module = "vane-enchantments"
 ```
 ---

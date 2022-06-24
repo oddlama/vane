@@ -52,7 +52,6 @@ def load_feature_markdown(markdown_file: Path, default_slug: str) -> Feature:
     metadata = metadata["feature"]
     if "slug" not in metadata:
         metadata["slug"] = default_slug
-    assert metadata["category"] in context.categories
 
     if ":" in metadata["icon"]:
         namespace, key = metadata["icon"].split(":", maxsplit=1)

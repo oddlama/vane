@@ -2,7 +2,6 @@
 [feature]
 title = "Angel [I-V]"
 icon = "minecraft:textures/item/barrier.png"
-category = "enchantments"
 module = "vane-enchantments"
 ```
 ---

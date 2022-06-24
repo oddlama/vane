@@ -2,7 +2,6 @@
 [feature]
 title = "Night to Day"
 icon = "minecraft:textures/item/barrier.png"
-category = "gameplay"
 module = "vane-bedtime"
 ```
 ---

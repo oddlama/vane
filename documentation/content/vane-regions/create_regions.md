@@ -2,7 +2,6 @@
 [feature]
 title = "Create Regions"
 icon = "minecraft:textures/item/writable_book.png"
-category = "mechanics"
 module = "vane-regions"
 ```
 ---

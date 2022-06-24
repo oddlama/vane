@@ -2,7 +2,6 @@
 [feature]
 title = "Netherite Elytra"
 icon = "vane-trifles:items/reinforced_elytra.png"
-category = "custom_items"
 module = "vane-trifles"
 ```
 ---

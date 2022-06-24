@@ -2,7 +2,6 @@
 [feature]
 title = "Portal Scroll - Unstable"
 icon = "vane-trifles:items/unstable_scroll.png"
-category = "custom_items"
 module = "vane-trifles"
 ```
 ---

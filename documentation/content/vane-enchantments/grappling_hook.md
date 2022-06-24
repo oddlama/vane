@@ -2,7 +2,6 @@
 [feature]
 title = "Grappling hook [I-III]"
 icon = "minecraft:textures/item/barrier.png"
-category = "enchantments"
 module = "vane-enchantments"
 ```
 ---
