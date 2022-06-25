@@ -1,7 +1,7 @@
 ```toml
 [feature]
-title = "Night to Day"
-icon = "minecraft:barrier"
+title = "Smooth Night Skipping"
+icon = "minecraft:bed"
 module = "vane-bedtime"
 ```
 ---

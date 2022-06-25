@@ -1,7 +1,7 @@
 ```toml
 [feature]
 title = "Chest Sorting"
-icon = "minecraft:barrier"
+icon = "minecraft:chest"
 module = "vane-trifles"
 ```
 ---

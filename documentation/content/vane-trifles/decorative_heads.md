@@ -1,7 +1,7 @@
 ```toml
 [feature]
 title = "Decorative Heads"
-icon = "minecraft:barrier"
+icon = "minecraft:player_head"
 module = "vane-trifles"
 ```
 ---

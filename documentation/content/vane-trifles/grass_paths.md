@@ -1,7 +1,7 @@
 ```toml
 [feature]
 title = "Grass Paths"
-icon = "minecraft:barrier"
+icon = "minecraft:dirt_path"
 module = "vane-trifles"
 ```
 ---
