@@ -1,7 +1,7 @@
 ```toml
 [feature]
 title = "File"
-icon = "vane-trifles:items/file.png"
+icon = "vane-trifles:file"
 module = "vane-trifles"
 itemlike = "vane-trifles:item_file"
 ```

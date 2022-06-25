@@ -1,7 +1,7 @@
 ```toml
 [feature]
 title = "Portal Scroll - Home"
-icon = "vane-trifles:items/home_scroll.png"
+icon = "vane-trifles:home_scroll"
 module = "vane-trifles"
 itemlike = "vane-trifles:scrolls.item_home_scroll"
 ```

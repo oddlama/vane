@@ -96,7 +96,7 @@ def ingredient_to_icon(ingredient: str) -> str:
         icon = f"assets/minecraft/textures/item/{key}.png"
         context.required_minecraft_assets.add(icon)
         return icon
-    elif namespace.startswith("vane_"):
+    elif namespace.startswith("vane"):
         namespace = namespace.replace("_", "-")
         key = f"items/{key}.png"
         icon = f"{namespace}/{key}"
@@ -150,7 +150,7 @@ def render_feature(feature: Feature, index: int, count: int) -> str:
 
     if "itemlike" in feature.metadata:
         recipes = [render_recipe(r) for r in get_from_config(feature.metadata["itemlike"] + ".recipes").values()]
-        html = html.replace("{{ feature.recipes }}", recipes[0])
+        html = html.replace("{{ feature.recipes }}", "\n".join(recipes))
 
         loot = get_from_config(feature.metadata["itemlike"] + ".loot")
     else:

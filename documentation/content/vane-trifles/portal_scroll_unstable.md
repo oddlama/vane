@@ -1,7 +1,7 @@
 ```toml
 [feature]
 title = "Portal Scroll - Unstable"
-icon = "vane-trifles:items/unstable_scroll.png"
+icon = "vane-trifles:unstable_scroll"
 module = "vane-trifles"
 itemlike = "vane-trifles:scrolls.item_unstable_scroll"
 ```

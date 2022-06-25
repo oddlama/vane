@@ -1,7 +1,7 @@
 ```toml
 [feature]
 title = "XP Bottles"
-icon = "vane-trifles:items/medium_xp_bottle.png"
+icon = "vane-trifles:medium_xp_bottle"
 module = "vane-trifles"
 
 recipes = "vane-trifles:item_empty_xp_bottle"
