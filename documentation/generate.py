@@ -72,7 +72,7 @@ def load_feature_markdown(markdown_file: Path, default_slug: str) -> Feature:
         if "itemlike" not in metadata:
             raise ValueError("metadata contains no icon definition. This is only possible if 'itemlike' is set to determine the icon from the recipe.")
 
-    return Feature(loaded_from=markdown_file,
+    return Feature(loaded_from=str(markdown_file),
                    metadata=metadata,
                    html_content=markdown.markdown(content))
 
@@ -304,6 +304,13 @@ def main():
 
     generate_docs()
     collect_assets(args.client_jar)
+
+    # Ensure that all content documents are included as a safety check
+    used = set(f for cat in context.content_settings["categories"] for f in cat["content"])
+    available = set(f.removeprefix("content/") for f in glob("content/**/*.md", recursive=True))
+    missing = available - used
+    if len(missing) > 0:
+        print(f"[1;33mwarning:[m unused content templates: {', '.join(missing)}")
 
 if __name__ == "__main__":
     main()
