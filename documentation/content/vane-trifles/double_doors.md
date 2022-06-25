@@ -1,7 +1,7 @@
 ```toml
 [feature]
 title = "Double Doors"
-icon = "minecraft:textures/item/oak_door.png"
+icon = "minecraft:oak_door"
 module = "vane-trifles"
 ```
 ---

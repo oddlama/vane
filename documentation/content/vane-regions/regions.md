@@ -1,7 +1,7 @@
 ```toml
 [feature]
 title = "Regions"
-icon = "minecraft:textures/item/compass_19.png"
+icon = "minecraft:compass"
 module = "vane-regions"
 ```
 ---

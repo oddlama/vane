@@ -1,7 +1,7 @@
 ```toml
 [feature]
 title = "Translations"
-icon = "minecraft:textures/item/barrier.png"
+icon = "minecraft:barrier"
 module = "vane-admin"
 ```
 ---

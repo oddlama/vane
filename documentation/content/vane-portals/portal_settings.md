@@ -1,7 +1,7 @@
 ```toml
 [feature]
 title = "Portal Settings"
-icon = "minecraft:textures/item/barrier.png"
+icon = "minecraft:barrier"
 module = "vane-portals"
 ```
 ---

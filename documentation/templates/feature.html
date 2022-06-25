@@ -12,7 +12,9 @@
 </h2>
 <div id="body-{{ feature.metadata.slug }}" class="hidden">
 	<div class="p-5 {{ accordion.body }} border-gray-200 dark:border-gray-700 dark:bg-gray-900">
-		<div class="prose dark:prose-invert">
+		{{ feature.recipes }}
+		{{ feature.loot }}
+		<div class="prose dark:prose-invert max-w-none">
 			{{ feature.html_content }}
 		</div>
 	</div>

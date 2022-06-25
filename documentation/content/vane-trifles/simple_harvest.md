@@ -1,7 +1,7 @@
 ```toml
 [feature]
 title = "Simple Harvest"
-icon = "minecraft:textures/item/wheat.png"
+icon = "minecraft:wheat"
 module = "vane-trifles"
 ```
 ---

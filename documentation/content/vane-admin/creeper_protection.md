@@ -1,7 +1,7 @@
 ```toml
 [feature]
 title = "Creeper protection"
-icon = "minecraft:textures/item/barrier.png"
+icon = "minecraft:barrier"
 module = "vane-admin"
 ```
 ---

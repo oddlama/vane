@@ -3,6 +3,7 @@
 title = "Portal Scroll - Unstable"
 icon = "vane-trifles:items/unstable_scroll.png"
 module = "vane-trifles"
+itemlike = "vane-trifles:scrolls.item_unstable_scroll"
 ```
 ---
 ![](images/portal_scroll_unstable.png)

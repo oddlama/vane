@@ -1,7 +1,7 @@
 ```toml
 [feature]
 title = "Create Regions"
-icon = "minecraft:textures/item/writable_book.png"
+icon = "minecraft:writable_book"
 module = "vane-regions"
 ```
 ---

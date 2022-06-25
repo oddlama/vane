@@ -56,14 +56,16 @@ def load_feature_markdown(markdown_file: Path, default_slug: str) -> Feature:
     if "slug" not in metadata:
         metadata["slug"] = default_slug
 
-    if ":" in metadata["icon"]:
+    if ":" in metadata["icon"] and metadata["icon"].endswith(".png"):
         namespace, key = metadata["icon"].split(":", maxsplit=1)
         if namespace == "minecraft":
-            metadata["icon"] = "minecraft/" + key
+            metadata["icon"] = "assets/minecraft/" + key
             context.required_minecraft_assets.add(metadata["icon"])
         elif namespace.startswith("vane-"):
-            metadata["icon"] = f"{namespace}/{key}"
+            metadata["icon"] = f"assets/{namespace}/{key}"
             context.required_project_assets.add((namespace, key))
+    else:
+        metadata["icon"] = ingredient_to_icon(metadata["icon"])
 
     return Feature(metadata=metadata,
                    html_content=markdown.markdown(content))
@@ -76,30 +78,89 @@ def replace_category_variables(s: str, category: dict[str, Any]):
 def deep_get(dictionary, keys):
     return reduce(lambda d, key: d[key], keys.split("."), dictionary)
 
-def render_feature(feature: Feature, index: int, count: int):
+def get_from_config(resource_key: str) -> dict[str, Any]:
+    namespace, key = resource_key.split(":", maxsplit=1)
+    with open(context.plugins_dir / namespace / "config.yml") as f:
+        config = yaml.safe_load(f)
+    return deep_get(config, key)
+
+def ingredient_to_icon(ingredient: str) -> str:
+    resource_key = ingredient.split("{")[0]
+    namespace, key = resource_key.split(":", maxsplit=1)
+    if namespace == "minecraft":
+        # Some items require manual rewrites
+        if key == "compass":
+            key = "compass_19"
+        elif key == "clock":
+            key = "clock_02"
+        icon = f"assets/minecraft/textures/item/{key}.png"
+        context.required_minecraft_assets.add(icon)
+        return icon
+    elif namespace.startswith("vane_"):
+        namespace = namespace.replace("_", "-")
+        key = f"items/{key}.png"
+        icon = f"{namespace}/{key}"
+        context.required_project_assets.add((namespace, key))
+        return "assets/" + icon
+    return f"assets/minecraft/textures/item/barrier.png"
+
+def render_recipe(recipe: dict[str, Any]) -> str:
+    if recipe["type"] == "shaped":
+        html = context.templates["shaped-recipe"]
+
+        shape = "".join([row.ljust(3) for row in (recipe["shape"] + 3 * [""])[:3]])
+        assert len(shape) == 9
+        for i,c in enumerate(shape):
+            tag = f"{{{{ recipe.ingredients.{i} }}}}"
+            if c == " ":
+                html = "".join(line for line in html.splitlines(keepends=True) if tag not in line)
+            else:
+                ingredient = recipe["ingredients"][c]
+                html = html.replace(tag, ingredient_to_icon(ingredient))
+                html = html.replace(f"{{{{ recipe.ingredients.{i}.name }}}}", ingredient)
+
+        html = html.replace("{{ recipe.result }}", ingredient_to_icon(recipe["result"]))
+        html = html.replace("{{ recipe.result.name }}", recipe["result"])
+    elif recipe["type"] == "shapeless":
+        html = context.templates["shaped-recipe"] # Abuse the template for shapeless recipes
+
+        for i,ingredient in enumerate(recipe["ingredients"] + (9 - len(recipe["ingredients"])) * [None]):
+            tag = f"{{{{ recipe.ingredients.{i} }}}}"
+            if ingredient is None:
+                html = "".join(line for line in html.splitlines(keepends=True) if tag not in line)
+            else:
+                html = html.replace(tag, ingredient_to_icon(ingredient))
+                html = html.replace(f"{{{{ recipe.ingredients.{i}.name }}}}", ingredient)
+
+        html = html.replace("{{ recipe.result }}", ingredient_to_icon(recipe["result"]))
+        html = html.replace("{{ recipe.result.name }}", recipe["result"])
+    elif recipe["type"] == "smithing":
+        print("TODO: smithing recipe")
+        return ""
+    else:
+        raise ValueError(f"cannot render recipe of unknown type {recipe['type']}")
+    return html
+
+def render_feature(feature: Feature, index: int, count: int) -> str:
     html = context.templates["feature"]
 
     is_last = index == count - 1
     html = html.replace("{{ accordion.heading }}", "border" + (""            if is_last else " border-b-0 ") + (" rounded-t-xl" if index == 0 else ""))
     html = html.replace("{{ accordion.body }}",    "border" + (" border-t-0" if is_last else " border-b-0"))
 
+    if "itemlike" in feature.metadata:
+        recipes = [render_recipe(r) for r in get_from_config(feature.metadata["itemlike"] + ".recipes").values()]
+        html = html.replace("{{ feature.recipes }}", recipes[0])
+
+        loot = get_from_config(feature.metadata["itemlike"] + ".loot")
+    else:
+        html = html.replace("{{ feature.recipes }}", "")
+        html = html.replace("{{ feature.loot }}", "")
+
     for k,v in feature.metadata.items():
         html = html.replace(f"{{{{ feature.metadata.{k} }}}}", v)
-
-
-    if "recipes" in feature.metadata:
-        namespace, key = feature.metadata["recipes"].split(":", maxsplit=1)
-        with open(context.plugins_dir / namespace / "config.yml") as f:
-            config = yaml.safe_load(f)
-        recipes = deep_get(config, f"{key}.recipes")
-        loot = deep_get(config, f"{key}.loot")
-
-
-
-
-    html = html.replace("{{ feature.recipe }}", feature.html_content)
     html = html.replace("{{ feature.html_content }}", feature.html_content)
-    html = html.replace("{{ feature.icon }}", f"assets/{feature.metadata['icon']}")
+    html = html.replace("{{ feature.icon }}", feature.metadata['icon'])
     module_badge = context.templates["module-badge"].replace("{{ text }}", feature.metadata["module"])
     html = html.replace("{{ feature.badge }}", module_badge)
     return html
@@ -140,10 +201,10 @@ def collect_assets(client_jar: str) -> None:
     print(f"Collecting {len(context.required_minecraft_assets)} required assets from client jar...")
     with zipfile.ZipFile(client_jar) as zf:
         for asset in context.required_minecraft_assets:
-            out = context.assets_path / asset
+            out = context.assets_path / asset.removeprefix("assets/")
             out.parent.mkdir(parents=True, exist_ok=True)
             with open(out, "wb") as f:
-                f.write(zf.read("assets/" + asset))
+                f.write(zf.read(asset))
 
     print(f"Collecting {len(context.required_project_assets)} required assets from this project...")
     for namespace, key in context.required_project_assets:
