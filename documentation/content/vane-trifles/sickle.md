@@ -1,7 +1,6 @@
 ```toml
 [feature]
 title = "Sickle"
-icon = "vane-trifles:golden_sickle"
 module = "vane-trifles"
 itemlike = "vane-trifles:sickles.item_golden_sickle"
 ```

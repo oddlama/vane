@@ -3,9 +3,7 @@
 title = "XP Bottles"
 icon = "vane-trifles:medium_xp_bottle"
 module = "vane-trifles"
-
-recipes = "vane-trifles:item_empty_xp_bottle"
-loot = "vane-trifles:item_empty_xp_bottle"
+itemlike = "vane-trifles:item_empty_xp_bottle"
 ```
 ---
 ![](images/xp_bottle.png)

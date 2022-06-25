@@ -56,16 +56,20 @@ def load_feature_markdown(markdown_file: Path, default_slug: str) -> Feature:
     if "slug" not in metadata:
         metadata["slug"] = default_slug
 
-    if ":" in metadata["icon"] and metadata["icon"].endswith(".png"):
-        namespace, key = metadata["icon"].split(":", maxsplit=1)
-        if namespace == "minecraft":
-            metadata["icon"] = "assets/minecraft/" + key
-            context.required_minecraft_assets.add(metadata["icon"])
-        elif namespace.startswith("vane-"):
-            metadata["icon"] = f"assets/{namespace}/{key}"
-            context.required_project_assets.add((namespace, key))
+    if "icon" in metadata:
+        if ":" in metadata["icon"] and metadata["icon"].endswith(".png"):
+            namespace, key = metadata["icon"].split(":", maxsplit=1)
+            if namespace == "minecraft":
+                metadata["icon"] = "assets/minecraft/" + key
+                context.required_minecraft_assets.add(metadata["icon"])
+            elif namespace.startswith("vane-"):
+                metadata["icon"] = f"assets/{namespace}/{key}"
+                context.required_project_assets.add((namespace, key))
+        else:
+            metadata["icon"] = ingredient_to_icon(metadata["icon"])
     else:
-        metadata["icon"] = ingredient_to_icon(metadata["icon"])
+        if "itemlike" not in metadata:
+            raise ValueError("metadata contains no icon definition. This is only possible if 'itemlike' is set to determine the icon from the recipe.")
 
     return Feature(metadata=metadata,
                    html_content=markdown.markdown(content))
@@ -104,7 +108,7 @@ def ingredient_to_icon(ingredient: str) -> str:
         return "assets/" + icon
     return f"assets/minecraft/textures/item/barrier.png"
 
-def render_recipe(recipe: dict[str, Any]) -> str:
+def render_recipe(feature: Feature, recipe: dict[str, Any]) -> str:
     if recipe["type"] == "shaped":
         html = context.templates["shaped-recipe"]
 
@@ -118,9 +122,6 @@ def render_recipe(recipe: dict[str, Any]) -> str:
                 ingredient = recipe["ingredients"][c]
                 html = html.replace(tag, ingredient_to_icon(ingredient))
                 html = html.replace(f"{{{{ recipe.ingredients.{i}.name }}}}", ingredient)
-
-        html = html.replace("{{ recipe.result }}", ingredient_to_icon(recipe["result"]))
-        html = html.replace("{{ recipe.result.name }}", recipe["result"])
     elif recipe["type"] == "shapeless":
         html = context.templates["shaped-recipe"] # Abuse the template for shapeless recipes
 
@@ -131,14 +132,17 @@ def render_recipe(recipe: dict[str, Any]) -> str:
             else:
                 html = html.replace(tag, ingredient_to_icon(ingredient))
                 html = html.replace(f"{{{{ recipe.ingredients.{i}.name }}}}", ingredient)
-
-        html = html.replace("{{ recipe.result }}", ingredient_to_icon(recipe["result"]))
-        html = html.replace("{{ recipe.result.name }}", recipe["result"])
     elif recipe["type"] == "smithing":
         print("TODO: smithing recipe")
         return ""
     else:
         raise ValueError(f"cannot render recipe of unknown type {recipe['type']}")
+
+    result_icon = ingredient_to_icon(recipe["result"])
+    html = html.replace("{{ recipe.result }}", result_icon)
+    html = html.replace("{{ recipe.result.name }}", recipe["result"])
+    if "icon" not in feature.metadata:
+        feature.metadata["icon"] = result_icon
     return html
 
 def render_feature(feature: Feature, index: int, count: int) -> str:
@@ -149,7 +153,7 @@ def render_feature(feature: Feature, index: int, count: int) -> str:
     html = html.replace("{{ accordion.body }}",    "border" + (" border-t-0" if is_last else " border-b-0"))
 
     if "itemlike" in feature.metadata:
-        recipes = [render_recipe(r) for r in get_from_config(feature.metadata["itemlike"] + ".recipes").values()]
+        recipes = [render_recipe(feature, r) for r in get_from_config(feature.metadata["itemlike"] + ".recipes").values()]
         html = html.replace("{{ feature.recipes }}", "\n".join(recipes))
 
         loot = get_from_config(feature.metadata["itemlike"] + ".loot")
@@ -160,7 +164,6 @@ def render_feature(feature: Feature, index: int, count: int) -> str:
     for k,v in feature.metadata.items():
         html = html.replace(f"{{{{ feature.metadata.{k} }}}}", v)
     html = html.replace("{{ feature.html_content }}", feature.html_content)
-    html = html.replace("{{ feature.icon }}", feature.metadata['icon'])
     module_badge = context.templates["module-badge"].replace("{{ text }}", feature.metadata["module"])
     html = html.replace("{{ feature.badge }}", module_badge)
     return html

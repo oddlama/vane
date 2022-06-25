@@ -1,7 +1,6 @@
 ```toml
 [feature]
 title = "Netherite Elytra"
-icon = "vane-trifles:reinforced_elytra"
 module = "vane-trifles"
 itemlike = "vane-trifles:item_reinforced_elytra"
 ```
