@@ -1,16 +1,16 @@
 <h2 id="{{ feature.metadata.slug }}">
-	<button type="button" class="flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 {{ accordion.heading }} border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" data-accordion-target="#body-{{ feature.metadata.slug }}" aria-expanded="true" aria-controls="body-{{ feature.metadata.slug }}">
+	<button type="button" class="feature-toggle flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 {{ accordion.heading }} border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" aria-expanded="false" aria-controls="body-{{ feature.metadata.slug }}">
 		<span class="flex items-center">
 			<img class="is-pixelated mr-4 w-[32px] h-[32px] min-w-[32px] min-h-[32px]" src="{{ feature.icon }}">
 			{{ feature.metadata.title }}
 		</span>
 		<div class="inline-flex shrink-0">
 			{{ feature.badge }}
-			<svg data-accordion-icon class="w-6 h-6 rotate-180 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+			<svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
 		</div>
 	</button>
 </h2>
-<div id="body-{{ feature.metadata.slug }}" class="hidden" aria-labelledby="{{ feature.metadata.slug }}">
+<div id="body-{{ feature.metadata.slug }}" class="hidden">
 	<div class="p-5 {{ accordion.body }} border-gray-200 dark:border-gray-700 dark:bg-gray-900">
 		<div class="prose dark:prose-invert">
 			{{ feature.html_content }}

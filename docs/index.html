@@ -60,12 +60,20 @@
 					</div>
 				</div>
 			</section>
-			
 			<section class="my-16">
-	<h1 class="py-6 text-center text-4xl font-bold tracking-tight leading-none text-gray-900 dark:text-white">Gameplay</h1>
-	<div data-accordion="open" class="my-16">
-		<h2 id="feature-vane-trifles--double_doors">
-	<button type="button" class="flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  rounded-t-xl border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" data-accordion-target="#body-feature-vane-trifles--double_doors" aria-expanded="true" aria-controls="body-feature-vane-trifles--double_doors">
+				<h1 class="py-6 text-center text-4xl font-bold tracking-tight leading-none text-gray-900 dark:text-gray-50">Features</h1>
+				<p class="mb-4 text-center text-lg font-normal text-gray-500 lg:text-xl lg:px-24 dark:text-gray-400">Below you will find an overview of each feature in vane, sorted into their major categories. The tag to the right indicates the module to which the feature belongs.</p>
+				<div class="mb-8 flex flex-col sm:flex-row sm:justify-center">
+					<button id="expand-collapse-all" class="py-2 px-4 uppercase text-xs font-bold text-center text-gray-900 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 dark:text-white dark:hover:bg-gray-700 dark:focus:ring-gray-800">Expand All</button>
+				</div>
+			</section>
+			
+			<div class="mt-8 relative flex justify-center py-5 items-center">
+	<span class="mx-2 text-gray-700 dark:text-gray-400 text-md font-bold uppercase">Gameplay</span>
+</div>
+<section class="my-4">
+	<h2 id="feature-vane-trifles--double_doors">
+	<button type="button" class="feature-toggle flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  rounded-t-xl border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" aria-expanded="false" aria-controls="body-feature-vane-trifles--double_doors">
 		<span class="flex items-center">
 			<img class="is-pixelated mr-4 w-[32px] h-[32px] min-w-[32px] min-h-[32px]" src="assets/minecraft/textures/item/oak_door.png">
 			Double Doors
@@ -73,11 +81,11 @@
 		<div class="inline-flex shrink-0">
 			<span class="bg-gray-100 text-gray-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">vane-trifles</span>
 
-			<svg data-accordion-icon class="w-6 h-6 rotate-180 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+			<svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
 		</div>
 	</button>
 </h2>
-<div id="body-feature-vane-trifles--double_doors" class="hidden" aria-labelledby="feature-vane-trifles--double_doors">
+<div id="body-feature-vane-trifles--double_doors" class="hidden">
 	<div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900">
 		<div class="prose dark:prose-invert">
 			<p>Double doors open automatically on both sides!</p>
@@ -86,7 +94,7 @@
 </div>
 
 <h2 id="feature-vane-trifles--simple_harvest">
-	<button type="button" class="flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" data-accordion-target="#body-feature-vane-trifles--simple_harvest" aria-expanded="true" aria-controls="body-feature-vane-trifles--simple_harvest">
+	<button type="button" class="feature-toggle flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" aria-expanded="false" aria-controls="body-feature-vane-trifles--simple_harvest">
 		<span class="flex items-center">
 			<img class="is-pixelated mr-4 w-[32px] h-[32px] min-w-[32px] min-h-[32px]" src="assets/minecraft/textures/item/wheat.png">
 			Simple Harvest
@@ -94,11 +102,11 @@
 		<div class="inline-flex shrink-0">
 			<span class="bg-gray-100 text-gray-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">vane-trifles</span>
 
-			<svg data-accordion-icon class="w-6 h-6 rotate-180 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+			<svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
 		</div>
 	</button>
 </h2>
-<div id="body-feature-vane-trifles--simple_harvest" class="hidden" aria-labelledby="feature-vane-trifles--simple_harvest">
+<div id="body-feature-vane-trifles--simple_harvest" class="hidden">
 	<div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900">
 		<div class="prose dark:prose-invert">
 			<p>Right-click on a mature plant to harvest it and replant it directly.</p>
@@ -107,7 +115,7 @@
 </div>
 
 <h2 id="feature-vane-trifles--chest_sorting">
-	<button type="button" class="flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" data-accordion-target="#body-feature-vane-trifles--chest_sorting" aria-expanded="true" aria-controls="body-feature-vane-trifles--chest_sorting">
+	<button type="button" class="feature-toggle flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" aria-expanded="false" aria-controls="body-feature-vane-trifles--chest_sorting">
 		<span class="flex items-center">
 			<img class="is-pixelated mr-4 w-[32px] h-[32px] min-w-[32px] min-h-[32px]" src="assets/minecraft/textures/item/barrier.png">
 			Chest Sorting
@@ -115,11 +123,11 @@
 		<div class="inline-flex shrink-0">
 			<span class="bg-gray-100 text-gray-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">vane-trifles</span>
 
-			<svg data-accordion-icon class="w-6 h-6 rotate-180 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+			<svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
 		</div>
 	</button>
 </h2>
-<div id="body-feature-vane-trifles--chest_sorting" class="hidden" aria-labelledby="feature-vane-trifles--chest_sorting">
+<div id="body-feature-vane-trifles--chest_sorting" class="hidden">
 	<div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900">
 		<div class="prose dark:prose-invert">
 			<p>When a button is pressed, all chests within a 1-block radius of the button are automatically sorted. (A 3x3x3 cube with the button in the middle)</p>
@@ -128,7 +136,7 @@
 </div>
 
 <h2 id="feature-vane-trifles--grass_paths">
-	<button type="button" class="flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" data-accordion-target="#body-feature-vane-trifles--grass_paths" aria-expanded="true" aria-controls="body-feature-vane-trifles--grass_paths">
+	<button type="button" class="feature-toggle flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" aria-expanded="false" aria-controls="body-feature-vane-trifles--grass_paths">
 		<span class="flex items-center">
 			<img class="is-pixelated mr-4 w-[32px] h-[32px] min-w-[32px] min-h-[32px]" src="assets/minecraft/textures/item/barrier.png">
 			Grass Paths
@@ -136,11 +144,11 @@
 		<div class="inline-flex shrink-0">
 			<span class="bg-gray-100 text-gray-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">vane-trifles</span>
 
-			<svg data-accordion-icon class="w-6 h-6 rotate-180 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+			<svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
 		</div>
 	</button>
 </h2>
-<div id="body-feature-vane-trifles--grass_paths" class="hidden" aria-labelledby="feature-vane-trifles--grass_paths">
+<div id="body-feature-vane-trifles--grass_paths" class="hidden">
 	<div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900">
 		<div class="prose dark:prose-invert">
 			<p>You'll run faster on grass paths, so it's worth building a few!</p>
@@ -149,7 +157,7 @@
 </div>
 
 <h2 id="feature-vane-trifles--decorative_heads">
-	<button type="button" class="flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" data-accordion-target="#body-feature-vane-trifles--decorative_heads" aria-expanded="true" aria-controls="body-feature-vane-trifles--decorative_heads">
+	<button type="button" class="feature-toggle flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" aria-expanded="false" aria-controls="body-feature-vane-trifles--decorative_heads">
 		<span class="flex items-center">
 			<img class="is-pixelated mr-4 w-[32px] h-[32px] min-w-[32px] min-h-[32px]" src="assets/minecraft/textures/item/barrier.png">
 			Decorative Heads
@@ -157,11 +165,11 @@
 		<div class="inline-flex shrink-0">
 			<span class="bg-gray-100 text-gray-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">vane-trifles</span>
 
-			<svg data-accordion-icon class="w-6 h-6 rotate-180 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+			<svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
 		</div>
 	</button>
 </h2>
-<div id="body-feature-vane-trifles--decorative_heads" class="hidden" aria-labelledby="feature-vane-trifles--decorative_heads">
+<div id="body-feature-vane-trifles--decorative_heads" class="hidden">
 	<div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900">
 		<div class="prose dark:prose-invert">
 			<p><img alt="" src="images/heads.png" /></p>
@@ -171,7 +179,7 @@
 </div>
 
 <h2 id="feature-vane-bedtime--night_to_day">
-	<button type="button" class="flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" data-accordion-target="#body-feature-vane-bedtime--night_to_day" aria-expanded="true" aria-controls="body-feature-vane-bedtime--night_to_day">
+	<button type="button" class="feature-toggle flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" aria-expanded="false" aria-controls="body-feature-vane-bedtime--night_to_day">
 		<span class="flex items-center">
 			<img class="is-pixelated mr-4 w-[32px] h-[32px] min-w-[32px] min-h-[32px]" src="assets/minecraft/textures/item/barrier.png">
 			Night to Day
@@ -179,11 +187,11 @@
 		<div class="inline-flex shrink-0">
 			<span class="bg-gray-100 text-gray-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">vane-bedtime</span>
 
-			<svg data-accordion-icon class="w-6 h-6 rotate-180 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+			<svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
 		</div>
 	</button>
 </h2>
-<div id="body-feature-vane-bedtime--night_to_day" class="hidden" aria-labelledby="feature-vane-bedtime--night_to_day">
+<div id="body-feature-vane-bedtime--night_to_day" class="hidden">
 	<div class="p-5 border border-t-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900">
 		<div class="prose dark:prose-invert">
 			<p>Once at least 50% of all players in a world are asleep, the night is skipped.</p>
@@ -191,14 +199,14 @@
 	</div>
 </div>
 
-	</div>
 </section>
 
-<section class="my-16">
-	<h1 class="py-6 text-center text-4xl font-bold tracking-tight leading-none text-gray-900 dark:text-white">Custom Items</h1>
-	<div data-accordion="open" class="my-16">
-		<h2 id="feature-vane-trifles--sickle">
-	<button type="button" class="flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  rounded-t-xl border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" data-accordion-target="#body-feature-vane-trifles--sickle" aria-expanded="true" aria-controls="body-feature-vane-trifles--sickle">
+<div class="mt-8 relative flex justify-center py-5 items-center">
+	<span class="mx-2 text-gray-700 dark:text-gray-400 text-md font-bold uppercase">Custom Items</span>
+</div>
+<section class="my-4">
+	<h2 id="feature-vane-trifles--sickle">
+	<button type="button" class="feature-toggle flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  rounded-t-xl border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" aria-expanded="false" aria-controls="body-feature-vane-trifles--sickle">
 		<span class="flex items-center">
 			<img class="is-pixelated mr-4 w-[32px] h-[32px] min-w-[32px] min-h-[32px]" src="assets/vane-trifles/items/golden_sickle.png">
 			Mass Harvest
@@ -206,11 +214,11 @@
 		<div class="inline-flex shrink-0">
 			<span class="bg-gray-100 text-gray-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">vane-trifles</span>
 
-			<svg data-accordion-icon class="w-6 h-6 rotate-180 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+			<svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
 		</div>
 	</button>
 </h2>
-<div id="body-feature-vane-trifles--sickle" class="hidden" aria-labelledby="feature-vane-trifles--sickle">
+<div id="body-feature-vane-trifles--sickle" class="hidden">
 	<div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900">
 		<div class="prose dark:prose-invert">
 			<p><img alt="" src="images/sickle.png" /></p>
@@ -220,7 +228,7 @@
 </div>
 
 <h2 id="feature-vane-trifles--file">
-	<button type="button" class="flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" data-accordion-target="#body-feature-vane-trifles--file" aria-expanded="true" aria-controls="body-feature-vane-trifles--file">
+	<button type="button" class="feature-toggle flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" aria-expanded="false" aria-controls="body-feature-vane-trifles--file">
 		<span class="flex items-center">
 			<img class="is-pixelated mr-4 w-[32px] h-[32px] min-w-[32px] min-h-[32px]" src="assets/vane-trifles/items/file.png">
 			File
@@ -228,11 +236,11 @@
 		<div class="inline-flex shrink-0">
 			<span class="bg-gray-100 text-gray-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">vane-trifles</span>
 
-			<svg data-accordion-icon class="w-6 h-6 rotate-180 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+			<svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
 		</div>
 	</button>
 </h2>
-<div id="body-feature-vane-trifles--file" class="hidden" aria-labelledby="feature-vane-trifles--file">
+<div id="body-feature-vane-trifles--file" class="hidden">
 	<div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900">
 		<div class="prose dark:prose-invert">
 			<p><img alt="" src="images/file.png" /></p>
@@ -242,7 +250,7 @@
 </div>
 
 <h2 id="feature-vane-trifles--portal_scroll_home">
-	<button type="button" class="flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" data-accordion-target="#body-feature-vane-trifles--portal_scroll_home" aria-expanded="true" aria-controls="body-feature-vane-trifles--portal_scroll_home">
+	<button type="button" class="feature-toggle flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" aria-expanded="false" aria-controls="body-feature-vane-trifles--portal_scroll_home">
 		<span class="flex items-center">
 			<img class="is-pixelated mr-4 w-[32px] h-[32px] min-w-[32px] min-h-[32px]" src="assets/vane-trifles/items/home_scroll.png">
 			Portal Scroll - Home
@@ -250,11 +258,11 @@
 		<div class="inline-flex shrink-0">
 			<span class="bg-gray-100 text-gray-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">vane-trifles</span>
 
-			<svg data-accordion-icon class="w-6 h-6 rotate-180 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+			<svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
 		</div>
 	</button>
 </h2>
-<div id="body-feature-vane-trifles--portal_scroll_home" class="hidden" aria-labelledby="feature-vane-trifles--portal_scroll_home">
+<div id="body-feature-vane-trifles--portal_scroll_home" class="hidden">
 	<div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900">
 		<div class="prose dark:prose-invert">
 			<p><img alt="" src="images/portal_scroll_home.png" /></p>
@@ -264,7 +272,7 @@
 </div>
 
 <h2 id="feature-vane-trifles--portal_scroll_unstable">
-	<button type="button" class="flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" data-accordion-target="#body-feature-vane-trifles--portal_scroll_unstable" aria-expanded="true" aria-controls="body-feature-vane-trifles--portal_scroll_unstable">
+	<button type="button" class="feature-toggle flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" aria-expanded="false" aria-controls="body-feature-vane-trifles--portal_scroll_unstable">
 		<span class="flex items-center">
 			<img class="is-pixelated mr-4 w-[32px] h-[32px] min-w-[32px] min-h-[32px]" src="assets/vane-trifles/items/unstable_scroll.png">
 			Portal Scroll - Unstable
@@ -272,11 +280,11 @@
 		<div class="inline-flex shrink-0">
 			<span class="bg-gray-100 text-gray-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">vane-trifles</span>
 
-			<svg data-accordion-icon class="w-6 h-6 rotate-180 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+			<svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
 		</div>
 	</button>
 </h2>
-<div id="body-feature-vane-trifles--portal_scroll_unstable" class="hidden" aria-labelledby="feature-vane-trifles--portal_scroll_unstable">
+<div id="body-feature-vane-trifles--portal_scroll_unstable" class="hidden">
 	<div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900">
 		<div class="prose dark:prose-invert">
 			<p><img alt="" src="images/portal_scroll_unstable.png" /></p>
@@ -286,7 +294,7 @@
 </div>
 
 <h2 id="feature-vane-trifles--xp_bottles">
-	<button type="button" class="flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" data-accordion-target="#body-feature-vane-trifles--xp_bottles" aria-expanded="true" aria-controls="body-feature-vane-trifles--xp_bottles">
+	<button type="button" class="feature-toggle flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" aria-expanded="false" aria-controls="body-feature-vane-trifles--xp_bottles">
 		<span class="flex items-center">
 			<img class="is-pixelated mr-4 w-[32px] h-[32px] min-w-[32px] min-h-[32px]" src="assets/vane-trifles/items/medium_xp_bottle.png">
 			XP Bottles
@@ -294,11 +302,11 @@
 		<div class="inline-flex shrink-0">
 			<span class="bg-gray-100 text-gray-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">vane-trifles</span>
 
-			<svg data-accordion-icon class="w-6 h-6 rotate-180 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+			<svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
 		</div>
 	</button>
 </h2>
-<div id="body-feature-vane-trifles--xp_bottles" class="hidden" aria-labelledby="feature-vane-trifles--xp_bottles">
+<div id="body-feature-vane-trifles--xp_bottles" class="hidden">
 	<div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900">
 		<div class="prose dark:prose-invert">
 			<p><img alt="" src="images/xp_bottle.png" /></p>
@@ -308,7 +316,7 @@
 </div>
 
 <h2 id="feature-vane-trifles--netherite_elytra">
-	<button type="button" class="flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" data-accordion-target="#body-feature-vane-trifles--netherite_elytra" aria-expanded="true" aria-controls="body-feature-vane-trifles--netherite_elytra">
+	<button type="button" class="feature-toggle flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" aria-expanded="false" aria-controls="body-feature-vane-trifles--netherite_elytra">
 		<span class="flex items-center">
 			<img class="is-pixelated mr-4 w-[32px] h-[32px] min-w-[32px] min-h-[32px]" src="assets/vane-trifles/items/reinforced_elytra.png">
 			Netherite Elytra
@@ -316,11 +324,11 @@
 		<div class="inline-flex shrink-0">
 			<span class="bg-gray-100 text-gray-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">vane-trifles</span>
 
-			<svg data-accordion-icon class="w-6 h-6 rotate-180 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+			<svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
 		</div>
 	</button>
 </h2>
-<div id="body-feature-vane-trifles--netherite_elytra" class="hidden" aria-labelledby="feature-vane-trifles--netherite_elytra">
+<div id="body-feature-vane-trifles--netherite_elytra" class="hidden">
 	<div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900">
 		<div class="prose dark:prose-invert">
 			<p><img alt="" src="images/netherite_elytra.png" /></p>
@@ -330,7 +338,7 @@
 </div>
 
 <h2 id="feature-vane-enchantments--ancient_tome">
-	<button type="button" class="flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" data-accordion-target="#body-feature-vane-enchantments--ancient_tome" aria-expanded="true" aria-controls="body-feature-vane-enchantments--ancient_tome">
+	<button type="button" class="feature-toggle flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" aria-expanded="false" aria-controls="body-feature-vane-enchantments--ancient_tome">
 		<span class="flex items-center">
 			<img class="is-pixelated mr-4 w-[32px] h-[32px] min-w-[32px] min-h-[32px]" src="assets/vane-enchantments/items/ancient_tome.png">
 			Ancient Tome
@@ -338,11 +346,11 @@
 		<div class="inline-flex shrink-0">
 			<span class="bg-gray-100 text-gray-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">vane-enchantments</span>
 
-			<svg data-accordion-icon class="w-6 h-6 rotate-180 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+			<svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
 		</div>
 	</button>
 </h2>
-<div id="body-feature-vane-enchantments--ancient_tome" class="hidden" aria-labelledby="feature-vane-enchantments--ancient_tome">
+<div id="body-feature-vane-enchantments--ancient_tome" class="hidden">
 	<div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900">
 		<div class="prose dark:prose-invert">
 			<p><img alt="" src="images/ancient_tome.png" /></p>
@@ -352,7 +360,7 @@
 </div>
 
 <h2 id="feature-vane-enchantments--ancient_tome_of_knowledge">
-	<button type="button" class="flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" data-accordion-target="#body-feature-vane-enchantments--ancient_tome_of_knowledge" aria-expanded="true" aria-controls="body-feature-vane-enchantments--ancient_tome_of_knowledge">
+	<button type="button" class="feature-toggle flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" aria-expanded="false" aria-controls="body-feature-vane-enchantments--ancient_tome_of_knowledge">
 		<span class="flex items-center">
 			<img class="is-pixelated mr-4 w-[32px] h-[32px] min-w-[32px] min-h-[32px]" src="assets/vane-enchantments/items/ancient_tome_of_knowledge.png">
 			Ancient Tome of Knowledge
@@ -360,11 +368,11 @@
 		<div class="inline-flex shrink-0">
 			<span class="bg-gray-100 text-gray-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">vane-enchantments</span>
 
-			<svg data-accordion-icon class="w-6 h-6 rotate-180 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+			<svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
 		</div>
 	</button>
 </h2>
-<div id="body-feature-vane-enchantments--ancient_tome_of_knowledge" class="hidden" aria-labelledby="feature-vane-enchantments--ancient_tome_of_knowledge">
+<div id="body-feature-vane-enchantments--ancient_tome_of_knowledge" class="hidden">
 	<div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900">
 		<div class="prose dark:prose-invert">
 			<p><img alt="" src="images/ancient_tome_of_knowledge.png" /></p>
@@ -374,7 +382,7 @@
 </div>
 
 <h2 id="feature-vane-enchantments--ancient_tome_of_the_gods">
-	<button type="button" class="flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" data-accordion-target="#body-feature-vane-enchantments--ancient_tome_of_the_gods" aria-expanded="true" aria-controls="body-feature-vane-enchantments--ancient_tome_of_the_gods">
+	<button type="button" class="feature-toggle flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" aria-expanded="false" aria-controls="body-feature-vane-enchantments--ancient_tome_of_the_gods">
 		<span class="flex items-center">
 			<img class="is-pixelated mr-4 w-[32px] h-[32px] min-w-[32px] min-h-[32px]" src="assets/vane-enchantments/items/ancient_tome_of_the_gods.png">
 			Ancient Tome of the Gods
@@ -382,11 +390,11 @@
 		<div class="inline-flex shrink-0">
 			<span class="bg-gray-100 text-gray-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">vane-enchantments</span>
 
-			<svg data-accordion-icon class="w-6 h-6 rotate-180 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+			<svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
 		</div>
 	</button>
 </h2>
-<div id="body-feature-vane-enchantments--ancient_tome_of_the_gods" class="hidden" aria-labelledby="feature-vane-enchantments--ancient_tome_of_the_gods">
+<div id="body-feature-vane-enchantments--ancient_tome_of_the_gods" class="hidden">
 	<div class="p-5 border border-t-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900">
 		<div class="prose dark:prose-invert">
 			<p><img alt="" src="images/ancient_tome_of_the_gods.png" /></p>
@@ -395,14 +403,14 @@
 	</div>
 </div>
 
-	</div>
 </section>
 
-<section class="my-16">
-	<h1 class="py-6 text-center text-4xl font-bold tracking-tight leading-none text-gray-900 dark:text-white">Enchantments</h1>
-	<div data-accordion="open" class="my-16">
-		<h2 id="feature-vane-enchantments--angel">
-	<button type="button" class="flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  rounded-t-xl border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" data-accordion-target="#body-feature-vane-enchantments--angel" aria-expanded="true" aria-controls="body-feature-vane-enchantments--angel">
+<div class="mt-8 relative flex justify-center py-5 items-center">
+	<span class="mx-2 text-gray-700 dark:text-gray-400 text-md font-bold uppercase">Enchantments</span>
+</div>
+<section class="my-4">
+	<h2 id="feature-vane-enchantments--angel">
+	<button type="button" class="feature-toggle flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  rounded-t-xl border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" aria-expanded="false" aria-controls="body-feature-vane-enchantments--angel">
 		<span class="flex items-center">
 			<img class="is-pixelated mr-4 w-[32px] h-[32px] min-w-[32px] min-h-[32px]" src="assets/minecraft/textures/item/barrier.png">
 			Angel [I-V]
@@ -410,11 +418,11 @@
 		<div class="inline-flex shrink-0">
 			<span class="bg-gray-100 text-gray-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">vane-enchantments</span>
 
-			<svg data-accordion-icon class="w-6 h-6 rotate-180 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+			<svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
 		</div>
 	</button>
 </h2>
-<div id="body-feature-vane-enchantments--angel" class="hidden" aria-labelledby="feature-vane-enchantments--angel">
+<div id="body-feature-vane-enchantments--angel" class="hidden">
 	<div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900">
 		<div class="prose dark:prose-invert">
 			<p><img alt="" src="images/enchantment_angel.png" /></p>
@@ -424,7 +432,7 @@
 </div>
 
 <h2 id="feature-vane-enchantments--grappling_hook">
-	<button type="button" class="flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" data-accordion-target="#body-feature-vane-enchantments--grappling_hook" aria-expanded="true" aria-controls="body-feature-vane-enchantments--grappling_hook">
+	<button type="button" class="feature-toggle flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" aria-expanded="false" aria-controls="body-feature-vane-enchantments--grappling_hook">
 		<span class="flex items-center">
 			<img class="is-pixelated mr-4 w-[32px] h-[32px] min-w-[32px] min-h-[32px]" src="assets/minecraft/textures/item/barrier.png">
 			Grappling hook [I-III]
@@ -432,11 +440,11 @@
 		<div class="inline-flex shrink-0">
 			<span class="bg-gray-100 text-gray-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">vane-enchantments</span>
 
-			<svg data-accordion-icon class="w-6 h-6 rotate-180 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+			<svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
 		</div>
 	</button>
 </h2>
-<div id="body-feature-vane-enchantments--grappling_hook" class="hidden" aria-labelledby="feature-vane-enchantments--grappling_hook">
+<div id="body-feature-vane-enchantments--grappling_hook" class="hidden">
 	<div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900">
 		<div class="prose dark:prose-invert">
 			<p><img alt="" src="images/enchantment_grappling_hook.png" /></p>
@@ -446,7 +454,7 @@
 </div>
 
 <h2 id="feature-vane-enchantments--hell_bent">
-	<button type="button" class="flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" data-accordion-target="#body-feature-vane-enchantments--hell_bent" aria-expanded="true" aria-controls="body-feature-vane-enchantments--hell_bent">
+	<button type="button" class="feature-toggle flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" aria-expanded="false" aria-controls="body-feature-vane-enchantments--hell_bent">
 		<span class="flex items-center">
 			<img class="is-pixelated mr-4 w-[32px] h-[32px] min-w-[32px] min-h-[32px]" src="assets/minecraft/textures/item/barrier.png">
 			Hell Bent [I]
@@ -454,11 +462,11 @@
 		<div class="inline-flex shrink-0">
 			<span class="bg-gray-100 text-gray-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">vane-enchantments</span>
 
-			<svg data-accordion-icon class="w-6 h-6 rotate-180 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+			<svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
 		</div>
 	</button>
 </h2>
-<div id="body-feature-vane-enchantments--hell_bent" class="hidden" aria-labelledby="feature-vane-enchantments--hell_bent">
+<div id="body-feature-vane-enchantments--hell_bent" class="hidden">
 	<div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900">
 		<div class="prose dark:prose-invert">
 			<p><img alt="" src="images/enchantment_hell_bent.png" /></p>
@@ -468,7 +476,7 @@
 </div>
 
 <h2 id="feature-vane-enchantments--leafchopper">
-	<button type="button" class="flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" data-accordion-target="#body-feature-vane-enchantments--leafchopper" aria-expanded="true" aria-controls="body-feature-vane-enchantments--leafchopper">
+	<button type="button" class="feature-toggle flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" aria-expanded="false" aria-controls="body-feature-vane-enchantments--leafchopper">
 		<span class="flex items-center">
 			<img class="is-pixelated mr-4 w-[32px] h-[32px] min-w-[32px] min-h-[32px]" src="assets/minecraft/textures/item/barrier.png">
 			Leafchopper [I]
@@ -476,11 +484,11 @@
 		<div class="inline-flex shrink-0">
 			<span class="bg-gray-100 text-gray-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">vane-enchantments</span>
 
-			<svg data-accordion-icon class="w-6 h-6 rotate-180 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+			<svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
 		</div>
 	</button>
 </h2>
-<div id="body-feature-vane-enchantments--leafchopper" class="hidden" aria-labelledby="feature-vane-enchantments--leafchopper">
+<div id="body-feature-vane-enchantments--leafchopper" class="hidden">
 	<div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900">
 		<div class="prose dark:prose-invert">
 			<p><img alt="" src="images/enchantment_leafchopper.png" /></p>
@@ -490,7 +498,7 @@
 </div>
 
 <h2 id="feature-vane-enchantments--rake">
-	<button type="button" class="flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" data-accordion-target="#body-feature-vane-enchantments--rake" aria-expanded="true" aria-controls="body-feature-vane-enchantments--rake">
+	<button type="button" class="feature-toggle flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" aria-expanded="false" aria-controls="body-feature-vane-enchantments--rake">
 		<span class="flex items-center">
 			<img class="is-pixelated mr-4 w-[32px] h-[32px] min-w-[32px] min-h-[32px]" src="assets/minecraft/textures/item/barrier.png">
 			Rake [I-IV]
@@ -498,11 +506,11 @@
 		<div class="inline-flex shrink-0">
 			<span class="bg-gray-100 text-gray-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">vane-enchantments</span>
 
-			<svg data-accordion-icon class="w-6 h-6 rotate-180 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+			<svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
 		</div>
 	</button>
 </h2>
-<div id="body-feature-vane-enchantments--rake" class="hidden" aria-labelledby="feature-vane-enchantments--rake">
+<div id="body-feature-vane-enchantments--rake" class="hidden">
 	<div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900">
 		<div class="prose dark:prose-invert">
 			<p><img alt="" src="images/enchantment_rake.png" /></p>
@@ -512,7 +520,7 @@
 </div>
 
 <h2 id="feature-vane-enchantments--seeding">
-	<button type="button" class="flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" data-accordion-target="#body-feature-vane-enchantments--seeding" aria-expanded="true" aria-controls="body-feature-vane-enchantments--seeding">
+	<button type="button" class="feature-toggle flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" aria-expanded="false" aria-controls="body-feature-vane-enchantments--seeding">
 		<span class="flex items-center">
 			<img class="is-pixelated mr-4 w-[32px] h-[32px] min-w-[32px] min-h-[32px]" src="assets/minecraft/textures/item/barrier.png">
 			Seeding [I-IV]
@@ -520,11 +528,11 @@
 		<div class="inline-flex shrink-0">
 			<span class="bg-gray-100 text-gray-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">vane-enchantments</span>
 
-			<svg data-accordion-icon class="w-6 h-6 rotate-180 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+			<svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
 		</div>
 	</button>
 </h2>
-<div id="body-feature-vane-enchantments--seeding" class="hidden" aria-labelledby="feature-vane-enchantments--seeding">
+<div id="body-feature-vane-enchantments--seeding" class="hidden">
 	<div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900">
 		<div class="prose dark:prose-invert">
 			<p><img alt="" src="images/enchantment_seeding.png" /></p>
@@ -534,7 +542,7 @@
 </div>
 
 <h2 id="feature-vane-enchantments--soulbound">
-	<button type="button" class="flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" data-accordion-target="#body-feature-vane-enchantments--soulbound" aria-expanded="true" aria-controls="body-feature-vane-enchantments--soulbound">
+	<button type="button" class="feature-toggle flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" aria-expanded="false" aria-controls="body-feature-vane-enchantments--soulbound">
 		<span class="flex items-center">
 			<img class="is-pixelated mr-4 w-[32px] h-[32px] min-w-[32px] min-h-[32px]" src="assets/minecraft/textures/item/barrier.png">
 			Soulbound [I]
@@ -542,11 +550,11 @@
 		<div class="inline-flex shrink-0">
 			<span class="bg-gray-100 text-gray-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">vane-enchantments</span>
 
-			<svg data-accordion-icon class="w-6 h-6 rotate-180 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+			<svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
 		</div>
 	</button>
 </h2>
-<div id="body-feature-vane-enchantments--soulbound" class="hidden" aria-labelledby="feature-vane-enchantments--soulbound">
+<div id="body-feature-vane-enchantments--soulbound" class="hidden">
 	<div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900">
 		<div class="prose dark:prose-invert">
 			<p><img alt="" src="images/enchantment_soulbound.png" /></p>
@@ -556,7 +564,7 @@
 </div>
 
 <h2 id="feature-vane-enchantments--takeoff">
-	<button type="button" class="flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" data-accordion-target="#body-feature-vane-enchantments--takeoff" aria-expanded="true" aria-controls="body-feature-vane-enchantments--takeoff">
+	<button type="button" class="feature-toggle flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" aria-expanded="false" aria-controls="body-feature-vane-enchantments--takeoff">
 		<span class="flex items-center">
 			<img class="is-pixelated mr-4 w-[32px] h-[32px] min-w-[32px] min-h-[32px]" src="assets/minecraft/textures/item/barrier.png">
 			Takeoff [I-III]
@@ -564,11 +572,11 @@
 		<div class="inline-flex shrink-0">
 			<span class="bg-gray-100 text-gray-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">vane-enchantments</span>
 
-			<svg data-accordion-icon class="w-6 h-6 rotate-180 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+			<svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
 		</div>
 	</button>
 </h2>
-<div id="body-feature-vane-enchantments--takeoff" class="hidden" aria-labelledby="feature-vane-enchantments--takeoff">
+<div id="body-feature-vane-enchantments--takeoff" class="hidden">
 	<div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900">
 		<div class="prose dark:prose-invert">
 			<p><img alt="" src="images/enchantment_take_off.png" /></p>
@@ -578,7 +586,7 @@
 </div>
 
 <h2 id="feature-vane-enchantments--unbreakable">
-	<button type="button" class="flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" data-accordion-target="#body-feature-vane-enchantments--unbreakable" aria-expanded="true" aria-controls="body-feature-vane-enchantments--unbreakable">
+	<button type="button" class="feature-toggle flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" aria-expanded="false" aria-controls="body-feature-vane-enchantments--unbreakable">
 		<span class="flex items-center">
 			<img class="is-pixelated mr-4 w-[32px] h-[32px] min-w-[32px] min-h-[32px]" src="assets/minecraft/textures/item/barrier.png">
 			Unbreakable [I]
@@ -586,11 +594,11 @@
 		<div class="inline-flex shrink-0">
 			<span class="bg-gray-100 text-gray-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">vane-enchantments</span>
 
-			<svg data-accordion-icon class="w-6 h-6 rotate-180 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+			<svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
 		</div>
 	</button>
 </h2>
-<div id="body-feature-vane-enchantments--unbreakable" class="hidden" aria-labelledby="feature-vane-enchantments--unbreakable">
+<div id="body-feature-vane-enchantments--unbreakable" class="hidden">
 	<div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900">
 		<div class="prose dark:prose-invert">
 			<p><img alt="" src="images/enchantment_unbreakable.png" /></p>
@@ -600,7 +608,7 @@
 </div>
 
 <h2 id="feature-vane-enchantments--wings">
-	<button type="button" class="flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" data-accordion-target="#body-feature-vane-enchantments--wings" aria-expanded="true" aria-controls="body-feature-vane-enchantments--wings">
+	<button type="button" class="feature-toggle flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" aria-expanded="false" aria-controls="body-feature-vane-enchantments--wings">
 		<span class="flex items-center">
 			<img class="is-pixelated mr-4 w-[32px] h-[32px] min-w-[32px] min-h-[32px]" src="assets/minecraft/textures/item/barrier.png">
 			Wings [I-IV]
@@ -608,11 +616,11 @@
 		<div class="inline-flex shrink-0">
 			<span class="bg-gray-100 text-gray-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">vane-enchantments</span>
 
-			<svg data-accordion-icon class="w-6 h-6 rotate-180 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+			<svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
 		</div>
 	</button>
 </h2>
-<div id="body-feature-vane-enchantments--wings" class="hidden" aria-labelledby="feature-vane-enchantments--wings">
+<div id="body-feature-vane-enchantments--wings" class="hidden">
 	<div class="p-5 border border-t-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900">
 		<div class="prose dark:prose-invert">
 			<p><img alt="" src="images/enchantment_wings.png" /></p>
@@ -621,14 +629,14 @@
 	</div>
 </div>
 
-	</div>
 </section>
 
-<section class="my-16">
-	<h1 class="py-6 text-center text-4xl font-bold tracking-tight leading-none text-gray-900 dark:text-white">Mechanics</h1>
-	<div data-accordion="open" class="my-16">
-		<h2 id="feature-vane-portals--portals">
-	<button type="button" class="flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  rounded-t-xl border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" data-accordion-target="#body-feature-vane-portals--portals" aria-expanded="true" aria-controls="body-feature-vane-portals--portals">
+<div class="mt-8 relative flex justify-center py-5 items-center">
+	<span class="mx-2 text-gray-700 dark:text-gray-400 text-md font-bold uppercase">Mechanics</span>
+</div>
+<section class="my-4">
+	<h2 id="feature-vane-portals--portals">
+	<button type="button" class="feature-toggle flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  rounded-t-xl border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" aria-expanded="false" aria-controls="body-feature-vane-portals--portals">
 		<span class="flex items-center">
 			<img class="is-pixelated mr-4 w-[32px] h-[32px] min-w-[32px] min-h-[32px]" src="assets/minecraft/textures/item/ender_pearl.png">
 			Portals
@@ -636,11 +644,11 @@
 		<div class="inline-flex shrink-0">
 			<span class="bg-gray-100 text-gray-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">vane-portals</span>
 
-			<svg data-accordion-icon class="w-6 h-6 rotate-180 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+			<svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
 		</div>
 	</button>
 </h2>
-<div id="body-feature-vane-portals--portals" class="hidden" aria-labelledby="feature-vane-portals--portals">
+<div id="body-feature-vane-portals--portals" class="hidden">
 	<div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900">
 		<div class="prose dark:prose-invert">
 			<h4>1 Overview</h4>
@@ -654,7 +662,7 @@
 </div>
 
 <h2 id="feature-vane-portals--portal_construction">
-	<button type="button" class="flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" data-accordion-target="#body-feature-vane-portals--portal_construction" aria-expanded="true" aria-controls="body-feature-vane-portals--portal_construction">
+	<button type="button" class="feature-toggle flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" aria-expanded="false" aria-controls="body-feature-vane-portals--portal_construction">
 		<span class="flex items-center">
 			<img class="is-pixelated mr-4 w-[32px] h-[32px] min-w-[32px] min-h-[32px]" src="assets/minecraft/textures/block/obsidian.png">
 			Portal Construction
@@ -662,11 +670,11 @@
 		<div class="inline-flex shrink-0">
 			<span class="bg-gray-100 text-gray-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">vane-portals</span>
 
-			<svg data-accordion-icon class="w-6 h-6 rotate-180 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+			<svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
 		</div>
 	</button>
 </h2>
-<div id="body-feature-vane-portals--portal_construction" class="hidden" aria-labelledby="feature-vane-portals--portal_construction">
+<div id="body-feature-vane-portals--portal_construction" class="hidden">
 	<div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900">
 		<div class="prose dark:prose-invert">
 			<h4>1 Materials</h4>
@@ -690,7 +698,7 @@
 </div>
 
 <h2 id="feature-vane-portals--portal_settings">
-	<button type="button" class="flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" data-accordion-target="#body-feature-vane-portals--portal_settings" aria-expanded="true" aria-controls="body-feature-vane-portals--portal_settings">
+	<button type="button" class="feature-toggle flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" aria-expanded="false" aria-controls="body-feature-vane-portals--portal_settings">
 		<span class="flex items-center">
 			<img class="is-pixelated mr-4 w-[32px] h-[32px] min-w-[32px] min-h-[32px]" src="assets/minecraft/textures/item/barrier.png">
 			Portal Settings
@@ -698,11 +706,11 @@
 		<div class="inline-flex shrink-0">
 			<span class="bg-gray-100 text-gray-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">vane-portals</span>
 
-			<svg data-accordion-icon class="w-6 h-6 rotate-180 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+			<svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
 		</div>
 	</button>
 </h2>
-<div id="body-feature-vane-portals--portal_settings" class="hidden" aria-labelledby="feature-vane-portals--portal_settings">
+<div id="body-feature-vane-portals--portal_settings" class="hidden">
 	<div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900">
 		<div class="prose dark:prose-invert">
 			<h4>6 Additional Things</h4>
@@ -718,7 +726,7 @@
 </div>
 
 <h2 id="feature-vane-regions--regions">
-	<button type="button" class="flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" data-accordion-target="#body-feature-vane-regions--regions" aria-expanded="true" aria-controls="body-feature-vane-regions--regions">
+	<button type="button" class="feature-toggle flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" aria-expanded="false" aria-controls="body-feature-vane-regions--regions">
 		<span class="flex items-center">
 			<img class="is-pixelated mr-4 w-[32px] h-[32px] min-w-[32px] min-h-[32px]" src="assets/minecraft/textures/item/compass_19.png">
 			Regions
@@ -726,11 +734,11 @@
 		<div class="inline-flex shrink-0">
 			<span class="bg-gray-100 text-gray-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">vane-regions</span>
 
-			<svg data-accordion-icon class="w-6 h-6 rotate-180 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+			<svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
 		</div>
 	</button>
 </h2>
-<div id="body-feature-vane-regions--regions" class="hidden" aria-labelledby="feature-vane-regions--regions">
+<div id="body-feature-vane-regions--regions" class="hidden">
 	<div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900">
 		<div class="prose dark:prose-invert">
 			<h4>1 Overview</h4>
@@ -744,7 +752,7 @@
 </div>
 
 <h2 id="feature-vane-regions--create_regions">
-	<button type="button" class="flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" data-accordion-target="#body-feature-vane-regions--create_regions" aria-expanded="true" aria-controls="body-feature-vane-regions--create_regions">
+	<button type="button" class="feature-toggle flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" aria-expanded="false" aria-controls="body-feature-vane-regions--create_regions">
 		<span class="flex items-center">
 			<img class="is-pixelated mr-4 w-[32px] h-[32px] min-w-[32px] min-h-[32px]" src="assets/minecraft/textures/item/writable_book.png">
 			Create Regions
@@ -752,11 +760,11 @@
 		<div class="inline-flex shrink-0">
 			<span class="bg-gray-100 text-gray-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">vane-regions</span>
 
-			<svg data-accordion-icon class="w-6 h-6 rotate-180 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+			<svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
 		</div>
 	</button>
 </h2>
-<div id="body-feature-vane-regions--create_regions" class="hidden" aria-labelledby="feature-vane-regions--create_regions">
+<div id="body-feature-vane-regions--create_regions" class="hidden">
 	<div class="p-5 border border-t-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900">
 		<div class="prose dark:prose-invert">
 			<h4>1 Preparation</h4>
@@ -792,14 +800,14 @@
 	</div>
 </div>
 
-	</div>
 </section>
 
-<section class="my-16">
-	<h1 class="py-6 text-center text-4xl font-bold tracking-tight leading-none text-gray-900 dark:text-white">Administrative Features</h1>
-	<div data-accordion="open" class="my-16">
-		<h2 id="feature-vane-admin--translations">
-	<button type="button" class="flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  rounded-t-xl border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" data-accordion-target="#body-feature-vane-admin--translations" aria-expanded="true" aria-controls="body-feature-vane-admin--translations">
+<div class="mt-8 relative flex justify-center py-5 items-center">
+	<span class="mx-2 text-gray-700 dark:text-gray-400 text-md font-bold uppercase">Administrative Features</span>
+</div>
+<section class="my-4">
+	<h2 id="feature-vane-admin--translations">
+	<button type="button" class="feature-toggle flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  rounded-t-xl border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" aria-expanded="false" aria-controls="body-feature-vane-admin--translations">
 		<span class="flex items-center">
 			<img class="is-pixelated mr-4 w-[32px] h-[32px] min-w-[32px] min-h-[32px]" src="assets/minecraft/textures/item/barrier.png">
 			Translations
@@ -807,11 +815,11 @@
 		<div class="inline-flex shrink-0">
 			<span class="bg-gray-100 text-gray-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">vane-admin</span>
 
-			<svg data-accordion-icon class="w-6 h-6 rotate-180 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+			<svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
 		</div>
 	</button>
 </h2>
-<div id="body-feature-vane-admin--translations" class="hidden" aria-labelledby="feature-vane-admin--translations">
+<div id="body-feature-vane-admin--translations" class="hidden">
 	<div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900">
 		<div class="prose dark:prose-invert">
 			<p>All messages and items are translated into English, German, French and Russian. The resource pack ensures that the same language that is selected in Minecraft will also be used for vane.</p>
@@ -820,7 +828,7 @@
 </div>
 
 <h2 id="feature-vane-admin--creeper_protection">
-	<button type="button" class="flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" data-accordion-target="#body-feature-vane-admin--creeper_protection" aria-expanded="true" aria-controls="body-feature-vane-admin--creeper_protection">
+	<button type="button" class="feature-toggle flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" aria-expanded="false" aria-controls="body-feature-vane-admin--creeper_protection">
 		<span class="flex items-center">
 			<img class="is-pixelated mr-4 w-[32px] h-[32px] min-w-[32px] min-h-[32px]" src="assets/minecraft/textures/item/barrier.png">
 			Creeper protection
@@ -828,11 +836,11 @@
 		<div class="inline-flex shrink-0">
 			<span class="bg-gray-100 text-gray-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">vane-admin</span>
 
-			<svg data-accordion-icon class="w-6 h-6 rotate-180 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+			<svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
 		</div>
 	</button>
 </h2>
-<div id="body-feature-vane-admin--creeper_protection" class="hidden" aria-labelledby="feature-vane-admin--creeper_protection">
+<div id="body-feature-vane-admin--creeper_protection" class="hidden">
 	<div class="p-5 border border-t-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900">
 		<div class="prose dark:prose-invert">
 			<p>Nobody likes creepers that blow away half your house. That's why we did something about it, but with style.</p>
@@ -840,12 +848,11 @@
 	</div>
 </div>
 
-	</div>
 </section>
 
+			<div class="my-16"></div>
 		</div>
 	</body>
-	<script src="https://unpkg.com/flowbite@1.4.7/dist/flowbite.js"></script>
 	<script>
 		var themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
 		var themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
@@ -893,5 +900,42 @@
 				.then(response => response.json()
 					.then(json => document.getElementById('starcount').innerText = json['stargazers_count']));
 		});
+	</script>
+	<script>
+		function accordionSetState(el, state) {
+			el.setAttribute('aria-expanded', state ? 'true' : 'false');
+			console.log(el);
+			console.log(el.getAttribute('aria-controls'));
+			var target = document.getElementById(el.getAttribute('aria-controls'));
+			var iconEl = el.querySelector('[data-accordion-icon]');
+			if (state) {
+				target.classList.remove("hidden");
+				if (iconEl) {
+					iconEl.classList.add('rotate-180');
+				}
+			} else {
+				target.classList.add("hidden");
+				if (iconEl) {
+					iconEl.classList.remove('rotate-180');
+				}
+			}
+		}
+
+		var state = false;
+		var expand_collapse_btn = document.getElementById("expand-collapse-all");
+		expand_collapse_btn.addEventListener('click', function() {
+			state = !state;
+			Array.prototype.forEach.call(document.getElementsByClassName('feature-toggle'), el => accordionSetState(el, state));
+			expand_collapse_btn.innerText = (state ? "Collapse All" : "Expand All");
+		});
+
+		document.addEventListener('DOMContentLoaded', () => {
+			document.querySelectorAll('[aria-controls]').forEach(el => {
+				el.addEventListener('click', function() {
+					var active = el.getAttribute('aria-expanded') === 'true' ? true : false;
+					accordionSetState(el, !active);
+				});
+			})
+		})
 	</script>
 </html>

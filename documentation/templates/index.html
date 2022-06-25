@@ -60,11 +60,18 @@
 					</div>
 				</div>
 			</section>
+			<section class="my-16">
+				<h1 class="py-6 text-center text-4xl font-bold tracking-tight leading-none text-gray-900 dark:text-gray-50">Features</h1>
+				<p class="mb-4 text-center text-lg font-normal text-gray-500 lg:text-xl lg:px-24 dark:text-gray-400">Below you will find an overview of each feature in vane, sorted into their major categories. The tag to the right indicates the module to which the feature belongs.</p>
+				<div class="mb-8 flex flex-col sm:flex-row sm:justify-center">
+					<button id="expand-collapse-all" class="py-2 px-4 uppercase text-xs font-bold text-center text-gray-900 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 dark:text-white dark:hover:bg-gray-700 dark:focus:ring-gray-800">Expand All</button>
+				</div>
+			</section>
 			{{ each_category_index }}
 			{{ each_category_content }}
+			<div class="my-16"></div>
 		</div>
 	</body>
-	<script src="https://unpkg.com/flowbite@1.4.7/dist/flowbite.js"></script>
 	<script>
 		var themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
 		var themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
@@ -112,5 +119,42 @@
 				.then(response => response.json()
 					.then(json => document.getElementById('starcount').innerText = json['stargazers_count']));
 		});
+	</script>
+	<script>
+		function accordionSetState(el, state) {
+			el.setAttribute('aria-expanded', state ? 'true' : 'false');
+			console.log(el);
+			console.log(el.getAttribute('aria-controls'));
+			var target = document.getElementById(el.getAttribute('aria-controls'));
+			var iconEl = el.querySelector('[data-accordion-icon]');
+			if (state) {
+				target.classList.remove("hidden");
+				if (iconEl) {
+					iconEl.classList.add('rotate-180');
+				}
+			} else {
+				target.classList.add("hidden");
+				if (iconEl) {
+					iconEl.classList.remove('rotate-180');
+				}
+			}
+		}
+
+		var state = false;
+		var expand_collapse_btn = document.getElementById("expand-collapse-all");
+		expand_collapse_btn.addEventListener('click', function() {
+			state = !state;
+			Array.prototype.forEach.call(document.getElementsByClassName('feature-toggle'), el => accordionSetState(el, state));
+			expand_collapse_btn.innerText = (state ? "Collapse All" : "Expand All");
+		});
+
+		document.addEventListener('DOMContentLoaded', () => {
+			document.querySelectorAll('[aria-controls]').forEach(el => {
+				el.addEventListener('click', function() {
+					var active = el.getAttribute('aria-expanded') === 'true' ? true : false;
+					accordionSetState(el, !active);
+				});
+			})
+		})
 	</script>
 </html>
