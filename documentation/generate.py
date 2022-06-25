@@ -143,8 +143,13 @@ def render_recipe(feature: Feature, recipe: dict[str, Any]) -> str:
                 html = html.replace(tag, item_to_icon(ingredient))
                 html = html.replace(f"{{{{ recipe.ingredients.{i}.name }}}}", ingredient)
     elif recipe["type"] == "smithing":
-        print("TODO: smithing recipe")
-        return ""
+        html = context.templates["smithing-recipe"]
+
+        html = html.replace("{{ recipe.base }}", item_to_icon(recipe["base"]))
+        html = html.replace("{{ recipe.base.name }}", recipe["base"])
+
+        html = html.replace("{{ recipe.addition }}", item_to_icon(recipe["addition"]))
+        html = html.replace("{{ recipe.addition.name }}", recipe["addition"])
     else:
         raise ValueError(f"cannot render recipe of unknown type {recipe['type']}")
 
