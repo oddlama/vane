@@ -70,6 +70,7 @@
 			{{ each_category_content }}
 			<div class="my-16"></div>
 		</div>
+		<div id="the-mctooltip"></div>
 	</body>
 	<script>
 		var themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
@@ -122,8 +123,6 @@
 	<script>
 		function accordionSetState(el, state) {
 			el.setAttribute('aria-expanded', state ? 'true' : 'false');
-			console.log(el);
-			console.log(el.getAttribute('aria-controls'));
 			var target = document.getElementById(el.getAttribute('aria-controls'));
 			var iconEl = el.querySelector('[data-accordion-icon]');
 			if (state) {
@@ -155,5 +154,48 @@
 				});
 			})
 		})
+	</script>
+	<script>
+		var minecraft_tooltip = document.getElementById("the-mctooltip");
+
+		Array.prototype.forEach.call(document.getElementsByClassName('mctooltip'), el => {
+			el.onmouseover = function(event) {
+				minecraft_tooltip.innerHTML = event.target.dataset.mctooltip;
+				minecraft_tooltip.style.display = "block";
+			};
+
+			el.onmouseout = function() {
+				minecraft_tooltip.style.display = "none";
+			};
+
+			el.onmousemove = function(event) {
+				pos(minecraft_tooltip, 5, -30, event);
+			};
+		});
+
+		var pos = function(o, x, y, event) {
+			var posX = 0, posY = 0;
+			var e = event || window.event;
+			if (e.pageX || e.pageY) {
+				posX = e.pageX;
+				posY = e.pageY;
+			} else if (e.clientX || e.clientY) {
+				posX = event.clientX + document.documentElement.scrollLeft + document.body.scrollLeft;
+				posY = event.clientY + document.documentElement.scrollTop + document.body.scrollTop;
+			}
+			o.style.position = "absolute";
+			o.style.top = (posY + y) + "px";
+			if (event.clientX <= document.documentElement.clientWidth / 2) {
+				o.style.left = (posX + x) + "px";
+				o.style.removeProperty("right");
+				o.style.maxWidth = (document.documentElement.clientWidth - (event.clientX + x) - 16) + "px";
+			} else {
+				o.style.removeProperty("left");
+				o.style.right = (document.documentElement.scrollLeft + document.documentElement.clientWidth) - (posX - x) + "px";
+				o.style.maxWidth = ((event.clientX - x) - 16) + "px";
+			}
+		}
+
+		minecraft_tooltip.style.display = "none";
 	</script>
 </html>

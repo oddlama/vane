@@ -1,6 +1,6 @@
 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
 	<th scope="row" class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
-		<img class="mr-4 w-[32px] h-[32px] min-w-[32px] min-h-[32px] is-pixelated" src="{{ loot_table.row.item.icon }}" alt="{{ loot_table.row.item.name }}">
+		<img class="mr-4 w-[32px] h-[32px] min-w-[32px] min-h-[32px] mctooltip is-pixelated" src="{{ loot_table.row.item.icon }}" data-mctooltip="{{ loot_table.row.item.name }}">
 	</th>
 	<td class="px-6 py-4">{{ loot_table.row.chance }}</td>
 	<td class="px-6 py-4">{{ loot_table.row.amount }}</td>
