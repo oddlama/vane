@@ -1,3 +1,13 @@
+[badge.color]
+vane-admin = "red"
+vane-bedtime = "gray"
+vane-core = "gray"
+vane-enchantments = "yellow"
+vane-permissions = "red"
+vane-portals = "indigo"
+vane-regions = "green"
+vane-trifles = "sky"
+
 [[categories]]
 id = "gameplay"
 title = "Gameplay"
@@ -6,6 +16,7 @@ content = [
 	"vane-trifles/simple_harvest.md",
 	"vane-trifles/chest_sorting.md",
 	"vane-trifles/grass_paths.md",
+	"vane-admin/creeper_protection.md",
 	"vane-trifles/decorative_heads.md",
 	"vane-bedtime/night_to_day.md",
 ]
@@ -57,5 +68,4 @@ id = "administrative"
 title = "Administrative Features"
 content = [
 	"vane-admin/translations.md",
-	"vane-admin/creeper_protection.md",
 ]

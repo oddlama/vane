@@ -162,9 +162,7 @@ def render_recipe(feature: Feature, recipe: dict[str, Any]) -> str:
 
 def render_loot_table(loot: dict[str, Any]) -> str:
     html = context.templates["loot-table"]
-    loot_badge = context.templates["badge"]
-    col_template = context.templates["loot-table-col-where"]
-    row_template = context.templates["loot-table-row"]
+    loot_badge = context.templates["badge"].replace("{{ color }}", "gray")
 
     table_rows = []
     for table in loot.values():
@@ -177,12 +175,12 @@ def render_loot_table(loot: dict[str, Any]) -> str:
             where_rows.append(badge_html)
         where_rows = "\n".join(where_rows)
 
-        col_html = col_template
+        col_html = context.templates["loot-table-col-where"]
         col_html = col_html.replace("{{ loot_table.n_rows }}", str(len(table["items"])))
         col_html = col_html.replace("{{ loot_table.where.rows }}", where_rows)
 
         for i,item in enumerate(table["items"]):
-            row_html = row_template
+            row_html = context.templates["loot-table-row"]
             row_html = row_html.replace("{{ loot_table.row.item.name }}", item["item"])
             row_html = row_html.replace("{{ loot_table.row.item.icon }}", item_to_icon(item["item"]))
             row_html = row_html.replace("{{ loot_table.row.chance }}", f"{item['chance'] * 100.0:.2f}%")
@@ -226,7 +224,8 @@ def render_feature(feature: Feature, index: int, count: int) -> str:
         html = html.replace(f"{{{{ feature.metadata.{k} }}}}", v)
 
     html = html.replace("{{ feature.html_content }}", feature.html_content)
-    module_badge = context.templates["badge"].replace("{{ text }}", feature.metadata["module"])
+    module_badge = context.templates["badge"].replace("{{ color }}", context.content_settings["badge"]["color"][feature.metadata["module"]])
+    module_badge = module_badge.replace("{{ text }}", feature.metadata["module"].removeprefix("vane-"))
     html = html.replace("{{ feature.badge }}", module_badge)
     return html
 
