@@ -3,6 +3,9 @@
 title = "File"
 icon = "vane-trifles:items/file.png"
 module = "vane-trifles"
+
+recipes = "vane-trifles:item_file"
+loot = "vane-trifles:item_file"
 ```
 ---
 ![](images/file.png)

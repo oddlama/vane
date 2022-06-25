@@ -7,7 +7,7 @@ function die() { echo "[1;31merror:[m $*" >&2; exit 1; }
 
 echo "Generating content..."
 rm -r ../docs/assets/minecraft &>/dev/null
-./generate.py --client-jar minecraft-client.jar -o ../docs
+./generate.py --client-jar minecraft-client.jar --plugins-dir plugins -o ../docs
 
 echo "Generating css..."
 npx tailwindcss -i templates/style.css -o ../docs/css/style.css --minify

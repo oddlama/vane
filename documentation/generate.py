@@ -5,8 +5,10 @@ import markdown
 import os
 import shutil
 import toml
+import yaml
 import zipfile
 from dataclasses import dataclass, field
+from functools import reduce
 from glob import glob
 from pathlib import Path
 from typing import Any
@@ -21,6 +23,7 @@ class Feature:
 class Context:
     build_path: Path = Path("build")
     assets_path: Path = Path("build/assets")
+    plugins_dir: Path = Path("plugins")
     content_settings: dict[str, Any] = field(default_factory=dict)
     features: dict[str, list[Feature]] = field(default_factory=dict)
     categories: dict[str, Any] = field(default_factory=dict)
@@ -70,24 +73,35 @@ def replace_category_variables(s: str, category: dict[str, Any]):
     s = s.replace("{{ category.title }}", category["title"])
     return s
 
-def replace_feature_variables(s: str, feature: Feature):
+def deep_get(dictionary, keys):
+    return reduce(lambda d, key: d[key], keys.split("."), dictionary)
+
+def render_feature(feature: Feature, index: int, count: int):
+    html = context.templates["feature"]
+
+    is_last = index == count - 1
+    html = html.replace("{{ accordion.heading }}", "border" + (""            if is_last else " border-b-0 ") + (" rounded-t-xl" if index == 0 else ""))
+    html = html.replace("{{ accordion.body }}",    "border" + (" border-t-0" if is_last else " border-b-0"))
+
     for k,v in feature.metadata.items():
-        s = s.replace(f"{{{{ feature.metadata.{k} }}}}", v)
-    s = s.replace("{{ feature.html_content }}", feature.html_content)
-    s = s.replace("{{ feature.icon }}", f"assets/{feature.metadata['icon']}")
+        html = html.replace(f"{{{{ feature.metadata.{k} }}}}", v)
+
+
+    if "recipes" in feature.metadata:
+        namespace, key = feature.metadata["recipes"].split(":", maxsplit=1)
+        with open(context.plugins_dir / namespace / "config.yml") as f:
+            config = yaml.safe_load(f)
+        recipes = deep_get(config, f"{key}.recipes")
+        loot = deep_get(config, f"{key}.loot")
+
+
+
+
+    html = html.replace("{{ feature.recipe }}", feature.html_content)
+    html = html.replace("{{ feature.html_content }}", feature.html_content)
+    html = html.replace("{{ feature.icon }}", f"assets/{feature.metadata['icon']}")
     module_badge = context.templates["module-badge"].replace("{{ text }}", feature.metadata["module"])
-    s = s.replace("{{ feature.badge }}", module_badge)
-    return s
-
-def render_category_index(category: dict[str, Any]) -> str:
-    # Pre-render features
-    features_html = []
-    for f in context.features[category["id"]]:
-        features_html.append(replace_feature_variables(context.templates["feature-index"], f))
-
-    html = context.templates["category-index"]
-    html = replace_category_variables(html, category)
-    html = html.replace("{{ features }}", "\n".join(features_html))
+    html = html.replace("{{ feature.badge }}", module_badge)
     return html
 
 def render_category_content(category: dict[str, Any]) -> str:
@@ -95,14 +109,9 @@ def render_category_content(category: dict[str, Any]) -> str:
     features_html = []
     fs = context.features[category["id"]]
     for i,f in enumerate(fs):
-        f_html = context.templates["feature-content"]
-        f_html = replace_feature_variables(f_html, f)
-        is_last = i == len(fs) - 1
-        f_html = f_html.replace("{{ accordion.heading }}", "border" + (""            if is_last else " border-b-0 ") + (" rounded-t-xl" if i == 0 else ""))
-        f_html = f_html.replace("{{ accordion.body }}",    "border" + (" border-t-0" if is_last else " border-b-0"))
-        features_html.append(f_html)
+        features_html.append(render_feature(f, i, len(fs)))
 
-    html = context.templates["category-content"]
+    html = context.templates["category"]
     html = replace_category_variables(html, category)
     html = html.replace("{{ features }}", "\n".join(features_html))
     return html
@@ -119,10 +128,6 @@ def generate_docs() -> None:
 
     print(f"Rendering index.html")
     index_content = context.templates["index"]
-    # index_content = index_content.replace("{{ each_category_index }}", "\n".join(
-    #     render_category_index(c) for c in context.content_settings["categories"]
-    # ))
-    # HINT: disabled for now. Didn't add much value but added clutter.
     index_content = index_content.replace("{{ each_category_index }}", "")
     index_content = index_content.replace("{{ each_category_content }}", "\n".join(
         render_category_content(c) for c in context.content_settings["categories"]
@@ -150,6 +155,8 @@ def main():
     parser = argparse.ArgumentParser(description="Generates the documentation page.")
     parser.add_argument('--client-jar', required=True, type=str,
             help="Specifies a minecraft client jar file from which required assets will be extracted.")
+    parser.add_argument('--plugins-dir', required=True, type=str,
+            help="Specifies a plugins/ directory from where vane's generated config can be read (for recipes and loot).")
     parser.add_argument('-o', '--output-dir', dest='output_dir', default="build", type=str,
             help="Specifies the output directory for the documentation. (default: 'build')")
     args = parser.parse_args()
@@ -159,6 +166,8 @@ def main():
 
     context.assets_path = context.build_path / "assets"
     context.assets_path.mkdir(parents=True, exist_ok=True)
+
+    context.plugins_dir = Path(args.plugins_dir)
 
     context.content_settings = toml.load("content.toml")
     assert "categories" in context.content_settings
