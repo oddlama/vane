@@ -122,13 +122,14 @@ def render_recipe(feature: Feature, recipe: dict[str, Any]) -> str:
         html = context.templates["shaped-recipe"]
 
         shape = "".join([row.ljust(3) for row in (recipe["shape"] + 3 * [""])[:3]])
+        ingredients = {str(k):v for k,v in recipe["ingredients"].items()}
         assert len(shape) == 9
         for i,c in enumerate(shape):
             tag = f"{{{{ recipe.ingredients.{i} }}}}"
             if c == " ":
                 html = remove_lines_containing(html, tag)
             else:
-                ingredient = recipe["ingredients"][c]
+                ingredient = ingredients[c]
                 html = html.replace(tag, item_to_icon(ingredient))
                 html = html.replace(f"{{{{ recipe.ingredients.{i}.name }}}}", ingredient)
     elif recipe["type"] == "shapeless":
@@ -210,10 +211,15 @@ def render_feature(feature: Feature, index: int, count: int) -> str:
 
     if "icon" not in feature.metadata:
         print(f"[1;33mwarning:[m could not infer icon")
+
+    if "icon_overlay" in feature.metadata:
+        feature.metadata["icon_overlay"] = item_to_icon(feature.metadata["icon_overlay"])
+    else:
+        html = remove_lines_containing(html, "{{ feature.metadata.icon_overlay }}")
+
     for k,v in feature.metadata.items():
         html = html.replace(f"{{{{ feature.metadata.{k} }}}}", v)
-    if "icon_overlay" not in feature.metadata:
-        html = remove_lines_containing(html, "{{ feature.metadata.icon_overlay }}")
+
     html = html.replace("{{ feature.html_content }}", feature.html_content)
     module_badge = context.templates["badge"].replace("{{ text }}", feature.metadata["module"])
     html = html.replace("{{ feature.badge }}", module_badge)
@@ -243,7 +249,6 @@ def generate_docs() -> None:
         context.features[c["id"]] = fs
 
     index_content = context.templates["index"]
-    index_content = index_content.replace("{{ each_category_index }}", "")
     index_content = index_content.replace("{{ each_category_content }}", "\n".join(
         render_category_content(c) for c in context.content_settings["categories"]
     ))

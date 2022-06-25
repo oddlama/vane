@@ -1,10 +1,8 @@
 ```toml
 [feature]
 title = "Seeding [I-IV]"
-icon = "minecraft:textures/item/barrier.png"
 module = "vane-enchantments"
+itemlike = "vane-enchantments:enchantment_seeding"
 ```
 ---
-![](images/enchantment_seeding.png)
-
 Right-click on a seed with the hoe to sow a nearby field with the same plant. Multiple right-clicks on the same field will sow a circle.

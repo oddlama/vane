@@ -1,10 +1,8 @@
 ```toml
 [feature]
 title = "Angel [I-V]"
-icon = "minecraft:textures/item/barrier.png"
 module = "vane-enchantments"
+itemlike = "vane-enchantments:enchantment_angel"
 ```
 ---
-![](images/enchantment_angel.png)
-
 The ultimate enchantment for the elytra. Sneak to accelerate!
