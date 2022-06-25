@@ -1,8 +1,8 @@
 ```toml
 [feature]
 title = "Wings [I-IV]"
-icon = "minecraft:textures/item/barrier.png"
 module = "vane-enchantments"
+itemlike = "vane-enchantments:enchantment_wings"
 ```
 ---
 ![](images/enchantment_wings.png)

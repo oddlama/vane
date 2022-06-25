@@ -16,6 +16,7 @@ from typing import Any
 
 @dataclass
 class Feature:
+    loaded_from: str
     metadata: dict[str, Any]
     html_content: str
 
@@ -66,12 +67,13 @@ def load_feature_markdown(markdown_file: Path, default_slug: str) -> Feature:
                 metadata["icon"] = f"assets/{namespace}/{key}"
                 context.required_project_assets.add((namespace, key))
         else:
-            metadata["icon"] = ingredient_to_icon(metadata["icon"])
+            metadata["icon"] = item_to_icon(metadata["icon"])
     else:
         if "itemlike" not in metadata:
             raise ValueError("metadata contains no icon definition. This is only possible if 'itemlike' is set to determine the icon from the recipe.")
 
-    return Feature(metadata=metadata,
+    return Feature(loaded_from=markdown_file,
+                   metadata=metadata,
                    html_content=markdown.markdown(content))
 
 def replace_category_variables(s: str, category: dict[str, Any]):
@@ -88,8 +90,10 @@ def get_from_config(resource_key: str) -> dict[str, Any]:
         config = yaml.safe_load(f)
     return deep_get(config, key)
 
-def ingredient_to_icon(ingredient: str) -> str:
-    resource_key = ingredient.split("{")[0]
+def item_to_icon(item: str) -> str:
+    resource_key = item.split("{")[0]
+    if not resource_key.startswith("#"):
+        resource_key = resource_key.split("#")[0]
     namespace, key = resource_key.split(":", maxsplit=1)
     if namespace == "minecraft":
         # Some items require manual rewrites
@@ -106,7 +110,12 @@ def ingredient_to_icon(ingredient: str) -> str:
         icon = f"{namespace}/{key}"
         context.required_project_assets.add((namespace, key))
         return "assets/" + icon
+    else:
+        print(f"[1;33mwarning:[m unknown icon for item: {item}")
     return f"assets/minecraft/textures/item/barrier.png"
+
+def remove_lines_containing(where: str, what: str):
+    return "".join(line for line in where.splitlines(keepends=True) if what not in line)
 
 def render_recipe(feature: Feature, recipe: dict[str, Any]) -> str:
     if recipe["type"] == "shaped":
@@ -117,10 +126,10 @@ def render_recipe(feature: Feature, recipe: dict[str, Any]) -> str:
         for i,c in enumerate(shape):
             tag = f"{{{{ recipe.ingredients.{i} }}}}"
             if c == " ":
-                html = "".join(line for line in html.splitlines(keepends=True) if tag not in line)
+                html = remove_lines_containing(html, tag)
             else:
                 ingredient = recipe["ingredients"][c]
-                html = html.replace(tag, ingredient_to_icon(ingredient))
+                html = html.replace(tag, item_to_icon(ingredient))
                 html = html.replace(f"{{{{ recipe.ingredients.{i}.name }}}}", ingredient)
     elif recipe["type"] == "shapeless":
         html = context.templates["shaped-recipe"] # Abuse the template for shapeless recipes
@@ -128,9 +137,9 @@ def render_recipe(feature: Feature, recipe: dict[str, Any]) -> str:
         for i,ingredient in enumerate(recipe["ingredients"] + (9 - len(recipe["ingredients"])) * [None]):
             tag = f"{{{{ recipe.ingredients.{i} }}}}"
             if ingredient is None:
-                html = "".join(line for line in html.splitlines(keepends=True) if tag not in line)
+                html = remove_lines_containing(html, tag)
             else:
-                html = html.replace(tag, ingredient_to_icon(ingredient))
+                html = html.replace(tag, item_to_icon(ingredient))
                 html = html.replace(f"{{{{ recipe.ingredients.{i}.name }}}}", ingredient)
     elif recipe["type"] == "smithing":
         print("TODO: smithing recipe")
@@ -138,11 +147,48 @@ def render_recipe(feature: Feature, recipe: dict[str, Any]) -> str:
     else:
         raise ValueError(f"cannot render recipe of unknown type {recipe['type']}")
 
-    result_icon = ingredient_to_icon(recipe["result"])
+    result_icon = item_to_icon(recipe["result"])
     html = html.replace("{{ recipe.result }}", result_icon)
     html = html.replace("{{ recipe.result.name }}", recipe["result"])
     if "icon" not in feature.metadata:
         feature.metadata["icon"] = result_icon
+    return html
+
+def render_loot_table(loot: dict[str, Any]) -> str:
+    html = context.templates["loot-table"]
+    loot_badge = context.templates["badge"]
+    col_template = context.templates["loot-table-col-where"]
+    row_template = context.templates["loot-table-row"]
+
+    table_rows = []
+    for table in loot.values():
+        where_rows = []
+        for where in table["tables"]:
+            where = where.removeprefix("minecraft:chests/")
+            badge_html = '<div class="inline-flex m-1">'
+            badge_html = badge_html + loot_badge.replace("{{ text }}", where)
+            badge_html = badge_html + '</div>'
+            where_rows.append(badge_html)
+        where_rows = "\n".join(where_rows)
+
+        col_html = col_template
+        col_html = col_html.replace("{{ loot_table.n_rows }}", str(len(table["items"])))
+        col_html = col_html.replace("{{ loot_table.where.rows }}", where_rows)
+
+        for i,item in enumerate(table["items"]):
+            row_html = row_template
+            row_html = row_html.replace("{{ loot_table.row.item.name }}", item["item"])
+            row_html = row_html.replace("{{ loot_table.row.item.icon }}", item_to_icon(item["item"]))
+            row_html = row_html.replace("{{ loot_table.row.chance }}", f"{item['chance'] * 100.0:.2f}%")
+            if item['amount_min'] == item['amount_max']:
+                amount = str(item['amount_min'])
+            else:
+                amount = f"{item['amount_min']} - {item['amount_max']}"
+            row_html = row_html.replace("{{ loot_table.row.amount }}", amount)
+            row_html = row_html.replace("{{ loot_table.col.where }}", col_html if i == 0 else "")
+            table_rows.append(row_html)
+
+    html = html.replace("{{ loot_table.rows }}", "\n".join(table_rows))
     return html
 
 def render_feature(feature: Feature, index: int, count: int) -> str:
@@ -157,14 +203,19 @@ def render_feature(feature: Feature, index: int, count: int) -> str:
         html = html.replace("{{ feature.recipes }}", "\n".join(recipes))
 
         loot = get_from_config(feature.metadata["itemlike"] + ".loot")
+        html = html.replace("{{ feature.loot }}", render_loot_table(loot) if len(loot) > 0 else "")
     else:
         html = html.replace("{{ feature.recipes }}", "")
         html = html.replace("{{ feature.loot }}", "")
 
+    if "icon" not in feature.metadata:
+        print(f"[1;33mwarning:[m could not infer icon")
     for k,v in feature.metadata.items():
         html = html.replace(f"{{{{ feature.metadata.{k} }}}}", v)
+    if "icon_overlay" not in feature.metadata:
+        html = remove_lines_containing(html, "{{ feature.metadata.icon_overlay }}")
     html = html.replace("{{ feature.html_content }}", feature.html_content)
-    module_badge = context.templates["module-badge"].replace("{{ text }}", feature.metadata["module"])
+    module_badge = context.templates["badge"].replace("{{ text }}", feature.metadata["module"])
     html = html.replace("{{ feature.badge }}", module_badge)
     return html
 
@@ -173,6 +224,7 @@ def render_category_content(category: dict[str, Any]) -> str:
     features_html = []
     fs = context.features[category["id"]]
     for i,f in enumerate(fs):
+        print(f"Rendering feature {f.loaded_from}")
         features_html.append(render_feature(f, i, len(fs)))
 
     html = context.templates["category"]
@@ -190,13 +242,13 @@ def generate_docs() -> None:
             default_slug="feature-" + i.removeprefix("content/").removesuffix(".md").replace("/", "--")))
         context.features[c["id"]] = fs
 
-    print(f"Rendering index.html")
     index_content = context.templates["index"]
     index_content = index_content.replace("{{ each_category_index }}", "")
     index_content = index_content.replace("{{ each_category_content }}", "\n".join(
         render_category_content(c) for c in context.content_settings["categories"]
     ))
 
+    print(f"Writing index.html")
     with open(context.build_path / "index.html", "w") as f:
         f.write(index_content)
 
@@ -207,7 +259,10 @@ def collect_assets(client_jar: str) -> None:
             out = context.assets_path / asset.removeprefix("assets/")
             out.parent.mkdir(parents=True, exist_ok=True)
             with open(out, "wb") as f:
-                f.write(zf.read(asset))
+                try:
+                    f.write(zf.read(asset))
+                except KeyError:
+                    print(f"[1;33mwarning:[m missing asset: {asset}")
 
     print(f"Collecting {len(context.required_project_assets)} required assets from this project...")
     for namespace, key in context.required_project_assets:

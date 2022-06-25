@@ -1,7 +1,10 @@
 <h2 id="{{ feature.metadata.slug }}">
 	<button type="button" class="feature-toggle flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 {{ accordion.heading }} border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" aria-expanded="false" aria-controls="body-{{ feature.metadata.slug }}">
 		<span class="flex items-center">
-			<img class="is-pixelated mr-4 w-[32px] h-[32px] min-w-[32px] min-h-[32px]" src="{{ feature.metadata.icon }}">
+			<div class="relative mr-4 w-[32px] h-[32px] min-w-[32px] min-h-[32px]">
+				<img class="absolute object-cover is-pixelated w-full h-full" src="{{ feature.metadata.icon }}">
+				<img class="absolute object-cover is-pixelated w-full h-full" src="{{ feature.metadata.icon_overlay }}">
+			</div>
 			{{ feature.metadata.title }}
 		</span>
 		<div class="inline-flex shrink-0">

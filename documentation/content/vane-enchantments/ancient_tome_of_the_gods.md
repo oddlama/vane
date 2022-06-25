@@ -1,8 +1,8 @@
 ```toml
 [feature]
 title = "Ancient Tome of the Gods"
-icon = "vane-enchantments:items/ancient_tome_of_the_gods.png"
 module = "vane-enchantments"
+itemlike = "vane-enchantments:item_ancient_tome_of_the_gods"
 ```
 ---
 ![](images/ancient_tome_of_the_gods.png)
