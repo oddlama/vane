@@ -88,7 +88,7 @@ def load_feature_markdown(markdown_file: Path, default_slug: str) -> Feature:
     content = markdown_item_pattern.sub(lambda match: item_to_inline_icon(match.group(1)), content)
     return Feature(loaded_from=str(markdown_file),
                    metadata=metadata,
-                   html_content=markdown.markdown(content))
+                   html_content=markdown.markdown(content, extensions=['tables']))
 
 def replace_category_variables(s: str, category: dict[str, Any]):
     s = s.replace("{{ category.id }}", category["id"])
