@@ -60,7 +60,8 @@ content = [
 	"vane-portals/portal_construction.md",
 	"vane-portals/portal_settings.md",
 	"vane-regions/regions.md",
-	"vane-regions/create_regions.md",
+	"vane-regions/region_creation.md",
+	"vane-regions/region_permissions.md",
 ]
 
 [[categories]]

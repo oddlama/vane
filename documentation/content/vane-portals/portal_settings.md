@@ -1,7 +1,7 @@
 ```toml
 [feature]
 title = "Portal Settings"
-icon = "minecraft:writable_book"
+icon = "minecraft:firework_star"
 module = "vane-portals"
 ```
 ---

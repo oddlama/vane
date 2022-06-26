@@ -1382,7 +1382,7 @@ This only works if the destination portal is not in a vane-region that restricts
 	<button type="button" class="feature-toggle flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" aria-expanded="false" aria-controls="body-feature-vane-portals--portal_settings">
 		<span class="flex items-center">
 			<div class="relative mr-4 w-[32px] h-[32px] min-w-[32px] min-h-[32px]">
-				<img class="absolute object-cover is-pixelated w-full h-full" src="assets/minecraft/textures/item/writable_book.png">
+				<img class="absolute object-cover is-pixelated w-full h-full" src="assets/minecraft/textures/item/firework_star.png">
 			</div>
 			Portal Settings
 		</span>
@@ -1434,7 +1434,7 @@ are part of a minecart railway network.</p></div>
 	<button type="button" class="feature-toggle flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" aria-expanded="false" aria-controls="body-feature-vane-regions--regions">
 		<span class="flex items-center">
 			<div class="relative mr-4 w-[32px] h-[32px] min-w-[32px] min-h-[32px]">
-				<img class="absolute object-cover is-pixelated w-full h-full" src="assets/minecraft/textures/item/compass_16.png">
+				<img class="absolute object-cover is-pixelated w-full h-full" src="assets/minecraft/textures/item/map.png">
 			</div>
 			Regions
 		</span>
@@ -1447,23 +1447,49 @@ are part of a minecart railway network.</p></div>
 </h2>
 <div id="body-feature-vane-regions--regions" class="hidden">
 	<div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900">
-		<div class="prose prose-slate prose-img:rounded-xl prose-img:w-1/3 prose-img:sm:m-4 prose-img:w-full prose-img:sm:w-1/2 prose-img:lg:w-2/5 prose-img:min-w-32 prose-img:max-w-full prose-img:float-right prose-h1:clear-right prose-h2:clear-right prose-img:float-right dark:prose-invert max-w-none"><h4>1 Overview</h4>
-<p><strong>Regions</strong> allow you to buy a piece of land. In your regions you can assign other players <strong>rights</strong> like building rights or container rights, as well as set conditions within the region (explosions, monster spawn, PVP, ...).</p>
-<h4>2 Usage</h4>
-<p>There are regions and region groups. <strong>Regions</strong> are purchased pieces of land, and are assigned to a region-group. In <strong>region-groups</strong>, you can assign rights to players by assigning them a <strong>role</strong>.</p>
-<h4>3 Portals &amp; Regions</h4>
-<p>The following applies to portals within regions: Admins of a region can change the settings of all portals within it. In addition, the visibility of the portal can be restricted to members of the region group, or only to portals that are also in a region with the same region group.</p></div>
+		<div class="prose prose-slate prose-img:rounded-xl prose-img:w-1/3 prose-img:sm:m-4 prose-img:w-full prose-img:sm:w-1/2 prose-img:lg:w-2/5 prose-img:min-w-32 prose-img:max-w-full prose-img:float-right prose-h1:clear-right prose-h2:clear-right prose-img:float-right dark:prose-invert max-w-none"><h2>Overview</h2>
+<p>Vane's region module allows you to purchase a piece of land.
+This allow you assign rights to other players, like building rights or container rights,
+as well as to set some environmental conditions within the region (disable explosions, monster spawn, PVP, ...).</p>
+<h2>Permission Management</h2>
+<p>There are some important concepts related to regions, which allow you to manage multiple regions easily:</p>
+<ul>
+<li>A <strong>region</strong> is an actual purchased piece of land.</li>
+<li>A so-called <strong>region-group</strong> is where you configure the environmental permissions and player permissions.</li>
+<li>Multiple regions can be governed by the same permissions simply by assinging them to the same region-group.</li>
+</ul>
+<p>Each region belongs to exactly one region-group which determines the rules in that region.
+If you create a new region, it will belong to your default default region-group. This is a region-group that exists
+by default and where only you have permissions to do anything.</p>
+<p>To avoid having to give each player permissions separately, <strong>roles</strong> exists to manage player permissions.
+Available permissions are intentionally kept simple to allow quick configuration, and should be everything
+your players need. For more sophisticated permission control, use WorldGuard or another plugin.</p>
+<ul>
+<li>3 default roles are created in each region-group for your convenience: <strong>admin</strong>, <strong>friend</strong>, <strong>others</strong>.<ul>
+<li><strong>others</strong> cannot build, can only view containers (only touch, no look!), but can use things (buttons, ...)</li>
+<li><strong>friends</strong> can build, can use things, can use chests</li>
+<li><strong>admins</strong> can do everything including permission management.</li>
+</ul>
+</li>
+<li>Exactly one role can be assigned to each player in that region-group. Unassigned players automatically belong to the <strong>others</strong> role.</li>
+</ul>
+<h2>Portals &amp; Regions</h2>
+<p>If a portal is inside of a region, some additional things apply:</p>
+<ul>
+<li>Admins of the region can change the portal settings</li>
+<li>The visibility of the portal can be restricted to either players that have the portal permission or other portals that are in a region with the same region group.</li>
+</ul></div>
 		<div class="clear-right"><!-- spacer --></div>
 	</div>
 </div>
 
-<h2 id="feature-vane-regions--create_regions">
-	<button type="button" class="feature-toggle flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" aria-expanded="false" aria-controls="body-feature-vane-regions--create_regions">
+<h2 id="feature-vane-regions--region_creation">
+	<button type="button" class="feature-toggle flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" aria-expanded="false" aria-controls="body-feature-vane-regions--region_creation">
 		<span class="flex items-center">
 			<div class="relative mr-4 w-[32px] h-[32px] min-w-[32px] min-h-[32px]">
 				<img class="absolute object-cover is-pixelated w-full h-full" src="assets/minecraft/textures/item/writable_book.png">
 			</div>
-			Create Regions
+			Region Creation
 		</span>
 		<div class="inline-flex shrink-0">
 			<span class="bg-green-100 text-green-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-green-200 dark:text-green-900 dark:opacity-50">regions</span>
@@ -1472,37 +1498,75 @@ are part of a minecart railway network.</p></div>
 		</div>
 	</button>
 </h2>
-<div id="body-feature-vane-regions--create_regions" class="hidden">
-	<div class="p-5 border border-t-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900">
-		<div class="prose prose-slate prose-img:rounded-xl prose-img:w-1/3 prose-img:sm:m-4 prose-img:w-full prose-img:sm:w-1/2 prose-img:lg:w-2/5 prose-img:min-w-32 prose-img:max-w-full prose-img:float-right prose-h1:clear-right prose-h2:clear-right prose-img:float-right dark:prose-invert max-w-none"><h4>1 Preparation</h4>
+<div id="body-feature-vane-regions--region_creation" class="hidden">
+	<div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900">
+		<div class="prose prose-slate prose-img:rounded-xl prose-img:w-1/3 prose-img:sm:m-4 prose-img:w-full prose-img:sm:w-1/2 prose-img:lg:w-2/5 prose-img:min-w-32 prose-img:max-w-full prose-img:float-right prose-h1:clear-right prose-h2:clear-right prose-img:float-right dark:prose-invert max-w-none"><h2>Preparation</h2>
 <p><img alt="" src="images/region_create.png" /></p>
-<p>A region costs diamonds. When you remove the region again, you get your diamonds back. Start a region selection by opening the region menu with <code>/rg</code> and selecting <strong>Create Region</strong> on the left.</p>
+<p>Opening the region menu with <code>/rg</code> and start selecting a region by clicking on <strong>Create Region</strong> on the left.</p>
+<p>A region costs diamonds <span class="not-prose inline-flex m-1 w-[32px] h-[32px] min-w-[32px] min-h-[32px]"><img class="is-pixelated mctooltip" src="assets/minecraft/textures/item/diamond.png" data-mctooltip="minecraft:diamond"></span>, but when you remove the region again, you will get all your diamonds back.</p>
+<h2>Select Region</h2>
 <p><img alt="" src="images/region_selection.png" /></p>
+<p>Choose the extent of your region by selecting two opposite corners of a cube.
+Use <strong>left-</strong> and <strong>right-clicking</strong> with an empty hand to set the two corners respectively.</p>
+<p>Your region selection will be displayed live in the world.
+If all requirements are met, you will see green particles together with your selection, otherwise red ones.
+In that case you can reopen the region menu with <code>/rg</code> to get detailed information on what is missing.</p>
+<h2>Create Region</h2>
 <p><img alt="" src="images/region_create_confirm.png" /></p>
-<h4>2 Select &amp; Create Region</h4>
-<p>Next, choose your region by selecting 2 opposite corners by <strong>left-</strong> and <strong>right-clicking</strong> with an empty hand. Your region selection will be displayed live in the world. If all requirements are met, you will see green particles together with your selection, otherwise red ones. Open the region menu again to check what is missing or to continue creating the region. If you are satisfied with your selection, create the region by clicking on the left button in the menu.</p>
-<h4>3 Default Group</h4>
+<p>When you are satisfied with your selection, create the region by clicking on the respective button in the region menu.</p></div>
+		<div class="clear-right"><!-- spacer --></div>
+	</div>
+</div>
+
+<h2 id="feature-vane-regions--region_permissions">
+	<button type="button" class="feature-toggle flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" aria-expanded="false" aria-controls="body-feature-vane-regions--region_permissions">
+		<span class="flex items-center">
+			<div class="relative mr-4 w-[32px] h-[32px] min-w-[32px] min-h-[32px]">
+				<img class="absolute object-cover is-pixelated w-full h-full" src="assets/minecraft/textures/block/iron_bars.png">
+			</div>
+			Region Permission Management
+		</span>
+		<div class="inline-flex shrink-0">
+			<span class="bg-green-100 text-green-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-green-200 dark:text-green-900 dark:opacity-50">regions</span>
+
+			<svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+		</div>
+	</button>
+</h2>
+<div id="body-feature-vane-regions--region_permissions" class="hidden">
+	<div class="p-5 border border-t-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900">
+		<div class="prose prose-slate prose-img:rounded-xl prose-img:w-1/3 prose-img:sm:m-4 prose-img:w-full prose-img:sm:w-1/2 prose-img:lg:w-2/5 prose-img:min-w-32 prose-img:max-w-full prose-img:float-right prose-h1:clear-right prose-h2:clear-right prose-img:float-right dark:prose-invert max-w-none"><h2>Default Group</h2>
 <p><img alt="" src="images/region_default_group.png" /></p>
-<p>A new region is assigned to your default group at the beginning. The settings there are preset so that you yourself are allowed to do everything, everyone else on the other hand can only use things (doors, ...), but neither build nor use containers.</p>
-<h4>4 Create Group</h4>
+<p>Newly created regions are initially assigned to your default region-group.
+In summary, this region-group allows you to do anything, and restrict everyone else from building or using your chests.
+Refer to <a href="#feature-vane-regions--regions">Regions</a> for more information about the default permissions.</p>
+<p>It's generally a good idea to keep your private regions in this default group.
+Add your friends to the friends role to allow them to build and use chests.</p>
+<h2>Creating a Region-Group</h2>
 <p><img alt="" src="images/region_create_group.png" /></p>
-<p>If you want to customize these settings, it is recommended to create a new region group. Otherwise, these settings will automatically apply to new regions you create in the future, as they will also be assigned to your default group at the beginning. Create a new region-group on the right side of the regions menu <code>/rg</code>.</p>
-<h4>5 Region Settings</h4>
-<p><img alt="" src="images/region_group_settings.png" /></p>
-<p>There are a few settings that do not affect players, but the region itself. These include, for example, whether monsters spawn in the region, whether PVP is allowed, or whether fire spreads. You can see and change all settings in the menu of the region group.</p>
-<h4>6 Roles</h4>
-<p><img alt="" src="images/region_role_settings_and_assign.png" /></p>
-<p>A new group contains 3 roles at the beginning: <strong>[Admins]</strong>, <strong>[Others]</strong> and <strong>Friends</strong>.</p>
-<p><strong>[Admins]</strong> are allowed to do everything, including assigning roles to players and adjusting permissions.</p>
-<p><strong>Friends</strong> are also allowed to do everything, but cannot change settings.</p>
-<p><strong>[Others]</strong> is a catch-all group for all players who are not assigned to any other role. These may only use things, but may not build or use containers.</p>
-<h4>7 Assign Player</h4>
-<p><img alt="" src="images/region_role_assign_dialog.png" /></p>
-<p>In the menu of your region group, assign the appropriate roles to your friends. In the same menu, you can also customize what your friends may do. For example, you can take away their right to use containers, or take away their building rights. If you only want to do this for a few of your friends, just create a new role for them.</p>
-<h4>8 Assign Group</h4>
+<p>Only create a new region-group if you require entirely different settings for one or more regions.
+This is usually the case when you share a bigger project with other people, and want everyone to be an admin in related areas.</p>
+<p>If you require a new region-group, you can create one by clicking the respective item on the right side in the region menu <code>/rg</code>.</p>
+<h2>Assign Group</h2>
 <p><img alt="" src="images/region_group_assign.png" /></p>
-<p>Finally, you just need to assign your region to the correct group. This is done via the region menu.</p>
-<p><strong>Tip:</strong> If you open the region menu <code>/rg</code> while you are in a region, you will see the corresponding region and the assigned region group directly in the main menu.</p></div>
+<p>Finally, you need to assign your region to the newly created group, which you can do from the region's settings menu.</p>
+<p><strong>Tip:</strong> If you open the region menu <code>/rg</code> while standing in a region, you will see direct links to both the region's settings and the currently assigned region-group.</p>
+<h2>Environmental Settings</h2>
+<p><img alt="" src="images/region_group_settings.png" /></p>
+<p>Each region-group has a set of environmental settings that apply to the actualy regions in this region-group themselves and not to any players.
+These are settings like: Disabling monster spawn, controlling whether PVP is allowed, whether fire spreads or similar things.
+You can see and change all settings in the menu related to the region-group.</p>
+<h2>Roles</h2>
+<p><img alt="" src="images/region_role_settings_and_assign.png" /></p>
+<p>Players are assigned to exactly one role that dictates what they are allowed to do.
+Any newly created region-group by default contains 3 roles: <strong>[Admins]</strong>, <strong>[Others]</strong> and <strong>Friends</strong>.</p>
+<p><strong>[Others]</strong> is a catch-all role for all players that have no assigned role. Those players may only use things like doors and buttons, but are restricted from building or using containers.</p>
+<p><strong>Friends</strong> may build, use things and use containers, but cannot change settings.</p>
+<p><strong>[Admins]</strong> are allowed to do everything, including assigning roles to players and adjusting permissions.</p>
+<h2>Assigning Roles and Permissions</h2>
+<p><img alt="" src="images/region_role_assign_dialog.png" /></p>
+<p>By clicking on a role in the region-menu, you can customize the permissions for all players that belong to that role.
+In the same menu, you can assign players to that the selected role.</p></div>
 		<div class="clear-right"><!-- spacer --></div>
 	</div>
 </div>
