@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 
 import argparse
+import json
 import markdown
 import os
 import shutil
+import subprocess
+import tempfile
 import toml
 import yaml
 import zipfile
@@ -25,6 +28,8 @@ class Context:
     build_path: Path = Path("build")
     assets_path: Path = Path("build/assets")
     plugins_dir: Path = Path("plugins")
+    client_jar: zipfile.ZipFile = None # type: ignore
+    loaded_minecraft_asset_icons: dict[str, str] = field(default_factory=dict)
     content_settings: dict[str, Any] = field(default_factory=dict)
     features: dict[str, list[Feature]] = field(default_factory=dict)
     categories: dict[str, Any] = field(default_factory=dict)
@@ -90,20 +95,122 @@ def get_from_config(resource_key: str) -> dict[str, Any]:
         config = yaml.safe_load(f)
     return deep_get(config, key)
 
+def collect_jar_asset(asset: str) -> None:
+    out = context.assets_path / asset.removeprefix("assets/")
+    out.parent.mkdir(parents=True, exist_ok=True)
+    with open(out, "wb") as f:
+        try:
+            f.write(context.client_jar.read(asset))
+        except KeyError:
+            print(f"[1;33mwarning:[m missing asset: {asset}")
+
+def _render_block(texture_front: str, texture_side: str, texture_top: str, output: Path):
+    size = 300
+    subprocess.run(["convert", "-size", f"{size}x{size}", "xc:transparent",
+        "(", texture_top, "-interpolate", "Nearest", "-filter", "point", "-resize", "3200%",
+            "-alpha", "set", "-virtual-pixel", "transparent", "+distort", "Perspective",
+                f"{int(0 * 512)},{int(0 * 512)} {int(150/300 * size)},{int(  0/300 * size)} \
+                  {int(1 * 512)},{int(0 * 512)} {int(284/300 * size)},{int( 68/300 * size)} \
+                  {int(0 * 512)},{int(1 * 512)} {int( 16/300 * size)},{int( 68/300 * size)} \
+                  {int(1 * 512)},{int(1 * 512)} {int(150/300 * size)},{int(135/300 * size)}", ")",
+        "(", texture_side, "-interpolate", "Nearest", "-filter", "point", "-resize", "3200%",
+            "-alpha", "set", "-virtual-pixel", "transparent", "+distort", "Perspective",
+                f"{int(0 * 512)},{int(0 * 512)} {int( 16/300 * size)},{int( 68/300 * size)} \
+                  {int(1 * 512)},{int(0 * 512)} {int(150/300 * size)},{int(135/300 * size)} \
+                  {int(0 * 512)},{int(1 * 512)} {int( 16/300 * size)},{int(232/300 * size)} \
+                  {int(1 * 512)},{int(1 * 512)} {int(150/300 * size)},{int(300/300 * size)}", ")",
+        "(", texture_front, "-interpolate", "Nearest", "-filter", "point", "-resize", "3200%",
+            "-alpha", "set", "-virtual-pixel", "transparent", "+distort", "Perspective",
+                f"{int(0 * 512)},{int(0 * 512)} {int(150/300 * size)},{int(135/300 * size)} \
+                  {int(1 * 512)},{int(0 * 512)} {int(284/300 * size)},{int( 68/300 * size)} \
+                  {int(0 * 512)},{int(1 * 512)} {int(150/300 * size)},{int(300/300 * size)} \
+                  {int(1 * 512)},{int(1 * 512)} {int(284/300 * size)},{int(232/300 * size)}", ")",
+        "-background", "transparent", "-compose", "plus", "-layers", "flatten", "+repage", str(output)
+    ], check=True)
+
+def render_cube_all(key: str, model: dict[str, Any]) -> str:
+    print(f"Rendering cube_all {key}...")
+    texture = model['textures']['all'].removeprefix('minecraft:block')
+
+    with tempfile.NamedTemporaryFile() as ftmp:
+        asset = f"assets/minecraft/textures/{texture.removeprefix('minecraft:')}.png"
+        ftmp.write(context.client_jar.read(asset))
+        ftmp.flush()
+
+        icon = f"assets/minecraft/blocks/{key}.png"
+        out = context.assets_path / icon.removeprefix("assets/")
+        out.parent.mkdir(parents=True, exist_ok=True)
+        _render_block(ftmp.name, ftmp.name, ftmp.name, out)
+
+    return icon
+
+def render_orientable(key: str, model: dict[str, Any]) -> str:
+    print(f"Rendering orientable {key}...")
+    texture_front = model['textures']['front'].removeprefix('minecraft:')
+    texture_side = model['textures']['side'].removeprefix('minecraft:')
+    texture_top = model['textures']['top'].removeprefix('minecraft:')
+
+    with tempfile.NamedTemporaryFile() as tmp_front, tempfile.NamedTemporaryFile() as tmp_side, tempfile.NamedTemporaryFile() as tmp_top:
+        tmp_front.write(context.client_jar.read(f"assets/minecraft/textures/{texture_front}.png"))
+        tmp_front.flush()
+        tmp_side.write(context.client_jar.read(f"assets/minecraft/textures/{texture_side}.png"))
+        tmp_side.flush()
+        tmp_top.write(context.client_jar.read(f"assets/minecraft/textures/{texture_top}.png"))
+        tmp_top.flush()
+
+        icon = f"assets/minecraft/blocks/{key}.png"
+        out = context.assets_path / icon.removeprefix("assets/")
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.parent.mkdir(parents=True, exist_ok=True)
+        _render_block(tmp_front.name, tmp_side.name, tmp_top.name, out)
+
+    return icon
+
+def minecraft_asset_icon(key: str) -> str:
+    # Don't load again if already known
+    if key in context.loaded_minecraft_asset_icons:
+        return context.loaded_minecraft_asset_icons[key]
+
+    icon = None
+    item_model = None
+    try:
+        item_model = json.loads(context.client_jar.read(f"assets/minecraft/models/item/{key}.json"))
+    except KeyError:
+        print(f"[1;33mwarning:[m cannot create icon for unknown item minecraft:{key}")
+
+    if item_model is not None:
+        item_parent = item_model["parent"].removeprefix("minecraft:")
+        if item_parent in ["item/generated", "item/handheld"]:
+            texture = item_model["textures"]["layer0"].removeprefix('minecraft:')
+            icon = f"assets/minecraft/textures/{texture}.png"
+            collect_jar_asset(icon)
+        elif item_parent.startswith("block/"):
+            block = item_parent.removeprefix("block/")
+            block_model = json.loads(context.client_jar.read(f"assets/minecraft/models/block/{block}.json"))
+            block_parent = block_model['parent'].removeprefix("minecraft:")
+            if block_parent == "block/cube_all":
+                icon = render_cube_all(key, block_model)
+            elif block_parent == "block/orientable":
+                icon = render_orientable(key, block_model)
+            else:
+                print(f"[1;33mwarning:[m unknown block model type {block_parent} for item minecraft:{key}")
+        else:
+            print(f"[1;33mwarning:[m unknown item model type {item_parent} for item minecraft:{key}")
+
+    if icon is None:
+        icon = f"assets/minecraft/textures/item/barrier.png"
+        collect_jar_asset(icon)
+
+    context.loaded_minecraft_asset_icons[key] = icon
+    return icon
+
 def item_to_icon(item: str) -> str:
     resource_key = item.split("{")[0]
     if not resource_key.startswith("#"):
         resource_key = resource_key.split("#")[0]
     namespace, key = resource_key.split(":", maxsplit=1)
     if namespace == "minecraft":
-        # Some items require manual rewrites
-        if key == "compass":
-            key = "compass_19"
-        elif key == "clock":
-            key = "clock_02"
-        icon = f"assets/minecraft/textures/item/{key}.png"
-        context.required_minecraft_assets.add(icon)
-        return icon
+        return minecraft_asset_icon(key)
     elif namespace.startswith("vane"):
         namespace = namespace.replace("_", "-")
         key = f"items/{key}.png"
@@ -261,17 +368,10 @@ def generate_docs() -> None:
     with open(context.build_path / "index.html", "w") as f:
         f.write(index_content)
 
-def collect_assets(client_jar: str) -> None:
+def collect_assets() -> None:
     print(f"Collecting {len(context.required_minecraft_assets)} required assets from client jar...")
-    with zipfile.ZipFile(client_jar) as zf:
-        for asset in context.required_minecraft_assets:
-            out = context.assets_path / asset.removeprefix("assets/")
-            out.parent.mkdir(parents=True, exist_ok=True)
-            with open(out, "wb") as f:
-                try:
-                    f.write(zf.read(asset))
-                except KeyError:
-                    print(f"[1;33mwarning:[m missing asset: {asset}")
+    for asset in context.required_minecraft_assets:
+        collect_jar_asset(asset)
 
     print(f"Collecting {len(context.required_project_assets)} required assets from this project...")
     for namespace, key in context.required_project_assets:
@@ -302,8 +402,10 @@ def main():
     context.categories = { c["id"]: c for c in context.content_settings["categories"] }
     context.templates = load_templates()
 
-    generate_docs()
-    collect_assets(args.client_jar)
+    with zipfile.ZipFile(args.client_jar) as client_jar:
+        context.client_jar = client_jar
+        generate_docs()
+        collect_assets()
 
     # Ensure that all content documents are included as a safety check
     used = set(f for cat in context.content_settings["categories"] for f in cat["content"])
