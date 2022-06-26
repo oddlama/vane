@@ -13,8 +13,6 @@
 
 #the-mctooltip {
     position: fixed;
-    top: 0;
-    left: 0;
     background-color: #100010;
     background-color: rgba(16,0,16,0.94);
     padding: 0.375em;

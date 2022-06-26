@@ -198,8 +198,8 @@ def minecraft_asset_icon(key: str) -> str:
             print(f"[1;33mwarning:[m unknown item model type {item_parent} for item minecraft:{key}")
 
     if icon is None:
-        icon = f"assets/minecraft/textures/item/barrier.png"
-        collect_jar_asset(icon)
+        icon = f"assets/minecraft_special/{key}.png"
+        print(f"  -> using {icon}")
 
     context.loaded_minecraft_asset_icons[key] = icon
     return icon
@@ -311,13 +311,19 @@ def render_feature(feature: Feature, index: int, count: int) -> str:
 
     if "itemlike" in feature.metadata:
         recipes = [render_recipe(feature, r) for r in get_from_config(feature.metadata["itemlike"] + ".recipes").values()]
-        html = html.replace("{{ feature.recipes }}", "\n".join(recipes))
+        if len(recipes) > 0:
+            html = html.replace("{{ feature.recipes }}", "\n".join(recipes))
+        else:
+            html = remove_lines_containing(html, "{{ feature.recipes }}")
 
         loot = get_from_config(feature.metadata["itemlike"] + ".loot")
-        html = html.replace("{{ feature.loot }}", render_loot_table(loot) if len(loot) > 0 else "")
+        if len(loot) > 0:
+            html = html.replace("{{ feature.loot }}", render_loot_table(loot))
+        else:
+            html = remove_lines_containing(html, "{{ feature.loot }}")
     else:
-        html = html.replace("{{ feature.recipes }}", "")
-        html = html.replace("{{ feature.loot }}", "")
+        html = remove_lines_containing(html, "{{ feature.recipes }}")
+        html = remove_lines_containing(html, "{{ feature.loot }}")
 
     if "icon" not in feature.metadata:
         print(f"[1;33mwarning:[m could not infer icon")
