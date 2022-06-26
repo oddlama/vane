@@ -4,6 +4,7 @@ import argparse
 import json
 import markdown
 import os
+import re
 import shutil
 import subprocess
 import tempfile
@@ -16,6 +17,7 @@ from glob import glob
 from pathlib import Path
 from typing import Any
 
+markdown_item_pattern = re.compile(r'{{ item:(\S*) }}')
 
 @dataclass
 class Feature:
@@ -45,6 +47,12 @@ def load_templates() -> dict[str, str]:
         with open(i, "r") as f:
             templates[os.path.basename(i).removesuffix(".html")] = f.read()
     return templates
+
+def item_to_inline_icon(resource_key: str) -> str:
+    html = context.templates["inline-icon"].strip()
+    html = html.replace("{{ icon }}", item_to_icon(resource_key))
+    html = html.replace("{{ name }}", resource_key)
+    return html
 
 def load_feature_markdown(markdown_file: Path, default_slug: str) -> Feature:
     with open(markdown_file, "r") as f:
@@ -77,6 +85,7 @@ def load_feature_markdown(markdown_file: Path, default_slug: str) -> Feature:
         if "itemlike" not in metadata:
             raise ValueError("metadata contains no icon definition. This is only possible if 'itemlike' is set to determine the icon from the recipe.")
 
+    content = markdown_item_pattern.sub(lambda match: item_to_inline_icon(match.group(1)), content)
     return Feature(loaded_from=str(markdown_file),
                    metadata=metadata,
                    html_content=markdown.markdown(content))
@@ -130,10 +139,10 @@ def _render_block(texture_front: str, texture_side: str, texture_top: str, outpu
 
 def render_cube_all(key: str, model: dict[str, Any]) -> str:
     print(f"Rendering cube_all {key}...")
-    texture = model['textures']['all'].removeprefix('minecraft:block')
+    texture = model['textures']['all'].removeprefix('minecraft:')
 
     with tempfile.NamedTemporaryFile() as ftmp:
-        asset = f"assets/minecraft/textures/{texture.removeprefix('minecraft:')}.png"
+        asset = f"assets/minecraft/textures/{texture}.png"
         ftmp.write(context.client_jar.read(asset))
         ftmp.flush()
 

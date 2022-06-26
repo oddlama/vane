@@ -5,13 +5,13 @@ icon = "minecraft:barrier"
 module = "vane-portals"
 ```
 ---
-#### 6 Additional Things
+## Additional Things
 
 ![](images/portal_menus.png)
 
 The owner of the portal will see more entries in the menu to personalize the portal, or to delete it again. In the settings menu you can change the name, icon and style, as well as toggle the visibility. If you want your portal to be public, you should select that now.
 
-#### 7 Icon & style
+## Icon & Style
 
 ![](images/portal_style.png)
 
