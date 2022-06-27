@@ -1,5 +1,5 @@
 ```toml
-title = "Client-side Translations"
+title = "Clientside Translations"
 icon = "minecraft:book"
 module = "vane-core"
 ```

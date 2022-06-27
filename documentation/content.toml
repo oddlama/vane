@@ -1,12 +1,13 @@
 [badge.color]
 vane-admin = "red"
-vane-bedtime = "gray"
+vane-bedtime = "sky"
 vane-core = "gray"
 vane-enchantments = "yellow"
 vane-permissions = "red"
 vane-portals = "indigo"
-vane-regions = "green"
+vane-regions = "sky"
 vane-trifles = "sky"
+vane-waterfall = "gray"
 
 [[categories]]
 id = "gameplay"
@@ -70,14 +71,24 @@ content = [
 id = "administrative"
 title = "Administrative Features"
 content = [
-	"vane-core/translations.md",
-	"vane-core/configurability.md",
-	"vane-admin/autostop.md",
-	"vane-core/core_commands.md",
-	"vane-core/command_hider.md",
 	"vane-admin/chat_message_formatter.md",
+	"vane-core/command_hider.md",
+	"vane-core/core_commands.md",
 	"vane-admin/convenience_commands.md",
 	"vane-admin/hazard_protection.md",
 	"vane-admin/spawn_protection.md",
 	"vane-admin/graylist.md",
+	"vane-core/loot_block_protection.md",
+]
+
+[[categories]]
+id = "system"
+title = "System Features"
+content = [
+	"vane-core/translations.md",
+	"vane-core/configurability.md",
+	"vane-admin/autostop.md",
+	"vane-waterfall/autostart.md",
+	"vane-waterfall/multiplexing.md",
+	"vane-core/uninstalling.md",
 ]

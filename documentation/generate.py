@@ -112,7 +112,7 @@ def collect_jar_asset(asset: str) -> None:
             print(f"[1;33mwarning:[m missing asset: {asset}")
 
 def _render_block(texture_front: str, texture_side: str, texture_top: str, output: Path):
-    size = 300
+    size = 128
     subprocess.run(["convert", "-size", f"{size}x{size}", "xc:transparent",
         "(", texture_top, "-interpolate", "Nearest", "-filter", "point", "-resize", "3200%",
             "-alpha", "set", "-virtual-pixel", "transparent", "+distort", "Perspective",
@@ -180,10 +180,11 @@ def minecraft_asset_icon(key: str) -> str:
 
     icon = None
     item_model = None
+    msg = ""
     try:
         item_model = json.loads(context.client_jar.read(f"assets/minecraft/models/item/{key}.json"))
     except KeyError:
-        print(f"[1;33mwarning:[m cannot create icon for unknown item minecraft:{key}")
+        msg = f"unknown item minecraft:{key}"
 
     if item_model is not None:
         item_parent = item_model["parent"].removeprefix("minecraft:")
@@ -200,13 +201,16 @@ def minecraft_asset_icon(key: str) -> str:
             elif block_parent == "block/orientable":
                 icon = render_orientable(key, block_model)
             else:
-                print(f"[1;33mwarning:[m unknown block model type {block_parent} for item minecraft:{key}")
+                msg = f"unknown block model type {block_parent} in item minecraft:{key}"
         else:
-            print(f"[1;33mwarning:[m unknown item model type {item_parent} for item minecraft:{key}")
+            msg = f"unknown item model type {item_parent} in item minecraft:{key}"
 
     if icon is None:
         icon = f"assets/minecraft_special/{key}.png"
-        print(f"  -> using {icon}")
+        out = context.assets_path / icon.removeprefix("assets/")
+        print(f"using {icon} for {msg}")
+        if not out.exists():
+            print(f"[1;33mwarning:[m missing asset: {icon}")
 
     context.loaded_minecraft_asset_icons[key] = icon
     return icon
@@ -224,6 +228,9 @@ def item_to_icon(item: str) -> str:
         icon = f"{namespace}/{key}"
         context.required_project_assets.add((namespace, key))
         return "assets/" + icon
+    # FIXME: hardcoded overrides
+    elif resource_key == "#minecraft:beds":
+        return f"assets/minecraft_special/bed.png"
     else:
         print(f"[1;33mwarning:[m unknown icon for item: {item}")
     return f"assets/minecraft/textures/item/barrier.png"
