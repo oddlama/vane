@@ -113,27 +113,28 @@ def collect_jar_asset(asset: str) -> None:
 
 def _render_block(texture_front: str, texture_side: str, texture_top: str, output: Path):
     size = 128
-    subprocess.run(["convert", "-size", f"{size}x{size}", "xc:transparent",
-        "(", texture_top, "-interpolate", "Nearest", "-filter", "point", "-resize", "3200%",
-            "-alpha", "set", "-virtual-pixel", "transparent", "+distort", "Perspective",
-                f"{int(0 * 512)},{int(0 * 512)} {int(150/300 * size)},{int(  0/300 * size)} \
-                  {int(1 * 512)},{int(0 * 512)} {int(284/300 * size)},{int( 68/300 * size)} \
-                  {int(0 * 512)},{int(1 * 512)} {int( 16/300 * size)},{int( 68/300 * size)} \
-                  {int(1 * 512)},{int(1 * 512)} {int(150/300 * size)},{int(135/300 * size)}", ")",
-        "(", texture_side, "-interpolate", "Nearest", "-filter", "point", "-resize", "3200%",
-            "-alpha", "set", "-virtual-pixel", "transparent", "+distort", "Perspective",
-                f"{int(0 * 512)},{int(0 * 512)} {int( 16/300 * size)},{int( 68/300 * size)} \
-                  {int(1 * 512)},{int(0 * 512)} {int(150/300 * size)},{int(135/300 * size)} \
-                  {int(0 * 512)},{int(1 * 512)} {int( 16/300 * size)},{int(232/300 * size)} \
-                  {int(1 * 512)},{int(1 * 512)} {int(150/300 * size)},{int(300/300 * size)}", ")",
-        "(", texture_front, "-interpolate", "Nearest", "-filter", "point", "-resize", "3200%",
-            "-alpha", "set", "-virtual-pixel", "transparent", "+distort", "Perspective",
-                f"{int(0 * 512)},{int(0 * 512)} {int(150/300 * size)},{int(135/300 * size)} \
-                  {int(1 * 512)},{int(0 * 512)} {int(284/300 * size)},{int( 68/300 * size)} \
-                  {int(0 * 512)},{int(1 * 512)} {int(150/300 * size)},{int(300/300 * size)} \
-                  {int(1 * 512)},{int(1 * 512)} {int(284/300 * size)},{int(232/300 * size)}", ")",
-        "-background", "transparent", "-compose", "plus", "-layers", "flatten", "+repage", str(output)
-    ], check=True)
+    if not output.exists():
+        subprocess.run(["convert", "-size", f"{size}x{size}", "xc:transparent",
+            "(", texture_top, "-interpolate", "Nearest", "-filter", "point", "-resize", "3200%",
+                "-alpha", "set", "-virtual-pixel", "transparent", "+distort", "Perspective",
+                    f"{int(0 * 512)},{int(0 * 512)} {int(150/300 * size)},{int(  0/300 * size)} \
+                    {int(1 * 512)},{int(0 * 512)} {int(284/300 * size)},{int( 68/300 * size)} \
+                    {int(0 * 512)},{int(1 * 512)} {int( 16/300 * size)},{int( 68/300 * size)} \
+                    {int(1 * 512)},{int(1 * 512)} {int(150/300 * size)},{int(135/300 * size)}", ")",
+            "(", texture_side, "-interpolate", "Nearest", "-filter", "point", "-resize", "3200%",
+                "-alpha", "set", "-virtual-pixel", "transparent", "+distort", "Perspective",
+                    f"{int(0 * 512)},{int(0 * 512)} {int( 16/300 * size)},{int( 68/300 * size)} \
+                    {int(1 * 512)},{int(0 * 512)} {int(150/300 * size)},{int(135/300 * size)} \
+                    {int(0 * 512)},{int(1 * 512)} {int( 16/300 * size)},{int(232/300 * size)} \
+                    {int(1 * 512)},{int(1 * 512)} {int(150/300 * size)},{int(300/300 * size)}", ")",
+            "(", texture_front, "-interpolate", "Nearest", "-filter", "point", "-resize", "3200%",
+                "-alpha", "set", "-virtual-pixel", "transparent", "+distort", "Perspective",
+                    f"{int(0 * 512)},{int(0 * 512)} {int(150/300 * size)},{int(135/300 * size)} \
+                    {int(1 * 512)},{int(0 * 512)} {int(284/300 * size)},{int( 68/300 * size)} \
+                    {int(0 * 512)},{int(1 * 512)} {int(150/300 * size)},{int(300/300 * size)} \
+                    {int(1 * 512)},{int(1 * 512)} {int(284/300 * size)},{int(232/300 * size)}", ")",
+            "-background", "transparent", "-compose", "plus", "-layers", "flatten", "+repage", str(output)
+        ], check=True)
 
 def render_cube_all(key: str, model: dict[str, Any]) -> str:
     print(f"Rendering cube_all {key}...")
