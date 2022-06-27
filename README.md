@@ -40,7 +40,7 @@ You also need the newest version of [ProtocolLib](https://ci.dmulloy2.net/job/Pr
 
 For a comprehensive guide, visit the [Installation Guide](https://github.com/oddlama/vane/wiki/Installation-Guide) on the wiki.
 
-### Installation (vane-waterfall)
+## Installation (vane-waterfall)
 
 Download `vane-waterfall.jar` into the proxy server's `plugins/` directory.
 The configuration will be generated on first start.
