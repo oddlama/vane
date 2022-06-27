@@ -1,5 +1,4 @@
 ```toml
-[feature]
 title = "Translations"
 icon = "minecraft:name_tag"
 module = "vane-core"

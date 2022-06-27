@@ -1,5 +1,4 @@
 ```toml
-[feature]
 title = "Portal Scroll - Home"
 module = "vane-trifles"
 itemlike = "vane-trifles:scrolls.item_home_scroll"

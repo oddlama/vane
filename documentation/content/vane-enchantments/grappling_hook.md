@@ -1,5 +1,4 @@
 ```toml
-[feature]
 title = "Grappling hook [I-III]"
 module = "vane-enchantments"
 itemlike = "vane-enchantments:enchantment_grappling_hook"

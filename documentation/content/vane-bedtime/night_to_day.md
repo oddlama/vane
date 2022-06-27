@@ -1,5 +1,4 @@
 ```toml
-[feature]
 title = "Smooth Night Skipping"
 icon = "minecraft:bed"
 module = "vane-bedtime"

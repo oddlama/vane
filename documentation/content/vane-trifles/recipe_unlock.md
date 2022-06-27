@@ -1,5 +1,4 @@
 ```toml
-[feature]
 title = "Unlocks All Recipes"
 icon = "minecraft:recipe_book"
 module = "vane-trifles"

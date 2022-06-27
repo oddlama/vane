@@ -1,5 +1,4 @@
 ```toml
-[feature]
 title = "Portal Scroll - Unstable"
 icon = "vane-trifles:unstable_scroll"
 module = "vane-trifles"

@@ -1,5 +1,4 @@
 ```toml
-[feature]
 title = "Portal Settings"
 icon = "minecraft:firework_star"
 module = "vane-portals"

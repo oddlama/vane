@@ -1,5 +1,4 @@
 ```toml
-[feature]
 title = "Region Permission Management"
 icon = "minecraft:iron_bars"
 module = "vane-regions"

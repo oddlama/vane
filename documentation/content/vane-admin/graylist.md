@@ -1,5 +1,4 @@
 ```toml
-[feature]
 title = "Graylist (optional)"
 icon = "minecraft:chain"
 module = "vane-admin"

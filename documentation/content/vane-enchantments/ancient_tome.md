@@ -1,5 +1,4 @@
 ```toml
-[feature]
 title = "Ancient Tome"
 icon = "vane-enchantments:ancient_tome"
 module = "vane-enchantments"

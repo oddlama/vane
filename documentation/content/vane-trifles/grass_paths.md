@@ -1,5 +1,4 @@
 ```toml
-[feature]
 title = "Grass Paths"
 icon = "minecraft:dirt_path"
 module = "vane-trifles"

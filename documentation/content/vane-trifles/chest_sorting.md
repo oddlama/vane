@@ -1,5 +1,4 @@
 ```toml
-[feature]
 title = "Chest Sorting"
 icon = "minecraft:chest"
 module = "vane-trifles"

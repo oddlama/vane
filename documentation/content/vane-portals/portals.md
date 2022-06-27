@@ -1,5 +1,4 @@
 ```toml
-[feature]
 title = "Portals"
 icon = "minecraft:ender_pearl"
 module = "vane-portals"

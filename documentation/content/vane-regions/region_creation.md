@@ -1,5 +1,4 @@
 ```toml
-[feature]
 title = "Region Creation"
 icon = "minecraft:writable_book"
 module = "vane-regions"

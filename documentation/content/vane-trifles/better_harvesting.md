@@ -1,5 +1,4 @@
 ```toml
-[feature]
 title = "Better Harvesting"
 icon = "minecraft:wheat"
 module = "vane-trifles"

@@ -1,5 +1,4 @@
 ```toml
-[feature]
 title = "Ancient Tome of Knowledge"
 module = "vane-enchantments"
 itemlike = "vane-enchantments:item_ancient_tome_of_knowledge"

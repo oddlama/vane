@@ -1,5 +1,4 @@
 ```toml
-[feature]
 title = "XP Bottles"
 icon = "vane-trifles:medium_xp_bottle"
 module = "vane-trifles"

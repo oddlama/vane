@@ -1,5 +1,4 @@
 ```toml
-[feature]
 title = "Portal Construction"
 icon = "minecraft:crying_obsidian"
 module = "vane-portals"

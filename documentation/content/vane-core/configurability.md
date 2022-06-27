@@ -1,5 +1,4 @@
 ```toml
-[feature]
 title = "Full configurability"
 icon = "minecraft:end_crystal"
 module = "vane-core"

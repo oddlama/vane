@@ -1,5 +1,4 @@
 ```toml
-[feature]
 title = "File"
 module = "vane-trifles"
 itemlike = "vane-trifles:item_file"

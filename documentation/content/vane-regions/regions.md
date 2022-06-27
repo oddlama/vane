@@ -1,5 +1,4 @@
 ```toml
-[feature]
 title = "Regions"
 icon = "minecraft:map"
 module = "vane-regions"

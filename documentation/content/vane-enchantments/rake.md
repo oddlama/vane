@@ -1,5 +1,4 @@
 ```toml
-[feature]
 title = "Rake [I-IV]"
 module = "vane-enchantments"
 itemlike = "vane-enchantments:enchantment_rake"

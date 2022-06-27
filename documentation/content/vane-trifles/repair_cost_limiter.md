@@ -1,5 +1,4 @@
 ```toml
-[feature]
 title = "Anvil Cost Limiter"
 icon = "minecraft:anvil"
 module = "vane-trifles"
