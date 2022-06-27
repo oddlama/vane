@@ -14,11 +14,13 @@ The settings menu allows you change several things about the portal:
 
 **Name:** Change the name of your portal
 
-![](images/portal_style.png)
-
 **Icon:** Choose any item from your inventory as the portal icon.
 This item will be used in the target selector, and will be displayed above consoles of portals where it is set as the destination.
 You can also use one of the many decorative heads from `/heads`.
+
+![](images/portal_style.png)
+
+![](assets/gifs/portal-style.gif)
 
 **Style:** In the style selector, you can either use one of the predefined styles, or create your own.
 Every type of block used in the portal frame can be disguised as any other block - at no cost.

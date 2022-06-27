@@ -5,4 +5,7 @@ icon = "minecraft:chest"
 module = "vane-trifles"
 ```
 ---
-When a button is pressed, all chests within a 1-block radius of the button are automatically sorted. (A 3x3x3 cube with the button in the middle)
+![](assets/gifs/chest-sorting.gif)
+
+When a button is pressed, all chest-like containers within a 1-block radius of the button are automatically sorted.
+This relates to a 3x3x3 cube where the button is the block in the middle.

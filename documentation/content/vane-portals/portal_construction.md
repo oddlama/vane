@@ -23,6 +23,7 @@ can later be individually styled as another block.
 ## Portal Frame
 
 ![](images/portal_boundary.png)
+![](assets/gifs/portal-frame-construction.gif)
 
 First you need to construct the frame of the portal.
 It can be built either vertically or horizontally,
@@ -39,6 +40,8 @@ without suffocating. With horizontal portals, the nethrite block location doesn'
 
 ## Console & Lever
 
+![](assets/gifs/portal-create.gif)
+
 Next, you need to place the enchantment table in a convenient place near your portal.
 It will become the portal console which is used to select the destination before you travel.
 Create the portal by shift-right-clicking on the enchantment table,
@@ -54,6 +57,8 @@ from other portals. To change that, right click the console to open the menu and
 > If you want, you can add additional consoles in the same way as you added the first console.
 
 ## Activation
+
+![](assets/gifs/portal-activate-use.gif)
 
 Activate the portal by first selecting a destination in the console, and then activate the lever.
 If the destination portal is private, the destination selection will be reset afterwards.

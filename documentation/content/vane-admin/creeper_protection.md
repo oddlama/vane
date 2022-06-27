@@ -1,8 +1,12 @@
 ```toml
 [feature]
-title = "Creeper protection"
+title = "Creeper protection with style"
 icon = "minecraft:creeper_head"
 module = "vane-admin"
 ```
 ---
-Nobody likes creepers that blow away half your house. That's why we did something about it, but with style.
+![](assets/gifs/creeper-protection.gif)
+
+Nobody likes creepers that blow away half of your house,
+but disabling creeper explosions is really lame.
+That's why we did something about it, with style.

@@ -1,6 +1,6 @@
 ```toml
 [feature]
-title = "Decorative Heads"
+title = "Decorative Heads (32000+)"
 icon = "minecraft:player_head"
 module = "vane-trifles"
 ```

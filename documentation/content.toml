@@ -13,7 +13,7 @@ id = "gameplay"
 title = "Gameplay"
 content = [
 	"vane-trifles/double_doors.md",
-	"vane-trifles/simple_harvest.md",
+	"vane-trifles/better_harvesting.md",
 	"vane-trifles/chest_sorting.md",
 	"vane-trifles/grass_paths.md",
 	"vane-admin/creeper_protection.md",
