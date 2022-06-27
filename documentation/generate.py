@@ -65,8 +65,6 @@ def load_feature_markdown(markdown_file: Path, default_slug: str) -> Feature:
             exit(1)
 
     metadata = toml.loads(metadata)
-    assert "feature" in metadata
-    metadata = metadata["feature"]
     if "slug" not in metadata:
         metadata["slug"] = default_slug
 

@@ -1,6 +1,6 @@
 ```toml
 [feature]
-title = "Creeper protection with style"
+title = "Creeper Protection with Style"
 icon = "minecraft:creeper_head"
 module = "vane-admin"
 ```

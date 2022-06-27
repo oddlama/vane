@@ -19,6 +19,8 @@ content = [
 	"vane-admin/creeper_protection.md",
 	"vane-trifles/decorative_heads.md",
 	"vane-bedtime/night_to_day.md",
+	"vane-trifles/recipe_unlock.md",
+	"vane-trifles/repair_cost_limiter.md",
 ]
 
 [[categories]]
@@ -70,4 +72,10 @@ title = "Administrative Features"
 content = [
 	"vane-core/translations.md",
 	"vane-core/configurability.md",
+	"vane-admin/autostop.md",
+	"vane-admin/chat_message_formatter.md",
+	"vane-admin/convenience_commands.md",
+	"vane-admin/graylist.md",
+	"vane-admin/hazard_protection.md",
+	"vane-admin/spawn_protection.md",
 ]
