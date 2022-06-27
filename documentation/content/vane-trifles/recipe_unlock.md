@@ -1,6 +1,6 @@
 ```toml
-title = "Unlocks All Recipes"
-icon = "minecraft:recipe_book"
+title = "Unlock All Recipes"
+icon = "minecraft:knowledge_book"
 module = "vane-trifles"
 ```
 ---

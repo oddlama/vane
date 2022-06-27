@@ -1,6 +1,6 @@
 ```toml
 title = "Portal Settings"
-icon = "minecraft:firework_star"
+icon = "minecraft:name_tag"
 module = "vane-portals"
 ```
 ---

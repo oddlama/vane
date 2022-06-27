@@ -215,7 +215,7 @@ That's why we did something about it, with style.</p></div>
 </div>
 
 <h2 id="feature-vane-bedtime--night_to_day">
-	<button type="button" class="feature-toggle flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" aria-expanded="false" aria-controls="body-feature-vane-bedtime--night_to_day">
+	<button type="button" class="feature-toggle flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" aria-expanded="false" aria-controls="body-feature-vane-bedtime--night_to_day">
 		<span class="flex items-center">
 			<div class="relative mr-4 w-[32px] h-[32px] min-w-[32px] min-h-[32px]">
 				<img class="absolute object-cover is-pixelated w-full h-full" src="assets/minecraft_special/bed.png">
@@ -230,8 +230,54 @@ That's why we did something about it, with style.</p></div>
 	</button>
 </h2>
 <div id="body-feature-vane-bedtime--night_to_day" class="hidden">
-	<div class="p-5 border border-t-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900">
+	<div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900">
 		<div class="prose prose-slate prose-img:rounded-xl prose-img:w-1/3 prose-img:sm:m-4 prose-img:w-full prose-img:sm:w-1/2 prose-img:lg:w-2/5 prose-img:min-w-32 prose-img:max-w-full prose-img:float-right prose-h1:clear-right prose-h2:clear-right prose-img:float-right dark:prose-invert max-w-none"><p>Once at least 50% of all players in a world are asleep, the night is skipped with a smooth transition to the next day.</p></div>
+		<div class="clear-right"><!-- spacer --></div>
+	</div>
+</div>
+
+<h2 id="feature-vane-trifles--recipe_unlock">
+	<button type="button" class="feature-toggle flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" aria-expanded="false" aria-controls="body-feature-vane-trifles--recipe_unlock">
+		<span class="flex items-center">
+			<div class="relative mr-4 w-[32px] h-[32px] min-w-[32px] min-h-[32px]">
+				<img class="absolute object-cover is-pixelated w-full h-full" src="assets/minecraft/textures/item/knowledge_book.png">
+			</div>
+			Unlocks All Recipes
+		</span>
+		<div class="inline-flex shrink-0">
+			<span class="bg-sky-100 text-sky-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-sky-200 dark:text-sky-900 dark:opacity-50">trifles</span>
+
+			<svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+		</div>
+	</button>
+</h2>
+<div id="body-feature-vane-trifles--recipe_unlock" class="hidden">
+	<div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900">
+		<div class="prose prose-slate prose-img:rounded-xl prose-img:w-1/3 prose-img:sm:m-4 prose-img:w-full prose-img:sm:w-1/2 prose-img:lg:w-2/5 prose-img:min-w-32 prose-img:max-w-full prose-img:float-right prose-h1:clear-right prose-h2:clear-right prose-img:float-right dark:prose-invert max-w-none"><p>Many players find it annoying that you have to find recipes before they are shown in your recipe book.
+By default, vane-trifles will unlock all recipes for a player when they first join a server.</p></div>
+		<div class="clear-right"><!-- spacer --></div>
+	</div>
+</div>
+
+<h2 id="feature-vane-trifles--repair_cost_limiter">
+	<button type="button" class="feature-toggle flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" aria-expanded="false" aria-controls="body-feature-vane-trifles--repair_cost_limiter">
+		<span class="flex items-center">
+			<div class="relative mr-4 w-[32px] h-[32px] min-w-[32px] min-h-[32px]">
+				<img class="absolute object-cover is-pixelated w-full h-full" src="assets/minecraft_special/anvil.png">
+			</div>
+			Anvil Cost Limiter
+		</span>
+		<div class="inline-flex shrink-0">
+			<span class="bg-sky-100 text-sky-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-sky-200 dark:text-sky-900 dark:opacity-50">trifles</span>
+
+			<svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+		</div>
+	</button>
+</h2>
+<div id="body-feature-vane-trifles--repair_cost_limiter" class="hidden">
+	<div class="p-5 border border-t-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900">
+		<div class="prose prose-slate prose-img:rounded-xl prose-img:w-1/3 prose-img:sm:m-4 prose-img:w-full prose-img:sm:w-1/2 prose-img:lg:w-2/5 prose-img:min-w-32 prose-img:max-w-full prose-img:float-right prose-h1:clear-right prose-h2:clear-right prose-img:float-right dark:prose-invert max-w-none"><p><strong>"Too Expensive!"</strong> no more! By default, vane will limit the cost of anvil repairs and upgrades
+to 39 levels, which is the maximum cost before the minecraft client yells that unpleasant phrase at you.</p></div>
 		<div class="clear-right"><!-- spacer --></div>
 	</div>
 </div>
@@ -1396,7 +1442,7 @@ This only works if the destination portal is not in a vane-region that restricts
 	<button type="button" class="feature-toggle flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" aria-expanded="false" aria-controls="body-feature-vane-portals--portal_settings">
 		<span class="flex items-center">
 			<div class="relative mr-4 w-[32px] h-[32px] min-w-[32px] min-h-[32px]">
-				<img class="absolute object-cover is-pixelated w-full h-full" src="assets/minecraft/textures/item/firework_star.png">
+				<img class="absolute object-cover is-pixelated w-full h-full" src="assets/minecraft/textures/item/name_tag.png">
 			</div>
 			Portal Settings
 		</span>
@@ -1596,9 +1642,9 @@ In the same menu, you can assign players to that the selected role.</p></div>
 	<button type="button" class="feature-toggle flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  rounded-t-xl border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" aria-expanded="false" aria-controls="body-feature-vane-core--translations">
 		<span class="flex items-center">
 			<div class="relative mr-4 w-[32px] h-[32px] min-w-[32px] min-h-[32px]">
-				<img class="absolute object-cover is-pixelated w-full h-full" src="assets/minecraft/textures/item/name_tag.png">
+				<img class="absolute object-cover is-pixelated w-full h-full" src="assets/minecraft/textures/item/book.png">
 			</div>
-			Translations
+			Client-side Translations
 		</span>
 		<div class="inline-flex shrink-0">
 			<span class="bg-gray-100 text-gray-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-200 dark:text-gray-900 dark:opacity-50">core</span>
@@ -1617,7 +1663,7 @@ is used automatically by the player's client.</p></div>
 </div>
 
 <h2 id="feature-vane-core--configurability">
-	<button type="button" class="feature-toggle flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" aria-expanded="false" aria-controls="body-feature-vane-core--configurability">
+	<button type="button" class="feature-toggle flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" aria-expanded="false" aria-controls="body-feature-vane-core--configurability">
 		<span class="flex items-center">
 			<div class="relative mr-4 w-[32px] h-[32px] min-w-[32px] min-h-[32px]">
 				<img class="absolute object-cover is-pixelated w-full h-full" src="assets/minecraft/textures/item/end_crystal.png">
@@ -1632,11 +1678,231 @@ is used automatically by the player's client.</p></div>
 	</button>
 </h2>
 <div id="body-feature-vane-core--configurability" class="hidden">
-	<div class="p-5 border border-t-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900">
+	<div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900">
 		<div class="prose prose-slate prose-img:rounded-xl prose-img:w-1/3 prose-img:sm:m-4 prose-img:w-full prose-img:sm:w-1/2 prose-img:lg:w-2/5 prose-img:min-w-32 prose-img:max-w-full prose-img:float-right prose-h1:clear-right prose-h2:clear-right prose-img:float-right dark:prose-invert max-w-none"><p>Everything in vane is fully configurable, and every feature can be disabled independently.
 There are so many options, that it would be far too much to list them here.</p>
 <p>Be sure to have a look at the corresponding configuration file for each module.
 Every option is carefully explained in there. The file path is <code>plugins/vane-&lt;module&gt;/config.yml</code>.</p></div>
+		<div class="clear-right"><!-- spacer --></div>
+	</div>
+</div>
+
+<h2 id="feature-vane-admin--autostop">
+	<button type="button" class="feature-toggle flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" aria-expanded="false" aria-controls="body-feature-vane-admin--autostop">
+		<span class="flex items-center">
+			<div class="relative mr-4 w-[32px] h-[32px] min-w-[32px] min-h-[32px]">
+				<img class="absolute object-cover is-pixelated w-full h-full" src="assets/minecraft/textures/item/clock_00.png">
+			</div>
+			Automatic server stop
+		</span>
+		<div class="inline-flex shrink-0">
+			<span class="bg-red-100 text-red-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-red-200 dark:text-red-900 dark:opacity-50">admin</span>
+
+			<svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+		</div>
+	</button>
+</h2>
+<div id="body-feature-vane-admin--autostop" class="hidden">
+	<div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900">
+		<div class="prose prose-slate prose-img:rounded-xl prose-img:w-1/3 prose-img:sm:m-4 prose-img:w-full prose-img:sm:w-1/2 prose-img:lg:w-2/5 prose-img:min-w-32 prose-img:max-w-full prose-img:float-right prose-h1:clear-right prose-h2:clear-right prose-img:float-right dark:prose-invert max-w-none"><p>To save on your server's resources, vane will stop your server when 20 minutes have passed
+while the server is empty.
+This feature is especially great combined with the <a href="#feature-vane-waterfall--autostart">autostart</a> feature by vane-waterfall,
+which automatically starts your server when someone tries to connect to it.</p>
+<p>Check out our <a href="https://oddlama.github.io/minecraft-server">Server Installer</a> for information on how set this up correctly.</p></div>
+		<div class="clear-right"><!-- spacer --></div>
+	</div>
+</div>
+
+<h2 id="feature-vane-core--core_commands">
+	<button type="button" class="feature-toggle flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" aria-expanded="false" aria-controls="body-feature-vane-core--core_commands">
+		<span class="flex items-center">
+			<div class="relative mr-4 w-[32px] h-[32px] min-w-[32px] min-h-[32px]">
+				<img class="absolute object-cover is-pixelated w-full h-full" src="assets/minecraft_special/command_block.png">
+			</div>
+			Core Commands
+		</span>
+		<div class="inline-flex shrink-0">
+			<span class="bg-gray-100 text-gray-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-200 dark:text-gray-900 dark:opacity-50">core</span>
+
+			<svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+		</div>
+	</button>
+</h2>
+<div id="body-feature-vane-core--core_commands" class="hidden">
+	<div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900">
+		<div class="prose prose-slate prose-img:rounded-xl prose-img:w-1/3 prose-img:sm:m-4 prose-img:w-full prose-img:sm:w-1/2 prose-img:lg:w-2/5 prose-img:min-w-32 prose-img:max-w-full prose-img:float-right prose-h1:clear-right prose-h2:clear-right prose-img:float-right dark:prose-invert max-w-none"><p>Several core commands are available to ops and players in the <code>admin</code> permission group.</p>
+<p><code>/customitem</code>: Allows you to create custom items, as they require special NBT tags and are therefore a hassle to get right with <code>/give</code>.</p>
+<p><code>/enchant</code>: Enchant the item in your hand with any enchantment by minecraft or vane.</p></div>
+		<div class="clear-right"><!-- spacer --></div>
+	</div>
+</div>
+
+<h2 id="feature-vane-core--command_hider">
+	<button type="button" class="feature-toggle flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" aria-expanded="false" aria-controls="body-feature-vane-core--command_hider">
+		<span class="flex items-center">
+			<div class="relative mr-4 w-[32px] h-[32px] min-w-[32px] min-h-[32px]">
+				<img class="absolute object-cover is-pixelated w-full h-full" src="assets/minecraft/textures/item/spider_eye.png">
+			</div>
+			Command Hider
+		</span>
+		<div class="inline-flex shrink-0">
+			<span class="bg-gray-100 text-gray-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-200 dark:text-gray-900 dark:opacity-50">core</span>
+
+			<svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+		</div>
+	</button>
+</h2>
+<div id="body-feature-vane-core--command_hider" class="hidden">
+	<div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900">
+		<div class="prose prose-slate prose-img:rounded-xl prose-img:w-1/3 prose-img:sm:m-4 prose-img:w-full prose-img:sm:w-1/2 prose-img:lg:w-2/5 prose-img:min-w-32 prose-img:max-w-full prose-img:float-right prose-h1:clear-right prose-h2:clear-right prose-img:float-right dark:prose-invert max-w-none"><p>Do you hate it that players can infer the commands and plugins installed on your server,
+based on the different error message they get when using an existing command even
+when they lack the associated permission?</p>
+<p>Vane replaces the error message with the exact <code>unknown-command</code> message from your
+<code>spigot.yml</code>, which prevents leaking any information.</p></div>
+		<div class="clear-right"><!-- spacer --></div>
+	</div>
+</div>
+
+<h2 id="feature-vane-admin--chat_message_formatter">
+	<button type="button" class="feature-toggle flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" aria-expanded="false" aria-controls="body-feature-vane-admin--chat_message_formatter">
+		<span class="flex items-center">
+			<div class="relative mr-4 w-[32px] h-[32px] min-w-[32px] min-h-[32px]">
+				<img class="absolute object-cover is-pixelated w-full h-full" src="assets/minecraft/textures/item/name_tag.png">
+			</div>
+			Better Chat Formatting
+		</span>
+		<div class="inline-flex shrink-0">
+			<span class="bg-red-100 text-red-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-red-200 dark:text-red-900 dark:opacity-50">admin</span>
+
+			<svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+		</div>
+	</button>
+</h2>
+<div id="body-feature-vane-admin--chat_message_formatter" class="hidden">
+	<div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900">
+		<div class="prose prose-slate prose-img:rounded-xl prose-img:w-1/3 prose-img:sm:m-4 prose-img:w-full prose-img:sm:w-1/2 prose-img:lg:w-2/5 prose-img:min-w-32 prose-img:max-w-full prose-img:float-right prose-h1:clear-right prose-h2:clear-right prose-img:float-right dark:prose-invert max-w-none"><p>We always thought that the default chat format of minecraft seems
+a bit blunt and is hard to read. That's why vane alters the default
+format of chat messages as well as join and leave notices slightly,
+to contrast the sender's name against the actual content.</p></div>
+		<div class="clear-right"><!-- spacer --></div>
+	</div>
+</div>
+
+<h2 id="feature-vane-admin--convenience_commands">
+	<button type="button" class="feature-toggle flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" aria-expanded="false" aria-controls="body-feature-vane-admin--convenience_commands">
+		<span class="flex items-center">
+			<div class="relative mr-4 w-[32px] h-[32px] min-w-[32px] min-h-[32px]">
+				<img class="absolute object-cover is-pixelated w-full h-full" src="assets/minecraft_special/command_block.png">
+			</div>
+			Convenience Commands
+		</span>
+		<div class="inline-flex shrink-0">
+			<span class="bg-red-100 text-red-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-red-200 dark:text-red-900 dark:opacity-50">admin</span>
+
+			<svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+		</div>
+	</button>
+</h2>
+<div id="body-feature-vane-admin--convenience_commands" class="hidden">
+	<div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900">
+		<div class="prose prose-slate prose-img:rounded-xl prose-img:w-1/3 prose-img:sm:m-4 prose-img:w-full prose-img:sm:w-1/2 prose-img:lg:w-2/5 prose-img:min-w-32 prose-img:max-w-full prose-img:float-right prose-h1:clear-right prose-h2:clear-right prose-img:float-right dark:prose-invert max-w-none"><p>Several commands were introduced for your convenience. If not noted otherwise, these
+commands are only available to ops and players in the <code>admin</code> permission group.</p>
+<p><code>/gm</code> or <code>/gamemode</code>: Quickly toggle between creative and survial mode.</p>
+<p><code>/setspawn</code>: Change the spawn location of your world to where you are currently standing.</p>
+<p><code>/slimechunk</code>: Tells you whether you are standing in a slimechunk.</p>
+<p><code>/spawn</code>: Teleport a player to the spawn. Available to everyone by default. Will be replaced with a scroll in the future.</p>
+<p><code>/time</code>: Smoothly change the time in your current world. Recognizes some nouns like <code>/time day</code>.</p>
+<p><code>/weather</code>: Change the weather in your current world to sun, rain or thunder.</p></div>
+		<div class="clear-right"><!-- spacer --></div>
+	</div>
+</div>
+
+<h2 id="feature-vane-admin--hazard_protection">
+	<button type="button" class="feature-toggle flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" aria-expanded="false" aria-controls="body-feature-vane-admin--hazard_protection">
+		<span class="flex items-center">
+			<div class="relative mr-4 w-[32px] h-[32px] min-w-[32px] min-h-[32px]">
+				<img class="absolute object-cover is-pixelated w-full h-full" src="assets/minecraft_special/tnt.png">
+			</div>
+			Hazard Protection
+		</span>
+		<div class="inline-flex shrink-0">
+			<span class="bg-red-100 text-red-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-red-200 dark:text-red-900 dark:opacity-50">admin</span>
+
+			<svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+		</div>
+	</button>
+</h2>
+<div id="body-feature-vane-admin--hazard_protection" class="hidden">
+	<div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900">
+		<div class="prose prose-slate prose-img:rounded-xl prose-img:w-1/3 prose-img:sm:m-4 prose-img:w-full prose-img:sm:w-1/2 prose-img:lg:w-2/5 prose-img:min-w-32 prose-img:max-w-full prose-img:float-right prose-h1:clear-right prose-h2:clear-right prose-img:float-right dark:prose-invert max-w-none"><p>Vane protects your world against some annoying hazards by default.
+Disable any of these protections, if they don't fit your playstyle.</p>
+<ul>
+<li>Entities cannot break doors</li>
+<li>Endermen don't steal blocks</li>
+<li>Lightning doesn't create fire</li>
+<li>Explosions caused by the wither and by creepers will be rebuilt. See <a href="#feature-vane-admin--creeper_protection">Creeper Protection</a>.</li>
+<li>The wither can only be spawned in the nether and the end.</li>
+</ul></div>
+		<div class="clear-right"><!-- spacer --></div>
+	</div>
+</div>
+
+<h2 id="feature-vane-admin--spawn_protection">
+	<button type="button" class="feature-toggle flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-b-0  border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" aria-expanded="false" aria-controls="body-feature-vane-admin--spawn_protection">
+		<span class="flex items-center">
+			<div class="relative mr-4 w-[32px] h-[32px] min-w-[32px] min-h-[32px]">
+				<img class="absolute object-cover is-pixelated w-full h-full" src="assets/minecraft/textures/block/iron_bars.png">
+			</div>
+			Spawn Protection (optional)
+		</span>
+		<div class="inline-flex shrink-0">
+			<span class="bg-red-100 text-red-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-red-200 dark:text-red-900 dark:opacity-50">admin</span>
+
+			<svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+		</div>
+	</button>
+</h2>
+<div id="body-feature-vane-admin--spawn_protection" class="hidden">
+	<div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900">
+		<div class="prose prose-slate prose-img:rounded-xl prose-img:w-1/3 prose-img:sm:m-4 prose-img:w-full prose-img:sm:w-1/2 prose-img:lg:w-2/5 prose-img:min-w-32 prose-img:max-w-full prose-img:float-right prose-h1:clear-right prose-h2:clear-right prose-img:float-right dark:prose-invert max-w-none"><p>Vane provides a slightly more sophisticated spawn protection than what is available in vanilla.
+It defines an actual radius (not a square) around some block to be protected from player modification.</p>
+<p>By default players are still allowed to use things like doors, chests and buttons.
+Player can be exempt from the protection by granting them the permission
+'vane.admin.bypass_spawn_protection'. By default is is given to ops and members of the <code>admin</code> group.</p>
+<p>If you need even more control, use a <a href="#feature-vane-regions--regions">Region</a>.</p>
+<blockquote>
+<p>Why can't I build anything?</p>
+</blockquote>
+<p>This feature is <strong>disabled</strong> by default, as it often caused confusion.</p></div>
+		<div class="clear-right"><!-- spacer --></div>
+	</div>
+</div>
+
+<h2 id="feature-vane-admin--graylist">
+	<button type="button" class="feature-toggle flex justify-between items-center p-5 w-full font-medium text-left text-gray-500 border border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" aria-expanded="false" aria-controls="body-feature-vane-admin--graylist">
+		<span class="flex items-center">
+			<div class="relative mr-4 w-[32px] h-[32px] min-w-[32px] min-h-[32px]">
+				<img class="absolute object-cover is-pixelated w-full h-full" src="assets/minecraft/textures/item/chain.png">
+			</div>
+			Graylist (optional)
+		</span>
+		<div class="inline-flex shrink-0">
+			<span class="bg-red-100 text-red-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-red-200 dark:text-red-900 dark:opacity-50">admin</span>
+
+			<svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+		</div>
+	</button>
+</h2>
+<div id="body-feature-vane-admin--graylist" class="hidden">
+	<div class="p-5 border border-t-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900">
+		<div class="prose prose-slate prose-img:rounded-xl prose-img:w-1/3 prose-img:sm:m-4 prose-img:w-full prose-img:sm:w-1/2 prose-img:lg:w-2/5 prose-img:min-w-32 prose-img:max-w-full prose-img:float-right prose-h1:clear-right prose-h2:clear-right prose-img:float-right dark:prose-invert max-w-none"><p>Vane provides a feature similar to a graylist.
+This allows anyone to connect to your server but in a <em>no touch, only look!</em> kind of way.
+To modify anything about the world, a player must either be opped,
+or be assigned to the user group with <code>perm add player_name user</code>, or any higher group.</p>
+<blockquote>
+<p>Why can't I build anything?</p>
+</blockquote>
+<p>This feature is <strong>disabled</strong> by default, as it often caused confusion.</p></div>
 		<div class="clear-right"><!-- spacer --></div>
 	</div>
 </div>

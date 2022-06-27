@@ -1,6 +1,6 @@
 ```toml
-title = "Translations"
-icon = "minecraft:name_tag"
+title = "Client-side Translations"
+icon = "minecraft:book"
 module = "vane-core"
 ```
 ---
