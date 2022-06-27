@@ -6,7 +6,6 @@ module = "vane-portals"
 ---
 ## Overview
 
-<!-- TODO SCREENSHOT -->
 ![](images/portal_boundary.png)
 
 Portals are structures that let you travel to specific other portals - as many times as you want.
