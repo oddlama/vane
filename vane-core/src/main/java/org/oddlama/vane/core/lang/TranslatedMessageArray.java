@@ -30,9 +30,22 @@ public class TranslatedMessageArray {
 
 	public List<String> str(Object... args) {
 		try {
+			final var args_as_strings = new Object[args.length];
+			for (int i = 0; i < args.length; ++i) {
+				if (args[i] instanceof Component) {
+					args_as_strings[i] = LegacyComponentSerializer.legacySection().serialize((Component) args[i]);
+				} else if (args[i] instanceof String) {
+					args_as_strings[i] = args[i];
+				} else {
+					throw new RuntimeException(
+						"Error while formatting message '" + key() + "', invalid argument to str() serializer: " + args[i]
+					);
+				}
+			}
+
 			final var list = new ArrayList<String>();
 			for (final var s : default_translation) {
-				list.add(String.format(s, args));
+				list.add(String.format(s, args_as_strings));
 			}
 			return list;
 		} catch (Exception e) {

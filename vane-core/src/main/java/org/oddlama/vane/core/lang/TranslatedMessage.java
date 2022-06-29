@@ -27,19 +27,19 @@ public class TranslatedMessage {
 
 	public String str(Object... args) {
 		try {
-			final var list = new Object[args.length];
+			final var args_as_strings = new Object[args.length];
 			for (int i = 0; i < args.length; ++i) {
 				if (args[i] instanceof Component) {
-					list[i] = LegacyComponentSerializer.legacySection().serialize((Component) args[i]);
+					args_as_strings[i] = LegacyComponentSerializer.legacySection().serialize((Component) args[i]);
 				} else if (args[i] instanceof String) {
-					list[i] = args[i];
+					args_as_strings[i] = args[i];
 				} else {
 					throw new RuntimeException(
-						"Error while formatting message '" + key() + "', invalid argument to str() serializer" + args[i]
+						"Error while formatting message '" + key() + "', invalid argument to str() serializer: " + args[i]
 					);
 				}
 			}
-			return String.format(default_translation, list);
+			return String.format(default_translation, args_as_strings);
 		} catch (Exception e) {
 			throw new RuntimeException("Error while formatting message '" + key() + "'", e);
 		}
