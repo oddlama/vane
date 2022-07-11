@@ -146,6 +146,11 @@ public class PortalBlueMapLayerDelegate {
 					// Update all existing
 					final var id_set = new HashSet<String>();
 					for (final var portal : get_module().all_available_portals()) {
+						// Don't show private portals
+						if (portal.visibility() == Portal.Visibility.PRIVATE) {
+							continue;
+						}
+
 						final var bm_world = api.getWorld(portal.spawn().getWorld().getUID());
 						if (bm_world.isPresent()) {
 							for (final var map : bm_world.get().getMaps()) {
