@@ -1,11 +1,11 @@
 plugins {
 	`java-library`
-	id("io.papermc.paperweight.userdev") version "1.3.6"
+	id("io.papermc.paperweight.userdev") version "1.3.8"
 	id("xyz.jpenilla.run-paper") version "1.0.6" // Adds runServer and runMojangMappedServer tasks for testing
 }
 
 dependencies {
-	paperDevBundle("1.19-R0.1-SNAPSHOT")
+	paperDevBundle("1.19.1-R0.1-SNAPSHOT")
 }
 
 java {
@@ -18,7 +18,7 @@ subprojects {
 	apply(plugin = "java")
 
 	group = "org.oddlama.vane"
-	version = "1.9.4"
+	version = "1.9.5"
 
 	repositories() {
 		mavenCentral()
@@ -47,7 +47,7 @@ configure(subprojects.filter {
 	apply(plugin = "io.papermc.paperweight.userdev")
 
 	dependencies {
-		paperDevBundle("1.19-R0.1-SNAPSHOT")
+		paperDevBundle("1.19.1-R0.1-SNAPSHOT")
 	}
 
 	tasks {
