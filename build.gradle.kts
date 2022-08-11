@@ -5,7 +5,7 @@ plugins {
 }
 
 dependencies {
-	paperDevBundle("1.19.1-R0.1-SNAPSHOT")
+	paperDevBundle("1.19.2-R0.1-SNAPSHOT")
 }
 
 java {
@@ -18,7 +18,7 @@ subprojects {
 	apply(plugin = "java")
 
 	group = "org.oddlama.vane"
-	version = "1.9.5"
+	version = "1.9.6"
 
 	repositories() {
 		mavenCentral()
@@ -47,7 +47,7 @@ configure(subprojects.filter {
 	apply(plugin = "io.papermc.paperweight.userdev")
 
 	dependencies {
-		paperDevBundle("1.19.1-R0.1-SNAPSHOT")
+		paperDevBundle("1.19.2-R0.1-SNAPSHOT")
 	}
 
 	tasks {
