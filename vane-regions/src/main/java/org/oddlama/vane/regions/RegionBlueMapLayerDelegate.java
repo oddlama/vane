@@ -1,14 +1,15 @@
 package org.oddlama.vane.regions;
 
 import de.bluecolored.bluemap.api.BlueMapAPI;
-import de.bluecolored.bluemap.api.BlueMapMap;
-import de.bluecolored.bluemap.api.marker.MarkerAPI;
-import de.bluecolored.bluemap.api.marker.MarkerSet;
-import de.bluecolored.bluemap.api.marker.Shape;
-import java.awt.Color;
-import java.io.IOException;
-import java.util.HashSet;
+import de.bluecolored.bluemap.api.markers.ExtrudeMarker;
+import de.bluecolored.bluemap.api.markers.MarkerSet;
+import de.bluecolored.bluemap.api.math.Color;
+import de.bluecolored.bluemap.api.math.Shape;
+
+import java.util.HashMap;
 import java.util.UUID;
+
+import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
 import org.oddlama.vane.regions.region.Region;
 
@@ -33,6 +34,11 @@ public class RegionBlueMapLayerDelegate {
 			get_module().log.info("Enabling BlueMap integration");
 			bluemap_enabled = true;
 
+			// Create marker sets
+			for (final var world : get_module().getServer().getWorlds()) {
+				create_marker_set(api, world);
+			}
+
 			update_all_markers();
 		});
 	}
@@ -46,132 +52,57 @@ public class RegionBlueMapLayerDelegate {
 		bluemap_enabled = false;
 	}
 
-	private MarkerSet get_or_create_marker_set(MarkerAPI api) {
-		// createMarkerSet returns the existing set if any.
-		final var marker_set = api.createMarkerSet(MARKER_SET_ID);
+	// world_id -> MarkerSet
+	private final HashMap<UUID, MarkerSet> marker_sets = new HashMap<>();
+	private void create_marker_set(final BlueMapAPI api, final World world) {
+		if (marker_sets.containsKey(world.getUID())) {
+			return;
+		}
 
-		// Update attributes
-		marker_set.setLabel(parent.lang_layer_label.str());
-		marker_set.setToggleable(true);
-		marker_set.setDefaultHidden(parent.config_hide_by_default);
+		final var marker_set = MarkerSet.builder()
+			.label(parent.lang_layer_label.str())
+			.toggleable(true)
+			.defaultHidden(parent.config_hide_by_default)
+			.build();
 
-		return marker_set;
-	}
+		api.getWorld(world).ifPresent(bm_world -> {
+			for (final var map : bm_world.getMaps()) {
+				map.getMarkerSets().put(MARKER_SET_ID, marker_set);
+			}
+		});
 
-	private String id_for(final BlueMapMap map, final UUID region_id) {
-		return map.getId() + ":" + region_id.toString();
-	}
-
-	private String id_for(final BlueMapMap map, final Region region) {
-		return id_for(map, region.id());
+		marker_sets.put(world.getUID(), marker_set);
 	}
 
 	public void update_marker(final Region region) {
-		if (!bluemap_enabled) {
-			return;
-		}
-
-		BlueMapAPI
-			.getInstance()
-			.ifPresent(api -> {
-				try {
-					final var marker_api = api.getMarkerAPI();
-					update_marker_no_save(api, get_or_create_marker_set(marker_api), region);
-					marker_api.save();
-				} catch (IOException e) {
-					get_module()
-						.log.warning("Could not retrieve BlueMap marker api when updating region marker. Skipping.");
-				}
-			});
-	}
-
-	public void remove_marker(final UUID region_id) {
-		if (!bluemap_enabled) {
-			return;
-		}
-
-		BlueMapAPI
-			.getInstance()
-			.ifPresent(api -> {
-				try {
-					final var marker_api = api.getMarkerAPI();
-					for (final var map : api.getMaps()) {
-						get_or_create_marker_set(marker_api).removeMarker(id_for(map, region_id));
-					}
-					marker_api.save();
-				} catch (IOException e) {
-					get_module()
-						.log.warning("Could not retrieve BlueMap marker api when updating region marker. Skipping.");
-				}
-			});
-	}
-
-	private void update_marker_no_save(final BlueMapAPI api, final MarkerSet marker_set, final Region region) {
+		remove_marker(region.id());
 		final var min = region.extent().min();
 		final var max = region.extent().max();
 		final var shape = Shape.createRect(min.getX(), min.getZ(), max.getX() + 1, max.getZ() + 1);
 
+		final var marker = ExtrudeMarker.builder()
+			.shape(shape, min.getY(), max.getY() + 1)
+			.label(parent.lang_marker_label.str(region.name()))
+			.lineWidth(parent.config_line_width)
+			.lineColor(new Color(parent.config_line_color, (float)parent.config_line_opacity))
+			.fillColor(new Color(parent.config_fill_color, (float)parent.config_fill_opacity))
+			.depthTestEnabled(parent.config_depth_test)
+			.centerPosition()
+			.build();
+
 		// Existing markers will be overwritten.
-		final var bm_world = api.getWorld(min.getWorld().getUID());
-		if (bm_world.isPresent()) {
-			for (final var map : bm_world.get().getMaps()) {
-				final var marker = marker_set.createExtrudeMarker(
-					id_for(map, region),
-					map,
-					shape,
-					min.getY(),
-					max.getY() + 1
-				);
-				marker.setLineWidth(parent.config_line_width);
-				marker.setLineColor(
-					new Color(parent.config_line_color | ((int) (parent.config_line_opacity * 255.999) << 24), true)
-				);
-				marker.setFillColor(
-					new Color(parent.config_fill_color | ((int) (parent.config_fill_opacity * 255.999) << 24), true)
-				);
-				marker.setDepthTestEnabled(parent.config_depth_test);
-				marker.setLabel(parent.lang_marker_label.str(region.name()));
-			}
+		marker_sets.get(min.getWorld().getUID()).getMarkers().put(region.id().toString(), marker);
+	}
+
+	public void remove_marker(final UUID region_id) {
+		for (final var marker_set : marker_sets.values()) {
+			marker_set.getMarkers().remove(region_id.toString());
 		}
 	}
 
 	public void update_all_markers() {
-		if (!bluemap_enabled) {
-			return;
+		for (final var region : get_module().all_regions()) {
+			update_marker(region);
 		}
-
-		BlueMapAPI
-			.getInstance()
-			.ifPresent(api -> {
-				try {
-					final var marker_api = api.getMarkerAPI();
-					final var marker_set = get_or_create_marker_set(marker_api);
-
-					// Update all existing
-					final var id_set = new HashSet<String>();
-					for (final var region : get_module().all_regions()) {
-						final var bm_world = api.getWorld(region.extent().min().getWorld().getUID());
-						if (bm_world.isPresent()) {
-							for (final var map : bm_world.get().getMaps()) {
-								id_set.add(id_for(map, region));
-							}
-						}
-						update_marker_no_save(api, marker_set, region);
-					}
-
-					// Remove orphaned
-					for (final var marker : marker_set.getMarkers()) {
-						final var id = marker.getId();
-						if (id != null && !id_set.contains(id)) {
-							marker_set.removeMarker(marker.getId());
-						}
-					}
-
-					marker_api.save();
-				} catch (IOException e) {
-					get_module()
-						.log.warning("Could not retrieve BlueMap marker api when updating region marker. Skipping.");
-				}
-			});
 	}
 }
