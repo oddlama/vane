@@ -117,7 +117,7 @@ configure(subprojects.filter {
 }) {
 	dependencies {
 		implementation(group = "us.dynmap", name = "dynmap-api", version = "3.2-SNAPSHOT")
-		implementation(group = "com.github.BlueMap-Minecraft", name = "BlueMapAPI", version = "v1.7.0")
+		implementation(group = "com.github.BlueMap-Minecraft", name = "BlueMapAPI", version = "v2.1.0")
 	}
 }
 
