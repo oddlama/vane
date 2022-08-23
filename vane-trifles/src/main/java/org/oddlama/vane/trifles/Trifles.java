@@ -7,7 +7,7 @@ import org.oddlama.vane.annotation.VaneModule;
 import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.trifles.items.XpBottles;
 
-@VaneModule(name = "trifles", bstats = 8644, config_version = 4, lang_version = 3, storage_version = 1)
+@VaneModule(name = "trifles", bstats = 8644, config_version = 4, lang_version = 4, storage_version = 1)
 public class Trifles extends Module<Trifles> {
 	public final HashMap<UUID, Long> last_xp_bottle_consume_time = new HashMap<>();
 	public XpBottles xp_bottles;
@@ -22,6 +22,7 @@ public class Trifles extends Module<Trifles> {
 		new ChestSorter(this);
 
 		new org.oddlama.vane.trifles.commands.Heads(this);
+		new org.oddlama.vane.trifles.commands.SetSpawn(this);
 
 		new org.oddlama.vane.trifles.items.Scrolls(this);
 		new org.oddlama.vane.trifles.items.ReinforcedElytra(this);

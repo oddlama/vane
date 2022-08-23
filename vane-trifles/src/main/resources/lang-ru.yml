@@ -12,7 +12,7 @@
 
 # DO NOT CHANGE! The version of this language file. Used to determine
 # if the file needs to be updated.
-version: 3
+version: 4
 # The corresponding language code used in resource packs. Used for
 # resource pack generation. Typically this is a combination of the
 # language code (ISO 639) and the country code (ISO 3166).
@@ -22,6 +22,11 @@ command_heads:
   usage: "%1$s"
   description: "Получить голову из библиотеки голов."
   help: "Активируйте чтобы открыть библиотеку голов."
+
+command_setspawn:
+  usage: "%1$s"
+  description: "Устанавливает глобальный спавнпоинт на текущую позицию."
+  help: "Устанавливает глобальный спавнпоинт на текущую позицию."
 
 xp_bottles:
   item_small_xp_bottle:
@@ -61,6 +66,5 @@ sickles:
 scrolls:
   item_home_scroll:
     name: "Свиток телепортации (Домой)"
-
   item_unstable_scroll:
     name: "Свиток телепортации (Нестабильный)"

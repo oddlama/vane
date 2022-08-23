@@ -47,22 +47,12 @@ command_gamemode:
   description: "§bgamemode §7[§bjoueur|joueuse§7]"
   help: "Sélectionne le mode de jeu pour un·e joueur·se."
 
-command_setspawn:
-  usage: "%1$s"
-  description: "Change la position du point d'apparition global vers votre position actuelle."
-  help: "Change la position du point d'apparition global vers votre position actuelle."
-
 command_slimechunk:
   slime_chunk_yes: "§aCeci est un chunk de slime."
   slime_chunk_no: "§cCeci n'est pas un chunk de slime."
   usage: "%1$s"
   description: "Vérifie si le chunk dans lequel vous vous trouvez est un chunk de slime."
   help: "Vérifie si le chunk dans lequel vous vous trouvez est un chunk de slime."
-
-command_spawn:
-  usage: "%1$s"
-  description: "Vous téléporte vers votre point d'apparition."
-  help: "Vous téléporte vers votre point d'apparition."
 
 command_time:
   usage: "%1$s §btime §7[§bmonde§7]"
