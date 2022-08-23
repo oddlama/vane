@@ -15,14 +15,9 @@ import org.oddlama.vane.annotation.item.VaneItem;
 import org.oddlama.vane.trifles.event.PlayerTeleportScrollEvent;
 import org.oddlama.vane.util.Util;
 
-@VaneItem(name = "unstable_scroll", base = Material.WARPED_FUNGUS_ON_A_STICK, durability = 25, model_data = 0x760001, version = 1)
-public class UnstableScroll extends Scroll {
-	public static final NamespacedKey LAST_SCROLL_TELEPORT_LOCATION = Util.namespaced_key("vane", "last_scroll_teleport_location");
-
-	@LangMessage
-	public TranslatedMessage lang_teleport_no_previous_teleport;
-
-	public UnstableScroll(Context<Trifles> context) {
+@VaneItem(name = "spawn_scroll", base = Material.WARPED_FUNGUS_ON_A_STICK, durability = 40, model_data = 0x760001, version = 1)
+public class SpawnScroll extends Scroll {
+	public SpawnScroll(Context<Trifles> context) {
 		super(context, 6000);
 	}
 
@@ -33,23 +28,24 @@ public class UnstableScroll extends Scroll {
 			.set_ingredient('b', Material.NETHERITE_SCRAP)
 			.set_ingredient('p', Material.MAP)
 			.set_ingredient('i', Material.CHORUS_FRUIT)
-			.set_ingredient('c', Material.COMPASS)
+			.set_ingredient('c', Material.OAK_SAPLING)
 			.set_ingredient('e', Material.ENDER_PEARL)
-			.set_ingredient('l', Material.CLOCK)
+			.set_ingredient('l', Material.EGG)
 			.result(key().toString()));
 	}
 
 	@Override
 	public Location teleport_location(final ItemStack scroll, Player player, boolean imminent_teleport) {
-		final var loc = Util.storage_get_location(player.getPersistentDataContainer(), LAST_SCROLL_TELEPORT_LOCATION, null);
-		if (imminent_teleport && loc == null) {
-			lang_teleport_no_previous_teleport.send_action_bar(player);
+		Location loc = null;
+		for (final var world : get_module().getServer().getWorlds()) {
+			if (world.getPersistentDataContainer().getOrDefault(Setspawn.IS_SPAWN_WORLD, PersistentDataContainer.BOOLEAN, false)) {
+				loc = world.getSpawnLocation();
+			}
+		}
+		// Fallback to spawn location of first world
+		if (loc == null) {
+			loc = get_module().getServer().getWorlds().get(0).getSpawnLocation();
 		}
 		return loc;
-	}
-
-	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void on_player_teleport_scroll(final PlayerTeleportScrollEvent event) {
-		Util.storage_set_location(event.getPlayer().getPersistentDataContainer(), LAST_SCROLL_TELEPORT_LOCATION, event.getFrom());
 	}
 }

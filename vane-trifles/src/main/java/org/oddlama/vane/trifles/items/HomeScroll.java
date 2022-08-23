@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.oddlama.vane.core.config.recipes.RecipeList;
 import org.oddlama.vane.core.config.recipes.ShapedRecipeDefinition;
 import org.oddlama.vane.annotation.item.VaneItem;
@@ -37,21 +38,18 @@ public class HomeScroll extends Scroll {
 	//}
 
 	@Override
-	public Location teleport_location(Player player, boolean imminent_teleport) {
+	public Location teleport_location(final ItemStack scroll, Player player, boolean imminent_teleport) {
 		final var to_location = player.getBedSpawnLocation();
-		if (to_location == null) {
-			if (imminent_teleport) {
-				final var to_potential_location = player.getPotentialBedLocation();
-				if (to_potential_location != null) {
-					// "You have no home bed or charged respawn anchor, or it was obstructed"
-					// The most cursed sentence in minecraft.
-					player.sendActionBar(Component.translatable("block.minecraft.spawn.not_valid"));
-				} else {
-					// "Sleep in a bed to change your respawn point"
-					player.sendActionBar(Component.translatable("advancements.adventure.sleep_in_bed.description"));
-				}
+		if (imminent_teleport && to_location == null) {
+			final var to_potential_location = player.getPotentialBedLocation();
+			if (to_potential_location != null) {
+				// "You have no home bed or charged respawn anchor, or it was obstructed"
+				// The most cursed sentence in minecraft.
+				player.sendActionBar(Component.translatable("block.minecraft.spawn.not_valid"));
+			} else {
+				// "Sleep in a bed to change your respawn point"
+				player.sendActionBar(Component.translatable("advancements.adventure.sleep_in_bed.description"));
 			}
-			return null;
 		}
 		return to_location;
 	}

@@ -37,6 +37,9 @@ public class Scrolls extends Listener<Trifles> {
 		super(context.group("scrolls", "Several scrolls that allow player teleportation, and related behavior."));
 		scrolls.add(new HomeScroll(get_context()));
 		scrolls.add(new UnstableScroll(get_context()));
+		scrolls.add(new SpawnScroll(get_context()));
+		scrolls.add(new LodestoneScroll(get_context()));
+		scrolls.add(new DeathScroll(get_context()));
 
 		// Accumulate base materials so the cooldown can be applied to all scrolls regardless of base material.
 		for (final var scroll : scrolls) {
