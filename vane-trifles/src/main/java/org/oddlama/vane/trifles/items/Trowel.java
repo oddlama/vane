@@ -42,7 +42,7 @@ import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.trifles.Trifles;
 import org.oddlama.vane.util.BlockUtil;
 
-@VaneItem(name = "trowel", base = Material.COMPASS, durability = 2000, model_data = 0x76000e, version = 1)
+@VaneItem(name = "trowel", base = Material.WARPED_FUNGUS_ON_A_STICK, durability = 2000, model_data = 0x76000e, version = 1)
 public class Trowel extends CustomItem<Trifles> {
 	public Trowel(Context<Trifles> context) {
 		super(context);
