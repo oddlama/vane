@@ -17,4 +17,8 @@ public enum InhibitBehavior {
 	HOE_TILL,
 	/** Prevents players from using the offhand item when holding this in the main hand. */
 	USE_OFFHAND,
+	/** Prevents players from mending this item (and prevents it from gaining mending in the anvil). */
+	MEND,
+	/** Prevents players from adding new enchantments via the anvil. */
+	NEW_ENCHANTS,
 }

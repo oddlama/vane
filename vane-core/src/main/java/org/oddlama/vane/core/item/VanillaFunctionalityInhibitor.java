@@ -134,24 +134,58 @@ public class VanillaFunctionalityInhibitor extends Listener<Core> {
 		event.setResult(custom_item_result.convertExistingStack(CraftItemStack.asCraftMirror(nms_result)));
 	}
 
-	// TODO: what about inventory based item repair?
-	// Always prevent custom item repair with the custom item base material
-	// if it is not also a matching custom item.
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void on_prepare_anvil(final PrepareAnvilEvent event) {
 		final var a = event.getInventory().getFirstItem();
 		final var b = event.getInventory().getSecondItem();
 
-		// If both items are not of the same material, there is nothing to do.
-		if (a == null || b == null || a.getType() != b.getType()) {
-			return;
+		// Always prevent custom item repair with the custom item base material
+		// if it is not also a matching custom item.
+		// TODO: what about inventory based item repair?
+		if (a != null && b != null && a.getType() == b.getType()) {
+			// Disable the result unless a and b are instances of the same custom item.
+			final var custom_item_a = get_module().item_registry().get(a);
+			final var custom_item_b = get_module().item_registry().get(b);
+			if (custom_item_a != null && custom_item_a != custom_item_b) {
+				event.setResult(null);
+				return;
+			}
 		}
 
-		// Disable the result unless a and b are instances of the same custom item.
-		final var custom_item_a = get_module().item_registry().get(a);
-		final var custom_item_b = get_module().item_registry().get(b);
-		if (custom_item_a != null && custom_item_a != custom_item_b) {
-			event.setResult(null);
+		final var r = event.getInventory().getResult();
+		if (r != null) {
+			final var custom_item_r = get_module().item_registry().get(r);
+			boolean did_edit = false;
+			r.editMeta(meta -> {
+				if (a != null && inhibit(custom_item_r, InhibitBehavior.NEW_ENCHANTS)) {
+					for (final var ench : r.getEnchantments().keySet()) {
+						if (!a.getEnchantments().keySet().contains(ench)) {
+							meta.removeEnchantment(ench);
+							did_edit = true;
+						}
+					}
+				}
+
+				if (inhibit(custom_item_r, InhibitBehavior.MEND)) {
+					meta.removeEnchantment(Enchantments.MENDING);
+					did_edit = true;
+				}
+			});
+
+			if (did_edit) {
+				event.setResult(r);
+			}
+		}
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void on_item_mend(final PlayerItemMendEvent event) {
+		final var item = event.getItem();
+		final var custom_item = get_module().item_registry().get(item);
+
+		// No repairing for mending inhibited items.
+		if (inhibit(custom_item, InhibitBehavior.MEND)) {
+			event.setCancelled(true);
 		}
 	}
 
@@ -193,7 +227,7 @@ public class VanillaFunctionalityInhibitor extends Listener<Core> {
 		final var player = event.getPlayer();
 		final var main_item = player.getEquipment().getItem(EquipmentSlot.HAND);
 		final var main_custom_item = get_module().item_registry().get(main_item);
-		if (main_custom_item != null && main_custom_item.inhibitedBehaviors().contains(InhibitBehavior.USE_OFFHAND)) {
+		if (inhibit(main_custom_item, InhibitBehavior.USE_OFFHAND)) {
 			event.setUseItemInHand(Event.Result.DENY);
 		}
 	}
