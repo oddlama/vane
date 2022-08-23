@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
@@ -66,6 +67,7 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 
 	// Per module catch-all permissions
 	public Permission permission_command_catchall_module;
+	public Random random = new Random();
 
 	// Permission attachment for console
 	private List<String> pending_console_permissions = new ArrayList<>();
@@ -495,6 +497,11 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 			return;
 		}
 
-		additional_loot_table.generate_loot(event.getLoot());
+		final var loc = event.getLootContext().getLocation();
+		final var local_random = new Random(random.nextInt()
+				+ (loc.getBlockX() & 0xffff << 16)
+				+ (loc.getBlockY() & 0xffff << 32)
+				+ (loc.getBlockZ() & 0xffff << 48));
+		additional_loot_table.generate_loot(event.getLoot(), local_random);
 	}
 }

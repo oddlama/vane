@@ -9,8 +9,6 @@ import org.bukkit.inventory.ItemStack;
 import org.oddlama.vane.core.functional.Consumer2;
 
 public class LootTable {
-
-	private Random random = new Random();
 	private Map<NamespacedKey, List<LootTableEntry>> possible_loot = new HashMap<>();
 
 	public LootTable() {}
@@ -30,7 +28,11 @@ public class LootTable {
 		return this;
 	}
 
-	public void generate_loot(final List<ItemStack> output) {
+	public Map<NamespacedKey, List<LootTableEntry>> possible_loot() {
+		return possible_loot;
+	}
+
+	public void generate_loot(final List<ItemStack> output, final Random random) {
 		for (final var set : possible_loot.values()) {
 			for (final var loot : set) {
 				if (loot.evaluate_chance(random)) {
@@ -42,8 +44,8 @@ public class LootTable {
 
 	public static class LootTableEntry {
 
-		private double chance;
-		private Consumer2<List<ItemStack>, Random> generator;
+		public double chance;
+		public Consumer2<List<ItemStack>, Random> generator;
 
 		public LootTableEntry(int rarity_expected_chests, final ItemStack item) {
 			this(1.0 / rarity_expected_chests, item.clone(), 1, 1);

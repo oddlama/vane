@@ -71,17 +71,23 @@ public class Vane extends Command<Core> {
 		}
 	}
 
-	private void test(CommandSender sender) {
+	private void test_tome_generation() {
 		final var loot_table = LootTables.ABANDONED_MINESHAFT.getLootTable();
-		Random r = new Random();
+		final var inventory = get_module().getServer().createInventory(null, 3 * 9);
+		final var context = (new LootContext.Builder(get_module().getServer().getWorlds().get(0).getBlockAt(0,0,0).getLocation())).build();
+		final var random = new Random();
+
 		int tomes = 0;
 		final var simulation_count = 10000;
+		final var gt_percentage = 0.2; // (0-2) (average 1) with 1/5 chance
+		final var tolerance = 0.7;
 		get_module().log.info("Testing ancient tome generation...");
 
 		for (int i = 0; i < simulation_count; ++i) {
-			final var loot = loot_table.populateLoot(r, (new LootContext.Builder(get_module().getServer().getWorlds().get(0).getBlockAt(0,0,0).getLocation())).build());
-			for (final var is : loot) {
-				if (is.hasItemMeta()) {
+			inventory.clear();
+			loot_table.fillInventory(inventory, random, context);
+			for (final var is : inventory.getStorageContents()) {
+				if (is != null && is.hasItemMeta()) {
 					final var meta = is.getItemMeta();
 					if (meta.hasCustomModelData() && is.getItemMeta().getCustomModelData() == 0x770000) {
 						++tomes;
@@ -92,10 +98,14 @@ public class Vane extends Command<Core> {
 
 		if (tomes == 0) {
 			get_module().log.severe("0 tomes were generated in " + simulation_count + " chests.");
-		} else if (tomes > 0.25 * simulation_count * 0.7 && tomes < 0.25 * simulation_count / 0.7) { // 70% tolerance to lower bound
-			get_module().log.warning(tomes + " tomes were generated in " + simulation_count + " chests. This is " + (100.0 * (tomes / simulation_count) / 0.25) + "% of the expected value.");
+		} else if (tomes > gt_percentage * simulation_count * tolerance && tomes < gt_percentage * simulation_count / tolerance) { // 70% tolerance to lower bound
+			get_module().log.warning(tomes + " tomes were generated in " + simulation_count + " chests. This is " + (100.0 * ((double)tomes / simulation_count) / gt_percentage) + "% of the expected value.");
 		} else {
-			get_module().log.info(tomes + " tomes were generated in " + simulation_count + " chests. This is " + (100.0 * (tomes / simulation_count) / 0.25) + "% of the expected value.");
+			get_module().log.info(tomes + " tomes were generated in " + simulation_count + " chests. This is " + (100.0 * ((double)tomes / simulation_count) / gt_percentage) + "% of the expected value.");
 		}
+	}
+
+	private void test(CommandSender sender) {
+		test_tome_generation();
 	}
 }
