@@ -67,3 +67,14 @@ scrolls:
     name: "Portalschriftrolle (Heim)"
   item_unstable_scroll:
     name: "Portalschriftrolle (Instabil)"
+    teleport_no_previous_teleport: "§cDu hast zuvor keine andere Schriftrolle verwendet."
+  item_spawn_scroll:
+    name: "Portalschriftrolle (Spawn)"
+  item_lodestone_scroll:
+    name: "Portalschriftrolle (Leitstein)"
+    teleport_no_bound_lodestone: "§bVerbinde die Schriftrolle zuerst mit einem Leitstein durch Ducken und Rechtsklicken."
+    teleport_missing_lodestone: "§cDie Schriftrolle scheint nichts zu funktionieren.. &6Du schlussfolgerst, dass der Leitstein nicht mehr existiert."
+    bound_lore: "§7Verbunden mit (%2$s§7, %3$s§7, %4$s§7) in %1$s"
+  item_death_scroll:
+    name: "Portalschriftrolle (Tod)"
+    teleport_no_recent_death: "§cDu bist nicht kürzlich gestorben, oder hast bereits eine Todesschriftrolle verwendet!"
