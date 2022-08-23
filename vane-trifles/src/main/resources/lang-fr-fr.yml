@@ -67,3 +67,18 @@ scrolls:
     name: "Parchemin de Rappel (Foyer)"
   item_unstable_scroll:
     name: "Parchemin de Rappel (instable)"
+    # FIXME: missing translations
+    teleport_no_previous_teleport: "§cYou have never used a scroll before."
+  item_spawn_scroll:
+    # FIXME: missing translations
+    name: "Parchemin de Rappel (Spawn)"
+  item_lodestone_scroll:
+    # FIXME: missing translations
+    name: "Parchemin de Rappel (Lodestone)"
+    teleport_no_bound_lodestone: "§bFirst sneak and right-click a lodestone to (re-)bind this scroll."
+    teleport_missing_lodestone: "§cThe scroll doesn't seem to do anything.. &6You fear the bound lodestone might be missing."
+    bound_lore: "§7Bound to (%2$s§7, %3$s§7, %4$s§7) in %1$s"
+  item_death_scroll:
+    # FIXME: missing translations
+    name: "Parchemin de Rappel (Death)"
+    teleport_no_recent_death: "§cYou have not died recently, or already used a Death Scroll!"

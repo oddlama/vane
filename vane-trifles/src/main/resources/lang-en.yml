@@ -82,3 +82,26 @@ scrolls:
   item_unstable_scroll:
     # The display name of this item variant.
     name: "Portal Scroll (Unstable)"
+    # Shown when used but no scroll was used previously.
+    teleport_no_previous_teleport: "§cYou have never used another scroll before."
+  item_spawn_scroll:
+    # The display name of this item variant.
+    name: "Portal Scroll (Spawn)"
+  item_lodestone_scroll:
+    # The display name of this item variant.
+    name: "Portal Scroll (Lodestone)"
+    # Shown when used but no lodestone was ever bound.
+    teleport_no_bound_lodestone: "§bFirst sneak and right-click a lodestone to (re-)bind this scroll."
+    # Shown when used but the bound lodestone doesn't exist anymore.
+    teleport_missing_lodestone: "§cThe scroll doesn't seem to do anything.. &6You fear the bound lodestone might be missing."
+    # The lore of a bound scoll
+    # %1$s: Bound lodestone's world name
+    # %2$s: Bound lodestone's X position
+    # %3$s: Bound lodestone's Y position
+    # %4$s: Bound lodestone's Z position
+    bound_lore: "§7Bound to (%2$s§7, %3$s§7, %4$s§7) in %1$s"
+  item_death_scroll:
+    # The display name of this item variant.
+    name: "Portal Scroll (Death)"
+    # Sent when a death scroll is used but the user hasn't died recently or already used a scroll of this type.
+    teleport_no_recent_death: "§cYou have not died recently, or already used a Death Scroll!"
