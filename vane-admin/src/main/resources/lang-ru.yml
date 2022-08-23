@@ -73,11 +73,6 @@ command_gamemode:
   description: "§bgamemode §7[§bplayer§7]"
   help: "Устанавливает режим игры для игрока."
 
-command_setspawn:
-  usage: "%1$s"
-  description: "Устанавливает глобальный спавнпоинт на текущую позицию."
-  help: "Устанавливает глобальный спавнпоинт на текущую позицию."
-
 command_slimechunk:
   # This message is sent when the player is standing in a slimechunk
   slime_chunk_yes: "§aЭто слаймчанк."
@@ -86,11 +81,6 @@ command_slimechunk:
   usage: "%1$s"
   description: "Проверяет является ли текущий чанк слаймчанком."
   help: "Проверяет является ли текущий чанк слаймчанком."
-
-command_spawn:
-  usage: "%1$s"
-  description: "Телепортирует тебя на спавн."
-  help: "Телепортирует тебя на спавн."
 
 command_time:
   usage: "%1$s §btime §7[§bworld§7]"

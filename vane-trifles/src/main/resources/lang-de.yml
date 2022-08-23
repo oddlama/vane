@@ -12,7 +12,7 @@
 
 # DO NOT CHANGE! The version of this language file. Used to determine
 # if the file needs to be updated.
-version: 3
+version: 4
 # The corresponding language code used in resource packs. Used for
 # resource pack generation. Typically this is a combination of the
 # language code (ISO 639) and the country code (ISO 3166).
@@ -22,6 +22,11 @@ command_heads:
   usage: "%1$s"
   description: "Kaufe Köpfe zur Dekoration."
   help: "Führe den Befehl aus um das Köpfe-Menü zu öffnen."
+
+command_setspawn:
+  usage: "%1$s"
+  description: "Setzt den globalen Spawn auf deine aktuelle Position."
+  help: "Setzt den globalen Spawn auf deine aktuelle Position."
 
 xp_bottles:
   item_small_xp_bottle:
@@ -60,6 +65,5 @@ sickles:
 scrolls:
   item_home_scroll:
     name: "Portalschriftrolle (Heim)"
-
   item_unstable_scroll:
     name: "Portalschriftrolle (Instabil)"

@@ -12,7 +12,7 @@
 
 # DO NOT CHANGE! The version of this language file. Used to determine
 # if the file needs to be updated.
-version: 3
+version: 4
 # The corresponding language code used in resource packs. Used for
 # resource pack generation. Typically this is a combination of the
 # language code (ISO 639) and the country code (ISO 3166).
@@ -22,6 +22,11 @@ command_heads:
   usage: "%1$s"
   description: "Obtenir des Têtes depuis le répertoire de Têtes."
   help: "Exécuter la commande pour ouvrir le répertoire de Têtes."
+
+command_setspawn:
+  usage: "%1$s"
+  description: "Change la position du point d'apparition global vers votre position actuelle."
+  help: "Change la position du point d'apparition global vers votre position actuelle."
 
 xp_bottles:
   item_small_xp_bottle:
@@ -60,6 +65,5 @@ sickles:
 scrolls:
   item_home_scroll:
     name: "Parchemin de Rappel (Foyer)"
-
   item_unstable_scroll:
     name: "Parchemin de Rappel (instable)"

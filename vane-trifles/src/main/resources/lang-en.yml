@@ -12,7 +12,7 @@
 
 # DO NOT CHANGE! The version of this language file. Used to determine
 # if the file needs to be updated.
-version: 3
+version: 4
 # The corresponding language code used in resource packs. Used for
 # resource pack generation. Typically this is a combination of the
 # language code (ISO 639) and the country code (ISO 3166).
@@ -22,6 +22,11 @@ command_heads:
   usage: "%1$s"
   description: "Get heads from the head library."
   help: "Execute to open the head library."
+
+command_setspawn:
+  usage: "%1$s"
+  description: "Sets the global spawn location to your current position."
+  help: "Sets the global spawn location to your current position."
 
 xp_bottles:
   item_small_xp_bottle:
@@ -74,7 +79,6 @@ scrolls:
   item_home_scroll:
     # The display name of this item variant.
     name: "Portal Scroll (Home)"
-
   item_unstable_scroll:
     # The display name of this item variant.
     name: "Portal Scroll (Unstable)"

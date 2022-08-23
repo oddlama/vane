@@ -73,11 +73,6 @@ command_gamemode:
   description: "§bgamemode §7[§bplayer§7]"
   help: "Sets the gamemode of a player."
 
-command_setspawn:
-  usage: "%1$s"
-  description: "Sets the global spawn location to your current position."
-  help: "Sets the global spawn location to your current position."
-
 command_slimechunk:
   # This message is sent when the player is standing in a slimechunk
   slime_chunk_yes: "§aThis is a slimechunk."
@@ -86,11 +81,6 @@ command_slimechunk:
   usage: "%1$s"
   description: "Checks if the current chunk is a slimechunk."
   help: "Checks if the current chunk is a slimechunk."
-
-command_spawn:
-  usage: "%1$s"
-  description: "Teleports you to the spawn."
-  help: "Teleports you to the spawn."
 
 command_time:
   usage: "%1$s §btime §7[§bworld§7]"
