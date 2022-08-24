@@ -45,8 +45,12 @@ item_reinforced_elytra:
 item_file:
   name: "Напильник"
 
-# FIXME: translation missing
+item_papyrus_scroll:
+  # FIXME: missing translations
+  name: "Papyrus Scroll"
+
 item_trowel:
+  # FIXME: translation missing
   name: "Trowel"
 
 sickles:

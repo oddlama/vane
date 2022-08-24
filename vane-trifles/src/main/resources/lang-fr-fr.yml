@@ -45,6 +45,10 @@ item_reinforced_elytra:
 item_file:
   name: "Lime"
 
+item_papyrus_scroll:
+  # FIXME: missing translations
+  name: "Papyrus Scroll"
+
 item_trowel:
   name: "Truelle"
 

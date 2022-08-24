@@ -1,0 +1,81 @@
+package org.oddlama.vane.trifles.items;
+
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.inventory.ItemStack;
+import org.oddlama.vane.core.config.recipes.RecipeList;
+import org.oddlama.vane.core.config.recipes.ShapedRecipeDefinition;
+import org.oddlama.vane.core.module.Context;
+import org.oddlama.vane.trifles.Trifles;
+import org.oddlama.vane.annotation.item.VaneItem;
+import org.oddlama.vane.trifles.event.PlayerTeleportScrollEvent;
+import org.oddlama.vane.util.Util;
+
+@VaneItem(name = "death_scroll", base = Material.WARPED_FUNGUS_ON_A_STICK, durability = 25, model_data = 0x760001, version = 1)
+public class DeathScroll extends Scroll {
+	public static final NamespacedKey RECENT_DEATH_LOCATION = Util.namespaced_key("vane", "recent_death_location");
+	public static final NamespacedKey RECENT_DEATH_TIME = Util.namespaced_key("vane", "recent_death_time");
+
+	@LangMessage
+	public TranslatedMessage lang_teleport_no_recent_death;
+
+	public DeathScroll(Context<Trifles> context) {
+		super(context, 6000);
+	}
+
+	@Override
+	public RecipeList default_recipes() {
+		return RecipeList.of(new ShapedRecipeDefinition("generic")
+			.shape("pip", "cbe", "plp")
+			.set_ingredient('b', Material.NETHERITE_SCRAP)
+			.set_ingredient('p', Material.MAP)
+			.set_ingredient('i', Material.CHORUS_FRUIT)
+			.set_ingredient('c', Material.RECOVERY_COMPASS)
+			.set_ingredient('e', Material.ENDER_PEARL)
+			.set_ingredient('l', Material.CLOCK)
+			.result(key().toString()));
+	}
+
+	@Override
+	public EnumSet<InhibitBehavior> inhibitedBehaviors() {
+		final var set = super.inhibitedBehaviors();
+		// Fuck no, this will not be made unbreakable.
+		set.add(InhibitBehavior.NEW_ENCHANTS);
+		return set;
+	}
+
+	@Override
+	public Location teleport_location(final ItemStack scroll, Player player, boolean imminent_teleport) {
+		final var pdc = player.getPersistentDataContainer();
+		final var time = pdc.getOrDefault(RECENT_DEATH_TIME, PersistentDataType.LONG, 0l);
+		var loc = Util.storage_get_location(player.getPersistentDataContainer(), LAST_SCROLL_TELEPORT_LOCATION, null);
+
+		// Only recent deaths up to 20 minutes ago
+		if (System.currentTimeMillis() - time < 20 * 60 * 1000l) {
+			loc = null;
+		}
+
+		if (imminent_teleport) {
+			if (loc == null) {
+				lang_teleport_no_recent_death.send_action_bar(player);
+			}
+
+			// Only once
+			pdc.remove(RECENT_DEATH_TIME);
+			pdc.remove(RECENT_DEATH_LOCATION);
+		}
+
+		return loc;
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void on_player_death(final PlayerDeathEvent event) {
+		final var pdc = event.getPlayer().getPersistentDataContainer();
+		Util.storage_set_location(pdc, RECENT_DEATH_LOCATION, event.getPlayer().getLocation());
+		pdc.set(RECENT_DEATH_TIME, PersistentDataType.LONG, System.currentTimeMillis());
+	}
+}
