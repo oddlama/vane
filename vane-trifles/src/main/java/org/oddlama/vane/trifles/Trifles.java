@@ -24,6 +24,7 @@ public class Trifles extends Module<Trifles> {
 		new org.oddlama.vane.trifles.commands.Heads(this);
 		new org.oddlama.vane.trifles.commands.Setspawn(this);
 
+		new org.oddlama.vane.trifles.items.PapyrusScroll(this);
 		new org.oddlama.vane.trifles.items.Scrolls(this);
 		new org.oddlama.vane.trifles.items.ReinforcedElytra(this);
 		new org.oddlama.vane.trifles.items.File(this);

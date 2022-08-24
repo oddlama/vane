@@ -61,18 +61,18 @@ public class DeathScroll extends Scroll {
 		var loc = Util.storage_get_location(player.getPersistentDataContainer(), RECENT_DEATH_LOCATION, null);
 
 		// Only recent deaths up to 20 minutes ago
-		if (System.currentTimeMillis() - time < 20 * 60 * 1000l) {
+		if (System.currentTimeMillis() - time > 20 * 60 * 1000l) {
 			loc = null;
 		}
 
 		if (imminent_teleport) {
 			if (loc == null) {
 				lang_teleport_no_recent_death.send_action_bar(player);
+			} else {
+				// Only once
+				pdc.remove(RECENT_DEATH_TIME);
+				Util.storage_remove_location(pdc, RECENT_DEATH_LOCATION);
 			}
-
-			// Only once
-			pdc.remove(RECENT_DEATH_TIME);
-			pdc.remove(RECENT_DEATH_LOCATION);
 		}
 
 		return loc;
