@@ -15,7 +15,7 @@ import org.oddlama.vane.annotation.item.VaneItem;
 import org.oddlama.vane.trifles.event.PlayerTeleportScrollEvent;
 import org.oddlama.vane.util.Util;
 
-@VaneItem(name = "death_scroll", base = Material.WARPED_FUNGUS_ON_A_STICK, durability = 25, model_data = 0x760001, version = 1)
+@VaneItem(name = "death_scroll", base = Material.WARPED_FUNGUS_ON_A_STICK, durability = 2, model_data = 0x760001, version = 1)
 public class DeathScroll extends Scroll {
 	public static final NamespacedKey RECENT_DEATH_LOCATION = Util.namespaced_key("vane", "recent_death_location");
 	public static final NamespacedKey RECENT_DEATH_TIME = Util.namespaced_key("vane", "recent_death_time");
