@@ -5,6 +5,7 @@ import static org.oddlama.vane.util.Nms.item_handle;
 
 import org.bukkit.Keyed;
 import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -18,6 +19,7 @@ import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.inventory.PrepareSmithingEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemMendEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.SmithingRecipe;
 import org.oddlama.vane.core.Core;
@@ -155,24 +157,24 @@ public class VanillaFunctionalityInhibitor extends Listener<Core> {
 		final var r = event.getInventory().getResult();
 		if (r != null) {
 			final var custom_item_r = get_module().item_registry().get(r);
-			boolean did_edit = false;
+			final boolean[] did_edit = new boolean[]{ true };
 			r.editMeta(meta -> {
 				if (a != null && inhibit(custom_item_r, InhibitBehavior.NEW_ENCHANTS)) {
 					for (final var ench : r.getEnchantments().keySet()) {
 						if (!a.getEnchantments().keySet().contains(ench)) {
-							meta.removeEnchantment(ench);
-							did_edit = true;
+							meta.removeEnchant(ench);
+							did_edit[0] = true;
 						}
 					}
 				}
 
 				if (inhibit(custom_item_r, InhibitBehavior.MEND)) {
-					meta.removeEnchantment(Enchantments.MENDING);
-					did_edit = true;
+					meta.removeEnchant(Enchantment.MENDING);
+					did_edit[0] = true;
 				}
 			});
 
-			if (did_edit) {
+			if (did_edit[0]) {
 				event.setResult(r);
 			}
 		}

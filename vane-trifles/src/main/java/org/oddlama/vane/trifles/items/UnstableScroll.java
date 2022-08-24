@@ -7,11 +7,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.inventory.ItemStack;
+import org.oddlama.vane.annotation.item.VaneItem;
+import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.core.config.recipes.RecipeList;
 import org.oddlama.vane.core.config.recipes.ShapedRecipeDefinition;
+import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.trifles.Trifles;
-import org.oddlama.vane.annotation.item.VaneItem;
 import org.oddlama.vane.trifles.event.PlayerTeleportScrollEvent;
 import org.oddlama.vane.util.Util;
 

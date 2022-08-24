@@ -86,7 +86,7 @@ public class Scrolls extends Listener<Trifles> {
 				break;
 		}
 
-		final var to_location = scroll.teleport_location(player, true);
+		final var to_location = scroll.teleport_location(item, player, true);
 		if (to_location == null) {
 			return;
 		}

@@ -5,8 +5,8 @@ import java.util.EnumSet;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.oddlama.vane.annotation.config.ConfigInt;
 import org.oddlama.vane.annotation.config.ConfigBoolean;
+import org.oddlama.vane.annotation.config.ConfigInt;
 import org.oddlama.vane.core.item.CustomItem;
 import org.oddlama.vane.core.item.api.InhibitBehavior;
 import org.oddlama.vane.core.module.Context;
@@ -16,7 +16,7 @@ public abstract class Scroll extends CustomItem<Trifles> {
 	@ConfigInt(def = 0, min = 0, desc = "Cooldown in milliseconds until another scroll can be used.")
 	public int config_cooldown;
 	@ConfigBoolean(def = false, desc = "Allow this scroll to be repaired via the mending enchantment.")
-	private int config_allow_mending;
+	private boolean config_allow_mending;
 
 	private int default_cooldown;
 
