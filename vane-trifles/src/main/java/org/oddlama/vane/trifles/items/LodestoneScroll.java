@@ -66,6 +66,11 @@ public class LodestoneScroll extends Scroll {
 
 	@Override
 	public Location teleport_location(final ItemStack scroll, Player player, boolean imminent_teleport) {
+		// This scroll cannot be used while sneaking to allow re-binding
+		if (player.isSneaking()) {
+			return null;
+		}
+
 		final var lodestone_location = get_lodestone_location(scroll);
 		final var lodestone = lodestone_location == null ? null : lodestone_location.getBlock();
 
@@ -82,7 +87,8 @@ public class LodestoneScroll extends Scroll {
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void on_player_interact(final PlayerInteractEvent event) {
-		if (!event.hasBlock() || event.getAction() != Action.RIGHT_CLICK_BLOCK || event.useItemInHand() == Event.Result.DENY) {
+		// Skip if no block clicked or the item is allowed to be used (e.g. torches in offhand)
+		if (!event.hasBlock() || event.getAction() != Action.RIGHT_CLICK_BLOCK || event.useItemInHand() == Event.Result.ALLOW) {
 			return;
 		}
 
@@ -93,12 +99,12 @@ public class LodestoneScroll extends Scroll {
 
 		// Only if player sneak-right-clicks
 		final var player = event.getPlayer();
-		if (!player.isSneaking() || event.getHand() != EquipmentSlot.HAND) {
+		if (!player.isSneaking()) {
 			return;
 		}
 
-		// With a lodestone scroll
-		final var item = player.getEquipment().getItem(event.getHand());
+		// With a lodestone scroll in main hand
+		final var item = player.getEquipment().getItem(EquipmentSlot.HAND);
 		final var custom_item = get_module().core.item_registry().get(item);
 		if (!(custom_item instanceof LodestoneScroll scroll) || !scroll.enabled()) {
 			return;
@@ -114,7 +120,7 @@ public class LodestoneScroll extends Scroll {
 
 		// Effects and sound
 		swing_arm(player, event.getHand());
-		block.getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE, block.getLocation(), 50, 0.0, 0.0, 0.0, 1.0);
+		block.getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE, block.getLocation().add(0.5, 2.0, 0.5), 100, 0.1, 0.3, 0.1, 2.0);
 		block.getWorld().playSound(block.getLocation(), Sound.BLOCK_RESPAWN_ANCHOR_CHARGE, SoundCategory.BLOCKS, 1.0f, 3.0f);
 
 		// Prevent offhand from triggering (e.g. plcaing torches)

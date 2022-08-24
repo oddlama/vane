@@ -125,10 +125,8 @@ public class Scrolls extends Listener<Trifles> {
 		to.getWorld().playSound(to, Sound.BLOCK_END_PORTAL_FRAME_FILL, SoundCategory.PLAYERS, 1.0f, 1.0f);
 
 		// Create particles
-		from.getWorld().spawnParticle(Particle.PORTAL, from.clone().add(0.5, 0.5, 0.5), 50, 0.0, 0.0, 0.0, 1.0);
-		from.getWorld().spawnParticle(Particle.PORTAL, from.clone().add(0.5, 1.5, 0.5), 50, 0.0, 0.0, 0.0, 1.0);
-		to.getWorld().spawnParticle(Particle.PORTAL, to.clone().add(0.5, 0.5, 0.5), 50, 0.0, 0.0, 0.0, 1.0);
-		to.getWorld().spawnParticle(Particle.PORTAL, to.clone().add(0.5, 1.5, 0.5), 50, 0.0, 0.0, 0.0, 1.0);
+		from.getWorld().spawnParticle(Particle.PORTAL, from.clone().add(0.0, 1.0, 0.0), 200, 1.0, 2.0, 1.0, 1.0);
+		to.getWorld().spawnParticle(Particle.END_ROD, to.clone().add(0.0, 1.0, 0.0), 100, 1.0, 2.0, 1.0, 1.0);
 		return true;
 	}
 
