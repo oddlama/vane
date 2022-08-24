@@ -45,6 +45,10 @@ item_reinforced_elytra:
 item_file:
   name: "Feile"
 
+item_papyrus_scroll:
+  # The display name of this item variant.
+  name: "Papyrusrolle"
+
 item_trowel:
   name: "Kelle"
 

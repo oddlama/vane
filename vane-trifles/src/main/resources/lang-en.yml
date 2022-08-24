@@ -51,6 +51,10 @@ item_file:
   # The display name of this item variant.
   name: "File"
 
+item_papyrus_scroll:
+  # The display name of this item variant.
+  name: "Papyrus Scroll"
+
 item_trowel:
   # The display name of this item variant.
   name: "Trowel"
