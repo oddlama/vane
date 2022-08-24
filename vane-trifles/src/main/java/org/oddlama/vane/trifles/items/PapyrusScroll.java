@@ -11,7 +11,7 @@ import org.oddlama.vane.core.item.api.InhibitBehavior;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.trifles.Trifles;
 
-@VaneItem(name = "papyrus_scroll", base = Material.PAPER, model_data = 0x76000a, version = 1)
+@VaneItem(name = "papyrus_scroll", base = Material.PAPER, model_data = 0x76000f, version = 1)
 public class PapyrusScroll extends CustomItem<Trifles> {
 	public PapyrusScroll(Context<Trifles> context) {
 		super(context);

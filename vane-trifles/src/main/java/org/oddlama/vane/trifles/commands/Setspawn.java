@@ -1,11 +1,13 @@
-package org.oddlama.vane.admin.commands;
+package org.oddlama.vane.trifles.commands;
 
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
+import org.bukkit.persistence.PersistentDataType;
 import org.oddlama.vane.trifles.Trifles;
 import org.oddlama.vane.annotation.command.Name;
 import org.oddlama.vane.core.command.Command;
 import org.oddlama.vane.core.module.Context;
-import org.oddlama.vane.util.LazyLocation;
+import org.oddlama.vane.util.Util;
 
 @Name("setspawn")
 public class Setspawn extends Command<Trifles> {
@@ -30,7 +32,7 @@ public class Setspawn extends Command<Trifles> {
 		// Set spawn and mark as default world
 		final var world = player.getWorld();
 		world.setSpawnLocation(loc);
-		world.getPersistentDataContainer().set(IS_SPAWN_WORLD, PersistentDataType.BOOLEAN, true);
+		world.getPersistentDataContainer().set(IS_SPAWN_WORLD, PersistentDataType.INTEGER, 1);
 		player.sendMessage("§aSpawn §7set!");
 	}
 }

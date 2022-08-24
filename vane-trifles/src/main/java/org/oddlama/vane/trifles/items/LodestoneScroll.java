@@ -1,21 +1,35 @@
 package org.oddlama.vane.trifles.items;
 
+import static org.oddlama.vane.util.PlayerUtil.swing_arm;
+
+import java.util.List;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.oddlama.vane.annotation.item.VaneItem;
+import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.core.config.recipes.RecipeList;
 import org.oddlama.vane.core.config.recipes.ShapedRecipeDefinition;
+import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.trifles.Trifles;
-import org.oddlama.vane.annotation.item.VaneItem;
-import org.oddlama.vane.trifles.event.PlayerTeleportScrollEvent;
 import org.oddlama.vane.util.Util;
 
-@VaneItem(name = "lodestone_scroll", base = Material.WARPED_FUNGUS_ON_A_STICK, durability = 15, model_data = 0x760001, version = 1)
+import net.kyori.adventure.text.format.TextDecoration;
+
+@VaneItem(name = "lodestone_scroll", base = Material.WARPED_FUNGUS_ON_A_STICK, durability = 15, model_data = 0x760011, version = 1)
 public class LodestoneScroll extends Scroll {
 	public static final NamespacedKey LODESTONE_LOCATION = Util.namespaced_key("vane", "lodestone_location");
 
@@ -99,9 +113,9 @@ public class LodestoneScroll extends Scroll {
 		});
 
 		// Effects and sound
-		// TODO: effect
 		swing_arm(player, event.getHand());
-		block.getWorld().playSound(block.getLocation(), Sound.RESPAWN_ANCHOR_REFILL, SoundCategory.BLOCKS, 1.0f, 3.0f);
+		block.getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE, block.getLocation(), 50, 0.0, 0.0, 0.0, 1.0);
+		block.getWorld().playSound(block.getLocation(), Sound.BLOCK_RESPAWN_ANCHOR_CHARGE, SoundCategory.BLOCKS, 1.0f, 3.0f);
 
 		// Prevent offhand from triggering (e.g. plcaing torches)
 		event.setUseInteractedBlock(Event.Result.DENY);
