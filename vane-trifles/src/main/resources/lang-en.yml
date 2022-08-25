@@ -58,6 +58,11 @@ item_papyrus_scroll:
 item_trowel:
   # The display name of this item variant.
   name: "Trowel"
+  # The lore of every trowel
+  # %1$s: The current feed source
+  lore:
+    - "§7Right-click this item in your inventory to change the feed source."
+    - "§7Current feed source: %1$s"
 
 sickles:
   item_wooden_sickle:

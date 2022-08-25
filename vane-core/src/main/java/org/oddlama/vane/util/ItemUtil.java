@@ -89,6 +89,18 @@ public class ItemUtil {
 		return name_item(item, name, Arrays.<Component>asList(new Component[] { lore }));
 	}
 
+	public static ItemStack set_lore(final ItemStack item, final List<Component> lore) {
+		item.editMeta(meta -> {
+			final var list = lore
+				.stream()
+				.map(x -> x.decoration(TextDecoration.ITALIC, false))
+				.collect(Collectors.toList());
+			meta.lore(list);
+		});
+
+		return item;
+	}
+
 	public static ItemStack name_item(final ItemStack item, Component name, final List<Component> lore) {
 		final var meta = item.getItemMeta();
 

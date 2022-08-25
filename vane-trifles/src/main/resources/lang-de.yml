@@ -51,6 +51,9 @@ item_papyrus_scroll:
 
 item_trowel:
   name: "Kelle"
+  lore:
+    - "§7Rechtsklicke dieses Item im Inventar um die Blockzufuhr zu ändern."
+    - "§7Aktuelle Blockzufuhr: %1$s"
 
 sickles:
   item_wooden_sickle:
