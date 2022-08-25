@@ -1,9 +1,8 @@
-package org.oddlama.vane.waterfall;
+package org.oddlama.vane.proxycore;
 
 import java.util.UUID;
 
 public class Util {
-
 	public static UUID add_uuid(UUID uuid, long i) {
 		var msb = uuid.getMostSignificantBits();
 		var lsb = uuid.getLeastSignificantBits();

@@ -30,7 +30,7 @@ public class Maintenance extends Command {
 		if (args.length == 1 && (args[0].equalsIgnoreCase("status"))) {
 			if (plugin.maintenance.start() != 0) {
 				sender.sendMessage(
-					plugin.maintenance.format_message(org.oddlama.vane.waterfall.Maintenance.MESSAGE_INFO)
+					plugin.maintenance.format_message(org.oddlama.vane.proxycore.Maintenance.MESSAGE_INFO)
 				);
 			} else {}
 		} else if (args.length == 1 && (args[0].equalsIgnoreCase("cancel"))) {
