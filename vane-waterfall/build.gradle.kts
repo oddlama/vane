@@ -7,6 +7,7 @@ dependencies {
 	implementation(group = "org.bstats", name = "bstats-bungeecord", version = "1.8")
 	implementation(group = "org.json", name = "json", version = "20200518")
 	implementation(rootProject.project(":vane-core"))
+	implementation(rootProject.project(":vane-proxy-core"))
 }
 
 tasks.create<Copy>("copyJar") {
@@ -27,6 +28,7 @@ tasks {
 		dependencies {
 			include(dependency("org.bstats:bstats-bungeecord"))
 			include(dependency("org.json:json"))
+			include(dependency(rootProject.project(":vane-proxy-core")))
 
 			// Utilities to include from vane-core.util
 			val includedUtils = listOf(
