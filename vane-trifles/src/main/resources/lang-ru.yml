@@ -52,6 +52,10 @@ item_papyrus_scroll:
 item_trowel:
   # FIXME: translation missing
   name: "Trowel"
+  # FIXME: missing translations
+  lore:
+    - "§7Right-click this item in your inventory to change the feed source."
+    - "§7Current feed source: %1$s"
 
 sickles:
   item_wooden_sickle:
