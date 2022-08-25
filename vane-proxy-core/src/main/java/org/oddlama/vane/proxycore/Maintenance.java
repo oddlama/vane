@@ -1,16 +1,10 @@
-package org.oddlama.vane.waterfall;
+package org.oddlama.vane.proxycore;
+
+import java.io.*;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 
 import static org.oddlama.vane.util.TimeUtil.format_time;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.concurrent.TimeUnit;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.scheduler.ScheduledTask;
 
 public class Maintenance {
 
@@ -37,7 +31,7 @@ public class Maintenance {
 			1000L,
 	};
 
-	public static String MESSAGE_ABORTED = "§7> §cServerwartung §l§6ABGEBROCHEN§r§c!";
+	public static String MESSAGE_ABORTED = "§7> §Server maintenance §l§CANCELLED§r§c!";
 
 	public static String MESSAGE_INFO =
 		"§7>" +
@@ -63,17 +57,17 @@ public class Maintenance {
 
 	public static String MESSAGE_CONNECT = "%MOTD%" + "\n" + "\n§7Please try again later.";
 
-	private final Waterfall plugin;
+	private final VaneProxyPlugin plugin;
 	private final File file = new File("./.maintenance");
 
 	private boolean enabled = false;
-	private TaskEnable task_enable = new TaskEnable();
-	private TaskNotify task_notify = new TaskNotify();
+	private final TaskEnable task_enable = new TaskEnable();
+	private final TaskNotify task_notify = new TaskNotify();
 
 	private long start = 0;
 	private long duration = 0;
 
-	public Maintenance(final Waterfall plugin) {
+	public Maintenance(final VaneProxyPlugin plugin) {
 		this.plugin = plugin;
 	}
 
@@ -94,11 +88,11 @@ public class Maintenance {
 
 		// Kick all players
 		final var kick_message = format_message(MESSAGE_KICK);
-		for (final var player : plugin.getProxy().getPlayers()) {
+		for (final var player : plugin.getVaneProxy().getPlayers()) {
 			player.disconnect(kick_message);
 		}
 
-		plugin.getLogger().info("Maintenance enabled!");
+		plugin.getVaneLogger().log(Level.INFO, "Maintenance enabled!");
 	}
 
 	public void disable() {
@@ -120,13 +114,13 @@ public class Maintenance {
 
 		if (start - System.currentTimeMillis() > 0) {
 			// Broadcast message (only if not started yet)
-			plugin.getProxy().broadcast(TextComponent.fromLegacyText(MESSAGE_ABORTED));
+			plugin.getVaneProxy().broadcast(MESSAGE_ABORTED);
 		}
 
 		// Disable maintenance (just to be on the safe side)
 		disable();
 
-		plugin.getLogger().info("Maintenance disabled!");
+		plugin.getVaneLogger().log(Level.INFO, "Maintenance disabled!");
 	}
 
 	public void schedule(long start_millis, long duration_millis) {
@@ -174,13 +168,13 @@ public class Maintenance {
 	public void save() {
 		//create and write file
 		try (final FileWriter writer = new FileWriter(file)) {
-			writer.write(Long.toString(start) + "\n" + Long.toString(duration));
+			writer.write(start + "\n" + duration);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public BaseComponent[] format_message(final String message) {
+	public String format_message(final String message) {
 		var timespan = start - System.currentTimeMillis();
 		final String time;
 
@@ -200,13 +194,11 @@ public class Maintenance {
 			remaining = 0;
 		}
 
-		return TextComponent.fromLegacyText(
-			message
+		return message
 				.replace("%MOTD%", MOTD)
 				.replace("%time%", time)
 				.replace("%duration%", format_time(duration))
-				.replace("%remaining%", format_time(remaining))
-		);
+				.replace("%remaining%", format_time(remaining));
 	}
 
 	public class TaskNotify implements Runnable {
@@ -218,8 +210,8 @@ public class Maintenance {
 		public synchronized void run() {
 			// Broadcast message
 			plugin
-				.getProxy()
-				.broadcast(format_message(notify_time <= SHUTDOWN_THRESHOLD ? MESSAGE_SHUTDOWN : MESSAGE_SCHEDULED));
+					.getVaneProxy()
+					.broadcast(format_message(notify_time <= SHUTDOWN_THRESHOLD ? MESSAGE_SHUTDOWN : MESSAGE_SCHEDULED));
 
 			// Schedule next time
 			schedule();
@@ -234,17 +226,16 @@ public class Maintenance {
 			}
 		}
 
-		@SuppressWarnings("deprecation")
 		public synchronized void schedule() {
 			//cancel if running
 			cancel();
 
-			//substract 500 millis so we will never "forget" one step
+			//subtract 500 millis, so we will never "forget" one step
 			final var timespan = start - System.currentTimeMillis() - 500;
 
 			if (notify_time < 0) {
 				// First schedule
-				plugin.getProxy().broadcast(format_message(MESSAGE_SCHEDULED));
+				plugin.getVaneProxy().broadcast(format_message(MESSAGE_SCHEDULED));
 				notify_time = timespan;
 			}
 
@@ -255,7 +246,7 @@ public class Maintenance {
 
 			// Schedule for next time
 			task =
-				plugin.getProxy().getScheduler().schedule(plugin, this, timespan - notify_time, TimeUnit.MILLISECONDS);
+					plugin.getVaneProxy().schedule(plugin, this, timespan - notify_time, TimeUnit.MILLISECONDS);
 		}
 
 		public long next_notify_time() {
@@ -300,7 +291,7 @@ public class Maintenance {
 				timespan = 0;
 			}
 
-			task = plugin.getProxy().getScheduler().schedule(plugin, this, timespan, TimeUnit.MILLISECONDS);
+			task = plugin.getVaneProxy().schedule(plugin, this, timespan, TimeUnit.MILLISECONDS);
 		}
 	}
 }

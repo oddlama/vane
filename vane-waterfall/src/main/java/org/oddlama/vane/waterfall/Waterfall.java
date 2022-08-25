@@ -1,10 +1,11 @@
 package org.oddlama.vane.waterfall;
 
-import static org.oddlama.vane.waterfall.Util.add_uuid;
+import static org.oddlama.vane.proxycore.Util.add_uuid;
 import static org.oddlama.vane.util.Resolve.resolve_uuid;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
@@ -14,7 +15,6 @@ import javax.imageio.ImageIO;
 import net.md_5.bungee.api.AbstractReconnectHandler;
 import net.md_5.bungee.api.Favicon;
 import net.md_5.bungee.api.ServerPing;
-import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.PendingConnection;
@@ -26,21 +26,34 @@ import net.md_5.bungee.event.EventHandler;
 import net.md_5.bungee.event.EventPriority;
 import net.md_5.bungee.protocol.packet.LoginRequest;
 import org.bstats.bungeecord.Metrics;
+import org.jetbrains.annotations.NotNull;
+import org.oddlama.vane.proxycore.Maintenance;
+import org.oddlama.vane.proxycore.ProxyServer;
+import org.oddlama.vane.proxycore.VaneProxyPlugin;
+import org.oddlama.vane.proxycore.config.ConfigManager;
+import org.oddlama.vane.proxycore.config.IVaneProxyServerInfo;
+import org.oddlama.vane.proxycore.log.IVaneLogger;
+import org.oddlama.vane.proxycore.log.JavaCompatLogger;
+import org.oddlama.vane.waterfall.compat.BungeeCompatProxyServer;
+import org.oddlama.vane.waterfall.compat.BungeeCompatServerInfo;
 
-public class Waterfall extends Plugin implements Listener {
+public class Waterfall extends Plugin implements Listener, VaneProxyPlugin {
 
 	public static final String CHANNEL_AUTH_MULTIPLEX = "vane_waterfall:auth_multiplex";
-	public static String MESSAGE_MULTIPLEX_MOJANG_AUTH_NO_PERMISSION_KICK =
-		"§cYou have no permission to use this auth multiplexer!";
 
-	public Config config = new Config(this);
+	public ConfigManager config = new ConfigManager(this);
 	public Maintenance maintenance = new Maintenance(this);
+	public IVaneLogger logger;
+	public BungeeCompatProxyServer server;
 
 	// bStats
 	private Metrics metrics;
 
 	@Override
 	public void onEnable() {
+		logger = new JavaCompatLogger(this.getLogger());
+		server = new BungeeCompatProxyServer(this.getProxy());
+
 		metrics = new Metrics(this, 8891);
 
 		config.load();
@@ -63,6 +76,7 @@ public class Waterfall extends Plugin implements Listener {
 		getProxy().unregisterChannel(CHANNEL_AUTH_MULTIPLEX);
 
 		metrics = null;
+		logger = null;
 	}
 
 	@SuppressWarnings("deprecation")
@@ -71,13 +85,14 @@ public class Waterfall extends Plugin implements Listener {
 		ServerPing server_ping = event.getResponse();
 
 		final PendingConnection connection = event.getConnection();
-		var server = AbstractReconnectHandler.getForcedHost(connection);
-		if (server == null) {
-			server = getProxy().getServerInfo(connection.getListener().getServerPriority().get(0));
+		var bungeeServerInfo = AbstractReconnectHandler.getForcedHost(connection);
+		if (bungeeServerInfo == null) {
+			bungeeServerInfo = getProxy().getServerInfo(connection.getListener().getServerPriority().get(0));
 		}
 
-		server_ping.setDescriptionComponent(get_motd(server));
-		server_ping.setFavicon(get_favicon(server));
+		var server = new BungeeCompatServerInfo(bungeeServerInfo);
+		server_ping.setDescriptionComponent(new TextComponent(TextComponent.fromLegacyText(get_motd(server))));
+		server_ping.setFavicon(get_favicon(server.getServerInfo()));
 
 		event.setResponse(server_ping);
 	}
@@ -100,11 +115,12 @@ public class Waterfall extends Plugin implements Listener {
 			return;
 		}
 
-		var server = AbstractReconnectHandler.getForcedHost(connection);
-		if (server == null) {
-			server = getProxy().getServerInfo(connection.getListener().getServerPriority().get(0));
+		var bungeeServerInfo = AbstractReconnectHandler.getForcedHost(connection);
+		if (bungeeServerInfo == null) {
+			bungeeServerInfo = getProxy().getServerInfo(connection.getListener().getServerPriority().get(0));
 		}
 
+		var server = new BungeeCompatServerInfo(bungeeServerInfo);
 		if (maintenance.enabled()) {
 			// Client is connecting while maintenance is on
 			if (has_permission(uuid, "vane_waterfall.bypass_maintenance")) {
@@ -214,68 +230,6 @@ public class Waterfall extends Plugin implements Listener {
 		}
 	}
 
-	private void register_auth_multiplex_player(
-		ServerInfo server,
-		int multiplexer_id,
-		UUID old_uuid,
-		String old_name,
-		UUID new_uuid,
-		String new_name
-	) {
-		final var stream = new ByteArrayOutputStream();
-		final var out = new DataOutputStream(stream);
-
-		try {
-			out.writeInt(multiplexer_id);
-			out.writeUTF(old_uuid.toString());
-			out.writeUTF(old_name);
-			out.writeUTF(new_uuid.toString());
-			out.writeUTF(new_name);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		server.sendData(CHANNEL_AUTH_MULTIPLEX, stream.toByteArray());
-	}
-
-	public boolean is_online(final ServerInfo server) {
-		final var addr = server.getSocketAddress();
-		if (!(addr instanceof InetSocketAddress)) {
-			return false;
-		}
-
-		final var inet_addr = (InetSocketAddress) addr;
-		var connected = false;
-		try (final var test = new Socket(inet_addr.getHostName(), inet_addr.getPort())) {
-			connected = test.isConnected();
-		} catch (IOException e) {
-			// Server not up or not reachable
-		}
-
-		return connected;
-	}
-
-	public BaseComponent get_motd(final ServerInfo server) {
-		// Maintenance
-		if (maintenance.enabled()) {
-			return new TextComponent(maintenance.format_message(Maintenance.MOTD));
-		}
-
-		final var cms = config.managed_servers.get(server.getName());
-		if (cms == null) {
-			return new TextComponent();
-		}
-
-		BaseComponent motd;
-		if (is_online(server)) {
-			motd = new TextComponent(cms.motd_online());
-		} else {
-			motd = new TextComponent(cms.motd_offline());
-		}
-
-		return motd;
-	}
-
 	public Favicon get_favicon(final ServerInfo server) {
 		final var cms = config.managed_servers.get(server.getName());
 		if (cms == null) {
@@ -294,6 +248,63 @@ public class Waterfall extends Plugin implements Listener {
 		return null;
 	}
 
+	@Override
+	public void register_auth_multiplex_player(IVaneProxyServerInfo server, int multiplexer_id, UUID old_uuid, String old_name, UUID new_uuid, String new_name) {
+		final var stream = new ByteArrayOutputStream();
+		final var out = new DataOutputStream(stream);
+
+		try {
+			out.writeInt(multiplexer_id);
+			out.writeUTF(old_uuid.toString());
+			out.writeUTF(old_name);
+			out.writeUTF(new_uuid.toString());
+			out.writeUTF(new_name);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		server.sendData(CHANNEL_AUTH_MULTIPLEX, stream.toByteArray());
+	}
+
+	@Override
+	public boolean is_online(IVaneProxyServerInfo server) {
+		final var addr = server.getSocketAddress();
+		if (!(addr instanceof final InetSocketAddress inet_addr)) {
+			return false;
+		}
+
+		var connected = false;
+		try (final var test = new Socket(inet_addr.getHostName(), inet_addr.getPort())) {
+			connected = test.isConnected();
+		} catch (IOException e) {
+			// Server not up or not reachable
+		}
+
+		return connected;
+	}
+
+	@Override
+	public String get_motd(IVaneProxyServerInfo server) {
+		// Maintenance
+		if (maintenance.enabled()) {
+			return maintenance.format_message(Maintenance.MOTD);
+		}
+
+		final var cms = config.managed_servers.get(server.getName());
+		if (cms == null) {
+			return "";
+		}
+
+		String motd;
+		if (is_online(server)) {
+			motd = cms.motd_online();
+		} else {
+			motd = cms.motd_offline();
+		}
+
+		return motd;
+	}
+
 	public boolean has_permission(UUID uuid, String permission) {
 		if (uuid == null) {
 			return false;
@@ -309,4 +320,21 @@ public class Waterfall extends Plugin implements Listener {
 
 		return false;
 	}
+
+	// TODO: These names are just workarounds for name conflicts for now, temporary
+	@Override
+	public File getVaneDataFolder() {
+		return this.getDataFolder();
+	}
+
+	@Override
+	public ProxyServer getVaneProxy() {
+		return new BungeeCompatProxyServer(this.getProxy());
+	}
+
+	@Override
+	public @NotNull IVaneLogger getVaneLogger() {
+		return logger;
+	}
+
 }
