@@ -1,7 +1,7 @@
 package org.oddlama.vane.core;
 
-import static org.oddlama.vane.util.Util.ms_to_ticks;
-import static org.oddlama.vane.util.Util.read_json_from_url;
+import static org.oddlama.vane.util.Conversions.ms_to_ticks;
+import static org.oddlama.vane.util.IOUtil.read_json_from_url;
 
 import java.io.File;
 import java.io.IOException;

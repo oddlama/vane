@@ -9,7 +9,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.loot.LootTables;
 import org.oddlama.vane.core.LootTable.LootTableEntry;
 import org.oddlama.vane.util.ItemUtil;
-import org.oddlama.vane.util.Util;
+import org.oddlama.vane.util.StorageUtil;
 
 public class LootDefinition {
 	private static record Entry(double chance, int amount_min, int amount_max, String item_definition) {
@@ -56,7 +56,7 @@ public class LootDefinition {
 	}
 
 	public NamespacedKey key(final NamespacedKey base_key) {
-		return Util.namespaced_key(base_key.namespace(), base_key.value() + "." + name);
+		return StorageUtil.namespaced_key(base_key.namespace(), base_key.value() + "." + name);
 	}
 
 	public LootDefinition in(final NamespacedKey table) {

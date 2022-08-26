@@ -1,17 +1,13 @@
 package org.oddlama.vane.waterfall;
 
 import static org.oddlama.vane.waterfall.Util.add_uuid;
+import static org.oddlama.vane.waterfall.Util.resolve_uuid;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 import java.util.logging.Level;
 import javax.imageio.ImageIO;
@@ -30,8 +26,6 @@ import net.md_5.bungee.event.EventHandler;
 import net.md_5.bungee.event.EventPriority;
 import net.md_5.bungee.protocol.packet.LoginRequest;
 import org.bstats.bungeecord.Metrics;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class Waterfall extends Plugin implements Listener {
 
@@ -88,39 +82,6 @@ public class Waterfall extends Plugin implements Listener {
 		event.setResponse(server_ping);
 	}
 
-	private static String read_all(Reader rd) throws IOException {
-		final var sb = new StringBuilder();
-		int cp;
-		while ((cp = rd.read()) != -1) {
-			sb.append((char) cp);
-		}
-		return sb.toString();
-	}
-
-	public static JSONObject read_json_from_url(String url) throws IOException, JSONException {
-		try (
-			final var rd = new BufferedReader(new InputStreamReader(new URL(url).openStream(), StandardCharsets.UTF_8))
-		) {
-			return new JSONObject(read_all(rd));
-		}
-	}
-
-	public UUID resolve_uuid(String name) {
-		final var url = "https://api.mojang.com/users/profiles/minecraft/" + name;
-		try {
-			final var json = read_json_from_url(url);
-			final var id_str = json.getString("id");
-			final var uuid_str = id_str.replaceFirst(
-				"(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)",
-				"$1-$2-$3-$4-$5"
-			);
-			return UUID.fromString(uuid_str);
-		} catch (IOException e) {
-			getLogger().log(Level.WARNING, "Failed to resolve UUID for player '" + name + "'", e);
-			return null;
-		}
-	}
-
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void on_pre_login(PreLoginEvent event) {
 		if (event.isCancelled()) {
@@ -129,7 +90,15 @@ public class Waterfall extends Plugin implements Listener {
 
 		final var connection = event.getConnection();
 		// This is pre-authentication, so we need to resolve the uuid ourselves.
-		final var uuid = resolve_uuid(connection.getName());
+		String playerName = connection.getName();
+		UUID uuid;
+
+		try {
+			uuid = resolve_uuid(playerName);
+		} catch (IOException e) {
+			getLogger().log(Level.WARNING, "Failed to resolve UUID for player '" + playerName + "'", e);
+			return;
+		}
 
 		var server = AbstractReconnectHandler.getForcedHost(connection);
 		if (server == null) {
@@ -297,14 +266,14 @@ public class Waterfall extends Plugin implements Listener {
 			return new TextComponent();
 		}
 
-		BaseComponent motd = null;
+		BaseComponent motd;
 		if (is_online(server)) {
 			motd = new TextComponent(cms.motd_online());
 		} else {
 			motd = new TextComponent(cms.motd_offline());
 		}
 
-		return motd == null ? new TextComponent() : motd;
+		return motd;
 	}
 
 	public Favicon get_favicon(final ServerInfo server) {

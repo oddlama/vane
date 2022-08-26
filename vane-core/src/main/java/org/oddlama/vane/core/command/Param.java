@@ -1,6 +1,6 @@
 package org.oddlama.vane.core.command;
 
-import static org.oddlama.vane.util.Util.namespaced_key;
+import static org.oddlama.vane.util.StorageUtil.namespaced_key;
 
 import java.util.Arrays;
 import java.util.Collection;

@@ -15,11 +15,11 @@ import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.trifles.Trifles;
 import org.oddlama.vane.trifles.event.PlayerTeleportScrollEvent;
-import org.oddlama.vane.util.Util;
+import org.oddlama.vane.util.StorageUtil;
 
 @VaneItem(name = "unstable_scroll", base = Material.WARPED_FUNGUS_ON_A_STICK, durability = 25, model_data = 0x760001, version = 1)
 public class UnstableScroll extends Scroll {
-	public static final NamespacedKey LAST_SCROLL_TELEPORT_LOCATION = Util.namespaced_key("vane", "last_scroll_teleport_location");
+	public static final NamespacedKey LAST_SCROLL_TELEPORT_LOCATION = StorageUtil.namespaced_key("vane", "last_scroll_teleport_location");
 
 	@LangMessage
 	public TranslatedMessage lang_teleport_no_previous_teleport;
@@ -43,7 +43,7 @@ public class UnstableScroll extends Scroll {
 
 	@Override
 	public Location teleport_location(final ItemStack scroll, Player player, boolean imminent_teleport) {
-		final var loc = Util.storage_get_location(player.getPersistentDataContainer(), LAST_SCROLL_TELEPORT_LOCATION, null);
+		final var loc = StorageUtil.storage_get_location(player.getPersistentDataContainer(), LAST_SCROLL_TELEPORT_LOCATION, null);
 		if (imminent_teleport && loc == null) {
 			lang_teleport_no_previous_teleport.send_action_bar(player);
 		}
@@ -52,6 +52,6 @@ public class UnstableScroll extends Scroll {
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void on_player_teleport_scroll(final PlayerTeleportScrollEvent event) {
-		Util.storage_set_location(event.getPlayer().getPersistentDataContainer(), LAST_SCROLL_TELEPORT_LOCATION, event.getFrom());
+		StorageUtil.storage_set_location(event.getPlayer().getPersistentDataContainer(), LAST_SCROLL_TELEPORT_LOCATION, event.getFrom());
 	}
 }

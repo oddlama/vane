@@ -25,13 +25,13 @@ import org.oddlama.vane.core.config.recipes.ShapedRecipeDefinition;
 import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.trifles.Trifles;
-import org.oddlama.vane.util.Util;
+import org.oddlama.vane.util.StorageUtil;
 
 import net.kyori.adventure.text.format.TextDecoration;
 
 @VaneItem(name = "lodestone_scroll", base = Material.WARPED_FUNGUS_ON_A_STICK, durability = 15, model_data = 0x760011, version = 1)
 public class LodestoneScroll extends Scroll {
-	public static final NamespacedKey LODESTONE_LOCATION = Util.namespaced_key("vane", "lodestone_location");
+	public static final NamespacedKey LODESTONE_LOCATION = StorageUtil.namespaced_key("vane", "lodestone_location");
 
 	@LangMessage
 	public TranslatedMessage lang_teleport_no_bound_lodestone;
@@ -61,7 +61,7 @@ public class LodestoneScroll extends Scroll {
 		if (!scroll.hasItemMeta()) {
 			return null;
 		}
-		return Util.storage_get_location(scroll.getItemMeta().getPersistentDataContainer(), LODESTONE_LOCATION, null);
+		return StorageUtil.storage_get_location(scroll.getItemMeta().getPersistentDataContainer(), LODESTONE_LOCATION, null);
 	}
 
 	@Override
@@ -112,7 +112,7 @@ public class LodestoneScroll extends Scroll {
 
 		// Save lodestone location
 		item.editMeta(meta -> {
-			Util.storage_set_location(meta.getPersistentDataContainer(), LODESTONE_LOCATION, block.getLocation().add(0.5, 0.5, 0.5));
+			StorageUtil.storage_set_location(meta.getPersistentDataContainer(), LODESTONE_LOCATION, block.getLocation().add(0.5, 0.5, 0.5));
 			meta.lore(List.of(lang_bound_lore
 				.format("§a" + block.getWorld().getName(), "§b" + block.getX(), "§b" + block.getY(), "§b" + block.getZ())
 				.decoration(TextDecoration.ITALIC, false)));

@@ -2,7 +2,7 @@ package org.oddlama.vane.enchantments.enchantments;
 
 import static org.oddlama.vane.util.ItemUtil.damage_item;
 import static org.oddlama.vane.util.PlayerUtil.apply_elytra_boost;
-import static org.oddlama.vane.util.Util.ms_to_ticks;
+import static org.oddlama.vane.util.Conversions.ms_to_ticks;
 
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;

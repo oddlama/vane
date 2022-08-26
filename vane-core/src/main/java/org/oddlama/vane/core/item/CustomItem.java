@@ -16,7 +16,7 @@ import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.core.resourcepack.ResourcePackGenerator;
-import org.oddlama.vane.util.Util;
+import org.oddlama.vane.util.StorageUtil;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -60,7 +60,7 @@ public class CustomItem<T extends Module<T>> extends Listener<T> implements org.
 		context = context.group("item_" + name(), "Enable item " + name());
 		set_context(context);
 
-		this.key = Util.namespaced_key(get_module().namespace(), name());
+		this.key = StorageUtil.namespaced_key(get_module().namespace(), name());
 		recipes = new Recipes<T>(get_context(), this.key, this::default_recipes);
 		loot_tables = new LootTables<T>(get_context(), this.key, this::default_loot_tables);
 

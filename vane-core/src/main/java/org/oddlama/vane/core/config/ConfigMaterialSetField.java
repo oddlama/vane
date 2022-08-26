@@ -1,7 +1,7 @@
 package org.oddlama.vane.core.config;
 
 import static org.oddlama.vane.util.MaterialUtil.material_from;
-import static org.oddlama.vane.util.Util.namespaced_key;
+import static org.oddlama.vane.util.StorageUtil.namespaced_key;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;

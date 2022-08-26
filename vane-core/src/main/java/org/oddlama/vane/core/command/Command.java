@@ -1,6 +1,6 @@
 package org.oddlama.vane.core.command;
 
-import static org.oddlama.vane.util.Util.prepend;
+import static org.oddlama.vane.util.ArrayUtil.prepend;
 
 import java.util.Collections;
 import java.util.List;

@@ -1,6 +1,6 @@
 package org.oddlama.vane.admin.commands;
 
-import static org.oddlama.vane.util.Util.parse_time;
+import static org.oddlama.vane.util.TimeUtil.parse_time;
 
 import org.bukkit.command.CommandSender;
 import org.oddlama.vane.admin.Admin;

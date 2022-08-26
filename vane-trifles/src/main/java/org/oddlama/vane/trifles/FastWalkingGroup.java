@@ -1,6 +1,6 @@
 package org.oddlama.vane.trifles;
 
-import static org.oddlama.vane.util.Util.ms_to_ticks;
+import static org.oddlama.vane.util.Conversions.ms_to_ticks;
 
 import java.util.Set;
 import org.bukkit.Material;

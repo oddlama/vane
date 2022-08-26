@@ -2,7 +2,6 @@ package org.oddlama.vane.portals.portal;
 
 import static org.oddlama.vane.core.persistent.PersistentSerializer.from_json;
 import static org.oddlama.vane.core.persistent.PersistentSerializer.to_json;
-import static org.oddlama.vane.util.Util.namespaced_key;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -11,6 +10,7 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
+import org.oddlama.vane.util.StorageUtil;
 
 public class Style {
 
@@ -76,7 +76,7 @@ public class Style {
 	}
 
 	public static NamespacedKey default_style_key() {
-		return namespaced_key("vane_portals", "portal_style_default");
+		return StorageUtil.namespaced_key("vane_portals", "portal_style_default");
 	}
 
 	public void set_material(boolean active, PortalBlock.Type type, Material material) {

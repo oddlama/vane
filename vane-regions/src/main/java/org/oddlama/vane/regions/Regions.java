@@ -61,7 +61,7 @@ import org.oddlama.vane.regions.region.RegionGroup;
 import org.oddlama.vane.regions.region.RegionSelection;
 import org.oddlama.vane.regions.region.Role;
 import org.oddlama.vane.regions.region.RoleSetting;
-import org.oddlama.vane.util.Util;
+import org.oddlama.vane.util.StorageUtil;
 
 import net.minecraft.core.BlockPos;
 
@@ -703,7 +703,7 @@ public class Regions extends Module<Regions> {
 		update_persistent_data(event.getWorld());
 	}
 
-	public static final NamespacedKey STORAGE_REGIONS = Util.namespaced_key("vane_regions", "regions");
+	public static final NamespacedKey STORAGE_REGIONS = StorageUtil.namespaced_key("vane_regions", "regions");
 
 	public void load_persistent_data(final World world) {
 		final var data = world.getPersistentDataContainer();

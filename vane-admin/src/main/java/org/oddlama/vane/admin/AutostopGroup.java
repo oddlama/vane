@@ -1,7 +1,7 @@
 package org.oddlama.vane.admin;
 
-import static org.oddlama.vane.util.Util.format_time;
-import static org.oddlama.vane.util.Util.ms_to_ticks;
+import static org.oddlama.vane.util.TimeUtil.format_time;
+import static org.oddlama.vane.util.Conversions.ms_to_ticks;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.scheduler.BukkitTask;

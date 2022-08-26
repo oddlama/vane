@@ -1,0 +1,23 @@
+package org.oddlama.vane.util;
+
+import java.io.IOException;
+import java.util.UUID;
+
+public class Resolve {
+	public static class Skin {
+
+		public String texture;
+		public String signature;
+	}
+
+	public static Skin resolve_skin(UUID id) throws IOException {
+		final var url = "https://sessionserver.mojang.com/session/minecraft/profile/" + id + "?unsigned=false";
+
+		final var json = IOUtil.read_json_from_url(url);
+		final var skin = new Skin();
+		final var obj = json.getJSONArray("properties").getJSONObject(0);
+		skin.texture = obj.getString("value");
+		skin.signature = obj.getString("signature");
+		return skin;
+	}
+}
