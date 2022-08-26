@@ -39,6 +39,10 @@ xp_bottles:
 item_empty_xp_bottle:
   name: "Пустая бутылка опыта"
 
+item_north_compass:
+  # FIXME: missing translation
+  name: "North Compass"
+
 item_reinforced_elytra:
   name: "Незеритовая элитра"
 
