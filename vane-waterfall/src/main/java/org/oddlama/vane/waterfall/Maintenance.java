@@ -1,6 +1,6 @@
 package org.oddlama.vane.waterfall;
 
-import static org.oddlama.vane.waterfall.Util.format_time;
+import static org.oddlama.vane.util.TimeUtil.format_time;
 
 import java.io.BufferedReader;
 import java.io.File;
