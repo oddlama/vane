@@ -44,7 +44,6 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.network.protocol.game.ClientboundBlockUpdatePacket;
@@ -143,7 +142,6 @@ public class Trowel extends CustomItem<Trifles> {
 
 		item_stack.lore(lore);
 	}
-
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void on_player_click_inventory(final InventoryClickEvent event) {

@@ -39,6 +39,10 @@ xp_bottles:
 item_empty_xp_bottle:
   name: "Fiole d'Expérience vide"
 
+item_north_compass:
+  # FIXME: missing translation
+  name: "North Compass"
+
 item_reinforced_elytra:
   name: "Élytres en netherite"
 

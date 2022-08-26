@@ -43,6 +43,10 @@ item_empty_xp_bottle:
   # The display name of this item variant.
   name: "Empty Experience Bottle"
 
+item_north_compass:
+  # The display name of this item variant.
+  name: "North Compass"
+
 item_reinforced_elytra:
   # The display name of this item variant.
   name: "Netherite Elytra"

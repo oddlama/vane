@@ -39,6 +39,9 @@ xp_bottles:
 item_empty_xp_bottle:
   name: "Leere Erfahrungsflasche"
 
+item_north_compass:
+  name: "Nordkompass"
+
 item_reinforced_elytra:
   name: "Netherit Elytren"
 
