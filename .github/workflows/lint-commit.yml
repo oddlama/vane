@@ -1,0 +1,58 @@
+name: Lint commit messages
+
+on: pull_request_target
+
+jobs:
+  lint_commits:
+    runs-on: ubuntu-latest
+    if: always() && github.repository == 'oddlama/vane'
+
+    steps:
+      - uses: actions/checkout@v2.3.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - uses: actions/setup-node@v3.4.1
+        with:
+          node-version: 16
+      - run: |
+          # Setup commitlint
+          yarn add @commitlint/{config-conventional,cli} >> /dev/null 2>&1
+          echo "module.exports = {extends: ['@commitlint/config-conventional']}" > commitlint.config.js
+          
+          # Get the PR commits
+          FIRST_COMMIT_SHA=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" ${{ github.event.pull_request.commits_url }} | jq -r '.[0].sha')
+          commit_log=$(git log $FIRST_COMMIT_SHA^...HEAD --pretty=format:"%s")
+          readarray -t commits <<<"$commit_log"
+          
+          errors=()
+          for commit in "${commits[@]}"; do
+            if ! echo $commit | yarn -s run commitlint -q; then
+              errors+=( "$commit" )
+            fi
+          done
+          
+          if (( ${#errors[@]} )); then
+            printf "One or more of the commits in this PR do not follow the Conventional Commits style:\n\n"
+            
+            for error in "${errors[@]}"; do
+              echo "$error"
+            done
+            
+            echo "CONTAINS_ERRORS=1" >> $GITHUB_ENV
+            exit 1
+          else
+            exit 0
+          fi
+
+      - name: Comment on PR
+        if: ${{ failure() && env.CONTAINS_ERRORS == '1' && !github.event.pull_request.draft }}
+        uses: thollander/actions-comment-pull-request@v1
+        with:
+          message: |
+            Hello!
+            
+            One or more of the commits in this PR do not follow the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) style. See the `lint_commits` job for more details. Please modify your commit message(s) with [git commit --amend](https://docs.github.com/en/pull-requests/committing-changes-to-your-project/creating-and-editing-commits/changing-a-commit-message) and force push those changes to update this PR.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
