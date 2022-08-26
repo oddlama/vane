@@ -20,4 +20,16 @@ public class Resolve {
 		skin.signature = obj.getString("signature");
 		return skin;
 	}
+
+	public static UUID resolve_uuid(String name) throws IOException {
+		final var url = "https://api.mojang.com/users/profiles/minecraft/" + name;
+
+		final var json = IOUtil.read_json_from_url(url);
+		final var id_str = json.getString("id");
+		final var uuid_str = id_str.replaceFirst(
+				"(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)",
+				"$1-$2-$3-$4-$5"
+		);
+		return UUID.fromString(uuid_str);
+	}
 }
