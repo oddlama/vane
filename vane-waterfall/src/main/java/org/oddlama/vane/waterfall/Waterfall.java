@@ -1,7 +1,7 @@
 package org.oddlama.vane.waterfall;
 
 import static org.oddlama.vane.waterfall.Util.add_uuid;
-import static org.oddlama.vane.waterfall.Util.resolve_uuid;
+import static org.oddlama.vane.util.Resolve.resolve_uuid;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;

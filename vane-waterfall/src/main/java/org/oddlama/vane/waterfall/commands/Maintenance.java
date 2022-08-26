@@ -1,6 +1,6 @@
 package org.oddlama.vane.waterfall.commands;
 
-import static org.oddlama.vane.waterfall.Util.parse_time;
+import static org.oddlama.vane.util.TimeUtil.parse_time;
 
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
