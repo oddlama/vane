@@ -1,7 +1,7 @@
 package org.oddlama.vane.core.material;
 
 import static org.oddlama.vane.util.ItemUtil.skull_with_texture;
-import static org.oddlama.vane.util.Util.namespaced_key;
+import static org.oddlama.vane.util.StorageUtil.namespaced_key;
 
 import java.util.ArrayList;
 import java.util.HashSet;

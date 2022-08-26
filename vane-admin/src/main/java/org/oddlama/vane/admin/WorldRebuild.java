@@ -1,7 +1,7 @@
 package org.oddlama.vane.admin;
 
 import static org.oddlama.vane.util.Nms.set_air_no_drops;
-import static org.oddlama.vane.util.Util.ms_to_ticks;
+import static org.oddlama.vane.util.Conversions.ms_to_ticks;
 
 import java.util.ArrayList;
 import java.util.Comparator;

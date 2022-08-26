@@ -2,7 +2,7 @@ package org.oddlama.vane.trifles.items;
 
 import static org.oddlama.vane.util.ItemUtil.damage_item;
 import static org.oddlama.vane.util.PlayerUtil.swing_arm;
-import static org.oddlama.vane.util.Util.ms_to_ticks;
+import static org.oddlama.vane.util.Conversions.ms_to_ticks;
 
 import java.util.HashSet;
 import java.util.Set;

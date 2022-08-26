@@ -7,11 +7,11 @@ import org.oddlama.vane.trifles.Trifles;
 import org.oddlama.vane.annotation.command.Name;
 import org.oddlama.vane.core.command.Command;
 import org.oddlama.vane.core.module.Context;
-import org.oddlama.vane.util.Util;
+import org.oddlama.vane.util.StorageUtil;
 
 @Name("setspawn")
 public class Setspawn extends Command<Trifles> {
-	public static final NamespacedKey IS_SPAWN_WORLD = Util.namespaced_key("vane", "is_spawn_world");
+	public static final NamespacedKey IS_SPAWN_WORLD = StorageUtil.namespaced_key("vane", "is_spawn_world");
 
 	public Setspawn(Context<Trifles> context) {
 		super(context);

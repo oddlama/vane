@@ -5,8 +5,7 @@ import static org.oddlama.vane.util.ItemUtil.name_item;
 import static org.oddlama.vane.util.Nms.item_handle;
 import static org.oddlama.vane.util.Nms.register_entity;
 import static org.oddlama.vane.util.Nms.spawn;
-import static org.oddlama.vane.util.Util.ms_to_ticks;
-import static org.oddlama.vane.util.Util.namespaced_key;
+import static org.oddlama.vane.util.Conversions.ms_to_ticks;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -75,6 +74,7 @@ import org.oddlama.vane.portals.portal.Style;
 import net.kyori.adventure.text.Component;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
+import org.oddlama.vane.util.StorageUtil;
 
 @VaneModule(name = "portals", bstats = 8642, config_version = 3, lang_version = 5, storage_version = 2)
 public class Portals extends Module<Portals> {
@@ -309,7 +309,7 @@ public class Portals extends Module<Portals> {
 				throw new RuntimeException("Invalid style key: '" + style_key + "' is not a valid namespaced key");
 			}
 
-			final var style = new Style(namespaced_key(split[0], split[1]));
+			final var style = new Style(StorageUtil.namespaced_key(split[0], split[1]));
 			v1.forEach((is_active, v2) -> {
 				final boolean active;
 				switch (is_active) {
@@ -957,7 +957,7 @@ public class Portals extends Module<Portals> {
 		}
 	}
 
-	public static final NamespacedKey STORAGE_PORTALS = namespaced_key("vane_portals", "portals");
+	public static final NamespacedKey STORAGE_PORTALS = StorageUtil.namespaced_key("vane_portals", "portals");
 
 	public void load_persistent_data(final World world) {
 		final var data = world.getPersistentDataContainer();

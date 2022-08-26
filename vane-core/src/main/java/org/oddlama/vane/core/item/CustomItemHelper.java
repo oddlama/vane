@@ -8,13 +8,13 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.oddlama.vane.core.Core;
 import org.oddlama.vane.core.item.api.CustomItem;
-import org.oddlama.vane.util.Util;
+import org.oddlama.vane.util.StorageUtil;
 
 public class CustomItemHelper {
 	/** Used in persistent item storage to identify custom items. */
-	public static final NamespacedKey CUSTOM_ITEM_IDENTIFIER = Util.namespaced_key("vane", "custom_item_identifier");
+	public static final NamespacedKey CUSTOM_ITEM_IDENTIFIER = StorageUtil.namespaced_key("vane", "custom_item_identifier");
 	/** Used in persistent item storage to store custom item version. */
-	public static final NamespacedKey CUSTOM_ITEM_VERSION = Util.namespaced_key("vane", "custom_item_version");
+	public static final NamespacedKey CUSTOM_ITEM_VERSION = StorageUtil.namespaced_key("vane", "custom_item_version");
 
 	/**
 	 * Internal function. Used as a dispatcher to update internal information and then call
@@ -53,7 +53,7 @@ public class CustomItemHelper {
 		if (parts.length != 2) {
 			throw new IllegalStateException("Invalid namespaced key '" + key + "'");
 		}
-		return Pair.of(Util.namespaced_key(parts[0], parts[1]), version);
+		return Pair.of(StorageUtil.namespaced_key(parts[0], parts[1]), version);
 	}
 
 	/**

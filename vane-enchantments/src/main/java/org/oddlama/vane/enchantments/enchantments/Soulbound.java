@@ -25,7 +25,7 @@ import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.enchantments.CustomEnchantment;
 import org.oddlama.vane.enchantments.Enchantments;
-import org.oddlama.vane.util.Util;
+import org.oddlama.vane.util.StorageUtil;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -40,7 +40,7 @@ public class Soulbound extends CustomEnchantment<Enchantments> {
 	)
 	public long config_cooldown;
 
-	private static final NamespacedKey IGNORE_SOULBOUND_DROP = Util.namespaced_key(
+	private static final NamespacedKey IGNORE_SOULBOUND_DROP = StorageUtil.namespaced_key(
 		"vane_enchantments",
 		"ignore_soulbound_drop"
 	);

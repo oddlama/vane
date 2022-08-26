@@ -20,7 +20,7 @@ import org.oddlama.vane.regions.Regions;
 import org.oddlama.vane.regions.region.EnvironmentSetting;
 import org.oddlama.vane.regions.region.RegionGroup;
 import org.oddlama.vane.regions.region.Role;
-import org.oddlama.vane.util.Util;
+import org.oddlama.vane.util.StorageUtil;
 
 public class RegionGroupMenu extends ModuleComponent<Regions> {
 
@@ -63,7 +63,7 @@ public class RegionGroupMenu extends ModuleComponent<Regions> {
 			new TranslatedItemStack<>(
 				ctx,
 				"delete",
-				Util.namespaced_key("vane", "decoration_tnt_1"),
+				StorageUtil.namespaced_key("vane", "decoration_tnt_1"),
 				1,
 				"Used to delete this region group."
 			);
@@ -71,7 +71,7 @@ public class RegionGroupMenu extends ModuleComponent<Regions> {
 			new TranslatedItemStack<>(
 				ctx,
 				"delete_confirm_accept",
-				Util.namespaced_key("vane", "decoration_tnt_1"),
+				StorageUtil.namespaced_key("vane", "decoration_tnt_1"),
 				1,
 				"Used to confirm deleting the region group."
 			);
@@ -122,7 +122,7 @@ public class RegionGroupMenu extends ModuleComponent<Regions> {
 			new TranslatedItemStack<>(
 				ctx,
 				"setting_info_animals",
-				Util.namespaced_key("vane", "animals_baby_pig_2"),
+				StorageUtil.namespaced_key("vane", "animals_baby_pig_2"),
 				1,
 				"Used to represent the info for the animals setting."
 			);
@@ -138,7 +138,7 @@ public class RegionGroupMenu extends ModuleComponent<Regions> {
 			new TranslatedItemStack<>(
 				ctx,
 				"setting_info_explosions",
-				Util.namespaced_key("vane", "monsters_creeper_with_tnt_2"),
+				StorageUtil.namespaced_key("vane", "monsters_creeper_with_tnt_2"),
 				1,
 				"Used to represent the info for the explosions setting."
 			);

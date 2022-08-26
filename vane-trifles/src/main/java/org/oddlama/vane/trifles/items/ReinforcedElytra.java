@@ -18,7 +18,7 @@ import org.oddlama.vane.core.item.api.InhibitBehavior;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.resourcepack.ResourcePackGenerator;
 import org.oddlama.vane.trifles.Trifles;
-import org.oddlama.vane.util.Util;
+import org.oddlama.vane.util.StorageUtil;
 
 @VaneItem(name = "reinforced_elytra", base = Material.ELYTRA, durability = 864, model_data = 0x760002, version = 1)
 public class ReinforcedElytra extends CustomItem<Trifles> {
@@ -68,7 +68,7 @@ public class ReinforcedElytra extends CustomItem<Trifles> {
 			throw new RuntimeException("Missing resource '" + broken_resource_name + "'. This is a bug.");
 		}
 
-		final var key_broken = Util.subkey(key(), "broken");
+		final var key_broken = StorageUtil.subkey(key(), "broken");
 		rp.add_item_model(key_broken, broken_resource);
 		rp.add_item_override(baseMaterial().getKey(), key_broken, predicate -> {
 			predicate.put("custom_model_data", customModelData());
