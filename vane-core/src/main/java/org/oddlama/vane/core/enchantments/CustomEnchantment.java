@@ -22,7 +22,7 @@ import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.util.Nms;
-import org.oddlama.vane.util.Util;
+import org.oddlama.vane.util.StorageUtil;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -59,7 +59,7 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 		set_context(context);
 
 		// Create namespaced key
-		key = Util.namespaced_key(get_module().namespace(), name);
+		key = StorageUtil.namespaced_key(get_module().namespace(), name);
 
 		// Check if instance is already exists
 		if (instances.get(getClass()) != null) {

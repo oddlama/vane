@@ -3,7 +3,7 @@ package org.oddlama.vane.trifles.items;
 import static org.oddlama.vane.util.PlayerUtil.give_item;
 import static org.oddlama.vane.util.PlayerUtil.remove_one_item_from_hand;
 import static org.oddlama.vane.util.PlayerUtil.swing_arm;
-import static org.oddlama.vane.util.Util.exp_for_level;
+import static org.oddlama.vane.util.Conversions.exp_for_level;
 
 import java.util.EnumSet;
 

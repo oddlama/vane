@@ -25,13 +25,13 @@ import org.oddlama.vane.core.Core;
 import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.util.ItemUtil;
-import org.oddlama.vane.util.Util;
+import org.oddlama.vane.util.StorageUtil;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TranslatableComponent;
 
 public class EnchantmentManager extends Listener<Core> {
-	private static final NamespacedKey SENTINEL = Util.namespaced_key("vane", "enchantment_lore");
+	private static final NamespacedKey SENTINEL = StorageUtil.namespaced_key("vane", "enchantment_lore");
 
 	public EnchantmentManager(Context<Core> context) {
 		super(context);

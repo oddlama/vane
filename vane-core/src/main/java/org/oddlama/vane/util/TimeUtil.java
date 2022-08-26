@@ -1,21 +1,9 @@
-package org.oddlama.vane.waterfall;
+package org.oddlama.vane.util;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
-public class Util {
-
-
+public class TimeUtil {
 	private static Map<Character, Long> time_multiplier;
 
 	static {
@@ -75,46 +63,5 @@ public class Util {
 		}
 
 		return ret;
-	}
-
-	private static String read_all(Reader rd) throws IOException {
-		final var sb = new StringBuilder();
-		int cp;
-		while ((cp = rd.read()) != -1) {
-			sb.append((char) cp);
-		}
-		return sb.toString();
-	}
-
-	public static JSONObject read_json_from_url(String url) throws IOException, JSONException {
-		try (
-				final var rd = new BufferedReader(new InputStreamReader(new URL(url).openStream(), StandardCharsets.UTF_8))
-		) {
-			return new JSONObject(read_all(rd));
-		}
-	}
-
-	public static UUID resolve_uuid(String name) throws IOException {
-		final var url = "https://api.mojang.com/users/profiles/minecraft/" + name;
-
-		final var json = read_json_from_url(url);
-		final var id_str = json.getString("id");
-		final var uuid_str = id_str.replaceFirst(
-				"(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)",
-				"$1-$2-$3-$4-$5"
-		);
-		return UUID.fromString(uuid_str);
-	}
-
-	public static UUID add_uuid(UUID uuid, long i) {
-		var msb = uuid.getMostSignificantBits();
-		var lsb = uuid.getLeastSignificantBits();
-
-		lsb += i;
-		if (lsb < uuid.getLeastSignificantBits()) {
-			++msb;
-		}
-
-		return new UUID(msb, lsb);
 	}
 }

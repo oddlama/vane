@@ -14,27 +14,27 @@ import net.md_5.bungee.api.scheduler.ScheduledTask;
 
 public class Maintenance {
 
-	public static long SHUTDOWN_THRESHOLD = 10000l; // MESSAGE_SHUTDOWN if <= 10 seconds
+	public static long SHUTDOWN_THRESHOLD = 10000L; // MESSAGE_SHUTDOWN if <= 10 seconds
 	public static final long[] NOTIFY_TIMES = {
-		240 * 60000l,
-		180 * 60000l,
-		120 * 60000l,
-		60 * 60000l,
-		30 * 60000l,
-		15 * 60000l,
-		10 * 60000l,
-		5 * 60000l,
-		4 * 60000l,
-		3 * 60000l,
-		2 * 60000l,
-		60000l,
-		30000l,
-		10000l,
-		5000l,
-		4000l,
-		3000l,
-		2000l,
-		1000l,
+		240 * 60000L,
+		180 * 60000L,
+		120 * 60000L,
+		60 * 60000L,
+		30 * 60000L,
+		15 * 60000L,
+		10 * 60000L,
+		5 * 60000L,
+		4 * 60000L,
+		3 * 60000L,
+		2 * 60000L,
+			60000L,
+			30000L,
+			10000L,
+			5000L,
+			4000L,
+			3000L,
+			2000L,
+			1000L,
 	};
 
 	public static String MESSAGE_ABORTED = "§7> §cServerwartung §l§6ABGEBROCHEN§r§c!";

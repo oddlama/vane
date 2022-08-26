@@ -21,7 +21,7 @@ import org.oddlama.vane.core.config.recipes.ShapedRecipeDefinition;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.enchantments.CustomEnchantment;
 import org.oddlama.vane.enchantments.Enchantments;
-import org.oddlama.vane.util.Util;
+import org.oddlama.vane.util.StorageUtil;
 
 @VaneEnchantment(name = "angel", max_level = 5, rarity = Rarity.VERY_RARE, treasure = true, allow_custom = true)
 public class Angel extends CustomEnchantment<Enchantments> {
@@ -43,7 +43,7 @@ public class Angel extends CustomEnchantment<Enchantments> {
 
 	public Angel(Context<Enchantments> context) {
 		super(context);
-		supersedes(Util.namespaced_key("vane_enchantments", "wings"));
+		supersedes(StorageUtil.namespaced_key("vane_enchantments", "wings"));
 	}
 
 	@Override

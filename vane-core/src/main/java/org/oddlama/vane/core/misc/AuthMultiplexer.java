@@ -1,6 +1,6 @@
 package org.oddlama.vane.core.misc;
 
-import static org.oddlama.vane.util.Util.resolve_skin;
+import static org.oddlama.vane.util.Resolve.resolve_skin;
 
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
@@ -8,9 +8,11 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.logging.Level;
 
 import com.destroystokyo.paper.profile.ProfileProperty;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -22,6 +24,7 @@ import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.module.Context;
 
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import org.oddlama.vane.util.Resolve;
 
 public class AuthMultiplexer extends Listener<Core> implements PluginMessageListener {
 	// Channel for proxy messages to multiplex connections
@@ -86,7 +89,14 @@ public class AuthMultiplexer extends Listener<Core> implements PluginMessageList
 		player.playerListName(display_name_component);
 
 		final var original_player_id = storage_auth_multiplex.get(id);
-		final var skin = resolve_skin(original_player_id);
+		Resolve.Skin skin;
+		try {
+			skin = resolve_skin(original_player_id);
+		} catch (IOException e) {
+			Bukkit.getLogger().log(Level.WARNING, "Failed to resolve skin for uuid '" + id + "'", e);
+			return;
+		}
+
 		final var profile = player.getPlayerProfile();
 		profile.setProperty(new ProfileProperty("textures", skin.texture, skin.signature));
 		player.setPlayerProfile(profile);

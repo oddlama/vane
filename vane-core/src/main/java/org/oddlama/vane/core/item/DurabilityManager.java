@@ -16,15 +16,15 @@ import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.item.api.CustomItem;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.util.ItemUtil;
-import org.oddlama.vane.util.Util;
+import org.oddlama.vane.util.StorageUtil;
 
 import net.kyori.adventure.text.Component;
 
 public class DurabilityManager extends Listener<Core> {
-	public static final NamespacedKey ITEM_DURABILITY_MAX = Util.namespaced_key("vane", "durability.max");
-	public static final NamespacedKey ITEM_DURABILITY_DAMAGE = Util.namespaced_key("vane", "durability.damage");
+	public static final NamespacedKey ITEM_DURABILITY_MAX = StorageUtil.namespaced_key("vane", "durability.max");
+	public static final NamespacedKey ITEM_DURABILITY_DAMAGE = StorageUtil.namespaced_key("vane", "durability.damage");
 
-	private static final NamespacedKey SENTINEL = Util.namespaced_key("vane", "durability_override_lore");
+	private static final NamespacedKey SENTINEL = StorageUtil.namespaced_key("vane", "durability_override_lore");
 
 	public DurabilityManager(final Context<Core> context) {
 		super(context);

@@ -22,7 +22,7 @@ import org.oddlama.vane.regions.region.RegionGroup;
 import org.oddlama.vane.regions.region.Role;
 import org.oddlama.vane.regions.region.RoleSetting;
 import org.oddlama.vane.util.ItemUtil;
-import org.oddlama.vane.util.Util;
+import org.oddlama.vane.util.StorageUtil;
 
 public class RoleMenu extends ModuleComponent<Regions> {
 
@@ -65,7 +65,7 @@ public class RoleMenu extends ModuleComponent<Regions> {
 			new TranslatedItemStack<>(
 				ctx,
 				"delete",
-				Util.namespaced_key("vane", "decoration_tnt_1"),
+				StorageUtil.namespaced_key("vane", "decoration_tnt_1"),
 				1,
 				"Used to delete this role."
 			);
@@ -73,7 +73,7 @@ public class RoleMenu extends ModuleComponent<Regions> {
 			new TranslatedItemStack<>(
 				ctx,
 				"delete_confirm_accept",
-				Util.namespaced_key("vane", "decoration_tnt_1"),
+				StorageUtil.namespaced_key("vane", "decoration_tnt_1"),
 				1,
 				"Used to confirm deleting the role."
 			);

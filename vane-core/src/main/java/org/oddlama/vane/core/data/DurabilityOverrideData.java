@@ -18,7 +18,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.Nullable;
-import org.oddlama.vane.util.Util;
+import org.oddlama.vane.util.StorageUtil;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
@@ -57,8 +57,8 @@ public class DurabilityOverrideData {
 		this(
 			max_durability,
 			tooltip,
-			Util.namespaced_key("vane", "durability.max"),
-			Util.namespaced_key("vane", "durability.damage")
+			StorageUtil.namespaced_key("vane", "durability.max"),
+			StorageUtil.namespaced_key("vane", "durability.damage")
 		);
 	}
 

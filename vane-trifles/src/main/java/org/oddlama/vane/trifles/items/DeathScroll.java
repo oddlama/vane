@@ -19,12 +19,12 @@ import org.oddlama.vane.core.item.api.InhibitBehavior;
 import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.trifles.Trifles;
-import org.oddlama.vane.util.Util;
+import org.oddlama.vane.util.StorageUtil;
 
 @VaneItem(name = "death_scroll", base = Material.WARPED_FUNGUS_ON_A_STICK, durability = 2, model_data = 0x760012, version = 1)
 public class DeathScroll extends Scroll {
-	public static final NamespacedKey RECENT_DEATH_LOCATION = Util.namespaced_key("vane", "recent_death_location");
-	public static final NamespacedKey RECENT_DEATH_TIME = Util.namespaced_key("vane", "recent_death_time");
+	public static final NamespacedKey RECENT_DEATH_LOCATION = StorageUtil.namespaced_key("vane", "recent_death_location");
+	public static final NamespacedKey RECENT_DEATH_TIME = StorageUtil.namespaced_key("vane", "recent_death_time");
 
 	@LangMessage
 	public TranslatedMessage lang_teleport_no_recent_death;
@@ -58,7 +58,7 @@ public class DeathScroll extends Scroll {
 	public Location teleport_location(final ItemStack scroll, Player player, boolean imminent_teleport) {
 		final var pdc = player.getPersistentDataContainer();
 		final var time = pdc.getOrDefault(RECENT_DEATH_TIME, PersistentDataType.LONG, 0l);
-		var loc = Util.storage_get_location(player.getPersistentDataContainer(), RECENT_DEATH_LOCATION, null);
+		var loc = StorageUtil.storage_get_location(player.getPersistentDataContainer(), RECENT_DEATH_LOCATION, null);
 
 		// Only recent deaths up to 20 minutes ago
 		if (System.currentTimeMillis() - time > 20 * 60 * 1000l) {
@@ -71,7 +71,7 @@ public class DeathScroll extends Scroll {
 			} else {
 				// Only once
 				pdc.remove(RECENT_DEATH_TIME);
-				Util.storage_remove_location(pdc, RECENT_DEATH_LOCATION);
+				StorageUtil.storage_remove_location(pdc, RECENT_DEATH_LOCATION);
 			}
 		}
 
@@ -81,7 +81,7 @@ public class DeathScroll extends Scroll {
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void on_player_death(final PlayerDeathEvent event) {
 		final var pdc = event.getPlayer().getPersistentDataContainer();
-		Util.storage_set_location(pdc, RECENT_DEATH_LOCATION, event.getPlayer().getLocation());
+		StorageUtil.storage_set_location(pdc, RECENT_DEATH_LOCATION, event.getPlayer().getLocation());
 		pdc.set(RECENT_DEATH_TIME, PersistentDataType.LONG, System.currentTimeMillis());
 	}
 }
