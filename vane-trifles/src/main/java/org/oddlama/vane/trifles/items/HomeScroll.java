@@ -22,13 +22,12 @@ public class HomeScroll extends Scroll {
 	@Override
 	public RecipeList default_recipes() {
 		return RecipeList.of(new ShapedRecipeDefinition("generic")
-			.shape("pip", "cbe", "plp")
-			.set_ingredient('b', Material.NETHERITE_SCRAP)
-			.set_ingredient('p', Material.MAP)
-			.set_ingredient('i', Tag.BEDS)
-			.set_ingredient('c', Material.COMPASS)
+			.shape("abc", "epe")
+			.set_ingredient('p', "vane_trifles:papyrus_scroll")
 			.set_ingredient('e', Material.ENDER_PEARL)
-			.set_ingredient('l', Material.CLOCK)
+			.set_ingredient('a', Material.CAMPFIRE)
+			.set_ingredient('b', Material.GOAT_HORN)
+			.set_ingredient('c', Tag.BEDS)
 			.result(key().toString()));
 	}
 

@@ -2,6 +2,7 @@ package org.oddlama.vane.trifles.items;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Tag;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
@@ -21,13 +22,11 @@ public class SpawnScroll extends Scroll {
 	@Override
 	public RecipeList default_recipes() {
 		return RecipeList.of(new ShapedRecipeDefinition("generic")
-			.shape("pip", "cbe", "plp")
-			.set_ingredient('b', Material.NETHERITE_SCRAP)
-			.set_ingredient('p', Material.MAP)
-			.set_ingredient('i', Material.CHORUS_FRUIT)
-			.set_ingredient('c', Material.OAK_SAPLING)
+			.shape("aba", "epe")
+			.set_ingredient('p', "vane_trifles:papyrus_scroll")
 			.set_ingredient('e', Material.ENDER_PEARL)
-			.set_ingredient('l', Material.EGG)
+			.set_ingredient('a', Material.WHEAT_SEEDS)
+			.set_ingredient('b', Tag.SAPLINGS)
 			.result(key().toString()));
 	}
 

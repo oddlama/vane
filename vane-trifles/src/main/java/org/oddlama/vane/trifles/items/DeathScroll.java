@@ -36,13 +36,11 @@ public class DeathScroll extends Scroll {
 	@Override
 	public RecipeList default_recipes() {
 		return RecipeList.of(new ShapedRecipeDefinition("generic")
-			.shape("pip", "cbe", "plp")
-			.set_ingredient('b', Material.NETHERITE_SCRAP)
-			.set_ingredient('p', Material.MAP)
-			.set_ingredient('i', Material.CHORUS_FRUIT)
-			.set_ingredient('c', Material.RECOVERY_COMPASS)
+			.shape("aba", "epe")
+			.set_ingredient('p', "vane_trifles:papyrus_scroll")
 			.set_ingredient('e', Material.ENDER_PEARL)
-			.set_ingredient('l', Material.CLOCK)
+			.set_ingredient('a', Material.BONE)
+			.set_ingredient('b', Material.RECOVERY_COMPASS)
 			.result(key().toString()));
 	}
 
