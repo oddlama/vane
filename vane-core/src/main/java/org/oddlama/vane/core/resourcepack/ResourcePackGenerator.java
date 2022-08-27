@@ -14,6 +14,8 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
+
+import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.NamespacedKey;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -24,7 +26,7 @@ public class ResourcePackGenerator {
 	private byte[] icon_png_content = null;
 	private Map<String, Map<String, JSONObject>> translations = new HashMap<>();
 	private Map<NamespacedKey, List<JSONObject>> item_overrides = new HashMap<>();
-	private Map<NamespacedKey, byte[]> item_textures = new HashMap<>();
+	private Map<NamespacedKey, Pair<byte[], byte[]>> item_textures = new HashMap<>();
 
 	public void set_description(String description) {
 		this.description = description;
@@ -53,7 +55,11 @@ public class ResourcePackGenerator {
 	}
 
 	public void add_item_model(NamespacedKey key, InputStream texture_png) throws IOException {
-		item_textures.put(key, texture_png.readAllBytes());
+		item_textures.put(key, Pair.of(texture_png.readAllBytes(), null));
+	}
+
+	public void add_item_model(NamespacedKey key, InputStream texture_png, InputStream texture_png_mcmeta) throws IOException {
+		item_textures.put(key, Pair.of(texture_png.readAllBytes(), texture_png_mcmeta.readAllBytes()));
 	}
 
 	public void add_item_override(
@@ -121,12 +127,20 @@ public class ResourcePackGenerator {
 	private void write_item_models(final ZipOutputStream zip) throws IOException {
 		for (var entry : item_textures.entrySet()) {
 			final var key = entry.getKey();
-			final var texture = entry.getValue();
+			final var texture_png = entry.getValue().getLeft();
+			final var texture_png_mcmeta = entry.getValue().getRight();
 
 			// Write texture
 			zip.putNextEntry(new ZipEntry("assets/" + key.getNamespace() + "/textures/item/" + key.getKey() + ".png"));
-			zip.write(texture);
+			zip.write(texture_png);
 			zip.closeEntry();
+
+			// Write mcmeta if given
+			if (texture_png_mcmeta != null) {
+				zip.putNextEntry(new ZipEntry("assets/" + key.getNamespace() + "/textures/item/" + key.getKey() + ".png.mcmeta"));
+				zip.write(texture_png_mcmeta);
+				zip.closeEntry();
+			}
 
 			// Write model json
 			final var model = create_item_model_handheld(key);

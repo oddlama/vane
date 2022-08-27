@@ -1,7 +1,7 @@
 ```toml
 title = "Trowel"
 module = "vane-trifles"
-itemlike = "vane-trifles:trowel"
+itemlike = "vane-trifles:item_trowel"
 ```
 ---
 ![](assets/gifs/trowel.mp4)

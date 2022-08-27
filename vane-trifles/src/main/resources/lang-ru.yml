@@ -55,6 +55,10 @@ item_reinforced_elytra:
 item_file:
   name: "Напильник"
 
+item_slime_bucket:
+  # FIXME: missing translation
+  name: "Slime in a Bucket"
+
 item_papyrus_scroll:
   # FIXME: missing translations
   name: "Papyrus Scroll"
