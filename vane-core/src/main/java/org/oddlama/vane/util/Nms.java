@@ -1,8 +1,23 @@
 package org.oddlama.vane.util;
 
+import java.util.Map;
+
 import com.mojang.datafixers.DataFixUtils;
 import com.mojang.datafixers.types.Type;
-import java.util.Map;
+
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.craftbukkit.v1_19_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_19_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_19_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_19_R1.util.CraftNamespacedKey;
+import org.bukkit.enchantments.EnchantmentTarget;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+
 import net.minecraft.SharedConstants;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
@@ -19,18 +34,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.craftbukkit.v1_19_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_19_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_19_R1.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack;
-import org.bukkit.craftbukkit.v1_19_R1.util.CraftNamespacedKey;
-import org.bukkit.enchantments.EnchantmentTarget;
-import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
 public class Nms {
 
@@ -39,7 +42,7 @@ public class Nms {
 	}
 
 	public static Entity entity_handle(final org.bukkit.entity.Entity entity) {
-		return ((CraftEntity)entity).getHandle();
+		return ((CraftEntity) entity).getHandle();
 	}
 
 	public static void register_enchantment(NamespacedKey key, Enchantment enchantment) {
@@ -127,21 +130,22 @@ public class Nms {
 
 	@SuppressWarnings({ "unchecked", "deprecation" })
 	public static void register_entity(
-		final NamespacedKey base_entity_type,
-		final String pseudo_namespace,
-		final String key,
-		final EntityType.Builder<?> builder
-	) {
+			final NamespacedKey base_entity_type,
+			final String pseudo_namespace,
+			final String key,
+			final EntityType.Builder<?> builder) {
 		final var id = pseudo_namespace + "_" + key;
-		// From: https://papermc.io/forums/t/register-and-spawn-a-custom-entity-on-1-13-x/293, adapted for 1.18
+		// From:
+		// https://papermc.io/forums/t/register-and-spawn-a-custom-entity-on-1-13-x/293,
+		// adapted for 1.18
 		// Get the datafixer
 		final var world_version = SharedConstants.getCurrentVersion().getWorldVersion();
 		final var world_version_key = DataFixUtils.makeKey(world_version);
 		final var data_types = DataFixers
-			.getDataFixer()
-			.getSchema(world_version_key)
-			.findChoiceType(References.ENTITY)
-			.types();
+				.getDataFixer()
+				.getSchema(world_version_key)
+				.findChoiceType(References.ENTITY)
+				.types();
 		final var data_types_map = (Map<Object, Type<?>>) data_types;
 		// Inject the new custom entity (this registers the key/id with the server,
 		// so it will be available in vanilla constructs like the /summon command)
@@ -166,7 +170,7 @@ public class Nms {
 
 	public static void set_air_no_drops(final org.bukkit.block.Block block) {
 		final var entity = world_handle(block.getWorld())
-			.getBlockEntity(new BlockPos(block.getX(), block.getY(), block.getZ()));
+				.getBlockEntity(new BlockPos(block.getX(), block.getY(), block.getZ()));
 		Clearable.tryClear(entity);
 		block.setType(Material.AIR, false);
 	}

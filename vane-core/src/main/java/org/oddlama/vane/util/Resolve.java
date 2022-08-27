@@ -28,8 +28,7 @@ public class Resolve {
 		final var id_str = json.getString("id");
 		final var uuid_str = id_str.replaceFirst(
 				"(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)",
-				"$1-$2-$3-$4-$5"
-		);
+				"$1-$2-$3-$4-$5");
 		return UUID.fromString(uuid_str);
 	}
 }

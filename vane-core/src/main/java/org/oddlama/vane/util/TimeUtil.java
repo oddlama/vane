@@ -8,12 +8,12 @@ public class TimeUtil {
 
 	static {
 		Map<Character, Long> mult = new HashMap<>();
-		mult.put('s', 1000L); //seconds
-		mult.put('m', 60000L); //minutes
-		mult.put('h', 3600000L); //hours
-		mult.put('d', 86400000L); //days
-		mult.put('w', 604800000L); //weeks
-		mult.put('y', 31536000000L); //years
+		mult.put('s', 1000L); // seconds
+		mult.put('m', 60000L); // minutes
+		mult.put('h', 3600000L); // hours
+		mult.put('d', 86400000L); // days
+		mult.put('w', 604800000L); // weeks
+		mult.put('y', 31536000000L); // years
 		time_multiplier = mult;
 	}
 

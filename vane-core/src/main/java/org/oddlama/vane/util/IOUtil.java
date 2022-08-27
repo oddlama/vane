@@ -21,9 +21,8 @@ public class IOUtil {
 	}
 
 	public static JSONObject read_json_from_url(String url) throws IOException, JSONException {
-		try (
-				final var rd = new BufferedReader(new InputStreamReader(new URL(url).openStream(), StandardCharsets.UTF_8))
-		) {
+		try (final var rd = new BufferedReader(
+				new InputStreamReader(new URL(url).openStream(), StandardCharsets.UTF_8))) {
 			return new JSONObject(read_all(rd));
 		}
 	}
