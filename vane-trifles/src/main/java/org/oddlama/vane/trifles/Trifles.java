@@ -36,5 +36,6 @@ public class Trifles extends Module<Trifles> {
 		xp_bottles = new org.oddlama.vane.trifles.items.XpBottles(this);
 		new org.oddlama.vane.trifles.items.Trowel(this);
 		new org.oddlama.vane.trifles.items.NorthCompass(this);
+		new org.oddlama.vane.trifles.items.SlimeBucket(this);
 	}
 }

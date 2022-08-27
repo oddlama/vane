@@ -79,6 +79,7 @@ I would like to thank the following projects and people maintaining them:
 - [ProtocolLib](https://github.com/dmulloy2/ProtocolLib) for the awesome protocol layer library.
 - [DynmapCoreAPI](https://github.com/webbukkit/DynmapCoreAPI) (Apache-2.0), dynmap integration
 - [BlueMapAPI](https://github.com/BlueMap-Minecraft/BlueMapAPI) (MIT), [BlueMap](https://bluemap.bluecolored.de/) integration
+- [Quark](https://quarkmod.net) (CC-BY-NC-SA 3.0) Assets and texts for the Slime Bucket
 
 #### Included software
 

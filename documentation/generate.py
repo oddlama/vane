@@ -232,6 +232,8 @@ def item_to_icon(item: str) -> str:
     # FIXME: hardcoded overrides
     elif resource_key == "#minecraft:beds":
         return f"assets/minecraft_special/bed.png"
+    elif resource_key == "#minecraft:saplings":
+        return minecraft_asset_icon("oak_sapling")
     else:
         print(f"[1;33mwarning:[m unknown icon for item: {item}")
     return f"assets/minecraft/textures/item/barrier.png"

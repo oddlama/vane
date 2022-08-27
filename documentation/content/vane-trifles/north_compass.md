@@ -1,7 +1,7 @@
 ```toml
 title = "North Compass"
 module = "vane-trifles"
-itemlike = "vane-trifles:north_compass"
+icon = "vane-trifles:items/north_compass_16.png"
 ```
 ---
 Just a real fucking compass that does what a compass usually does: Point north.

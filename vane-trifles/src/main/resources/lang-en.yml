@@ -60,6 +60,10 @@ item_file:
   # The display name of this item variant.
   name: "File"
 
+item_slime_bucket:
+  # The display name of this item variant.
+  name: "Slime in a Bucket"
+
 item_papyrus_scroll:
   # The display name of this item variant.
   name: "Papyrus Scroll"
