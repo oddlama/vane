@@ -31,7 +31,8 @@ tasks {
 			// Utilities to include from vane-core.util
 			val includedUtils = listOf(
 				"Resolve",
-				"TimeUtil"
+				"TimeUtil",
+				"IOUtil"
 			)
 
 			from(rootProject.project(":vane-core").sourceSets.main.get().output) {
