@@ -4,7 +4,7 @@ icon = "minecraft:spyglass"
 module = "vane-trifles"
 ```
 ---
-![](assets/gifs/item_finder.gif)
+![](assets/gifs/find_item.mp4)
 
 Have you ever wondered where the fuck you put those pesky ender pearls, which you certainly own
 and desperately need right now? Don't worry, the item finder has got you covered.

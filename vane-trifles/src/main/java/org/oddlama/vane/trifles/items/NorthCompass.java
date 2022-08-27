@@ -55,7 +55,7 @@ public class NorthCompass extends CustomItem<Trifles> {
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void on_player_click_inventory(final InventoryClickEvent event) {
 		final var item = event.getCurrentItem();
-		if (item.getType() != Material.COMPASS) {
+		if (item == null || item.getType() != Material.COMPASS) {
 			return;
 		}
 
@@ -120,6 +120,16 @@ public class NorthCompass extends CustomItem<Trifles> {
 			Pair.of(0.953125f, 15),
 			Pair.of(0.984375f, 16));
 
+		// Include standard overrides for the normal compass
+		final var base_key = baseMaterial().getKey();
+		for (final var angle_item : angle_item_overrides) {
+			final var angle = angle_item.getLeft();
+			final var num = angle_item.getRight();
+			final var key_num = num == 16 ? base_key : StorageUtil.namespaced_key(base_key.namespace(), String.format("%s_%02d", base_key.value(), num));
+			rp.add_item_override(base_key, key_num, predicate -> {
+				predicate.put("angle", angle);
+			});
+		}
 		for (final var angle_item : angle_item_overrides) {
 			final var angle = angle_item.getLeft();
 			final var num = angle_item.getRight();
@@ -128,9 +138,9 @@ public class NorthCompass extends CustomItem<Trifles> {
 			if (resource == null) {
 				throw new RuntimeException("Missing resource '" + resource_name + "'. This is a bug.");
 			}
-			final var key_num = StorageUtil.subkey(key(), String.format("%02d", num));
+			final var key_num = StorageUtil.namespaced_key(key().namespace(), String.format("%s_%02d", key().value(), num));
 			rp.add_item_model(key_num, resource);
-			rp.add_item_override(baseMaterial().getKey(), key_num, predicate -> {
+			rp.add_item_override(base_key, key_num, predicate -> {
 				predicate.put("custom_model_data", customModelData());
 				predicate.put("angle", angle);
 			});
