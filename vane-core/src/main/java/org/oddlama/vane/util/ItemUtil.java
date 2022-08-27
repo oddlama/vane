@@ -1,14 +1,9 @@
 package org.oddlama.vane.util;
 
 import static net.kyori.adventure.text.event.HoverEvent.Action.SHOW_TEXT;
-
 import static org.oddlama.vane.util.Nms.creative_tab_id;
 import static org.oddlama.vane.util.Nms.item_handle;
 import static org.oddlama.vane.util.Nms.player_handle;
-
-import com.destroystokyo.paper.profile.ProfileProperty;
-import com.mojang.brigadier.StringReader;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -16,16 +11,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
-import net.kyori.adventure.text.event.HoverEvent;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextDecoration;
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.core.Registry;
-import net.minecraft.commands.arguments.item.ItemParser;
-import net.minecraft.world.item.Item;
+
+import com.destroystokyo.paper.profile.ProfileProperty;
+import com.mojang.brigadier.StringReader;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.Bukkit;
@@ -44,16 +33,25 @@ import org.jetbrains.annotations.Nullable;
 import org.oddlama.vane.core.Core;
 import org.oddlama.vane.core.material.ExtendedMaterial;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.event.HoverEvent;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import net.minecraft.commands.arguments.item.ItemParser;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.Registry;
+import net.minecraft.world.item.Item;
+
 public class ItemUtil {
 
 	private static final UUID SKULL_OWNER = UUID.fromString("00000000-0000-0000-0000-000000000000");
 
 	public static final UUID MODIFIER_UUID_GENERIC_ATTACK_DAMAGE = UUID.fromString(
-		"CB3F55D3-645C-4F38-A497-9C13A33DB5CF"
-	);
+			"CB3F55D3-645C-4F38-A497-9C13A33DB5CF");
 	public static final UUID MODIFIER_UUID_GENERIC_ATTACK_SPEED = UUID.fromString(
-		"FA233E1C-4180-4865-B01B-BCCE9785ACA3"
-	);
+			"FA233E1C-4180-4865-B01B-BCCE9785ACA3");
 
 	public static void damage_item(final Player player, final ItemStack item_stack, final int amount) {
 		if (amount <= 0) {
@@ -65,7 +63,8 @@ public class ItemUtil {
 			return;
 		}
 
-		handle.hurtAndBreak(amount, player_handle(player), onBreak -> {});
+		handle.hurtAndBreak(amount, player_handle(player), onBreak -> {
+		});
 	}
 
 	public static String name_of(final ItemStack item) {
@@ -92,9 +91,9 @@ public class ItemUtil {
 	public static ItemStack set_lore(final ItemStack item, final List<Component> lore) {
 		item.editMeta(meta -> {
 			final var list = lore
-				.stream()
-				.map(x -> x.decoration(TextDecoration.ITALIC, false))
-				.collect(Collectors.toList());
+					.stream()
+					.map(x -> x.decoration(TextDecoration.ITALIC, false))
+					.collect(Collectors.toList());
 			meta.lore(list);
 		});
 
@@ -109,9 +108,9 @@ public class ItemUtil {
 
 		if (lore != null) {
 			final var list = lore
-				.stream()
-				.map(x -> x.decoration(TextDecoration.ITALIC, false))
-				.collect(Collectors.toList());
+					.stream()
+					.map(x -> x.decoration(TextDecoration.ITALIC, false))
+					.collect(Collectors.toList());
 			meta.lore(list);
 		}
 
@@ -157,41 +156,37 @@ public class ItemUtil {
 
 		// Sort by combined rarity (rare = low value) first
 		final var a_rarity = ae
-			.keySet()
-			.stream()
-			.mapToInt(e -> CraftEnchantment.getRaw(e).getRarity().getWeight())
-			.sum();
+				.keySet()
+				.stream()
+				.mapToInt(e -> CraftEnchantment.getRaw(e).getRarity().getWeight())
+				.sum();
 		final var b_rarity = be
-			.keySet()
-			.stream()
-			.mapToInt(e -> CraftEnchantment.getRaw(e).getRarity().getWeight())
-			.sum();
+				.keySet()
+				.stream()
+				.mapToInt(e -> CraftEnchantment.getRaw(e).getRarity().getWeight())
+				.sum();
 		if (a_rarity != b_rarity) {
 			return b_rarity - a_rarity;
 		}
 
 		final var a_sorted = ae
-			.entrySet()
-			.stream()
-			.sorted(
-				Map.Entry
-					.<Enchantment, Integer>comparingByKey((a, b) ->
-						a.getKey().toString().compareTo(b.getKey().toString())
-					)
-					.thenComparing(Map.Entry.<Enchantment, Integer>comparingByValue())
-			)
-			.collect(Collectors.toList());
+				.entrySet()
+				.stream()
+				.sorted(
+						Map.Entry
+								.<Enchantment, Integer>comparingByKey(
+										(a, b) -> a.getKey().toString().compareTo(b.getKey().toString()))
+								.thenComparing(Map.Entry.<Enchantment, Integer>comparingByValue()))
+				.collect(Collectors.toList());
 		final var b_sorted = be
-			.entrySet()
-			.stream()
-			.sorted(
-				Map.Entry
-					.<Enchantment, Integer>comparingByKey((a, b) ->
-						a.getKey().toString().compareTo(b.getKey().toString())
-					)
-					.thenComparing(Map.Entry.<Enchantment, Integer>comparingByValue())
-			)
-			.collect(Collectors.toList());
+				.entrySet()
+				.stream()
+				.sorted(
+						Map.Entry
+								.<Enchantment, Integer>comparingByKey(
+										(a, b) -> a.getKey().toString().compareTo(b.getKey().toString()))
+								.thenComparing(Map.Entry.<Enchantment, Integer>comparingByValue()))
+				.collect(Collectors.toList());
 
 		// Lastly, compare names and levels
 		final var ait = a_sorted.iterator();
@@ -281,9 +276,9 @@ public class ItemUtil {
 		final var item = new ItemStack(Material.PLAYER_HEAD);
 		final var meta = (SkullMeta) item.getItemMeta();
 		final var name_component = Component
-			.text(name)
-			.decoration(TextDecoration.ITALIC, false)
-			.color(NamedTextColor.YELLOW);
+				.text(name)
+				.decoration(TextDecoration.ITALIC, false)
+				.color(NamedTextColor.YELLOW);
 		meta.displayName(name_component);
 		meta.setPlayerProfile(profile);
 		item.setItemMeta(meta);
@@ -315,7 +310,8 @@ public class ItemUtil {
 	}
 
 	/**
-	 * Applies enchantments to the item given in the form "{<namespace:enchant>[*<level>][,<namespace:enchant>[*<level>]]...}".
+	 * Applies enchantments to the item given in the form
+	 * "{<namespace:enchant>[*<level>][,<namespace:enchant>[*<level>]]...}".
 	 * Throws IllegalArgumentException if an enchantment cannot be found.
 	 */
 	private static ItemStack apply_enchants(final ItemStack item_stack, @Nullable String enchants) {
@@ -325,7 +321,8 @@ public class ItemUtil {
 
 		enchants = enchants.trim();
 		if (!enchants.startsWith("{") || !enchants.endsWith("}")) {
-			throw new IllegalArgumentException("enchantments must be of form {<namespace:enchant>[*<level>][,<namespace:enchant>[*<level>]]...}");
+			throw new IllegalArgumentException(
+					"enchantments must be of form {<namespace:enchant>[*<level>][,<namespace:enchant>[*<level>]]...}");
 		}
 
 		final var parts = enchants.substring(1, enchants.length() - 1).split(",");
@@ -342,7 +339,8 @@ public class ItemUtil {
 
 			final var ench = Enchantment.getByKey(NamespacedKey.fromString(key));
 			if (ench == null) {
-				throw new IllegalArgumentException("Cannot apply unknown enchantment '" + key + "' to item '" + item_stack + "'");
+				throw new IllegalArgumentException(
+						"Cannot apply unknown enchantment '" + key + "' to item '" + item_stack + "'");
 			}
 
 			if (item_stack.getType() == Material.ENCHANTED_BOOK) {
@@ -361,9 +359,13 @@ public class ItemUtil {
 		return item_stack;
 	}
 
-	/** Returns the itemstack and a boolean indicating whether it was just as simlpe material. */
+	/**
+	 * Returns the itemstack and a boolean indicating whether it was just as simlpe
+	 * material.
+	 */
 	public static @NotNull Pair<ItemStack, Boolean> itemstack_from_string(String definition) {
-		// namespace:key[{nbtdata}][#enchants{}], where the key can reference a material, head material or customitem.
+		// namespace:key[{nbtdata}][#enchants{}], where the key can reference a
+		// material, head material or customitem.
 		final var enchants_delim = definition.indexOf("#enchants{");
 		String enchants = null;
 		if (enchants_delim != -1) {
@@ -396,7 +398,8 @@ public class ItemUtil {
 		// of whatever the extended material gave us.
 		final var vanilla_definition = item_stack.getType().key().toString() + definition.substring(nbt_delim);
 		try {
-			final var parsed_nbt = ItemParser.parseForItem(HolderLookup.forRegistry(Registry.ITEM), new StringReader(vanilla_definition)).nbt();
+			final var parsed_nbt = ItemParser
+					.parseForItem(HolderLookup.forRegistry(Registry.ITEM), new StringReader(vanilla_definition)).nbt();
 			final var inherent_nbt = CraftItemStack.asNMSCopy(item_stack).getOrCreateTag();
 			// Now apply the NBT be parsed by minecraft's internal parser to the itemstack.
 			final var nms_item = item_handle(item_stack).copy();
