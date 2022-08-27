@@ -233,14 +233,11 @@ public class Trowel extends CustomItem<Trifles> {
 			}
 
 			if (result.consumesAction()) {
+				swing_arm(player, EquipmentSlot.HAND);
 				if (sound_type != null) {
 					nms_world.playSound(null, block_pos, sound_type.getPlaceSound(), SoundSource.BLOCKS, (sound_type.getVolume() + 1.0F) / 2.0F, sound_type.getPitch() * 0.8F);
 				}
 				CriteriaTriggers.ITEM_USED_ON_BLOCK.trigger(nms_player, block_pos, nms_item);
-			}
-
-			if (result.shouldSwing()) {
-				swing_arm(player, EquipmentSlot.HAND);
 			}
 
 			nms_player.connection.send(new ClientboundBlockUpdatePacket(nms_world, block_pos));

@@ -15,6 +15,7 @@ title = "Gameplay"
 content = [
 	"vane-trifles/double_doors.md",
 	"vane-trifles/better_harvesting.md",
+	"vane-trifles/item_finder.md",
 	"vane-trifles/chest_sorting.md",
 	"vane-trifles/grass_paths.md",
 	"vane-admin/creeper_protection.md",
@@ -30,8 +31,13 @@ title = "Custom Items"
 content = [
 	"vane-trifles/sickle.md",
 	"vane-trifles/file.md",
+	"vane-trifles/trowel.md",
+	"vane-trifles/north_compass.md",
 	"vane-trifles/portal_scroll_home.md",
 	"vane-trifles/portal_scroll_unstable.md",
+	"vane-trifles/portal_scroll_spawn.md",
+	"vane-trifles/portal_scroll_death.md",
+	"vane-trifles/portal_scroll_lodestone.md",
 	"vane-trifles/xp_bottles.md",
 	"vane-trifles/netherite_elytra.md",
 	"vane-enchantments/ancient_tome.md",
