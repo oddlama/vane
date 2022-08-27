@@ -102,6 +102,9 @@ public abstract class Command<T extends Module<T>> extends ModuleComponent<T> {
 	private AnyParam<String> root_param;
 
 	public Command(Context<T> context) {
+		this(context, PermissionDefault.OP);
+	}
+	public Command(Context<T> context, PermissionDefault permission_default) {
 		super(null);
 		// Make namespace
 		name = getClass().getAnnotation(Name.class).value();
@@ -113,7 +116,7 @@ public abstract class Command<T extends Module<T>> extends ModuleComponent<T> {
 			new Permission(
 				"vane." + get_module().get_name() + ".commands." + name,
 				"Allow access to /" + name,
-				PermissionDefault.OP
+				permission_default
 			);
 		get_module().register_permission(permission);
 		permission.addParent(get_module().permission_command_catchall_module, true);

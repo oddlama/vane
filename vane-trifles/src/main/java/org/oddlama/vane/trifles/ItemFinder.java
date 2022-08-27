@@ -18,16 +18,12 @@ import org.bukkit.inventory.InventoryHolder;
 import org.jetbrains.annotations.NotNull;
 import org.oddlama.vane.annotation.config.ConfigBoolean;
 import org.oddlama.vane.annotation.config.ConfigInt;
-import org.oddlama.vane.annotation.config.ConfigLong;
-import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.core.Listener;
-import org.oddlama.vane.core.data.CooldownData;
-import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Context;
-import org.oddlama.vane.util.Util;
+import org.oddlama.vane.util.StorageUtil;
 
 public class ItemFinder extends Listener<Trifles> {
-	public static final NamespacedKey LAST_FIND_TIME = Util.namespaced_key("vane_trifles", "last_item_find_time");
+	public static final NamespacedKey LAST_FIND_TIME = StorageUtil.namespaced_key("vane_trifles", "last_item_find_time");
 
 	@ConfigInt(def = 2, min = 1, max = 10, desc = "The radius of chunks in which containers (and possibly entities) are checked for matching items.")
 	public int config_radius;
@@ -55,8 +51,10 @@ public class ItemFinder extends Listener<Trifles> {
 			return;
 		}
 
-		find_item(player, item.getType());
 		event.setCancelled(true);
+		if (find_item(player, item.getType())) {
+			get_module().schedule_next_tick(player::closeInventory);
+		}
 	}
 
 	private boolean is_container(final Block block) {
@@ -64,15 +62,13 @@ public class ItemFinder extends Listener<Trifles> {
 	}
 
 	private void indicate_match_at(@NotNull Player player, @NotNull Location location) {
-		player.spawnParticle(Particle.ASH, location, 100, 0.0, 0.0, 0.0, 1.0);
+		player.spawnParticle(Particle.DRIPPING_OBSIDIAN_TEAR, location, 130, 0.4, 0.0, 0.0, 0.0);
+		player.spawnParticle(Particle.DRIPPING_OBSIDIAN_TEAR, location, 130, 0.0, 0.4, 0.0, 0.0);
+		player.spawnParticle(Particle.DRIPPING_OBSIDIAN_TEAR, location, 130, 0.0, 0.0, 0.4, 0.0);
+		player.spawnParticle(Particle.CAMPFIRE_SIGNAL_SMOKE, location, 70, 0.2, 0.2, 0.2, 0.0);
 	}
 
-	public void find_item(@NotNull final Player player, @NotNull final Material material) {
-		if (!cooldown_data.check_or_update_cooldown(player)) {
-			lang_cooldown.send_action_bar(player);
-			return;
-		}
-
+	public boolean find_item(@NotNull final Player player, @NotNull final Material material) {
 		// Find chests in configured radius and sort them.
 		boolean any_found = false;
 		final var world = player.getWorld();
@@ -86,13 +82,18 @@ public class ItemFinder extends Listener<Trifles> {
 				for (final var tile_entity : chunk.getTileEntities(this::is_container, false)) {
 					if (tile_entity instanceof Container container) {
 						if (container.getInventory().contains(material)) {
-							indicate_match_at(player, container.getLocation());
+							indicate_match_at(player, container.getLocation().add(0.5, 0.5, 0.5));
 							any_found = true;
 						}
 					}
 				}
 				if (config_search_entities) {
 					for (final var entity : chunk.getEntities()) {
+						// Don't indicate the player
+						if (entity == player) {
+							continue;
+						}
+
 						if (entity instanceof InventoryHolder holder) {
 							if (holder.getInventory().contains(material)) {
 								indicate_match_at(player, entity.getLocation());
@@ -105,9 +106,11 @@ public class ItemFinder extends Listener<Trifles> {
 		}
 
 		if (any_found) {
-			player.playSound(player, Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 1.0f, 5.0f);
+			player.playSound(player, Sound.BLOCK_AMETHYST_BLOCK_HIT, SoundCategory.MASTER, 1.0f, 1.3f);
 		} else {
-			player.playSound(player, Sound.BLOCK_AMETHYST_BLOCK_CHIME, SoundCategory.MASTER, 1.0f, 5.0f);
+			player.playSound(player, Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 1.0f, 5.0f);
 		}
+
+		return any_found;
 	}
 }

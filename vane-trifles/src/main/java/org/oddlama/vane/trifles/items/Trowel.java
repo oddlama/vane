@@ -35,7 +35,7 @@ import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.trifles.Trifles;
 import org.oddlama.vane.util.ItemUtil;
 import org.oddlama.vane.util.Nms;
-import org.oddlama.vane.util.Util;
+import org.oddlama.vane.util.StorageUtil;
 
 import net.kyori.adventure.text.Component;
 import net.minecraft.core.BlockPos;
@@ -52,8 +52,8 @@ import net.minecraft.advancements.CriteriaTriggers;
 
 @VaneItem(name = "trowel", base = Material.WARPED_FUNGUS_ON_A_STICK, durability = 800, model_data = 0x76000e, version = 1)
 public class Trowel extends CustomItem<Trifles> {
-	private static final NamespacedKey SENTINEL = Util.namespaced_key("vane", "trowel_lore");
-	public static final NamespacedKey FEED_SOURCE = Util.namespaced_key("vane", "feed_source");
+	private static final NamespacedKey SENTINEL = StorageUtil.namespaced_key("vane", "trowel_lore");
+	public static final NamespacedKey FEED_SOURCE = StorageUtil.namespaced_key("vane", "feed_source");
 	private static Random random = new Random(23584982345l);
 
 	public enum FeedSource {

@@ -23,6 +23,11 @@ command_heads:
   description: "Get heads from the head library."
   help: "Execute to open the head library."
 
+command_finditem:
+  usage: "%1$s"
+  description: "Searches for the given material in nearby containers and entities."
+  help: "Searches for the given material in nearby containers and entities."
+
 command_setspawn:
   usage: "%1$s"
   description: "Sets the global spawn location to your current position."

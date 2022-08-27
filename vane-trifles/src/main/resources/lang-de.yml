@@ -23,6 +23,11 @@ command_heads:
   description: "Kaufe Köpfe zur Dekoration."
   help: "Führe den Befehl aus um das Köpfe-Menü zu öffnen."
 
+command_finditem:
+  usage: "%1$s"
+  description: "Sucht nach dem gegebenen Material in Kisten und Entities in der Nähe."
+  help: "Sucht nach dem gegebenen Material in Kisten und Entities in der Nähe."
+
 command_setspawn:
   usage: "%1$s"
   description: "Setzt den globalen Spawn auf deine aktuelle Position."

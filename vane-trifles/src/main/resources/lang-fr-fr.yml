@@ -23,6 +23,12 @@ command_heads:
   description: "Obtenir des Têtes depuis le répertoire de Têtes."
   help: "Exécuter la commande pour ouvrir le répertoire de Têtes."
 
+command_finditem:
+  # FIXME: missing translation
+  usage: "%1$s"
+  description: "Searches for the given material in nearby containers and entities."
+  help: "Searches for the given material in nearby containers and entities."
+
 command_setspawn:
   usage: "%1$s"
   description: "Change la position du point d'apparition global vers votre position actuelle."
