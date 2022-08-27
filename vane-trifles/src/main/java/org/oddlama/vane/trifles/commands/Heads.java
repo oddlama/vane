@@ -6,6 +6,7 @@ import static org.oddlama.vane.util.PlayerUtil.take_items;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.permissions.PermissionDefault;
 import org.oddlama.vane.annotation.command.Name;
 import org.oddlama.vane.annotation.config.ConfigInt;
 import org.oddlama.vane.annotation.config.ConfigMaterial;
@@ -25,7 +26,8 @@ public class Heads extends Command<Trifles> {
 	public int config_price_per_head;
 
 	public Heads(Context<Trifles> context) {
-		super(context);
+		// Anyone may use this by default.
+		super(context, PermissionDefault.TRUE);
 		// Add help
 		params().fixed("help").ignore_case().exec(this::print_help);
 		// Command parameters

@@ -20,7 +20,7 @@ import org.oddlama.vane.core.item.api.InhibitBehavior;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.resourcepack.ResourcePackGenerator;
 import org.oddlama.vane.trifles.Trifles;
-import org.oddlama.vane.util.Util;
+import org.oddlama.vane.util.StorageUtil;
 
 @VaneItem(name = "north_compass", base = Material.COMPASS, model_data = 0x760013, version = 1)
 public class NorthCompass extends CustomItem<Trifles> {
@@ -128,7 +128,7 @@ public class NorthCompass extends CustomItem<Trifles> {
 			if (resource == null) {
 				throw new RuntimeException("Missing resource '" + resource_name + "'. This is a bug.");
 			}
-			final var key_num = Util.subkey(key(), String.format("%02d", num));
+			final var key_num = StorageUtil.subkey(key(), String.format("%02d", num));
 			rp.add_item_model(key_num, resource);
 			rp.add_item_override(baseMaterial().getKey(), key_num, predicate -> {
 				predicate.put("custom_model_data", customModelData());

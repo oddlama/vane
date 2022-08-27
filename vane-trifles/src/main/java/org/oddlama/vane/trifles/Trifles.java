@@ -11,6 +11,7 @@ import org.oddlama.vane.trifles.items.XpBottles;
 public class Trifles extends Module<Trifles> {
 	public final HashMap<UUID, Long> last_xp_bottle_consume_time = new HashMap<>();
 	public XpBottles xp_bottles;
+	public ItemFinder item_finder;
 
 	public Trifles() {
 		var fast_walking_group = new FastWalkingGroup(this);
@@ -20,10 +21,11 @@ public class Trifles extends Module<Trifles> {
 		new RepairCostLimiter(this);
 		new RecipeUnlock(this);
 		new ChestSorter(this);
-		new ItemFinder(this);
+		item_finder = new ItemFinder(this);
 
 		new org.oddlama.vane.trifles.commands.Heads(this);
 		new org.oddlama.vane.trifles.commands.Setspawn(this);
+		new org.oddlama.vane.trifles.commands.Finditem(this);
 
 		new org.oddlama.vane.trifles.items.PapyrusScroll(this);
 		new org.oddlama.vane.trifles.items.Scrolls(this);
