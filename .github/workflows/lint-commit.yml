@@ -19,7 +19,10 @@ jobs:
           node-version: 16
       - run: |
           # Setup commitlint
-          yarn add @commitlint/{config-conventional,cli} >> /dev/null 2>&1
+          if ! yarn add {ts-node, @commitlint/{config-conventional,cli}} >> /dev/null 2>&1; then
+            exit 0
+          fi
+          
           echo "module.exports = {extends: ['@commitlint/config-conventional']}" > commitlint.config.js
           
           # Get the PR commits
