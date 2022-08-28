@@ -1,5 +1,7 @@
 package org.oddlama.vane.proxycore;
 
+import org.oddlama.vane.proxycore.scheduler.ProxyTaskScheduler;
+
 import java.util.Collection;
 import java.util.UUID;
 
