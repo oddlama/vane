@@ -38,7 +38,7 @@ public class CookingRecipeDefinition extends RecipeDefinition {
 	}
 
 	public CookingRecipeDefinition input(final Tag<?> tag) {
-		return input("#" + tag.key().toString());
+		return input("#" + tag.key());
 	}
 
 	public CookingRecipeDefinition input(Material material) {

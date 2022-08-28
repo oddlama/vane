@@ -533,7 +533,7 @@ public class StyleMenu extends ModuleComponent<Portals> {
 				if (stack.getType() == Material.AIR) {
 					stack.setType(Material.BARRIER);
 				}
-				super.item(t_item.alternative(stack, "§6" + building_material.getKey().toString()));
+				super.item(t_item.alternative(stack, "§6" + building_material.getKey()));
 			}
 		};
 	}

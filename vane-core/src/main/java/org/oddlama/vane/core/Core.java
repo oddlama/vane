@@ -228,7 +228,7 @@ public class Core extends Module<Core> {
 				properties.load(Core.class.getResourceAsStream("/vane-core.properties"));
 				current_version = "v" + properties.getProperty("version");
 			} catch (IOException e) {
-				log.severe("Could not load current version from included properties file: " + e.toString());
+				log.severe("Could not load current version from included properties file: " + e);
 				return;
 			}
 		}
@@ -248,7 +248,7 @@ public class Core extends Module<Core> {
 				log.warning("Get the latest release here: https://github.com/oddlama/vane/releases/latest");
 			}
 		} catch (IOException | JSONException e) {
-			log.warning("Could not check for updates: " + e.toString());
+			log.warning("Could not check for updates: " + e);
 		}
 	}
 

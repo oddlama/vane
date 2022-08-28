@@ -81,7 +81,7 @@ public class ConfigDictField extends ConfigField<ConfigDictSerializable> {
 				) {
 					builder.append(indent);
 					builder.append("  - ");
-					builder.append(entry.toString());
+					builder.append(entry);
 					builder.append("\n");
 				} else if (entry instanceof Map<?,?>) {
 					append_dict(builder, indent + "  ", null, (Map<String, Object>)entry, true);

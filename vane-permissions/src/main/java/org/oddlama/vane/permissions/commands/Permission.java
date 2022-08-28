@@ -190,7 +190,7 @@ public class Permission extends Command<Permissions> {
 						lang_list_permission.send(
 							sender,
 							"§d" + perm.getName(),
-							permission_value_color_code(att.getValue()) + String.valueOf(att.getValue()),
+							permission_value_color_code(att.getValue()) + att.getValue(),
 							perm.getDescription()
 						);
 					});
@@ -206,14 +206,14 @@ public class Permission extends Command<Permissions> {
 				lang_list_permission.send(
 					sender,
 					"§d" + p,
-					permission_value_color_code(true) + String.valueOf(true),
+					permission_value_color_code(true) + true,
 					""
 				);
 			} else {
 				lang_list_permission.send(
 					sender,
 					"§d" + perm.getName(),
-					permission_value_color_code(true) + String.valueOf(true),
+					permission_value_color_code(true) + true,
 					perm.getDescription()
 				);
 			}
