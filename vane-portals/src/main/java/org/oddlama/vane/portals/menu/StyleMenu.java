@@ -275,7 +275,7 @@ public class StyleMenu extends ModuleComponent<Portals> {
 			menu_item_block_selector(
 				portal,
 				style_container,
-				0 * columns + 0,
+					0,
 				item_block_console_inactive,
 				get_module().constructor.config_material_console,
 				lang_select_block_console_inactive_title.str(),
@@ -287,7 +287,7 @@ public class StyleMenu extends ModuleComponent<Portals> {
 			menu_item_block_selector(
 				portal,
 				style_container,
-				0 * columns + 1,
+					1,
 				item_block_origin_inactive,
 				get_module().constructor.config_material_origin,
 				lang_select_block_origin_inactive_title.str(),
@@ -299,7 +299,7 @@ public class StyleMenu extends ModuleComponent<Portals> {
 			menu_item_block_selector(
 				portal,
 				style_container,
-				0 * columns + 2,
+					2,
 				item_block_portal_inactive,
 				get_module().constructor.config_material_portal_area,
 				lang_select_block_portal_inactive_title.str(),
@@ -311,7 +311,7 @@ public class StyleMenu extends ModuleComponent<Portals> {
 			menu_item_block_selector(
 				portal,
 				style_container,
-				0 * columns + 4,
+				4,
 				item_block_boundardy_1_inactive,
 				get_module().constructor.config_material_boundary_1,
 				lang_select_block_boundardy_1_inactive_title.str(),
@@ -323,7 +323,7 @@ public class StyleMenu extends ModuleComponent<Portals> {
 			menu_item_block_selector(
 				portal,
 				style_container,
-				0 * columns + 5,
+				5,
 				item_block_boundardy_2_inactive,
 				get_module().constructor.config_material_boundary_2,
 				lang_select_block_boundardy_2_inactive_title.str(),
@@ -335,7 +335,7 @@ public class StyleMenu extends ModuleComponent<Portals> {
 			menu_item_block_selector(
 				portal,
 				style_container,
-				0 * columns + 6,
+				6,
 				item_block_boundardy_3_inactive,
 				get_module().constructor.config_material_boundary_3,
 				lang_select_block_boundardy_3_inactive_title.str(),
@@ -347,7 +347,7 @@ public class StyleMenu extends ModuleComponent<Portals> {
 			menu_item_block_selector(
 				portal,
 				style_container,
-				0 * columns + 7,
+				7,
 				item_block_boundardy_4_inactive,
 				get_module().constructor.config_material_boundary_4,
 				lang_select_block_boundardy_4_inactive_title.str(),
@@ -359,7 +359,7 @@ public class StyleMenu extends ModuleComponent<Portals> {
 			menu_item_block_selector(
 				portal,
 				style_container,
-				0 * columns + 8,
+				8,
 				item_block_boundardy_5_inactive,
 				get_module().constructor.config_material_boundary_5,
 				lang_select_block_boundardy_5_inactive_title.str(),
@@ -371,7 +371,7 @@ public class StyleMenu extends ModuleComponent<Portals> {
 			menu_item_block_selector(
 				portal,
 				style_container,
-				1 * columns + 0,
+					columns,
 				item_block_console_active,
 				get_module().constructor.config_material_console,
 				lang_select_block_console_active_title.str(),
@@ -383,7 +383,7 @@ public class StyleMenu extends ModuleComponent<Portals> {
 			menu_item_block_selector(
 				portal,
 				style_container,
-				1 * columns + 1,
+				columns + 1,
 				item_block_origin_active,
 				get_module().constructor.config_material_origin,
 				lang_select_block_origin_active_title.str(),
@@ -396,7 +396,7 @@ public class StyleMenu extends ModuleComponent<Portals> {
 			menu_item_block_selector(
 				portal,
 				style_container,
-				1 * columns + 4,
+				columns + 4,
 				item_block_boundardy_1_active,
 				get_module().constructor.config_material_boundary_1,
 				lang_select_block_boundardy_1_active_title.str(),
@@ -408,7 +408,7 @@ public class StyleMenu extends ModuleComponent<Portals> {
 			menu_item_block_selector(
 				portal,
 				style_container,
-				1 * columns + 5,
+				columns + 5,
 				item_block_boundardy_2_active,
 				get_module().constructor.config_material_boundary_2,
 				lang_select_block_boundardy_2_active_title.str(),
@@ -420,7 +420,7 @@ public class StyleMenu extends ModuleComponent<Portals> {
 			menu_item_block_selector(
 				portal,
 				style_container,
-				1 * columns + 6,
+				columns + 6,
 				item_block_boundardy_3_active,
 				get_module().constructor.config_material_boundary_3,
 				lang_select_block_boundardy_3_active_title.str(),
@@ -432,7 +432,7 @@ public class StyleMenu extends ModuleComponent<Portals> {
 			menu_item_block_selector(
 				portal,
 				style_container,
-				1 * columns + 7,
+				columns + 7,
 				item_block_boundardy_4_active,
 				get_module().constructor.config_material_boundary_4,
 				lang_select_block_boundardy_4_active_title.str(),
@@ -444,7 +444,7 @@ public class StyleMenu extends ModuleComponent<Portals> {
 			menu_item_block_selector(
 				portal,
 				style_container,
-				1 * columns + 8,
+				columns + 8,
 				item_block_boundardy_5_active,
 				get_module().constructor.config_material_boundary_5,
 				lang_select_block_boundardy_5_active_title.str(),
@@ -544,7 +544,7 @@ public class StyleMenu extends ModuleComponent<Portals> {
 		final Menu previous
 	) {
 		return new MenuItem(
-			3 * columns + 0,
+				3 * columns,
 			item_accept.item(),
 			(player, menu, self) -> {
 				menu.close(player);
