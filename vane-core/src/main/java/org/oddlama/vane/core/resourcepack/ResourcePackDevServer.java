@@ -58,7 +58,6 @@ public class ResourcePackDevServer implements HttpHandler {
 			fis.transferTo(os);
 			os.close();
 		} else {
-			assert ("HEAD".equals(method));
 			he.sendResponseHeaders(200, -1);
 		}
 		fis.close();

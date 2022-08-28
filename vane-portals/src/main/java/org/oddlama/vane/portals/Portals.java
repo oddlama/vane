@@ -325,9 +325,6 @@ public class Portals extends Module<Portals> {
 
 				v2.forEach((portal_block_type, material) -> {
 					final var type = PortalBlock.Type.valueOf(portal_block_type.toUpperCase());
-					if (type == null) {
-						throw new RuntimeException("Invalid portal block type: '" + portal_block_type + "'");
-					}
 					style.set_material(active, type, material);
 				});
 			});

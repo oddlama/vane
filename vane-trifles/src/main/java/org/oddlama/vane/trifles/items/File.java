@@ -217,7 +217,7 @@ public class File extends CustomItem<Trifles> {
 		}
 
 		// Break if the resulting shape is invalid
-		if (shape == null || face == null) {
+		if (shape == null) {
 			return null;
 		}
 

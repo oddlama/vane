@@ -146,9 +146,6 @@ public class BlockUtil {
 
 			// Get block above
 			final var above = block.getRelative(0, 1, 0);
-			if (above == null) {
-				continue;
-			}
 
 			if (above.getType() == Material.AIR) {
 				// If the block above is air, we can till the block.

@@ -87,7 +87,7 @@ public class PlayerUtil {
 		}
 
 		final var leftovers = inventory.removeItem(stacks.toArray(new ItemStack[0]));
-		if (leftovers != null && !leftovers.isEmpty()) {
+		if (!leftovers.isEmpty()) {
 			Bukkit
 					.getLogger()
 					.warning(
