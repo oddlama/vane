@@ -31,6 +31,7 @@ import net.md_5.bungee.protocol.packet.LoginRequest;
 import org.bstats.bungeecord.Metrics;
 import org.jetbrains.annotations.NotNull;
 import org.oddlama.vane.proxycore.Maintenance;
+import org.oddlama.vane.proxycore.ManagedServer;
 import org.oddlama.vane.proxycore.ProxyServer;
 import org.oddlama.vane.proxycore.VaneProxyPlugin;
 import org.oddlama.vane.proxycore.config.ConfigManager;
@@ -131,7 +132,7 @@ public class Waterfall extends Plugin implements Listener, VaneProxyPlugin {
 				return;
 			}
 
-			if (!has_permission(uuid, "vane_waterfall.auth_multiplexer." + multiplexer_id)) {
+			if (!this.server.has_permission(uuid, "vane_waterfall.auth_multiplexer." + multiplexer_id)) {
 				event.setCancelReason(TextComponent.fromLegacyText(MESSAGE_MULTIPLEX_MOJANG_AUTH_NO_PERMISSION_KICK));
 				event.setCancelled(true);
 				return;
@@ -218,24 +219,19 @@ public class Waterfall extends Plugin implements Listener, VaneProxyPlugin {
 			// For use inside callback
 			final var cms = config.managed_servers.get(server.getName());
 
+			if (!this.server.can_start_server(uuid, server.getName())) {
+				// TODO: This could probably use a configurable message?
+				event.setCancelReason(TextComponent.fromLegacyText("Server is offline"));
+				event.setCancelled(true);
+				return;
+			}
+
 			if (cms == null || cms.start_cmd() == null) {
 				getLogger().severe("Could not start server '" + server.getName() + "', no start command was set!");
 				event.setCancelReason(TextComponent.fromLegacyText("Could not start server"));
 			} else {
 				// Client is connecting while startup
-				this.server
-						.get_scheduler()
-						.runAsync(
-								this,
-								() -> {
-									try {
-										final var p = Runtime.getRuntime().exec(cms.start_cmd());
-										p.waitFor();
-									} catch (Exception e) {
-										e.printStackTrace();
-									}
-								}
-						);
+				try_start_server(cms);
 
 				if (cms.start_kick_msg() == null) {
 					event.setCancelReason(TextComponent.fromLegacyText("Server is starting"));
@@ -258,7 +254,7 @@ public class Waterfall extends Plugin implements Listener, VaneProxyPlugin {
 		if (maintenance.enabled()) {
 			// Client is connecting while maintenance is on
 			// Players with bypass_maintenance flag may join
-			return has_permission(uuid, "vane_waterfall.bypass_maintenance");
+			return this.server.has_permission(uuid, "vane_waterfall.bypass_maintenance");
 		}
 
 		return true;
@@ -339,20 +335,21 @@ public class Waterfall extends Plugin implements Listener, VaneProxyPlugin {
 		return motd;
 	}
 
-	public boolean has_permission(UUID uuid, String permission) {
-		if (uuid == null) {
-			return false;
-		}
-
-		final var conf_adapter = getProxy().getConfigurationAdapter();
-		for (final var group : conf_adapter.getGroups(uuid.toString())) {
-			final var perms = conf_adapter.getList("permissions." + group, null);
-			if (perms != null && perms.contains(permission)) {
-				return true;
-			}
-		}
-
-		return false;
+	@Override
+	public void try_start_server(ManagedServer server) {
+		// TODO: This could really use some checks (existing process running, nonzero exit code)
+		this.server.get_scheduler()
+				.runAsync(
+						this,
+						() -> {
+							try {
+								final var p = Runtime.getRuntime().exec(server.start_cmd());
+								p.waitFor();
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+						}
+				);
 	}
 
 	// TODO: These names are just workarounds for name conflicts for now, temporary
