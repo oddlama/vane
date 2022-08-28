@@ -141,7 +141,7 @@ public class PersistentSerializer {
 		// Other types
 		serializers.put(String.class, x -> x);
 		deserializers.put(String.class, x -> x);
-		serializers.put(UUID.class, x -> ((UUID) x).toString());
+		serializers.put(UUID.class, Object::toString);
 		deserializers.put(UUID.class, x -> UUID.fromString((String) x));
 
 		// Bukkit types
