@@ -551,11 +551,7 @@ public class Regions extends Module<Regions> {
 		final var max = region.extent().max();
 
 		final var world_id = min.getWorld().getUID();
-		var regions_in_chunk = regions_in_chunk_in_world.get(world_id);
-		if (regions_in_chunk == null) {
-			regions_in_chunk = new HashMap<Long, List<Region>>();
-			regions_in_chunk_in_world.put(world_id, regions_in_chunk);
-		}
+		var regions_in_chunk = regions_in_chunk_in_world.computeIfAbsent(world_id, k -> new HashMap<>());
 
 		final var min_chunk = min.getChunk();
 		final var max_chunk = max.getChunk();
@@ -564,11 +560,7 @@ public class Regions extends Module<Regions> {
 		for (int cx = min_chunk.getX(); cx <= max_chunk.getX(); ++cx) {
 			for (int cz = min_chunk.getZ(); cz <= max_chunk.getZ(); ++cz) {
 				final var chunk_key = Chunk.getChunkKey(cx, cz);
-				var possible_regions = regions_in_chunk.get(chunk_key);
-				if (possible_regions == null) {
-					possible_regions = new ArrayList<Region>();
-					regions_in_chunk.put(chunk_key, possible_regions);
-				}
+				var possible_regions = regions_in_chunk.computeIfAbsent(chunk_key, k -> new ArrayList<>());
 				possible_regions.add(region);
 			}
 		}

@@ -26,20 +26,12 @@ public class HeadMaterialLibrary {
 			by_texture.put(mat.texture(), mat);
 
 			// Add to category lookup
-			var category = categories.get(mat.category());
-			if (category == null) {
-				category = new ArrayList<HeadMaterial>();
-				categories.put(mat.category(), category);
-			}
+			var category = categories.computeIfAbsent(mat.category(), k -> new ArrayList<>());
 			category.add(mat);
 
 			// Add to tag lookup
 			for (final var tag : mat.tags()) {
-				var tag_list = tags.get(tag);
-				if (tag_list == null) {
-					tag_list = new ArrayList<HeadMaterial>();
-					tags.put(tag, tag_list);
-				}
+				var tag_list = tags.computeIfAbsent(tag, k -> new ArrayList<>());
 				tag_list.add(mat);
 			}
 		}

@@ -41,11 +41,7 @@ public class ResourcePackGenerator {
 	}
 
 	public JSONObject translations(String namespace, String lang_code) {
-		var ns = translations.get(namespace);
-		if (ns == null) {
-			ns = new HashMap<String, JSONObject>();
-			translations.put(namespace, ns);
-		}
+		var ns = translations.computeIfAbsent(namespace, k -> new HashMap<>());
 		var lang_map = ns.get(lang_code);
 		if (lang_map == null) {
 			lang_map = new JSONObject();
@@ -67,11 +63,7 @@ public class ResourcePackGenerator {
 		NamespacedKey new_item_key,
 		Consumer<JSONObject> create_predicate
 	) {
-		var overrides = item_overrides.get(base_item_key);
-		if (overrides == null) {
-			overrides = new ArrayList<JSONObject>();
-			item_overrides.put(base_item_key, overrides);
-		}
+		var overrides = item_overrides.computeIfAbsent(base_item_key, k -> new ArrayList<>());
 
 		final var predicate = new JSONObject();
 		create_predicate.accept(predicate);
