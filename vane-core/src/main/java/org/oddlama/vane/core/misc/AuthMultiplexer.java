@@ -61,11 +61,7 @@ public class AuthMultiplexer extends Listener<Core> implements PluginMessageList
 		}
 
 		final var original_player = get_module().getServer().getOfflinePlayer(original_player_id);
-		if (original_player != null) {
-			return "§7[" + multiplexer_id + "]§r " + original_player.getName();
-		}
-
-		return null;
+		return "§7[" + multiplexer_id + "]§r " + original_player.getName();
 	}
 
 	private void try_init_multiplexed_player_name(final Player player) {
@@ -140,7 +136,7 @@ public class AuthMultiplexer extends Listener<Core> implements PluginMessageList
 			mark_persistent_storage_dirty();
 
 			final var multiplexed_player = get_module().getServer().getOfflinePlayer(new_uuid);
-			if (multiplexed_player != null && multiplexed_player.isOnline()) {
+			if (multiplexed_player.isOnline()) {
 				try_init_multiplexed_player_name(multiplexed_player.getPlayer());
 			}
 		} catch (IOException e) {

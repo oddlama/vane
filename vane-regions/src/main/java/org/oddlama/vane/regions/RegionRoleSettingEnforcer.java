@@ -121,7 +121,7 @@ public class RegionRoleSettingEnforcer extends Listener<Regions> {
 					final var player_damager = (Player) damager;
 					final var item_frame = (ItemFrame) damaged;
 					final var item = item_frame.getItem();
-					if (item != null && item.getType() != Material.AIR) {
+					if (item.getType() != Material.AIR) {
 						// This is a player taking the item out of an item-frame
 						if (
 							check_setting_at(
@@ -189,7 +189,7 @@ public class RegionRoleSettingEnforcer extends Listener<Regions> {
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void on_player_interact_entity(final PlayerInteractEntityEvent event) {
 		final var entity = event.getRightClicked();
-		if (entity == null || entity.getType() != EntityType.ITEM_FRAME) {
+		if (entity.getType() != EntityType.ITEM_FRAME) {
 			return;
 		}
 

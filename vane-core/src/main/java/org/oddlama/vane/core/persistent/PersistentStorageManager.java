@@ -126,8 +126,7 @@ public class PersistentStorageManager {
 
 		// Check version and migrate if necessary
 		final var version_path = module.storage_path_of("storage_version");
-		final var version_obj = Long.valueOf(json.optString(version_path, "0"));
-		final var version = version_obj == null ? 0 : (long) version_obj;
+		final var version = Long.parseLong(json.optString(version_path, "0"));
 		final var needed_version = module.annotation.storage_version();
 		if (version != needed_version && migrations.size() > 0) {
 			module.log.info("Persistent storage is out of date.");
