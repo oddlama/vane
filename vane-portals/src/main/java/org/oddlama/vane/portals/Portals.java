@@ -539,18 +539,10 @@ public class Portals extends Module<Portals> {
 		// Add to acceleration structure
 		final var block = portal_block.block();
 		final var world_id = block.getWorld().getUID();
-		var portal_blocks_in_chunk = portal_blocks_in_chunk_in_world.get(world_id);
-		if (portal_blocks_in_chunk == null) {
-			portal_blocks_in_chunk = new HashMap<Long, Map<Long, PortalBlockLookup>>();
-			portal_blocks_in_chunk_in_world.put(world_id, portal_blocks_in_chunk);
-		}
+		var portal_blocks_in_chunk = portal_blocks_in_chunk_in_world.computeIfAbsent(world_id, k -> new HashMap<>());
 
 		final var chunk_key = block.getChunk().getChunkKey();
-		var block_to_portal_block = portal_blocks_in_chunk.get(chunk_key);
-		if (block_to_portal_block == null) {
-			block_to_portal_block = new HashMap<Long, PortalBlockLookup>();
-			portal_blocks_in_chunk.put(chunk_key, block_to_portal_block);
-		}
+		var block_to_portal_block = portal_blocks_in_chunk.computeIfAbsent(chunk_key, k -> new HashMap<>());
 
 		block_to_portal_block.put(block_key(block), portal_block.lookup(portal.id()));
 	}

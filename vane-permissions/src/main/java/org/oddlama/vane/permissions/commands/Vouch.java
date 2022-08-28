@@ -41,11 +41,7 @@ public class Vouch extends Command<Permissions> {
 	}
 
 	private void vouch_for_player(final Player sender, final OfflinePlayer vouched_player) {
-		var vouched_by_set = storage_vouched_by.get(vouched_player.getUniqueId());
-		if (vouched_by_set == null) {
-			vouched_by_set = new HashSet<UUID>();
-			storage_vouched_by.put(vouched_player.getUniqueId(), vouched_by_set);
-		}
+		var vouched_by_set = storage_vouched_by.computeIfAbsent(vouched_player.getUniqueId(), k -> new HashSet<>());
 
 		if (vouched_by_set.add(sender.getUniqueId())) {
 			// If it was the first one, we assign the group,
