@@ -85,7 +85,7 @@ public class ItemUtil {
 
 	public static ItemStack name_item(final ItemStack item, final Component name, Component lore) {
 		lore = lore.decoration(TextDecoration.ITALIC, false);
-		return name_item(item, name, Arrays.<Component>asList(new Component[] { lore }));
+		return name_item(item, name, Arrays.asList(new Component[] { lore }));
 	}
 
 	public static ItemStack set_lore(final ItemStack item, final List<Component> lore) {
@@ -176,7 +176,7 @@ public class ItemUtil {
 						Map.Entry
 								.<Enchantment, Integer>comparingByKey(
 										(a, b) -> a.getKey().toString().compareTo(b.getKey().toString()))
-								.thenComparing(Map.Entry.<Enchantment, Integer>comparingByValue()))
+								.thenComparing(Map.Entry.comparingByValue()))
 				.collect(Collectors.toList());
 		final var b_sorted = be
 				.entrySet()
@@ -185,7 +185,7 @@ public class ItemUtil {
 						Map.Entry
 								.<Enchantment, Integer>comparingByKey(
 										(a, b) -> a.getKey().toString().compareTo(b.getKey().toString()))
-								.thenComparing(Map.Entry.<Enchantment, Integer>comparingByValue()))
+								.thenComparing(Map.Entry.comparingByValue()))
 				.collect(Collectors.toList());
 
 		// Lastly, compare names and levels

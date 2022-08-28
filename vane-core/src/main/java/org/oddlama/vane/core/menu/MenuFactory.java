@@ -279,7 +279,7 @@ public class MenuFactory {
 		final Function4<Player, Menu, T, InventoryClickEvent, ClickResult> on_click,
 		final Consumer1<Player> on_cancel
 	) {
-		return GenericSelector.<T, F>create(
+		return GenericSelector.create(
 			context,
 			player,
 			title,
