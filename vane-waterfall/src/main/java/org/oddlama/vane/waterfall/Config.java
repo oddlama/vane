@@ -124,7 +124,7 @@ public class Config {
 
 		// Save content to file
 		try {
-			Files.write(file.toPath(), content.getBytes(StandardCharsets.UTF_8));
+			Files.writeString(file.toPath(), content);
 		} catch (IOException e) {
 			plugin.getLogger().log(Level.SEVERE, "Error while writing config file '" + file + "'", e);
 		}
