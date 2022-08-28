@@ -50,9 +50,7 @@ public class LootTables<T extends Module<T>> extends ModuleComponent<T> {
 		if (enabled() && config_register_loot) {
 			config_loot.tables().forEach(table -> {
 				final var entries = table.entries();
-				table.affected_tables.forEach(table_key -> {
-					get_module().loot_table(table_key).put(table.key(base_loot_key), entries);
-				});
+				table.affected_tables.forEach(table_key -> get_module().loot_table(table_key).put(table.key(base_loot_key), entries));
 			});
 		}
 	}

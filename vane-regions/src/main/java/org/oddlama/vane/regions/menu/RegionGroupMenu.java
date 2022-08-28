@@ -275,9 +275,7 @@ public class RegionGroupMenu extends ModuleComponent<Regions> {
 							return ClickResult.SUCCESS;
 						},
 						item_delete_confirm_cancel.item(),
-						player2 -> {
-							menu.open(player2);
-						}
+						player2 -> menu.open(player2)
 					)
 					.tag(new RegionGroupMenuTag(group.id()))
 					.open(player);
@@ -303,9 +301,7 @@ public class RegionGroupMenu extends ModuleComponent<Regions> {
 							return ClickResult.SUCCESS;
 						}
 					)
-					.on_natural_close(player2 -> {
-						menu.open(player2);
-					})
+					.on_natural_close(player2 -> menu.open(player2))
 					.open(player);
 
 				return ClickResult.SUCCESS;
@@ -340,9 +336,7 @@ public class RegionGroupMenu extends ModuleComponent<Regions> {
 							get_module().menus.role_menu.create(group, role, player2).open(player2);
 							return ClickResult.SUCCESS;
 						},
-						player2 -> {
-							menu.open(player2);
-						}
+						player2 -> menu.open(player2)
 					)
 					.open(player);
 				return ClickResult.SUCCESS;
@@ -361,9 +355,7 @@ public class RegionGroupMenu extends ModuleComponent<Regions> {
 			new MenuItem(
 				9 + col,
 				item_info.item(),
-				(player, menu, self) -> {
-					return ClickResult.IGNORE;
-				}
+				(player, menu, self) -> ClickResult.IGNORE
 			)
 		);
 

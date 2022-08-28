@@ -120,9 +120,7 @@ public class Menu {
 			return false;
 		}
 
-		manager.schedule_next_tick(() -> {
-			player.closeInventory(reason);
-		});
+		manager.schedule_next_tick(() -> player.closeInventory(reason));
 		return true;
 	}
 

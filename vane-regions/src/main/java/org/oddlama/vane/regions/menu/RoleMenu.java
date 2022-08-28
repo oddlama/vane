@@ -248,9 +248,7 @@ public class RoleMenu extends ModuleComponent<Regions> {
 							return ClickResult.SUCCESS;
 						},
 						item_delete_confirm_cancel.item(),
-						player2 -> {
-							menu.open(player2);
-						}
+						player2 -> menu.open(player2)
 					)
 					.open(player);
 				return ClickResult.SUCCESS;
@@ -295,9 +293,7 @@ public class RoleMenu extends ModuleComponent<Regions> {
 							group.player_to_role().put(p.getUniqueId(), role.id());
 							return ClickResult.SUCCESS;
 						},
-						player2 -> {
-							menu.open(player2);
-						}
+						player2 -> menu.open(player2)
 					)
 					.open(player);
 				return ClickResult.SUCCESS;
@@ -342,9 +338,7 @@ public class RoleMenu extends ModuleComponent<Regions> {
 							group.player_to_role().remove(p.getUniqueId());
 							return ClickResult.SUCCESS;
 						},
-						player2 -> {
-							menu.open(player2);
-						}
+						player2 -> menu.open(player2)
 					)
 					.open(player);
 				return ClickResult.SUCCESS;
@@ -363,9 +357,7 @@ public class RoleMenu extends ModuleComponent<Regions> {
 			new MenuItem(
 				9 + col,
 				item_info.item(),
-				(player, menu, self) -> {
-					return ClickResult.IGNORE;
-				}
+				(player, menu, self) -> ClickResult.IGNORE
 			)
 		);
 

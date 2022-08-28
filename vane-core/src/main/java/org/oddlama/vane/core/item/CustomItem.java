@@ -134,8 +134,6 @@ public class CustomItem<T extends Module<T>> extends Listener<T> implements org.
 			throw new RuntimeException("Missing resource '" + resource_name + "'. This is a bug.");
 		}
 		rp.add_item_model(key(), resource);
-		rp.add_item_override(baseMaterial().getKey(), key(), predicate -> {
-			predicate.put("custom_model_data", customModelData());
-		});
+		rp.add_item_override(baseMaterial().getKey(), key(), predicate -> predicate.put("custom_model_data", customModelData()));
 	}
 }

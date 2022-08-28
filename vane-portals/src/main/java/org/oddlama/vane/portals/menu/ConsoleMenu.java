@@ -279,9 +279,7 @@ public class ConsoleMenu extends ModuleComponent<Portals> {
 								portal.update_blocks(get_module());
 								return ClickResult.SUCCESS;
 							},
-							player2 -> {
-								menu.open(player2);
-							}
+							player2 -> menu.open(player2)
 						)
 						.tag(new PortalMenuTag(portal.id()))
 						.open(player);
@@ -332,9 +330,7 @@ public class ConsoleMenu extends ModuleComponent<Portals> {
 							return ClickResult.SUCCESS;
 						},
 						item_unlink_console_confirm_cancel.item(),
-						player2 -> {
-							menu.open(player2);
-						}
+						player2 -> menu.open(player2)
 					)
 					.tag(new PortalMenuTag(portal.id()))
 					.open(player);
@@ -367,9 +363,7 @@ public class ConsoleMenu extends ModuleComponent<Portals> {
 							return ClickResult.SUCCESS;
 						},
 						item_destroy_portal_confirm_cancel.item(),
-						player2 -> {
-							menu.open(player2);
-						}
+						player2 -> menu.open(player2)
 					)
 					.tag(new PortalMenuTag(portal.id()))
 					.open(player);

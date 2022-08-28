@@ -48,9 +48,7 @@ public class PlayerMessageDelayer extends Listener<Core> {
 
 		// Check for message delaying timeouts every 5 seconds.
 		schedule_task_timer(
-			() -> {
-				check_message_delay_timeout();
-			},
+			() -> check_message_delay_timeout(),
 			5 * 20,
 			5 * 20
 		);
