@@ -29,9 +29,7 @@ public interface GenericsFinder extends Serializable {
 	default Method method() {
 		SerializedLambda lambda = serialized();
 		Class<?> containingClass = getContainingClass();
-		return Arrays
-			.asList(containingClass.getDeclaredMethods())
-			.stream()
+		return Arrays.stream(containingClass.getDeclaredMethods())
 			.filter(method -> Objects.equals(method.getName(), lambda.getImplMethodName()))
 			.findFirst()
 			.orElseThrow(RuntimeException::new);
