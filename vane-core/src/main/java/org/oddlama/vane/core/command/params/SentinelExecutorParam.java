@@ -57,9 +57,9 @@ public class SentinelExecutorParam<T> extends BaseParam implements Executor {
 				args.size() +
 				" were given." +
 				"\nRequired: " +
-				Arrays.stream(method.getParameters()).map(p -> p.getType().getName()).collect(Collectors.toList()) +
+						Arrays.stream(method.getParameters()).map(p -> p.getType().getName()).toList() +
 				"\nGiven: " +
-				args.stream().map(p -> p.getClass().getName()).collect(Collectors.toList())
+						args.stream().map(p -> p.getClass().getName()).toList()
 			);
 		}
 
