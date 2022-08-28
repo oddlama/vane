@@ -176,6 +176,7 @@ public class ResourcePackDistributor extends Listener<Core> {
 		}
 	}
 
+	@SuppressWarnings({"deprecation", "UnstableApiUsage"})
 	public void update_sha1(File file) {
 		if (!localDev) return;
 		try {
