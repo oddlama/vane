@@ -246,7 +246,7 @@ public class Maintenance {
 
 			// Schedule for next time
 			task =
-					plugin.getVaneProxy().schedule(plugin, this, timespan - notify_time, TimeUnit.MILLISECONDS);
+					plugin.getVaneProxy().get_scheduler().schedule(plugin, this, timespan - notify_time, TimeUnit.MILLISECONDS);
 		}
 
 		public long next_notify_time() {
@@ -291,7 +291,7 @@ public class Maintenance {
 				timespan = 0;
 			}
 
-			task = plugin.getVaneProxy().schedule(plugin, this, timespan, TimeUnit.MILLISECONDS);
+			task = plugin.getVaneProxy().get_scheduler().schedule(plugin, this, timespan, TimeUnit.MILLISECONDS);
 		}
 	}
 }
