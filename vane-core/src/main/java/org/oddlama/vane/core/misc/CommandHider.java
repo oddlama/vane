@@ -25,7 +25,7 @@ public class CommandHider extends Listener<Core> {
 			return false;
 		}
 
-		var id = message.substring(1, message.length());
+		var id = message.substring(1);
 		final var space_index = id.indexOf(' ');
 		if (space_index > -1) {
 			id = id.substring(0, space_index);
