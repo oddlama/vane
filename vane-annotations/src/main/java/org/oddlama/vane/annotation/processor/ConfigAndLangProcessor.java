@@ -88,7 +88,7 @@ public class ConfigAndLangProcessor extends AbstractProcessor {
 	}
 
 	private void verify_type(TypeElement annotation, Element element) {
-		var type = ((VariableElement) element).asType().toString();
+		var type = element.asType().toString();
 		var required_type = field_type_mapping.get(annotation.asType().toString());
 		if (required_type == null) {
 			processingEnv

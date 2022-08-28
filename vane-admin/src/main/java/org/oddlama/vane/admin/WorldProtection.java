@@ -53,7 +53,7 @@ public class WorldProtection extends Listener<Admin> {
 			return false;
 		}
 
-		return !((Player) entity).hasPermission(permission);
+		return !entity.hasPermission(permission);
 	}
 
 	/* ************************ blocks ************************ */
