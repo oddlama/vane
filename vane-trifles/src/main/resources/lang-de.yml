@@ -33,6 +33,13 @@ command_setspawn:
   description: "Setzt den globalen Spawn auf deine aktuelle Position."
   help: "Setzt den globalen Spawn auf deine aktuelle Position."
 
+storage:
+  open_stacked_item: "Nur ein einzelnes Item kann geöffnet werden."
+  item_pouch:
+    name: "Beutel"
+  item_backpack:
+    name: "Rucksack"
+
 xp_bottles:
   item_small_xp_bottle:
     name: "Kleine Erfahrungsflasche"

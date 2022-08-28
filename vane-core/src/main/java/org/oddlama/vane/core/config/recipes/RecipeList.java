@@ -11,6 +11,11 @@ import org.oddlama.vane.core.config.ConfigDictSerializable;
 public class RecipeList implements ConfigDictSerializable {
 	private List<RecipeDefinition> recipes = new ArrayList<>();
 
+	public RecipeList() { }
+	public RecipeList(List<RecipeDefinition> recipes) {
+		this.recipes = recipes;
+	}
+
 	public List<RecipeDefinition> recipes() {
 		return recipes;
 	}

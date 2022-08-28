@@ -100,18 +100,27 @@ public class ResourcePackGenerator {
 
 	private JSONObject create_item_model_handheld(NamespacedKey texture) {
 		// Create model json
-		final var textures = new JSONObject();
-		// FIXME: hardcoded fix for compasses. better rewrite RP generator
-		// and use static files for all items. just language should be generated.
-		if (texture.getNamespace().equals("minecraft") && texture.getKey().equals("compass")) {
-			textures.put("layer0", texture.getNamespace() + ":item/compass_16");
-		} else {
-			textures.put("layer0", texture.getNamespace() + ":item/" + texture.getKey());
-		}
-
 		final var model = new JSONObject();
-		model.put("parent", "minecraft:item/handheld");
-		model.put("textures", textures);
+
+		// FIXME: hardcoded fixes. better rewrite RP generator
+		// and use static files for all items. just language should be generated.
+		if (texture.getNamespace().equals("minecraft") && texture.getKey().equals("dropper")) {
+			model.put("parent", "minecraft:block/dropper");
+		} else if (texture.getNamespace().equals("minecraft") && texture.getKey().endsWith("shulker_box")) {
+			model.put("parent", "minecraft:item/template_shulker_box");
+			final var textures = new JSONObject();
+			textures.put("particle", "minecraft:block/" + texture.getKey());
+			model.put("textures", textures);
+		} else {
+			model.put("parent", "minecraft:item/handheld");
+			final var textures = new JSONObject();
+			if (texture.getNamespace().equals("minecraft") && texture.getKey().equals("compass")) {
+				textures.put("layer0", texture.getNamespace() + ":item/compass_16");
+			} else {
+				textures.put("layer0", texture.getNamespace() + ":item/" + texture.getKey());
+			}
+			model.put("textures", textures);
+		}
 
 		return model;
 	}

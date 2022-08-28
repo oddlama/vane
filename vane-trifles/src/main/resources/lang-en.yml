@@ -33,6 +33,15 @@ command_setspawn:
   description: "Sets the global spawn location to your current position."
   help: "Sets the global spawn location to your current position."
 
+storage:
+  open_stacked_item: "You need to unstack these items to open them."
+  item_pouch:
+    # The display name of this item variant.
+    name: "Pouch"
+  item_backpack:
+    # The display name of this item variant.
+    name: "Backpack"
+
 xp_bottles:
   item_small_xp_bottle:
     # The display name of this item variant.

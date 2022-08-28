@@ -388,6 +388,10 @@ public class BlockUtil {
 
 	public static String texture_from_skull(final Skull skull) {
 		final var profile = skull.getPlayerProfile();
+		if (profile == null) {
+			return null;
+		}
+
 		for (final var property : profile.getProperties()) {
 			if ("textures".equals(property.getName())) {
 				return property.getValue();

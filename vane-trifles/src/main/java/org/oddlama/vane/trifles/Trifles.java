@@ -12,9 +12,10 @@ public class Trifles extends Module<Trifles> {
 	public final HashMap<UUID, Long> last_xp_bottle_consume_time = new HashMap<>();
 	public XpBottles xp_bottles;
 	public ItemFinder item_finder;
+	public StorageGroup storage_group;
 
 	public Trifles() {
-		var fast_walking_group = new FastWalkingGroup(this);
+		final var fast_walking_group = new FastWalkingGroup(this);
 		new FastWalkingListener(fast_walking_group);
 		new DoubleDoorListener(this);
 		new HarvestListener(this);
@@ -37,5 +38,9 @@ public class Trifles extends Module<Trifles> {
 		new org.oddlama.vane.trifles.items.Trowel(this);
 		new org.oddlama.vane.trifles.items.NorthCompass(this);
 		new org.oddlama.vane.trifles.items.SlimeBucket(this);
+
+		storage_group = new StorageGroup(this);
+		new org.oddlama.vane.trifles.items.storage.Pouch(storage_group.get_context());
+		new org.oddlama.vane.trifles.items.storage.Backpack(storage_group.get_context());
 	}
 }

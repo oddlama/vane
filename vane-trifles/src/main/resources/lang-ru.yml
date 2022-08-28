@@ -34,6 +34,14 @@ command_setspawn:
   description: "Устанавливает глобальный спавнпоинт на текущую позицию."
   help: "Устанавливает глобальный спавнпоинт на текущую позицию."
 
+storage:
+  # FIXME: missing translation
+  open_stacked_item: "You need to unstack these items to open them."
+  item_pouch:
+    name: "Pouch"
+  item_backpack:
+    name: "Backpack"
+
 xp_bottles:
   item_small_xp_bottle:
     name: "Маленькая бутылка опыта"
