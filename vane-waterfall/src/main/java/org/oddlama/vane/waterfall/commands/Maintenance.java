@@ -1,12 +1,12 @@
 package org.oddlama.vane.waterfall.commands;
 
-import static org.oddlama.vane.util.TimeUtil.parse_time;
-
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import org.oddlama.vane.waterfall.Waterfall;
+
+import static org.oddlama.vane.util.TimeUtil.parse_time;
 
 public class Maintenance extends Command {
 
@@ -15,7 +15,7 @@ public class Maintenance extends Command {
 	private final Waterfall plugin;
 
 	public Maintenance(final Waterfall plugin) {
-		super("maintenance", "vane_waterfall.commands.maintenance", new String[0]);
+		super("maintenance", "vane_waterfall.commands.maintenance");
 		this.plugin = plugin;
 	}
 
@@ -30,20 +30,21 @@ public class Maintenance extends Command {
 		if (args.length == 1 && (args[0].equalsIgnoreCase("status"))) {
 			if (plugin.maintenance.start() != 0) {
 				sender.sendMessage(
-					plugin.maintenance.format_message(org.oddlama.vane.proxycore.Maintenance.MESSAGE_INFO)
+						TextComponent.fromLegacyText(
+								plugin.maintenance.format_message(org.oddlama.vane.proxycore.Maintenance.MESSAGE_INFO))
 				);
-			} else {}
+			}
 		} else if (args.length == 1 && (args[0].equalsIgnoreCase("cancel"))) {
 			plugin.maintenance.abort();
 		} else if (args.length == 3 && (args[0].equalsIgnoreCase("schedule"))) {
-			long time = 0;
-			long duration = 0;
+			long time;
+			long duration;
 
 			try {
 				time = parse_time(args[1]);
 			} catch (NumberFormatException e) {
 				sender.sendMessage(
-					TextComponent.fromLegacyText(MESSAGE_INVALID_TIME_FORMAT.replace("%time%", args[1]))
+						TextComponent.fromLegacyText(MESSAGE_INVALID_TIME_FORMAT.replace("%time%", args[1]))
 				);
 				return;
 			}
@@ -52,7 +53,7 @@ public class Maintenance extends Command {
 				duration = parse_time(args[2]);
 			} catch (NumberFormatException e) {
 				sender.sendMessage(
-					TextComponent.fromLegacyText(MESSAGE_INVALID_TIME_FORMAT.replace("%time%", args[2]))
+						TextComponent.fromLegacyText(MESSAGE_INVALID_TIME_FORMAT.replace("%time%", args[2]))
 				);
 				return;
 			}
@@ -60,13 +61,15 @@ public class Maintenance extends Command {
 			plugin.maintenance.schedule(System.currentTimeMillis() + time, duration);
 		} else {
 			sender.sendMessage(
-				TextComponent.fromLegacyText(
-					"§7> §3/maintenance §3[ §7cancel §3] §f- Cancel any scheduled/active maintenance" +
-					"\n§7> §3/maintenance §3[ §7status §3] §f- Display info about scheduled/active maintenance" +
-					"\n§7> §3/maintenance §3[ §7schedule §3] §7<§bin§7> <§bduration§7> §f- Schedule maintenance in <in> for <duration>" +
-					"\n§7> §3|§7 time format§7 §f- Examples: §b§o3h5m§r§f or §b§o1y2w3d4h5m6s§r"
-				)
+					TextComponent.fromLegacyText(
+							"""
+									§7> §3/maintenance §3[ §7cancel §3] §f- Cancel any scheduled/active maintenance
+									§7> §3/maintenance §3[ §7status §3] §f- Display info about scheduled/active maintenance
+									§7> §3/maintenance §3[ §7schedule §3] §7<§bin§7> <§bduration§7> §f- Schedule maintenance in <in> for <duration>
+									§7> §3|§7 time format§7 §f- Examples: §b§o3h5m§r§f or §b§o1y2w3d4h5m6s§r"""
+					)
 			);
 		}
 	}
+
 }
