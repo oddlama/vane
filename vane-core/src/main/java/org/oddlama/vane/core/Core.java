@@ -150,9 +150,7 @@ public class Core extends Module<Core> {
 			schedule_task_timer(this::check_for_update, 1l, ms_to_ticks(2 * 60l * 60l * 1000l));
 		}
 
-		schedule_next_tick(() -> {
-			freeze_registries();
-		});
+		schedule_next_tick(() -> freeze_registries());
 	}
 
 	private void unfreeze_registries() {

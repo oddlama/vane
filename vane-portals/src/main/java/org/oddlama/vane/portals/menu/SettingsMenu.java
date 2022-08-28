@@ -225,9 +225,7 @@ public class SettingsMenu extends ModuleComponent<Portals> {
 							menu.open(player2);
 							return ClickResult.SUCCESS;
 						},
-						player2 -> {
-							menu.open(player2);
-						}
+						player2 -> menu.open(player2)
 					)
 					.tag(new PortalMenuTag(portal.id()))
 					.open(player);

@@ -1049,9 +1049,7 @@ public class Portals extends Module<Portals> {
 			.collect(Collectors.toSet());
 
 		// Remove all portals that no longer exist
-		Sets.difference(stored_portals, portals.keySet()).forEach(id -> {
-			data.remove(NamespacedKey.fromString(storage_portal_prefix + id.toString()));
-		});
+		Sets.difference(stored_portals, portals.keySet()).forEach(id -> data.remove(NamespacedKey.fromString(storage_portal_prefix + id.toString())));
 	}
 
 	private class PortalDisableRunnable implements Runnable {

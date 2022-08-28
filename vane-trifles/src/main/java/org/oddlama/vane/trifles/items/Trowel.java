@@ -119,9 +119,7 @@ public class Trowel extends CustomItem<Trifles> {
 	}
 
 	private void feed_source(final ItemStack item_stack, final FeedSource feed_source) {
-		item_stack.editMeta(meta -> {
-			meta.getPersistentDataContainer().set(FEED_SOURCE, PersistentDataType.INTEGER, feed_source.ordinal());
-		});
+		item_stack.editMeta(meta -> meta.getPersistentDataContainer().set(FEED_SOURCE, PersistentDataType.INTEGER, feed_source.ordinal()));
 	}
 
 	private void update_lore(final ItemStack item_stack) {

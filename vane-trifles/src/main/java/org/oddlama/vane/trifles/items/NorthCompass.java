@@ -44,9 +44,7 @@ public class NorthCompass extends CustomItem<Trifles> {
 			final var world = worlds.get(0);
 			System.out.println("update noth " + world);
 			if (world != null) {
-				item_stack.editMeta(CompassMeta.class, meta -> {
-					meta.setLodestone(new Location(world, 0.0, 0.0, -999999999.0));
-				});
+				item_stack.editMeta(CompassMeta.class, meta -> meta.setLodestone(new Location(world, 0.0, 0.0, -999999999.0)));
 			}
 		}
 		return item_stack;
@@ -126,9 +124,7 @@ public class NorthCompass extends CustomItem<Trifles> {
 			final var angle = angle_item.getLeft();
 			final var num = angle_item.getRight();
 			final var key_num = num == 16 ? base_key : StorageUtil.namespaced_key(base_key.namespace(), String.format("%s_%02d", base_key.value(), num));
-			rp.add_item_override(base_key, key_num, predicate -> {
-				predicate.put("angle", angle);
-			});
+			rp.add_item_override(base_key, key_num, predicate -> predicate.put("angle", angle));
 		}
 		for (final var angle_item : angle_item_overrides) {
 			final var angle = angle_item.getLeft();

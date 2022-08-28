@@ -222,9 +222,7 @@ public class MainMenu extends ModuleComponent<Regions> {
 								}
 							}
 						)
-						.on_natural_close(player2 -> {
-							menu.open(player2);
-						})
+						.on_natural_close(player2 -> menu.open(player2))
 						.open(player);
 
 					return ClickResult.SUCCESS;
@@ -349,9 +347,7 @@ public class MainMenu extends ModuleComponent<Regions> {
 							get_module().menus.region_menu.create(region, player2).open(player2);
 							return ClickResult.SUCCESS;
 						},
-						player2 -> {
-							menu.open(player2);
-						}
+						player2 -> menu.open(player2)
 					)
 					.open(player);
 				return ClickResult.SUCCESS;
@@ -387,9 +383,7 @@ public class MainMenu extends ModuleComponent<Regions> {
 							return ClickResult.SUCCESS;
 						}
 					)
-					.on_natural_close(player2 -> {
-						menu.open(player2);
-					})
+					.on_natural_close(player2 -> menu.open(player2))
 					.open(player);
 
 				return ClickResult.SUCCESS;
@@ -426,9 +420,7 @@ public class MainMenu extends ModuleComponent<Regions> {
 							get_module().menus.region_group_menu.create(group, player).open(player);
 							return ClickResult.SUCCESS;
 						},
-						player2 -> {
-							menu.open(player2);
-						}
+						player2 -> menu.open(player2)
 					)
 					.open(player);
 				return ClickResult.SUCCESS;

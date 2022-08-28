@@ -43,9 +43,7 @@ public class MenuFactory {
 		anvil.add(
 			new MenuItemClickListener(
 				2,
-				(p, menu, item) -> {
-					return on_click.apply(p, menu, name_of(item));
-				}
+				(p, menu, item) -> on_click.apply(p, menu, name_of(item))
 			)
 		);
 		return anvil;
@@ -122,13 +120,11 @@ public class MenuFactory {
 		final Function1<ItemStack, ItemStack> on_select_item
 	) {
 		final var menu_manager = context.get_module().core.menu_manager;
-		final Function1<ItemStack, ItemStack> set_item_name = item -> {
-			return name_item(
-				item,
-				menu_manager.item_selector_selected.lang_name.format(),
-				menu_manager.item_selector_selected.lang_lore.format()
-			);
-		};
+		final Function1<ItemStack, ItemStack> set_item_name = item -> name_item(
+			item,
+			menu_manager.item_selector_selected.lang_name.format(),
+			menu_manager.item_selector_selected.lang_lore.format()
+		);
 
 		final var no_item = set_item_name.apply(new ItemStack(Material.BARRIER));
 		final ItemStack default_item;

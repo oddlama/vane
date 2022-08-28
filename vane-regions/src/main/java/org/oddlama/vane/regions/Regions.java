@@ -788,9 +788,7 @@ public class Regions extends Module<Regions> {
 			.collect(Collectors.toSet());
 
 		// Remove all regions that no longer exist
-		Sets.difference(stored_regions, regions.keySet()).forEach(id -> {
-			data.remove(NamespacedKey.fromString(storage_region_prefix + id.toString()));
-		});
+		Sets.difference(stored_regions, regions.keySet()).forEach(id -> data.remove(NamespacedKey.fromString(storage_region_prefix + id.toString())));
 	}
 
 	@Override

@@ -508,9 +508,7 @@ public class StyleMenu extends ModuleComponent<Portals> {
 							menu.open(player2);
 							return ClickResult.SUCCESS;
 						},
-						player2 -> {
-							menu.open(player2);
-						},
+						player2 -> menu.open(player2),
 						item -> {
 							// Only allow placeable solid blocks
 							if (item == null || !(item.getType().isBlock() && item.getType().isSolid())) {
@@ -610,9 +608,7 @@ public class StyleMenu extends ModuleComponent<Portals> {
 							menu.open(player2);
 							return ClickResult.SUCCESS;
 						},
-						player2 -> {
-							menu.open(player2);
-						}
+						player2 -> menu.open(player2)
 					)
 					.tag(new PortalMenuTag(portal.id()))
 					.open(player);
