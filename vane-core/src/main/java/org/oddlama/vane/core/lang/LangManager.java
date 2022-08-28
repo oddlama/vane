@@ -115,11 +115,10 @@ public class LangManager {
 	public void compile(Object owner, Function<String, String> map_name) {
 		// Compile all annotated fields
 		lang_fields.addAll(
-			getAllFields(owner.getClass())
-				.stream()
-				.filter(this::has_lang_annotation)
-				.map(f -> compile_field(owner, f, map_name))
-				.collect(Collectors.toList())
+				getAllFields(owner.getClass())
+						.stream()
+						.filter(this::has_lang_annotation)
+						.map(f -> compile_field(owner, f, map_name)).toList()
 		);
 
 		if (owner == module && field_version == null) {

@@ -175,8 +175,7 @@ public class ItemUtil {
 						Map.Entry
 								.<Enchantment, Integer>comparingByKey(
 										(a, b) -> a.getKey().toString().compareTo(b.getKey().toString()))
-								.thenComparing(Map.Entry.comparingByValue()))
-				.collect(Collectors.toList());
+								.thenComparing(Map.Entry.comparingByValue())).toList();
 		final var b_sorted = be
 				.entrySet()
 				.stream()
@@ -184,8 +183,7 @@ public class ItemUtil {
 						Map.Entry
 								.<Enchantment, Integer>comparingByKey(
 										(a, b) -> a.getKey().toString().compareTo(b.getKey().toString()))
-								.thenComparing(Map.Entry.comparingByValue()))
-				.collect(Collectors.toList());
+								.thenComparing(Map.Entry.comparingByValue())).toList();
 
 		// Lastly, compare names and levels
 		final var ait = a_sorted.iterator();
