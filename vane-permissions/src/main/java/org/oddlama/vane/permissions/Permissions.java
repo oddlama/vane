@@ -136,9 +136,7 @@ public class Permissions extends Module<Permissions> {
 			sender_attachments.put(sender, attachment);
 
 			final var attached_perms = console_attachment.getPermissions();
-			attached_perms.forEach((p, v) -> {
-				attachment.setPermission(p, v);
-			});
+			attached_perms.forEach((p, v) -> attachment.setPermission(p, v));
 		}
 	}
 
@@ -220,9 +218,7 @@ public class Permissions extends Module<Permissions> {
 		// Clear attachment
 		final var attachment = player_attachments.get(player.getUniqueId());
 		final var attached_perms = attachment.getPermissions();
-		attached_perms.forEach((p, v) -> {
-			attachment.unsetPermission(p);
-		});
+		attached_perms.forEach((p, v) -> attachment.unsetPermission(p));
 
 		// Add permissions again
 		var groups = storage_player_groups.get(player.getUniqueId());

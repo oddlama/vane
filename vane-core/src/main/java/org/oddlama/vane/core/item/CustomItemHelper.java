@@ -82,9 +82,7 @@ public class CustomItemHelper {
 	 */
 	public static ItemStack newStack(final CustomItem customItem, final int amount) {
 		final var itemStack = new ItemStack(customItem.baseMaterial(), amount);
-		itemStack.editMeta(meta -> {
-			meta.displayName(customItem.displayName());
-		});
+		itemStack.editMeta(meta -> meta.displayName(customItem.displayName()));
 		return CustomItemHelper.updateItemStack(customItem, itemStack);
 	}
 

@@ -222,9 +222,7 @@ public class DurabilityManager extends Listener<Core> {
 		// calling this event. We always increase the visual durability by 1
 		// and let the server implementation decrease it again to
 		// allow the item to break.
-		item.editMeta(Damageable.class, damage_meta -> {
-			damage_meta.setDamage(damage_meta.getDamage() - 1);
-		});
+		item.editMeta(Damageable.class, damage_meta -> damage_meta.setDamage(damage_meta.getDamage() - 1));
 		event.setDamage(1);
 	}
 

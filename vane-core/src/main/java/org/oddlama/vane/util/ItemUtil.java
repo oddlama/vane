@@ -344,9 +344,7 @@ public class ItemUtil {
 
 			if (item_stack.getType() == Material.ENCHANTED_BOOK) {
 				final var flevel = level;
-				item_stack.editMeta(EnchantmentStorageMeta.class, meta -> {
-					meta.addStoredEnchant(ench, flevel, false);
-				});
+				item_stack.editMeta(EnchantmentStorageMeta.class, meta -> meta.addStoredEnchant(ench, flevel, false));
 			} else {
 				item_stack.addEnchantment(ench, level);
 			}

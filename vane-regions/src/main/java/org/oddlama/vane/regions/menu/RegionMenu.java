@@ -189,9 +189,7 @@ public class RegionMenu extends ModuleComponent<Regions> {
 							return ClickResult.SUCCESS;
 						},
 						item_delete_confirm_cancel.item(),
-						player2 -> {
-							menu.open(player2);
-						}
+						player2 -> menu.open(player2)
 					)
 					.tag(new RegionMenuTag(region.id()))
 					.open(player);
@@ -235,9 +233,7 @@ public class RegionMenu extends ModuleComponent<Regions> {
 							menu.open(player2);
 							return ClickResult.SUCCESS;
 						},
-						player2 -> {
-							menu.open(player2);
-						}
+						player2 -> menu.open(player2)
 					)
 					.open(player);
 				return ClickResult.SUCCESS;
