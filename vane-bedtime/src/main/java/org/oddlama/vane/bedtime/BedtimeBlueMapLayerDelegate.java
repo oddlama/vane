@@ -16,7 +16,7 @@ public class BedtimeBlueMapLayerDelegate {
 
 	public static final String MARKER_SET_ID = "vane_bedtime.bedtime";
 
-	private BedtimeBlueMapLayer parent = null;
+	private final BedtimeBlueMapLayer parent;
 
 	private boolean bluemap_enabled = false;
 

@@ -166,7 +166,7 @@ public class ChestSorter extends Listener<Trifles> {
 		final var face = ((FaceAttachable) button_data).getAttachedFace();
 
 		int rx = 0;
-		int ry = 0;
+		int ry;
 		int rz = 0;
 
 		// Determine relative radius rx, ry, rz as seen from the button.

@@ -35,7 +35,7 @@ public class PortalBoundary {
 	// Origin block is the root block of the portal. It determines the search point
 	// for the spawn location for XY and YZ types, and the region the portal belongs to.
 	private Block origin_block = null;
-	private Plane plane = null;
+	private final Plane plane;
 	private Location spawn = null;
 
 	private ErrorState error_state = ErrorState.NONE;
@@ -510,7 +510,7 @@ public class PortalBoundary {
 
 			// Find "backwards" last block inside
 			Block next = first_inside;
-			Block back_last_inside = null;
+			Block back_last_inside;
 			int total_blocks_inside = -1; // -1 because both forward and backward search include first_inside
 			do {
 				back_last_inside = next;
@@ -520,7 +520,7 @@ public class PortalBoundary {
 
 			// Find "forward" last block inside
 			next = first_inside;
-			Block last_inside = null;
+			Block last_inside;
 			do {
 				last_inside = next;
 				next = last_inside.getRelative(mod_x, 0, mod_z);

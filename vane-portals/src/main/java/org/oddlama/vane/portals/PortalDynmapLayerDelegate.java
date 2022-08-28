@@ -13,7 +13,7 @@ import org.oddlama.vane.portals.portal.Portal;
 
 public class PortalDynmapLayerDelegate {
 
-	private PortalDynmapLayer parent = null;
+	private final PortalDynmapLayer parent;
 
 	private DynmapAPI dynmap_api = null;
 	private MarkerAPI marker_api = null;

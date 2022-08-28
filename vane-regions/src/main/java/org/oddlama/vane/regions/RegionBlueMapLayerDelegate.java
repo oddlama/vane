@@ -17,7 +17,7 @@ public class RegionBlueMapLayerDelegate {
 
 	public static final String MARKER_SET_ID = "vane_regions.regions";
 
-	private RegionBlueMapLayer parent = null;
+	private final RegionBlueMapLayer parent;
 
 	private boolean bluemap_enabled = false;
 

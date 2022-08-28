@@ -13,7 +13,7 @@ import org.dynmap.markers.MarkerSet;
 
 public class BedtimeDynmapLayerDelegate {
 
-	private BedtimeDynmapLayer parent = null;
+	private final BedtimeDynmapLayer parent;
 
 	private DynmapAPI dynmap_api = null;
 	private MarkerAPI marker_api = null;
