@@ -657,9 +657,8 @@ public class Portals extends Module<Portals> {
 		for (final var chunk : chunks_for(portal)) {
 			final var chunk_key = chunk.getChunkKey();
 			final var ticket_counter = chunk_ticket_count.get(chunk_key);
-			if (ticket_counter == null) {
-				continue;
-			} else if (ticket_counter > 1) {
+
+			if (ticket_counter > 1) {
 				chunk_ticket_count.put(chunk_key, ticket_counter - 1);
 			} else if (ticket_counter == 1) {
 				chunk.removePluginChunkTicket(this);
@@ -978,7 +977,6 @@ public class Portals extends Module<Portals> {
 				index_portal(portal);
 			} catch (IOException e) {
 				log.log(Level.SEVERE, "error while serializing persistent data!", e);
-				continue;
 			}
 		}
 		log.log(Level.INFO, "Loaded " + pdc_portals.size() + " portals for world " + world.getName() + "(" + world.getUID() + ")");

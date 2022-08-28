@@ -134,7 +134,6 @@ public class RegionRoleSettingEnforcer extends Listener<Regions> {
 							event.setCancelled(true);
 						}
 					}
-					return;
 				}
 		}
 	}
@@ -231,7 +230,6 @@ public class RegionRoleSettingEnforcer extends Listener<Regions> {
 					if (check_setting_at(block, player, RoleSetting.USE, false)) {
 						event.setCancelled(true);
 					}
-					return;
 				}
 		}
 	}
@@ -341,7 +339,6 @@ public class RegionRoleSettingEnforcer extends Listener<Regions> {
 			check_setting_at(event.getPortal().spawn(), event.getPlayer(), RoleSetting.ADMIN, false)
 		) {
 			event.setCancelled(true);
-			return;
 		}
 	}
 
@@ -368,7 +365,6 @@ public class RegionRoleSettingEnforcer extends Listener<Regions> {
 		// Check permission on portal
 		if (check_setting_at(event.getPortal().spawn(), event.getPlayer(), RoleSetting.ADMIN, false)) {
 			event.setCancelled(true);
-			return;
 		}
 	}
 
@@ -388,7 +384,6 @@ public class RegionRoleSettingEnforcer extends Listener<Regions> {
 		// Check permission on portal
 		if (check_setting_at(event.getPortal().spawn(), event.getPlayer(), RoleSetting.PORTAL, false)) {
 			event.setCancelled(true);
-			return;
 		}
 	}
 
@@ -411,7 +406,6 @@ public class RegionRoleSettingEnforcer extends Listener<Regions> {
 			check_setting_at(event.getTarget().spawn(), event.getPlayer(), RoleSetting.PORTAL, false)
 		) {
 			event.setCancelled(true);
-			return;
 		}
 	}
 
