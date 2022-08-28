@@ -258,11 +258,7 @@ public class Permissions extends Module<Permissions> {
 	}
 
 	public boolean add_player_to_group(final OfflinePlayer player, final String group) {
-		var set = storage_player_groups.get(player.getUniqueId());
-		if (set == null) {
-			set = new HashSet<String>();
-			storage_player_groups.put(player.getUniqueId(), set);
-		}
+		var set = storage_player_groups.computeIfAbsent(player.getUniqueId(), k -> new HashSet<String>());
 
 		final var added = set.add(group);
 		if (added) {

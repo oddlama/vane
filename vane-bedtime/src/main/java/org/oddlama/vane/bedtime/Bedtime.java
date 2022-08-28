@@ -167,11 +167,7 @@ public class Bedtime extends Module<Bedtime> {
 	private void add_sleeping(final World world, final Player player) {
 		// Add player to sleepers
 		final var world_id = world.getUID();
-		var sleepers = world_sleepers.get(world_id);
-		if (sleepers == null) {
-			sleepers = new HashSet<UUID>();
-			world_sleepers.put(world_id, sleepers);
-		}
+		var sleepers = world_sleepers.computeIfAbsent(world_id, k -> new HashSet<>());
 
 		sleepers.add(player.getUniqueId());
 
