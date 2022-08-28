@@ -85,7 +85,7 @@ public class ItemUtil {
 
 	public static ItemStack name_item(final ItemStack item, final Component name, Component lore) {
 		lore = lore.decoration(TextDecoration.ITALIC, false);
-		return name_item(item, name, Arrays.asList(new Component[] { lore }));
+		return name_item(item, name, List.of(lore));
 	}
 
 	public static ItemStack set_lore(final ItemStack item, final List<Component> lore) {

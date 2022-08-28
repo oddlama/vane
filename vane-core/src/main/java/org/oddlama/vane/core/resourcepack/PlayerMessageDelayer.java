@@ -186,7 +186,7 @@ public class PlayerMessageDelayer extends Listener<Core> {
 			super(
 				PlayerMessageDelayer.this.get_module(),
 				ListenerPriority.HIGHEST,
-				new PacketType[] { PacketType.Play.Server.SYSTEM_CHAT }
+				PacketType.Play.Server.SYSTEM_CHAT
 			);
 		}
 
