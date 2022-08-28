@@ -36,12 +36,7 @@ public class PortalBlockProtector extends Listener<Portals> {
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void on_entity_explode(final EntityExplodeEvent event) {
 		// Prevent explosions from removing portal blocks
-		final var it = event.blockList().iterator();
-		while (it.hasNext()) {
-			if (get_module().is_portal_block(it.next())) {
-				it.remove();
-			}
-		}
+		event.blockList().removeIf(block -> get_module().is_portal_block(block));
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
