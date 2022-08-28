@@ -359,7 +359,7 @@ public class RegionGroupMenu extends ModuleComponent<Regions> {
 	) {
 		region_group_menu.add(
 			new MenuItem(
-				1 * 9 + col,
+				9 + col,
 				item_info.item(),
 				(player, menu, self) -> {
 					return ClickResult.IGNORE;

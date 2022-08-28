@@ -80,7 +80,7 @@ public class GenericSelector<T, F extends Filter<T>> {
 		// Filter item
 		generic_selector_menu.add(
 			new MenuItem(
-				generic_selector.page_size + 0,
+					generic_selector.page_size,
 				generic_selector.menu_manager.generic_selector_filter.item(),
 				(p, menu, self, event) -> {
 					if (!Menu.is_left_or_right_click(event)) {
