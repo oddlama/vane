@@ -88,11 +88,10 @@ public class PersistentStorageManager {
 	public void compile(Object owner, Function<String, String> map_name) {
 		// Compile all annotated fields
 		persistent_fields.addAll(
-			getAllFields(owner.getClass())
-				.stream()
-				.filter(this::has_persistent_annotation)
-				.map(f -> compile_field(owner, f, map_name))
-				.collect(Collectors.toList())
+				getAllFields(owner.getClass())
+						.stream()
+						.filter(this::has_persistent_annotation)
+						.map(f -> compile_field(owner, f, map_name)).toList()
 		);
 	}
 

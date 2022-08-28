@@ -171,11 +171,10 @@ public class ConfigManager {
 	public void compile(Object owner, Function<String, String> map_name) {
 		// Compile all annotated fields
 		config_fields.addAll(
-			getAllFields(owner.getClass())
-				.stream()
-				.filter(this::has_config_annotation)
-				.map(f -> compile_field(owner, f, map_name))
-				.collect(Collectors.toList())
+				getAllFields(owner.getClass())
+						.stream()
+						.filter(this::has_config_annotation)
+						.map(f -> compile_field(owner, f, map_name)).toList()
 		);
 
 		// Sort fields alphabetically, and by precedence (e.g. put version last and lang first)

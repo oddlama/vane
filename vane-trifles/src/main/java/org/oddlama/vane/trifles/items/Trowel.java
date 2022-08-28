@@ -135,8 +135,7 @@ public class Trowel extends CustomItem<Trifles> {
 		lore.addAll(lang_lore
 				.format("§a" + feed_source)
 				.stream()
-				.map(x -> ItemUtil.add_sentinel(x, SENTINEL))
-				.collect(Collectors.toList()));
+				.map(x -> ItemUtil.add_sentinel(x, SENTINEL)).toList());
 
 		item_stack.lore(lore);
 	}
