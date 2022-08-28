@@ -11,4 +11,6 @@ public interface ProxyServer {
 	void broadcast(String message);
 
 	Collection<ProxyPlayer> getPlayers();
+
+	// TODO: getServerInfo()
 }
