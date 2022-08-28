@@ -4,7 +4,7 @@ import java.util.UUID;
 
 public class RegionMenuTag {
 
-	private UUID region_id = null;
+	private final UUID region_id;
 
 	public RegionMenuTag(final UUID region_id) {
 		this.region_id = region_id;

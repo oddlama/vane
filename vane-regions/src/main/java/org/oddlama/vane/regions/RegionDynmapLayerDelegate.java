@@ -12,7 +12,7 @@ import org.oddlama.vane.regions.region.Region;
 
 public class RegionDynmapLayerDelegate {
 
-	private RegionDynmapLayer parent = null;
+	private final RegionDynmapLayer parent;
 
 	private DynmapAPI dynmap_api = null;
 	private MarkerAPI marker_api = null;
