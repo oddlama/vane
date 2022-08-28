@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
-import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -16,15 +15,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityTeleportEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.util.Vector;
 import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.event.EntityMoveEvent;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.portals.portal.Portal;
 import org.oddlama.vane.util.Nms;
-
-import net.minecraft.core.BlockPos;
 
 public class PortalTeleporter extends Listener<Portals> {
 

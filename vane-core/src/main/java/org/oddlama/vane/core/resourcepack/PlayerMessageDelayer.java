@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.logging.Level;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -21,7 +20,6 @@ import org.bukkit.event.player.PlayerResourcePackStatusEvent;
 import org.oddlama.vane.core.Core;
 import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.module.Context;
-import org.oddlama.vane.packet.WrapperPlayServerChat;
 
 public class PlayerMessageDelayer extends Listener<Core> {
 
