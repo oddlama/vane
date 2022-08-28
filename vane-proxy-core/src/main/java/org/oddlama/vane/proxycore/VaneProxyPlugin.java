@@ -24,7 +24,6 @@ public interface VaneProxyPlugin {
 
 	boolean is_online(final IVaneProxyServerInfo server);
 	String get_motd(final IVaneProxyServerInfo server);
-	boolean has_permission(UUID uuid, String permission);
 
 	java.io.File getVaneDataFolder();
 
@@ -32,4 +31,6 @@ public interface VaneProxyPlugin {
 
 	@NotNull
 	IVaneLogger getVaneLogger();
+
+	void try_start_server(ManagedServer server);
 }

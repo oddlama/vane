@@ -2,14 +2,9 @@ package org.oddlama.vane.waterfall.compat;
 
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.plugin.Plugin;
 import org.oddlama.vane.proxycore.*;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
+import java.util.*;
 
 public class BungeeCompatProxyServer implements org.oddlama.vane.proxycore.ProxyServer {
 	public ProxyServer proxyServer;
@@ -31,6 +26,28 @@ public class BungeeCompatProxyServer implements org.oddlama.vane.proxycore.Proxy
 	@Override
 	public Collection<ProxyPlayer> getPlayers() {
 		return proxyServer.getPlayers().stream().map(it -> (ProxyPlayer) new BungeeCompatProxyPlayer(it)).toList();
+	}
+
+	@Override
+	public boolean can_start_server(UUID uuid, String serverName) {
+		return has_permission(uuid, "vane_waterfall.start_server", "vane_waterfall.start_server." + serverName);
+	}
+
+	@Override
+	public boolean has_permission(UUID uuid, String... permission) {
+		if (uuid == null) {
+			return false;
+		}
+
+		final var conf_adapter = proxyServer.getConfigurationAdapter();
+		for (final var group : conf_adapter.getGroups(uuid.toString())) {
+			final var perms = conf_adapter.getList("permissions." + group, null);
+			if (perms != null && !Collections.disjoint(perms, List.of(permission))) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 }
