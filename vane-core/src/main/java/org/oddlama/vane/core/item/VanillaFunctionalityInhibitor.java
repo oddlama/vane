@@ -161,7 +161,7 @@ public class VanillaFunctionalityInhibitor extends Listener<Core> {
 			r.editMeta(meta -> {
 				if (a != null && inhibit(custom_item_r, InhibitBehavior.NEW_ENCHANTS)) {
 					for (final var ench : r.getEnchantments().keySet()) {
-						if (!a.getEnchantments().keySet().contains(ench)) {
+						if (!a.getEnchantments().containsKey(ench)) {
 							meta.removeEnchant(ench);
 							did_edit[0] = true;
 						}
