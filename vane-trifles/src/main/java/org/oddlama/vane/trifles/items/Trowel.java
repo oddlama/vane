@@ -1,5 +1,6 @@
 package org.oddlama.vane.trifles.items;
 
+import static org.oddlama.vane.util.ItemUtil.damage_item;
 import static org.oddlama.vane.util.PlayerUtil.swing_arm;
 
 import java.util.ArrayList;
@@ -231,6 +232,7 @@ public class Trowel extends CustomItem<Trifles> {
 
 			if (result.consumesAction()) {
 				swing_arm(player, EquipmentSlot.HAND);
+				damage_item(player, item_in_hand, 1);
 				if (sound_type != null) {
 					nms_world.playSound(null, block_pos, sound_type.getPlaceSound(), SoundSource.BLOCKS, (sound_type.getVolume() + 1.0F) / 2.0F, sound_type.getPitch() * 0.8F);
 				}
