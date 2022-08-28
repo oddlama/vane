@@ -39,11 +39,7 @@ public class PortalTeleporter extends Listener<Portals> {
 			return true;
 		}
 
-		if (get_module().is_portal_block(entity.getLocation().getBlock())) {
-			return true;
-		}
-
-		return false;
+		return get_module().is_portal_block(entity.getLocation().getBlock());
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

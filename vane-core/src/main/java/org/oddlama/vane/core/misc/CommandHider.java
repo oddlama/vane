@@ -34,9 +34,7 @@ public class CommandHider extends Listener<Core> {
 		final var command_map = get_module().getServer().getCommandMap().getKnownCommands();
 		var command = command_map.get(id);
 		if (command != null) {
-			if (!command.testPermissionSilent(player)) {
-				return false;
-			}
+			return command.testPermissionSilent(player);
 		}
 
 		return true;
