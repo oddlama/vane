@@ -105,7 +105,7 @@ public class ConfigDictField extends ConfigField<ConfigDictSerializable> {
 			builder.append(" {}\n");
 		} else {
 			builder.append("\n");
-			dict.entrySet().stream().sorted(Map.Entry.<String, Object>comparingByKey()).forEach(entry -> {
+			dict.entrySet().stream().sorted(Map.Entry.comparingByKey()).forEach(entry -> {
 				if (entry.getValue() instanceof String) {
 					builder.append(indent + "  ");
 					builder.append(entry.getKey());
