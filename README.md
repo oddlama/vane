@@ -83,9 +83,10 @@ I would like to thank the following projects and people maintaining them:
 
 #### Included software
 
-The following software packets will be included in the compilation step:
+The following projects will be included in the compilation step:
 
 - [org.json](https://github.com/stleary/JSON-java) (MIT), Java json implementation
+- [SnakeYAML](https://bitbucket.org/snakeyaml/snakeyaml) (Apache-2.0), Java YAML 1.1 implementation
 - [ronmamo reflections](https://github.com/ronmamo/reflections) (WTFPL), Java reflection helper
 - [PacketWrapper](https://github.com/dmulloy2/PacketWrapper) (LGPL3), only specific parts are included
 - [bStats](https://bstats.org/) (LGPL3), plugin metrics
