@@ -263,7 +263,7 @@ public class ConfigManager {
 		// Save to tmp file, then move atomically to prevent corruption.
 		final var tmp_file = new File(file.getAbsolutePath() + ".tmp");
 		try {
-			Files.write(tmp_file.toPath(), content.getBytes(StandardCharsets.UTF_8));
+			Files.writeString(tmp_file.toPath(), content);
 		} catch (IOException e) {
 			module.log.log(Level.SEVERE, "error while writing config file '" + file + "'", e);
 			return false;

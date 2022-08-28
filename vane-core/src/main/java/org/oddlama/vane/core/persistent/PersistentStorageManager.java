@@ -191,7 +191,7 @@ public class PersistentStorageManager {
 		// Save to tmp file, then move atomically to prevent corruption.
 		final var tmp_file = new File(file.getAbsolutePath() + ".tmp");
 		try {
-			Files.write(tmp_file.toPath(), json.toString().getBytes(StandardCharsets.UTF_8));
+			Files.writeString(tmp_file.toPath(), json.toString());
 		} catch (IOException e) {
 			module.log.log(Level.SEVERE, "error while saving persistent data to temporary file!", e);
 			return;
