@@ -49,8 +49,6 @@ public class ResourceList {
 		ZipFile zf;
 		try {
 			zf = new ZipFile(file);
-		} catch (final ZipException e) {
-			throw new Error(e);
 		} catch (final IOException e) {
 			throw new Error(e);
 		}
