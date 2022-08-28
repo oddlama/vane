@@ -184,7 +184,6 @@ public class RegionEnvironmentSettingEnforcer extends Listener<Regions> {
 					if (check_setting_at(event.getEntity().getLocation(), EnvironmentSetting.EXPLOSIONS, false)) {
 						event.setCancelled(true);
 					}
-					return;
 				}
 		}
 	}

@@ -724,7 +724,6 @@ public class Regions extends Module<Regions> {
 				index_region(region);
 			} catch (IOException e) {
 				log.log(Level.SEVERE, "error while serializing persistent data!", e);
-				continue;
 			}
 		}
 		log.log(Level.INFO, "Loaded " + pdc_regions.size() + " regions for world " + world.getName() + "(" + world.getUID() + ")");

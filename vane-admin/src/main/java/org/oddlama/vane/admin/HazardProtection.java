@@ -111,7 +111,6 @@ public class HazardProtection extends Listener<Admin> {
 				if (config_disable_lightning_fire) {
 					event.setCancelled(true);
 				}
-				return;
 		}
 	}
 

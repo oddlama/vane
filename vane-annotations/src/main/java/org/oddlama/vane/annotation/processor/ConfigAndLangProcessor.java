@@ -114,7 +114,6 @@ public class ConfigAndLangProcessor extends AbstractProcessor {
 						" but got " +
 						type
 					);
-				return;
 			}
 		}
 	}

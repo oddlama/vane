@@ -116,7 +116,6 @@ public class ExistingItemConverter extends Listener<Core> {
 				get_module().log.info("Updated item durability " + custom_item.key());
 				DurabilityManager.initialize_or_update_max(custom_item, contents[i]);
 				++changed;
-				continue;
 			}
 		}
 

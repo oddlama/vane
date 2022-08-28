@@ -106,7 +106,6 @@ public class Enchant extends Command<Core> {
 				"§b" + enchantment.getKey().toString(),
 				"§a" + item_stack.getType().getKey().toString()
 			);
-			return;
 		}
 	}
 }

@@ -262,8 +262,6 @@ public class PlayerUtil {
 			case OFF_HAND:
 				player.swingOffHand();
 				break;
-			default:
-				return;
 		}
 	}
 }
