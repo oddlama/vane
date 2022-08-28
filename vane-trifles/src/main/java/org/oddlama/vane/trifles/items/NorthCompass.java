@@ -133,7 +133,7 @@ public class NorthCompass extends CustomItem<Trifles> {
 		for (final var angle_item : angle_item_overrides) {
 			final var angle = angle_item.getLeft();
 			final var num = angle_item.getRight();
-			final var resource_name = String.format("items/%s_%02d.png", key().value().toString(), num);
+			final var resource_name = String.format("items/%s_%02d.png", key().value(), num);
 			final var resource = get_module().getResource(resource_name);
 			if (resource == null) {
 				throw new RuntimeException("Missing resource '" + resource_name + "'. This is a bug.");
