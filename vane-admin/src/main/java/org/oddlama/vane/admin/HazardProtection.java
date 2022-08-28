@@ -72,10 +72,6 @@ public class HazardProtection extends Listener<Admin> {
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void on_entity_explode(final EntityExplodeEvent event) {
-		if (event.getEntity() == null) {
-			return;
-		}
-
 		if (disable_explosion(event.getEntityType())) {
 			if (world_rebuild.enabled()) {
 				// Schedule rebuild

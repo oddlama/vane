@@ -75,7 +75,7 @@ public class LodestoneScroll extends Scroll {
 		if (imminent_teleport) {
 			if (lodestone_location == null) {
 				lang_teleport_no_bound_lodestone.send_action_bar(player);
-			} else if (lodestone == null || lodestone.getType() != Material.LODESTONE) {
+			} else if (lodestone.getType() != Material.LODESTONE) {
 				lang_teleport_missing_lodestone.send_action_bar(player);
 			}
 		}
