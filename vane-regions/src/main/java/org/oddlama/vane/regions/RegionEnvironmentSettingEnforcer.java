@@ -54,23 +54,13 @@ public class RegionEnvironmentSettingEnforcer extends Listener<Regions> {
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void on_block_explode(final BlockExplodeEvent event) {
 		// Prevent explosions from removing region blocks
-		final var it = event.blockList().iterator();
-		while (it.hasNext()) {
-			if (check_setting_at(it.next(), EnvironmentSetting.EXPLOSIONS, false)) {
-				it.remove();
-			}
-		}
+		event.blockList().removeIf(block -> check_setting_at(block, EnvironmentSetting.EXPLOSIONS, false));
 	}
 
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void on_entity_explode(final EntityExplodeEvent event) {
 		// Prevent explosions from removing region blocks
-		final var it = event.blockList().iterator();
-		while (it.hasNext()) {
-			if (check_setting_at(it.next(), EnvironmentSetting.EXPLOSIONS, false)) {
-				it.remove();
-			}
-		}
+		event.blockList().removeIf(block -> check_setting_at(block, EnvironmentSetting.EXPLOSIONS, false));
 	}
 
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
