@@ -957,7 +957,7 @@ public class Portals extends Module<Portals> {
 
 	public void load_persistent_data(final World world) {
 		final var data = world.getPersistentDataContainer();
-		final var storage_portal_prefix = STORAGE_PORTALS.toString() + ".";
+		final var storage_portal_prefix = STORAGE_PORTALS + ".";
 
 		// Load all currently stored portals.
 		final var pdc_portals = data.getKeys().stream()
@@ -1023,7 +1023,7 @@ public class Portals extends Module<Portals> {
 
 	public void update_persistent_data(final World world) {
 		final var data = world.getPersistentDataContainer();
-		final var storage_portal_prefix = STORAGE_PORTALS.toString() + ".";
+		final var storage_portal_prefix = STORAGE_PORTALS + ".";
 
 		// Update invalidated portals
 		portals.values().stream()

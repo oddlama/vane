@@ -73,8 +73,8 @@ public class Enchant extends Command<Core> {
 		if (item_stack.getType() == Material.AIR) {
 			lang_invalid_enchantment.send(
 				player,
-				"§b" + enchantment.getKey().toString(),
-				"§a" + item_stack.getType().getKey().toString()
+				"§b" + enchantment.getKey(),
+				"§a" + item_stack.getType().getKey()
 			);
 			return;
 		}
@@ -103,8 +103,8 @@ public class Enchant extends Command<Core> {
 		} catch (Exception e) {
 			lang_invalid_enchantment.send(
 				player,
-				"§b" + enchantment.getKey().toString(),
-				"§a" + item_stack.getType().getKey().toString()
+				"§b" + enchantment.getKey(),
+				"§a" + item_stack.getType().getKey()
 			);
 		}
 	}

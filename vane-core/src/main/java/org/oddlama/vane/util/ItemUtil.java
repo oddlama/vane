@@ -396,7 +396,7 @@ public class ItemUtil {
 
 		// Parse the NBT by using minecraft's internal parser with the base material
 		// of whatever the extended material gave us.
-		final var vanilla_definition = item_stack.getType().key().toString() + definition.substring(nbt_delim);
+		final var vanilla_definition = item_stack.getType().key() + definition.substring(nbt_delim);
 		try {
 			final var parsed_nbt = ItemParser
 					.parseForItem(HolderLookup.forRegistry(Registry.ITEM), new StringReader(vanilla_definition)).nbt();

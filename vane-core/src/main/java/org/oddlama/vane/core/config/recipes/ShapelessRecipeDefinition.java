@@ -26,7 +26,7 @@ public class ShapelessRecipeDefinition extends RecipeDefinition {
 	}
 
 	public ShapelessRecipeDefinition add_ingredient(final Tag<?> tag) {
-		return add_ingredient("#" + tag.key().toString());
+		return add_ingredient("#" + tag.key());
 	}
 
 	public ShapelessRecipeDefinition add_ingredient(Material material) {

@@ -33,7 +33,7 @@ public class ShapedRecipeDefinition extends RecipeDefinition {
 	}
 
 	public ShapedRecipeDefinition set_ingredient(char id, final Tag<?> tag) {
-		return set_ingredient(id, "#" + tag.key().toString());
+		return set_ingredient(id, "#" + tag.key());
 	}
 
 	public ShapedRecipeDefinition set_ingredient(char id, Material material) {
