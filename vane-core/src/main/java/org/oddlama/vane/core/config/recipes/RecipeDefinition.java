@@ -40,7 +40,7 @@ public abstract class RecipeDefinition {
 			throw new IllegalArgumentException("Invalid recipe dictionary: Argument must be a Map<String, Object>, but is " + dict.getClass() + "!");
 		}
 		final var type = ((Map<?,?>)dict).get("type");
-		if (type == null || !(type instanceof String)) {
+		if (!(type instanceof String)) {
 			throw new IllegalArgumentException("Invalid recipe dictionary: recipe type must exist and be a string!");
 		}
 
