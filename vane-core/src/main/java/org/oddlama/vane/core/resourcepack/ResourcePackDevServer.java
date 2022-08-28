@@ -21,6 +21,7 @@ public class ResourcePackDevServer implements HttpHandler {
 		this.file = file;
 	}
 
+	@SuppressWarnings({"deprecation", "UnstableApiUsage"})
 	public void serve() {
 		try {
 			final HttpServer httpServer = HttpServer.create(new InetSocketAddress(9000), 0);
