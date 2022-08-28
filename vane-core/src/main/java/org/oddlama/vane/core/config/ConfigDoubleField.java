@@ -55,12 +55,12 @@ public class ConfigDoubleField extends ConfigField<Double> {
 		}
 
 		var val = yaml.getDouble(yaml_path());
-		if (annotation.min() != Double.NaN && val < annotation.min()) {
+		if (!Double.isNaN(annotation.min()) && val < annotation.min()) {
 			throw new YamlLoadException(
 				"Configuration '" + yaml_path() + "' has an invalid value: Value must be >= " + annotation.min()
 			);
 		}
-		if (annotation.max() != Double.NaN && val > annotation.max()) {
+		if (!Double.isNaN(annotation.max()) && val > annotation.max()) {
 			throw new YamlLoadException(
 				"Configuration '" + yaml_path() + "' has an invalid value: Value must be <= " + annotation.max()
 			);
