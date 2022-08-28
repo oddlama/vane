@@ -101,7 +101,7 @@ public class ConfigAndLangProcessor extends AbstractProcessor {
 					" has no required_type mapping! This is a bug."
 				);
 		} else {
-			if (required_type != "<any>" && !required_type.equals(type)) {
+			if (!required_type.equals("<any>") && !required_type.equals(type)) {
 				processingEnv
 					.getMessager()
 					.printMessage(
