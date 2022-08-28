@@ -45,11 +45,8 @@ public class MaterialUtil {
 			default:
 				return null;
 			case WHEAT_SEEDS:
-				return Material.FARMLAND;
 			case CARROT:
-				return Material.FARMLAND;
 			case POTATO:
-				return Material.FARMLAND;
 			case BEETROOT_SEEDS:
 				return Material.FARMLAND;
 			case NETHER_WART:

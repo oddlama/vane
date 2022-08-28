@@ -54,8 +54,6 @@ public class Heads extends Command<Trifles> {
 							amount = 32;
 							break;
 						case MIDDLE:
-							amount = 64;
-							break;
 						case SHIFT_LEFT:
 							amount = 64;
 							break;

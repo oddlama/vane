@@ -143,7 +143,6 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 		switch (annotation.rarity()) {
 			default:
 			case COMMON:
-				return component.color(NamedTextColor.DARK_AQUA);
 			case UNCOMMON:
 				return component.color(NamedTextColor.DARK_AQUA);
 			case RARE:
