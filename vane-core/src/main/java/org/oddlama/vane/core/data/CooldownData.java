@@ -38,11 +38,7 @@ public class CooldownData {
 		PersistentDataContainer persistent_data = holder.getPersistentDataContainer();
 		Long last_time = persistent_data.getOrDefault(this.key, PersistentDataType.LONG, 0L);
 		long now = System.currentTimeMillis();
-		if (now - last_time < this.cooldown_time) {
-			return false;
-		} else {
-			return true;
-		}
+		return now - last_time >= this.cooldown_time;
 	}
 
 	public void clear(final PersistentDataHolder holder) {
