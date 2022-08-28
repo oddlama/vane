@@ -5,7 +5,6 @@ import static org.oddlama.vane.util.Nms.creative_tab_id;
 import static org.oddlama.vane.util.Nms.item_handle;
 import static org.oddlama.vane.util.Nms.player_handle;
 
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
