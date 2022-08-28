@@ -34,7 +34,7 @@ public class ExtendedMaterial {
 
 	public static ExtendedMaterial from(final NamespacedKey key) {
 		final var mat = new ExtendedMaterial(key);
-		if (mat.material == null && mat.head_material == null && key.namespace() == "minecraft") {
+		if (mat.material == null && mat.head_material == null && key.namespace().equals("minecraft")) {
 			// If no material was found and the key doesn't suggest a custom item, return null.
 			return null;
 		}

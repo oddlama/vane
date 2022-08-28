@@ -3,6 +3,8 @@ package org.oddlama.vane.core.command.check;
 import org.bukkit.command.CommandSender;
 import org.oddlama.vane.core.command.Command;
 
+import java.util.Objects;
+
 public class ErrorCheckResult implements CheckResult {
 
 	private int depth;
@@ -31,7 +33,7 @@ public class ErrorCheckResult implements CheckResult {
 
 	public boolean apply(Command<?> command, CommandSender sender, String indent) {
 		var str = indent;
-		if (indent == "") {
+		if (Objects.equals(indent, "")) {
 			str += "§cerror: ";
 		}
 		str += "§6";
