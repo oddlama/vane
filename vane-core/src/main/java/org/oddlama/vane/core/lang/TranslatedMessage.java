@@ -105,9 +105,7 @@ public class TranslatedMessage {
 	}
 
 	public void send_action_bar(final CommandSender sender, Object... args) {
-		if (sender == null || sender == module.getServer().getConsoleSender()) {
-			// no-op
-		} else {
+		if (sender != null && sender != module.getServer().getConsoleSender()) {
 			sender.sendActionBar(format(args));
 		}
 	}
@@ -116,9 +114,7 @@ public class TranslatedMessage {
 		module.clog.info(str_component(args));
 
 		// Also send to sender if it's not the console
-		if (sender == null || sender == module.getServer().getConsoleSender()) {
-			return;
-		} else {
+		if (sender != null && sender != module.getServer().getConsoleSender()) {
 			sender.sendMessage(format(args));
 		}
 	}

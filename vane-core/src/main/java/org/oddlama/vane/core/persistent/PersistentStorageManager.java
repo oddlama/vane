@@ -214,7 +214,6 @@ public class PersistentStorageManager {
 				"' with temporary file (very recent changes might be lost)!",
 				e
 			);
-			return;
 		}
 	}
 }

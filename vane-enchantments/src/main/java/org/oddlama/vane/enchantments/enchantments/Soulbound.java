@@ -124,7 +124,6 @@ public class Soulbound extends CustomEnchantment<Enchantments> {
 				event.setResult(Event.Result.DENY);
 				return;
 			}
-			return;
 			// else allow as normal
 		}
 	}
