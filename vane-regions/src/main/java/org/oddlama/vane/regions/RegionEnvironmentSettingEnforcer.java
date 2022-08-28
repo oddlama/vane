@@ -3,10 +3,7 @@ package org.oddlama.vane.regions;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Animals;
-import org.bukkit.entity.Monster;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
@@ -143,11 +140,8 @@ public class RegionEnvironmentSettingEnforcer extends Listener<Regions> {
 		final var damaged = event.getEntity();
 		final var damager = event.getDamager();
 
-		switch (damaged.getType()) {
-			case PLAYER:
-				break;
-			default:
-				return;
+		if (damaged.getType() != EntityType.PLAYER) {
+			return;
 		}
 
 		final Player player_damaged = (Player) damaged;
