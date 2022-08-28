@@ -416,11 +416,7 @@ public class Regions extends Module<Regions> {
 		}
 
 		// If any region uses this group, we can't remove it.
-		if (regions.values().stream().anyMatch(r -> r.region_group_id().equals(group.id()))) {
-			return false;
-		}
-
-		return true;
+		return regions.values().stream().noneMatch(r -> r.region_group_id().equals(group.id()));
 	}
 
 	public void remove_region_group(final RegionGroup group) {

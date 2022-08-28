@@ -117,9 +117,7 @@ public class SingleDoor {
 		upper = as_door_state(upper_data);
 
 		if (lower == null) return false;
-		if (upper == null) return false;
-
-		return true;
+		return upper != null;
 	}
 
 	public void set_open(boolean open) {

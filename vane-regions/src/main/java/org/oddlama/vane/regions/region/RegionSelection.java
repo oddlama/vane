@@ -105,11 +105,7 @@ public class RegionSelection {
 		}
 
 		// Check that the player can afford it
-		if (!can_afford(player)) {
-			return false;
-		}
-
-		return true;
+		return can_afford(player);
 	}
 
 	public RegionExtent extent() {
