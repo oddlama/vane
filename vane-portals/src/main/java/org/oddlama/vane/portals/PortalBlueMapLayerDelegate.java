@@ -16,7 +16,7 @@ public class PortalBlueMapLayerDelegate {
 
 	public static final String MARKER_SET_ID = "vane_portals.portals";
 
-	private PortalBlueMapLayer parent = null;
+	private final PortalBlueMapLayer parent;
 
 	private boolean bluemap_enabled = false;
 

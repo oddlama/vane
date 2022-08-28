@@ -342,7 +342,7 @@ public class File extends CustomItem<Trifles> {
 				if (target_height == Wall.Height.NONE) {
 					target_height = Wall.Height.LOW;
 				}
-				wall.setHeight(adjusted_clicked_face, Wall.Height.LOW);
+				wall.setHeight(adjusted_clicked_face, target_height);
 				return Sound.UI_STONECUTTER_TAKE_RESULT;
 			}
 		}

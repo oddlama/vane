@@ -7,7 +7,7 @@ import org.bukkit.Location;
 
 public class LazyLocation {
 
-	private UUID world_id = null;
+	private final UUID world_id;
 	private Location location;
 
 	public LazyLocation(final Location location) {

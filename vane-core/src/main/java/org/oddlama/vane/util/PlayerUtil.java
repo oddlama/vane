@@ -204,7 +204,7 @@ public class PlayerUtil {
 	}
 
 	public static boolean harvest_plant(final Player player, final Block block) {
-		ItemStack[] drops = null;
+		ItemStack[] drops;
 		switch (block.getType()) {
 			default:
 				return false;

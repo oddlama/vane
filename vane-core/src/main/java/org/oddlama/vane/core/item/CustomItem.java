@@ -34,8 +34,8 @@ public class CustomItem<T extends Module<T>> extends Listener<T> implements org.
 
 	@ConfigInt(def = 0, min = 0, desc = "The durability of this item. Set to 0 to use the durability properties of whatever base material the item is made of.")
 	private int config_durability;
-	private String name_override = null;
-	private Integer custom_model_data_override = null;
+	private final String name_override;
+	private final Integer custom_model_data_override;
 
 	public CustomItem(Context<T> context) {
 		this(context, null, null);
