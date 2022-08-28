@@ -96,7 +96,7 @@ public class SpawnProtection extends Listener<Admin> {
 	}
 
 	public boolean deny_modify_spawn(final Location location, final Entity entity) {
-		if (spawn_center == null || entity == null || !(entity instanceof Player)) {
+		if (spawn_center == null || !(entity instanceof Player)) {
 			return false;
 		}
 

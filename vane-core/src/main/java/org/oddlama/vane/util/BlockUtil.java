@@ -305,7 +305,7 @@ public class BlockUtil {
 
 		@Override
 		public boolean equals(Object other) {
-			return other != null && other instanceof Corner && ((Corner) other).id == id;
+			return other instanceof Corner && ((Corner) other).id == id;
 		}
 	}
 

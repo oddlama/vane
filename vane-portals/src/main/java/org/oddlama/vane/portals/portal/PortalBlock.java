@@ -58,7 +58,7 @@ public class PortalBlock {
 
 	@Override
 	public boolean equals(Object other) {
-		if (other == null || !(other instanceof PortalBlock)) {
+		if (!(other instanceof PortalBlock)) {
 			return false;
 		}
 

@@ -76,7 +76,7 @@ public class VanillaFunctionalityInhibitor extends Listener<Core> {
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void on_prepare_item_craft(final PrepareItemCraftEvent event) {
 		final var recipe = event.getRecipe();
-		if (recipe == null || !(recipe instanceof Keyed keyed)) {
+		if (!(recipe instanceof Keyed keyed)) {
 			return;
 		}
 
@@ -98,7 +98,7 @@ public class VanillaFunctionalityInhibitor extends Listener<Core> {
 	public void on_prepare_smithing(final PrepareSmithingEvent event) {
 		final var item = event.getInventory().getInputEquipment();
 		final var recipe = event.getInventory().getRecipe();
-		if (recipe == null || !(recipe instanceof Keyed keyed)) {
+		if (!(recipe instanceof Keyed keyed)) {
 			return;
 		}
 
@@ -117,7 +117,7 @@ public class VanillaFunctionalityInhibitor extends Listener<Core> {
 	public void on_prepare_smithing_copy_nbt(final PrepareSmithingEvent event) {
 		var result = event.getResult();
 		final var recipe = event.getInventory().getRecipe();
-		if (result == null || recipe == null || !(recipe instanceof SmithingRecipe smithing_recipe) || !smithing_recipe.willCopyNbt()) {
+		if (result == null || !(recipe instanceof SmithingRecipe smithing_recipe) || !smithing_recipe.willCopyNbt()) {
 			return;
 		}
 

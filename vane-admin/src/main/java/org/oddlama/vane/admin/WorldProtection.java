@@ -49,7 +49,7 @@ public class WorldProtection extends Listener<Admin> {
 	}
 
 	public boolean deny_modify_world(final Entity entity) {
-		if (entity == null || !(entity instanceof Player)) {
+		if (!(entity instanceof Player)) {
 			return false;
 		}
 
