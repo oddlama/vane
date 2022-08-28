@@ -3,6 +3,7 @@ package org.oddlama.vane.waterfall.compat;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.oddlama.vane.proxycore.*;
+import org.oddlama.vane.proxycore.scheduler.ProxyTaskScheduler;
 
 import java.util.*;
 

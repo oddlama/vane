@@ -2,8 +2,8 @@ package org.oddlama.vane.waterfall.compat;
 
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.scheduler.TaskScheduler;
-import org.oddlama.vane.proxycore.ProxyTaskScheduler;
-import org.oddlama.vane.proxycore.ScheduledTask;
+import org.oddlama.vane.proxycore.scheduler.ProxyTaskScheduler;
+import org.oddlama.vane.proxycore.scheduler.ProxyScheduledTask;
 import org.oddlama.vane.proxycore.VaneProxyPlugin;
 
 import java.util.concurrent.TimeUnit;
@@ -17,21 +17,21 @@ public class BungeeCompatProxyTaskScheduler implements ProxyTaskScheduler {
 
 
 	@Override
-	public ScheduledTask runAsync(VaneProxyPlugin owner, Runnable task) {
+	public ProxyScheduledTask runAsync(VaneProxyPlugin owner, Runnable task) {
 		net.md_5.bungee.api.scheduler.ScheduledTask bungeeTask = scheduler.runAsync((Plugin) owner, task);
-		return new BungeeCompatScheduledTask(bungeeTask);
+		return new BungeeCompatProxyScheduledTask(bungeeTask);
 	}
 
 	@Override
-	public ScheduledTask schedule(VaneProxyPlugin owner, Runnable task, long delay, TimeUnit unit) {
+	public ProxyScheduledTask schedule(VaneProxyPlugin owner, Runnable task, long delay, TimeUnit unit) {
 		net.md_5.bungee.api.scheduler.ScheduledTask bungeeTask = scheduler.schedule((Plugin) owner, task, delay, unit);
-		return new BungeeCompatScheduledTask(bungeeTask);
+		return new BungeeCompatProxyScheduledTask(bungeeTask);
 	}
 
 	@Override
-	public ScheduledTask schedule(VaneProxyPlugin owner, Runnable task, long delay, long period, TimeUnit unit) {
+	public ProxyScheduledTask schedule(VaneProxyPlugin owner, Runnable task, long delay, long period, TimeUnit unit) {
 		net.md_5.bungee.api.scheduler.ScheduledTask bungeeTask = scheduler.schedule((Plugin) owner, task, delay, period, unit);
-		return new BungeeCompatScheduledTask(bungeeTask);
+		return new BungeeCompatProxyScheduledTask(bungeeTask);
 	}
 
 }

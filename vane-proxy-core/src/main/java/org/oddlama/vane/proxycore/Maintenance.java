@@ -1,5 +1,7 @@
 package org.oddlama.vane.proxycore;
 
+import org.oddlama.vane.proxycore.scheduler.ProxyScheduledTask;
+
 import java.io.*;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -203,7 +205,7 @@ public class Maintenance {
 
 	public class TaskNotify implements Runnable {
 
-		private ScheduledTask task = null;
+		private ProxyScheduledTask task = null;
 		private long notify_time = -1;
 
 		@Override
@@ -266,7 +268,7 @@ public class Maintenance {
 
 	public class TaskEnable implements Runnable {
 
-		private ScheduledTask task = null;
+		private ProxyScheduledTask task = null;
 
 		@Override
 		public synchronized void run() {
