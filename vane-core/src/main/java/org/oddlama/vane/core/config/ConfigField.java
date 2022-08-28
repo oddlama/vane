@@ -45,12 +45,10 @@ public abstract class ConfigField<T> implements Comparable<ConfigField<?>> {
 		this.type_name = type_name;
 
 		// lang, enabled, metrics_enabled should be at the top
-		if (this.path.equals("lang")) {
-			this.sort_priority = -10;
-		} else if (this.path.equals("enabled")) {
-			this.sort_priority = -9;
-		} else if (this.path.equals("metrics_enabled")) {
-			this.sort_priority = -8;
+		switch (this.path) {
+			case "lang" -> this.sort_priority = -10;
+			case "enabled" -> this.sort_priority = -9;
+			case "metrics_enabled" -> this.sort_priority = -8;
 		}
 
 		field.setAccessible(true);
