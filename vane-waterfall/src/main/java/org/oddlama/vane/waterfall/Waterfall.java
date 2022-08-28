@@ -223,8 +223,8 @@ public class Waterfall extends Plugin implements Listener, VaneProxyPlugin {
 				event.setCancelReason(TextComponent.fromLegacyText("Could not start server"));
 			} else {
 				// Client is connecting while startup
-				getProxy()
-						.getScheduler()
+				this.server
+						.get_scheduler()
 						.runAsync(
 								this,
 								() -> {

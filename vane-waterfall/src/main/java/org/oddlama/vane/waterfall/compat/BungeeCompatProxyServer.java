@@ -3,11 +3,12 @@ package org.oddlama.vane.waterfall.compat;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.plugin.Plugin;
-import org.oddlama.vane.proxycore.ProxyPlayer;
-import org.oddlama.vane.proxycore.ScheduledTask;
-import org.oddlama.vane.proxycore.VaneProxyPlugin;
+import org.oddlama.vane.proxycore.*;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 public class BungeeCompatProxyServer implements org.oddlama.vane.proxycore.ProxyServer {
@@ -18,9 +19,8 @@ public class BungeeCompatProxyServer implements org.oddlama.vane.proxycore.Proxy
 	}
 
 	@Override
-	public ScheduledTask schedule(VaneProxyPlugin owner, Runnable task, long delay, TimeUnit unit) {
-		net.md_5.bungee.api.scheduler.ScheduledTask bungeeTask = proxyServer.getScheduler().schedule((Plugin) owner, task, delay, unit);
-		return new BungeeCompatScheduledTask(bungeeTask);
+	public ProxyTaskScheduler get_scheduler() {
+		return new BungeeCompatProxyTaskScheduler(proxyServer.getScheduler());
 	}
 
 	@Override

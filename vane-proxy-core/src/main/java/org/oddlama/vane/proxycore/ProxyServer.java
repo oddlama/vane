@@ -3,10 +3,7 @@ package org.oddlama.vane.proxycore;
 import java.util.Collection;
 
 public interface ProxyServer {
-	ScheduledTask schedule(VaneProxyPlugin owner,
-						   Runnable task,
-						   long delay,
-						   java.util.concurrent.TimeUnit unit);
+	ProxyTaskScheduler get_scheduler();
 
 	void broadcast(String message);
 
