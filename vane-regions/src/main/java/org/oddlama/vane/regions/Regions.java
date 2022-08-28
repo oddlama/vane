@@ -411,7 +411,7 @@ public class Regions extends Module<Regions> {
 		// Returns true if this region group is unused and can be removed.
 
 		// If this region group is the fallback default group, it is permanent!
-		if (storage_default_region_group.values().contains(group.id())) {
+		if (storage_default_region_group.containsValue(group.id())) {
 			return false;
 		}
 
