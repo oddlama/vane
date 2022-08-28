@@ -26,7 +26,7 @@ public class SmithingRecipeDefinition extends RecipeDefinition {
 	}
 
 	public SmithingRecipeDefinition base(final Tag<?> tag) {
-		return base("#" + tag.key().toString());
+		return base("#" + tag.key());
 	}
 
 	public SmithingRecipeDefinition base(Material material) {
@@ -44,7 +44,7 @@ public class SmithingRecipeDefinition extends RecipeDefinition {
 	}
 
 	public SmithingRecipeDefinition addition(final Tag<?> tag) {
-		return addition("#" + tag.key().toString());
+		return addition("#" + tag.key());
 	}
 
 	public SmithingRecipeDefinition addition(Material material) {

@@ -707,7 +707,7 @@ public class Regions extends Module<Regions> {
 
 	public void load_persistent_data(final World world) {
 		final var data = world.getPersistentDataContainer();
-		final var storage_region_prefix = STORAGE_REGIONS.toString() + ".";
+		final var storage_region_prefix = STORAGE_REGIONS + ".";
 
 		// Load all currently stored regions.
 		final var pdc_regions = data.getKeys().stream()
@@ -766,7 +766,7 @@ public class Regions extends Module<Regions> {
 
 	public void update_persistent_data(final World world) {
 		final var data = world.getPersistentDataContainer();
-		final var storage_region_prefix = STORAGE_REGIONS.toString() + ".";
+		final var storage_region_prefix = STORAGE_REGIONS + ".";
 
 		// Update invalidated regions
 		regions.values().stream()

@@ -154,7 +154,7 @@ public class GenericSelector<T, F extends Filter<T>> {
 					// Current page indicator
 					item =
 						generic_selector.menu_manager.generic_selector_current_page.item(
-							"§6" + String.valueOf(page + 1),
+							"§6" + (page + 1),
 							"§6" + (generic_selector.last_page + 1),
 							"§6" + generic_selector.filtered_things.size()
 						);
@@ -164,7 +164,7 @@ public class GenericSelector<T, F extends Filter<T>> {
 					item =
 						generic_selector.menu_manager.generic_selector_page.item_amount(
 							Math.abs(actual_offset),
-							"§6" + String.valueOf(page + 1)
+							"§6" + (page + 1)
 						);
 				}
 

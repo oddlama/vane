@@ -24,7 +24,7 @@ public class StonecuttingRecipeDefinition extends RecipeDefinition {
 	}
 
 	public StonecuttingRecipeDefinition input(final Tag<?> tag) {
-		return input("#" + tag.key().toString());
+		return input("#" + tag.key());
 	}
 
 	public StonecuttingRecipeDefinition input(Material material) {

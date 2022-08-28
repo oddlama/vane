@@ -47,19 +47,19 @@ public class TimeUtil {
 		long seconds = (millis / 1000L) % 60;
 
 		if (days > 0) {
-			ret += Long.toString(days) + "d";
+			ret += days + "d";
 		}
 
 		if (hours > 0) {
-			ret += Long.toString(hours) + "h";
+			ret += hours + "h";
 		}
 
 		if (minutes > 0) {
-			ret += Long.toString(minutes) + "m";
+			ret += minutes + "m";
 		}
 
 		if (seconds > 0 || ret.length() == 0) {
-			ret += Long.toString(seconds) + "s";
+			ret += seconds + "s";
 		}
 
 		return ret;
