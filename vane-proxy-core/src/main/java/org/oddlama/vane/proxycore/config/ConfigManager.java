@@ -44,14 +44,14 @@ public class ConfigManager {
 			}
 
 			multiplexer_by_port.putAll(conf.auth_multiplex);
+			managed_servers.putAll(conf.managed_servers);
 
-			// Set all the server IDs
-			for (Map.Entry<String, ManagedServer> entry : conf.managed_servers.entrySet()) {
-				ManagedServer server = entry.getValue();
-				server.id(entry.getKey());
+			for (var entry : managed_servers.entrySet()) {
+				final var server_id = entry.getKey();
+				var server = entry.getValue();
 
 				try {
-					server.try_encoded_favicon();
+					server.post_process(server_id);
 				} catch (IOException e) {
 					plugin.get_logger().log(Level.SEVERE, "Failed to read favicon! (is the path correct?)");
 					e.printStackTrace();
