@@ -2,12 +2,16 @@ package org.oddlama.vane.waterfall.compat;
 
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.oddlama.vane.proxycore.*;
+import org.oddlama.vane.proxycore.ProxyPlayer;
 import org.oddlama.vane.proxycore.scheduler.ProxyTaskScheduler;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
 
 public class BungeeCompatProxyServer implements org.oddlama.vane.proxycore.ProxyServer {
+
 	public ProxyServer proxyServer;
 
 	public BungeeCompatProxyServer(ProxyServer proxyServer) {

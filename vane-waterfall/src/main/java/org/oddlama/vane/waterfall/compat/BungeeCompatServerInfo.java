@@ -6,14 +6,11 @@ import org.oddlama.vane.proxycore.config.IVaneProxyServerInfo;
 import java.net.SocketAddress;
 
 public class BungeeCompatServerInfo implements IVaneProxyServerInfo {
+
 	public ServerInfo serverInfo;
 
 	public BungeeCompatServerInfo(ServerInfo serverInfo) {
 		this.serverInfo = serverInfo;
-	}
-
-	public ServerInfo getServerInfo() {
-		return serverInfo;
 	}
 
 	@Override
