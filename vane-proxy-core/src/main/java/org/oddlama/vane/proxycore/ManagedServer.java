@@ -70,36 +70,6 @@ public class ManagedServer {
 		this.encoded_favicon = encoded_favicon;
 	}
 
-	public String random_quote_online() {
-		String[] quotes_online = quotes.online;
-		if (quotes_online == null || quotes_online.length == 0) {
-			return "";
-		}
-		return quotes_online[new Random().nextInt(quotes_online.length)];
-	}
-
-	public String random_quote_offline() {
-		String[] quotes_offline = quotes.offline;
-		if (quotes_offline == null || quotes_offline.length == 0) {
-			return "";
-		}
-		return quotes_offline[new Random().nextInt(quotes_offline.length)];
-	}
-
-	public String motd_online() {
-		if (motd.online == null) {
-			return "";
-		}
-		return motd.online.replace("%QUOTE%", random_quote_online());
-	}
-
-	public String motd_offline() {
-		if (motd.offline == null) {
-			return "";
-		}
-		return motd.offline.replace("%QUOTE%", random_quote_offline());
-	}
-
 	public String favicon() {
 		return encoded_favicon;
 	}
@@ -110,6 +80,55 @@ public class ManagedServer {
 
 	public String start_kick_msg() {
 		return start.kick_msg;
+	}
+
+	public enum QuoteSource {
+		ONLINE,
+		OFFLINE,
+	}
+
+	public enum MotdSource {
+		ONLINE,
+		OFFLINE,
+	}
+
+	public String random_quote(QuoteSource source) {
+		final String[] quote_set;
+		switch (source) {
+			case ONLINE -> quote_set = quotes.online;
+			case OFFLINE -> quote_set = quotes.offline;
+			default -> {
+				return "";
+			}
+		}
+
+		if (quote_set == null || quote_set.length == 0) {
+			return "";
+		}
+		return quote_set[new Random().nextInt(quote_set.length)];
+	}
+
+	public String motd(MotdSource source) {
+		final String sourced_motd;
+		final QuoteSource quote_source;
+		switch (source) {
+			case ONLINE -> {
+				sourced_motd = motd.online;
+				quote_source = QuoteSource.ONLINE;
+			}
+			case OFFLINE -> {
+				sourced_motd = motd.offline;
+				quote_source = QuoteSource.OFFLINE;
+			}
+			default -> {
+				return "";
+			}
+		}
+
+		if (sourced_motd == null) {
+			return "";
+		}
+		return sourced_motd.replace("%QUOTE%", random_quote(quote_source));
 	}
 
 	private static class Quotes {
