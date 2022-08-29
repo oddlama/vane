@@ -7,10 +7,6 @@ import java.net.Socket;
 import java.util.LinkedHashMap;
 import java.util.UUID;
 import net.md_5.bungee.api.AbstractReconnectHandler;
-import net.md_5.bungee.api.Favicon;
-import net.md_5.bungee.api.ServerPing;
-import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.PendingConnection;
 import net.md_5.bungee.api.event.ProxyPingEvent;
 import net.md_5.bungee.api.event.ServerDisconnectEvent;
@@ -27,6 +23,7 @@ import org.oddlama.vane.proxycore.VaneProxyPlugin;
 import org.oddlama.vane.proxycore.config.ConfigManager;
 import org.oddlama.vane.proxycore.config.IVaneProxyServerInfo;
 import org.oddlama.vane.proxycore.listeners.LoginEvent;
+import org.oddlama.vane.proxycore.listeners.PingEvent;
 import org.oddlama.vane.proxycore.listeners.PreLoginEvent;
 import org.oddlama.vane.proxycore.log.IVaneLogger;
 import org.oddlama.vane.proxycore.log.JavaCompatLogger;
@@ -34,6 +31,7 @@ import org.oddlama.vane.waterfall.compat.BungeeCompatProxyServer;
 import org.oddlama.vane.waterfall.compat.BungeeCompatServerInfo;
 import org.oddlama.vane.waterfall.compat.event.BungeeCompatLoginEvent;
 import org.oddlama.vane.waterfall.compat.event.BungeeCompatPendingConnection;
+import org.oddlama.vane.waterfall.compat.event.BungeeCompatPingEvent;
 import org.oddlama.vane.waterfall.compat.event.BungeeCompatPreLoginEvent;
 
 public class Waterfall extends Plugin implements Listener, VaneProxyPlugin {
@@ -87,8 +85,6 @@ public class Waterfall extends Plugin implements Listener, VaneProxyPlugin {
 
 	@EventHandler
 	public void on_proxy_ping(ProxyPingEvent event) {
-		ServerPing server_ping = event.getResponse();
-
 		final PendingConnection connection = event.getConnection();
 		var bungeeServerInfo = AbstractReconnectHandler.getForcedHost(connection);
 		if (bungeeServerInfo == null) {
@@ -96,10 +92,8 @@ public class Waterfall extends Plugin implements Listener, VaneProxyPlugin {
 		}
 
 		var server = new BungeeCompatServerInfo(bungeeServerInfo);
-		server_ping.setDescriptionComponent(new TextComponent(TextComponent.fromLegacyText(get_motd(server))));
-		server_ping.setFavicon(get_favicon(server.getServerInfo()));
-
-		event.setResponse(server_ping);
+		PingEvent proxy_event = new BungeeCompatPingEvent(this, event, server);
+		proxy_event.fire();
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
@@ -146,26 +140,6 @@ public class Waterfall extends Plugin implements Listener, VaneProxyPlugin {
 	@Override
 	public LinkedHashMap<UUID, UUID> get_multiplexed_uuids() {
 		return multiplexedUUIDs;
-	}
-
-	public Favicon get_favicon(final ServerInfo server) {
-		final var cms = config.managed_servers.get(server.getName());
-		if (cms == null) {
-			return null;
-		}
-
-		final var favicon = cms.favicon();
-		if (favicon == null || favicon.isEmpty()) {
-			return null;
-		}
-
-		try {
-			return Favicon.create(favicon);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return null;
 	}
 
 	@Override

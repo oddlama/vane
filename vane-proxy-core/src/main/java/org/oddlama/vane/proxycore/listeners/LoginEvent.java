@@ -1,14 +1,11 @@
 package org.oddlama.vane.proxycore.listeners;
 
-import org.oddlama.vane.proxycore.Maintenance;
-import org.oddlama.vane.proxycore.ProxyEvent;
-import org.oddlama.vane.proxycore.ProxyPendingConnection;
-import org.oddlama.vane.proxycore.VaneProxyPlugin;
+import org.oddlama.vane.proxycore.*;
 import org.oddlama.vane.proxycore.config.IVaneProxyServerInfo;
 
 import java.util.logging.Level;
 
-public abstract class LoginEvent implements ProxyEvent {
+public abstract class LoginEvent implements ProxyEvent, ProxyCancellableEvent {
 
 	VaneProxyPlugin plugin;
 	IVaneProxyServerInfo server_info;
