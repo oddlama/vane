@@ -21,18 +21,31 @@ public class ManagedServer {
 	public Quotes quotes;
 	public Motd motd;
 	public ServerStart start;
-	private String id;
-
-	public void id(String id) {
-		this.id = id;
-	}
 
 	@SuppressWarnings("unused")
 	public void setFavicon(@Nullable String favicon_path) {
 		this.favicon = favicon_path;
 	}
 
-	public void try_encoded_favicon() throws IOException {
+	public void post_process(String id) throws IOException, IllegalArgumentException {
+		// Replace placeholders in messages
+		if (start.cmd != null) {
+			start.cmd = Arrays.stream(start.cmd).map(s -> s.replace("%SERVER%", id)).toArray(String[]::new);
+		}
+
+		if (start.kick_msg != null) {
+			start.kick_msg = start.kick_msg.replace("%SERVER%", id).replace("%SERVER_DISPLAY_NAME%", display_name);
+		}
+
+		if (motd.online != null) {
+			motd.online = motd.online.replace("%SERVER_DISPLAY_NAME%", display_name);
+		}
+
+		if (motd.offline != null) {
+			motd.offline = motd.offline.replace("%SERVER_DISPLAY_NAME%", display_name);
+		}
+
+		// Try and encode the favicon
 		if (favicon == null || favicon.isEmpty()) {
 			return;
 		}
@@ -77,14 +90,14 @@ public class ManagedServer {
 		if (motd.online == null) {
 			return "";
 		}
-		return motd.online.replace("%SERVER_DISPLAY_NAME%", display_name).replace("%QUOTE%", random_quote_online());
+		return motd.online.replace("%QUOTE%", random_quote_online());
 	}
 
 	public String motd_offline() {
 		if (motd.offline == null) {
 			return "";
 		}
-		return motd.offline.replace("%SERVER_DISPLAY_NAME%", display_name).replace("%QUOTE%", random_quote_offline());
+		return motd.offline.replace("%QUOTE%", random_quote_offline());
 	}
 
 	public String favicon() {
@@ -92,14 +105,11 @@ public class ManagedServer {
 	}
 
 	public String[] start_cmd() {
-		if (start.cmd == null) {
-			return null;
-		}
-		return Arrays.stream(start.cmd).map(s -> s.replace("%SERVER%", id)).toArray(String[]::new);
+		return start.cmd;
 	}
 
 	public String start_kick_msg() {
-		return start.kick_msg.replace("%SERVER%", id).replace("%SERVER_DISPLAY_NAME%", display_name);
+		return start.kick_msg;
 	}
 
 	private static class Quotes {
