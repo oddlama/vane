@@ -14,10 +14,9 @@ import java.util.UUID;
 public abstract class VaneProxyPlugin {
 
 	public static final String CHANNEL_AUTH_MULTIPLEX = "vane_waterfall:auth_multiplex";
-
+	public final LinkedHashMap<UUID, UUID> multiplexedUUIDs = new LinkedHashMap<>();
 	public ConfigManager config = new ConfigManager(this);
 	public Maintenance maintenance = new Maintenance(this);
-	public final LinkedHashMap<UUID, UUID> multiplexedUUIDs = new LinkedHashMap<>();
 	public IVaneLogger logger;
 	public ProxyServer server;
 

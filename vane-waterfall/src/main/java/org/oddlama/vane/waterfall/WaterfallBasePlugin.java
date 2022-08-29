@@ -3,6 +3,7 @@ package org.oddlama.vane.waterfall;
 import net.md_5.bungee.api.plugin.Plugin;
 
 public final class WaterfallBasePlugin extends Plugin {
+
 	Waterfall waterfall;
 
 	@Override

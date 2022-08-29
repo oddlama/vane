@@ -1,14 +1,15 @@
 package org.oddlama.vane.waterfall.compat;
 
 import net.md_5.bungee.api.scheduler.TaskScheduler;
-import org.oddlama.vane.proxycore.scheduler.ProxyTaskScheduler;
-import org.oddlama.vane.proxycore.scheduler.ProxyScheduledTask;
 import org.oddlama.vane.proxycore.VaneProxyPlugin;
+import org.oddlama.vane.proxycore.scheduler.ProxyScheduledTask;
+import org.oddlama.vane.proxycore.scheduler.ProxyTaskScheduler;
 import org.oddlama.vane.waterfall.Waterfall;
 
 import java.util.concurrent.TimeUnit;
 
 public class BungeeCompatProxyTaskScheduler implements ProxyTaskScheduler {
+
 	TaskScheduler scheduler;
 
 	public BungeeCompatProxyTaskScheduler(TaskScheduler scheduler) {

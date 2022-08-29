@@ -14,13 +14,13 @@ import java.util.Random;
 public class ManagedServer {
 
 	public String display_name;
+	public Quotes quotes;
+	public Motd motd;
+	public ServerStart start;
 	@Nullable
 	private String encoded_favicon;
 	@Nullable
 	private String favicon;
-	public Quotes quotes;
-	public Motd motd;
-	public ServerStart start;
 
 	@SuppressWarnings("unused")
 	public void setFavicon(@Nullable String favicon_path) {
@@ -82,16 +82,6 @@ public class ManagedServer {
 		return start.kick_msg;
 	}
 
-	public enum QuoteSource {
-		ONLINE,
-		OFFLINE,
-	}
-
-	public enum MotdSource {
-		ONLINE,
-		OFFLINE,
-	}
-
 	public String random_quote(QuoteSource source) {
 		final String[] quote_set;
 		switch (source) {
@@ -129,6 +119,16 @@ public class ManagedServer {
 			return "";
 		}
 		return sourced_motd.replace("%QUOTE%", random_quote(quote_source));
+	}
+
+	public enum QuoteSource {
+		ONLINE,
+		OFFLINE,
+	}
+
+	public enum MotdSource {
+		ONLINE,
+		OFFLINE,
 	}
 
 	private static class Quotes {
