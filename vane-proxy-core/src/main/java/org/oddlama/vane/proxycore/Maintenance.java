@@ -33,7 +33,7 @@ public class Maintenance {
 			1000L,
 	};
 
-	public static String MESSAGE_ABORTED = "§7> §Server maintenance §l§CANCELLED§r§c!";
+	public static String MESSAGE_ABORTED = "§7> §cServer maintenance §l§6CANCELLED§r§c!";
 
 	public static String MESSAGE_INFO =
 		"§7>" +
