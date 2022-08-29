@@ -1,5 +1,7 @@
 package org.oddlama.vane.proxycore;
 
+import org.jetbrains.annotations.Nullable;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
@@ -12,7 +14,9 @@ import java.util.Random;
 public class ManagedServer {
 
 	public String display_name;
+	@Nullable
 	private String encoded_favicon;
+	@Nullable
 	private String favicon;
 	public Quotes quotes;
 	public Motd motd;
@@ -24,11 +28,15 @@ public class ManagedServer {
 	}
 
 	@SuppressWarnings("unused")
-	public void setFavicon(String favicon_path) {
+	public void setFavicon(@Nullable String favicon_path) {
 		this.favicon = favicon_path;
 	}
 
 	public void try_encoded_favicon() throws IOException {
+		if (favicon == null || favicon.isEmpty()) {
+			return;
+		}
+
 		File favicon_file = new File(favicon.replace("%SERVER%", id));
 		BufferedImage image = ImageIO.read(favicon_file);
 

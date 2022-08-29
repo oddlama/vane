@@ -35,14 +35,14 @@ public abstract class LoginEvent implements ProxyEvent, ProxyCancellableEvent {
 			// For use inside callback
 			final var cms = plugin.get_config().managed_servers.get(server_info.getName());
 
-			if (!plugin.getVaneProxy().can_start_server(uuid, server_info.getName())) {
+			if (!plugin.get_proxy().can_start_server(uuid, server_info.getName())) {
 				// TODO: This could probably use a configurable message?
 				this.cancel("Server is offline");
 				return;
 			}
 
 			if (cms == null || cms.start_cmd() == null) {
-				plugin.getVaneLogger().log(Level.SEVERE, "Could not start server '" + server_info.getName() + "', no start command was set!");
+				plugin.get_logger().log(Level.SEVERE, "Could not start server '" + server_info.getName() + "', no start command was set!");
 				this.cancel("Could not start server");
 			} else {
 				// Client is connecting while startup
