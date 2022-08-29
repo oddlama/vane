@@ -50,9 +50,9 @@ public abstract class VaneProxyPlugin {
 
 		String motd;
 		if (is_online(server)) {
-			motd = cms.motd_online();
+			motd = cms.motd(ManagedServer.MotdSource.ONLINE);
 		} else {
-			motd = cms.motd_offline();
+			motd = cms.motd(ManagedServer.MotdSource.OFFLINE);
 		}
 
 		return motd;
