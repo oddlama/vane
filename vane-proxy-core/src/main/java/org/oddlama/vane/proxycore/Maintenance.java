@@ -10,19 +10,18 @@ import static org.oddlama.vane.util.TimeUtil.format_time;
 
 public class Maintenance {
 
-	public static long SHUTDOWN_THRESHOLD = 10000L; // MESSAGE_SHUTDOWN if <= 10 seconds
 	public static final long[] NOTIFY_TIMES = {
-		240 * 60000L,
-		180 * 60000L,
-		120 * 60000L,
-		60 * 60000L,
-		30 * 60000L,
-		15 * 60000L,
-		10 * 60000L,
-		5 * 60000L,
-		4 * 60000L,
-		3 * 60000L,
-		2 * 60000L,
+			240 * 60000L,
+			180 * 60000L,
+			120 * 60000L,
+			60 * 60000L,
+			30 * 60000L,
+			15 * 60000L,
+			10 * 60000L,
+			5 * 60000L,
+			4 * 60000L,
+			3 * 60000L,
+			2 * 60000L,
 			60000L,
 			30000L,
 			10000L,
@@ -32,40 +31,38 @@ public class Maintenance {
 			2000L,
 			1000L,
 	};
-
+	public static long SHUTDOWN_THRESHOLD = 10000L; // MESSAGE_SHUTDOWN if <= 10 seconds
 	public static String MESSAGE_ABORTED = "§7> §cServer maintenance §l§6CANCELLED§r§c!";
 
 	public static String MESSAGE_INFO =
-		"§7>" +
-		"\n§7> §cScheduled maintenance in: §6%time%" +
-		"\n§7> §cExpected time remaining: §6%remaining%" +
-		"\n§7>";
+			"§7>" +
+					"\n§7> §cScheduled maintenance in: §6%time%" +
+					"\n§7> §cExpected time remaining: §6%remaining%" +
+					"\n§7>";
 
 	public static String MESSAGE_SCHEDULED =
-		"§7>" +
-		"\n§7> §e\u21af§r §6§lMaintenance active§r §e\u21af§r" +
-		"\n§7>" +
-		"\n§7> §cScheduled maintenance in: §6%time%" +
-		"\n§7> §cExpected duration: §6%duration%" +
-		"\n§7>";
+			"§7>" +
+					"\n§7> §e\u21af§r §6§lMaintenance active§r §e\u21af§r" +
+					"\n§7>" +
+					"\n§7> §cScheduled maintenance in: §6%time%" +
+					"\n§7> §cExpected duration: §6%duration%" +
+					"\n§7>";
 
 	public static String MESSAGE_SHUTDOWN = "§7> §cShutdown in §6%time%§c!";
 
 	public static String MESSAGE_KICK =
-		"§e\u21af§r §6§lMaintenance active§r §e\u21af§r" + "\n§cExpected duration: §6%duration%";
+			"§e\u21af§r §6§lMaintenance active§r §e\u21af§r" + "\n§cExpected duration: §6%duration%";
 
 	public static String MOTD =
-		"§e\u21af§r §6§lMaintenance active§r §e\u21af§r" + "\n§cExpected time remaining: §6%remaining%";
+			"§e\u21af§r §6§lMaintenance active§r §e\u21af§r" + "\n§cExpected time remaining: §6%remaining%";
 
 	public static String MESSAGE_CONNECT = "%MOTD%" + "\n" + "\n§7Please try again later.";
 
 	private final VaneProxyPlugin plugin;
 	private final File file = new File("./.maintenance");
-
-	private boolean enabled = false;
 	private final TaskEnable task_enable = new TaskEnable();
 	private final TaskNotify task_notify = new TaskNotify();
-
+	private boolean enabled = false;
 	private long start = 0;
 	private long duration = 0;
 
@@ -264,6 +261,7 @@ public class Maintenance {
 
 			return -1;
 		}
+
 	}
 
 	public class TaskEnable implements Runnable {
@@ -295,5 +293,7 @@ public class Maintenance {
 
 			task = plugin.getVaneProxy().get_scheduler().schedule(plugin, this, timespan, TimeUnit.MILLISECONDS);
 		}
+
 	}
+
 }

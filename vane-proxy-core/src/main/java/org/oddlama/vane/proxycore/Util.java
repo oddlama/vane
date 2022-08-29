@@ -3,6 +3,7 @@ package org.oddlama.vane.proxycore;
 import java.util.UUID;
 
 public class Util {
+
 	public static UUID add_uuid(UUID uuid, long i) {
 		var msb = uuid.getMostSignificantBits();
 		var lsb = uuid.getLeastSignificantBits();
@@ -14,4 +15,5 @@ public class Util {
 
 		return new UUID(msb, lsb);
 	}
+
 }
