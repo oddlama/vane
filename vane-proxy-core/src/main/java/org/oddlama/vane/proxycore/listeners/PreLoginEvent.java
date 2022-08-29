@@ -1,9 +1,6 @@
 package org.oddlama.vane.proxycore.listeners;
 
-import org.oddlama.vane.proxycore.Maintenance;
-import org.oddlama.vane.proxycore.ProxyEvent;
-import org.oddlama.vane.proxycore.ProxyPendingConnection;
-import org.oddlama.vane.proxycore.VaneProxyPlugin;
+import org.oddlama.vane.proxycore.*;
 import org.oddlama.vane.proxycore.config.IVaneProxyServerInfo;
 
 import java.io.IOException;
@@ -13,7 +10,7 @@ import java.util.logging.Level;
 import static org.oddlama.vane.proxycore.Util.add_uuid;
 import static org.oddlama.vane.util.Resolve.resolve_uuid;
 
-public abstract class PreLoginEvent implements ProxyEvent {
+public abstract class PreLoginEvent implements ProxyEvent, ProxyCancellableEvent {
 
 	public static String MESSAGE_MULTIPLEX_MOJANG_AUTH_NO_PERMISSION_KICK =
 			"§cYou have no permission to use this auth multiplexer!";
