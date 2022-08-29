@@ -1,26 +1,16 @@
 package org.oddlama.vane.proxycore;
 
 import org.jetbrains.annotations.NotNull;
+import org.oddlama.vane.proxycore.config.ConfigManager;
 import org.oddlama.vane.proxycore.config.IVaneProxyServerInfo;
 import org.oddlama.vane.proxycore.log.IVaneLogger;
 
+import java.util.LinkedHashMap;
 import java.util.UUID;
 
 public interface VaneProxyPlugin {
 
 	IVaneLogger logger = null;
-
-	String MESSAGE_MULTIPLEX_MOJANG_AUTH_NO_PERMISSION_KICK =
-			"§cYou have no permission to use this auth multiplexer!";
-
-	void register_auth_multiplex_player(
-			IVaneProxyServerInfo server,
-			int multiplexer_id,
-			UUID old_uuid,
-			String old_name,
-			UUID new_uuid,
-			String new_name
-	);
 
 	boolean is_online(final IVaneProxyServerInfo server);
 
@@ -36,6 +26,12 @@ public interface VaneProxyPlugin {
 	@NotNull
 	Maintenance get_maintenance();
 
+	@NotNull
+	ConfigManager get_config();
+
 	void try_start_server(ManagedServer server);
 
+	boolean can_join_maintenance(UUID uuid);
+
+	LinkedHashMap<UUID, UUID> get_multiplexed_uuids();
 }
