@@ -17,5 +17,9 @@ public interface ProxyServer {
 
 	boolean has_permission(UUID uuid, String... permission);
 
+	void register_channel(String channel);
+
+	void unregister_channel(String channel);
+
 	// TODO: getServerInfo()
 }
