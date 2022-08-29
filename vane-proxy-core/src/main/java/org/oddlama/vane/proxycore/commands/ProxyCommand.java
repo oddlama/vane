@@ -17,7 +17,7 @@ public abstract class ProxyCommand {
 	public abstract void execute(ProxyCommandSender sender, String[] args);
 
 	public boolean has_permission(UUID uuid) {
-		return this.permission == null || plugin.getVaneProxy().has_permission(uuid, this.permission);
+		return this.permission == null || plugin.get_proxy().has_permission(uuid, this.permission);
 	}
 
 }

@@ -5,33 +5,103 @@ import org.oddlama.vane.proxycore.config.ConfigManager;
 import org.oddlama.vane.proxycore.config.IVaneProxyServerInfo;
 import org.oddlama.vane.proxycore.log.IVaneLogger;
 
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.util.LinkedHashMap;
 import java.util.UUID;
 
-public interface VaneProxyPlugin {
+public abstract class VaneProxyPlugin {
 
-	IVaneLogger logger = null;
+	public static final String CHANNEL_AUTH_MULTIPLEX = "vane_waterfall:auth_multiplex";
 
-	boolean is_online(final IVaneProxyServerInfo server);
+	public ConfigManager config = new ConfigManager(this);
+	public Maintenance maintenance = new Maintenance(this);
+	public final LinkedHashMap<UUID, UUID> multiplexedUUIDs = new LinkedHashMap<>();
+	public IVaneLogger logger;
+	public ProxyServer server;
 
-	String get_motd(final IVaneProxyServerInfo server);
+	public boolean is_online(final IVaneProxyServerInfo server) {
+		final var addr = server.getSocketAddress();
+		if (!(addr instanceof final InetSocketAddress inet_addr)) {
+			return false;
+		}
 
-	java.io.File getVaneDataFolder();
+		var connected = false;
+		try (final var test = new Socket(inet_addr.getHostName(), inet_addr.getPort())) {
+			connected = test.isConnected();
+		} catch (IOException e) {
+			// Server not up or not reachable
+		}
 
-	ProxyServer getVaneProxy();
+		return connected;
+	}
 
-	@NotNull
-	IVaneLogger getVaneLogger();
+	public String get_motd(final IVaneProxyServerInfo server) {
+		// Maintenance
+		if (maintenance.enabled()) {
+			return maintenance.format_message(Maintenance.MOTD);
+		}
 
-	@NotNull
-	Maintenance get_maintenance();
+		final var cms = config.managed_servers.get(server.getName());
+		if (cms == null) {
+			return "";
+		}
 
-	@NotNull
-	ConfigManager get_config();
+		String motd;
+		if (is_online(server)) {
+			motd = cms.motd_online();
+		} else {
+			motd = cms.motd_offline();
+		}
 
-	void try_start_server(ManagedServer server);
+		return motd;
+	}
 
-	boolean can_join_maintenance(UUID uuid);
+	public abstract java.io.File get_data_folder();
 
-	LinkedHashMap<UUID, UUID> get_multiplexed_uuids();
+	public abstract ProxyServer get_proxy();
+
+	public @NotNull IVaneLogger get_logger() {
+		return logger;
+	}
+
+	public @NotNull Maintenance get_maintenance() {
+		return this.maintenance;
+	}
+
+	public @NotNull ConfigManager get_config() {
+		return this.config;
+	}
+
+	public void try_start_server(ManagedServer server) {
+		// TODO: This could really use some checks (existing process running, nonzero exit code)
+		this.server.get_scheduler()
+				.runAsync(
+						this,
+						() -> {
+							try {
+								final var p = Runtime.getRuntime().exec(server.start_cmd());
+								p.waitFor();
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+						}
+				);
+	}
+
+	public boolean can_join_maintenance(UUID uuid) {
+		if (maintenance.enabled()) {
+			// Client is connecting while maintenance is on
+			// Players with bypass_maintenance flag may join
+			return this.server.has_permission(uuid, "vane_waterfall.bypass_maintenance");
+		}
+
+		return true;
+	}
+
+	public LinkedHashMap<UUID, UUID> get_multiplexed_uuids() {
+		return multiplexedUUIDs;
+	}
+
 }

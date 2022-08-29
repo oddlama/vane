@@ -4,4 +4,4 @@ version: ${version}
 author: oddlama
 website: 'https://github.com/oddlama/vane'
 
-main: org.oddlama.vane.waterfall.Waterfall
+main: org.oddlama.vane.waterfall.WaterfallBasePlugin

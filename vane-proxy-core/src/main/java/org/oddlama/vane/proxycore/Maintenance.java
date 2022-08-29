@@ -87,11 +87,11 @@ public class Maintenance {
 
 		// Kick all players
 		final var kick_message = format_message(MESSAGE_KICK);
-		for (final var player : plugin.getVaneProxy().getPlayers()) {
+		for (final var player : plugin.get_proxy().getPlayers()) {
 			player.disconnect(kick_message);
 		}
 
-		plugin.getVaneLogger().log(Level.INFO, "Maintenance enabled!");
+		plugin.get_logger().log(Level.INFO, "Maintenance enabled!");
 	}
 
 	public void disable() {
@@ -113,13 +113,13 @@ public class Maintenance {
 
 		if (start - System.currentTimeMillis() > 0) {
 			// Broadcast message (only if not started yet)
-			plugin.getVaneProxy().broadcast(MESSAGE_ABORTED);
+			plugin.get_proxy().broadcast(MESSAGE_ABORTED);
 		}
 
 		// Disable maintenance (just to be on the safe side)
 		disable();
 
-		plugin.getVaneLogger().log(Level.INFO, "Maintenance disabled!");
+		plugin.get_logger().log(Level.INFO, "Maintenance disabled!");
 	}
 
 	public void schedule(long start_millis, long duration_millis) {
@@ -209,7 +209,7 @@ public class Maintenance {
 		public synchronized void run() {
 			// Broadcast message
 			plugin
-					.getVaneProxy()
+					.get_proxy()
 					.broadcast(format_message(notify_time <= SHUTDOWN_THRESHOLD ? MESSAGE_SHUTDOWN : MESSAGE_SCHEDULED));
 
 			// Schedule next time
@@ -234,7 +234,7 @@ public class Maintenance {
 
 			if (notify_time < 0) {
 				// First schedule
-				plugin.getVaneProxy().broadcast(format_message(MESSAGE_SCHEDULED));
+				plugin.get_proxy().broadcast(format_message(MESSAGE_SCHEDULED));
 				notify_time = timespan;
 			}
 
@@ -245,7 +245,7 @@ public class Maintenance {
 
 			// Schedule for next time
 			task =
-					plugin.getVaneProxy().get_scheduler().schedule(plugin, this, timespan - notify_time, TimeUnit.MILLISECONDS);
+					plugin.get_proxy().get_scheduler().schedule(plugin, this, timespan - notify_time, TimeUnit.MILLISECONDS);
 		}
 
 		public long next_notify_time() {
@@ -291,7 +291,7 @@ public class Maintenance {
 				timespan = 0;
 			}
 
-			task = plugin.getVaneProxy().get_scheduler().schedule(plugin, this, timespan, TimeUnit.MILLISECONDS);
+			task = plugin.get_proxy().get_scheduler().schedule(plugin, this, timespan, TimeUnit.MILLISECONDS);
 		}
 
 	}

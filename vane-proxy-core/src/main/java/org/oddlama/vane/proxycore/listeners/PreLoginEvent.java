@@ -35,7 +35,7 @@ public abstract class PreLoginEvent implements ProxyEvent, ProxyCancellableEvent
 			try {
 				uuid = resolve_uuid(playerName);
 			} catch (IOException e) {
-				plugin.getVaneLogger().log(Level.WARNING, "Failed to resolve UUID for player '" + playerName + "'", e);
+				plugin.get_logger().log(Level.WARNING, "Failed to resolve UUID for player '" + playerName + "'", e);
 				return;
 			}
 
@@ -44,7 +44,7 @@ public abstract class PreLoginEvent implements ProxyEvent, ProxyCancellableEvent
 				return;
 			}
 
-			if (!plugin.getVaneProxy().has_permission(uuid, "vane_waterfall.auth_multiplexer." + multiplexer_id)) {
+			if (!plugin.get_proxy().has_permission(uuid, "vane_waterfall.auth_multiplexer." + multiplexer_id)) {
 				this.cancel(MESSAGE_MULTIPLEX_MOJANG_AUTH_NO_PERMISSION_KICK);
 				return;
 			}
@@ -54,7 +54,7 @@ public abstract class PreLoginEvent implements ProxyEvent, ProxyCancellableEvent
 			final var new_uuid_str = new_uuid.toString();
 			final var new_name = new_uuid_str.substring(new_uuid_str.length() - 16);
 
-			plugin.getVaneLogger()
+			plugin.get_logger()
 					.log(
 							Level.INFO,
 							"auth multiplex request from player " +

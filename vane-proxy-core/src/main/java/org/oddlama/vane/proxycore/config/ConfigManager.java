@@ -26,7 +26,7 @@ public class ConfigManager {
 	}
 
 	private File file() {
-		return new File(plugin.getVaneDataFolder(), "config.yml");
+		return new File(plugin.get_data_folder(), "config.yml");
 	}
 
 	public boolean load() {
@@ -39,7 +39,7 @@ public class ConfigManager {
 		try (FileInputStream is = new FileInputStream(file)) {
 			Config conf = yaml.loadAs(is, Config.class);
 			if (conf == null) {
-				plugin.getVaneLogger().log(Level.SEVERE, "Failed to parse config (is it missing anything?)");
+				plugin.get_logger().log(Level.SEVERE, "Failed to parse config (is it missing anything?)");
 				return false;
 			}
 
@@ -53,16 +53,16 @@ public class ConfigManager {
 				try {
 					server.try_encoded_favicon();
 				} catch (IOException e) {
-					plugin.getVaneLogger().log(Level.SEVERE, "Failed to read favicon! (is the path correct?)");
+					plugin.get_logger().log(Level.SEVERE, "Failed to read favicon! (is the path correct?)");
 					e.printStackTrace();
 					return false;
 				} catch (IllegalArgumentException e) {
-					plugin.getVaneLogger().log(Level.SEVERE, "Failed to set favicon: " + e.getMessage());
+					plugin.get_logger().log(Level.SEVERE, "Failed to set favicon: " + e.getMessage());
 					return false;
 				}
 			}
 		} catch (IOException e) {
-			plugin.getVaneLogger().log(Level.SEVERE, "Error while loading config file '" + file + "'", e);
+			plugin.get_logger().log(Level.SEVERE, "Error while loading config file '" + file + "'", e);
 			return false;
 		}
 
@@ -123,7 +123,7 @@ public class ConfigManager {
 		try {
 			Files.writeString(file.toPath(), content);
 		} catch (IOException e) {
-			plugin.getVaneLogger().log(Level.SEVERE, "Error while writing config file '" + file + "'", e);
+			plugin.get_logger().log(Level.SEVERE, "Error while writing config file '" + file + "'", e);
 		}
 	}
 
