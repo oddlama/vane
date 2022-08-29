@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.UUID;
 
 public interface ProxyServer {
+
 	ProxyTaskScheduler get_scheduler();
 
 	void broadcast(String message);

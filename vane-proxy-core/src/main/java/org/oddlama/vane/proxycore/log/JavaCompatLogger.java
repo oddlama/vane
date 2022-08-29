@@ -4,6 +4,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class JavaCompatLogger implements IVaneLogger {
+
 	private final Logger logger;
 
 	public JavaCompatLogger(Logger logger) {
