@@ -1,4 +1,4 @@
-package org.oddlama.vane.proxycore;
+package org.oddlama.vane.proxycore.listeners;
 
 public interface ProxyServerPing {
 
