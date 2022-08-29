@@ -1,17 +1,11 @@
 package org.oddlama.vane.waterfall;
 
-import static org.oddlama.vane.proxycore.Util.add_uuid;
-import static org.oddlama.vane.util.Resolve.resolve_uuid;
-
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.LinkedHashMap;
 import java.util.UUID;
-import java.util.logging.Level;
 import javax.imageio.ImageIO;
 import net.md_5.bungee.api.AbstractReconnectHandler;
 import net.md_5.bungee.api.Favicon;
@@ -19,15 +13,12 @@ import net.md_5.bungee.api.ServerPing;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.PendingConnection;
-import net.md_5.bungee.api.event.LoginEvent;
-import net.md_5.bungee.api.event.PreLoginEvent;
 import net.md_5.bungee.api.event.ProxyPingEvent;
 import net.md_5.bungee.api.event.ServerDisconnectEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.event.EventHandler;
 import net.md_5.bungee.event.EventPriority;
-import net.md_5.bungee.protocol.packet.LoginRequest;
 import org.bstats.bungeecord.Metrics;
 import org.jetbrains.annotations.NotNull;
 import org.oddlama.vane.proxycore.Maintenance;
@@ -36,10 +27,15 @@ import org.oddlama.vane.proxycore.ProxyServer;
 import org.oddlama.vane.proxycore.VaneProxyPlugin;
 import org.oddlama.vane.proxycore.config.ConfigManager;
 import org.oddlama.vane.proxycore.config.IVaneProxyServerInfo;
+import org.oddlama.vane.proxycore.listeners.LoginEvent;
+import org.oddlama.vane.proxycore.listeners.PreLoginEvent;
 import org.oddlama.vane.proxycore.log.IVaneLogger;
 import org.oddlama.vane.proxycore.log.JavaCompatLogger;
 import org.oddlama.vane.waterfall.compat.BungeeCompatProxyServer;
 import org.oddlama.vane.waterfall.compat.BungeeCompatServerInfo;
+import org.oddlama.vane.waterfall.compat.event.BungeeCompatLoginEvent;
+import org.oddlama.vane.waterfall.compat.event.BungeeCompatPendingConnection;
+import org.oddlama.vane.waterfall.compat.event.BungeeCompatPreLoginEvent;
 
 public class Waterfall extends Plugin implements Listener, VaneProxyPlugin {
 
@@ -50,7 +46,7 @@ public class Waterfall extends Plugin implements Listener, VaneProxyPlugin {
 	public IVaneLogger logger;
 	public BungeeCompatProxyServer server;
 
-	private final LinkedHashMap<UUID, UUID> multiplexedUUIDs = new LinkedHashMap<>();
+	public final LinkedHashMap<UUID, UUID> multiplexedUUIDs = new LinkedHashMap<>();
 
 	// bStats
 	@SuppressWarnings("unused")
@@ -104,103 +100,18 @@ public class Waterfall extends Plugin implements Listener, VaneProxyPlugin {
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
-	public void on_pre_login(PreLoginEvent event) {
+	public void on_pre_login(net.md_5.bungee.api.event.PreLoginEvent event) {
 		if (event.isCancelled()) {
 			return;
 		}
 
-		final var connection = event.getConnection();
-
-		// Multiplex authentication if the connection is to a multiplexing port
-		final var port = connection.getVirtualHost().getPort();
-		final var multiplexer_id = config.multiplexer_by_port.getOrDefault(port, 0);
-		if (multiplexer_id > 0) {
-			// This is pre-authentication, so we need to resolve the uuid ourselves.
-			String playerName = connection.getName();
-			UUID uuid;
-
-			try {
-				uuid = resolve_uuid(playerName);
-			} catch (IOException e) {
-				getLogger().log(Level.WARNING, "Failed to resolve UUID for player '" + playerName + "'", e);
-				return;
-			}
-
-			if (!can_join_maintenance(uuid)) {
-				event.setCancelReason(TextComponent.fromLegacyText(maintenance.format_message(Maintenance.MESSAGE_CONNECT)));
-				event.setCancelled(true);
-				return;
-			}
-
-			if (!this.server.has_permission(uuid, "vane_waterfall.auth_multiplexer." + multiplexer_id)) {
-				event.setCancelReason(TextComponent.fromLegacyText(MESSAGE_MULTIPLEX_MOJANG_AUTH_NO_PERMISSION_KICK));
-				event.setCancelled(true);
-				return;
-			}
-
-			final var name = connection.getName();
-			final var new_uuid = add_uuid(uuid, multiplexer_id);
-			final var new_uuid_str = new_uuid.toString();
-			final var new_name = new_uuid_str.substring(new_uuid_str.length() - 16);
-
-			getLogger()
-				.info(
-					"auth multiplex request from player " +
-					name +
-					" connecting from " +
-					connection.getSocketAddress().toString()
-				);
-
-			try {
-				// Change the name of the player
-				final var handler_class = Class.forName("net.md_5.bungee.connection.InitialHandler");
-				final var request_field = handler_class.getDeclaredField("loginRequest");
-				request_field.setAccessible(true);
-				final var login_request = (LoginRequest) request_field.get(connection);
-
-				final var data_field = LoginRequest.class.getDeclaredField("data");
-				data_field.setAccessible(true);
-				data_field.set(login_request, new_name);
-
-				// Set name specifically
-				final var name_field = handler_class.getDeclaredField("name");
-				name_field.setAccessible(true);
-				name_field.set(connection, new_name);
-			} catch (
-				ClassNotFoundException
-				| NoSuchFieldException
-				| SecurityException
-				| IllegalArgumentException
-				| IllegalAccessException e
-			) {
-				e.printStackTrace();
-				return;
-			}
-
-			connection.setOnlineMode(false);
-			connection.setUniqueId(new_uuid);
-
-			multiplexedUUIDs.put(new_uuid, uuid);
-			//final var resulting_uuid = UUID.nameUUIDFromBytes(
-			//	("OfflinePlayer:" + new_name).getBytes(StandardCharsets.UTF_8));
-
-			var bungeeServerInfo = AbstractReconnectHandler.getForcedHost(connection);
-			if (bungeeServerInfo == null) {
-				bungeeServerInfo = getProxy().getServerInfo(connection.getListener().getServerPriority().get(0));
-			}
-
-			var server = new BungeeCompatServerInfo(bungeeServerInfo);
-			register_auth_multiplex_player(server, multiplexer_id, uuid, name, new_uuid, new_name);
-			getLogger()
-				.info("auth multiplex granted as uuid: " + new_uuid + ", name: " + new_name + " for player " + name);
-		}
+		PreLoginEvent proxy_event = new BungeeCompatPreLoginEvent(this, event);
+		proxy_event.fire();
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
-	public void on_login(LoginEvent event) {
+	public void on_login(net.md_5.bungee.api.event.LoginEvent event) {
 		final var connection = event.getConnection();
-		final var connection_uuid = connection.getUniqueId();
-		final var uuid = multiplexedUUIDs.getOrDefault(connection_uuid, connection_uuid);
 
 		var bungeeServerInfo = AbstractReconnectHandler.getForcedHost(connection);
 		if (bungeeServerInfo == null) {
@@ -208,40 +119,8 @@ public class Waterfall extends Plugin implements Listener, VaneProxyPlugin {
 		}
 
 		var server = new BungeeCompatServerInfo(bungeeServerInfo);
-		if (!can_join_maintenance(uuid)) {
-			event.setCancelReason(TextComponent.fromLegacyText(maintenance.format_message(Maintenance.MESSAGE_CONNECT)));
-			event.setCancelled(true);
-			return;
-		}
-
-		// Start server if necessary
-		if (!is_online(server)) {
-			// For use inside callback
-			final var cms = config.managed_servers.get(server.getName());
-
-			if (!this.server.can_start_server(uuid, server.getName())) {
-				// TODO: This could probably use a configurable message?
-				event.setCancelReason(TextComponent.fromLegacyText("Server is offline"));
-				event.setCancelled(true);
-				return;
-			}
-
-			if (cms == null || cms.start_cmd() == null) {
-				getLogger().severe("Could not start server '" + server.getName() + "', no start command was set!");
-				event.setCancelReason(TextComponent.fromLegacyText("Could not start server"));
-			} else {
-				// Client is connecting while startup
-				try_start_server(cms);
-
-				if (cms.start_kick_msg() == null) {
-					event.setCancelReason(TextComponent.fromLegacyText("Server is starting"));
-				} else {
-					event.setCancelReason(TextComponent.fromLegacyText(cms.start_kick_msg()));
-				}
-			}
-
-			event.setCancelled(true);
-		}
+		LoginEvent proxy_event = new BungeeCompatLoginEvent(event, this, server, new BungeeCompatPendingConnection(connection));
+		proxy_event.fire();
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
@@ -250,6 +129,7 @@ public class Waterfall extends Plugin implements Listener, VaneProxyPlugin {
 		multiplexedUUIDs.remove(uuid);
 	}
 
+	@Override
 	public boolean can_join_maintenance(UUID uuid) {
 		if (maintenance.enabled()) {
 			// Client is connecting while maintenance is on
@@ -258,6 +138,11 @@ public class Waterfall extends Plugin implements Listener, VaneProxyPlugin {
 		}
 
 		return true;
+	}
+
+	@Override
+	public LinkedHashMap<UUID, UUID> get_multiplexed_uuids() {
+		return multiplexedUUIDs;
 	}
 
 	public Favicon get_favicon(final ServerInfo server) {
@@ -276,24 +161,6 @@ public class Waterfall extends Plugin implements Listener, VaneProxyPlugin {
 		}
 
 		return null;
-	}
-
-	@Override
-	public void register_auth_multiplex_player(IVaneProxyServerInfo server, int multiplexer_id, UUID old_uuid, String old_name, UUID new_uuid, String new_name) {
-		final var stream = new ByteArrayOutputStream();
-		final var out = new DataOutputStream(stream);
-
-		try {
-			out.writeInt(multiplexer_id);
-			out.writeUTF(old_uuid.toString());
-			out.writeUTF(old_name);
-			out.writeUTF(new_uuid.toString());
-			out.writeUTF(new_name);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		server.sendData(CHANNEL_AUTH_MULTIPLEX, stream.toByteArray());
 	}
 
 	@Override
@@ -371,6 +238,11 @@ public class Waterfall extends Plugin implements Listener, VaneProxyPlugin {
 	@Override
 	public @NotNull Maintenance get_maintenance() {
 		return this.maintenance;
+	}
+
+	@Override
+	public @NotNull ConfigManager get_config() {
+		return this.config;
 	}
 
 }
