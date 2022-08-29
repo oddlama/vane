@@ -14,12 +14,12 @@ import java.util.Map;
 import java.util.logging.Level;
 
 public class ConfigManager {
-	private final VaneProxyPlugin plugin;
 
 	// name → managed server
 	public final Map<String, ManagedServer> managed_servers = new HashMap<>();
 	// port → alias id (starts at 1)
 	public final Map<Integer, Integer> multiplexer_by_port = new HashMap<>();
+	private final VaneProxyPlugin plugin;
 
 	public ConfigManager(final VaneProxyPlugin plugin) {
 		this.plugin = plugin;
@@ -37,8 +37,7 @@ public class ConfigManager {
 		}
 
 		Yaml yaml = new Yaml(new CustomClassLoaderConstructor(Config.class.getClassLoader()));
-		try (FileInputStream is = new FileInputStream(file))
-		{
+		try (FileInputStream is = new FileInputStream(file)) {
 			Config conf = yaml.loadAs(is, Config.class);
 			if (conf == null) {
 				plugin.getVaneLogger().log(Level.SEVERE, "Failed to parse config (is it missing anything?)");
@@ -113,4 +112,5 @@ public class ConfigManager {
 			plugin.getVaneLogger().log(Level.SEVERE, "Error while writing config file '" + file + "'", e);
 		}
 	}
+
 }

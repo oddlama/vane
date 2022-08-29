@@ -5,6 +5,7 @@ import org.oddlama.vane.proxycore.VaneProxyPlugin;
 import java.util.UUID;
 
 public abstract class ProxyCommand {
+
 	public final String permission;
 	public final VaneProxyPlugin plugin;
 

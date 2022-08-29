@@ -7,12 +7,12 @@ import java.util.Random;
 @SuppressWarnings("unused")
 public class ManagedServer {
 
-	private String id;
 	public String display_name;
 	public String favicon;
 	public Quotes quotes;
 	public Motd motd;
 	public ServerStart start;
+	private String id;
 
 	public void id(String id) {
 		this.id = id;
@@ -64,17 +64,24 @@ public class ManagedServer {
 	}
 
 	private static class Quotes {
+
 		public String[] online;
 		public String[] offline;
+
 	}
 
 	private static class Motd {
+
 		public String online;
 		public String offline;
+
 	}
 
 	private static class ServerStart {
+
 		public String[] cmd;
 		public String kick_msg;
+
 	}
+
 }
