@@ -1,6 +1,5 @@
 package org.oddlama.vane.waterfall.compat.event;
 
-import net.md_5.bungee.api.ServerPing;
 import net.md_5.bungee.api.event.ProxyPingEvent;
 import org.oddlama.vane.proxycore.ProxyPendingConnection;
 import org.oddlama.vane.proxycore.VaneProxyPlugin;
@@ -24,7 +23,7 @@ public class BungeeCompatPingEvent extends PingEvent {
 
 	@Override
 	public void send_response() {
-		event.setResponse((ServerPing) ping);
+		event.setResponse(event.getResponse());
 	}
 
 }
