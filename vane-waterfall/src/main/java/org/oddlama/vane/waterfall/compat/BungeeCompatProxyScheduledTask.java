@@ -1,7 +1,6 @@
 package org.oddlama.vane.waterfall.compat;
 
 import net.md_5.bungee.api.scheduler.ScheduledTask;
-import org.oddlama.vane.proxycore.VaneProxyPlugin;
 import org.oddlama.vane.proxycore.scheduler.ProxyScheduledTask;
 
 public class BungeeCompatProxyScheduledTask implements ProxyScheduledTask {
@@ -14,11 +13,6 @@ public class BungeeCompatProxyScheduledTask implements ProxyScheduledTask {
 	@Override
 	public int getId() {
 		return task.getId();
-	}
-
-	@Override
-	public VaneProxyPlugin getOwner() {
-		return (VaneProxyPlugin) task.getOwner();
 	}
 
 	@Override

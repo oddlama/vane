@@ -5,7 +5,6 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.protocol.packet.LoginRequest;
 import org.oddlama.vane.proxycore.ProxyPendingConnection;
-import org.oddlama.vane.proxycore.VaneProxyPlugin;
 import org.oddlama.vane.proxycore.config.IVaneProxyServerInfo;
 import org.oddlama.vane.proxycore.listeners.PreLoginEvent;
 import org.oddlama.vane.waterfall.Waterfall;
@@ -19,10 +18,12 @@ import java.util.logging.Level;
 public class BungeeCompatPreLoginEvent extends PreLoginEvent {
 
 	net.md_5.bungee.api.event.PreLoginEvent event;
+	Plugin bungee_plugin;
 
-	public BungeeCompatPreLoginEvent(Plugin plugin, net.md_5.bungee.api.event.PreLoginEvent event) {
-		super((VaneProxyPlugin) plugin);
+	public BungeeCompatPreLoginEvent(Waterfall waterfall, net.md_5.bungee.api.event.PreLoginEvent event) {
+		super(waterfall);
 		this.event = event;
+		this.bungee_plugin = waterfall.get_plugin();
 	}
 
 	@Override
@@ -80,12 +81,12 @@ public class BungeeCompatPreLoginEvent extends PreLoginEvent {
 
 		var bungeeServerInfo = AbstractReconnectHandler.getForcedHost(connection);
 		if (bungeeServerInfo == null) {
-			bungeeServerInfo = ((Plugin)plugin).getProxy().getServerInfo(connection.getListener().getServerPriority().get(0));
+			bungeeServerInfo = bungee_plugin.getProxy().getServerInfo(connection.getListener().getServerPriority().get(0));
 		}
 
 		var server = new BungeeCompatServerInfo(bungeeServerInfo);
 		register_auth_multiplex_player(server, multiplexed_player);
-		plugin.getVaneLogger()
+		plugin.get_logger()
 				.log(Level.INFO, "auth multiplex granted as uuid: " + new_uuid + ", name: " + new_name + " for player " + name);
 
 		return true;
