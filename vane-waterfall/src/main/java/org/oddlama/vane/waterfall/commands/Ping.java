@@ -1,29 +1,23 @@
 package org.oddlama.vane.waterfall.commands;
 
 import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
+import org.oddlama.vane.proxycore.commands.ProxyPingCommand;
+import org.oddlama.vane.waterfall.Waterfall;
+import org.oddlama.vane.waterfall.compat.BungeeCompatProxyCommandSender;
 
 public class Ping extends Command {
 
-	public Ping() {
-		super("ping", "vane_waterfall.commands.ping");
+	ProxyPingCommand cmd;
+
+	public Ping(final Waterfall plugin) {
+		super("ping");
+		this.cmd = new ProxyPingCommand("vane_waterfall.commands.ping", plugin);
 	}
 
 	@Override
 	public void execute(CommandSender sender, String[] args) {
-		if (!(sender instanceof final ProxiedPlayer player)) {
-			sender.sendMessage(TextComponent.fromLegacyText("Not a player!"));
-			return;
-		}
-
-		if (!hasPermission(sender)) {
-			sender.sendMessage(TextComponent.fromLegacyText("No permission!"));
-			return;
-		}
-
-		player.sendMessage(TextComponent.fromLegacyText("§7ping: §3" + player.getPing() + "ms"));
+		cmd.execute(new BungeeCompatProxyCommandSender(sender), args);
 	}
 
 }
