@@ -11,7 +11,6 @@ import net.md_5.bungee.api.connection.PendingConnection;
 import net.md_5.bungee.api.event.ProxyPingEvent;
 import net.md_5.bungee.api.event.ServerDisconnectEvent;
 import net.md_5.bungee.api.plugin.Listener;
-import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.event.EventHandler;
 import net.md_5.bungee.event.EventPriority;
 import org.bstats.bungeecord.Metrics;
@@ -34,7 +33,7 @@ import org.oddlama.vane.waterfall.compat.event.BungeeCompatPendingConnection;
 import org.oddlama.vane.waterfall.compat.event.BungeeCompatPingEvent;
 import org.oddlama.vane.waterfall.compat.event.BungeeCompatPreLoginEvent;
 
-public class Waterfall extends Plugin implements Listener, VaneProxyPlugin {
+public class Waterfall implements Listener, VaneProxyPlugin {
 
 	public static final String CHANNEL_AUTH_MULTIPLEX = "vane_waterfall:auth_multiplex";
 
@@ -48,36 +47,39 @@ public class Waterfall extends Plugin implements Listener, VaneProxyPlugin {
 	// bStats
 	@SuppressWarnings("unused")
 	private Metrics metrics;
+	private final WaterfallBasePlugin plugin;
 
-	@Override
-	public void onEnable() {
-		logger = new JavaCompatLogger(this.getLogger());
-		server = new BungeeCompatProxyServer(this.getProxy());
+	public Waterfall(WaterfallBasePlugin plugin) {
+		this.plugin = plugin;
+	}
 
-		metrics = new Metrics(this, 8891);
+	public void enable() {
+		logger = new JavaCompatLogger(plugin.getLogger());
+		server = new BungeeCompatProxyServer(plugin.getProxy());
+
+		metrics = new Metrics(plugin, 8891);
 
 		if (!config.load()) {
-			this.onDisable();
+			plugin.onDisable();
 			return;
 		}
 
 		maintenance.load();
 
-		final var plugin_manager = getProxy().getPluginManager();
-		plugin_manager.registerListener(this, this);
-		plugin_manager.registerCommand(this, new org.oddlama.vane.waterfall.commands.Ping(this));
-		plugin_manager.registerCommand(this, new org.oddlama.vane.waterfall.commands.Maintenance(this));
+		final var plugin_manager = plugin.getProxy().getPluginManager();
+		plugin_manager.registerListener(plugin, this);
+		plugin_manager.registerCommand(plugin, new org.oddlama.vane.waterfall.commands.Ping(this));
+		plugin_manager.registerCommand(plugin, new org.oddlama.vane.waterfall.commands.Maintenance(this));
 
-		getProxy().registerChannel(CHANNEL_AUTH_MULTIPLEX);
+		plugin.getProxy().registerChannel(CHANNEL_AUTH_MULTIPLEX);
 	}
 
-	@Override
-	public void onDisable() {
-		final var plugin_manager = getProxy().getPluginManager();
-		plugin_manager.unregisterCommands(this);
-		plugin_manager.unregisterListeners(this);
+	public void disable() {
+		final var plugin_manager = plugin.getProxy().getPluginManager();
+		plugin_manager.unregisterCommands(plugin);
+		plugin_manager.unregisterListeners(plugin);
 
-		getProxy().unregisterChannel(CHANNEL_AUTH_MULTIPLEX);
+		plugin.getProxy().unregisterChannel(CHANNEL_AUTH_MULTIPLEX);
 
 		metrics = null;
 		logger = null;
@@ -88,7 +90,7 @@ public class Waterfall extends Plugin implements Listener, VaneProxyPlugin {
 		final PendingConnection connection = event.getConnection();
 		var bungeeServerInfo = AbstractReconnectHandler.getForcedHost(connection);
 		if (bungeeServerInfo == null) {
-			bungeeServerInfo = getProxy().getServerInfo(connection.getListener().getServerPriority().get(0));
+			bungeeServerInfo = plugin.getProxy().getServerInfo(connection.getListener().getServerPriority().get(0));
 		}
 
 		var server = new BungeeCompatServerInfo(bungeeServerInfo);
@@ -102,7 +104,7 @@ public class Waterfall extends Plugin implements Listener, VaneProxyPlugin {
 			return;
 		}
 
-		PreLoginEvent proxy_event = new BungeeCompatPreLoginEvent(this, event);
+		PreLoginEvent proxy_event = new BungeeCompatPreLoginEvent(plugin, event);
 		proxy_event.fire();
 	}
 
@@ -112,7 +114,7 @@ public class Waterfall extends Plugin implements Listener, VaneProxyPlugin {
 
 		var bungeeServerInfo = AbstractReconnectHandler.getForcedHost(connection);
 		if (bungeeServerInfo == null) {
-			bungeeServerInfo = getProxy().getServerInfo(connection.getListener().getServerPriority().get(0));
+			bungeeServerInfo = plugin.getProxy().getServerInfo(connection.getListener().getServerPriority().get(0));
 		}
 
 		var server = new BungeeCompatServerInfo(bungeeServerInfo);
@@ -201,12 +203,12 @@ public class Waterfall extends Plugin implements Listener, VaneProxyPlugin {
 	// TODO: These names are just workarounds for name conflicts for now, temporary
 	@Override
 	public File getVaneDataFolder() {
-		return this.getDataFolder();
+		return plugin.getDataFolder();
 	}
 
 	@Override
 	public ProxyServer getVaneProxy() {
-		return new BungeeCompatProxyServer(this.getProxy());
+		return new BungeeCompatProxyServer(plugin.getProxy());
 	}
 
 	@Override
