@@ -23,6 +23,7 @@ public interface VaneProxyPlugin {
 	);
 
 	boolean is_online(final IVaneProxyServerInfo server);
+
 	String get_motd(final IVaneProxyServerInfo server);
 
 	java.io.File getVaneDataFolder();
@@ -32,5 +33,9 @@ public interface VaneProxyPlugin {
 	@NotNull
 	IVaneLogger getVaneLogger();
 
+	@NotNull
+	Maintenance get_maintenance();
+
 	void try_start_server(ManagedServer server);
+
 }

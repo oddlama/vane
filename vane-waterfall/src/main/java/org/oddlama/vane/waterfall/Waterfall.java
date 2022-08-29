@@ -68,7 +68,7 @@ public class Waterfall extends Plugin implements Listener, VaneProxyPlugin {
 
 		final var plugin_manager = getProxy().getPluginManager();
 		plugin_manager.registerListener(this, this);
-		plugin_manager.registerCommand(this, new org.oddlama.vane.waterfall.commands.Ping());
+		plugin_manager.registerCommand(this, new org.oddlama.vane.waterfall.commands.Ping(this));
 		plugin_manager.registerCommand(this, new org.oddlama.vane.waterfall.commands.Maintenance(this));
 
 		getProxy().registerChannel(CHANNEL_AUTH_MULTIPLEX);
@@ -366,6 +366,11 @@ public class Waterfall extends Plugin implements Listener, VaneProxyPlugin {
 	@Override
 	public @NotNull IVaneLogger getVaneLogger() {
 		return logger;
+	}
+
+	@Override
+	public @NotNull Maintenance get_maintenance() {
+		return this.maintenance;
 	}
 
 }
