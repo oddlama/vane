@@ -1,14 +1,19 @@
 package org.oddlama.vane.proxycore;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.Random;
 
-@SuppressWarnings("unused")
 public class ManagedServer {
 
 	public String display_name;
-	public String favicon;
+	private String encoded_favicon;
+	private String favicon;
 	public Quotes quotes;
 	public Motd motd;
 	public ServerStart start;
@@ -16,6 +21,32 @@ public class ManagedServer {
 
 	public void id(String id) {
 		this.id = id;
+	}
+
+	@SuppressWarnings("unused")
+	public void setFavicon(String favicon_path) {
+		this.favicon = favicon_path;
+	}
+
+	public void try_encoded_favicon() throws IOException {
+		File favicon_file = new File(favicon.replace("%SERVER%", id));
+		BufferedImage image = ImageIO.read(favicon_file);
+
+		if (image.getWidth() != 64 || image.getHeight() != 64) {
+			throw new IllegalArgumentException("Favicon has invalid dimensions (must be 64x64)");
+		}
+
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		ImageIO.write(image, "PNG", stream);
+		byte[] favicon_bytes = stream.toByteArray();
+
+		String encoded_favicon = "data:image/png;base64," + Base64.getEncoder().encodeToString(favicon_bytes);
+
+		if (encoded_favicon.length() > Short.MAX_VALUE) {
+			throw new IllegalArgumentException("Favicon file too large for server to process");
+		}
+
+		this.encoded_favicon = encoded_favicon;
 	}
 
 	public String random_quote_online() {
@@ -48,8 +79,8 @@ public class ManagedServer {
 		return motd.offline.replace("%SERVER_DISPLAY_NAME%", display_name).replace("%QUOTE%", random_quote_offline());
 	}
 
-	public File favicon_file() {
-		return new File(favicon.replace("%SERVER%", id));
+	public String favicon() {
+		return encoded_favicon;
 	}
 
 	public String[] start_cmd() {
