@@ -1,6 +1,8 @@
 package org.oddlama.vane.proxycore.listeners;
 
-import org.oddlama.vane.proxycore.*;
+import org.oddlama.vane.proxycore.Maintenance;
+import org.oddlama.vane.proxycore.ProxyPendingConnection;
+import org.oddlama.vane.proxycore.VaneProxyPlugin;
 import org.oddlama.vane.proxycore.config.IVaneProxyServerInfo;
 
 import java.io.IOException;

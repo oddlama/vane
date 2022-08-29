@@ -16,10 +16,10 @@ import java.io.File;
 
 public class Waterfall extends VaneProxyPlugin implements Listener {
 
+	private final WaterfallBasePlugin plugin;
 	// bStats
 	@SuppressWarnings("unused")
 	private Metrics metrics;
-	private final WaterfallBasePlugin plugin;
 
 	public Waterfall(WaterfallBasePlugin plugin) {
 		this.plugin = plugin;

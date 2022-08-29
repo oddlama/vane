@@ -4,6 +4,7 @@ import net.md_5.bungee.api.scheduler.ScheduledTask;
 import org.oddlama.vane.proxycore.scheduler.ProxyScheduledTask;
 
 public class BungeeCompatProxyScheduledTask implements ProxyScheduledTask {
+
 	public ScheduledTask task;
 
 	public BungeeCompatProxyScheduledTask(ScheduledTask task) {

@@ -7,6 +7,7 @@ import org.oddlama.vane.proxycore.ProxyPlayer;
 import java.util.UUID;
 
 public class BungeeCompatProxyPlayer extends ProxyPlayer {
+
 	public ProxiedPlayer player;
 
 	public BungeeCompatProxyPlayer(ProxiedPlayer player) {
