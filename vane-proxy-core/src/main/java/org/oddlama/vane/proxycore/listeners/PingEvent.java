@@ -1,7 +1,5 @@
 package org.oddlama.vane.proxycore.listeners;
 
-import org.oddlama.vane.proxycore.ProxyEvent;
-import org.oddlama.vane.proxycore.ProxyServerPing;
 import org.oddlama.vane.proxycore.VaneProxyPlugin;
 import org.oddlama.vane.proxycore.config.IVaneProxyServerInfo;
 
