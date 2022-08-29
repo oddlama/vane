@@ -51,4 +51,14 @@ public class BungeeCompatProxyServer implements org.oddlama.vane.proxycore.Proxy
 		return false;
 	}
 
+	@Override
+	public void register_channel(String channel) {
+		proxyServer.registerChannel(channel);
+	}
+
+	@Override
+	public void unregister_channel(String channel) {
+		proxyServer.unregisterChannel(channel);
+	}
+
 }
