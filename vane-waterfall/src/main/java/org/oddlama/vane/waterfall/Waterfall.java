@@ -6,7 +6,6 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.LinkedHashMap;
 import java.util.UUID;
-import javax.imageio.ImageIO;
 import net.md_5.bungee.api.AbstractReconnectHandler;
 import net.md_5.bungee.api.Favicon;
 import net.md_5.bungee.api.ServerPing;
@@ -59,7 +58,11 @@ public class Waterfall extends Plugin implements Listener, VaneProxyPlugin {
 
 		metrics = new Metrics(this, 8891);
 
-		config.load();
+		if (!config.load()) {
+			this.onDisable();
+			return;
+		}
+
 		maintenance.load();
 
 		final var plugin_manager = getProxy().getPluginManager();
@@ -151,13 +154,15 @@ public class Waterfall extends Plugin implements Listener, VaneProxyPlugin {
 			return null;
 		}
 
-		final var file = cms.favicon_file();
-		if (file.exists()) {
-			try {
-				return Favicon.create(ImageIO.read(file));
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+		final var favicon = cms.favicon();
+		if (favicon == null || favicon.isEmpty()) {
+			return null;
+		}
+
+		try {
+			return Favicon.create(favicon);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
 		return null;

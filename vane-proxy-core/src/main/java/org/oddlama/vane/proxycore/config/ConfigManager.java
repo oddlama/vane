@@ -25,12 +25,11 @@ public class ConfigManager {
 		this.plugin = plugin;
 	}
 
-
 	private File file() {
 		return new File(plugin.getVaneDataFolder(), "config.yml");
 	}
 
-	public void load() {
+	public boolean load() {
 		final var file = file();
 		if (!file.exists()) {
 			save_default(file);
@@ -41,18 +40,33 @@ public class ConfigManager {
 			Config conf = yaml.loadAs(is, Config.class);
 			if (conf == null) {
 				plugin.getVaneLogger().log(Level.SEVERE, "Failed to parse config (is it missing anything?)");
-				return;
+				return false;
 			}
 
 			multiplexer_by_port.putAll(conf.auth_multiplex);
 
 			// Set all the server IDs
 			for (Map.Entry<String, ManagedServer> entry : conf.managed_servers.entrySet()) {
-				entry.getValue().id(entry.getKey());
+				ManagedServer server = entry.getValue();
+				server.id(entry.getKey());
+
+				try {
+					server.try_encoded_favicon();
+				} catch (IOException e) {
+					plugin.getVaneLogger().log(Level.SEVERE, "Failed to read favicon! (is the path correct?)");
+					e.printStackTrace();
+					return false;
+				} catch (IllegalArgumentException e) {
+					plugin.getVaneLogger().log(Level.SEVERE, "Failed to set favicon: " + e.getMessage());
+					return false;
+				}
 			}
 		} catch (IOException e) {
 			plugin.getVaneLogger().log(Level.SEVERE, "Error while loading config file '" + file + "'", e);
+			return false;
 		}
+
+		return true;
 	}
 
 	public void save_default(final File file) {
