@@ -18,6 +18,7 @@ public class BungeeCompatProxyServerPing implements ProxyServerPing {
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public void set_favicon(String encoded_favicon) {
 		ping.setFavicon(encoded_favicon);
 	}
