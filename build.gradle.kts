@@ -42,7 +42,7 @@ subprojects {
 
 // All Paper Plugins + Annotations.
 configure(subprojects.filter {
-	!listOf("vane-waterfall", "vane-proxy-core").contains(it.name)
+	!listOf("vane-waterfall", "vane-velocity", "vane-proxy-core").contains(it.name)
 }) {
 	apply(plugin = "io.papermc.paperweight.userdev")
 
@@ -57,9 +57,9 @@ configure(subprojects.filter {
 	 }
 }
 
-// All Projects except waterfall and annotations.
+// All Projects except proxies and annotations.
 configure(subprojects.filter {
-	!listOf("vane-annotations", "vane-waterfall", "vane-proxy-core").contains(it.name)
+	!listOf("vane-annotations", "vane-waterfall", "vane-velocity", "vane-proxy-core").contains(it.name)
 }) {
 	tasks.create<Copy>("copyJar") {
 		from(tasks.reobfJar)
@@ -98,7 +98,7 @@ configure(subprojects.filter {
 
 // All paper plugins except core.
 configure(subprojects.filter {
-	!listOf("vane-annotations", "vane-core", "vane-waterfall", "vane-proxy-core").contains(it.name)
+	!listOf("vane-annotations", "vane-core", "vane-waterfall", "vane-velocity", "vane-proxy-core").contains(it.name)
 }) {
 	dependencies {
 		// https://imperceptiblethoughts.com/shadow/multi-project/#depending-on-the-shadow-jar-from-another-project
