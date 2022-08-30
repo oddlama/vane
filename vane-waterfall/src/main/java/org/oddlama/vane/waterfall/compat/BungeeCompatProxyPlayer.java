@@ -6,7 +6,7 @@ import org.oddlama.vane.proxycore.ProxyPlayer;
 
 import java.util.UUID;
 
-public class BungeeCompatProxyPlayer extends ProxyPlayer {
+public class BungeeCompatProxyPlayer implements ProxyPlayer {
 
 	public ProxiedPlayer player;
 
@@ -25,7 +25,7 @@ public class BungeeCompatProxyPlayer extends ProxyPlayer {
 	}
 
 	@Override
-	public int get_ping() {
+	public long get_ping() {
 		return player.getPing();
 	}
 
