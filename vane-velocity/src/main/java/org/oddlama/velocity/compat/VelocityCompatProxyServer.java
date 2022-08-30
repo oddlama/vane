@@ -4,6 +4,7 @@ import net.kyori.adventure.text.Component;
 import org.oddlama.vane.proxycore.ProxyPlayer;
 import org.oddlama.vane.proxycore.ProxyServer;
 import org.oddlama.vane.proxycore.scheduler.ProxyTaskScheduler;
+import org.oddlama.velocity.compat.scheduler.VelocityCompatProxyTaskScheduler;
 
 import java.util.Arrays;
 import java.util.Collection;

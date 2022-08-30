@@ -1,4 +1,4 @@
-package org.oddlama.velocity.compat;
+package org.oddlama.velocity.compat.scheduler;
 
 import com.velocitypowered.api.scheduler.ScheduledTask;
 import com.velocitypowered.api.scheduler.Scheduler;

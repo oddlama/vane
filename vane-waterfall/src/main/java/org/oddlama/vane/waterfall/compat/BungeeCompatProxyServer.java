@@ -4,6 +4,7 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.oddlama.vane.proxycore.ProxyPlayer;
 import org.oddlama.vane.proxycore.scheduler.ProxyTaskScheduler;
+import org.oddlama.vane.waterfall.compat.scheduler.BungeeCompatProxyTaskScheduler;
 
 import java.util.Collection;
 import java.util.Collections;
