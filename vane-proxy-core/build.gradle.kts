@@ -4,6 +4,7 @@ plugins {
 
 dependencies {
     implementation(group = "org.yaml", name = "snakeyaml", version = "1.30")
+    implementation(group = "org.slf4j", name = "slf4j-api", version = "1.7.30")
     implementation(rootProject.project(":vane-core"))
 }
 

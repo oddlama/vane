@@ -4,18 +4,12 @@ import java.net.SocketAddress;
 
 public interface IVaneProxyServerInfo {
 
-	String getMotd();
-
 	String getName();
-
-	String getPermission();
 
 	SocketAddress getSocketAddress();
 
-	boolean isRestricted();
+	void sendData(byte[] data);
 
-	void sendData(String channel, byte[] data);
-
-	boolean sendData(String channel, byte[] data, boolean queue);
+	boolean sendData(byte[] data, boolean queue);
 
 }
