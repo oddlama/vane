@@ -5,6 +5,8 @@ import org.oddlama.vane.proxycore.ProxyPendingConnection;
 import org.oddlama.vane.proxycore.VaneProxyPlugin;
 import org.oddlama.vane.proxycore.config.IVaneProxyServerInfo;
 
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -76,7 +78,22 @@ public abstract class PreLoginEvent implements ProxyEvent, ProxyCancellableEvent
 
 	public abstract boolean implementation_specific_auth(MultiplexedPlayer multiplexed_player);
 
-	public abstract void register_auth_multiplex_player(IVaneProxyServerInfo server, PreLoginEvent.MultiplexedPlayer multiplexed_player);
+	public void register_auth_multiplex_player(IVaneProxyServerInfo server, PreLoginEvent.MultiplexedPlayer multiplexed_player) {
+		final var stream = new ByteArrayOutputStream();
+		final var out = new DataOutputStream(stream);
+
+		try {
+			out.writeInt(multiplexed_player.multiplexer_id);
+			out.writeUTF(multiplexed_player.original_uuid.toString());
+			out.writeUTF(multiplexed_player.name);
+			out.writeUTF(multiplexed_player.new_uuid.toString());
+			out.writeUTF(multiplexed_player.new_name);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		server.sendData(stream.toByteArray());
+	}
 
 	public static class MultiplexedPlayer {
 
