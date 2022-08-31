@@ -15,12 +15,6 @@ public class VelocityCompatPreLoginEvent extends PreLoginEvent {
 	}
 
 	@Override
-	public boolean implementation_specific_auth(MultiplexedPlayer multiplexed_player) {
-		// TODO
-		return false;
-	}
-
-	@Override
 	public void cancel() {
 		cancel("");
 	}
@@ -33,6 +27,12 @@ public class VelocityCompatPreLoginEvent extends PreLoginEvent {
 	@Override
 	public ProxyPendingConnection get_connection() {
 		return new VelocityCompatPendingConnection(event.getConnection(), event.getUsername());
+	}
+
+	@Override
+	public boolean implementation_specific_auth(MultiplexedPlayer multiplexed_player) {
+		// TODO
+		return false;
 	}
 
 }
