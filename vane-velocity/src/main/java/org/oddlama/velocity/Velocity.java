@@ -42,12 +42,15 @@ public class Velocity extends VaneProxyPlugin {
 
 		this.velocity_server = server;
 		this.data_dir = data_dir.toFile();
-
-		logger.info("Hello world!");
 	}
 
 	@Subscribe
-	public void onEnable(final ProxyInitializeEvent event) {
+	public void on_enable(final ProxyInitializeEvent event) {
+		if (!config.load()) {
+			disable();
+			return;
+		}
+
 		metricsFactory.make(this, 8891);
 
 		EventManager event_manager = velocity_server.getEventManager();
@@ -61,9 +64,16 @@ public class Velocity extends VaneProxyPlugin {
 
 	@Subscribe
 	public void on_disable(final ProxyShutdownEvent event) {
+		disable();
+	}
+
+	private void disable() {
 		velocity_server.getEventManager().unregisterListeners(this);
 
 		velocity_server.getChannelRegistrar().unregister(CHANNEL);
+
+		server = null;
+		logger = null;
 	}
 
 	@Override

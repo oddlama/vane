@@ -10,5 +10,6 @@ libs/
 target/
 target-obf/
 external/
+!vane-velocity/external
 bin/
 run/
