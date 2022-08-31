@@ -16,6 +16,7 @@ import org.oddlama.vane.util.Version;
 import org.oddlama.velocity.compat.VelocityCompatProxyServer;
 import org.oddlama.velocity.listeners.ProxyDisconnectListener;
 import org.oddlama.velocity.listeners.ProxyLoginListener;
+import org.oddlama.velocity.listeners.ProxyPingListener;
 import org.oddlama.velocity.listeners.ProxyPreLoginListener;
 import org.slf4j.Logger;
 
@@ -55,6 +56,7 @@ public class Velocity extends VaneProxyPlugin {
 
 		EventManager event_manager = velocity_server.getEventManager();
 
+		event_manager.register(this, new ProxyPingListener(this));
 		event_manager.register(this, new ProxyPreLoginListener(this));
 		event_manager.register(this, new ProxyLoginListener(this));
 		event_manager.register(this, new ProxyDisconnectListener(this));
