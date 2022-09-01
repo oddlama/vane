@@ -72,7 +72,7 @@ public abstract class PreLoginEvent implements ProxyEvent, ProxyCancellableEvent
 					);
 
 			MultiplexedPlayer multiplexed_player = new MultiplexedPlayer(multiplexer_id, name, new_name, uuid, new_uuid);
-			if (!implementation_specific_auth(multiplexed_player, destination)) {
+			if (!implementation_specific_auth(multiplexed_player)) {
 				return;
 			}
 
@@ -83,7 +83,7 @@ public abstract class PreLoginEvent implements ProxyEvent, ProxyCancellableEvent
 		}
 	}
 
-	public abstract boolean implementation_specific_auth(MultiplexedPlayer multiplexed_player, PreLoginDestination destination);
+	public abstract boolean implementation_specific_auth(MultiplexedPlayer multiplexed_player);
 
 	public static void register_auth_multiplex_player(IVaneProxyServerInfo server, PreLoginEvent.MultiplexedPlayer multiplexed_player) {
 		final var stream = new ByteArrayOutputStream();
