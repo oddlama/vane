@@ -40,7 +40,8 @@ public class VelocityCompatPreLoginEvent extends PreLoginEvent {
 	}
 
 	@Override
-	public boolean implementation_specific_auth(MultiplexedPlayer multiplexed_player) {
+	public boolean implementation_specific_auth(MultiplexedPlayer multiplexed_player, PreLoginDestination destination) {
+		// Not applicable, all handled in `ProxyGameProfileRequestListener`
 		return true;
 	}
 

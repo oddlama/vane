@@ -26,6 +26,10 @@ public abstract class PreLoginEvent implements ProxyEvent, ProxyCancellableEvent
 	}
 
 	public void fire() {
+		// Not applicable
+		assert false;
+	}
+	public void fire(PreLoginDestination destination) {
 		ProxyPendingConnection connection = get_connection();
 
 		// Multiplex authentication if the connection is to a multiplexing port
@@ -47,11 +51,11 @@ public abstract class PreLoginEvent implements ProxyEvent, ProxyCancellableEvent
 				this.cancel(plugin.get_maintenance().format_message(Maintenance.MESSAGE_CONNECT));
 				return;
 			}
-
-			if (!plugin.get_proxy().has_permission(uuid, "vane_waterfall.auth_multiplexer." + multiplexer_id)) {
-				this.cancel(MESSAGE_MULTIPLEX_MOJANG_AUTH_NO_PERMISSION_KICK);
-				return;
-			}
+// TODO
+//			if (!plugin.get_proxy().has_permission(uuid, "vane_waterfall.auth_multiplexer." + multiplexer_id)) {
+//				this.cancel(MESSAGE_MULTIPLEX_MOJANG_AUTH_NO_PERMISSION_KICK);
+//				return;
+//			}
 
 			final var name = connection.get_name();
 			final var new_uuid = add_uuid(uuid, multiplexer_id);
@@ -68,15 +72,18 @@ public abstract class PreLoginEvent implements ProxyEvent, ProxyCancellableEvent
 					);
 
 			MultiplexedPlayer multiplexed_player = new MultiplexedPlayer(multiplexer_id, name, new_name, uuid, new_uuid);
-			if (!implementation_specific_auth(multiplexed_player)) {
+			if (!implementation_specific_auth(multiplexed_player, destination)) {
 				return;
 			}
 
-			plugin.get_multiplexed_uuids().put(multiplexed_player.new_uuid, multiplexed_player.original_uuid);
+			switch (destination) {
+				case MULTIPLEXED_UUIDS -> plugin.get_multiplexed_uuids().put(multiplexed_player.new_uuid, multiplexed_player.original_uuid);
+				case PENDING_MULTIPLEXED_LOGINS -> plugin.get_pending_multiplexer_logins().put(uuid, multiplexed_player);
+			}
 		}
 	}
 
-	public abstract boolean implementation_specific_auth(MultiplexedPlayer multiplexed_player);
+	public abstract boolean implementation_specific_auth(MultiplexedPlayer multiplexed_player, PreLoginDestination destination);
 
 	public static void register_auth_multiplex_player(IVaneProxyServerInfo server, PreLoginEvent.MultiplexedPlayer multiplexed_player) {
 		final var stream = new ByteArrayOutputStream();
@@ -93,6 +100,14 @@ public abstract class PreLoginEvent implements ProxyEvent, ProxyCancellableEvent
 		}
 
 		server.sendData(stream.toByteArray());
+	}
+
+	/**
+	 * Where to send the details of a PreLoginEvent
+	 */
+	public enum PreLoginDestination {
+		MULTIPLEXED_UUIDS,
+		PENDING_MULTIPLEXED_LOGINS,
 	}
 
 	public static class MultiplexedPlayer {
