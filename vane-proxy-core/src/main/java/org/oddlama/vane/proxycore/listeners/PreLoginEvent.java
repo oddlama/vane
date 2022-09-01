@@ -78,7 +78,7 @@ public abstract class PreLoginEvent implements ProxyEvent, ProxyCancellableEvent
 
 	public abstract boolean implementation_specific_auth(MultiplexedPlayer multiplexed_player);
 
-	public void register_auth_multiplex_player(IVaneProxyServerInfo server, PreLoginEvent.MultiplexedPlayer multiplexed_player) {
+	public static void register_auth_multiplex_player(IVaneProxyServerInfo server, PreLoginEvent.MultiplexedPlayer multiplexed_player) {
 		final var stream = new ByteArrayOutputStream();
 		final var out = new DataOutputStream(stream);
 
