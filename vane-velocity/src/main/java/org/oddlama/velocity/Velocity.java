@@ -13,7 +13,6 @@ import com.velocitypowered.proxy.VelocityServer;
 import com.velocitypowered.proxy.network.ConnectionManager;
 import org.bstats.velocity.Metrics;
 import org.oddlama.vane.proxycore.VaneProxyPlugin;
-import org.oddlama.vane.proxycore.listeners.PreLoginEvent;
 import org.oddlama.vane.proxycore.log.slf4jCompatLogger;
 import org.oddlama.vane.util.Version;
 import org.oddlama.velocity.compat.VelocityCompatProxyServer;
@@ -23,8 +22,6 @@ import org.slf4j.Logger;
 import java.io.File;
 import java.net.InetSocketAddress;
 import java.nio.file.Path;
-import java.util.LinkedHashMap;
-import java.util.UUID;
 import java.util.logging.Level;
 
 @Plugin(id = "vane-velocity", name = "Vane Velocity", version = Version.VERSION, description = "TODO",
@@ -34,7 +31,6 @@ public class Velocity extends VaneProxyPlugin {
 	public static final MinecraftChannelIdentifier CHANNEL = MinecraftChannelIdentifier.create(CHANNEL_AUTH_MULTIPLEX_NAMESPACE, CHANNEL_AUTH_MULTIPLEX_NAME);
 	private final ProxyServer velocity_server;
 	private final File data_dir;
-	public final LinkedHashMap<UUID, PreLoginEvent.MultiplexedPlayer> pending_multiplexer_logins = new LinkedHashMap<>();
 	// bStats
 	@SuppressWarnings("unused")
 	private final Metrics.Factory metricsFactory;
@@ -48,6 +44,20 @@ public class Velocity extends VaneProxyPlugin {
 
 		this.velocity_server = server;
 		this.data_dir = data_dir.toFile();
+	}
+
+	@Override
+	public File get_data_folder() {
+		return this.data_dir;
+	}
+
+	@Override
+	public org.oddlama.vane.proxycore.ProxyServer get_proxy() {
+		return server;
+	}
+
+	public ProxyServer get_raw_proxy() {
+		return velocity_server;
 	}
 
 	@Subscribe
@@ -71,42 +81,13 @@ public class Velocity extends VaneProxyPlugin {
 
 		if (!config.multiplexer_by_port.isEmpty()) {
 			try {
+				// Velocity doesn't let you register multiple listeners like Bungeecord
+				// So we have to take matters into our own hands :)
 				start_listeners();
 			} catch (Exception e) {
-				get_logger().log(Level.SEVERE, "Failed to initialize login session injector!", e);
+				get_logger().log(Level.SEVERE, "Failed to inject into VelocityServer!", e);
+				disable();
 			}
-		}
-	}
-
-	private void start_listeners() {
-		get_logger().log(Level.INFO, "Attempting to register auth multiplexers");
-
-		final var server = (VelocityServer) velocity_server;
-		ConnectionManager cm;
-		try {
-			final var velocity_server = Class.forName("com.velocitypowered.proxy.VelocityServer");
-			final var cm_field = velocity_server.getDeclaredField("cm");
-			cm_field.setAccessible(true);
-			cm = (ConnectionManager) cm_field.get(server);
-		} catch (
-				ClassNotFoundException
-				| NoSuchFieldException
-				| SecurityException
-				| IllegalArgumentException
-				| IllegalAccessException e
-		) {
-			e.printStackTrace();
-			return;
-		}
-
-		for (final var multiplexer_map : config.multiplexer_by_port.entrySet()) {
-			final var port = multiplexer_map.getKey();
-			final var id = multiplexer_map.getValue();
-
-			get_logger().log(Level.INFO, "Registering multiplexer ID " + id + ", bound to port " + port);
-
-			final var address = new InetSocketAddress(port);
-			cm.bind(address);
 		}
 	}
 
@@ -120,22 +101,63 @@ public class Velocity extends VaneProxyPlugin {
 
 		velocity_server.getChannelRegistrar().unregister(CHANNEL);
 
+		// Now let's be good and clean up our mess :)
+		try {
+			stop_listeners();
+		} catch (Exception e) {
+			get_logger().log(Level.SEVERE, "Failed to stop listeners!", e);
+			get_logger().log(Level.SEVERE, "Shutting down the server to prevent lingering unmanaged listeners!");
+			velocity_server.shutdown();
+		}
+
 		server = null;
 		logger = null;
 	}
 
-	@Override
-	public File get_data_folder() {
-		return this.data_dir;
+	private ConnectionManager get_cm() throws ClassNotFoundException, NoSuchFieldException, IllegalAccessException {
+		final var server = (VelocityServer) velocity_server;
+
+		// We steal the VelocityServer's `ConnectionManager`, which (currently) has no
+		// issue binding to however many addresses we give it.
+		final var velocity_server = Class.forName("com.velocitypowered.proxy.VelocityServer");
+		final var cm_field = velocity_server.getDeclaredField("cm");
+		cm_field.setAccessible(true);
+
+		return (ConnectionManager) cm_field.get(server);
 	}
 
-	@Override
-	public org.oddlama.vane.proxycore.ProxyServer get_proxy() {
-		return server;
+	private void start_listeners() throws ClassNotFoundException, NoSuchFieldException, IllegalAccessException {
+		get_logger().log(Level.INFO, "Attempting to register auth multiplexers");
+
+		ConnectionManager cm = get_cm();
+
+		for (final var multiplexer_map : config.multiplexer_by_port.entrySet()) {
+			final var port = multiplexer_map.getKey();
+			final var id = multiplexer_map.getValue();
+
+			get_logger().log(Level.INFO, "Registering multiplexer ID " + id + ", bound to port " + port);
+
+			final var address = new InetSocketAddress(port);
+			cm.bind(address);
+		}
 	}
 
-	public ProxyServer get_raw_proxy() {
-		return velocity_server;
+	private void stop_listeners() throws ClassNotFoundException, NoSuchFieldException, IllegalAccessException {
+		get_logger().log(Level.INFO, "Attempting to close auth multiplexers");
+
+		ConnectionManager cm = get_cm();
+
+		for (final var multiplexer_map : config.multiplexer_by_port.entrySet()) {
+			final var port = multiplexer_map.getKey();
+			final var id = multiplexer_map.getValue();
+
+			get_logger().log(Level.INFO, "Closing multiplexer ID " + id + ", bound to port " + port);
+
+			final var address = new InetSocketAddress(port);
+			cm.close(address);
+		}
+
+		get_logger().log(Level.INFO, "Successfully closed all multiplexers");
 	}
 
 }

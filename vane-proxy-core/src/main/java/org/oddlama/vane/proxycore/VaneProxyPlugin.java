@@ -3,6 +3,7 @@ package org.oddlama.vane.proxycore;
 import org.jetbrains.annotations.NotNull;
 import org.oddlama.vane.proxycore.config.ConfigManager;
 import org.oddlama.vane.proxycore.config.IVaneProxyServerInfo;
+import org.oddlama.vane.proxycore.listeners.PreLoginEvent;
 import org.oddlama.vane.proxycore.log.IVaneLogger;
 
 import java.io.IOException;
@@ -18,7 +19,8 @@ public abstract class VaneProxyPlugin {
 	public static final String CHANNEL_AUTH_MULTIPLEX_NAME = "auth_multiplex";
 	public static final String CHANNEL_AUTH_MULTIPLEX = CHANNEL_AUTH_MULTIPLEX_NAMESPACE + ":" + CHANNEL_AUTH_MULTIPLEX_NAME;
 
-	public final LinkedHashMap<UUID, UUID> multiplexedUUIDs = new LinkedHashMap<>();
+	private final LinkedHashMap<UUID, UUID> multiplexedUUIDs = new LinkedHashMap<>();
+	private final LinkedHashMap<UUID, PreLoginEvent.MultiplexedPlayer> pending_multiplexer_logins = new LinkedHashMap<>();
 	public ConfigManager config = new ConfigManager(this);
 	public Maintenance maintenance = new Maintenance(this);
 	public IVaneLogger logger;
@@ -105,6 +107,10 @@ public abstract class VaneProxyPlugin {
 
 	public LinkedHashMap<UUID, UUID> get_multiplexed_uuids() {
 		return multiplexedUUIDs;
+	}
+
+	public LinkedHashMap<UUID, PreLoginEvent.MultiplexedPlayer> get_pending_multiplexer_logins() {
+		return pending_multiplexer_logins;
 	}
 
 }
