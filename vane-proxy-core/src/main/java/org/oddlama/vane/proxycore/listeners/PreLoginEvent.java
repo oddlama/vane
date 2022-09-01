@@ -34,52 +34,54 @@ public abstract class PreLoginEvent implements ProxyEvent, ProxyCancellableEvent
 
 		// Multiplex authentication if the connection is to a multiplexing port
 		final var port = connection.get_port();
-		final var multiplexer_id = plugin.get_config().multiplexer_by_port.getOrDefault(port, 0);
-		if (multiplexer_id > 0) {
-			// This is pre-authentication, so we need to resolve the uuid ourselves.
-			String playerName = connection.get_name();
-			UUID uuid;
+		final var multiplexer = plugin.get_config().get_multiplexer_for_port(port);
+		if (multiplexer == null) return;
 
-			try {
-				uuid = resolve_uuid(playerName);
-			} catch (IOException e) {
-				plugin.get_logger().log(Level.WARNING, "Failed to resolve UUID for player '" + playerName + "'", e);
-				return;
-			}
+		final var multiplexer_id = multiplexer.getKey();
 
-			if (!plugin.can_join_maintenance(uuid)) {
-				this.cancel(plugin.get_maintenance().format_message(Maintenance.MESSAGE_CONNECT));
-				return;
-			}
-// TODO
-//			if (!plugin.get_proxy().has_permission(uuid, "vane_waterfall.auth_multiplexer." + multiplexer_id)) {
-//				this.cancel(MESSAGE_MULTIPLEX_MOJANG_AUTH_NO_PERMISSION_KICK);
-//				return;
-//			}
+		// This is pre-authentication, so we need to resolve the uuid ourselves.
+		String playerName = connection.get_name();
+		UUID uuid;
 
-			final var name = connection.get_name();
-			final var new_uuid = add_uuid(uuid, multiplexer_id);
-			final var new_uuid_str = new_uuid.toString();
-			final var new_name = new_uuid_str.substring(new_uuid_str.length() - 16);
+		try {
+			uuid = resolve_uuid(playerName);
+		} catch (IOException e) {
+			plugin.get_logger().log(Level.WARNING, "Failed to resolve UUID for player '" + playerName + "'", e);
+			return;
+		}
 
-			plugin.get_logger()
-					.log(
-							Level.INFO,
-							"auth multiplex request from player " +
-									name +
-									" connecting from " +
-									connection.get_socket_address().toString()
-					);
+		if (!plugin.can_join_maintenance(uuid)) {
+			this.cancel(plugin.get_maintenance().format_message(Maintenance.MESSAGE_CONNECT));
+			return;
+		}
 
-			MultiplexedPlayer multiplexed_player = new MultiplexedPlayer(multiplexer_id, name, new_name, uuid, new_uuid);
-			if (!implementation_specific_auth(multiplexed_player)) {
-				return;
-			}
+		if (!multiplexer.getValue().uuid_is_allowed(uuid)) {
+			this.cancel(MESSAGE_MULTIPLEX_MOJANG_AUTH_NO_PERMISSION_KICK);
+			return;
+		}
 
-			switch (destination) {
-				case MULTIPLEXED_UUIDS -> plugin.get_multiplexed_uuids().put(multiplexed_player.new_uuid, multiplexed_player.original_uuid);
-				case PENDING_MULTIPLEXED_LOGINS -> plugin.get_pending_multiplexer_logins().put(uuid, multiplexed_player);
-			}
+		final var name = connection.get_name();
+		final var new_uuid = add_uuid(uuid, multiplexer_id);
+		final var new_uuid_str = new_uuid.toString();
+		final var new_name = new_uuid_str.substring(new_uuid_str.length() - 16);
+
+		plugin.get_logger()
+				.log(
+						Level.INFO,
+						"auth multiplex request from player " +
+								name +
+								" connecting from " +
+								connection.get_socket_address().toString()
+				);
+
+		MultiplexedPlayer multiplexed_player = new MultiplexedPlayer(multiplexer_id, name, new_name, uuid, new_uuid);
+		if (!implementation_specific_auth(multiplexed_player)) {
+			return;
+		}
+
+		switch (destination) {
+			case MULTIPLEXED_UUIDS -> plugin.get_multiplexed_uuids().put(multiplexed_player.new_uuid, multiplexed_player.original_uuid);
+			case PENDING_MULTIPLEXED_LOGINS -> plugin.get_pending_multiplexer_logins().put(uuid, multiplexed_player);
 		}
 	}
 

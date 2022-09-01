@@ -67,7 +67,7 @@ public class Velocity extends VaneProxyPlugin {
 
 		velocity_server.getChannelRegistrar().register(CHANNEL);
 
-		if (!config.multiplexer_by_port.isEmpty()) {
+		if (!config.multiplexer_by_id.isEmpty()) {
 			try {
 				// Velocity doesn't let you register multiple listeners like Bungeecord
 				// So we have to take matters into our own hands :)
@@ -119,9 +119,9 @@ public class Velocity extends VaneProxyPlugin {
 
 		ConnectionManager cm = get_cm();
 
-		for (final var multiplexer_map : config.multiplexer_by_port.entrySet()) {
-			final var port = multiplexer_map.getKey();
-			final var id = multiplexer_map.getValue();
+		for (final var multiplexer_map : config.multiplexer_by_id.entrySet()) {
+			final var id = multiplexer_map.getKey();
+			final var port = multiplexer_map.getValue().port;
 
 			get_logger().log(Level.INFO, "Registering multiplexer ID " + id + ", bound to port " + port);
 
@@ -135,9 +135,9 @@ public class Velocity extends VaneProxyPlugin {
 
 		ConnectionManager cm = get_cm();
 
-		for (final var multiplexer_map : config.multiplexer_by_port.entrySet()) {
-			final var port = multiplexer_map.getKey();
-			final var id = multiplexer_map.getValue();
+		for (final var multiplexer_map : config.multiplexer_by_id.entrySet()) {
+			final var id = multiplexer_map.getKey();
+			final var port = multiplexer_map.getValue().port;
 
 			get_logger().log(Level.INFO, "Closing multiplexer ID " + id + ", bound to port " + port);
 
