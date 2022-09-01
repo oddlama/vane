@@ -19,7 +19,6 @@ import org.oddlama.velocity.compat.VelocityCompatProxyServer;
 import org.oddlama.velocity.listeners.*;
 import org.slf4j.Logger;
 
-import java.io.File;
 import java.net.InetSocketAddress;
 import java.nio.file.Path;
 import java.util.logging.Level;
@@ -30,7 +29,6 @@ public class Velocity extends VaneProxyPlugin {
 
 	public static final MinecraftChannelIdentifier CHANNEL = MinecraftChannelIdentifier.create(CHANNEL_AUTH_MULTIPLEX_NAMESPACE, CHANNEL_AUTH_MULTIPLEX_NAME);
 	private final ProxyServer velocity_server;
-	private final File data_dir;
 	// bStats
 	@SuppressWarnings("unused")
 	private final Metrics.Factory metricsFactory;
@@ -44,16 +42,6 @@ public class Velocity extends VaneProxyPlugin {
 
 		this.velocity_server = server;
 		this.data_dir = data_dir.toFile();
-	}
-
-	@Override
-	public File get_data_folder() {
-		return this.data_dir;
-	}
-
-	@Override
-	public org.oddlama.vane.proxycore.ProxyServer get_proxy() {
-		return server;
 	}
 
 	public ProxyServer get_raw_proxy() {

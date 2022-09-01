@@ -6,6 +6,7 @@ import org.oddlama.vane.proxycore.config.IVaneProxyServerInfo;
 import org.oddlama.vane.proxycore.listeners.PreLoginEvent;
 import org.oddlama.vane.proxycore.log.IVaneLogger;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
@@ -25,6 +26,7 @@ public abstract class VaneProxyPlugin {
 	public Maintenance maintenance = new Maintenance(this);
 	public IVaneLogger logger;
 	public ProxyServer server;
+	public File data_dir;
 
 	public boolean is_online(final IVaneProxyServerInfo server) {
 		final var addr = server.getSocketAddress();
@@ -63,9 +65,13 @@ public abstract class VaneProxyPlugin {
 		return motd;
 	}
 
-	public abstract java.io.File get_data_folder();
+	public File get_data_folder() {
+		return data_dir;
+	}
 
-	public abstract ProxyServer get_proxy();
+	public ProxyServer get_proxy() {
+		return server;
+	}
 
 	public @NotNull IVaneLogger get_logger() {
 		return logger;
