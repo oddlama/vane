@@ -27,8 +27,8 @@ public class ProxyGameProfileRequestListener {
 		final var virtual_host = event.getConnection().getVirtualHost();
 		if (virtual_host.isEmpty()) return;
 
-		Integer multiplexer_id = velocity.get_config().multiplexer_by_port.get(virtual_host.get().getPort());
-		if (multiplexer_id == null) return;
+		final var multiplexer = velocity.get_config().get_multiplexer_for_port(virtual_host.get().getPort());
+		if (multiplexer == null) return;
 
 		final var pending_multiplexer_logins = velocity.get_pending_multiplexer_logins();
 		if (pending_multiplexer_logins.isEmpty()) return;

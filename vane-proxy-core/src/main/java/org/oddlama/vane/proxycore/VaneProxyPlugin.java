@@ -3,6 +3,7 @@ package org.oddlama.vane.proxycore;
 import org.jetbrains.annotations.NotNull;
 import org.oddlama.vane.proxycore.config.ConfigManager;
 import org.oddlama.vane.proxycore.config.IVaneProxyServerInfo;
+import org.oddlama.vane.proxycore.config.ManagedServer;
 import org.oddlama.vane.proxycore.listeners.PreLoginEvent;
 import org.oddlama.vane.proxycore.log.IVaneLogger;
 
