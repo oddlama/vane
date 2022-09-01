@@ -1,9 +1,11 @@
 package org.oddlama.velocity.compat.event;
 
-import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.oddlama.vane.proxycore.ProxyPendingConnection;
 import org.oddlama.vane.proxycore.VaneProxyPlugin;
 import org.oddlama.vane.proxycore.listeners.PreLoginEvent;
+
+import java.util.logging.Level;
 
 public class VelocityCompatPreLoginEvent extends PreLoginEvent {
 
@@ -21,7 +23,15 @@ public class VelocityCompatPreLoginEvent extends PreLoginEvent {
 
 	@Override
 	public void cancel(String reason) {
-		event.setResult(com.velocitypowered.api.event.connection.PreLoginEvent.PreLoginComponentResult.denied(Component.text(reason)));
+		plugin.get_logger().log(Level.WARNING,
+				"Denying multiplexer connection from "
+						+ event.getConnection().getRemoteAddress()
+						+ ": "
+						+ (reason.isEmpty() ? "No reason provided" : reason));
+
+		event.setResult(com.velocitypowered.api.event.connection.PreLoginEvent.PreLoginComponentResult.denied(
+				LegacyComponentSerializer.legacySection().deserialize(reason.isEmpty() ? "Failed to authorize multiplexer connection" : reason)
+		));
 	}
 
 	@Override
@@ -31,8 +41,8 @@ public class VelocityCompatPreLoginEvent extends PreLoginEvent {
 
 	@Override
 	public boolean implementation_specific_auth(MultiplexedPlayer multiplexed_player) {
-		// TODO
-		return false;
+		return true;
 	}
 
 }
+
