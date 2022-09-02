@@ -63,6 +63,11 @@
     #
     #       cmd = ["/path/to/startscript", "arg1", "will also substitute %SERVER%"]
     #
+    #       # How long the start command is allowed to run before it is killed
+    #       # If unspecified, it will be 10 seconds
+    #
+    #       timeout = 10
+    #
     #       # The kick message to send to the player that started the server
     #       # %SERVER%: The server identifier
     #       # %SERVER_DISPLAY_NAME%: The server display name
