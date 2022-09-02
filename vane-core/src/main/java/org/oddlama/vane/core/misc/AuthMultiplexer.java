@@ -28,7 +28,7 @@ import org.oddlama.vane.util.Resolve;
 
 public class AuthMultiplexer extends Listener<Core> implements PluginMessageListener {
 	// Channel for proxy messages to multiplex connections
-	public static final String CHANNEL_AUTH_MULTIPLEX = "vane_waterfall:auth_multiplex";
+	public static final String CHANNEL_AUTH_MULTIPLEX = "vane_proxy:auth_multiplex";
 
 	// Persistent storage
 	@Persistent
