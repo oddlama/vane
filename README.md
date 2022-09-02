@@ -40,21 +40,25 @@ You also need the newest version of [ProtocolLib](https://ci.dmulloy2.net/job/Pr
 
 For a comprehensive guide, visit the [Installation Guide](https://github.com/oddlama/vane/wiki/Installation-Guide) on the wiki.
 
-## Installation (vane-waterfall)
+## Proxy Installation (vane-waterfall, vane-velocity)
 
-Download `vane-waterfall.jar` into the proxy server's `plugins/` directory.
+Download the `vane-{waterfall, velocity}.jar` into the proxy server's `plugins/` directory.
 The configuration will be generated on first start.
 
-To enable the authentication multiplexing, you need to do the following:
+### Enabling Authentication Multiplexing
 
-1. Define multiple listeners (distinct ports) for your servers in the proxy's `config.yml`.
-2. Map these ports to multiplexer ids in `plugins/vane-waterfall/config.yml`. The specific multiplexer ids must be >0.
-   Other than that the ids are only important to check player permissions.
-3. Assign the corresponding permission(s) `vane_waterfall.auth_multiplexer.<multiplexer_id>` to the desired group in the proxy's `config.yml`.
-4. Assign the group to a player using the players' **UUID**. *THIS IS IMPORTANT* and won't work with player names.
+#### Waterfall
 
-Optionally, you can configure the second configuration section in `plugins/vane-waterfall/config.yml` to allow automatic server start.
-An example is provided in the config file.
+Before using multiplexers, you must define listeners (distinct ports) for your servers in the
+proxy's `config.yml`.
+
+Afterwards, all further configuration is handled in the plugin's `config.toml`
+
+#### Velocity
+
+All configuration is handled in the plugin's `config.toml`
+
+Check the config for additional settings to manage your servers.
 
 ## Building from source
 
