@@ -14,6 +14,8 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.LinkedHashMap;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 
 public abstract class VaneProxyPlugin {
 
@@ -22,13 +24,15 @@ public abstract class VaneProxyPlugin {
 	public static final String CHANNEL_AUTH_MULTIPLEX_NAME = "auth_multiplex";
 	public static final String CHANNEL_AUTH_MULTIPLEX = CHANNEL_AUTH_MULTIPLEX_NAMESPACE + ":" + CHANNEL_AUTH_MULTIPLEX_NAME;
 
-	private final LinkedHashMap<UUID, UUID> multiplexedUUIDs = new LinkedHashMap<>();
-	private final LinkedHashMap<UUID, PreLoginEvent.MultiplexedPlayer> pending_multiplexer_logins = new LinkedHashMap<>();
 	public ConfigManager config = new ConfigManager(this);
 	public Maintenance maintenance = new Maintenance(this);
 	public IVaneLogger logger;
 	public ProxyServer server;
 	public File data_dir;
+
+	private final LinkedHashMap<UUID, UUID> multiplexedUUIDs = new LinkedHashMap<>();
+	private final LinkedHashMap<UUID, PreLoginEvent.MultiplexedPlayer> pending_multiplexer_logins = new LinkedHashMap<>();
+	private boolean server_starting;
 
 	public boolean is_online(final IVaneProxyServerInfo server) {
 		final var addr = server.getSocketAddress();
@@ -100,17 +104,35 @@ public abstract class VaneProxyPlugin {
 	}
 
 	public void try_start_server(ManagedServer server) {
-		// TODO: This could really use some checks (existing process running, nonzero exit code)
+		if (server_starting) return;
+
 		this.server.get_scheduler()
 				.runAsync(
 						this,
 						() -> {
 							try {
-								final var p = Runtime.getRuntime().exec(server.start_cmd());
-								p.waitFor();
+								server_starting = true;
+								final var timeout = server.command_timeout();
+								final var process = Runtime.getRuntime().exec(server.start_cmd());
+
+								if (!process.waitFor(timeout, TimeUnit.SECONDS)) {
+									get_logger().log(
+											Level.SEVERE,
+											"Server '"
+													+ server.id()
+													+ "'s start command timed out!");
+								} else if (process.exitValue() != 0) {
+									get_logger().log(
+											Level.SEVERE,
+											"Server '"
+													+ server.id()
+													+ "'s start command returned a nonzero exit code!");
+								}
 							} catch (Exception e) {
 								e.printStackTrace();
 							}
+
+							server_starting = false;
 						}
 				);
 	}

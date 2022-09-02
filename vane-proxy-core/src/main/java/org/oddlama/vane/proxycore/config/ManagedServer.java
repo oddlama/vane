@@ -1,6 +1,7 @@
 package org.oddlama.vane.proxycore.config;
 
 import com.electronwill.nightconfig.core.CommentedConfig;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.imageio.ImageIO;
@@ -17,6 +18,7 @@ public class ManagedServer {
 	public String display_name;
 	public ServerStart start;
 
+	private final String id;
 	private final StatefulConfiguration online_config;
 	private final StatefulConfiguration offline_config;
 
@@ -25,11 +27,16 @@ public class ManagedServer {
 						 CommentedConfig online_config_section,
 						 CommentedConfig offline_config_section,
 						 CommentedConfig start) throws IOException {
+		this.id = id;
 		this.display_name = display_name;
 
 		this.online_config = new StatefulConfiguration(id, display_name, online_config_section);
 		this.offline_config = new StatefulConfiguration(id, display_name, offline_config_section);
 		this.start = new ServerStart(id, display_name, start);
+	}
+
+	public @NotNull String id() {
+		return this.id;
 	}
 
 	public @Nullable String favicon(ConfigItemSource source) {
@@ -91,6 +98,10 @@ public class ManagedServer {
 			return "";
 		}
 		return sourced_motd.replace("%QUOTE%", random_quote(quote_source));
+	}
+
+	public Integer command_timeout() {
+		return start.timeout;
 	}
 
 	public enum ConfigItemSource {
@@ -167,22 +178,35 @@ public class ManagedServer {
 
 	private static class ServerStart {
 
+		private static final int DEFAULT_TIMEOUT_SECONDS = 10;
 		public String[] cmd;
+		public Integer timeout;
 		public String kick_msg;
 
 		public ServerStart(String id, String display_name, CommentedConfig config) {
 			List<String> cmd = config.get("cmd");
+			var timeout = config.get("timeout");
 			var kick_msg = config.get("kick_msg");
-
-			if (!(kick_msg == null || kick_msg instanceof String))
-				throw new IllegalArgumentException("Managed server '" + id + "' has invalid kick message!");
 
 			if (cmd != null) this.cmd = cmd.stream().map(s -> s.replace("%SERVER%", id)).toArray(String[]::new);
 			else this.cmd = null;
 
+			if (!(kick_msg == null || kick_msg instanceof String))
+				throw new IllegalArgumentException("Managed server '" + id + "' has an invalid kick message!");
+
 			if (kick_msg != null)
 				this.kick_msg = ((String) kick_msg).replace("%SERVER%", id).replace("%SERVER_DISPLAY_NAME%", display_name);
 			else this.kick_msg = null;
+
+			if (timeout == null) {
+				this.timeout = DEFAULT_TIMEOUT_SECONDS;
+				return;
+			}
+
+			if (!(timeout instanceof Integer))
+				throw new IllegalArgumentException("Managed server '" + id + "' has an invalid command timeout!");
+
+			this.timeout = (Integer) timeout;
 		}
 
 	}
