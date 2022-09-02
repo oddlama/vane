@@ -19,8 +19,7 @@ import java.util.logging.Level;
 
 public abstract class VaneProxyPlugin {
 
-	// TODO: rename
-	public static final String CHANNEL_AUTH_MULTIPLEX_NAMESPACE = "vane_waterfall";
+	public static final String CHANNEL_AUTH_MULTIPLEX_NAMESPACE = "vane_proxy";
 	public static final String CHANNEL_AUTH_MULTIPLEX_NAME = "auth_multiplex";
 	public static final String CHANNEL_AUTH_MULTIPLEX = CHANNEL_AUTH_MULTIPLEX_NAMESPACE + ":" + CHANNEL_AUTH_MULTIPLEX_NAME;
 
