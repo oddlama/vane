@@ -7,7 +7,7 @@ import org.oddlama.vane.proxycore.listeners.ProxyServerPing;
 
 public class VelocityCompatProxyServerPing implements ProxyServerPing {
 
-	public ServerPing.Builder ping;
+	public final ServerPing.Builder ping;
 
 	public VelocityCompatProxyServerPing(ServerPing ping) {
 		this.ping = ping.asBuilder();

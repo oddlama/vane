@@ -10,8 +10,8 @@ import java.util.UUID;
 
 public class VelocityCompatPendingConnection implements ProxyPendingConnection {
 
-	InboundConnection connection;
-	String username;
+	final InboundConnection connection;
+	final String username;
 
 	public VelocityCompatPendingConnection(InboundConnection connection, String username) {
 		this.connection = connection;

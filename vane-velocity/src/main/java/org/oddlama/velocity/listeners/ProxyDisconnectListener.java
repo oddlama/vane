@@ -8,7 +8,7 @@ import org.oddlama.velocity.Velocity;
 
 public final class ProxyDisconnectListener {
 
-	Velocity velocity;
+	final Velocity velocity;
 
 	@Inject
 	public ProxyDisconnectListener(Velocity velocity) {

@@ -14,7 +14,7 @@ import static org.oddlama.velocity.Util.get_server_for_host;
 
 public class ProxyGameProfileRequestListener {
 
-	Velocity velocity;
+	final Velocity velocity;
 
 	public ProxyGameProfileRequestListener(Velocity velocity) {
 		this.velocity = velocity;

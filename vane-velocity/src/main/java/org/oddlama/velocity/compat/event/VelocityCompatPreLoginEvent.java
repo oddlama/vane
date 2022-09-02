@@ -9,7 +9,7 @@ import java.util.logging.Level;
 
 public class VelocityCompatPreLoginEvent extends PreLoginEvent {
 
-	com.velocitypowered.api.event.connection.PreLoginEvent event;
+	final com.velocitypowered.api.event.connection.PreLoginEvent event;
 
 	public VelocityCompatPreLoginEvent(VaneProxyPlugin plugin, com.velocitypowered.api.event.connection.PreLoginEvent event) {
 		super(plugin);

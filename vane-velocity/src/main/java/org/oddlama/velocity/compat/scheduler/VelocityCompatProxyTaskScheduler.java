@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 
 public class VelocityCompatProxyTaskScheduler implements ProxyTaskScheduler {
 
-	Scheduler scheduler;
+	final Scheduler scheduler;
 
 	public VelocityCompatProxyTaskScheduler(Scheduler scheduler) {
 		this.scheduler = scheduler;

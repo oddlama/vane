@@ -8,7 +8,7 @@ import java.net.SocketAddress;
 
 public class VelocityCompatServerInfo implements IVaneProxyServerInfo {
 
-	public RegisteredServer server;
+	public final RegisteredServer server;
 
 	public VelocityCompatServerInfo(RegisteredServer server) {
 		this.server = server;

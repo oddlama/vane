@@ -14,7 +14,7 @@ import static org.oddlama.velocity.Util.get_server_for_host;
 
 public class ProxyLoginListener {
 
-	Velocity velocity;
+	final Velocity velocity;
 
 	@Inject
 	public ProxyLoginListener(Velocity velocity) {

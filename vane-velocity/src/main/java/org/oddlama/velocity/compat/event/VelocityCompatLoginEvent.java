@@ -9,7 +9,7 @@ import org.oddlama.vane.proxycore.listeners.LoginEvent;
 
 public class VelocityCompatLoginEvent extends LoginEvent {
 
-	com.velocitypowered.api.event.connection.LoginEvent event;
+	final com.velocitypowered.api.event.connection.LoginEvent event;
 
 	public VelocityCompatLoginEvent(com.velocitypowered.api.event.connection.LoginEvent event, VaneProxyPlugin plugin, IVaneProxyServerInfo server_info, ProxyPendingConnection connection) {
 		super(plugin, server_info, connection);
