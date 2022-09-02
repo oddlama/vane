@@ -1,6 +1,8 @@
 package org.oddlama.velocity;
 
 import com.google.inject.Inject;
+import com.velocitypowered.api.command.CommandManager;
+import com.velocitypowered.api.command.CommandMeta;
 import com.velocitypowered.api.event.EventManager;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
@@ -15,6 +17,8 @@ import org.bstats.velocity.Metrics;
 import org.oddlama.vane.proxycore.VaneProxyPlugin;
 import org.oddlama.vane.proxycore.log.slf4jCompatLogger;
 import org.oddlama.vane.util.Version;
+import org.oddlama.velocity.commands.Maintenance;
+import org.oddlama.velocity.commands.Ping;
 import org.oddlama.velocity.compat.VelocityCompatProxyServer;
 import org.oddlama.velocity.listeners.*;
 import org.slf4j.Logger;
@@ -65,6 +69,14 @@ public class Velocity extends VaneProxyPlugin {
 		event_manager.register(this, new ProxyGameProfileRequestListener(this));
 		event_manager.register(this, new ProxyLoginListener(this));
 		event_manager.register(this, new ProxyDisconnectListener(this));
+
+		CommandManager command_manager = velocity_server.getCommandManager();
+
+		CommandMeta ping_meta = command_manager.metaBuilder("ping").build();
+		command_manager.register(ping_meta, new Ping(this));
+
+		CommandMeta maintenance_meta = command_manager.metaBuilder("maintenance").build();
+		command_manager.register(maintenance_meta, new Maintenance(this));
 
 		velocity_server.getChannelRegistrar().register(CHANNEL);
 
