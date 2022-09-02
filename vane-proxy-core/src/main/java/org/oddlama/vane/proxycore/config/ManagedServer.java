@@ -15,58 +15,35 @@ import java.util.Random;
 public class ManagedServer {
 
 	public String display_name;
-	public Quotes quotes;
-	public Motd motd;
 	public ServerStart start;
-	@Nullable
-	private String encoded_favicon;
+
+	private final StatefulConfiguration online_config;
+	private final StatefulConfiguration offline_config;
 
 	public ManagedServer(String id,
 						 String display_name,
-						 @Nullable String favicon,
-						 CommentedConfig quotes,
-						 CommentedConfig motd,
+						 CommentedConfig online_config_section,
+						 CommentedConfig offline_config_section,
 						 CommentedConfig start) throws IOException {
 		this.display_name = display_name;
 
-		// Replaces placeholders in messages
-		this.quotes = new Quotes(id, display_name, quotes);
-		this.motd = new Motd(id, display_name, motd);
+		this.online_config = new StatefulConfiguration(id, display_name, online_config_section);
+		this.offline_config = new StatefulConfiguration(id, display_name, offline_config_section);
 		this.start = new ServerStart(id, display_name, start);
-
-		if (favicon == null || favicon.isEmpty()) {
-			return;
-		}
-
-		// Try and encode the favicon
-		File favicon_file = new File(favicon.replace("%SERVER%", id));
-		BufferedImage image;
-		try {
-			image = ImageIO.read(favicon_file);
-		} catch (IOException e) {
-			throw new IOException("Failed to read favicon file: " + e.getMessage());
-		}
-
-
-		if (image.getWidth() != 64 || image.getHeight() != 64) {
-			throw new IllegalArgumentException("Favicon has invalid dimensions (must be 64x64)");
-		}
-
-		ByteArrayOutputStream stream = new ByteArrayOutputStream();
-		ImageIO.write(image, "PNG", stream);
-		byte[] favicon_bytes = stream.toByteArray();
-
-		String encoded_favicon = "data:image/png;base64," + Base64.getEncoder().encodeToString(favicon_bytes);
-
-		if (encoded_favicon.length() > Short.MAX_VALUE) {
-			throw new IllegalArgumentException("Favicon file too large for server to process");
-		}
-
-		this.encoded_favicon = encoded_favicon;
 	}
 
-	public String favicon() {
-		return encoded_favicon;
+	public @Nullable String favicon(ConfigItemSource source) {
+		switch (source) {
+			case ONLINE -> {
+				return online_config.encoded_favicon;
+			}
+			case OFFLINE -> {
+				return offline_config.encoded_favicon;
+			}
+			default -> {
+				return null;
+			}
+		}
 	}
 
 	public String[] start_cmd() {
@@ -77,11 +54,11 @@ public class ManagedServer {
 		return start.kick_msg;
 	}
 
-	public String random_quote(QuoteSource source) {
+	private String random_quote(ConfigItemSource source) {
 		final String[] quote_set;
 		switch (source) {
-			case ONLINE -> quote_set = quotes.online;
-			case OFFLINE -> quote_set = quotes.offline;
+			case ONLINE -> quote_set = online_config.quotes;
+			case OFFLINE -> quote_set = offline_config.quotes;
 			default -> {
 				return "";
 			}
@@ -93,17 +70,17 @@ public class ManagedServer {
 		return quote_set[new Random().nextInt(quote_set.length)];
 	}
 
-	public String motd(MotdSource source) {
+	public String motd(ConfigItemSource source) {
 		final String sourced_motd;
-		final QuoteSource quote_source;
+		final ConfigItemSource quote_source;
 		switch (source) {
 			case ONLINE -> {
-				sourced_motd = motd.online;
-				quote_source = QuoteSource.ONLINE;
+				sourced_motd = online_config.motd;
+				quote_source = ConfigItemSource.ONLINE;
 			}
 			case OFFLINE -> {
-				sourced_motd = motd.offline;
-				quote_source = QuoteSource.OFFLINE;
+				sourced_motd = offline_config.motd;
+				quote_source = ConfigItemSource.OFFLINE;
 			}
 			default -> {
 				return "";
@@ -116,56 +93,74 @@ public class ManagedServer {
 		return sourced_motd.replace("%QUOTE%", random_quote(quote_source));
 	}
 
-	public enum QuoteSource {
+	public enum ConfigItemSource {
 		ONLINE,
 		OFFLINE,
 	}
 
-	public enum MotdSource {
-		ONLINE,
-		OFFLINE,
-	}
+	private static class StatefulConfiguration {
 
-	private static class Quotes {
+		public String[] quotes = null;
+		public String motd = null;
+		private @Nullable String encoded_favicon;
 
-		public String[] online;
-		public String[] offline;
+		public StatefulConfiguration(String id, String display_name, CommentedConfig config) throws IOException {
+			// [managed_servers.my_server.state]
 
-		public Quotes(String id, String display_name, CommentedConfig config) {
-			List<String> offline = config.get("offline");
-			List<String> online = config.get("online");
+			// quotes = ["", ...]
+			List<String> quotes = config.get("quotes");
 
-			if (offline != null)
-				this.offline = offline.stream().map(s -> s.replace("%SERVER%", id)).toArray(String[]::new);
-			else this.offline = null;
+			if (quotes != null)
+				this.quotes = quotes.stream()
+						.filter(s -> !s.isBlank())
+						.map(s -> s.replace("%SERVER%", id)
+								.replace("%SERVER_DISPLAY_NAME%", display_name))
+						.toArray(String[]::new);
 
-			if (online != null)
-				this.online = online.stream().map(s -> s.replace("%SERVER%", id).replace("%SERVER_DISPLAY_NAME%", display_name)).toArray(String[]::new);
-			else this.online = null;
+			// motd = "..."
+			var motd = config.get("motd");
+
+			if (!(motd == null || motd instanceof String))
+				throw new IllegalArgumentException("Managed server '" + id + "' has a non-string MOTD!");
+
+			if (motd != null && !((String) motd).isEmpty())
+				this.motd = ((String) motd).replace("%SERVER_DISPLAY_NAME%", display_name);
+
+			// favicon = "..."
+			var favicon_path = config.get("favicon");
+
+			if (!(favicon_path == null || favicon_path instanceof String))
+				throw new IllegalArgumentException("Managed server '" + id + "' has a non-string favicon path!");
+
+			if (favicon_path != null && !((String) favicon_path).isEmpty())
+				this.encoded_favicon = encode_favicon(id, (String) favicon_path);
 		}
 
-	}
+		private static String encode_favicon(String id, String favicon_path) throws IOException {
+			File favicon_file = new File(favicon_path.replace("%SERVER%", id));
+			BufferedImage image;
+			try {
+				image = ImageIO.read(favicon_file);
+			} catch (IOException e) {
+				throw new IOException("Failed to read favicon file: " + e.getMessage());
+			}
 
-	private static class Motd {
 
-		public String online;
-		public String offline;
+			if (image.getWidth() != 64 || image.getHeight() != 64) {
+				throw new IllegalArgumentException("Favicon has invalid dimensions (must be 64x64)");
+			}
 
-		public Motd(String id, String display_name, CommentedConfig config) {
-			var offline = config.get("offline");
-			var online = config.get("online");
+			ByteArrayOutputStream stream = new ByteArrayOutputStream();
+			ImageIO.write(image, "PNG", stream);
+			byte[] favicon_bytes = stream.toByteArray();
 
-			if (!(offline == null || offline instanceof String))
-				throw new IllegalArgumentException("Managed server '" + id + "' has an invalid offline MOTD!");
+			String encoded_favicon = "data:image/png;base64," + Base64.getEncoder().encodeToString(favicon_bytes);
 
-			if (!(online == null || online instanceof String))
-				throw new IllegalArgumentException("Managed server '" + id + "' has an invalid online MOTD!");
+			if (encoded_favicon.length() > Short.MAX_VALUE) {
+				throw new IllegalArgumentException("Favicon file too large for server to process");
+			}
 
-			if (online != null) this.online = ((String) online).replace("%SERVER_DISPLAY_NAME%", display_name);
-			else this.online = null;
-
-			if (offline != null) this.offline = ((String) offline).replace("%SERVER_DISPLAY_NAME%", display_name);
-			else this.offline = null;
+			return encoded_favicon;
 		}
 
 	}

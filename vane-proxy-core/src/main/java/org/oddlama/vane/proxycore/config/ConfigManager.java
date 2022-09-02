@@ -88,6 +88,9 @@ public class ConfigManager {
 				[managed_servers]
 
 				    # Define your managed servers
+				    #
+				    # NOTE: No field is necessary! You can leave out anything you don't
+				    #       want, including entire sections!
 
 				    # Example:
 				    #
@@ -97,20 +100,26 @@ public class ConfigManager {
 				    #
 				    #   display_name = "§6> §6§lMy Minecraft Server§6 <"
 				    #
-				    #   # The server favicon (absolute path or relative to proxy directory)
-				    #   # %SERVER%: The server identifier
+				    #       # The online configuration, things to show in the server list
+				    #       # when the server is online
 				    #
-				    #   favicon = "../%SERVER%/server-icon.png"
+				    #       [managed_servers.my_server.online]
+				    #
+				    #       # The server favicon (absolute path or relative to proxy directory)
+				    #       favicon = "../%SERVER%/server-icon.png"
 				    #
 				    #       # The motd for the server list (up to two lines)
-				    #       [managed_servers.my_server.motd]
-				    #       offline = "%SERVER_DISPLAY_NAME%\\n§cowo§7 | %QUOTE%"
-				    #       online = "%SERVER_DISPLAY_NAME%\\n§aowo§7 | %QUOTE%"
+				    #       motd = "%SERVER_DISPLAY_NAME%\\n§aowo§7 | %QUOTE%"
 				    #
 				    #       # A list of quotes for substitutions
-				    #       [managed_servers.my_server.quotes]
-				    #       offline = ["Paniik!"]
-				    #       online = ["Ah, yes."]
+				    #       quotes = ["Ah, yes."]
+				    #
+				    #       # The offline configuration, for when the server is offline
+				    #
+				    #       [managed_servers.my_server.offline]
+				    #       favicon = "../%SERVER%/server-icon-offline.png"
+				    #       motd = "%SERVER_DISPLAY_NAME%\\n§cowo§7 | %QUOTE%"
+				    #       quotes = ["Paniik!"]
 				    #
 				    #       # Automatic start settings
 				    #       [managed_servers.my_server.start]
@@ -118,7 +127,7 @@ public class ConfigManager {
 				    #       # The command to execute when the first player joins while the server is offline
 				    #       # %SERVER%: The server identifier
 				    #
-				    #       cmd = ["path/to/script.sh"]
+				    #       cmd = ["/path/to/startscript", "arg1", "will also substitute %SERVER%"]
 				    #
 				    #       # The kick message to send to the player that started the server
 				    #       # %SERVER%: The server identifier
