@@ -14,7 +14,7 @@ public interface ProxyServer {
 	Collection<ProxyPlayer> getPlayers();
 
 	default boolean can_start_server(UUID uuid, String serverName) {
-		return has_permission(uuid, "vane_waterfall.start_server", "vane_waterfall.start_server.*", "vane_waterfall.start_server." + serverName);
+		return has_permission(uuid, "vane_proxy.start_server", "vane_proxy.start_server.*", "vane_proxy.start_server." + serverName);
 	}
 
 	boolean has_permission(UUID uuid, String... permission);

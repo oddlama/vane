@@ -12,7 +12,7 @@ public class Ping implements SimpleCommand {
 	ProxyPingCommand cmd;
 
 	public Ping(final Velocity plugin) {
-		this.cmd = new ProxyPingCommand("vane_velocity.commands.ping", plugin);
+		this.cmd = new ProxyPingCommand("vane_proxy.commands.ping", plugin);
 	}
 
 	@Override
