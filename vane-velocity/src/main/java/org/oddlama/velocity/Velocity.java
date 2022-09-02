@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 
 import java.net.InetSocketAddress;
 import java.nio.file.Path;
+import java.util.function.BiConsumer;
 import java.util.logging.Level;
 
 @Plugin(id = "vane-velocity", name = "Vane Velocity", version = Version.VERSION, description = "TODO",
@@ -69,9 +70,11 @@ public class Velocity extends VaneProxyPlugin {
 
 		if (!config.multiplexer_by_id.isEmpty()) {
 			try {
+				get_logger().log(Level.INFO, "Attempting to register auth multiplexers");
+
 				// Velocity doesn't let you register multiple listeners like Bungeecord
 				// So we have to take matters into our own hands :)
-				start_listeners();
+				handle_listeners("Registering", ConnectionManager::bind);
 			} catch (Exception e) {
 				get_logger().log(Level.SEVERE, "Failed to inject into VelocityServer!", e);
 				disable();
@@ -91,7 +94,9 @@ public class Velocity extends VaneProxyPlugin {
 
 		// Now let's be good and clean up our mess :)
 		try {
-			stop_listeners();
+			get_logger().log(Level.INFO, "Attempting to close auth multiplexers");
+
+			handle_listeners("Closing", ConnectionManager::close);
 		} catch (Exception e) {
 			get_logger().log(Level.SEVERE, "Failed to stop listeners!", e);
 			get_logger().log(Level.SEVERE, "Shutting down the server to prevent lingering unmanaged listeners!");
@@ -102,7 +107,11 @@ public class Velocity extends VaneProxyPlugin {
 		logger = null;
 	}
 
-	private ConnectionManager get_cm() throws ClassNotFoundException, NoSuchFieldException, IllegalAccessException {
+	private void handle_listeners(String action,
+								  BiConsumer<? super ConnectionManager, ? super InetSocketAddress> method)
+			throws ClassNotFoundException,
+					NoSuchFieldException,
+					IllegalAccessException {
 		final var server = (VelocityServer) velocity_server;
 
 		// We steal the VelocityServer's `ConnectionManager`, which (currently) has no
@@ -111,41 +120,17 @@ public class Velocity extends VaneProxyPlugin {
 		final var cm_field = velocity_server.getDeclaredField("cm");
 		cm_field.setAccessible(true);
 
-		return (ConnectionManager) cm_field.get(server);
-	}
-
-	private void start_listeners() throws ClassNotFoundException, NoSuchFieldException, IllegalAccessException {
-		get_logger().log(Level.INFO, "Attempting to register auth multiplexers");
-
-		ConnectionManager cm = get_cm();
+		final var cm = (ConnectionManager) cm_field.get(server);
 
 		for (final var multiplexer_map : config.multiplexer_by_id.entrySet()) {
 			final var id = multiplexer_map.getKey();
 			final var port = multiplexer_map.getValue().port;
 
-			get_logger().log(Level.INFO, "Registering multiplexer ID " + id + ", bound to port " + port);
+			get_logger().log(Level.INFO, action + " multiplexer ID " + id + ", bound to port " + port);
 
 			final var address = new InetSocketAddress(port);
-			cm.bind(address);
+			method.accept(cm, address);
 		}
-	}
-
-	private void stop_listeners() throws ClassNotFoundException, NoSuchFieldException, IllegalAccessException {
-		get_logger().log(Level.INFO, "Attempting to close auth multiplexers");
-
-		ConnectionManager cm = get_cm();
-
-		for (final var multiplexer_map : config.multiplexer_by_id.entrySet()) {
-			final var id = multiplexer_map.getKey();
-			final var port = multiplexer_map.getValue().port;
-
-			get_logger().log(Level.INFO, "Closing multiplexer ID " + id + ", bound to port " + port);
-
-			final var address = new InetSocketAddress(port);
-			cm.close(address);
-		}
-
-		get_logger().log(Level.INFO, "Successfully closed all multiplexers");
 	}
 
 }
