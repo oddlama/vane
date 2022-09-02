@@ -14,7 +14,7 @@ public class Ping extends Command {
 
 	public Ping(final Waterfall plugin) {
 		super("ping");
-		this.cmd = new ProxyPingCommand("vane_waterfall.commands.ping", plugin);
+		this.cmd = new ProxyPingCommand("vane_proxy.commands.ping", plugin);
 	}
 
 	@Override

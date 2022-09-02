@@ -141,7 +141,7 @@ public abstract class VaneProxyPlugin {
 		if (maintenance.enabled()) {
 			// Client is connecting while maintenance is on
 			// Players with bypass_maintenance flag may join
-			return this.server.has_permission(uuid, "vane_waterfall.bypass_maintenance");
+			return this.server.has_permission(uuid, "vane_proxy.bypass_maintenance");
 		}
 
 		return true;

@@ -12,7 +12,7 @@ public class Maintenance extends Command {
 
 	public Maintenance(final Waterfall plugin) {
 		super("maintenance");
-		this.cmd = new ProxyMaintenanceCommand("vane_waterfall.commands.maintenance", plugin);
+		this.cmd = new ProxyMaintenanceCommand("vane_proxy.commands.maintenance", plugin);
 	}
 
 	@Override
