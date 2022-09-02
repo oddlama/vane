@@ -8,7 +8,7 @@ import org.oddlama.velocity.compat.event.VelocityCompatPreLoginEvent;
 
 public class ProxyPreLoginListener {
 
-	Velocity velocity;
+	final Velocity velocity;
 
 	@Inject
 	public ProxyPreLoginListener(Velocity velocity) {

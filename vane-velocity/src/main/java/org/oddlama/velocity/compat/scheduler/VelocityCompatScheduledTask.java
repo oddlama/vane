@@ -5,7 +5,7 @@ import org.oddlama.vane.proxycore.scheduler.ProxyScheduledTask;
 
 public class VelocityCompatScheduledTask implements ProxyScheduledTask {
 
-	ScheduledTask task;
+	final ScheduledTask task;
 
 	public VelocityCompatScheduledTask(ScheduledTask task) {
 		this.task = task;

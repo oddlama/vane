@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public class VelocityCompatProxyPlayer implements ProxyPlayer {
 
-	Player player;
+	final Player player;
 
 	public VelocityCompatProxyPlayer(Player player) {
 		this.player = player;

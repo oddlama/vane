@@ -12,7 +12,7 @@ import java.util.UUID;
 
 public class VelocityCompatProxyServer implements ProxyServer {
 
-	com.velocitypowered.api.proxy.ProxyServer proxy;
+	final com.velocitypowered.api.proxy.ProxyServer proxy;
 
 	public VelocityCompatProxyServer(com.velocitypowered.api.proxy.ProxyServer proxy) {
 		this.proxy = proxy;

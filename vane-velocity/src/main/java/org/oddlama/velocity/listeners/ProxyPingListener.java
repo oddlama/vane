@@ -12,7 +12,7 @@ import static org.oddlama.velocity.Util.get_server_for_host;
 
 public class ProxyPingListener {
 
-	Velocity velocity;
+	final Velocity velocity;
 
 	public ProxyPingListener(Velocity velocity) {
 		this.velocity = velocity;
