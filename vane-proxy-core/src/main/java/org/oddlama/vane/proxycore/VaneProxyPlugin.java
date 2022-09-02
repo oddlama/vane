@@ -115,6 +115,7 @@ public abstract class VaneProxyPlugin {
 				);
 	}
 
+	@SuppressWarnings("BooleanMethodIsAlwaysInverted")
 	public boolean can_join_maintenance(UUID uuid) {
 		if (maintenance.enabled()) {
 			// Client is connecting while maintenance is on

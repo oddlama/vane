@@ -42,7 +42,7 @@ public class Config {
 			if (!(value instanceof final CommentedConfig multiplexer_config)) throw new IllegalArgumentException("Multiplexer '" + key + "' has an invalid configuration!");
 
 			final var port = multiplexer_config.getInt("port");
-			if (registered_ports.contains(port)) throw new IllegalArgumentException("Multiplexer ID '" + key_string + "' uses an already registed port!");
+			if (registered_ports.contains(port)) throw new IllegalArgumentException("Multiplexer ID '" + key_string + "' uses an already registered port!");
 
 			final var multiplexer = new AuthMultiplex(
 					port,
