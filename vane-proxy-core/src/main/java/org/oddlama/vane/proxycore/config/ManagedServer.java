@@ -97,7 +97,7 @@ public class ManagedServer {
 		if (sourced_motd == null) {
 			return "";
 		}
-		return sourced_motd.replace("%QUOTE%", random_quote(quote_source));
+		return sourced_motd.replace("{QUOTE}", random_quote(quote_source));
 	}
 
 	public Integer command_timeout() {
@@ -124,8 +124,8 @@ public class ManagedServer {
 			if (quotes != null)
 				this.quotes = quotes.stream()
 						.filter(s -> !s.isBlank())
-						.map(s -> s.replace("%SERVER%", id)
-								.replace("%SERVER_DISPLAY_NAME%", display_name))
+						.map(s -> s.replace("{SERVER}", id)
+								.replace("{SERVER_DISPLAY_NAME}", display_name))
 						.toArray(String[]::new);
 
 			// motd = "..."
@@ -135,7 +135,7 @@ public class ManagedServer {
 				throw new IllegalArgumentException("Managed server '" + id + "' has a non-string MOTD!");
 
 			if (motd != null && !((String) motd).isEmpty())
-				this.motd = ((String) motd).replace("%SERVER_DISPLAY_NAME%", display_name);
+				this.motd = ((String) motd).replace("{SERVER_DISPLAY_NAME}", display_name);
 
 			// favicon = "..."
 			var favicon_path = config.get("favicon");
@@ -148,7 +148,7 @@ public class ManagedServer {
 		}
 
 		private static String encode_favicon(String id, String favicon_path) throws IOException {
-			File favicon_file = new File(favicon_path.replace("%SERVER%", id));
+			File favicon_file = new File(favicon_path.replace("{SERVER}", id));
 			BufferedImage image;
 			try {
 				image = ImageIO.read(favicon_file);
@@ -188,14 +188,14 @@ public class ManagedServer {
 			var timeout = config.get("timeout");
 			var kick_msg = config.get("kick_msg");
 
-			if (cmd != null) this.cmd = cmd.stream().map(s -> s.replace("%SERVER%", id)).toArray(String[]::new);
+			if (cmd != null) this.cmd = cmd.stream().map(s -> s.replace("{SERVER}", id)).toArray(String[]::new);
 			else this.cmd = null;
 
 			if (!(kick_msg == null || kick_msg instanceof String))
 				throw new IllegalArgumentException("Managed server '" + id + "' has an invalid kick message!");
 
 			if (kick_msg != null)
-				this.kick_msg = ((String) kick_msg).replace("%SERVER%", id).replace("%SERVER_DISPLAY_NAME%", display_name);
+				this.kick_msg = ((String) kick_msg).replace("{SERVER}", id).replace("{SERVER_DISPLAY_NAME}", display_name);
 			else this.kick_msg = null;
 
 			if (timeout == null) {
