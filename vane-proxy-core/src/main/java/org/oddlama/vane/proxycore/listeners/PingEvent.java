@@ -17,25 +17,11 @@ public abstract class PingEvent implements ProxyEvent {
 
 	public void fire() {
 		ping.set_description(plugin.get_motd(server));
-		ping.set_favicon(get_favicon(server));
+		ping.set_favicon(plugin.get_favicon(server));
 
 		this.send_response();
 	}
 
 	public abstract void send_response();
-
-	public String get_favicon(final IVaneProxyServerInfo server) {
-		final var cms = plugin.get_config().managed_servers.get(server.getName());
-		if (cms == null) {
-			return null;
-		}
-
-		final var favicon = cms.favicon();
-		if (favicon == null || favicon.isEmpty()) {
-			return null;
-		}
-
-		return favicon;
-	}
 
 }

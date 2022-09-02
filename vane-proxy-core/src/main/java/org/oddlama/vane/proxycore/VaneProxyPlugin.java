@@ -1,6 +1,7 @@
 package org.oddlama.vane.proxycore;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.oddlama.vane.proxycore.config.ConfigManager;
 import org.oddlama.vane.proxycore.config.IVaneProxyServerInfo;
 import org.oddlama.vane.proxycore.config.ManagedServer;
@@ -52,18 +53,30 @@ public abstract class VaneProxyPlugin {
 		}
 
 		final var cms = config.managed_servers.get(server.getName());
-		if (cms == null) {
-			return "";
-		}
+		if (cms == null) return "";
 
-		String motd;
+		ManagedServer.ConfigItemSource source;
 		if (is_online(server)) {
-			motd = cms.motd(ManagedServer.MotdSource.ONLINE);
+			source = ManagedServer.ConfigItemSource.ONLINE;
 		} else {
-			motd = cms.motd(ManagedServer.MotdSource.OFFLINE);
+			source = ManagedServer.ConfigItemSource.OFFLINE;
 		}
 
-		return motd;
+		return cms.motd(source);
+	}
+
+	public @Nullable String get_favicon(final IVaneProxyServerInfo server) {
+		final var cms = config.managed_servers.get(server.getName());
+		if (cms == null) return null;
+
+		ManagedServer.ConfigItemSource source;
+		if (is_online(server)) {
+			source = ManagedServer.ConfigItemSource.ONLINE;
+		} else {
+			source = ManagedServer.ConfigItemSource.OFFLINE;
+		}
+
+		return cms.favicon(source);
 	}
 
 	public File get_data_folder() {

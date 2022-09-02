@@ -65,9 +65,8 @@ public class Config {
 			final var managed_server = new ManagedServer(
 					key,
 					managed_server_config.get("display_name"),
-					managed_server_config.get("favicon"),
-					managed_server_config.get("quotes"),
-					managed_server_config.get("motd"),
+					managed_server_config.get("online"),
+					managed_server_config.get("offline"),
 					managed_server_config.get("start")
 			);
 
