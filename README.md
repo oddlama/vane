@@ -58,6 +58,23 @@ Afterwards, all further configuration is handled in the plugin's `config.toml`
 
 All configuration is handled in the plugin's `config.toml`
 
+### Permission management
+
+There are permissions players will need to perform certain actions, such as starting offline
+servers and joining servers in maintenance mode.
+
+#### Waterfall
+
+Permissions **must** be defined in the proxy's `config.yml`! External permissions plugins
+will **not** work.
+
+These permissions must be assigned to the player's **UUID**. *THIS IS IMPORTANT* and
+won't work with player names.
+
+#### Velocity
+
+Permissions can be handled by any external permissions plugin, such as [LuckPerms](https://luckperms.net).
+
 Check the config for additional settings to manage your servers.
 
 ## Building from source
