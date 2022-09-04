@@ -74,6 +74,7 @@ won't work with player names.
 #### Velocity
 
 Permissions can be handled by any external permissions plugin, such as [LuckPerms](https://luckperms.net).
+Unlike Waterfall, this **will** work with player names or UUIDs.
 
 Check the config for additional settings to manage your servers.
 
