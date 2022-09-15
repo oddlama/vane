@@ -2,6 +2,7 @@
 title = "North Compass"
 module = "vane-trifles"
 icon = "vane-trifles:items/north_compass_16.png"
+itemlike = "vane-trifles:item_north_compass"
 ```
 ---
 Just a real fucking compass that does what a compass usually does: Point north.

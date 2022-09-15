@@ -77,6 +77,7 @@ def load_feature_markdown(markdown_file: Path, default_slug: str) -> Feature:
             elif namespace.startswith("vane-"):
                 metadata["icon"] = f"assets/{namespace}/{key}"
                 context.required_project_assets.add((namespace, key))
+                print("a", (namespace, key))
         else:
             metadata["icon"] = item_to_icon(metadata["icon"])
     else:
@@ -97,10 +98,14 @@ def deep_get(dictionary, keys):
     return reduce(lambda d, key: d[key], keys.split("."), dictionary)
 
 def get_from_config(resource_key: str) -> dict[str, Any]:
-    namespace, key = resource_key.split(":", maxsplit=1)
-    with open(context.plugins_dir / namespace / "config.yml") as f:
-        config = yaml.safe_load(f)
-    return deep_get(config, key)
+    try:
+        namespace, key = resource_key.split(":", maxsplit=1)
+        with open(context.plugins_dir / namespace / "config.yml") as f:
+            config = yaml.safe_load(f)
+        return deep_get(config, key)
+    except:
+        print(f"Error while trying to get {resource_key} from config")
+        raise
 
 def collect_jar_asset(asset: str) -> None:
     out = context.assets_path / asset.removeprefix("assets/")
@@ -221,17 +226,26 @@ def item_to_icon(item: str) -> str:
     if not resource_key.startswith("#"):
         resource_key = resource_key.split("#")[0]
     namespace, key = resource_key.split(":", maxsplit=1)
-    if namespace == "minecraft":
+
+    # FIXME: contains hardcoded overrides
+    if resource_key == "minecraft:leather_chestplate":
+        return f"assets/minecraft_special/leather_chestplate.png"
+    elif namespace == "minecraft":
         return minecraft_asset_icon(key)
     elif namespace.startswith("vane"):
-        namespace = namespace.replace("_", "-")
-        key = f"items/{key}.png"
-        icon = f"{namespace}/{key}"
-        context.required_project_assets.add((namespace, key))
-        return "assets/" + icon
-    # FIXME: hardcoded overrides
+        if resource_key == "vane_trifles:north_compass":
+            context.required_project_assets.add(("vane-trifles", "items/north_compass_16.png"))
+            return f"assets/vane-trifles/items/north_compass_16.png"
+        else:
+            namespace = namespace.replace("_", "-")
+            key = f"items/{key}.png"
+            icon = f"{namespace}/{key}"
+            context.required_project_assets.add((namespace, key))
+            return "assets/" + icon
     elif resource_key == "#minecraft:beds":
         return f"assets/minecraft_special/bed.png"
+    elif resource_key == "#minecraft:shulker_boxes":
+        return f"assets/minecraft_special/shulker_box.png"
     elif resource_key == "#minecraft:saplings":
         return minecraft_asset_icon("oak_sapling")
     else:
