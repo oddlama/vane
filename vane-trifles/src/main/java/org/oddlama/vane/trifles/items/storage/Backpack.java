@@ -30,7 +30,7 @@ public class Backpack extends CustomItem<Trifles> {
 	public RecipeList default_recipes() {
 		return RecipeList.of(new SmithingRecipeDefinition("from_shulker_box")
 			.base(Tag.SHULKER_BOXES)
-			.addition(Material.NETHERITE_INGOT)
+			.addition(Material.LEATHER_CHESTPLATE)
 			.copy_nbt(true)
 			.result(key().toString()));
 	}

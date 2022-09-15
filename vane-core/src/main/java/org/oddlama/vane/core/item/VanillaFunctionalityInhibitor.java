@@ -93,7 +93,7 @@ public class VanillaFunctionalityInhibitor extends Listener<Core> {
 		}
 	}
 
-	// Prevent custom items from being used in smiting by default. They have to override this event to allow it.
+	// Prevent custom items from being used in smithing by default. They have to override this event to allow it.
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void on_prepare_smithing(final PrepareSmithingEvent event) {
 		final var item = event.getInventory().getInputEquipment();

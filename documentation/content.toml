@@ -34,6 +34,8 @@ content = [
 	"vane-trifles/trowel.md",
 	"vane-trifles/north_compass.md",
 	"vane-trifles/slime_bucket.md",
+	"vane-trifles/pouch.md",
+	"vane-trifles/backpack.md",
 	"vane-trifles/portal_scroll_home.md",
 	"vane-trifles/portal_scroll_unstable.md",
 	"vane-trifles/portal_scroll_spawn.md",
