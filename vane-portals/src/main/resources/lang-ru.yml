@@ -20,7 +20,7 @@ resource_pack_lang_code: 'ru_ru'
 
 # This message is sent when a new portal console has been selected
 # and the player may now select a boundary block to construct a portal.
-select_boundary_now: "§6ПКМ по рамке портала теперь"
+select_boundary_now: "Теперь §6ПКМ по рамке портала"
 # This message is sent when the selected console block is not of the correct
 # type anymore. This can happen when a player replaces the console block
 # while it is selected as a pending console.
@@ -60,7 +60,7 @@ portal_area_obstructed: "§cПорталу что-то мешает!"
 intersects_existing_portal: "§cПорталы пересекаются друг с другом!"
 
 # This message is sent when a player has no permission to build a portal in the area.
-build_restricted: "§cУ вас нет разрешения чтобы сделать тут портал!"
+build_restricted: "§cУ вас нет разрешения для постройки портала в этом месте!"
 # This message is sent when a player has no permission to link a console to a portal.
 link_restricted: "§cВам запрещено привязывать консоль к этому порталу!"
 
@@ -92,11 +92,11 @@ settings_restricted: "§cУ вас нет доступа к настройкам
 select_target_restricted: "§cВы не можете выбрать пункт назначения для этого портала!"
 
 dynmap:
-  layer_label: "Portals"
+  layer_label: "Порталы"
   marker_label: "%1$s"
 
 blue_map:
-  layer_label: "Portals"
+  layer_label: "Порталы"
   marker_label: "<span style=\"color: white\">🌌 %1$s</span>"
 
 menus:
@@ -120,12 +120,12 @@ menus:
       lore: []
 
     exit_orientation_lock_on:
-      name: "§b§lToggle Exit Orientation Lock"
-      lore: ["", "§bCurrent: §e§lLocked (always exit front)§r"]
+      name: "§b§lПереключить фиксацию направления выхода"
+      lore: ["", "§bТекущая: §e§lФиксированно (выход всегда спереди)§r"]
 
     exit_orientation_lock_off:
-      name: "§b§lToggle Exit Orientation Lock"
-      lore: ["", "§bCurrent: §a§lUnlocked (exit same side as entered)§r"]
+      name: "§b§lПереключить фиксацию направления выхода"
+      lore: ["", "§bТекушая: §a§lСвободно (выход с той же стороны что и вход)§r"]
 
     visibility_public:
       name: "§b§lПереключить видимость"
@@ -144,12 +144,12 @@ menus:
       lore: ["", "§bТекущая: §c§lЧастный§r"]
 
     target_lock_on:
-      name: "§b§lПереключить блокировку выбора цели"
-      lore: ["", "§bТекущая §c§lЗаблокировано§r"]
+      name: "§b§lПереключить фиксацию выбора цели"
+      lore: ["", "§bТекущая §c§lФиксированно§r"]
 
     target_lock_off:
-      name: "§b§lПереключить блокировку выбора цели"
-      lore: ["", "§bТекущая: §a§lРазблокировано§r"]
+      name: "§b§lПереключить фиксацию выбора цели"
+      lore: ["", "§bТекущая: §a§lСвободно§r"]
 
     back:
       name: "§6↩ §lНазад"
@@ -205,7 +205,7 @@ menus:
       name: "§b§lОсновной блок §e(неактивный)"
       lore: []
     block_portal_inactive:
-      name: "§b§lБлок заполнения §e(Неактиный)"
+      name: "§b§lБлок заполнения §e(неактивный)"
       lore: []
     block_boundardy_1_inactive:
       name: "§b§lРамка §e(неактивная)"
@@ -241,7 +241,7 @@ menus:
       lore: []
 
     cancel:
-      name: "§6↩ §lСбросить изменения"
+      name: "§6↩ §lОтменить изменения"
       lore: []
 
   console:
@@ -260,7 +260,7 @@ menus:
       name: "§d§lВыберите цель"
       lore:
         - ""
-        - "§7CТекущая: %1$s"
+        - "§7Текущая: %1$s"
         - "§8Выбор цели на данный момент §6§lЗАБЛОКИРОВАН§r§8!"
 
     select_target_title: "§8§lВыберите цель"

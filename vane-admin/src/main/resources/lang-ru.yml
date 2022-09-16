@@ -26,7 +26,7 @@ chat_message_formatter:
 
   # This message is sent when a player joins the server
   # %1$s: player name
-  player_join: "%1$s§e только что пожаловал"
+  player_join: "%1$s§e присоединился к игре"
 
   # This message is sent when a player is kicked from the server
   # %1$s: player name
@@ -34,28 +34,28 @@ chat_message_formatter:
 
   # This message is sent when a player leaves the server
   # %1$s: player name
-  player_quit: "%1$s§e покинул сервер"
+  player_quit: "%1$s§e покинул игру"
 
 autostop:
   # This message is sent when autostop is aborted, due to an administrative command
   # or a player joining the server.
-  aborted: "§dЗапланированное выключение прервано"
+  aborted: "§dАвтоматическая остановка сервера прервана"
   # This message is sent when autostop is scheduled, due to an administrative command
   # or the last player leaving the server.
   # %1$s: Time until stop
-  scheduled: "§dЗапланированное выключение через %1$s"
+  scheduled: "§dЗапланирована автоматическая остановка сервера через %1$s"
   # This message is sent when autostop status is requested and autostop is already scheduled.
   # %1$s: Time until stop
-  status: "§dЗапланированное выключение через %1$s"
+  status: "§7Автоматическая остановка сервера через %1$s"
   # This message is sent when autostop status is requested but autostop is not scheduled.
-  status_not_scheduled: "§dАвтоматическое отключение не запланировано"
+  status_not_scheduled: "§dАвтоматической остановки сервера не запланировано"
   # This message is sent when the actual autostop is performed.
-  shutdown: "§dЗапланированное выключение инициализировано!"
+  shutdown: "§dИнициирована автоматическая остановка сервера!"
 
   command_autostop:
     usage: "%1$s §7<§aabort§7|§aschedule§7|§astatus§7>"
-    description: "Управляет запланированным отключением."
-    help: "§aabort§7:§r Прерывает запланированное отключение.\n\
+    description: "Управляет автоматическим отключением."
+    help: "§aabort§7:§r Прерывает автоматическое отключение.\n\
       §aschedule §7[§bdelay§7]:§r Инициирует остановку сервера независимо от количества игроков. Принимает задержку в качестве параметра, игнорируя значение в конфиге.\n\
       §astatus§7:§r Показывает текущий статус планировщика."
 
