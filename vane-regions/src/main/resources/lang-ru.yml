@@ -28,11 +28,11 @@ command_region:
   help: "Выполните чтобы открыть меню управления регионами."
 
 dynmap:
-  layer_label: "Regions"
+  layer_label: "Регионы"
   marker_label: "%1$s"
 
 blue_map:
-  layer_label: "Regions"
+  layer_label: "Регионы"
   marker_label: "%1$s"
 
 menus:

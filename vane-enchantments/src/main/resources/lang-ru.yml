@@ -20,27 +20,27 @@ resource_pack_lang_code: 'ru_ru'
 
 item_ancient_tome:
   # The display name of this item variant.
-  name: "Древняя книга"
+  name: "Старинный фолиант"
 
 item_enchanted_ancient_tome:
   # The display name of this item variant.
-  name: "Древняя книга"
+  name: "Старинный фолиант"
 
 item_ancient_tome_of_knowledge:
   # The display name of this item variant.
-  name: "Древняя книга знаний"
+  name: "Старинный фолиант знаний"
 
 item_enchanted_ancient_tome_of_knowledge:
   # The display name of this item variant.
-  name: "Древняя книга знаний"
+  name: "Старинный фолиант знаний"
 
 item_ancient_tome_of_the_gods:
   # The display name of this item variant.
-  name: "Древняя книга богов"
+  name: "Старинный фолиант богов"
 
 item_enchanted_ancient_tome_of_the_gods:
   # The display name of this item variant.
-  name: "Древняя книга богов"
+  name: "Старинный фолиант богов"
 
 enchantment_angel:
   # The display name of this enchantment. Will be packed into a resource pack.
@@ -52,7 +52,7 @@ enchantment_grappling_hook:
 
 enchantment_hell_bent:
   # The display name of this enchantment. Will be packed into a resource pack.
-  name: "Стены больше не помеха"
+  name: "Крепкий орешек"
 
 enchantment_leafchopper:
   # The display name of this enchantment. Will be packed into a resource pack.
@@ -73,14 +73,14 @@ enchantment_seeding:
 
 enchantment_soulbound:
   # The display name of this enchantment. Will be packed into a resource pack.
-  name: "Духовная связь"
-  drop_lock_warning: "Soulbound Items can only be dropped using mouse"
-  drop_cooldown: "Drop again to confirm drop"
-  dropped_notification: "Soulbound Item Dropped: %1$s"
+  name: "Привязка души"
+  drop_lock_warning: "Предметы с привязкой души могут быть выброшены только мышью"
+  drop_cooldown: "Выбросите снова чтобы выбросить"
+  dropped_notification: "Выброшен предмет с привязкой души: %1$s"
 
 enchantment_take_off:
   # The display name of this enchantment. Will be packed into a resource pack.
-  name: "На взлёт!"
+  name: "Отрыв от земли"
 
 enchantment_unbreakable:
   # The display name of this enchantment. Will be packed into a resource pack.

@@ -30,12 +30,12 @@ command_permission_denied: "§cОшибка:§6 доступ запрещён!"
 invalid_time_format: "§cОшибка:§6 неверное время: %1$s"
 
 # This message is sent when a block with a lootable is first attempted to be broken.
-break_loot_block_prevented: "§6Этот блок включён в таблицу добычи, его содержимое будет обновлено через некоторое время. Если вы действительно хотите его уничтожить подождите 5 секунд и сломайте его снова."
+break_loot_block_prevented: "§6Этот блок имеет loot table, его содержимое будет обновлено через некоторое время. Если вы действительно хотите его уничтожить подождите 5 секунд и сломайте его снова."
 
 command_customitem:
   usage: "%1$s §agive §7<§bitem§7>"
-  description: "Выдаёт игроку определённый кастомный предмет."
-  help: "§agive §7<§bitem§7>:§r Выдаёт игроку определённый кастомный предмет."
+  description: "Выдаёт игроку указанный предмет."
+  help: "§agive §7<§bitem§7>:§r Выдаёт игроку указанный предмет."
 
 command_enchant:
   # This message is sent when an enchantment level is given that is too low for the chosen enchantment.
@@ -72,12 +72,12 @@ command_vane:
 
 resource_pack:
   # This kick message is used when a mandatory resource pack was declined by a player.
-  # FIXME: missing new sentence in declined translation. see lang-en.yml for the new sentence.
-  declined: "Вам нужно принять ресурспак для игры на этом сервере.\n\
-    Это нужно для локализации и текстур."
+  declined: "Вам необходимо принять ресурспак для игры на этом сервере.\n\
+    Это необходимо для локализации и текстур. Если вы случайно отказались,\n\
+    то вы можете изменить это отредактировав сервер в вашем списке."
   # This kick message is used when a mandatory resource pack failed to download for  player.
-  download_failed: "§cПохоже возникла ошибка в загрузке ресурспака.§r\n\
-    §7(Вы будете кикнуты во избежание ошибок отображения)\n\
+  download_failed: "§cПохоже во время загрузки ресурспака произошла какая-то ошибка.§r\n\
+    §7(Вы были отключены от сервера во избежание ошибок отображения)\n\
     \n\
     §dПожалуйста попробуйте снова."
 
@@ -116,7 +116,7 @@ menus:
       name: "§d§lВыбранный предмет"
       lore:
         - ""
-        - "Кликните на любой предмет в вашем инвенатре чтобы выбрать его."
+        - "Кликните на любой предмет в вашем инвентаре чтобы выбрать его."
         - ""
         - "§bЛКМ§7 для сброса настроек."
         - "§bПКМ§7 для отчистки (если разрешено)."
