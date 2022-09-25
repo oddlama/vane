@@ -10,10 +10,7 @@ import net.pl3x.map.event.world.WorldLoadedEvent;
 import net.pl3x.map.event.world.WorldUnloadedEvent;
 import net.pl3x.map.util.FileUtil;
 import net.pl3x.map.world.World;
-import org.oddlama.vane.core.map.pl3x.PlexMapCreateAccessorRequestEvent;
-import org.oddlama.vane.core.map.pl3x.PlexMapDisableAccessorEvent;
-import org.oddlama.vane.core.map.pl3x.PlexMapRemoveMarkerEvent;
-import org.oddlama.vane.core.map.pl3x.PlexMapUpdateMarkerEvent;
+import org.oddlama.vane.core.map.pl3x.*;
 
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -36,8 +33,9 @@ public class PlexMapAddon extends Addon implements EventListener {
 			return;
 		}
 
-		// Register default icon
+		// Register default icons
 		FileUtil.extract(getClass(), "portal-default.png", "web/images/icon/", !Config.WEB_DIR_READONLY);
+		FileUtil.extract(getClass(), "bedtime-default.png", "web/images/icon/", !Config.WEB_DIR_READONLY);
 
 		// register event listener
 		Pl3xMap.api().getEventRegistry().register(this);
@@ -112,6 +110,15 @@ public class PlexMapAddon extends Addon implements EventListener {
 		final var accessor = accessors.get(event.get_layer_key());
 		if (accessor != null) {
 			accessor.remove_marker(Key.of(event.get_marker_id()));
+		}
+	}
+
+	@EventHandler
+	@SuppressWarnings("unused")
+	public void clear_orphans(PlexMapClearOrphansEvent event) {
+		final var accessor = accessors.get(event.get_layer_key());
+		if (accessor != null) {
+			accessor.retain_in_set(event.get_active_keys());
 		}
 	}
 
