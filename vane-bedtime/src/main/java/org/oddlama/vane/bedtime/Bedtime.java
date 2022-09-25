@@ -56,10 +56,12 @@ public class Bedtime extends Module<Bedtime> {
 
 	public BedtimeDynmapLayer dynmap_layer;
 	public BedtimeBlueMapLayer blue_map_layer;
+	public BedtimePlexMapLayer plexmap_layer;
 
 	public Bedtime() {
 		dynmap_layer = new BedtimeDynmapLayer(this);
 		blue_map_layer = new BedtimeBlueMapLayer(this);
+		plexmap_layer = new BedtimePlexMapLayer(this);
 	}
 
 	public void start_check_world_task(final World world) {
@@ -109,6 +111,7 @@ public class Bedtime extends Module<Bedtime> {
 		// Update marker
 		dynmap_layer.update_marker(player);
 		blue_map_layer.update_marker(player);
+		plexmap_layer.update_marker(player);
 
 		schedule_next_tick(() -> {
 			// Register the new player as sleeping

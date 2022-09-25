@@ -10,9 +10,7 @@ import net.pl3x.map.markers.option.Tooltip;
 import net.pl3x.map.world.World;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.UUID;
+import java.util.*;
 
 public class PlexMapAccessor {
 
@@ -90,6 +88,12 @@ public class PlexMapAccessor {
 
 	public void remove_marker(final Key id) {
 		set.remove_marker(id);
+	}
+
+	public void retain_in_set(final HashSet<Key> valid_ids) {
+		for (var world_marker_set : set.MARKERS.values()) {
+			world_marker_set.removeIf(it -> valid_ids.contains(it.getKey()));
+		}
 	}
 
 	public void disable_module() {
