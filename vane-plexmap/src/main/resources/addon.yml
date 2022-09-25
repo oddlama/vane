@@ -1,0 +1,6 @@
+name: "Vane-Pl3xMap"
+main: "org.oddlama.vane.plexmap.PlexMapAddon"
+version: "${version}"
+description: "Vane Pl3xMap integration"
+author: "Serial-ATA"
+website: "https://github.com/oddlama/vane"

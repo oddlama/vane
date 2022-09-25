@@ -176,6 +176,8 @@ public class Regions extends Module<Regions> {
 	public final Permission admin_permission;
 
 	public RegionMenuGroup menus;
+
+	// TODO: Pl3xMap
 	public RegionDynmapLayer dynmap_layer;
 	public RegionBlueMapLayer blue_map_layer;
 
