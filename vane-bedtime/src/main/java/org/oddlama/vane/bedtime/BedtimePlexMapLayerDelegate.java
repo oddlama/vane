@@ -3,6 +3,7 @@ package org.oddlama.vane.bedtime;
 import net.pl3x.map.Key;
 import net.pl3x.map.Pl3xMap;
 import net.pl3x.map.markers.Point;
+import net.pl3x.map.markers.marker.Marker;
 import net.pl3x.map.markers.option.Tooltip;
 import org.bukkit.OfflinePlayer;
 import org.oddlama.vane.core.map.pl3x.*;
@@ -40,10 +41,6 @@ public class BedtimePlexMapLayerDelegate {
 
 	private String id_for(final UUID player_id) {
 		return player_id.toString();
-	}
-
-	private String id_for(final OfflinePlayer player) {
-		return id_for(player.getUniqueId());
 	}
 
 	public void on_enable() {
@@ -102,7 +99,7 @@ public class BedtimePlexMapLayerDelegate {
 				new String[][] {
 						{ "<name>", marker_label }
 				},
-				Point.of(loc.getX(), loc.getZ())
+				Marker.icon(LAYER_KEY, Point.of(loc.getX(), loc.getZ()), ICON_KEY)
 		));
 
 		return true;

@@ -3,7 +3,7 @@ package org.oddlama.vane.core.map.pl3x;
 import net.pl3x.map.Key;
 import net.pl3x.map.event.Event;
 import net.pl3x.map.event.RegisteredHandler;
-import net.pl3x.map.markers.Point;
+import net.pl3x.map.markers.marker.Marker;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -18,20 +18,20 @@ public class PlexMapUpdateMarkerEvent extends Event {
 	private final UUID marker_id;
 	private final String marker_name;
 	private final String[][] tooltip_replacements;
-	private final Point point;
+	private final Marker<?> marker;
 
 	public PlexMapUpdateMarkerEvent(@NotNull Key layer_key,
 									@NotNull String world,
 									@NotNull UUID marker_id,
 									@NotNull String marker_name,
 									@NotNull String[][] tooltip_replacements,
-									@NotNull Point point) {
+									@NotNull Marker<?> marker) {
 		this.layer_key = layer_key;
 		this.world = Key.of(world);
 		this.marker_id = marker_id;
 		this.marker_name = marker_name;
 		this.tooltip_replacements = tooltip_replacements;
-		this.point = point;
+		this.marker = marker;
 	}
 
 	@Override
@@ -59,8 +59,8 @@ public class PlexMapUpdateMarkerEvent extends Event {
 		return tooltip_replacements;
 	}
 
-	public @NotNull Point get_point() {
-		return point;
+	public @NotNull Marker<?> get_marker() {
+		return marker;
 	}
 
 }

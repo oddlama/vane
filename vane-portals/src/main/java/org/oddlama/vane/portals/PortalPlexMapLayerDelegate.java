@@ -3,13 +3,12 @@ package org.oddlama.vane.portals;
 import net.pl3x.map.Key;
 import net.pl3x.map.Pl3xMap;
 import net.pl3x.map.markers.Point;
+import net.pl3x.map.markers.marker.Marker;
 import net.pl3x.map.markers.option.Tooltip;
-import org.oddlama.vane.core.map.pl3x.PlexMapCreateAccessorRequestEvent;
-import org.oddlama.vane.core.map.pl3x.PlexMapDisableAccessorEvent;
-import org.oddlama.vane.core.map.pl3x.PlexMapRemoveMarkerEvent;
-import org.oddlama.vane.core.map.pl3x.PlexMapUpdateMarkerEvent;
+import org.oddlama.vane.core.map.pl3x.*;
 import org.oddlama.vane.portals.portal.Portal;
 
+import java.util.HashSet;
 import java.util.UUID;
 import java.util.logging.Level;
 
@@ -74,40 +73,43 @@ public class PortalPlexMapLayerDelegate {
 		}
 	}
 
-	public void update_marker(final Portal portal) {
-		if (plexmap_enabled
-				&& portal.visibility() != Portal.Visibility.PRIVATE) {
-			final var loc = portal.spawn();
-
-			String target_name;
-			final var target = get_module().portal_for(portal.target_id());
-			if (target == null) {
-				target_name = "None";
-			} else {
-				target_name = target.name();
-			}
-
-			String owner_name;
-			final var owner = get_module().getServer().getPlayer(portal.owner());
-			if (owner == null) {
-				owner_name = "Unknown";
-			} else {
-				owner_name = owner.getName();
-			}
-
-			Pl3xMap.api().getEventRegistry().callEvent(new PlexMapUpdateMarkerEvent(
-					LAYER_KEY,
-					loc.getWorld().getName(),
-					portal.id(),
-					"Portal " + portal.name(),
-					new String[][] {
-							{ "<name>", portal.name() },
-							{ "<owner>", owner_name },
-							{ "<linked>", target_name }
-					},
-					Point.of(loc.getBlockX(), loc.getBlockZ())
-			));
+	public boolean update_marker(final Portal portal) {
+		if (!plexmap_enabled || portal.visibility() == Portal.Visibility.PRIVATE) {
+			return false;
 		}
+
+		final var loc = portal.spawn();
+
+		String target_name;
+		final var target = get_module().portal_for(portal.target_id());
+		if (target == null) {
+			target_name = "None";
+		} else {
+			target_name = target.name();
+		}
+
+		String owner_name;
+		final var owner = get_module().getServer().getPlayer(portal.owner());
+		if (owner == null) {
+			owner_name = "Unknown";
+		} else {
+			owner_name = owner.getName();
+		}
+
+		Pl3xMap.api().getEventRegistry().callEvent(new PlexMapUpdateMarkerEvent(
+				LAYER_KEY,
+				loc.getWorld().getName(),
+				portal.id(),
+				"Portal " + portal.name(),
+				new String[][] {
+						{ "<name>", portal.name() },
+						{ "<owner>", owner_name },
+						{ "<linked>", target_name }
+				},
+				Marker.icon(LAYER_KEY, Point.of(loc.getX(), loc.getZ()), ICON_KEY)
+		));
+
+		return true;
 	}
 
 	public void remove_marker(final UUID portal_id) {
@@ -120,16 +122,21 @@ public class PortalPlexMapLayerDelegate {
 	}
 
 	public void update_all_markers() {
-		if (plexmap_enabled) {
-			for (final var portal : get_module().all_available_portals()) {
-				// Don't show private portals
-				if (portal.visibility() == Portal.Visibility.PRIVATE) {
-					continue;
-				}
+		if (!plexmap_enabled) return;
 
-				update_marker(portal);
+		// Update all existing
+		final var id_set = new HashSet<Key>();
+		for (final var portal : get_module().all_available_portals()) {
+			if (update_marker(portal)) {
+				id_set.add(Key.of(portal.id()));
 			}
 		}
+
+		// Remove orphaned
+		Pl3xMap.api().getEventRegistry().callEvent(new PlexMapClearOrphansEvent(
+				LAYER_KEY,
+				id_set
+		));
 	}
 
 	public boolean is_enabled() {

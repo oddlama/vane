@@ -100,7 +100,7 @@ public class PlexMapAddon extends Addon implements EventListener {
 					event.get_world_key(),
 					event.get_marker_id(),
 					event.get_tooltip_replacements(),
-					event.get_point());
+					event.get_marker());
 		}
 	}
 

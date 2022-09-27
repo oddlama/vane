@@ -5,6 +5,7 @@ import net.pl3x.map.event.Event;
 import net.pl3x.map.event.RegisteredHandler;
 import net.pl3x.map.markers.option.Tooltip;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,11 +19,11 @@ public class PlexMapCreateAccessorRequestEvent extends Event {
 	private final Tooltip tooltip;
 	private final String label_provider;
 
-	public PlexMapCreateAccessorRequestEvent(@NotNull String icon,
-											@NotNull Key icon_key,
-											@NotNull Key layer_key,
-											@NotNull Tooltip tooltip,
-											@NotNull String label_provider) {
+	public PlexMapCreateAccessorRequestEvent(@Nullable String icon,
+											 @Nullable Key icon_key,
+											 @NotNull Key layer_key,
+											 @NotNull Tooltip tooltip,
+											 @NotNull String label_provider) {
 		this.icon = icon;
 		this.icon_key = icon_key;
 		this.layer_key = layer_key;
@@ -35,11 +36,11 @@ public class PlexMapCreateAccessorRequestEvent extends Event {
 		return handlers;
 	}
 
-	public @NotNull String get_icon() {
+	public @Nullable String get_icon() {
 		return icon;
 	}
 
-	public @NotNull Key get_icon_key() {
+	public @Nullable Key get_icon_key() {
 		return icon_key;
 	}
 
