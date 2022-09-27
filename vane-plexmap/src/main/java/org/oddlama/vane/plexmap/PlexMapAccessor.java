@@ -2,7 +2,6 @@ package org.oddlama.vane.plexmap;
 
 import net.pl3x.map.Key;
 import net.pl3x.map.Pl3xMap;
-import net.pl3x.map.markers.Point;
 import net.pl3x.map.markers.layer.SimpleLayer;
 import net.pl3x.map.markers.marker.Marker;
 import net.pl3x.map.markers.option.Options;
@@ -32,11 +31,15 @@ public class PlexMapAccessor {
 		this.label_provider = label_provider;
 
 		MarkerSet set;
-		try {
-			set = new MarkerSet(icon, icon_key, layer_key);
-			Pl3xMap.api().getIconRegistry().register(set.get_image());
-		} catch (Exception ignored) {
-			throw new IllegalStateException("Failed to load Vane Pl3xMap marker icon!");
+		if (icon == null) {
+			set = new MarkerSet(layer_key);
+		} else {
+			try {
+				set = new MarkerSet(icon, icon_key, layer_key);
+				Pl3xMap.api().getIconRegistry().register(set.get_image());
+			} catch (Exception ignored) {
+				throw new IllegalStateException("Failed to load Vane Pl3xMap marker icon!");
+			}
 		}
 
 		this.set = set;
@@ -66,10 +69,9 @@ public class PlexMapAccessor {
 		);
 	}
 
-	public void update_marker(Key world, UUID id, String[][] tooltip_replacements, Point point) {
+	public void update_marker(Key world, UUID id, String[][] tooltip_replacements, Marker<?> marker) {
 		remove_marker(Key.of(id));
 
-		var marker = Marker.icon(Key.of(id.toString()), point, set.get_icon_key());
 		var tooltip_content = tooltip.getContent();
 
 		for (final var replacements : tooltip_replacements) {
@@ -92,7 +94,7 @@ public class PlexMapAccessor {
 
 	public void retain_in_set(final HashSet<Key> valid_ids) {
 		for (var world_marker_set : set.MARKERS.values()) {
-			world_marker_set.removeIf(it -> valid_ids.contains(it.getKey()));
+			world_marker_set.removeIf(it -> !valid_ids.contains(it.getKey()));
 		}
 	}
 

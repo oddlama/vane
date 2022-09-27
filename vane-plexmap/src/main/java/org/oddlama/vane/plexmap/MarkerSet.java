@@ -6,6 +6,7 @@ import net.pl3x.map.image.IconImage;
 import net.pl3x.map.markers.marker.Marker;
 import net.pl3x.map.world.World;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.imageio.ImageIO;
 import java.io.IOException;
@@ -14,10 +15,11 @@ import java.util.*;
 
 public class MarkerSet {
 
-	private final IconImage image;
-	private final Key icon_key;
 	private final Key layer_key;
 	final LinkedHashMap<Key, HashSet<Marker<?>>> MARKERS = new LinkedHashMap<>();
+
+	private IconImage image = null;
+	private Key icon_key = null;
 
 	public MarkerSet(String icon_filename, Key icon_key, Key layer_key) throws IOException {
 		Path icon = World.WEB_DIR.resolve("images/icon/" + icon_filename);
@@ -26,15 +28,19 @@ public class MarkerSet {
 		this.layer_key = layer_key;
 	}
 
-	public IconImage get_image() {
+	public MarkerSet(Key layer_key) {
+		this.layer_key = layer_key;
+	}
+
+	public @Nullable IconImage get_image() {
 		return image;
 	}
 
-	public Key get_icon_key() {
+	public @Nullable Key get_icon_key() {
 		return icon_key;
 	}
 
-	public Key get_layer_key() {
+	public @NotNull Key get_layer_key() {
 		return layer_key;
 	}
 
