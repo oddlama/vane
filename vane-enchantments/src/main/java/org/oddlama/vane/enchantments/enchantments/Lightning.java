@@ -49,6 +49,12 @@ public class Lightning extends CustomEnchantment<Enchantments> {
     )
     private int config_lightning_damage;
 
+    @ConfigBoolean(
+        def = true,
+        desc = "Enable lightning to work in rainstorms as well"
+    )
+    private boolean config_lightning_rain;
+
     @Override
     public RecipeList default_recipes() {
         return RecipeList.of(new ShapedRecipeDefinition("generic")
@@ -105,6 +111,9 @@ public class Lightning extends CustomEnchantment<Enchantments> {
 
         // Get Storm status
         if(!world.hasStorm()) return;
+
+        // Exit if config set to thunder only
+        if(!config_lightning_rain && !world.isThundering()) return;
 
         // Test if sky is visible
         if(damagee.getLocation().getBlockY() < world.getHighestBlockYAt(damagee.getLocation())) return;
