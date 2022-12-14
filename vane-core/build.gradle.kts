@@ -1,7 +1,12 @@
-import java.security.MessageDigest;
+import java.security.MessageDigest
 
 plugins {
 	id("com.github.johnrengelman.shadow") version "7.1.0"
+	id("net.kyori.blossom") version "1.2.0" // Text replacement for version numbers
+}
+
+blossom {
+	replaceToken("\$VERSION", project.version)
 }
 
 dependencies {

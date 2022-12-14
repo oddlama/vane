@@ -1,24 +1,37 @@
 package org.oddlama.vane.proxycore;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.oddlama.vane.proxycore.config.ConfigManager;
 import org.oddlama.vane.proxycore.config.IVaneProxyServerInfo;
+import org.oddlama.vane.proxycore.config.ManagedServer;
+import org.oddlama.vane.proxycore.listeners.PreLoginEvent;
 import org.oddlama.vane.proxycore.log.IVaneLogger;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.LinkedHashMap;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 
 public abstract class VaneProxyPlugin {
 
-	public static final String CHANNEL_AUTH_MULTIPLEX = "vane_waterfall:auth_multiplex";
-	public final LinkedHashMap<UUID, UUID> multiplexedUUIDs = new LinkedHashMap<>();
+	public static final String CHANNEL_AUTH_MULTIPLEX_NAMESPACE = "vane_proxy";
+	public static final String CHANNEL_AUTH_MULTIPLEX_NAME = "auth_multiplex";
+	public static final String CHANNEL_AUTH_MULTIPLEX = CHANNEL_AUTH_MULTIPLEX_NAMESPACE + ":" + CHANNEL_AUTH_MULTIPLEX_NAME;
+
 	public ConfigManager config = new ConfigManager(this);
 	public Maintenance maintenance = new Maintenance(this);
 	public IVaneLogger logger;
 	public ProxyServer server;
+	public File data_dir;
+
+	private final LinkedHashMap<UUID, UUID> multiplexedUUIDs = new LinkedHashMap<>();
+	private final LinkedHashMap<UUID, PreLoginEvent.MultiplexedPlayer> pending_multiplexer_logins = new LinkedHashMap<>();
+	private boolean server_starting;
 
 	public boolean is_online(final IVaneProxyServerInfo server) {
 		final var addr = server.getSocketAddress();
@@ -43,23 +56,39 @@ public abstract class VaneProxyPlugin {
 		}
 
 		final var cms = config.managed_servers.get(server.getName());
-		if (cms == null) {
-			return "";
-		}
+		if (cms == null) return "";
 
-		String motd;
+		ManagedServer.ConfigItemSource source;
 		if (is_online(server)) {
-			motd = cms.motd(ManagedServer.MotdSource.ONLINE);
+			source = ManagedServer.ConfigItemSource.ONLINE;
 		} else {
-			motd = cms.motd(ManagedServer.MotdSource.OFFLINE);
+			source = ManagedServer.ConfigItemSource.OFFLINE;
 		}
 
-		return motd;
+		return cms.motd(source);
 	}
 
-	public abstract java.io.File get_data_folder();
+	public @Nullable String get_favicon(final IVaneProxyServerInfo server) {
+		final var cms = config.managed_servers.get(server.getName());
+		if (cms == null) return null;
 
-	public abstract ProxyServer get_proxy();
+		ManagedServer.ConfigItemSource source;
+		if (is_online(server)) {
+			source = ManagedServer.ConfigItemSource.ONLINE;
+		} else {
+			source = ManagedServer.ConfigItemSource.OFFLINE;
+		}
+
+		return cms.favicon(source);
+	}
+
+	public File get_data_folder() {
+		return data_dir;
+	}
+
+	public ProxyServer get_proxy() {
+		return server;
+	}
 
 	public @NotNull IVaneLogger get_logger() {
 		return logger;
@@ -74,26 +103,45 @@ public abstract class VaneProxyPlugin {
 	}
 
 	public void try_start_server(ManagedServer server) {
-		// TODO: This could really use some checks (existing process running, nonzero exit code)
+		if (server_starting) return;
+
 		this.server.get_scheduler()
 				.runAsync(
 						this,
 						() -> {
 							try {
-								final var p = Runtime.getRuntime().exec(server.start_cmd());
-								p.waitFor();
+								server_starting = true;
+								final var timeout = server.command_timeout();
+								final var process = Runtime.getRuntime().exec(server.start_cmd());
+
+								if (!process.waitFor(timeout, TimeUnit.SECONDS)) {
+									get_logger().log(
+											Level.SEVERE,
+											"Server '"
+													+ server.id()
+													+ "'s start command timed out!");
+								} else if (process.exitValue() != 0) {
+									get_logger().log(
+											Level.SEVERE,
+											"Server '"
+													+ server.id()
+													+ "'s start command returned a nonzero exit code!");
+								}
 							} catch (Exception e) {
 								e.printStackTrace();
 							}
+
+							server_starting = false;
 						}
 				);
 	}
 
+	@SuppressWarnings("BooleanMethodIsAlwaysInverted")
 	public boolean can_join_maintenance(UUID uuid) {
 		if (maintenance.enabled()) {
 			// Client is connecting while maintenance is on
 			// Players with bypass_maintenance flag may join
-			return this.server.has_permission(uuid, "vane_waterfall.bypass_maintenance");
+			return this.server.has_permission(uuid, "vane_proxy.bypass_maintenance");
 		}
 
 		return true;
@@ -101,6 +149,10 @@ public abstract class VaneProxyPlugin {
 
 	public LinkedHashMap<UUID, UUID> get_multiplexed_uuids() {
 		return multiplexedUUIDs;
+	}
+
+	public LinkedHashMap<UUID, PreLoginEvent.MultiplexedPlayer> get_pending_multiplexer_logins() {
+		return pending_multiplexer_logins;
 	}
 
 }

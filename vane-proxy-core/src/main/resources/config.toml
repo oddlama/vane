@@ -1,0 +1,75 @@
+[auth_multiplex]
+
+    # Define your auth multiplexers
+    # These allow the specified UUIDs to join the server
+    # multiple times with a fake UUID. IDs must be > 0.
+
+    # Example:
+    #
+    # [auth_multiplex.ID_NUMBER]
+    # port = 25566
+    # allowed_uuids = ["b4a6717f-e3ab-4348-8e18-022827ef3177"]
+    #
+    # (Where ID_NUMBER is a nonzero integer)
+    #
+    # This will allow *only* UUID "b4a6717f-e3ab-4348-8e18-022827ef3177"
+    # to use this multiplexer. You can add as many UUIDs as you want.
+    #
+    # To make it public, simply leave out the `allowed_uuids` field.
+    #
+    # It is *not* possible to have multiple multiplexers on the same port.
+
+[managed_servers]
+
+    # Define your managed servers
+    #
+    # NOTE: No field is necessary! You can leave out anything you don't
+    #       want, including entire sections!
+
+    # Example:
+    #
+    #   [managed_servers.my_server]
+    #
+    #   # The server display name (used for messages and substitutions)
+    #
+    #   display_name = "§6> §6§lMy Minecraft Server§6 <"
+    #
+    #       # The online configuration, things to show in the server list
+    #       # when the server is online
+    #
+    #       [managed_servers.my_server.online]
+    #
+    #       # The server favicon (absolute path or relative to proxy directory)
+    #       favicon = "../{SERVER}/server-icon.png"
+    #
+    #       # The motd for the server list (up to two lines)
+    #       motd = "{SERVER_DISPLAY_NAME}\n§aowo§7 | {QUOTE}"
+    #
+    #       # A list of quotes for substitutions
+    #       quotes = ["Ah, yes."]
+    #
+    #       # The offline configuration, for when the server is offline
+    #
+    #       [managed_servers.my_server.offline]
+    #       favicon = "../{SERVER}/server-icon-offline.png"
+    #       motd = "{SERVER_DISPLAY_NAME}\n§cowo§7 | {QUOTE}"
+    #       quotes = ["Paniik!"]
+    #
+    #       # Automatic start settings
+    #       [managed_servers.my_server.start]
+    #
+    #       # The command to execute when the first player joins while the server is offline
+    #       # {SERVER}: The server identifier
+    #
+    #       cmd = ["/path/to/startscript", "arg1", "will also substitute {SERVER}"]
+    #
+    #       # How long the start command is allowed to run before it is killed
+    #       # If unspecified, it will be 10 seconds
+    #
+    #       timeout = 10
+    #
+    #       # The kick message to send to the player that started the server
+    #       # {SERVER}: The server identifier
+    #       # {SERVER_DISPLAY_NAME}: The server display name
+    #
+    #       kick_msg = "{SERVER_DISPLAY_NAME} §7is being started.\n§7Try again in §b10 Seconds§7 \\(^-^)/"

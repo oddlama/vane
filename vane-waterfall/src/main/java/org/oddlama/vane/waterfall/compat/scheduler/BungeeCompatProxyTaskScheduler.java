@@ -1,4 +1,4 @@
-package org.oddlama.vane.waterfall.compat;
+package org.oddlama.vane.waterfall.compat.scheduler;
 
 import net.md_5.bungee.api.scheduler.TaskScheduler;
 import org.oddlama.vane.proxycore.VaneProxyPlugin;

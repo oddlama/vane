@@ -22,7 +22,9 @@ public class ProxyPreLoginListener implements Listener {
 		}
 
 		PreLoginEvent proxy_event = new BungeeCompatPreLoginEvent(waterfall, event);
-		proxy_event.fire();
+
+		// Unlike Velocity, we can just immediately put the new UUID in `multiplexed_uuids`
+		proxy_event.fire(PreLoginEvent.PreLoginDestination.MULTIPLEXED_UUIDS);
 	}
 
 }

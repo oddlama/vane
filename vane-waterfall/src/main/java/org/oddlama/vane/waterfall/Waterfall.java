@@ -3,7 +3,6 @@ package org.oddlama.vane.waterfall;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.api.plugin.Plugin;
 import org.bstats.bungeecord.Metrics;
-import org.oddlama.vane.proxycore.ProxyServer;
 import org.oddlama.vane.proxycore.VaneProxyPlugin;
 import org.oddlama.vane.proxycore.log.JavaCompatLogger;
 import org.oddlama.vane.waterfall.compat.BungeeCompatProxyServer;
@@ -11,8 +10,6 @@ import org.oddlama.vane.waterfall.listeners.ProxyDisconnectListener;
 import org.oddlama.vane.waterfall.listeners.ProxyLoginListener;
 import org.oddlama.vane.waterfall.listeners.ProxyPingListener;
 import org.oddlama.vane.waterfall.listeners.ProxyPreLoginListener;
-
-import java.io.File;
 
 public class Waterfall extends VaneProxyPlugin implements Listener {
 
@@ -28,6 +25,7 @@ public class Waterfall extends VaneProxyPlugin implements Listener {
 	public void enable() {
 		logger = new JavaCompatLogger(plugin.getLogger());
 		server = new BungeeCompatProxyServer(plugin.getProxy());
+		data_dir = plugin.getDataFolder();
 
 		metrics = new Metrics(plugin, 8891);
 
@@ -62,16 +60,8 @@ public class Waterfall extends VaneProxyPlugin implements Listener {
 
 		metrics = null;
 		logger = null;
-	}
-
-	@Override
-	public File get_data_folder() {
-		return plugin.getDataFolder();
-	}
-
-	@Override
-	public ProxyServer get_proxy() {
-		return new BungeeCompatProxyServer(plugin.getProxy());
+		data_dir = null;
+		server = null;
 	}
 
 	public Plugin get_plugin() {
