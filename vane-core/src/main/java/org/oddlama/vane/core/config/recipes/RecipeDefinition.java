@@ -70,6 +70,10 @@ public abstract class RecipeDefinition {
 				if (Modifier.isStatic(f.getModifiers()) && f.getType() == Tag.class) {
 					try {
 						final var tag = (Tag<?>)f.get(null);
+						if (tag == null) {
+							// System.out.println("warning: " + f + " has no associated key! It therefore cannot be used in custom recipes.");
+							continue;
+						}
 						if (tag.key().toString().equals(definition.substring(1))) {
 							return new RecipeChoice.MaterialChoice((Tag<Material>)tag);
 						}
