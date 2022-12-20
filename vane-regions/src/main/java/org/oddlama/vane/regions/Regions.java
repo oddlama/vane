@@ -176,8 +176,10 @@ public class Regions extends Module<Regions> {
 	public final Permission admin_permission;
 
 	public RegionMenuGroup menus;
+
 	public RegionDynmapLayer dynmap_layer;
 	public RegionBlueMapLayer blue_map_layer;
+	public RegionPlexMapLayer plexmap_layer;
 
 	public RegionEconomyDelegate economy;
 
@@ -191,6 +193,7 @@ public class Regions extends Module<Regions> {
 		new RegionSelectionListener(this);
 		dynmap_layer = new RegionDynmapLayer(this);
 		blue_map_layer = new RegionBlueMapLayer(this);
+		plexmap_layer = new RegionPlexMapLayer(this);
 
 		// Register admin permission
 		admin_permission =
@@ -536,11 +539,13 @@ public class Regions extends Module<Regions> {
 	public void update_marker(final Region region) {
 		dynmap_layer.update_marker(region);
 		blue_map_layer.update_marker(region);
+		plexmap_layer.update_marker(region);
 	}
 
 	public void remove_marker(final UUID region_id) {
 		dynmap_layer.remove_marker(region_id);
 		blue_map_layer.remove_marker(region_id);
+		plexmap_layer.remove_marker(region_id);
 	}
 
 	private void index_region(final Region region) {

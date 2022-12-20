@@ -45,7 +45,7 @@ import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minecraft.core.Holder;
 import net.minecraft.core.MappedRegistry;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.EntityType;
 
 @VaneModule(name = "core", bstats = 8637, config_version = 6, lang_version = 4, storage_version = 1)
@@ -157,24 +157,24 @@ public class Core extends Module<Core> {
 		// NOTE: MAGIC VALUES! Introduced for 1.18.2 when registries were frozen. Sad, no workaround at the time.
 		try {
 			// Make relevant fields accessible
-			final var frozen = MappedRegistry.class.getDeclaredField("ca" /* frozen */);
+			final var frozen = MappedRegistry.class.getDeclaredField("l" /* frozen */);
 			frozen.setAccessible(true);
-			final var intrusive_holder_cache = MappedRegistry.class.getDeclaredField("cc" /* intrusiveHolderCache */);
+			final var intrusive_holder_cache = MappedRegistry.class.getDeclaredField("m" /* unregisteredIntrusiveHolders (1.19.3+), intrusiveHolderCache (until 1.19.2) */);
 			intrusive_holder_cache.setAccessible(true);
 
 			// Unfreeze required registries
-			frozen.set(Registry.ENTITY_TYPE, false);
-			frozen.set(Registry.ENCHANTMENT, false);
-			intrusive_holder_cache.set(Registry.ENTITY_TYPE, new IdentityHashMap<EntityType<?>, Holder.Reference<EntityType<?>>>());
-			intrusive_holder_cache.set(Registry.ENCHANTMENT, new IdentityHashMap<EntityType<?>, Holder.Reference<EntityType<?>>>());
+			frozen.set(BuiltInRegistries.ENTITY_TYPE, false);
+			frozen.set(BuiltInRegistries.ENCHANTMENT, false);
+			intrusive_holder_cache.set(BuiltInRegistries.ENTITY_TYPE, new IdentityHashMap<EntityType<?>, Holder.Reference<EntityType<?>>>());
+			// BuiltInRegistries.ENCHANTMENT is a "simple registry" that doesn't require intrusive holders
 		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
 			e.printStackTrace();
 		}
 	}
 
 	private void freeze_registries() {
-		Registry.ENTITY_TYPE.freeze();
-		Registry.ENCHANTMENT.freeze();
+		BuiltInRegistries.ENTITY_TYPE.freeze();
+		BuiltInRegistries.ENCHANTMENT.freeze();
 	}
 
 	@Override

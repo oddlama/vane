@@ -8,12 +8,12 @@ import com.mojang.datafixers.types.Type;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.craftbukkit.v1_19_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_19_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_19_R1.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack;
-import org.bukkit.craftbukkit.v1_19_R1.util.CraftNamespacedKey;
+import org.bukkit.craftbukkit.v1_19_R2.CraftServer;
+import org.bukkit.craftbukkit.v1_19_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_19_R2.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_19_R2.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_19_R2.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_19_R2.util.CraftNamespacedKey;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -21,6 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import net.minecraft.SharedConstants;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.dedicated.DedicatedServer;
 import net.minecraft.server.level.ServerLevel;
@@ -30,8 +31,8 @@ import net.minecraft.util.datafix.fixes.References;
 import net.minecraft.world.Clearable;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 
@@ -46,11 +47,11 @@ public class Nms {
 	}
 
 	public static void register_enchantment(NamespacedKey key, Enchantment enchantment) {
-		Registry.register(Registry.ENCHANTMENT, new ResourceLocation(key.getNamespace(), key.getKey()), enchantment);
+		Registry.register(BuiltInRegistries.ENCHANTMENT, new ResourceLocation(key.getNamespace(), key.getKey()), enchantment);
 	}
 
 	public static org.bukkit.enchantments.Enchantment bukkit_enchantment(Enchantment enchantment) {
-		final var key = Registry.ENCHANTMENT.getKey(enchantment);
+		final var key = BuiltInRegistries.ENCHANTMENT.getKey(enchantment);
 		return org.bukkit.enchantments.Enchantment.getByKey(CraftNamespacedKey.fromMinecraft(key));
 	}
 
@@ -151,7 +152,7 @@ public class Nms {
 		// so it will be available in vanilla constructs like the /summon command)
 		data_types_map.put("minecraft:" + id, data_types_map.get(base_entity_type.toString()));
 		// Store new type in registry
-		Registry.register(Registry.ENTITY_TYPE, id, builder.build(id));
+		Registry.register(BuiltInRegistries.ENTITY_TYPE, id, builder.build(id));
 	}
 
 	public static void spawn(org.bukkit.World world, Entity entity) {
@@ -163,9 +164,8 @@ public class Nms {
 		return player_handle(player).awardRecipes(recipes);
 	}
 
-	public static int creative_tab_id(final Item item) {
-		final var tab = item.getItemCategory();
-		return tab == null ? Integer.MAX_VALUE : tab.getId();
+	public static int creative_tab_id(final ItemStack item_stack) {
+		return (int)CreativeModeTabs.allTabs().stream().takeWhile(tab -> tab.contains(item_stack)).count();
 	}
 
 	public static void set_air_no_drops(final org.bukkit.block.Block block) {

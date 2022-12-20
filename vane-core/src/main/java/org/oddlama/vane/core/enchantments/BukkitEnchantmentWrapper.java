@@ -1,7 +1,7 @@
 package org.oddlama.vane.core.enchantments;
 
 import net.minecraft.world.item.enchantment.Enchantment;
-import org.bukkit.craftbukkit.v1_19_R1.enchantments.CraftEnchantment;
+import org.bukkit.craftbukkit.v1_19_R2.enchantments.CraftEnchantment;
 import org.jetbrains.annotations.NotNull;
 
 public class BukkitEnchantmentWrapper extends CraftEnchantment {

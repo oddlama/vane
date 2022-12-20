@@ -81,7 +81,7 @@ public class BedtimeBlueMapLayerDelegate {
 		}
 
 		final var marker = HtmlMarker.builder()
-			.position((int)loc.getX(), (int)loc.getY(), (int)loc.getZ())
+			.position(loc.getX(), loc.getY(), loc.getZ())
 			.label("Bed for " + player.getName())
 			.html(parent.lang_marker_label.str(escapeHtml(player.getName())))
 			.build();

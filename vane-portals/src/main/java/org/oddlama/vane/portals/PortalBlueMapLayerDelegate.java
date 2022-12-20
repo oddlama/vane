@@ -83,7 +83,7 @@ public class PortalBlueMapLayerDelegate {
 
 		final var loc = portal.spawn();
 		final var marker = HtmlMarker.builder()
-			.position((int)loc.getX(), (int)loc.getY(), (int)loc.getZ())
+			.position(loc.getX(), loc.getY(), loc.getZ())
 			.label("Portal " + portal.name())
 			.html(parent.lang_marker_label.str(escapeHtml(portal.name())))
 			.build();

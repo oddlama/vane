@@ -38,6 +38,9 @@ Otherwise, simply download all desired jars files from the [Releases](https://gi
 Grab the `all-plugins.zip` if you don't want to download each file by hand.
 You also need the newest version of [ProtocolLib](https://ci.dmulloy2.net/job/ProtocolLib/).
 
+Beware that `vane-waterfall`, `vane-velocity` and `vane-plexmap` (plexmap addon) are not classical server plugins!
+Use them only if you know what you are doing.
+
 For a comprehensive guide, visit the [Installation Guide](https://github.com/oddlama/vane/wiki/Installation-Guide) on the wiki.
 
 ## Proxy Installation (vane-waterfall, vane-velocity)

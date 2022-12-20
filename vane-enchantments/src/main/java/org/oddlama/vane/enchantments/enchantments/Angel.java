@@ -92,6 +92,9 @@ public class Angel extends CustomEnchantment<Enchantments> {
 
 		// Check enchantment level
 		final var chest = player.getEquipment().getChestplate();
+		if (chest == null) { // Can happen due to other plugins
+			return;
+		}
 		final var level = chest.getEnchantmentLevel(this.bukkit());
 		if (level == 0) {
 			return;

@@ -6,10 +6,10 @@ authors: [oddlama]
 website: 'https://github.com/oddlama/vane'
 
 depend: [vane-core]
-softdepend: [dynmap, BlueMap]
+softdepend: [dynmap, BlueMap, Pl3xMap]
 
 main: org.oddlama.vane.bedtime.Bedtime
 database: false
 
 api-version: 1.19
-load: STARTUP
+load: POSTWORLD

@@ -143,12 +143,9 @@ public class Permissions extends Module<Permissions> {
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void on_server_command_event(ServerCommandEvent event) {
 		final var sender = event.getSender();
-		if (sender instanceof ConsoleCommandSender) {
+		if (sender instanceof Player && sender.isOp()) {
 			// Console command sender will always have the correct permission attachment
-			return;
-		}
-
-		if (sender.isOp()) {
+			// Command block shall be ignored for now (causes lag, see #178)
 			add_console_permissions(sender);
 		}
 	}

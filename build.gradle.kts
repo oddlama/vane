@@ -1,11 +1,11 @@
 plugins {
 	`java-library`
-	id("io.papermc.paperweight.userdev") version "1.3.8"
+	id("io.papermc.paperweight.userdev") version "1.4.0"
 	id("xyz.jpenilla.run-paper") version "1.0.6" // Adds runServer and runMojangMappedServer tasks for testing
 }
 
 dependencies {
-	paperDevBundle("1.19.2-R0.1-SNAPSHOT")
+	paperDevBundle("1.19.3-R0.1-SNAPSHOT")
 }
 
 java {
@@ -18,7 +18,7 @@ subprojects {
 	apply(plugin = "java")
 
 	group = "org.oddlama.vane"
-	version = "1.10.1"
+	version = "1.10.2"
 
 	repositories() {
 		mavenCentral()
@@ -27,6 +27,7 @@ subprojects {
 		maven("https://repo.mikeprimm.com/")
 		maven("https://repo.codemc.org/repository/maven-public/")
 		maven("https://jitpack.io")
+		maven("https://api.modrinth.com/maven")
 	}
 
 	tasks.withType<JavaCompile> {
@@ -47,7 +48,7 @@ configure(subprojects.filter {
 	apply(plugin = "io.papermc.paperweight.userdev")
 
 	dependencies {
-		paperDevBundle("1.19.2-R0.1-SNAPSHOT")
+		paperDevBundle("1.19.3-R0.1-SNAPSHOT")
 	}
 
 	tasks {
@@ -117,7 +118,9 @@ configure(subprojects.filter {
 }) {
 	dependencies {
 		implementation(group = "us.dynmap", name = "dynmap-api", version = "3.2-SNAPSHOT")
-		implementation(group = "com.github.BlueMap-Minecraft", name = "BlueMapAPI", version = "v2.1.0")
+		implementation(group = "com.github.BlueMap-Minecraft", name = "BlueMapAPI", version = "v2.3.0")
+		implementation(rootProject.project(":vane-plexmap"))
+		compileOnly(group = "maven.modrinth", name = "pl3xmap", version = "1.19.2-310")
 	}
 }
 

@@ -20,8 +20,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.craftbukkit.v1_19_R1.enchantments.CraftEnchantment;
-import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_19_R2.enchantments.CraftEnchantment;
+import org.bukkit.craftbukkit.v1_19_R2.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -40,7 +40,7 @@ import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.minecraft.commands.arguments.item.ItemParser;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.Item;
 
 public class ItemUtil {
@@ -230,7 +230,7 @@ public class ItemUtil {
 			}
 
 			// By creative mode tab
-			final var creative_mode_tab_diff = creative_tab_id(na.getItem()) - creative_tab_id(nb.getItem());
+			final var creative_mode_tab_diff = creative_tab_id(na) - creative_tab_id(nb);
 			if (creative_mode_tab_diff != 0) {
 				return creative_mode_tab_diff;
 			}
@@ -394,7 +394,7 @@ public class ItemUtil {
 		final var vanilla_definition = item_stack.getType().key() + definition.substring(nbt_delim);
 		try {
 			final var parsed_nbt = ItemParser
-					.parseForItem(HolderLookup.forRegistry(Registry.ITEM), new StringReader(vanilla_definition)).nbt();
+					.parseForItem(BuiltInRegistries.ITEM.asLookup(), new StringReader(vanilla_definition)).nbt();
 			final var inherent_nbt = CraftItemStack.asNMSCopy(item_stack).getOrCreateTag();
 			// Now apply the NBT be parsed by minecraft's internal parser to the itemstack.
 			final var nms_item = item_handle(item_stack).copy();
