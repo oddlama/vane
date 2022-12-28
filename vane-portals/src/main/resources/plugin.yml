@@ -12,4 +12,4 @@ main: org.oddlama.vane.portals.Portals
 database: false
 
 api-version: 1.19
-load: POSTWORLD
+load: STARTUP
