@@ -14,7 +14,7 @@ public class RegionMenuGroup extends ModuleComponent<Regions> {
 	public RegionMenu region_menu;
 	public RoleMenu role_menu;
 
-	public RegionMenuGroup(Context<Regions> context) {
+	public RegionMenuGroup(Context<Regions> context, boolean vane_portals_available) {
 		super(context.namespace("menus"));
 		enter_region_name_menu = new EnterRegionNameMenu(get_context());
 		enter_region_group_name_menu = new EnterRegionGroupNameMenu(get_context());
@@ -22,7 +22,7 @@ public class RegionMenuGroup extends ModuleComponent<Regions> {
 		main_menu = new MainMenu(get_context());
 		region_group_menu = new RegionGroupMenu(get_context());
 		region_menu = new RegionMenu(get_context());
-		role_menu = new RoleMenu(get_context());
+		role_menu = new RoleMenu(get_context(), vane_portals_available);
 	}
 
 	@Override

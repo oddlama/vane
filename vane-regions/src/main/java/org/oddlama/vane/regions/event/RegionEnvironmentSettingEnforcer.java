@@ -1,4 +1,4 @@
-package org.oddlama.vane.regions;
+package org.oddlama.vane.regions.event;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -19,6 +19,7 @@ import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.module.Context;
+import org.oddlama.vane.regions.Regions;
 import org.oddlama.vane.regions.region.EnvironmentSetting;
 
 public class RegionEnvironmentSettingEnforcer extends Listener<Regions> {
