@@ -33,4 +33,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: vane-${{ matrix.project }}-${{ env.git_hash }}.jar
-          path: vane-${{ matrix.project }}/build/libs/*.jar
+          path: target/vane-${{ matrix.project }}-*.jar
