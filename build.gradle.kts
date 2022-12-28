@@ -12,6 +12,11 @@ java {
 	sourceCompatibility = JavaVersion.VERSION_17
 }
 
+// We don't need to generate an empty `vane.jar`
+tasks.withType<Jar> {
+	enabled = false
+}
+
 // Common settings to all subprojects.
 subprojects {
 	apply(plugin = "java-library")
