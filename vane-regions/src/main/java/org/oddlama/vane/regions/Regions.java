@@ -50,7 +50,10 @@ import org.oddlama.vane.annotation.persistent.Persistent;
 import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.core.persistent.PersistentSerializer;
-import org.oddlama.vane.portals.Portals;
+import org.oddlama.vane.regions.event.RegionEnvironmentSettingEnforcer;
+import org.oddlama.vane.regions.event.RegionPortalRoleSettingEnforcer;
+import org.oddlama.vane.regions.event.RegionRoleSettingEnforcer;
+import org.oddlama.vane.regions.event.RegionSelectionListener;
 import org.oddlama.vane.regions.menu.RegionGroupMenuTag;
 import org.oddlama.vane.regions.menu.RegionMenuGroup;
 import org.oddlama.vane.regions.menu.RegionMenuTag;
@@ -182,12 +185,20 @@ public class Regions extends Module<Regions> {
 	public RegionEconomyDelegate economy;
 
 	public Regions() {
-		menus = new RegionMenuGroup(this);
+		final var portals_plugin = get_module().getServer().getPluginManager().getPlugin("vane-portals");
+		boolean vane_portals_available = portals_plugin != null;
+
+		menus = new RegionMenuGroup(this, vane_portals_available);
 
 		new org.oddlama.vane.regions.commands.Region(this);
 
 		new RegionEnvironmentSettingEnforcer(this);
 		new RegionRoleSettingEnforcer(this);
+
+		if (vane_portals_available) {
+			new RegionPortalIntegration(this, portals_plugin);
+		}
+
 		new RegionSelectionListener(this);
 		dynmap_layer = new RegionDynmapLayer(this);
 		blue_map_layer = new RegionBlueMapLayer(this);
@@ -213,14 +224,12 @@ public class Regions extends Module<Regions> {
 	private boolean setup_economy() {
 		get_module().log.info("Enabling economy integration");
 
-		Plugin vault_api_plugin;
-		try {
-			vault_api_plugin = get_module().getServer().getPluginManager().getPlugin("Vault");
-		} catch (Exception e) {
+		Plugin vault_api_plugin = get_module().getServer().getPluginManager().getPlugin("Vault");
+		if (vault_api_plugin == null) {
 			get_module()
-				.log.severe(
-					"Economy was selected as the currency provider, but the Vault plugin wasn't found! Falling back to material currency."
-				);
+					.log.severe(
+							"Economy was selected as the currency provider, but the Vault plugin wasn't found! Falling back to material currency."
+					);
 			return false;
 		}
 
@@ -230,29 +239,6 @@ public class Regions extends Module<Regions> {
 
 	@Override
 	public void on_enable() {
-		final var portals = (Portals) getServer().getPluginManager().getPlugin("vane-portals");
-
-		// Register callback to portals module so portals
-		// can find out if two portals are in the same region group
-		portals.set_is_in_same_region_group_callback((a, b) -> {
-			final var reg_a = region_at(a.spawn());
-			final var reg_b = region_at(b.spawn());
-			if (reg_a == null || reg_b == null) {
-				return reg_a == reg_b;
-			}
-			return reg_a.region_group_id().equals(reg_b.region_group_id());
-		});
-
-		portals.set_player_can_use_portals_in_region_group_of_callback((player, portal) -> {
-			final var region = region_at(portal.spawn());
-			if (region == null) {
-				// No region -> no restriction.
-				return true;
-			}
-			final var group = region.region_group(get_module());
-			return group.get_role(player.getUniqueId()).get_setting(RoleSetting.PORTAL);
-		});
-
 		schedule_next_tick(this::delayed_on_enable);
 		// Every second: Visualize selections
 		schedule_task_timer(this::visualize_selections, 1l, 20l);

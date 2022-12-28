@@ -5,8 +5,8 @@ description: Regions module for vane
 authors: [oddlama]
 website: 'https://github.com/oddlama/vane'
 
-depend: [vane-core, vane-portals]
-softdepend: [dynmap, Vault, BlueMap]
+depend: [vane-core]
+softdepend: [dynmap, Vault, BlueMap, vane-portals]
 
 main: org.oddlama.vane.regions.Regions
 database: false
