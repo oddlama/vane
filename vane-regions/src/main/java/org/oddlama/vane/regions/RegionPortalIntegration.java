@@ -7,9 +7,10 @@ import org.oddlama.vane.regions.region.RoleSetting;
 
 public class RegionPortalIntegration {
 
-    public RegionPortalIntegration(Regions context, Plugin portals_plugin) {
+    public RegionPortalIntegration(Regions context) {
         new RegionPortalRoleSettingEnforcer(context);
 
+        final var portals_plugin = context.get_module().getServer().getPluginManager().getPlugin("vane-portals");
         if (portals_plugin instanceof final org.oddlama.vane.portals.Portals portals) {
             // Register callback to portals module so portals
             // can find out if two portals are in the same region group
