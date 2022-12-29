@@ -70,6 +70,8 @@ public class Velocity extends VaneProxyPlugin {
 		event_manager.register(this, new ProxyLoginListener(this));
 		event_manager.register(this, new ProxyDisconnectListener(this));
 
+		maintenance.load();
+
 		CommandManager command_manager = velocity_server.getCommandManager();
 
 		CommandMeta ping_meta = command_manager.metaBuilder("ping").build();
