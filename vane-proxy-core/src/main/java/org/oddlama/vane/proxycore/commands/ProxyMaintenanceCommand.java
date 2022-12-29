@@ -33,6 +33,10 @@ public class ProxyMaintenanceCommand extends ProxyCommand {
 
 					return;
 				}
+				case "on" -> {
+					maintenance.schedule(System.currentTimeMillis(), null);
+					return;
+				}
 				case "cancel" -> {
 					maintenance.abort();
 					return;
@@ -66,6 +70,7 @@ public class ProxyMaintenanceCommand extends ProxyCommand {
 				"""
 						§7> §3/maintenance §3[ §7cancel §3] §f- Cancel any scheduled/active maintenance
 						§7> §3/maintenance §3[ §7status §3] §f- Display info about scheduled/active maintenance
+						§7> §3/maintenance §3[ §7on §3] §f- Enable maintenance for an indefinite amount of time
 						§7> §3/maintenance §3[ §7schedule §3] §7<§bin§7> <§bduration§7> §f- Schedule maintenance in <in> for <duration>
 						§7> §3|§7 time format§7 §f- Examples: §b§o3h5m§r§f or §b§o1y2w3d4h5m6s§r""");
 	}
