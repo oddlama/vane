@@ -37,7 +37,7 @@ public class ProxyMaintenanceCommand extends ProxyCommand {
 					maintenance.schedule(System.currentTimeMillis(), null);
 					return;
 				}
-				case "cancel" -> {
+				case "cancel", "off" -> {
 					maintenance.abort();
 					return;
 				}
@@ -68,7 +68,7 @@ public class ProxyMaintenanceCommand extends ProxyCommand {
 
 		sender.send_message(
 				"""
-						§7> §3/maintenance §3[ §7cancel §3] §f- Cancel any scheduled/active maintenance
+						§7> §3/maintenance §3[ §7cancel§r|§7off §3] §f- Cancel any scheduled/active maintenance
 						§7> §3/maintenance §3[ §7status §3] §f- Display info about scheduled/active maintenance
 						§7> §3/maintenance §3[ §7on §3] §f- Enable maintenance for an indefinite amount of time
 						§7> §3/maintenance §3[ §7schedule §3] §7<§bin§7> <§bduration§7> §f- Schedule maintenance in <in> for <duration>
