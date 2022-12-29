@@ -51,7 +51,6 @@ import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.core.persistent.PersistentSerializer;
 import org.oddlama.vane.regions.event.RegionEnvironmentSettingEnforcer;
-import org.oddlama.vane.regions.event.RegionPortalRoleSettingEnforcer;
 import org.oddlama.vane.regions.event.RegionRoleSettingEnforcer;
 import org.oddlama.vane.regions.event.RegionSelectionListener;
 import org.oddlama.vane.regions.menu.RegionGroupMenuTag;
@@ -186,9 +185,11 @@ public class Regions extends Module<Regions> {
 
 	public RegionEconomyDelegate economy;
 
+	boolean vane_portals_available;
+
 	public Regions() {
 		final var portals_plugin = get_module().getServer().getPluginManager().getPlugin("vane-portals");
-		boolean vane_portals_available = portals_plugin != null;
+		vane_portals_available = portals_plugin != null;
 
 		menus = new RegionMenuGroup(this, vane_portals_available);
 
@@ -196,10 +197,6 @@ public class Regions extends Module<Regions> {
 
 		new RegionEnvironmentSettingEnforcer(this);
 		new RegionRoleSettingEnforcer(this);
-
-		if (vane_portals_available) {
-			new RegionPortalIntegration(this, portals_plugin);
-		}
 
 		new RegionSelectionListener(this);
 		dynmap_layer = new RegionDynmapLayer(this);
@@ -242,6 +239,10 @@ public class Regions extends Module<Regions> {
 
 	@Override
 	public void on_enable() {
+		if (vane_portals_available) {
+			new RegionPortalIntegration(this);
+		}
+
 		schedule_next_tick(this::delayed_on_enable);
 		// Every second: Visualize selections
 		schedule_task_timer(this::visualize_selections, 1l, 20l);
