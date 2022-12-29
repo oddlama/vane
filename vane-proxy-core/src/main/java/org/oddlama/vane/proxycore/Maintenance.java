@@ -126,6 +126,11 @@ public class Maintenance {
 	}
 
 	public void schedule(long start_millis, @Nullable Long duration_millis) {
+		if (duration_millis == null && enabled) {
+			plugin.get_logger().log(Level.WARNING, "Maintenance already enabled!");
+			return;
+		}
+
 		// Schedule maintenance
 		enabled = false;
 		start = start_millis;
