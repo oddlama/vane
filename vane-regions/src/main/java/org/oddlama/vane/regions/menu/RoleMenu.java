@@ -57,7 +57,7 @@ public class RoleMenu extends ModuleComponent<Regions> {
 	public TranslatedItemStack<?> item_setting_info_container;
 	public TranslatedItemStack<?> item_setting_info_portal;
 
-	public RoleMenu(Context<Regions> context, boolean vane_portals_available) {
+	public RoleMenu(Context<Regions> context) {
 		super(context.namespace("role"));
 		final var ctx = get_context();
 		item_rename = new TranslatedItemStack<>(ctx, "rename", Material.NAME_TAG, 1, "Used to rename the role.");
@@ -159,16 +159,14 @@ public class RoleMenu extends ModuleComponent<Regions> {
 				"Used to represent the info for the container setting."
 			);
 
-		if (vane_portals_available) {
-			item_setting_info_portal =
-					new TranslatedItemStack<>(
-							ctx,
-							"setting_info_portal",
-							Material.ENDER_PEARL,
-							1,
-							"Used to represent the info for the portal setting."
-					);
-		}
+		item_setting_info_portal =
+				new TranslatedItemStack<>(
+						ctx,
+						"setting_info_portal",
+						Material.ENDER_PEARL,
+						1,
+						"Used to represent the info for the portal setting."
+				);
 	}
 
 	public Menu create(final RegionGroup group, final Role role, final Player player) {
@@ -196,7 +194,7 @@ public class RoleMenu extends ModuleComponent<Regions> {
 		add_menu_item_setting(role_menu, role, 4, item_setting_info_use, RoleSetting.USE);
 		add_menu_item_setting(role_menu, role, 5, item_setting_info_container, RoleSetting.CONTAINER);
 
-		if (item_setting_info_portal != null) {
+		if (get_module().vane_portals_available) {
 			add_menu_item_setting(role_menu, role, 8, item_setting_info_portal, RoleSetting.PORTAL);
 		}
 
