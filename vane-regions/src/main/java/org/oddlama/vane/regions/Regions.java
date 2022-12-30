@@ -182,14 +182,10 @@ public class Regions extends Module<Regions> {
 	public RegionBlueMapLayer blue_map_layer;
 
 	public RegionEconomyDelegate economy;
-
-	boolean vane_portals_available;
+	public boolean vane_portals_available = false;
 
 	public Regions() {
-		final var portals_plugin = get_module().getServer().getPluginManager().getPlugin("vane-portals");
-		vane_portals_available = portals_plugin != null;
-
-		menus = new RegionMenuGroup(this, vane_portals_available);
+		menus = new RegionMenuGroup(this);
 
 		new org.oddlama.vane.regions.commands.Region(this);
 
@@ -236,8 +232,10 @@ public class Regions extends Module<Regions> {
 
 	@Override
 	public void on_enable() {
-		if (vane_portals_available) {
-			new RegionPortalIntegration(this);
+		final var portals_plugin = get_module().getServer().getPluginManager().getPlugin("vane-portals");
+		if (portals_plugin != null) {
+			new RegionPortalIntegration(this, portals_plugin);
+			vane_portals_available = true;
 		}
 
 		schedule_next_tick(this::delayed_on_enable);
