@@ -54,7 +54,6 @@ public class Permissions extends Module<Permissions> {
 				key = "user",
 				list = {
 					"vane.permissions.groups.default",
-					"vane.admin.commands.spawn",
 					"vane.admin.modify_world",
 					"vane.regions.commands.region",
 					"vane.trifles.commands.heads",
