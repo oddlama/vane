@@ -165,6 +165,7 @@ public class Nms {
 	}
 
 	public static int creative_tab_id(final ItemStack item_stack) {
+		// TODO FIXME BUG this is broken and always returns 0
 		return (int)CreativeModeTabs.allTabs().stream().takeWhile(tab -> tab.contains(item_stack)).count();
 	}
 
