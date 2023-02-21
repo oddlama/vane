@@ -103,6 +103,8 @@ public abstract class VaneProxyPlugin {
 	}
 
 	public void try_start_server(ManagedServer server) {
+		// FIXME: this is not async-safe and there might be conditions where two start commands can be executed 
+		// simultaneously. Don't rely on this as a user - instead use a start command that is atomic.
 		if (server_starting) return;
 
 		this.server.get_scheduler()
@@ -111,6 +113,8 @@ public abstract class VaneProxyPlugin {
 						() -> {
 							try {
 								server_starting = true;
+								get_logger().log(Level.INFO, "Running start command for server " + server.id());
+								System.out.println("run start cmd for " + server.id()  + ": " + server.start_cmd());
 								final var timeout = server.command_timeout();
 								final var process = Runtime.getRuntime().exec(server.start_cmd());
 
