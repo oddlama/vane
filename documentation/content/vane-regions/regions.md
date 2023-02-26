@@ -27,7 +27,7 @@ Available permissions are intentionally kept simple to allow quick configuration
 your players need. For more sophisticated permission control, use WorldGuard or another plugin.
 
 - 3 default roles are created in each region-group for your convenience: **admin**, **friend**, **others**.
-	- **others** cannot build, can only view containers (only touch, no look!), but can use things (buttons, ...)
+	- **others** cannot build, can only view containers (only look, no touch!), but can use things (buttons, ...)
 	- **friends** can build, can use things, can use chests
 	- **admins** can do everything including permission management.
 - Exactly one role can be assigned to each player in that region-group. Unassigned players automatically belong to the **others** role.
