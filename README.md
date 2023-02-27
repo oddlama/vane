@@ -1,4 +1,4 @@
-<p align="center"><img width="auto" height="90" src="./docs/vane.png"></p>
+<p align="center"><img width="auto" src="https://user-images.githubusercontent.com/31919558/221619567-f4d69311-22bb-468d-bfb4-679567cdd1e9.png"></p>
 
 <div align="center">
 
