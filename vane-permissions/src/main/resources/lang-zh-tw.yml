@@ -1,0 +1,46 @@
+# vim: set tabstop=2 softtabstop=0 expandtab shiftwidth=2:
+#
+# >> See lang-en.yml for variable descriptions <<
+#
+# +-----------------------------------+
+# | CAUTION: Do NOT change this file! |
+# +-----------------------------------+
+#
+# It will be silently overwritten with updates! If you want
+# to customize strings yourself, copy this file to lang-custom.yml
+# and set the language in the config.yml to "lang: 'custom'"
+
+# DO NOT CHANGE! The version of this language file. Used to determine
+# if the file needs to be updated.
+version: 1
+# The corresponding language code used in resource packs. Used for
+# resource pack generation. Typically this is a combination of the
+# language code (ISO 639) and the country code (ISO 3166).
+resource_pack_lang_code: 'zh_tw'
+
+command_permission:
+  list_empty: "§b∅"
+  list_header_groups: "列出所有註冊的群組："
+  list_header_permissions: "列出所有註冊的權限：\n格式：<權限>（<預設值>）：<描述>"
+  list_header_player_groups: "列出 %1$s 所有的群組："
+  list_header_player_permissions: "列出 %1$s 所有的權限：\n格式：<權限>（<預設值>）：<描述>"
+  list_header_group_permissions: "列出 %1$s 所有的權限：\n格式：<權限>（<預設值>）：<描述>"
+  list_player_offline: "§6所請求的玩家不在線上。僅顯示已設定的權限。其他權限管理插件的權限可能會遺失。"
+  list_group: "§7 - %1$s"
+  list_permission: "§7 - %1$s§7（%2$s§7）：%3$s"
+  group_assigned: "%1$s已被指定至%2$s"
+  group_removed: "%1$s已從%2$s中移除"
+  group_already_assigned: "§6該玩家已經被指定至此組別"
+  group_not_assigned: "§6該玩家尚未被指定至此組別"
+  usage: "%1$s §7<§a列表§7|§a新增§7|§a移除§7>"
+  description: "管理玩家權限."
+  help: "§a列表 §7<§a組別§7|§a權限§7>:§r 列出所有可用的權限或權限組別。\n\
+    §a新增 §b玩家 §b組別§7:§r 將玩家新增至指定的權限組別。\n\
+    §a移除 §b玩家 §b組別§7:§r 將玩家從指定的權限組別中移除。"
+
+command_vouch:
+  vouched: "§a你已為%1$s作擔保§a！"
+  already_vouched: "§6你已經為%1$s作過擔保§6！"
+  usage: "%1$s §b玩家名稱"
+  description: "為一個玩家作擔保."
+  help: "為一個玩家作擔保，以便讓其有權限進入伺服器."
