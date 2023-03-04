@@ -56,7 +56,7 @@ Simply download all desired jars files from the [Releases](https://github.com/od
 Grab the `all-plugins.zip` if you don't want to download each file by hand. You can also download vane from [Modrinth](https://modrinth.com/plugin/vane). Make sure that:
 
 - You are using the correct Paper (or Purpur) server version (compatible versions are listed in the title on the download page)
-- You have the latest newest version of [ProtocolLib](https://ci.dmulloy2.net/job/ProtocolLib/).
+- You have the latest version of [ProtocolLib](https://ci.dmulloy2.net/job/ProtocolLib/).
 - Beware that `vane-waterfall`, `vane-velocity` and `vane-plexmap` (plexmap addon) are not classical server plugins! Use them only if you know what you are doing.
 
 For a comprehensive guide, visit the [Installation Guide](https://github.com/oddlama/vane/wiki/Installation-Guide) on the wiki.
