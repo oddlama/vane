@@ -22,6 +22,7 @@ import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryInteractEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
@@ -223,6 +224,31 @@ public class RegionRoleSettingEnforcer extends Listener<Regions> {
 						event.setCancelled(true);
 					}
 				}
+		}
+	}
+
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+	public void on_player_inventory_open(final InventoryOpenEvent event) {
+		// Only relevant if viewing should be prohibited, too.
+		if (!get_module().config_prohibit_viewing_containers) {
+			return;
+		}
+
+		if (!(event.getPlayer() instanceof Player player)) {
+			return;
+		}
+
+		final var inventory = event.getInventory();
+		if (inventory.getLocation() == null || inventory.getHolder() == null) {
+			// Inventory is virtual / transient
+			return;
+		}
+
+		final var holder = inventory.getHolder();
+		if (holder instanceof DoubleChest || holder instanceof Container || holder instanceof Minecart) {
+			if (check_setting_at(inventory.getLocation(), player, RoleSetting.CONTAINER, false)) {
+				event.setCancelled(true);
+			}
 		}
 	}
 

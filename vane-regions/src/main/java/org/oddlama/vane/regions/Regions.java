@@ -122,6 +122,9 @@ public class Regions extends Module<Regions> {
 	@ConfigBoolean(def = false, desc = "Use economy via VaultAPI as currency provider.")
 	public boolean config_economy_as_currency;
 
+	@ConfigBoolean(def = false, desc = "Enable this to prevent players without the conatiner permission from being able to view chests.")
+	public boolean config_prohibit_viewing_containers;
+
 	@ConfigInt(
 		def = 0,
 		min = -1,

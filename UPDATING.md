@@ -109,12 +109,13 @@ to make vane compatible with a new minecraft release.
 	Enter the server. Now it is important to test those parts of vane which interface with
 	the mojang mappings, since those are the most likely to break.
 
-    - `/customitem give sickle` should display as a sickle, should work when used on wheat. (Tests custom item registration and event dispatching)
-    - Take an elytra in your hand, run `/enchant angel 1`, test whether you can fly. (Tests custom enchantment registration)
+    - `/customitem give vane_trifles:golden_sickle` should display as a sickle, should work when used on wheat. (Tests custom item registration and event dispatching)
+    - Take an elytra in your hand, run `/enchant vane_enchantments:angel`, test whether you can accelerate by sneaking. (Tests custom enchantment registration)
     - Duplicate the elytra, go into survival mode (IMPORTANT!) then combine them on an anvil. You should get Angel II.
+	- Take a smithing table, combine the elytra with a netherite ingot. (Test's complex smithing recipe integration)
     - Put some random blocks and items in a chest, place a button next to it and press it. The chest should now be sorted.
 
-    Fix issues if necessary, make a new commit.
+    Fix issues and make a new commit if necessary.
 
 12. Copy the generated resource pack to `docs/resourcepacks/<new_version>.zip`, and update
 	vane's version numer in `build.gradle.kts` (always bump minor version for mojang version updates).
