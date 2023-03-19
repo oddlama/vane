@@ -1,11 +1,11 @@
 plugins {
 	`java-library`
-	id("io.papermc.paperweight.userdev") version "1.4.0"
+	id("io.papermc.paperweight.userdev") version "1.5.3"
 	id("xyz.jpenilla.run-paper") version "1.0.6" // Adds runServer and runMojangMappedServer tasks for testing
 }
 
 dependencies {
-	paperDevBundle("1.19.3-R0.1-SNAPSHOT")
+	paperDevBundle("1.19.4-R0.1-SNAPSHOT")
 }
 
 java {
@@ -28,7 +28,7 @@ subprojects {
 	repositories() {
 		mavenCentral()
 		maven("https://papermc.io/repo/repository/maven-public/")
-		maven("https://repo.dmulloy2.net/nexus/repository/public/")
+		//maven("https://repo.dmulloy2.net/nexus/repository/public/")
 		maven("https://repo.mikeprimm.com/")
 		maven("https://repo.codemc.org/repository/maven-public/")
 		maven("https://jitpack.io")
@@ -41,8 +41,8 @@ subprojects {
 	}
 
 	dependencies {
-		compileOnly(group = "org.jetbrains", name = "annotations", version = "20.0.0")
-		annotationProcessor("org.jetbrains:annotations:20.0.0")
+		compileOnly(group = "org.jetbrains", name = "annotations", version = "24.0.1")
+		annotationProcessor("org.jetbrains:annotations:24.0.1")
 	}
 }
 
@@ -53,7 +53,7 @@ configure(subprojects.filter {
 	apply(plugin = "io.papermc.paperweight.userdev")
 
 	dependencies {
-		paperDevBundle("1.19.3-R0.1-SNAPSHOT")
+		paperDevBundle("1.19.4-R0.1-SNAPSHOT")
 	}
 
 	tasks {
