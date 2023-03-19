@@ -1,5 +1,7 @@
 package org.oddlama.vane.regions.menu;
 
+import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -21,6 +23,8 @@ import org.oddlama.vane.regions.region.EnvironmentSetting;
 import org.oddlama.vane.regions.region.RegionGroup;
 import org.oddlama.vane.regions.region.Role;
 import org.oddlama.vane.util.StorageUtil;
+
+import net.kyori.adventure.text.Component;
 
 public class RegionGroupMenu extends ModuleComponent<Regions> {
 
@@ -201,13 +205,7 @@ public class RegionGroupMenu extends ModuleComponent<Regions> {
 		add_menu_item_setting(region_group_menu, group, 4, item_setting_info_fire, EnvironmentSetting.FIRE);
 		add_menu_item_setting(region_group_menu, group, 5, item_setting_info_pvp, EnvironmentSetting.PVP);
 		add_menu_item_setting(region_group_menu, group, 7, item_setting_info_trample, EnvironmentSetting.TRAMPLE);
-		add_menu_item_setting(
-			region_group_menu,
-			group,
-			8,
-			item_setting_info_vine_growth,
-			EnvironmentSetting.VINE_GROWTH
-		);
+		add_menu_item_setting(region_group_menu, group, 8, item_setting_info_vine_growth, EnvironmentSetting.VINE_GROWTH);
 
 		region_group_menu.on_natural_close(player2 -> get_module().menus.main_menu.create(player2).open(player2));
 
@@ -364,6 +362,11 @@ public class RegionGroupMenu extends ModuleComponent<Regions> {
 				2 * 9 + col,
 				null,
 				(player, menu, self) -> {
+					// Prevent toggling when the setting is forced by the server
+					if (setting.has_override()) {
+						return ClickResult.ERROR;
+					}
+
 					group.settings().put(setting, !group.get_setting(setting));
 					mark_persistent_storage_dirty();
 					menu.update();
@@ -372,10 +375,17 @@ public class RegionGroupMenu extends ModuleComponent<Regions> {
 			) {
 				@Override
 				public void item(final ItemStack item) {
+					final Consumer<List<Component>> maybe_add_forced_hint = (lore) -> {
+						if (setting.has_override()) {
+							lore.add(Component.empty());
+							lore.add(Component.text("FORCED BY SERVER"));
+						}
+					};
+
 					if (group.get_setting(setting)) {
-						super.item(item_setting_toggle_on.item());
+						super.item(item_setting_toggle_on.item_transform_lore(maybe_add_forced_hint));
 					} else {
-						super.item(item_setting_toggle_off.item());
+						super.item(item_setting_toggle_off.item_transform_lore(maybe_add_forced_hint));
 					}
 				}
 			}

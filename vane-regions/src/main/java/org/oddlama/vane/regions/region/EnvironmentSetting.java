@@ -1,5 +1,7 @@
 package org.oddlama.vane.regions.region;
 
+import org.oddlama.vane.regions.Regions;
+
 public enum EnvironmentSetting {
 	// Spawning
 	ANIMALS(true),
@@ -22,5 +24,13 @@ public enum EnvironmentSetting {
 
 	public boolean default_value() {
 		return def;
+	}
+
+	public boolean has_override() {
+		return get_override() != 0;
+	}
+
+	public int get_override() {
+		return Regions.environment_overrides.get_override(this);
 	}
 }

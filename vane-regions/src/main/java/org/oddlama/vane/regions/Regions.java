@@ -189,8 +189,13 @@ public class Regions extends Module<Regions> {
 	public RegionEconomyDelegate economy;
 	public boolean vane_portals_available = false;
 
+	public static RegionGlobalRoleOverrides role_overrides = null;
+	public static RegionGlobalEnvironmentOverrides environment_overrides = null;
+
 	public Regions() {
 		menus = new RegionMenuGroup(this);
+		role_overrides = new RegionGlobalRoleOverrides(this);
+		environment_overrides = new RegionGlobalEnvironmentOverrides(this);
 
 		new org.oddlama.vane.regions.commands.Region(this);
 

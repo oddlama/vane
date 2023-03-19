@@ -1,5 +1,7 @@
 package org.oddlama.vane.regions.menu;
 
+import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -23,6 +25,8 @@ import org.oddlama.vane.regions.region.Role;
 import org.oddlama.vane.regions.region.RoleSetting;
 import org.oddlama.vane.util.ItemUtil;
 import org.oddlama.vane.util.StorageUtil;
+
+import net.kyori.adventure.text.Component;
 
 public class RoleMenu extends ModuleComponent<Regions> {
 
@@ -370,6 +374,11 @@ public class RoleMenu extends ModuleComponent<Regions> {
 				2 * 9 + col,
 				null,
 				(player, menu, self) -> {
+					// Prevent toggling when the setting is forced by the server
+					if (setting.has_override()) {
+						return ClickResult.ERROR;
+					}
+
 					if (setting == RoleSetting.ADMIN) {
 						// Admin setting is immutable
 						return ClickResult.ERROR;
@@ -383,10 +392,17 @@ public class RoleMenu extends ModuleComponent<Regions> {
 			) {
 				@Override
 				public void item(final ItemStack item) {
+					final Consumer<List<Component>> maybe_add_forced_hint = (lore) -> {
+						if (setting.has_override()) {
+							lore.add(Component.empty());
+							lore.add(Component.text("FORCED BY SERVER"));
+						}
+					};
+
 					if (role.get_setting(setting)) {
-						super.item(item_setting_toggle_on.item());
+						super.item(item_setting_toggle_on.item_transform_lore(maybe_add_forced_hint));
 					} else {
-						super.item(item_setting_toggle_off.item());
+						super.item(item_setting_toggle_off.item_transform_lore(maybe_add_forced_hint));
 					}
 				}
 			}

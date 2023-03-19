@@ -2,6 +2,9 @@ package org.oddlama.vane.core.config;
 
 import static org.oddlama.vane.util.ItemUtil.name_item;
 
+import java.util.List;
+import java.util.function.Consumer;
+
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
@@ -15,6 +18,8 @@ import org.oddlama.vane.core.material.ExtendedMaterial;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.core.module.ModuleComponent;
+
+import net.kyori.adventure.text.Component;
 
 public class TranslatedItemStack<T extends Module<T>> extends ModuleComponent<T> {
 
@@ -70,6 +75,12 @@ public class TranslatedItemStack<T extends Module<T>> extends ModuleComponent<T>
 
 	public ItemStack item(Object... args) {
 		return name_item(config_material.item(config_amount), lang_name.format(args), lang_lore.format(args));
+	}
+
+	public ItemStack item_transform_lore(Consumer<List<Component>> f_lore, Object... args) {
+		final var lore = lang_lore.format(args);
+		f_lore.accept(lore);
+		return name_item(config_material.item(config_amount), lang_name.format(args), lore);
 	}
 
 	public ItemStack item_amount(int amount, Object... args) {

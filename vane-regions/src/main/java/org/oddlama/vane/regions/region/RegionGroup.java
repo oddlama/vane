@@ -142,6 +142,9 @@ public class RegionGroup {
 	}
 
 	public boolean get_setting(final EnvironmentSetting setting) {
+		if (setting.has_override()) {
+			return setting.get_override() == 1;
+		}
 		return settings.getOrDefault(setting, setting.default_value());
 	}
 
