@@ -8,12 +8,12 @@ import com.mojang.datafixers.types.Type;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.craftbukkit.v1_19_R2.CraftServer;
-import org.bukkit.craftbukkit.v1_19_R2.CraftWorld;
-import org.bukkit.craftbukkit.v1_19_R2.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_19_R2.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_19_R2.inventory.CraftItemStack;
-import org.bukkit.craftbukkit.v1_19_R2.util.CraftNamespacedKey;
+import org.bukkit.craftbukkit.v1_19_R3.CraftServer;
+import org.bukkit.craftbukkit.v1_19_R3.CraftWorld;
+import org.bukkit.craftbukkit.v1_19_R3.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_19_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_19_R3.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_19_R3.util.CraftNamespacedKey;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -140,7 +140,7 @@ public class Nms {
 		// https://papermc.io/forums/t/register-and-spawn-a-custom-entity-on-1-13-x/293,
 		// adapted for 1.18
 		// Get the datafixer
-		final var world_version = SharedConstants.getCurrentVersion().getWorldVersion();
+		final var world_version = SharedConstants.getCurrentVersion().getDataVersion().getVersion();
 		final var world_version_key = DataFixUtils.makeKey(world_version);
 		final var data_types = DataFixers
 				.getDataFixer()
@@ -165,6 +165,7 @@ public class Nms {
 	}
 
 	public static int creative_tab_id(final ItemStack item_stack) {
+		// TODO FIXME BUG this is broken and always returns 0
 		return (int)CreativeModeTabs.allTabs().stream().takeWhile(tab -> tab.contains(item_stack)).count();
 	}
 

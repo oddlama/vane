@@ -1,0 +1,233 @@
+# vim: set tabstop:2 softtabstop:0 expandtab shiftwidth:2:
+#
+# >> See lang-en.yml for variable descriptions <<
+#
+# +-----------------------------------+
+# | CAUTION: Do NOT change this file! |
+# +-----------------------------------+
+#
+# It will be silently overwritten with updates! If you want
+# to customize strings yourself, copy this file to lang-custom.yml
+# and set the language in the config.yml to "lang: 'custom'"
+
+# DO NOT CHANGE! The version of this language file. Used to determine
+# if the file needs to be updated.
+version: 5
+# The corresponding language code used in resource packs. Used for
+# resource pack generation. Typically this is a combination of the
+# language code (ISO 639) and the country code (ISO 3166).
+resource_pack_lang_code: 'zh_tw'
+
+select_boundary_now: "§6現在右鍵點擊傳送門邊界"
+console_invalid_type: "§c控制台方塊的方塊類型無效！"
+console_different_world: "§c控制台必須與傳送門在同一個世界中"
+console_too_far_away: "§c控制台與傳送門的距離太遠"
+console_linked: "§a控制台已連接"
+no_boundary_found: "§c找不到傳送門邊界！"
+no_origin: "§c傳送門沒有起點方塊！"
+multiple_origins: "§c傳送門不能有多個起點方塊！"
+no_portal_block_above_origin: "§c起點方塊上方需要傳送門區域方塊！"
+not_enough_portal_blocks_above_origin: "§c起點方塊上方至少需要 3 個傳送門區域方塊！"
+too_large: "§c傳送門在 %1$s 方向太大！"
+too_small_spawn: "§c生成區域在 %1$s 方向太小！"
+too_many_portal_area_blocks: "§c傳送門區域太大！%1$s§6/%2$s§c 個方塊"
+portal_area_obstructed: "§c傳送門區域被擋住了！"
+intersects_existing_portal: "§c傳送門與現有的傳送門重疊了！"
+build_restricted: "§c你沒有權限在這裡建造傳送門！"
+link_restricted: "§c你沒有權限連接控制台到這個傳送門！"
+target_already_connected: "§6目標傳送門已經連接到另一個傳送門！"
+source_use_restricted: "§c你沒有權限使用這個傳送門！"
+target_use_restricted: "§c你沒有權限使用目標傳送門！"
+console_display_active: "§6§l>§r %1$s §6§l<§r"
+console_display_inactive: "§8§l>§r %1$s §8§l<§r"
+console_no_target: "§k?"
+unlink_restricted: "§c您沒有權限取消此傳送門的控制台連接！"
+destroy_restricted: "§c您沒有權限銷毀此傳送門的控制台！"
+settings_restricted: "§c您沒有權限更改此傳送門的設置！"
+select_target_restricted: "§c您沒有權限為此傳送門選擇目標！"
+
+dynmap:
+  layer_label: "傳送門"
+  marker_label: "%1$s"
+blue_map:
+  layer_label: "傳送門"
+  marker_label: "<span style=\"color: white\">🌌 %1$s</span>"
+
+menus:
+  enter_name:
+    title: "§8§l輸入傳送門名稱"
+  settings:
+    title: "§8§l設定：%1$s"
+    select_icon_title: "§8§l選擇圖示"
+    rename:
+      name: "§b§l重命名"
+      lore: []
+    select_icon:
+      name: "§b§l選擇圖示"
+      lore: []
+    select_style:
+      name: "§b§l選擇樣式"
+      lore: []
+    exit_orientation_lock_on:
+      name: "§b§l切換出口定向鎖"
+      lore: ["", "§b當前: §e§l鎖定（總是向前離開）§r"]
+    exit_orientation_lock_off:
+      name: "§b§l切換出口定向鎖"
+      lore: ["", "§b當前: §a§l未鎖定（離開與進入相同方向）§r"]
+    visibility_public:
+      name: "§b§l切換顯示方式"
+      lore: ["", "§b當前: §a§l公共顯示§r"]
+    visibility_group:
+      name: "§b§l切換顯示方式"
+      lore: ["", "§b當前: §e§l區域組（成員）顯示§r"]
+    visibility_group_internal:
+      name: "§b§l切換可見度"
+      lore: ["", "§b當前狀態: §e§l群組 (僅在內部可見)§r"]
+    visibility_private:
+      name: "§b§l切換可見度"
+      lore: ["", "§b當前狀態: §c§l私有§r"]
+    target_lock_on:
+      name: "§b§l切換目標鎖定"
+      lore: ["", "§b當前狀態: §c§l已鎖定§r"]
+    target_lock_off:
+      name: "§b§l切換目標鎖定"
+      lore: ["", "§b當前狀態: §a§l已解鎖§r"]
+    back:
+      name: "§6↩ §l返回"
+      lore: []
+  style:
+    title: "§8§l入口樣式： %1$s"
+    select_block_console_active_title: "選擇激活的 控制 方塊。"
+    select_block_origin_active_title: "選擇激活的 起點 方塊。"
+    select_block_portal_active_title: "選擇激活的 區域 方塊。"
+    select_block_boundardy_1_active_title: "選擇激活的邊界 1方塊。"
+    select_block_boundardy_2_active_title: "選擇激活的邊界 2方塊。"
+    select_block_boundardy_3_active_title: "選擇激活的邊界 3方塊。"
+    select_block_boundardy_4_active_title: "選擇激活的邊界 4方塊。"
+    select_block_boundardy_5_active_title: "選擇激活的邊界 5方塊。"
+    select_block_console_inactive_title: "選擇未啟用的控制台方塊。"
+    select_block_origin_inactive_title: "選擇未啟用的原點方塊。"
+    select_block_portal_inactive_title: "選擇未啟用的傳送門區域方塊。"
+    select_block_boundardy_1_inactive_title: "選擇未啟用的 邊界 1 方塊。"
+    select_block_boundardy_2_inactive_title: "選擇未啟用的 邊界 2 方塊。"
+    select_block_boundardy_3_inactive_title: "選擇未啟用的 邊界 3 方塊。"
+    select_block_boundardy_4_inactive_title: "選擇未啟用的 邊界 4 方塊。"
+    select_block_boundardy_5_inactive_title: "選擇未啟用的 邊界 5 方塊。"
+
+
+    block_console_active:
+      name: "§b§l控制台 §a(啟用中)"
+      lore: []
+    block_origin_active:
+      name: "§b§l原點 §a(啟用中)"
+      lore: []
+    block_portal_active:
+      name: "§b§l傳送門區域 §a(啟用中)"
+      lore: []
+    block_boundardy_1_active:
+      name: "§b§l邊界 §a(啟用中)"
+      lore: ["", "§a變體 1", "§7建造材料: %1$s"]
+    block_boundardy_2_active:
+      name: "§b§l邊界 §a(啟用中)"
+      lore: ["", "§a變體 2", "§7建造材料: %1$s"]
+    block_boundardy_3_active:
+      name: "§b§l邊界 §a(啟用中)"
+      lore: ["", "§a變體 3", "§7建造材料: %1$s"]
+    block_boundardy_4_active:
+      name: "§b§l邊界 §a(啟用中)"
+      lore: ["", "§a變體 4", "§7建造材料: %1$s"]
+    block_boundardy_5_active:
+      name: "§b§l邊界 §a(啟用中)"
+      lore: ["", "§a變體 5", "§7建造材料: %1$s"]
+    block_console_inactive:
+      name: "§b§l控制台 §e(未啟用)"
+      lore: []
+    block_origin_inactive:
+      name: "§b§l起點 §e(未啟用)"
+      lore: []
+    block_portal_inactive:
+      name: "§b§l傳送門區域 §e(未啟用)"
+      lore: []
+    block_boundardy_1_inactive:
+      name: "§b§l邊界 §e(未啟用)"
+      lore: ["", "§a變體 1", "§7建造材料：%1$s"]
+    block_boundardy_2_inactive:
+      name: "§b§l邊界 §e(未啟用)"
+      lore: ["", "§a變體 2", "§7建造材料：%1$s"]
+    block_boundardy_3_inactive:
+      name: "§b§l邊界 §e(未啟用)"
+      lore: ["", "§a變體 3", "§7建造材料：%1$s"]
+    block_boundardy_4_inactive:
+      name: "§b§l邊界 §e(未啟用)"
+      lore: ["", "§a變體 4", "§7建造材料：%1$s"]
+    block_boundardy_5_inactive:
+      name: "§b§l邊界 §e(未啟用)"
+      lore: ["", "§a變體 5", "§7建造材料：%1$s"]
+    accept:
+      name: "§a§l套用風格"
+      lore: []
+    reset:
+      name: "§6§l重設更改"
+      lore: []
+    select_style_title: "§8§l選擇風格"
+    filter_styles_title: "§8§l篩選風格"
+    select_defined:
+      name: "§b§l選擇預設風格"
+      lore: []
+    select_style:
+      name: "%1$s"
+      lore: []
+    cancel:
+      name: "§6↩ §l捨棄更改"
+      lore: []
+  console:
+      title: "§8§l傳送門: %1$s"
+      settings:
+        name: "§b§l設定"
+        lore: []
+      select_target:
+        name: "§d§l選擇目標"
+        lore:
+          - ""
+          - "§7目前: %1$s"
+      select_target_locked:
+        name: "§d§l選擇目標"
+        lore:
+          - ""
+          - "§7目前: %1$s"
+          - "§8目標選擇目前§6§l已鎖定§r§8！"
+      select_target_title: "§8§l選擇目標傳送門"
+      filter_portals_title: "§8§l篩選傳送門"
+      select_target_portal:
+        name: "%1$s"
+        lore:
+          - ""
+          - "§7距離: %2$s§6米"
+          - "§7世界: %3$s"
+          - "§7%4$s"
+      select_target_portal_visibility_public: "§a公共的"
+      select_target_portal_visibility_group: "§e區域組（成員）"
+      select_target_portal_visibility_group_internal: "§e區域組（僅在內部可見）"
+      select_target_portal_visibility_private: "§c私有的"
+
+
+      unlink_console:
+        name: "§c§l解除連接控制台"
+        lore: []
+      unlink_console_confirm_title: "§c§l確認解除連接控制台？"
+      unlink_console_confirm_accept:
+        name: "§c§l解除連接控制台"
+        lore: []
+      unlink_console_confirm_cancel:
+        name: "§a§l取消"
+        lore: []
+      destroy_portal:
+        name: "§c§l摧毀傳送門"
+        lore: []
+      destroy_portal_confirm_title: "§c§l確認摧毀傳送門？"
+      destroy_portal_confirm_accept:
+        name: "§c§l摧毀傳送門"
+        lore: []
+      destroy_portal_confirm_cancel:
+        name: "§a§l取消"
+        lore: []

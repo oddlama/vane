@@ -1,5 +1,7 @@
 package org.oddlama.vane.regions.menu;
 
+import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -23,6 +25,8 @@ import org.oddlama.vane.regions.region.Role;
 import org.oddlama.vane.regions.region.RoleSetting;
 import org.oddlama.vane.util.ItemUtil;
 import org.oddlama.vane.util.StorageUtil;
+
+import net.kyori.adventure.text.Component;
 
 public class RoleMenu extends ModuleComponent<Regions> {
 
@@ -158,14 +162,15 @@ public class RoleMenu extends ModuleComponent<Regions> {
 				1,
 				"Used to represent the info for the container setting."
 			);
+
 		item_setting_info_portal =
-			new TranslatedItemStack<>(
-				ctx,
-				"setting_info_portal",
-				Material.ENDER_PEARL,
-				1,
-				"Used to represent the info for the portal setting."
-			);
+				new TranslatedItemStack<>(
+						ctx,
+						"setting_info_portal",
+						Material.ENDER_PEARL,
+						1,
+						"Used to represent the info for the portal setting."
+				);
 	}
 
 	public Menu create(final RegionGroup group, final Role role, final Player player) {
@@ -192,7 +197,10 @@ public class RoleMenu extends ModuleComponent<Regions> {
 		add_menu_item_setting(role_menu, role, 2, item_setting_info_build, RoleSetting.BUILD);
 		add_menu_item_setting(role_menu, role, 4, item_setting_info_use, RoleSetting.USE);
 		add_menu_item_setting(role_menu, role, 5, item_setting_info_container, RoleSetting.CONTAINER);
-		add_menu_item_setting(role_menu, role, 8, item_setting_info_portal, RoleSetting.PORTAL);
+
+		if (get_module().vane_portals_available) {
+			add_menu_item_setting(role_menu, role, 8, item_setting_info_portal, RoleSetting.PORTAL);
+		}
 
 		role_menu.on_natural_close(player2 -> get_module().menus.region_group_menu.create(group, player2).open(player2)
 		);
@@ -366,6 +374,11 @@ public class RoleMenu extends ModuleComponent<Regions> {
 				2 * 9 + col,
 				null,
 				(player, menu, self) -> {
+					// Prevent toggling when the setting is forced by the server
+					if (setting.has_override()) {
+						return ClickResult.ERROR;
+					}
+
 					if (setting == RoleSetting.ADMIN) {
 						// Admin setting is immutable
 						return ClickResult.ERROR;
@@ -379,10 +392,17 @@ public class RoleMenu extends ModuleComponent<Regions> {
 			) {
 				@Override
 				public void item(final ItemStack item) {
+					final Consumer<List<Component>> maybe_add_forced_hint = (lore) -> {
+						if (setting.has_override()) {
+							lore.add(Component.empty());
+							lore.add(Component.text("FORCED BY SERVER"));
+						}
+					};
+
 					if (role.get_setting(setting)) {
-						super.item(item_setting_toggle_on.item());
+						super.item(item_setting_toggle_on.item_transform_lore(maybe_add_forced_hint));
 					} else {
-						super.item(item_setting_toggle_off.item());
+						super.item(item_setting_toggle_off.item_transform_lore(maybe_add_forced_hint));
 					}
 				}
 			}

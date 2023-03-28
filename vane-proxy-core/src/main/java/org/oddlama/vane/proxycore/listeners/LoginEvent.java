@@ -32,12 +32,15 @@ public abstract class LoginEvent implements ProxyEvent, ProxyCancellableEvent {
 			return;
 		}
 
+		plugin.get_logger().log(Level.INFO, "Connection '" + connection.get_name() + "' is connecting to '" + server_info.getName() + "'");
+
 		// Start server if necessary
 		if (!plugin.is_online(server_info)) {
 			// For use inside callback
 			final var cms = plugin.get_config().managed_servers.get(server_info.getName());
 
 			if (!connection.can_start_server(plugin.get_proxy(), server_info.getName())) {
+				plugin.get_logger().log(Level.INFO, "Disconnecting '" + connection.get_name() + "' because they don't have the permission to start server '" + server_info.getName() + "'");
 				// TODO: This could probably use a configurable message?
 				this.cancel("Server is offline");
 				return;

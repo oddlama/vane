@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.UUID;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
+import org.oddlama.vane.regions.Regions;
 
 public class Role {
 
@@ -86,6 +87,9 @@ public class Role {
 	}
 
 	public boolean get_setting(final RoleSetting setting) {
+		if (setting.has_override()) {
+			return setting.get_override() == 1;
+		}
 		return settings.getOrDefault(setting, setting.default_value(false));
 	}
 

@@ -117,6 +117,10 @@ public class ManagedServer {
 
 		public StatefulConfiguration(String id, String display_name, CommentedConfig config) throws IOException {
 			// [managed_servers.my_server.state]
+			if (config == null) {
+				// The whole section is missing
+				return;
+			}
 
 			// quotes = ["", ...]
 			List<String> quotes = config.get("quotes");

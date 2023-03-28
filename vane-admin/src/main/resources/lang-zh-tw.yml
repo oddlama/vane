@@ -1,0 +1,65 @@
+# vim: set tabstop=2 softtabstop=0 expandtab shiftwidth=2:
+#
+# >> See lang-en.yml for variable descriptions <<
+#
+# +-----------------------------------+
+# | CAUTION: Do NOT change this file! |
+# +-----------------------------------+
+#
+# It will be silently overwritten with updates! If you want
+# to customize strings yourself, copy this file to lang-custom.yml
+# and set the language in the config.yml to "lang: 'custom'"
+
+# DO NOT CHANGE! The version of this language file. Used to determine
+# if the file needs to be updated.
+version: 2
+# The corresponding language code used in resource packs. Used for
+# resource pack generation. Typically this is a combination of the
+# language code (ISO 639) and the country code (ISO 3166).
+resource_pack_lang_code: 'zh_tw'
+
+chat_message_formatter:
+  player_chat_format: "%1$s§7: %2$s"
+  player_join: "%1$s§e 加入了伺服器"
+  player_kick: "%1$s§e 被踢出了伺服器"
+  player_quit: "%1$s§e 離開了伺服器"
+
+autostop:
+  aborted: "§d自動停止已中止"
+  scheduled: "§d自動停止已安排在 %1$s"
+  status: "§7自動停止將在 %1$s"
+  status_not_scheduled: "§d未安排自動停止"
+  shutdown: "§d自動停止已啟動！"
+
+  command_autostop:
+    usage: "%1$s §7<§aabort§7|§aschedule§7|§astatus§7>"
+    description: "管理自動停止。"
+    help: "§aabort§7:§r 中止已安排的自動停止任務。\n\
+      §aschedule§7[§b延遲§7]:§r 立即安排自動停止任務，而不管玩家數量。可接受延遲參數以覆蓋預設值。\n\
+      §astatus§7:§r 顯示目前的自動停止狀態。"
+
+hazard_protection:
+  wither_spawn_prohibited: "§7此世界中無法生成蠹魂！"
+
+command_gamemode:
+  set: "§7已將 %1$s 的遊戲模式設為 %2$s。"
+  usage: "%1$s §bgamemode §7[§b玩家§7]"
+  description: "§bgamemode §7[§b玩家§7]"
+  help: "設定玩家的遊戲模式。"
+
+command_slimechunk:
+  slime_chunk_yes: "§a這是史萊姆區塊。"
+  slime_chunk_no: "§c這不是史萊姆區塊。"
+  usage: "%1$s"
+  description: "檢查當前區塊是否為史萊姆區塊。"
+  help: "檢查當前區塊是否為史萊姆區塊。"
+
+command_time:
+  usage: "%1$s §btime §7[§bworld§7]"
+  description: "設置當前或給定世界的時間。"
+  help: "設置當前或給定世界的時間。"
+
+command_weather:
+  usage: "%1$s §bweather §7[§bworld§7]"
+  description: "設置當前或給定世界的天氣。"
+  help: "設置當前或給定世界的天氣。"

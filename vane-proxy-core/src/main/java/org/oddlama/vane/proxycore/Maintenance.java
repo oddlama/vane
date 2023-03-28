@@ -1,5 +1,6 @@
 package org.oddlama.vane.proxycore;
 
+import org.jetbrains.annotations.Nullable;
 import org.oddlama.vane.proxycore.scheduler.ProxyScheduledTask;
 
 import java.io.*;
@@ -64,7 +65,9 @@ public class Maintenance {
 	private final TaskNotify task_notify = new TaskNotify();
 	private boolean enabled = false;
 	private long start = 0;
-	private long duration = 0;
+
+	@Nullable
+	private Long duration = 0L;
 
 	public Maintenance(final VaneProxyPlugin plugin) {
 		this.plugin = plugin;
@@ -74,7 +77,7 @@ public class Maintenance {
 		return start;
 	}
 
-	public long duration() {
+	public @Nullable Long duration() {
 		return duration;
 	}
 
@@ -96,7 +99,7 @@ public class Maintenance {
 
 	public void disable() {
 		start = 0;
-		duration = 0;
+		duration = 0L;
 		enabled = false;
 
 		task_enable.cancel();
@@ -122,7 +125,12 @@ public class Maintenance {
 		plugin.get_logger().log(Level.INFO, "Maintenance disabled!");
 	}
 
-	public void schedule(long start_millis, long duration_millis) {
+	public void schedule(long start_millis, @Nullable Long duration_millis) {
+		if (duration_millis == null && enabled) {
+			plugin.get_logger().log(Level.WARNING, "Maintenance already enabled!");
+			return;
+		}
+
 		// Schedule maintenance
 		enabled = false;
 		start = start_millis;
@@ -133,7 +141,10 @@ public class Maintenance {
 
 		// Start tasks
 		task_enable.schedule();
-		task_notify.schedule();
+
+		if (duration_millis != null) {
+			task_notify.schedule();
+		}
 	}
 
 	public void load() {
@@ -142,7 +153,15 @@ public class Maintenance {
 
 			try (final var file_reader = new FileReader(file); final var reader = new BufferedReader(file_reader)) {
 				start = Long.parseLong(reader.readLine());
-				duration = Long.parseLong(reader.readLine());
+				String duration_line = reader.readLine();
+				if (duration_line != null) {
+					duration = Long.parseLong(duration_line);
+				} else {
+					// We have no duration, run until stopped
+					duration = null;
+					enable();
+					return;
+				}
 			} catch (IOException | NumberFormatException e) {
 				disable();
 				return;
@@ -167,7 +186,11 @@ public class Maintenance {
 	public void save() {
 		//create and write file
 		try (final FileWriter writer = new FileWriter(file)) {
-			writer.write(start + "\n" + duration);
+			if (duration != null) {
+				writer.write(start + "\n" + duration);
+			} else {
+				writer.write(Long.toString(start));
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -186,18 +209,29 @@ public class Maintenance {
 			time = format_time(timespan);
 		}
 
-		var remaining = duration + (start - System.currentTimeMillis());
-		if (remaining > duration) {
-			remaining = duration;
-		} else if (remaining < 0) {
-			remaining = 0;
+		String duration_string;
+		String remaining_string;
+		if (duration != null) {
+			var remaining = duration + (start - System.currentTimeMillis());
+			if (remaining > duration) {
+				remaining = duration;
+			} else if (remaining < 0) {
+				remaining = 0;
+			}
+
+			duration_string = format_time(duration);
+			remaining_string = format_time(remaining);
+		} else {
+			duration_string = "Indefinite";
+			remaining_string = "Indefinite";
 		}
+
 
 		return message
 				.replace("%MOTD%", MOTD)
 				.replace("%time%", time)
-				.replace("%duration%", format_time(duration))
-				.replace("%remaining%", format_time(remaining));
+				.replace("%duration%", duration_string)
+				.replace("%remaining%", remaining_string);
 	}
 
 	public class TaskNotify implements Runnable {

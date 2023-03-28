@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        project: [ 'admin', 'bedtime', 'core', 'enchantments', 'permissions', 'portals', 'regions', 'trifles', 'waterfall', 'velocity' ]
+        project: [ 'admin', 'bedtime', 'core', 'enchantments', 'permissions', 'plexmap', 'portals', 'regions', 'trifles', 'waterfall', 'velocity' ]
 
     steps:
       - uses: actions/checkout@v3.0.0
@@ -33,4 +33,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: vane-${{ matrix.project }}-${{ env.git_hash }}.jar
-          path: vane-${{ matrix.project }}/build/libs/*.jar
+          path: target/vane-${{ matrix.project }}-*.jar

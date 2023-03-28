@@ -1,5 +1,7 @@
 package org.oddlama.vane.regions.region;
 
+import org.oddlama.vane.regions.Regions;
+
 public enum RoleSetting {
 	ADMIN(false, true),
 	BUILD(false, true),
@@ -20,5 +22,13 @@ public enum RoleSetting {
 			return def_admin;
 		}
 		return def;
+	}
+
+	public boolean has_override() {
+		return get_override() != 0;
+	}
+
+	public int get_override() {
+		return Regions.role_overrides.get_override(this);
 	}
 }

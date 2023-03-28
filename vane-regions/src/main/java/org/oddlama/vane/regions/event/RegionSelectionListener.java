@@ -1,4 +1,4 @@
-package org.oddlama.vane.regions;
+package org.oddlama.vane.regions.event;
 
 import org.bukkit.Material;
 import org.bukkit.event.Event;
@@ -10,6 +10,7 @@ import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Context;
+import org.oddlama.vane.regions.Regions;
 
 public class RegionSelectionListener extends Listener<Regions> {
 

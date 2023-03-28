@@ -1,0 +1,104 @@
+# vim: set tabstop=2 softtabstop=0 expandtab shiftwidth=2:
+#
+# >> See lang-en.yml for variable descriptions <<
+#
+# +-----------------------------------+
+# | CAUTION: Do NOT change this file! |
+# +-----------------------------------+
+#
+# It will be silently overwritten with updates! If you want
+# to customize strings yourself, copy this file to lang-custom.yml
+# and set the language in the config.yml to "lang: 'custom'"
+
+# DO NOT CHANGE! The version of this language file. Used to determine
+# if the file needs to be updated.
+version: 4
+# The corresponding language code used in resource packs. Used for
+# resource pack generation. Typically this is a combination of the
+# language code (ISO 639) and the country code (ISO 3166).
+resource_pack_lang_code: 'zh_tw'
+
+command_heads:
+  usage: "%1$s"
+  description: "從頭顱倉庫中取得頭顱。"
+  help: "打開頭顱倉庫。"
+
+command_finditem:
+  usage: "%1$s"
+  description: "在附近的容器和實體中搜尋指定的物品。"
+  help: "在附近的容器和實體中搜尋指定的物品。"
+
+command_setspawn:
+  usage: "%1$s"
+  description: "將全域重生點設定為您當前位置。"
+  help: "將全域重生點設定為您當前位置。"
+
+storage:
+  open_stacked_item: "你需要將這些物品拆開才能打開它們。"
+  item_pouch:
+    name: "小袋子"
+  item_backpack:
+    name: "背包"
+
+xp_bottles:
+  item_small_xp_bottle:
+    name: "小型經驗之瓶"
+  item_medium_xp_bottle:
+    name: "中型經驗之瓶"
+  item_large_xp_bottle:
+    name: "大型經驗之瓶"
+
+item_empty_xp_bottle:
+  name: "空的經驗之瓶"
+
+item_north_compass:
+  name: "指北針"
+
+item_reinforced_elytra:
+  name: "獄髓鞘翅"
+
+item_file:
+  name: "銼刀"
+
+item_slime_bucket:
+  name: "史萊姆桶"
+
+item_papyrus_scroll:
+  name: "紙莎草卷軸"
+
+item_trowel:
+  name: "抹刀"
+  lore:
+    - "§7右鍵點擊你的物品欄以更改建築材料。"
+    - "§7目前建築材料：%1$s"
+
+sickles:
+  item_wooden_sickle:
+    name: "木鐮刀"
+  item_stone_sickle:
+    name: "石鐮刀"
+  item_iron_sickle:
+    name: "鐵鐮刀"
+  item_golden_sickle:
+    name: "金鐮刀"
+  item_diamond_sickle:
+    name: "鑽石鐮刀"
+  item_netherite_sickle:
+    name: "獄髓鐮刀"
+
+scrolls:
+  item_home_scroll:
+    name: "傳送卷軸（家）"
+  item_unstable_scroll:
+    name: "傳送卷軸（不穩定）"
+    teleport_no_previous_teleport: "§c你之前從未使用過其他卷軸。"
+  item_spawn_scroll:
+    name: "傳送卷軸（出生點）"
+  item_lodestone_scroll:
+    name: "傳送卷軸（磁石）"
+    teleport_no_bound_lodestone: "§b先潛行右鍵點擊磁石來（重新）綁定這個卷軸。"
+    teleport_missing_lodestone: "§c卷軸似乎沒有作用... &6你擔心綁定的磁石可能已經不存在了。"
+    bound_lore: "§7綁定到 %1$s 的 (%2$s§7, %3$s§7, %4$s§7)"
+  item_death_scroll:
+    name: "傳送卷軸（死亡）"
+    teleport_no_recent_death: "§c你最近沒有死亡，或已經使用過死亡卷軸！"
