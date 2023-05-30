@@ -63,7 +63,7 @@ public abstract class PreLoginEvent implements ProxyEvent, ProxyCancellableEvent
 		final var name = connection.get_name();
 		final var new_uuid = add_uuid(uuid, multiplexer_id);
 		final var new_uuid_str = new_uuid.toString();
-		final var new_name = new_uuid_str.substring(new_uuid_str.length() - 16);
+		final var new_name = new_uuid_str.substring(new_uuid_str.length() - 16).replace("-", "_");
 
 		plugin.get_logger()
 				.log(
