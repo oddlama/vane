@@ -53,7 +53,7 @@ public class AnvilMenu extends Menu {
 			super(
 				window_id,
 				entity.getInventory(),
-				ContainerLevelAccess.create(entity.getLevel(), new BlockPos(0, 0, 0))
+				ContainerLevelAccess.create(entity.level(), new BlockPos(0, 0, 0))
 			);
 			this.checkReachable = false;
 		}
