@@ -1,0 +1,90 @@
+# vim: set tabstop=2 softtabstop=0 expandtab shiftwidth=2:
+#
+# >> Ver lang-en.yml para descripciones de variables <<
+#
+# +---------------------------------------+
+# | PRECAUCIÓN: ¡NO cambies este archivo! |
+# +---------------------------------------+
+#
+# ¡Se sobrescribirá silenciosamente con actualizaciones! Si quieres
+# personalizar las cadenas tú mismo, copia este archivo a lang-custom.yml
+# y establece el idioma en config.yml como "lang: 'custom'"
+
+# ¡NO CAMBIAR! La versión de este archivo de idioma. Se utiliza para determinar
+# si el archivo debe actualizarse.
+version: 4
+# El código de idioma correspondiente utilizado en paquetes de recursos. Utilizado para
+# generación de paquetes de recursos. Normalmente, esto es una combinación del
+# código de idioma (ISO 639) y el código de país (ISO 3166).
+resource_pack_lang_code: 'es_es'
+
+item_ancient_tome:
+  # El nombre que se mostrará para esta variante de objeto.
+  name: "Tomo antiguo"
+
+item_enchanted_ancient_tome:
+  # El nombre que se mostrará para esta variante de objeto.
+  name: "Tomo antiguo encantado"
+
+item_ancient_tome_of_knowledge:
+  # El nombre que se mostrará para esta variante de objeto.
+  name: "Tomo antiguo del conocimiento"
+
+item_enchanted_ancient_tome_of_knowledge:
+  # El nombre que se mostrará para esta variante de objeto.
+  name: "Tomo antiguo del conocimiento encantado"
+
+item_ancient_tome_of_the_gods:
+  # El nombre que se mostrará para esta variante de objeto.
+  name: "Tomo antiguo de los dioses"
+
+item_enchanted_ancient_tome_of_the_gods:
+  # El nombre que se mostrará para esta variante de objeto.
+  name: "Tomo antiguo de los dioses encantado"
+
+enchantment_angel:
+  # El nombre que se mostrará para este encantamiento. Se incluirá en un paquete de recursos.
+  name: "Ángel"
+
+enchantment_grappling_hook:
+  # El nombre que se mostrará para este encantamiento. Se incluirá en un paquete de recursos.
+  name: "Gancho de agarre"
+
+enchantment_hell_bent:
+  # El nombre que se mostrará para este encantamiento. Se incluirá en un paquete de recursos.
+  name: "Cabeza dura"
+
+enchantment_leafchopper:
+  # El nombre que se mostrará para este encantamiento. Se incluirá en un paquete de recursos.
+  name: "Talador de hojas"
+
+enchantment_lightning:
+  # El nombre que se mostrará para este encantamiento. Se incluirá en un paquete de recursos.
+  name: "Rayo"
+  
+enchantment_rake:
+  # El nombre que se mostrará para este encantamiento. Se incluirá en un paquete de recursos.
+  name: "Rastrillo"
+
+enchantment_seeding:
+  # El nombre que se mostrará para este encantamiento. Se incluirá en un paquete de recursos.
+  name: "Siembra"
+
+enchantment_soulbound:
+  # El nombre que se mostrará para este encantamiento. Se incluirá en un paquete de recursos.
+  name: "Vínculo de alma"
+  drop_lock_warning: "Los objetos con Vínculo de alma solo se pueden soltar usando el mouse"
+  drop_cooldown: "Suelta de nuevo para confirmar la eliminación"
+  dropped_notification: "Objeto con Vínculo de alma eliminado: %1$s"
+
+enchantment_take_off:
+  # El nombre que se mostrará para este encantamiento. Se incluirá en un paquete de recursos.
+  name: "Despegue"
+
+enchantment_unbreakable:
+  # El nombre que se mostrará para este encantamiento. Se incluirá en un paquete de recursos.
+  name: "Inquebrantable"
+
+enchantment_wings:
+  # El nombre que se mostrará para este encantamiento. Se incluirá en un paquete de recursos.
+  name: "Alas"

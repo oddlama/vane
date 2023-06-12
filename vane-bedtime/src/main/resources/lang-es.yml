@@ -1,0 +1,51 @@
+# vim: set tabstop=2 softtabstop=0 expandtab shiftwidth=2:
+#
+# >> Consulta lang-en.yml para descripciones de variables <<
+#
+# +-----------------------------------------+
+# | ¡PRECAUCIÓN: NO modificar este archivo! |
+# +-----------------------------------------+
+#
+# ¡Se sobrescribirá silenciosamente con actualizaciones! Si deseas
+# personalizar las cadenas tú mismo, copia este archivo a lang-custom.yml
+# y establece el idioma en config.yml como "lang: 'custom'"
+
+# ¡NO CAMBIAR! Versión de este archivo de idioma. Se utiliza para determinar
+# si el archivo necesita actualizarse.
+version: 5
+# Código de idioma correspondiente utilizado en paquetes de recursos. Utilizado para
+# generación de paquetes de recursos. Normalmente es una combinación de
+# código de idioma (ISO 639) y código de país (ISO 3166).
+resource_pack_lang_code: 'es_es'
+
+# Este mensaje se envía en el mundo cuando un jugador entra en la cama.
+# %1$s: nombre del jugador
+# %2$s: porcentaje de jugadores durmiendo
+# %3$s: cantidad actual de jugadores durmiendo en el mundo relevante
+# %4$s: cantidad requerida de jugadores durmiendo para avanzar el tiempo
+# %5$s: nombre del mundo
+player_bed_enter: "%1$s está durmiendo %3$s/%4$s"
+
+# Este mensaje se envía en el mundo cuando un jugador sale de la cama temprano,
+# antes de que se avance el tiempo.
+# %1$s: nombre del jugador
+# %2$s: porcentaje de jugadores durmiendo restantes
+# %3$s: cantidad actual de jugadores durmiendo en el mundo relevante
+# %4$s: cantidad requerida de jugadores durmiendo para avanzar el tiempo
+# %5$s: nombre del mundo
+player_bed_leave: "%1$s se siente descansado %3$s/%4$s"
+
+dynmap:
+  # La etiqueta para la capa de Dynmap
+  layer_label: "Camas"
+  # La etiqueta para los marcadores de Dynmap
+  # %1$s: nombre del jugador
+  marker_label: "%1$s"
+
+blue_map:
+  # La etiqueta para el conjunto de marcadores de BlueMap
+  layer_label: "Camas"
+  # La etiqueta para los marcadores de cama de BlueMap. Admite HTML. Los argumentos se escaparán correctamente.
+  # %1$s: nombre del jugador
+  marker_label: "<span style=\"color: white\">🏠 %1$s</span>"
+
