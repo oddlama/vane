@@ -1,0 +1,79 @@
+# vim: set tabstop=2 softtabstop=0 expandtab shiftwidth=2:
+#
+# >> Ver lang-en.yml para descripciones de variables <<
+#
+# +---------------------------------------+
+# | PRECAUCIÓN: ¡NO cambies este archivo! |
+# +---------------------------------------+
+#
+# ¡Se sobrescribirá silenciosamente con actualizaciones! Si quieres
+# personalizar las cadenas tú mismo, copia este archivo a lang-custom.yml
+# y establece el idioma en config.yml como "lang: 'custom'"
+
+# ¡NO CAMBIAR! La versión de este archivo de idioma. Se utiliza para determinar
+# si el archivo debe actualizarse.
+version: 1
+# El código de idioma correspondiente utilizado en paquetes de recursos. Utilizado para
+# generación de paquetes de recursos. Normalmente, esto es una combinación del
+# código de idioma (ISO 639) y el código de país (ISO 3166).
+resource_pack_lang_code: 'es_es'
+
+command_permission:
+  # Este mensaje se utiliza para representar la lista vacía
+  list_empty: "§b∅"
+  # Este mensaje se envía como primera línea de encabezado para la salida de la lista de grupos
+  list_header_groups: "Listando todos los grupos registrados:"
+  # Este mensaje se envía como primera línea de encabezado para la salida de la lista de permisos
+  list_header_permissions: "Listando todos los permisos registrados:\nFormato: <permiso> (<predeterminado>): <descripción>"
+  # Este mensaje se envía como primera línea de encabezado para la salida de la lista de grupos de jugadores
+  # %1$s: Nombre del jugador
+  list_header_player_groups: "Listando todos los grupos para %1$s:"
+  # Este mensaje se envía como primera línea de encabezado para la salida de la lista de permisos de jugadores
+  # %1$s: Nombre del jugador
+  list_header_player_permissions: "Listando todos los permisos para %1$s:\nFormato: <permiso> (<predeterminado>): <descripción>"
+  # Este mensaje se envía como primera línea de encabezado para la salida de la lista de permisos de grupo
+  # %1$s: Nombre del grupo
+  list_header_group_permissions: "Listando todos los permisos para %1$s:\nFormato: <permiso> (<predeterminado>): <descripción>"
+  # Este mensaje se envía cuando se consultan permisos en un jugador sin conexión
+  list_player_offline: "§6El jugador solicitado está desconectado. Solo se mostrarán los permisos configurados. Es posible que falten permisos de otros complementos de administración de permisos."
+  # Este mensaje se envía para cada grupo cuando se solicita una lista de todos los grupos.
+  # %1$s: Nombre del grupo
+  list_group: "§7 - %1$s"
+  # Este mensaje se envía para cada permiso cuando se solicita una lista de todos los permisos.
+  # %1$s: Nombre del permiso
+  # %2$s: Valor del permiso
+  # %3$s: Descripción del permiso
+  list_permission: "§7 - %1$s§7 (%2$s§7): %3$s"
+  # Este mensaje se envía cuando se agrega un grupo a un jugador.
+  # %1$s: Nombre del jugador
+  # %2$s: Nombre del grupo
+  group_assigned: "%1$s fue asignado a %2$s"
+  # Este mensaje se envía cuando se elimina un grupo de un jugador.
+  # %1$s: Nombre del jugador
+  # %2$s: Nombre del grupo
+  group_removed: "%1$s fue eliminado de %2$s"
+  # Este mensaje se envía cuando se agrega un grupo a un jugador, pero ya está asignado.
+  # %1$s: Nombre del jugador
+  # %2$s: Nombre del grupo
+  group_already_assigned: "§6Grupo ya asignado"
+  # Este mensaje se envía cuando se elimina un grupo de un jugador, pero no estaba asignado.
+  # %1$s: Nombre del jugador
+  # %2$s: Nombre del grupo
+  group_not_assigned: "§6Grupo no asignado"
+  usage: "%1$s §7<§alist§7|§aadd§7|§aremove§7>"
+  description: "Administra los permisos de los jugadores."
+  help: "§alist §7<§agroups§7|§apermisos§7>:§r Lista todos los permisos disponibles o grupos de permisos.\n\
+    §aadd §bplayer §bgroup§7:§r Añade al jugador al grupo de permisos indicado.\n\
+    §aremove §bplayer §bgroup§7:§r Elimina al jugador del grupo de permisos indicado."
+
+command_vouch:
+  # Este mensaje se envía cuando un jugador avala con éxito a otro jugador.
+  # %1$s: Nombre del jugador
+  vouched: "§a¡Has avalado a %1$s§a!"
+  # Este mensaje se envía cuando un jugador intenta avalar a otro jugador por el que ya ha avalado
+  # %1$s: Nombre del jugador
+  already_vouched: "§6¡Ya has avalado a %1$s§6!"
+  usage: "%1$s §bjugador"
+  description: "Avala a un jugador."
+  help: "Avala a un jugador para que tenga permiso para jugar en el servidor."
+

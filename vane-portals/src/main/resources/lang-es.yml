@@ -1,0 +1,412 @@
+# vim: set tabstop:2 softtabstop:0 expandtab shiftwidth:2:
+#
+# >> See lang-en.yml for variable descriptions <<
+#
+# +---------------------------------------+
+# | ¡PRECAUCIÓN: NO cambies este archivo! |
+# +---------------------------------------+
+#
+# ¡Se sobrescribirá silenciosamente con actualizaciones! Si deseas
+# personalizar las cadenas tú mismo, copia este archivo a lang-custom.yml
+# y establece el idioma en config.yml en "lang: 'custom'"
+
+# ¡NO CAMBIAR! La versión de este archivo de idioma. Se utiliza para determinar
+# si el archivo necesita actualizarse.
+version: 5
+# El código de idioma correspondiente utilizado en paquetes de recursos. Utilizado para
+# generación de paquetes de recursos. Por lo general, es una combinación de
+# el código de idioma (ISO 639) y el código de país (ISO 3166).
+resource_pack_lang_code: 'es_es'
+
+# Este mensaje se envía cuando se ha seleccionado una nueva consola de portal
+# y el jugador ahora puede seleccionar un bloque límite para construir un portal.
+select_boundary_now: "§6Haz clic derecho en el límite del portal ahora"
+# Este mensaje se envía cuando el bloque de consola seleccionado ya no es del tipo correcto.
+# Esto puede suceder cuando un jugador reemplaza el bloque de consola
+# mientras está seleccionado como consola pendiente.
+console_invalid_type: "§c¡El bloque de consola tiene un tipo de bloque no válido!"
+# Este mensaje se envía cuando la consola seleccionada está en otro mundo que el límite del portal.
+console_different_world: "§cLa consola debe estar en el mismo mundo que el portal"
+# Este mensaje se envía cuando la consola de portal seleccionada está demasiado lejos de
+# el límite del portal.
+console_too_far_away: "§cLa consola está demasiado lejos del portal"
+# Este mensaje se envía cuando se ha vinculado correctamente una consola.
+console_linked: "§aConsola vinculada"
+
+# Este mensaje se envía cuando no se encontró ningún límite en la ubicación dada.
+no_boundary_found: "§c¡No se encontró límite del portal!"
+# Este mensaje se envía cuando el límite seleccionado no contiene un bloque de origen
+no_origin: "§c¡El portal no tiene un bloque de origen!"
+# Este mensaje se envía cuando el límite seleccionado tiene múltiples bloques de origen
+multiple_origins: "§c¡El portal no puede tener múltiples bloques de origen!"
+# Este mensaje se envía cuando el límite vertical del portal seleccionado no tiene área de portal sobre el bloque de origen.
+no_portal_block_above_origin: "§c¡El bloque de origen necesita área de portal encima!"
+# Este mensaje se envía cuando el límite vertical del portal seleccionado no tiene suficiente área de portal sobre el bloque de origen.
+not_enough_portal_blocks_above_origin: "§c¡El bloque de origen necesita al menos 3 bloques de área de portal encima!"
+# Este mensaje se envía cuando el límite del portal seleccionado es demasiado grande en una dirección dada.
+# %1$s: La dirección (x, y, z)
+too_large: "§cEl portal es demasiado grande en la dirección %1$s§c"
+# Este mensaje se envía cuando el límite del portal seleccionado es demasiado pequeño en una dirección determinada.
+# %1$s: La dirección (x, y, z)
+too_small_spawn: "§cEl área de generación es demasiado pequeña en la dirección %1$s"
+# Este mensaje se envía cuando el límite del portal seleccionado contiene demasiados bloques de área de portal.
+# %1$s: Cantidad actual de bloques
+# %2$s: Cantidad máxima permitida de bloques
+too_many_portal_area_blocks: "§cEl área del portal es demasiado grande. %1$s§6/%2$s§c bloques"
+# Este mensaje se envía cuando se selecciona un límite del portal pero
+# una parte del área está obstruida.
+portal_area_obstructed: "§c¡El área del portal está obstruida!"
+# Este mensaje se envía cuando el límite seleccionado interseca con un portal existente.
+intersects_existing_portal: "§cEl portal interseca con otro portal."
+
+# Este mensaje se envía cuando un jugador no tiene permiso para construir un portal en el área.
+build_restricted: "§cNo tienes permiso para construir un portal aquí."
+# Este mensaje se envía cuando un jugador no tiene permiso para enlazar una consola a un portal.
+link_restricted: "§cNo tienes permiso para enlazar una consola a este portal."
+
+# Este mensaje se envía cuando se activa un portal, pero el destino ya está conectado a otro portal.
+target_already_connected: "§6El portal de destino ya está conectado a otro portal."
+# Este mensaje se envía cuando se activa un portal, pero el jugador no tiene permiso para usarlo.
+source_use_restricted: "§cNo tienes permiso para usar este portal."
+# Este mensaje se envía cuando se activa un portal, pero el jugador no tiene permiso para usar el portal de destino.
+target_use_restricted: "§cNo tienes permiso para usar el portal de destino."
+
+# Esto se muestra en un ítem flotante sobre todas las consolas de portal de portales activados para indicar el portal conectado.
+# CONSEJO: Los §r finales son importantes, de lo contrario, la etiqueta tendrá espacio vacío a la derecha
+# %1$s: Nombre del portal de destino
+console_display_active: "§6§l>§r %1$s §6§l<§r"
+# Esto se muestra en un ítem flotante sobre todas las consolas de portal de portales inactivos para indicar el portal de destino seleccionado.
+# CONSEJO: Los §r finales son importantes, de lo contrario, la etiqueta tendrá espacio vacío a la derecha
+# %1$s: Nombre del portal de destino
+console_display_inactive: "§8§l>§r %1$s §8§l<§r"
+# Esto es la sustitución de nombre utilizada para portales sin un portal de destino seleccionado.
+console_no_target: "§k?"
+
+# Este mensaje se envía cuando un jugador intenta desvincular una consola para la cual no tiene permiso.
+unlink_restricted: "§cNo tienes permiso para desvincular una consola de este portal."
+# Este mensaje se envía cuando un jugador intenta destruir una consola para la cual no tiene permiso.
+destroy_restricted: "§cNo tienes permiso para destruir este portal."
+# Este mensaje se envía cuando un jugador intenta cambiar una configuración de portal para la cual no tiene permiso.
+settings_restricted: "§cNo tienes permiso para cambiar la configuración de este portal."
+# Este mensaje se envía cuando un jugador intenta cambiar la selección de destino de un portal para el cual no tiene permiso.
+select_target_restricted: "§cNo tienes permiso para seleccionar un destino para este portal."
+
+dynmap:
+  # La etiqueta para la capa de Dynmap
+  layer_label: "Portales"
+  # La etiqueta para los marcadores de Dynmap
+  # %1$s: Nombre del portal
+  marker_label: "%1$s"
+
+blue_map:
+  # La etiqueta para el conjunto de marcadores de BlueMap
+  layer_label: "Portales"
+  # La etiqueta para los marcadores de portal de BlueMap. Admite HTML. Los argumentos se escaparán correctamente.
+  # %1$s: Nombre del portal
+  marker_label: "<span style=\"color: white\">🌌 %1$s</span>"
+
+menus:
+  # Configuraciones para el menú de nombramiento del portal.
+  enter_name:
+    # El título para el menú de nombramiento.
+    title: "§8§lIngresa el nombre del portal"
+
+  # Configuraciones para el menú de configuraciones del portal.
+  settings:
+    # El título para el menú de configuraciones.
+    # %1$s: Nombre del portal
+    title: "§8§lConfiguraciones: %1$s"
+    # El título para el menú de selección de ícono.
+    select_icon_title: "§8§lSeleccionar ícono"
+
+    # Este ítem se utiliza para cambiar el nombre del portal.
+    rename:
+      name: "§b§lRenombrar"
+      lore: []
+    # Este ítem se utiliza para seleccionar el ícono del portal.
+    select_icon:
+      name: "§b§lSeleccionar ícono"
+      lore: []
+    # Este ítem se utiliza para cambiar el estilo del portal.
+    select_style:
+      name: "§b§lSeleccionar estilo"
+      lore: []
+    # Este ítem se utiliza para cambiar e indicar el bloqueo de orientación de salida activado.
+    exit_orientation_lock_on:
+      name: "§b§lAlternar bloqueo de orientación de salida"
+      lore: ["", "§bActual: §e§lBloqueado (siempre hacia adelante)§r"]
+    # Este ítem se utiliza para cambiar e indicar el bloqueo de orientación de salida desactivado.
+    exit_orientation_lock_off:
+      name: "§b§lAlternar bloqueo de orientación de salida"
+      lore: ["", "§bActual: §a§lDesbloqueado (salida en el mismo lado que la entrada)§r"]
+
+    # Este ítem se utiliza para alternar la visibilidad e indicar visibilidad pública.
+    visibility_public:
+      name: "§b§lAlternar Visibilidad"
+      lore: ["", "§bActual: §a§lPública§r"]
+
+    # Este ítem se utiliza para alternar la visibilidad e indicar visibilidad de grupo.
+    visibility_group:
+      name: "§b§lAlternar Visibilidad"
+      lore: ["", "§bActual: §e§lGrupo de región (miembros)§r"]
+
+    # Este ítem se utiliza para alternar la visibilidad e indicar visibilidad de grupo interna.
+    visibility_group_internal:
+      name: "§b§lAlternar Visibilidad"
+      lore: ["", "§bActual: §e§lGrupo de región (solo visible internamente)§r"]
+
+    # Este ítem se utiliza para alternar la visibilidad e indicar visibilidad privada.
+    visibility_private:
+      name: "§b§lAlternar Visibilidad"
+      lore: ["", "§bActual: §c§lPrivada§r"]
+
+    # Este ítem se utiliza para cambiar e indicar el bloqueo de destino activado.
+    target_lock_on:
+      name: "§b§lAlternar Bloqueo de Destino"
+      lore: ["", "§bActual: §c§lBloqueado§r"]
+
+    # Este ítem se utiliza para cambiar e indicar el bloqueo de destino desactivado.
+    target_lock_off:
+      name: "§b§lAlternar Bloqueo de Destino"
+      lore: ["", "§bActual: §a§lDesbloqueado§r"]
+
+    # Este ítem se utiliza para volver al menú anterior.
+    back:
+      name: "§6↩ §lVolver"
+      lore: []
+
+    # Configuraciones para el menú de estilo del portal.
+  style:
+    # El título para el menú de estilo.
+    # %1$s: Nombre del portal
+    title: "§8§lEstilo para: %1$s"
+    # El título para el selector de bloque para el bloque de consola activo.
+    select_block_console_active_title:     "Seleccionar bloque de consola activo."
+    # El título para el selector de bloque para el bloque de origen activo.
+    select_block_origin_active_title:      "Seleccionar bloque de origen activo."
+    # El título para el selector de bloque para el bloque de área de portal activo.
+    select_block_portal_active_title:      "Seleccionar bloque de área de portal activo."
+    # El título para el selector de bloque para el bloque de variante de límite activo 1.
+    select_block_boundardy_1_active_title:   "Seleccionar bloque de variante de límite activo 1."
+    # El título para el selector de bloque para el bloque de variante de límite activo 2.
+    select_block_boundardy_2_active_title:   "Seleccionar bloque de variante de límite activo 2."
+    # El título para el selector de bloque para el bloque de variante de límite activo 3.
+    select_block_boundardy_3_active_title:   "Seleccionar bloque de variante de límite activo 3."
+    # El título para el selector de bloque para el bloque de variante de límite activo 4.
+    select_block_boundardy_4_active_title:   "Seleccionar bloque de variante de límite activo 4."
+    # El título para el selector de bloque para el bloque de variante de límite activo 5.
+    select_block_boundardy_5_active_title:   "Seleccionar bloque de variante de límite activo 5."
+    # El título para el selector de bloque para el bloque de consola inactivo.
+    select_block_console_inactive_title:   "Seleccionar bloque de consola inactivo."
+    # El título para el selector de bloque para el bloque de origen inactivo.
+    select_block_origin_inactive_title:    "Seleccionar bloque de origen inactivo."
+    # El título para el selector de bloque para el bloque de área de portal inactivo.
+    select_block_portal_inactive_title:    "Seleccionar bloque de área de portal inactivo."
+    # El título para el selector de bloque para el bloque de variante de límite inactivo 1.
+    select_block_boundardy_1_inactive_title: "Seleccionar bloque de variante de límite inactivo 1."
+    # El título para el selector de bloque para el bloque de variante de límite inactivo 2.
+    select_block_boundardy_2_inactive_title: "Seleccionar bloque de variante de límite inactivo 2."
+    # El título para el selector de bloque para el bloque de variante de límite inactivo 3.
+    select_block_boundardy_3_inactive_title: "Seleccionar bloque de variante de límite inactivo 3."
+    # El título para el selector de bloque para el bloque de variante de límite inactivo 4.
+    select_block_boundardy_4_inactive_title: "Seleccionar bloque de variante de límite inactivo 4."
+    # El título para el selector de bloque para el bloque de variante de límite inactivo 5.
+    select_block_boundardy_5_inactive_title: "Seleccionar bloque de variante de límite inactivo 5."
+
+    # El ítem utilizado para representar el bloque de consola activo seleccionado.
+    # %1$s: Material de construcción
+    block_console_active:
+      name: "§b§lConsola §a(activo)"
+      lore: []
+
+    # El ítem utilizado para representar el bloque de origen activo seleccionado.
+    # %1$s: Material de construcción
+    block_origin_active:
+      name: "§b§lOrigen §a(activo)"
+      lore: []
+
+    # El ítem utilizado para representar el área de portal activa seleccionada.
+    # %1$s: Material de construcción
+    block_portal_active:
+      name: "§b§lÁrea del portal §a(activo)"
+      lore: []
+
+    # El ítem utilizado para representar el bloque de límite activo de variante 1 seleccionado.
+    # %1$s: Material de construcción
+    block_boundardy_1_active:
+      name: "§b§lLímite §a(activo)"
+      lore: ["", "§aVariante 1", "§7Material de construcción: %1$s"]
+
+    # El ítem utilizado para representar el bloque de límite activo de variante 2 seleccionado.
+    # %1$s: Material de construcción
+    block_boundardy_2_active:
+      name: "§b§lLímite §a(activo)"
+      lore: ["", "§aVariante 2", "§7Material de construcción: %1$s"]
+
+    # El ítem utilizado para representar el bloque de límite activo de variante 3 seleccionado.
+    # %1$s: Material de construcción
+    block_boundardy_3_active:
+      name: "§b§lLímite §a(activo)"
+      lore: ["", "§aVariante 3", "§7Material de construcción: %1$s"]
+
+    # El ítem utilizado para representar el bloque de límite activo de variante 4 seleccionado.
+    # %1$s: Material de construcción
+    block_boundardy_4_active:
+      name: "§b§lLímite §a(activo)"
+      lore: ["", "§aVariante 4", "§7Material de construcción: %1$s"]
+
+    # El ítem utilizado para representar el bloque de límite activo de variante 5 seleccionado.
+    # %1$s: Material de construcción
+    block_boundardy_5_active:
+      name: "§b§lLímite §a(activo)"
+      lore: ["", "§aVariante 5", "§7Material de construcción: %1$s"]
+
+    # El ítem utilizado para representar el bloque de consola inactivo seleccionado.
+    # %1$s: Material de construcción
+    block_console_inactive:
+      name: "§b§lConsola §e(inactivo)"
+      lore: []
+
+    # El ítem utilizado para representar el bloque de origen inactivo seleccionado.
+    # %1$s: Material de construcción
+    block_origin_inactive:
+      name: "§b§lOrigen §e(inactivo)"
+      lore: []
+
+    # El ítem utilizado para representar el área de portal inactiva seleccionada.
+    # %1$s: Material de construcción
+    block_portal_inactive:
+      name: "§b§lÁrea del portal §e(inactivo)"
+      lore: []
+
+    # El ítem utilizado para representar el bloque de límite inactivo de variante 1 seleccionado.
+    # %1$s: Material de construcción
+    block_boundardy_1_inactive:
+      name: "§b§lLímite §e(inactivo)"
+      lore: ["", "§aVariante 1", "§7Material de construcción: %1$s"]
+    # El ítem utilizado para representar el bloque de límite inactivo de la variante 2 seleccionado.
+    # %1$s: Material de construcción
+    block_boundardy_2_inactive:
+      name: "§b§lLímite §e(inactivo)"
+      lore: ["", "§aVariante 2", "§7Material de construcción: %1$s"]
+    # El ítem utilizado para representar el bloque de límite inactivo de la variante 3 seleccionado.
+    # %1$s: Material de construcción
+    block_boundardy_3_inactive:
+      name: "§b§lLímite §e(inactivo)"
+      lore: ["", "§aVariante 3", "§7Material de construcción: %1$s"]
+    # El ítem utilizado para representar el bloque de límite inactivo de la variante 4 seleccionado.
+    # %1$s: Material de construcción
+    block_boundardy_4_inactive:
+      name: "§b§lLímite §e(inactivo)"
+      lore: ["", "§aVariante 4", "§7Material de construcción: %1$s"]
+    # El ítem utilizado para representar el bloque de límite inactivo de la variante 5 seleccionado.
+    # %1$s: Material de construcción
+    block_boundardy_5_inactive:
+      name: "§b§lLímite §e(inactivo)"
+      lore: ["", "§aVariante 5", "§7Material de construcción: %1$s"]
+
+    # El ítem utilizado para aplicar el estilo al portal.
+    accept:
+      name: "§a§lAplicar Estilo"
+      lore: []
+
+    # El ítem utilizado para restablecer todos los cambios realizados en este menú.
+    reset:
+      name: "§6§lRestablecer Cambios"
+      lore: []
+
+    # El título para el selector de estilos predefinidos.
+    select_style_title: "§8§lSeleccionar Estilo"
+    # El título para el filtro del selector de estilos predefinidos.
+    filter_styles_title: "§8§lFiltrar Estilos"
+    # El ítem utilizado para abrir el selector de estilos para estilos predefinidos.
+    select_defined:
+      name: "§b§lSeleccionar Estilo Definido"
+      lore: []
+    # El ítem utilizado para representar un estilo predefinido.
+    # %1$s: Nombre del estilo
+    select_style:
+      name: "%1$s"
+      lore: []
+
+    # El ítem utilizado para descartar cualquier cambio y volver al menú anterior.
+    cancel:
+      name: "§6↩ §lDescartar Cambios"
+      lore: []
+
+  # Configuración para el menú de consola del portal.
+  console:
+    # El título para el menú de consola.
+    # %1$s: Nombre del portal
+    title: "§8§lPortal: %1$s"
+
+    # El ítem utilizado para abrir la configuración del portal.
+    settings:
+      name: "§b§lConfiguración"
+      lore: []
+
+    # El ítem utilizado para abrir el selector de destino del portal.
+    # %1$s: El destino actualmente seleccionado
+    select_target:
+      name: "§d§lSeleccionar Destino"
+      lore:
+        - ""
+        - "§7Actual: %1$s"
+    # El ítem utilizado para mostrar el destino actual cuando el destino está bloqueado.
+    # %1$s: El destino actualmente seleccionado
+    select_target_locked:
+      name: "§d§lSeleccionar Destino"
+      lore:
+        - ""
+        - "§7Actual: %1$s"
+        - "§8¡La selección de destino está §6§lBLOQUEADA§r§8!"
+   
+
+    select_target_title: "§8§lSeleccionar Portal de Destino"
+    filter_portals_title: "§8§lFiltrar Portales"
+    # El ítem utilizado para representar un portal de destino.
+    # %1$s: Nombre del portal
+    # %2$s: Distancia del portal
+    # %3$s: Mundo del portal
+    # %4$s: Visibilidad del portal (definido a continuación, público, privado, ...)
+    select_target_portal:
+      name: "%1$s"
+      lore:
+        - ""
+        - "§7Distancia: %2$s§6m"
+        - "§7Mundo: %3$s"
+        - "§7%4$s"
+    select_target_portal_visibility_public: "§aPúblico"
+    select_target_portal_visibility_group: "§eGrupo de Región (miembros)"
+    select_target_portal_visibility_group_internal: "§eGrupo de Región (solo visible internamente)"
+    select_target_portal_visibility_private: "§cPrivado"
+    
+    # El ítem utilizado para desvincular la consola actual.
+    unlink_console:
+      name: "§c§lDesvincular Consola"
+      lore: []
+    # El título para el diálogo de confirmación de desvinculación.
+    unlink_console_confirm_title: "§c§l¿Desvincular consola?"
+    # El ítem para aceptar la desvinculación.
+    unlink_console_confirm_accept:
+      name: "§c§lDESVINCULAR CONSOLA"
+      lore: []
+    # El ítem para cancelar la desvinculación.
+    unlink_console_confirm_cancel:
+      name: "§a§lCancelar"
+      lore: []
+    
+    # El ítem utilizado para destruir el portal.
+    destroy_portal:
+      name: "§c§lDestruir Portal"
+      lore: []
+    # El título para el diálogo de confirmación de destrucción del portal.
+    destroy_portal_confirm_title: "§c§l¿Destruir portal?"
+    # El ítem para aceptar la destrucción.
+    destroy_portal_confirm_accept:
+      name: "§c§lDESTRUIR PORTAL"
+      lore: []
+    # El ítem para cancelar la destrucción.
+    destroy_portal_confirm_cancel:
+      name: "§a§lCancelar"
+      lore: []

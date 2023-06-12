@@ -1,0 +1,139 @@
+# vim: set tabstop=2 softtabstop=0 expandtab shiftwidth=2:
+#
+# >> Consulta lang-en.yml para obtener descripciones de variables <<
+#
+# +---------------------------------------+
+# | ¡PRECAUCIÓN: No cambies este archivo! |
+# +---------------------------------------+
+#
+# ¡Se sobrescribirá silenciosamente con actualizaciones! Si deseas
+# personalizar las cadenas tú mismo, copia este archivo a lang-custom.yml
+# y establece el idioma en config.yml como "lang: 'custom'"
+
+# ¡NO CAMBIAR! La versión de este archivo de idioma. Se utiliza para determinar
+# si el archivo necesita actualizarse.
+version: 4
+# El código de idioma correspondiente utilizado en paquetes de recursos. Se utiliza para
+# la generación de paquetes de recursos. Típicamente, esto es una combinación del código de
+# idioma (ISO 639) y el código de país (ISO 3166).
+resource_pack_lang_code: 'es_es'
+
+command_heads:
+  usage: "%1$s"
+  description: "Obtiene cabezas de la biblioteca de cabezas."
+  help: "Ejecuta para abrir la biblioteca de cabezas."
+
+command_finditem:
+  usage: "%1$s"
+  description: "Busca el material dado en contenedores y entidades cercanas."
+  help: "Busca el material dado en contenedores y entidades cercanas."
+
+command_setspawn:
+  usage: "%1$s"
+  description: "Establece la ubicación global de aparición en tu posición actual."
+  help: "Establece la ubicación global de aparición en tu posición actual."
+
+storage:
+  open_stacked_item: "Debes desagrupar estos objetos para abrirlos."
+  item_pouch:
+    # El nombre visual de esta variante de objeto.
+    name: "Bolsa"
+  item_backpack:
+    # El nombre visual de esta variante de objeto.
+    name: "Mochila"
+
+xp_bottles:
+  item_small_xp_bottle:
+    # El nombre visual de esta variante de objeto.
+    name: "Botella  de experiencia pequeña"
+  item_medium_xp_bottle:
+    # El nombre visual de esta variante de objeto.
+    name: "Botella  de experiencia mediana"
+  item_large_xp_bottle:
+    # El nombre visual de esta variante de objeto.
+    name: "Botella  de experiencia grande"
+
+item_empty_xp_bottle:
+  # El nombre visual de esta variante de objeto.
+  name: "Botella de experiencia vacía"
+
+item_north_compass:
+  # El nombre visual de esta variante de objeto.
+  name: "Brújula del norte"
+
+item_reinforced_elytra:
+  # El nombre visual de esta variante de objeto.
+  name: "Elytra de netherita"
+
+item_file:
+  # El nombre visual de esta variante de objeto.
+  name: "Lima"
+
+item_slime_bucket:
+  # El nombre visual de esta variante de objeto.
+  name: "Slime en una cubeta"
+
+item_papyrus_scroll:
+  # El nombre visual de esta variante de objeto.
+  name: "Pergamino de papiro"
+
+item_trowel:
+  # El nombre visual de esta variante de objeto.
+  name: "Paleta"
+  # La descripción de cada paleta
+  # %1$s: La fuente actual de alimentación
+  lore:
+    - "§7Haz clic derecho en este objeto en tu inventario para cambiar la fuente de alimentación."
+    - "§7Fuente de alimentación actual: %1$s"
+
+sickles:
+  item_wooden_sickle:
+    # El nombre visual de esta variante de objeto.
+    name: "Hoz de madera"
+  item_stone_sickle:
+    # El nombre visual de esta variante de objeto.
+    name: "Hoz de piedra"
+  item_iron_sickle:
+    # El nombre visual de esta variante de objeto.
+    name: "Hoz de hierro"
+  item_golden_sickle:
+    # El nombre visual de esta variante de objeto.
+    name: "Hoz de oro"
+  item_diamond_sickle:
+    # El nombre visual de esta variante de objeto.
+    name: "Hoz de diamante"
+  item_netherite_sickle:
+    # El nombre visual de esta variante de objeto.
+    name: "Hoz de netherita"
+
+scrolls:
+  item_home_scroll:
+    # El nombre visual de esta variante de objeto.
+    name: "Pergamino de portal (Hogar)"
+  item_unstable_scroll:
+    # El nombre visual de esta variante de objeto.
+    name: "Pergamino de portal (Inestable)"
+    # Se muestra cuando se utiliza pero no se utilizó previamente un pergamino.
+    teleport_no_previous_teleport: "§cNunca has usado otro pergamino antes."
+  item_spawn_scroll:
+    # El nombre visual de esta variante de objeto.
+    name: "Pergamino de portal (Spawn)"
+  item_lodestone_scroll:
+    # El nombre visual de esta variante de objeto.
+    name: "Pergamino de portal (Magnetita)"
+    # Se muestra cuando se utiliza pero no se ha enlazado ninguna magnetita.
+    teleport_no_bound_lodestone: "§bPrimero agachate y haz clic derecho en una magnetita para (re)enlazar este pergamino."
+    # Se muestra cuando se utiliza pero la magnetita enlazada ya no existe.
+    teleport_missing_lodestone: "§cEl pergamino no parece hacer nada... &6Temes que la magnetita enlazada pueda faltar."
+    # La descripción de un pergamino enlazado
+    # %1$s: Nombre del mundo de la magnetita enlazada
+    # %2$s: Posición X de la magnetita enlazada
+    # %3$s: Posición Y de la magnetita enlazada
+    # %4$s: Posición Z de la magnetita enlazada
+    bound_lore: "§7Enlazado a (%2$s§7, %3$s§7, %4$s§7) en %1$s"
+  item_death_scroll:
+    # El nombre visual de esta variante de objeto.
+    name: "Pergamino de Portal (Muerte)"
+    # Se envía cuando se utiliza un pergamino de muerte pero el usuario no ha muerto recientemente o ya ha usado un pergamino de este tipo.
+    teleport_no_recent_death: "§cNo has muerto recientemente o ya has usado un Pergamino de Muerte."
+
