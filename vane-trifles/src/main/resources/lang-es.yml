@@ -45,13 +45,13 @@ storage:
 xp_bottles:
   item_small_xp_bottle:
     # El nombre visual de esta variante de objeto.
-    name: "Botella pequeña de experiencia"
+    name: "Botella  de experiencia pequeña"
   item_medium_xp_bottle:
     # El nombre visual de esta variante de objeto.
-    name: "Botella mediana de experiencia"
+    name: "Botella  de experiencia mediana"
   item_large_xp_bottle:
     # El nombre visual de esta variante de objeto.
-    name: "Botella grande de experiencia"
+    name: "Botella  de experiencia grande"
 
 item_empty_xp_bottle:
   # El nombre visual de esta variante de objeto.
