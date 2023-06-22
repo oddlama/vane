@@ -379,6 +379,7 @@ public class Portal {
 				// Disable beam
 				final var end_gateway = (EndGateway) portal_block.block().getState(false);
 				end_gateway.setAge(200l);
+				end_gateway.update(true, false);
 			}
 			if (portal_block.type() == PortalBlock.Type.CONSOLE) {
 				portals.update_console_item(this, portal_block.block());
