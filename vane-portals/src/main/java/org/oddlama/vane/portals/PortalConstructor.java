@@ -250,7 +250,7 @@ public class PortalConstructor extends Listener<Portals> {
 		// Call event
 		final var event = new PortalLinkConsoleEvent(player, console, blocks, check_only, existing_portal);
 		get_module().getServer().getPluginManager().callEvent(event);
-		if (event.isCancelled()) {
+		if (event.isCancelled() && !player.hasPermission(get_module().admin_permission)) {
 			lang_link_restricted.send(player);
 			return false;
 		}
