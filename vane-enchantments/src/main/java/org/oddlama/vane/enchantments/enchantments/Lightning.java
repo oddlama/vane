@@ -100,7 +100,7 @@ public class Lightning extends CustomEnchantment<Enchantments> {
         if(!(event.getDamager() instanceof Player)) return;
 
         //if not an attack with a weapon exit
-        if(event.getCause()==DamageCause.ENTITY_ATTACK) return;
+        if(event.getCause()!=DamageCause.ENTITY_ATTACK) return;
 
         Player damager = (Player) event.getDamager();
         final var damagee = event.getEntity();
