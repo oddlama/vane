@@ -48,8 +48,8 @@ command_gamemode:
   help: "设定玩家的游戏模式。"
 
 command_slimechunk:
-  slime_chunk_yes: "§a这是斯莱姆区块。"
-  slime_chunk_no: "§c这不是斯莱姆区块。"
+  slime_chunk_yes: "§a这是史莱姆区块。"
+  slime_chunk_no: "§c这不是史莱姆区块。"
   usage: "%1$s"
   description: "检查当前区块是否为史莱姆区块。"
   help: "检查当前区块是否为史莱姆区块。"
