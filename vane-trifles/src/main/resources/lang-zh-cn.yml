@@ -30,8 +30,8 @@ command_finditem:
 
 command_setspawn:
   usage: "%1$s"
-  description: "将全域重生点设定为您当前位置。"
-  help: "将全域重生点设定为您当前位置。"
+  description: "将全局重生点设定为您当前位置。"
+  help: "将全局重生点设定为您当前位置。"
 
 storage:
   open_stacked_item: "你需要将这些物品拆开才能打开它们。"
@@ -55,7 +55,7 @@ item_north_compass:
   name: "指北针"
 
 item_reinforced_elytra:
-  name: "狱髓鞘翅"
+  name: "下界合金鞘翅"
 
 item_file:
   name: "锉刀"
@@ -64,7 +64,7 @@ item_slime_bucket:
   name: "史莱姆桶"
 
 item_papyrus_scroll:
-  name: "纸莎草卷轴"
+  name: "莎草纸卷轴"
 
 item_trowel:
   name: "抹刀"
@@ -84,7 +84,7 @@ sickles:
   item_diamond_sickle:
     name: "钻石镰刀"
   item_netherite_sickle:
-    name: "狱髓镰刀"
+    name: "下界合金镰刀"
 
 scrolls:
   item_home_scroll:
@@ -100,5 +100,5 @@ scrolls:
     teleport_missing_lodestone: "§c卷轴似乎没有作用... &6你担心绑定的磁石可能已经不存在了。"
     bound_lore: "§7绑定到 %1$s 的 (%2$s§7, %3$s§7, %4$s§7)"
   item_death_scroll:
-    name: "传送卷轴（死亡）"
+    name: "传送卷轴（死亡点）"
     teleport_no_recent_death: "§c你最近没有死亡，或已经使用过死亡卷轴！"
