@@ -224,7 +224,7 @@ public class Trowel extends CustomItem<Trifles> {
 			}
 
 			// Place the item by calling NMS to get correct placing behavior
-			final var result = nms_item.useOn(action_context, InteractionHand.MAIN_HAND);
+			final var result = nms_item.useOn(action_context);
 
 			// Don't consume item in creative mode
 			if (player.getGameMode() == GameMode.CREATIVE) {
