@@ -1,0 +1,156 @@
+# vim: set tabstop=2 softtabstop=0 expandtab shiftwidth=2:
+#
+# >> See lang-en.yml for variable descriptions <<
+#
+# +-----------------------------------+
+# | CAUTION: Do NOT change this file! |
+# +-----------------------------------+
+#
+# It will be silently overwritten with updates! If you want
+# to customize strings yourself, copy this file to lang-custom.yml
+# and set the language in the config.yml to "lang: 'custom'"
+
+# DO NOT CHANGE! The version of this language file. Used to determine
+# if the file needs to be updated.
+version: 4
+# The corresponding language code used in resource packs. Used for
+# resource pack generation. Typically this is a combination of the
+# language code (ISO 639) and the country code (ISO 3166).
+resource_pack_lang_code: 'tr_tr'
+
+# This message is sent when a command requires a player but is executed
+# by a non-player.
+command_not_a_player: "§chata:§6 komut bir oyuncu tarafından yürütülmelidir!"
+# This message is sent when the command sender is missing the required
+# permission.
+command_permission_denied: "§chata:§6 izin reddedildi!"
+
+# This message is sent when an invalid time format is encountered.
+# %1$s: format error message
+invalid_time_format: "§chata:§6 geçersiz zaman: %1$s"
+
+# This message is sent when a block with a lootable is first attempted to be broken.
+break_loot_block_prevented: "§6Bu bloğun bir ganimet tablosu vardır ve bir süre sonra otomatik olarak yeniden doldurulacaktır. Bu bloğu gerçekten yok etmek istiyorsanız, 5 saniye bekleyin ve tekrar kırın."
+
+command_customitem:
+  usage: "%1$s §agive §7<§beşya§7>"
+  description: "Oyuncuya belirli bir özel öğe verir."
+  help: "§agive §7<§beşya§7>:§r Oyuncuya belirli bir özel öğe verir."
+
+command_enchant:
+  # This message is sent when an enchantment level is given that is too low for the chosen enchantment.
+  # %1$s: Given level
+  # %2$s: Minimum level
+  level_too_low: "§chata:§6 %1$s§6 seviyesi çok düşük, en az %2$s§6 olmalıdır"
+  # This message is sent when an enchantment level is given that is too high for the chosen enchantment.
+  # %1$s: Given level
+  # %2$s: Maximum level
+  level_too_high: "§chata:§6 %1$s§6 seviyesi çok yüksek, en fazla %2$s§6 olmalıdır"
+  # This message is sent when the selected enchantment cannot be applied to the item in hand.
+  # %1$s: Enchantment
+  # %2$s: Item in hand
+  invalid_enchantment: "§chata: %1$s§6, %2$s§6 öğesine uygulanamaz"
+  usage: "%1$s §bbüyü §7[§bseviye§7]"
+  description: "Elinizdeki eşyayı büyüler."
+  help: "Elinizdeki eşyayı büyüler."
+
+command_vane:
+  # This message is sent when a module has been successfully reloaded.
+  # %1$s: module
+  reload_success: "%1$s§7: §ayeniden yükleme başarılı"
+  # This message is sent when a module failed to reload.
+  # %1$s: module
+  reload_fail: "%1$s§7: §cyeniden yükleme başarısız oldu"
+  # This message is sent when the resource_pack has been successfully generated.
+  # %1$s: path to the resource pack file
+  resource_pack_generate_success: "§aKaynak paketi başarıyla oluşturuldu: %1$s"
+  # This message is sent when the resource_pack could not be generated.
+  resource_pack_generate_fail: "§cKaynak paketi oluşturulurken bir hata oluştu"
+  usage: "%1$s §7<§areload§7|§agenerate_resource_pack§7>"
+  description: "Vane eklentilerini yönetir."
+  help: "§areload §7[§bmodül§7]:§r Tümünü veya verilen Vane modülünü yeniden yükler.\n\
+    §agenerate_resource_pack§7:§r vane kaynak paketini oluşturur."
+
+resource_pack:
+  # This kick message is used when a mandatory resource pack was declined by a player.
+  declined: "Bu sunucuda oynamak için kaynak paketini kabul etmeniz gerekiyor.\n\
+    Bu Yerelleştirme ve dokular için gereklidir. Yanlışlıkla reddetmeniz durumunda,\n\
+    sunucu listenizdeki bu sunucunun girişini düzenleyerek bunu değiştirebilirsiniz."
+  # This kick message is used when a mandatory resource pack failed to download for  player.
+  download_failed: "§cKaynak paketi indirmeniz başarısız olmuş gibi görünüyor.§r\n\
+    §7(Görsel hataları önlemek için bağlantınız kesildi)\n\
+    \n\
+    §dLütfen tekrar deneyin."
+
+menus:
+  head_selector:
+    # The title for the head selection menu.
+    # %1$s: Total heads in library
+    title: "%1$s §8§lKafalar"
+    # The title for the filter menu.
+    filter_title: "§8§lKafa kütüphanesini filtrele"
+    # Represents a head in the library.
+    # %1$s: Head name
+    # %2$s: Head category
+    # %3$s: Head tags
+    select_head:
+      name: "%1$s"
+      lore:
+        - ""
+        - "§7Kategori: %2$s"
+        - "§7Etiketler: %3$s"
+
+  # Item selection menu.
+  item_selector:
+    # The item used to accept the selection.
+    accept:
+      name: "§a§lKabul etmek"
+      lore: ["§7Seçili olan öğeyi §bSeçersin§7."]
+
+    # The item used to cancel the selection.
+    cancel:
+      name: "§c§lİptal etmek"
+      lore: ["§7Öğe seçmeyi §6İptal edersin§7."]
+
+    # The item used to represent the currently selected item.
+    selected:
+      name: "§d§lSeçilen öğe"
+      lore:
+        - ""
+        - "Seçmek için envanterinizdeki herhangi bir öğeye tıklayın."
+        - ""
+        - "§7Değişiklikleri sıfırlamak için §bSol tıklayın§7."
+        - "§7Temizlemek için §bSağ tıklayın§7 (izin veriliyorsa)."
+
+  # Generic thing selection menu.
+  generic_selector:
+    # The item selecting the n'th page
+    # %1$s: Page number
+    page:
+      name: "§bSayfa %1$s"
+      lore: []
+
+    # The item showing the current page
+    # %1$s: Page number
+    # %2$s: Total amount of pages
+    # %3$s: Total amount of items (filtered)
+    # %4$s: Total amount of items (unfiltered)
+    current_page:
+      name: "§aMevcut sayfa %1$s §7/ %2$s"
+      lore:
+        - ""
+        - "§b#Filtrelenmiş eşyalar: %3$s"
+
+    # The item used to open the filter menu.
+    # Right clicking resets the filter.
+    filter:
+      name: "§d§lFiltre"
+      lore:
+        - ""
+        - "§7Filtre menüsünü açmak için §bSol tıklayın§7."
+        - "§7Filtreyi sıfırlamak için §bSağ tıklayın§7."
+
+    # The item used to cancel the selection.
+    cancel:
+      name: "§c§lİptal Etmek"
+      lore: ["§7seçimi §6İptal eder§7."]
