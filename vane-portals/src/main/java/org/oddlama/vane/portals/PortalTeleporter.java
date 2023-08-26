@@ -17,7 +17,7 @@ import org.bukkit.event.entity.EntityTeleportEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.util.Vector;
 import org.oddlama.vane.core.Listener;
-import org.oddlama.vane.core.event.EntityMoveEvent;
+import org.oddlama.vane.portals.event.EntityMoveEvent;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.portals.portal.Portal;
 import org.oddlama.vane.util.Nms;

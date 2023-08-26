@@ -1,6 +1,7 @@
-package org.oddlama.vane.core.misc;
+package org.oddlama.vane.portals;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.UUID;
 
@@ -10,12 +11,11 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.scheduler.BukkitTask;
-import org.oddlama.vane.core.Core;
-import org.oddlama.vane.core.event.EntityMoveEvent;
+import org.oddlama.vane.portals.event.EntityMoveEvent;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.ModuleComponent;
 
-public class EntityMoveProcessor extends ModuleComponent<Core> {
+public class EntityMoveProcessor extends ModuleComponent<Portals> {
 	// This is the queue of entity move events that need processing.
 	// It is a linked hash map, so we can update moved entity positions
 	// without changing iteration order. Processed entries will be removed from
@@ -35,7 +35,7 @@ public class EntityMoveProcessor extends ModuleComponent<Core> {
 	// We use 15ms threshold time, and 50ms would be 1 tick.
 	private static final long move_event_max_nanoseconds_per_tick = 15000000l;
 
-	public EntityMoveProcessor(Context<Core> context) {
+	public EntityMoveProcessor(Context<Portals> context) {
 		super(context);
 	}
 
@@ -71,10 +71,20 @@ public class EntityMoveProcessor extends ModuleComponent<Core> {
 		// Phase 1 - Movement detection
 		// --------------------------------------------
 
+		final var active_portal_worlds = new HashSet<UUID>();
+		for (final var portal : get_module().all_available_portals()) {
+			if (get_module().is_activated(portal)) {
+				active_portal_worlds.add(portal.spawn_world());
+			}
+		}
+
 		// Store current positions for each entity
-		for (final var world : get_module().getServer().getWorlds()) {
-			for (final var entity : world.getEntities()) {
-				move_event_current_positions.put(entity.getUniqueId(), Pair.of(entity, entity.getLocation()));
+		for (final var world_id : active_portal_worlds) {
+			final var world = get_module().getServer().getWorld(world_id);
+			if (world != null) {
+				for (final var entity : world.getEntities()) {
+					move_event_current_positions.put(entity.getUniqueId(), Pair.of(entity, entity.getLocation()));
+				}
 			}
 		}
 

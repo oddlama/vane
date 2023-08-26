@@ -1,4 +1,4 @@
-package org.oddlama.vane.core.event;
+package org.oddlama.vane.portals.event;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;

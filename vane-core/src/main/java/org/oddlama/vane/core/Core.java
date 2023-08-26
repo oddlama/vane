@@ -32,7 +32,6 @@ import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.menu.MenuManager;
 import org.oddlama.vane.core.misc.AuthMultiplexer;
 import org.oddlama.vane.core.misc.CommandHider;
-import org.oddlama.vane.core.misc.EntityMoveProcessor;
 import org.oddlama.vane.core.misc.HeadLibrary;
 import org.oddlama.vane.core.misc.LootChestProtector;
 import org.oddlama.vane.core.module.Module;
@@ -126,7 +125,6 @@ public class Core extends Module<Core> {
 		// Components
 		enchantment_manager = new EnchantmentManager(this);
 		new HeadLibrary(this);
-		new EntityMoveProcessor(this);
 		new AuthMultiplexer(this);
 		new LootChestProtector(this);
 		new VanillaFunctionalityInhibitor(this);
