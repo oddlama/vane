@@ -257,6 +257,7 @@ public class Portals extends Module<Portals> {
 		new PortalBlockProtector(this);
 		constructor = new PortalConstructor(this);
 		new PortalTeleporter(this);
+		new EntityMoveProcessor(this);
 		dynmap_layer = new PortalDynmapLayer(this);
 		blue_map_layer = new PortalBlueMapLayer(this);
 		plexmap_layer = new PortalPlexMapLayer(this);
