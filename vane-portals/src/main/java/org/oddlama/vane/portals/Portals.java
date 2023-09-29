@@ -281,6 +281,7 @@ public class Portals extends Module<Portals> {
 
 	@SuppressWarnings("unchecked")
 	private void register_entities() {
+		get_module().core.unfreeze_registries();
 		register_entity(
 			NamespacedKey.minecraft("item"),
 			namespace(),

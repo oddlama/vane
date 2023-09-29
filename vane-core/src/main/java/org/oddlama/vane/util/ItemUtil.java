@@ -267,7 +267,7 @@ public class ItemUtil {
 	}
 
 	public static ItemStack skull_with_texture(final String name, final String base64_texture) {
-		final var profile = Bukkit.createProfile(SKULL_OWNER);
+		final var profile = Bukkit.createProfileExact(SKULL_OWNER, "-");
 		profile.setProperty(new ProfileProperty("textures", base64_texture));
 
 		final var item = new ItemStack(Material.PLAYER_HEAD);

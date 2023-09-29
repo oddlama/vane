@@ -68,6 +68,7 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 		instances.put(getClass(), this);
 
 		// Register and create wrappers
+		get_module().core.unfreeze_registries();
 		native_wrapper = new NativeEnchantmentWrapper(this);
 		Nms.register_enchantment(key(), native_wrapper);
 
