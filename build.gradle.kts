@@ -1,11 +1,11 @@
 plugins {
 	`java-library`
 	id("io.papermc.paperweight.userdev") version "1.5.5"
-	id("xyz.jpenilla.run-paper") version "2.1.0" // Adds runServer and runMojangMappedServer tasks for testing
+	id("xyz.jpenilla.run-paper") version "2.2.0" // Adds runServer and runMojangMappedServer tasks for testing
 }
 
 dependencies {
-	paperDevBundle("1.20.1-R0.1-SNAPSHOT")
+	paperDevBundle("1.20.2-R0.1-SNAPSHOT")
 }
 
 java {
@@ -53,7 +53,7 @@ configure(subprojects.filter {
 	apply(plugin = "io.papermc.paperweight.userdev")
 
 	dependencies {
-		paperDevBundle("1.20.1-R0.1-SNAPSHOT")
+		paperDevBundle("1.20.2-R0.1-SNAPSHOT")
 	}
 
 	tasks {
