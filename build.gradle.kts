@@ -124,8 +124,6 @@ configure(subprojects.filter {
 	dependencies {
 		implementation(group = "us.dynmap", name = "dynmap-api", version = "3.2-SNAPSHOT")
 		implementation(group = "com.github.BlueMap-Minecraft", name = "BlueMapAPI", version = "v2.3.0")
-		implementation(rootProject.project(":vane-plexmap"))
-		compileOnly(group = "maven.modrinth", name = "pl3xmap", version = "1.19.2-310")
 	}
 }
 

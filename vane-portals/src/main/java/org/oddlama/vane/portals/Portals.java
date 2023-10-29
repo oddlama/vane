@@ -247,7 +247,6 @@ public class Portals extends Module<Portals> {
 	public PortalConstructor constructor;
 	public PortalDynmapLayer dynmap_layer;
 	public PortalBlueMapLayer blue_map_layer;
-	public PortalPlexMapLayer plexmap_layer;
 
 	public Portals() {
 		register_entities();
@@ -260,7 +259,6 @@ public class Portals extends Module<Portals> {
 		new EntityMoveProcessor(this);
 		dynmap_layer = new PortalDynmapLayer(this);
 		blue_map_layer = new PortalBlueMapLayer(this);
-		plexmap_layer = new PortalPlexMapLayer(this);
 
 		// Register admin permission
 		admin_permission =
@@ -920,13 +918,11 @@ public class Portals extends Module<Portals> {
 	public void update_marker(final Portal portal) {
 		dynmap_layer.update_marker(portal);
 		blue_map_layer.update_marker(portal);
-		plexmap_layer.update_marker(portal);
 	}
 
 	public void remove_marker(final UUID portal_id) {
 		dynmap_layer.remove_marker(portal_id);
 		blue_map_layer.remove_marker(portal_id);
-		plexmap_layer.remove_marker(portal_id);
 	}
 
 	@EventHandler
