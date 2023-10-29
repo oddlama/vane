@@ -641,7 +641,7 @@ public class Regions extends Module<Regions> {
 	public boolean may_administrate(final Player player, final RegionGroup group) {
 		return (
 			player.getUniqueId().equals(group.owner()) ||
-			group.get_role(player.getUniqueId()).get_setting(RoleSetting.ADMIN)
+			(group != null && group.get_role(player.getUniqueId()).get_setting(RoleSetting.ADMIN))
 		);
 	}
 
