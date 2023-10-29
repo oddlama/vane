@@ -12,6 +12,7 @@ import org.oddlama.vane.core.item.CustomItem;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.ModuleGroup;
 import org.oddlama.vane.enchantments.Enchantments;
+import org.oddlama.vane.util.StorageUtil;
 
 public class Tomes extends ModuleGroup<Enchantments> {
 	public Tomes(Context<Enchantments> context) {
@@ -55,7 +56,51 @@ public class Tomes extends ModuleGroup<Enchantments> {
 					.add(1.0 / 5, 0, 2, key().toString()),
 				new LootDefinition("ancientcity")
 					.in(LootTables.ANCIENT_CITY)
-					.add(1.0 / 20, 0, 2, key().toString()));
+					.add(1.0 / 20, 0, 2, key().toString()),
+				new LootDefinition("terralith_generic")
+					// terralith low
+					.in(StorageUtil.namespaced_key("terralith", "spire/common"))
+					.in(StorageUtil.namespaced_key("terralith", "village/desert/generic_low"))
+					.in(StorageUtil.namespaced_key("terralith", "village/fortified/generic_low"))
+					.in(StorageUtil.namespaced_key("terralith", "village/fortified/smith/novice"))
+					.in(StorageUtil.namespaced_key("terralith", "village/desert/smith/novice"))
+					.in(StorageUtil.namespaced_key("terralith", "village/fortified/tavern_downstairs"))
+					.in(StorageUtil.namespaced_key("terralith", "village/fortified/tavern_upstairs"))
+					// terralith normal
+					.in(StorageUtil.namespaced_key("terralith", "ruin/glacial/main_cs"))
+					.in(StorageUtil.namespaced_key("terralith", "spire/treasure"))
+					.in(StorageUtil.namespaced_key("terralith", "underground/chest"))
+					.in(StorageUtil.namespaced_key("terralith", "village/desert/archer"))
+					.in(StorageUtil.namespaced_key("terralith", "village/desert/attic"))
+					.in(StorageUtil.namespaced_key("terralith", "village/desert/butcher"))
+					.in(StorageUtil.namespaced_key("terralith", "village/desert/cartographer"))
+					.in(StorageUtil.namespaced_key("terralith", "village/desert/generic"))
+					.in(StorageUtil.namespaced_key("terralith", "village/desert/library"))
+					.in(StorageUtil.namespaced_key("terralith", "village/desert/mason"))
+					.in(StorageUtil.namespaced_key("terralith", "village/desert/smith"))
+					.in(StorageUtil.namespaced_key("terralith", "village/desert/treasure"))
+					.in(StorageUtil.namespaced_key("terralith", "village/fortified/archer"))
+					.in(StorageUtil.namespaced_key("terralith", "village/fortified/attic"))
+					.in(StorageUtil.namespaced_key("terralith", "village/fortified/butcher"))
+					.in(StorageUtil.namespaced_key("terralith", "village/fortified/cartographer"))
+					.in(StorageUtil.namespaced_key("terralith", "village/fortified/fisherman"))
+					.in(StorageUtil.namespaced_key("terralith", "village/fortified/food"))
+					.in(StorageUtil.namespaced_key("terralith", "village/fortified/generic"))
+					.in(StorageUtil.namespaced_key("terralith", "village/fortified/library"))
+					.in(StorageUtil.namespaced_key("terralith", "village/fortified/mason"))
+					.in(StorageUtil.namespaced_key("terralith", "village/fortified/smith"))
+					.in(StorageUtil.namespaced_key("terralith", "village/fortified/treasure"))
+					.in(StorageUtil.namespaced_key("terralith", "village/treasure/diamond"))
+					.in(StorageUtil.namespaced_key("terralith", "village/treasure/emerald"))
+					.in(StorageUtil.namespaced_key("terralith", "village/treasure/golem"))
+					.add(1.0 / 5, 0, 2, key().toString()),
+				new LootDefinition("terralith_rare")
+					// terralith rare
+					.in(StorageUtil.namespaced_key("terralith", "village/desert/smith/expert"))
+					.in(StorageUtil.namespaced_key("terralith", "village/fortified/smith/expert"))
+					.in(StorageUtil.namespaced_key("terralith", "spire/rare"))
+					.add(1.0 / 20, 0, 2, key().toString())
+				);
 		}
 	}
 
@@ -97,7 +142,44 @@ public class Tomes extends ModuleGroup<Enchantments> {
 				new LootDefinition("ancientcity")
 					.in(LootTables.ANCIENT_CITY)
 					.add(1.0 / 30, 1, 1, key().toString())  //duplicate for more consistent spawn
-					.add(1.0 / 30, 1, 1, key().toString()));
+					.add(1.0 / 30, 1, 1, key().toString()),
+				new LootDefinition("terralith_generic")
+					// terralith normal
+					.in(StorageUtil.namespaced_key("terralith", "ruin/glacial/main_cs"))
+					.in(StorageUtil.namespaced_key("terralith", "spire/treasure"))
+					.in(StorageUtil.namespaced_key("terralith", "underground/chest"))
+					.in(StorageUtil.namespaced_key("terralith", "village/desert/archer"))
+					.in(StorageUtil.namespaced_key("terralith", "village/desert/attic"))
+					.in(StorageUtil.namespaced_key("terralith", "village/desert/butcher"))
+					.in(StorageUtil.namespaced_key("terralith", "village/desert/cartographer"))
+					.in(StorageUtil.namespaced_key("terralith", "village/desert/generic"))
+					.in(StorageUtil.namespaced_key("terralith", "village/desert/library"))
+					.in(StorageUtil.namespaced_key("terralith", "village/desert/mason"))
+					.in(StorageUtil.namespaced_key("terralith", "village/desert/smith"))
+					.in(StorageUtil.namespaced_key("terralith", "village/desert/treasure"))
+					.in(StorageUtil.namespaced_key("terralith", "village/fortified/archer"))
+					.in(StorageUtil.namespaced_key("terralith", "village/fortified/attic"))
+					.in(StorageUtil.namespaced_key("terralith", "village/fortified/butcher"))
+					.in(StorageUtil.namespaced_key("terralith", "village/fortified/cartographer"))
+					.in(StorageUtil.namespaced_key("terralith", "village/fortified/fisherman"))
+					.in(StorageUtil.namespaced_key("terralith", "village/fortified/food"))
+					.in(StorageUtil.namespaced_key("terralith", "village/fortified/generic"))
+					.in(StorageUtil.namespaced_key("terralith", "village/fortified/library"))
+					.in(StorageUtil.namespaced_key("terralith", "village/fortified/mason"))
+					.in(StorageUtil.namespaced_key("terralith", "village/fortified/smith"))
+					.in(StorageUtil.namespaced_key("terralith", "village/fortified/treasure"))
+					.in(StorageUtil.namespaced_key("terralith", "village/treasure/diamond"))
+					.in(StorageUtil.namespaced_key("terralith", "village/treasure/emerald"))
+					.in(StorageUtil.namespaced_key("terralith", "village/treasure/golem"))
+					.add(1.0 / 40, 1, 1, key().toString()),
+				new LootDefinition("terralith_rare")
+					// terralith rare
+					.in(StorageUtil.namespaced_key("terralith", "village/desert/smith/expert"))
+					.in(StorageUtil.namespaced_key("terralith", "village/fortified/smith/expert"))
+					.in(StorageUtil.namespaced_key("terralith", "spire/rare"))
+					.add(1.0 / 30, 1, 1, key().toString())  //duplicate for more consistent spawn
+					.add(1.0 / 30, 1, 1, key().toString())
+				);
 		}
 	}
 
@@ -132,7 +214,17 @@ public class Tomes extends ModuleGroup<Enchantments> {
 					.add(1.0 / 200, 1, 1, key().toString()),
 				new LootDefinition("ancientcity")
 					.in(LootTables.ANCIENT_CITY)
-					.add(1.0 / 150, 1, 1, key().toString()));
+					.add(1.0 / 150, 1, 1, key().toString()),
+				new LootDefinition("terralith_generic")
+					// terralith normal
+					.in(StorageUtil.namespaced_key("terralith", "spire/treasure"))
+					.in(StorageUtil.namespaced_key("terralith", "underground/chest"))
+					.add(1.0 / 200, 1, 1, key().toString()),
+				new LootDefinition("terralith_rare")
+					// terralith rare
+					.in(StorageUtil.namespaced_key("terralith", "spire/rare"))
+					.add(1.0 / 150, 1, 1, key().toString())
+				);
 		}
 	}
 
