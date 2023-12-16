@@ -32,7 +32,7 @@ public class ItemFinder extends Listener<Trifles> {
 	public boolean config_search_entities;
 
 	public ItemFinder(Context<Trifles> context) {
-		super(context.group("item_finder", "Enables players to search for items in nearby containers by either middle-clicking a similar item in their inventory or by using the `/finditem <item>` command."));
+		super(context.group("item_finder", "Enables players to search for items in nearby containers by either shift-right-clicking a similar item in their inventory or by using the `/finditem <item>` command."));
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
