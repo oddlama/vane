@@ -70,13 +70,14 @@ public class LodestoneScroll extends Scroll {
 		}
 
 		final var lodestone_location = get_lodestone_location(scroll);
-		final var lodestone = lodestone_location == null ? null : lodestone_location.getBlock();
+		var lodestone = lodestone_location == null ? null : lodestone_location.getBlock();
 
 		if (imminent_teleport) {
 			if (lodestone_location == null) {
 				lang_teleport_no_bound_lodestone.send_action_bar(player);
 			} else if (lodestone.getType() != Material.LODESTONE) {
 				lang_teleport_missing_lodestone.send_action_bar(player);
+				lodestone = null;
 			}
 		}
 

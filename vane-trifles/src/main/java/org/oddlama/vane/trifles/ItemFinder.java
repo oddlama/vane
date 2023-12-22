@@ -15,6 +15,8 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
 import org.jetbrains.annotations.NotNull;
 import org.oddlama.vane.annotation.config.ConfigBoolean;
 import org.oddlama.vane.annotation.config.ConfigInt;
@@ -31,13 +33,32 @@ public class ItemFinder extends Listener<Trifles> {
 	@ConfigBoolean(def = true, desc = "Also search entities such as players, mobs, minecarts, ...")
 	public boolean config_search_entities;
 
+	@ConfigBoolean(def = false, desc = "Only allow players to use the shift+rightclick shortcut when they have the shortcut permission `vane.trifles.use_item_find_shortcut`.")
+	public boolean config_require_permission;
+
+	// This permission allows players to use the shift+rightclick.
+	public final Permission use_item_find_shortcut_permission;
+
 	public ItemFinder(Context<Trifles> context) {
-		super(context.group("item_finder", "Enables players to search for items in nearby containers by either middle-clicking a similar item in their inventory or by using the `/finditem <item>` command."));
+		super(context.group("item_finder", "Enables players to search for items in nearby containers by either shift-right-clicking a similar item in their inventory or by using the `/finditem <item>` command."));
+
+		// Register admin permission
+		use_item_find_shortcut_permission =
+			new Permission(
+				"vane." + get_module().get_name() + ".use_item_find_shortcut",
+				"Allows a player to use shfit+rightclick to search for items if the require_permission config is set",
+				PermissionDefault.FALSE
+			);
+		get_module().register_permission(use_item_find_shortcut_permission);
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void on_player_click_inventory(final InventoryClickEvent event) {
 		if (!(event.getWhoClicked() instanceof Player player)) {
+			return;
+		}
+
+		if (config_require_permission && !player.hasPermission(use_item_find_shortcut_permission)) {
 			return;
 		}
 
