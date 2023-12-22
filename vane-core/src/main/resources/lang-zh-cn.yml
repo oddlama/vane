@@ -1,0 +1,101 @@
+# vim: set tabstop=2 softtabstop=0 expandtab shiftwidth=2:
+#
+# >> See lang-en.yml for variable descriptions <<
+#
+# +-----------------------------------+
+# | CAUTION: Do NOT change this file! |
+# +-----------------------------------+
+#
+# It will be silently overwritten with updates! If you want
+# to customize strings yourself, copy this file to lang-custom.yml
+# and set the language in the config.yml to "lang: 'custom'"
+
+# DO NOT CHANGE! The version of this language file. Used to determine
+# if the file needs to be updated.
+version: 4
+# The corresponding language code used in resource packs. Used for
+# resource pack generation. Typically this is a combination of the
+# language code (ISO 639) and the country code (ISO 3166).
+resource_pack_lang_code: 'zh_cn'
+
+
+command_not_a_player: "§c错误:§6 该指令只能由玩家执行！"
+command_permission_denied: "§c错误:§6 沒有权限！"
+invalid_time_format: "§c错误:§6 时间格式无效：%1$s"
+break_loot_block_prevented: "§6此方块具有战利品表，并会在一段时间后自动补充如果确定要摧毁此方块，请等待5秒后再次破坏"
+
+command_customitem:
+  usage: "%1$s §a给予 §7<§b物品§7>"
+  description: "给予玩家特定的自定义物品"
+  help: "§a给予 §7<§b物品§7>:§r 给予玩家特定的自定义物品"
+
+command_enchant:
+  level_too_low: "§c错误:§6 等级 %1$s§6 过低，必须至少为 %2$s"
+  level_too_high: "§c错误:§6 等级 %1$s§6 过高，必须最多为 %2$s"
+  invalid_enchantment: "§c错误: %1$s§6 不能應用於 %2$s"
+  usage: "%1$s §b附魔 §7[§b等级§7]"
+  description: "将手中物品附魔"
+  help: "将手中物品附魔"
+
+command_vane:
+  reload_success: "%1$s§7: §a重新载入成功"
+  reload_fail: "%1$s§7: §c重新载入失败"
+  resource_pack_generate_success: "§a资源包生成成功：%1$s"
+  resource_pack_generate_fail: "§c生成资源包时发生错误"
+  usage: "%1$s §7<§areload§7|§agenerate_resource_pack§7>"
+  description: "管理vane插件"
+  help: "§areload §7[§b模组§7]:§r 重新载入所有或給定的vane模组\n\
+    §agenerate_resource_pack§7:§r 生成vane资源包"
+
+resource_pack:
+  declined: "您需要接受此服务器的资源包才能进行游戏\n\
+    它是用于本地化和材质的如果您是意外拒绝的，\n\
+    您可以通过编辑您的服务器列表中的此服务器条目来更改"
+  download_failed: "§c您的资源包下载似乎失败了§r\n\
+    §7(您已被断开以防止显示错误)\n\
+    \n\
+    §d请再试一次"
+
+menus:
+  head_selector:
+    title: "%1$s §8§l头颅"
+    filter_title: "§8§l头颅仓库筛选器"
+    select_head:
+      name: "%1$s"
+      lore:
+        - ""
+        - "§7类别: %2$s"
+        - "§7标签: %3$s"
+  item_selector:
+    accept:
+      name: "§a§l接受"
+      lore: ["§b选择§7当前选定的物品"]
+    cancel:
+      name: "§c§l取消"
+      lore: ["§6取消§7物品选择"]
+    selected:
+      name: "§d§l已选物品"
+      lore:
+        - ""
+        - "点击任何物品來选择它"
+        - ""
+        - "§b左键点击§7重置更改"
+        - "§b右键点击§7清除（如果允许）"
+  generic_selector:
+    page:
+      name: "§b第%1$s页"
+      lore: []
+    current_page:
+      name: "§a当前第%1$s页 §7/ %2$s"
+      lore:
+        - ""
+        - "§b#已筛选項目: %3$s"
+    filter:
+      name: "§d§l筛选"
+      lore:
+        - ""
+        - "§b左键点击可打开筛选菜单"
+        - "§b右键点击可重置筛选器"
+    cancel:
+      name: "§c§l取消"
+      lore: ["§6取消选择"]

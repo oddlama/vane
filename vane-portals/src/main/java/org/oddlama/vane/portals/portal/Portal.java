@@ -380,6 +380,13 @@ public class Portal {
 				final var end_gateway = (EndGateway) portal_block.block().getState(false);
 				end_gateway.setAge(200l);
 				end_gateway.update(true, false);
+
+				// If there's no exit location then the game will generate a natural gateway when the portal is used.
+				// Setting any location will do, since the teleports are cancelled via their events anyway.
+				if (spawn.location().getWorld().getEnvironment() == World.Environment.THE_END){
+					end_gateway.setExitLocation(spawn.location());
+					end_gateway.setExactTeleport(true);
+				}
 			}
 			if (portal_block.type() == PortalBlock.Type.CONSOLE) {
 				portals.update_console_item(this, portal_block.block());

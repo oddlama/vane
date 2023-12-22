@@ -6,7 +6,7 @@ authors: [oddlama]
 website: 'https://github.com/oddlama/vane'
 
 depend: [vane-core]
-softdepend: [dynmap, BlueMap, Pl3xMap]
+softdepend: [dynmap, BlueMap]
 
 main: org.oddlama.vane.bedtime.Bedtime
 database: false

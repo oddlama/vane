@@ -1,0 +1,404 @@
+# vim: set tabstop:2 softtabstop:0 expandtab shiftwidth:2:
+#
+# >> See lang-en.yml for variable descriptions <<
+#
+# +-----------------------------------+
+# | CAUTION: Do NOT change this file! |
+# +-----------------------------------+
+#
+# It will be silently overwritten with updates! If you want
+# to customize strings yourself, copy this file to lang-custom.yml
+# and set the language in the config.yml to "lang: 'custom'"
+
+# DO NOT CHANGE! The version of this language file. Used to determine
+# if the file needs to be updated.
+version: 5
+# The corresponding language code used in resource packs. Used for
+# resource pack generation. Typically this is a combination of the
+# language code (ISO 639) and the country code (ISO 3166).
+resource_pack_lang_code: 'tr_tr'
+
+# This message is sent when a new portal console has been selected
+# and the player may now select a boundary block to construct a portal.
+select_boundary_now: "§6Şimdi portal sınırına sağ tıklayın"
+# This message is sent when the selected console block is not of the correct
+# type anymore. This can happen when a player replaces the console block
+# while it is selected as a pending console.
+console_invalid_type: "§cKonsol bloğunda geçersiz bir blok türü var!"
+# This message is sent when the selected console is in a another world than the portal boundary.
+console_different_world: "§cKonsol, portal ile aynı dünyada olmalıdır"
+# This message is sent when the selected portal console is too far away from
+# the portal boundary.
+console_too_far_away: "§cKonsol portaldan çok uzakta"
+# This message is sent when a console has successfully been linked.
+console_linked: "§aKonsol bağlandı"
+
+# This message is sent when no boundary was found at the given location
+no_boundary_found: "§cPortal sınırı bulunamadı!"
+# This message is sent when the selected boundary doesn't contain an origin block
+no_origin: "§cPortalın kaynak bloğu yok!"
+# This message is sent when the selected boundary has multiple origin blocks
+multiple_origins: "§cPortalda birden fazla başlangıç bloğu olamaz!"
+# This message is sent when the selected vertical portal boundary has no portal area above the origin block
+no_portal_block_above_origin: "§cOrijin bloğunun yukarıda portal alanına ihtiyacı var!"
+# This message is sent when the selected vertical portal boundary has not enough portal area above the origin block
+not_enough_portal_blocks_above_origin: "§cOrijin bloğunun yukarıda en az 3 portal alan bloğuna ihtiyacı var!"
+# This message is sent when the selected portal boundary is too large in a given direction.
+# %1$s: The direction (x,y,z)
+too_large: "§cPortal, %1$s§c yönünde çok büyük!"
+# This message is sent when the selected portal boundary is too small in a given direction.
+# %1$s: The direction (x,y,z)
+too_small_spawn: "§cOluşturma alanı %1$s§c yönünde çok küçük!"
+# This message is sent when the selected portal boundary contains too many portal area blocks.
+# %1$s: Current amount of blocks
+# %2$s: Maximum allowed amount of blocks
+too_many_portal_area_blocks: "§cPortal alanı çok büyük! %1$s§6/%2$s§c blok"
+# This message is sent when a portal boundary is selected but
+# a part of the area is obstructed.
+portal_area_obstructed: "§cPortal alanı engellendi!"
+# This message is sent when the selected boundary instersects an existing portal.
+intersects_existing_portal: "§cPortal başka bir portalla kesişiyor!"
+
+# This message is sent when a player has no permission to build a portal in the area.
+build_restricted: "§cBurada portal oluşturma izniniz yok!"
+# This message is sent when a player has no permission to link a console to a portal.
+link_restricted: "§cBu portala konsol bağlama izniniz yok!"
+
+# This message is sent when a portal is activated, but the target is already connected to another portal.
+target_already_connected: "§6Hedef portal zaten başka bir portala bağlı!"
+# This message is sent when a portal is activated, but the player has no permission to use it.
+source_use_restricted: "§cBu portalı kullanma izniniz yok!"
+# This message is sent when a portal is activated, but the player has no permission to use the target portal.
+target_use_restricted: "§cHedef portalı kullanma izniniz yok!"
+
+# This is the displayed on a floating item over all portal consoles of activated portals to indicate the connected portal.
+# HINT: The trailing §r's are important, otherwise the label will have empty space to the right
+# %1$s: Target portal name
+console_display_active: "§6§l>§r %1$s §6§l<§r"
+# This is the displayed on a floating item over all portal consoles of inactive portals to indicate the selected target portal.
+# HINT: The trailing §r's are important, otherwise the label will have empty space to the right
+# %1$s: Target portal name
+console_display_inactive: "§8§l>§r %1$s §8§l<§r"
+# This is the name substitution used for portals without a selected target portal.
+console_no_target: "§k?"
+
+# This message is sent when a player tries to unlink a console for which they have no permission.
+unlink_restricted: "§cBu portaldan bir konsolun bağlantısını kaldırma izniniz yok!"
+# This message is sent when a player tries to destroy a console for which they have no permission.
+destroy_restricted: "§cBu portalı yok etme izniniz yok!"
+# This message is sent when a player tries to change a portal setting for which they have no permission.
+settings_restricted: "§cBu portalın ayarlarını değiştirme izniniz yok!"
+# This message is sent when a player tries to change the target selection of a portal for which they have no permission.
+select_target_restricted: "§cBu portal için hedef seçme izniniz yok!"
+
+dynmap:
+  # The label for the dynmap layer
+  layer_label: "Portallar"
+  # The label for the dynmap markers
+  # %1$s: Portal name
+  marker_label: "%1$s"
+
+blue_map:
+  # The label for the BlueMap marker set
+  layer_label: "Portallar"
+  # The label for the BlueMap portal markers. Supports HTML. Arguments will be escaped properly.
+  # %1$s: Portal name
+  marker_label: "<span style=\"color: white\">🌌 %1$s</span>"
+
+menus:
+  # Settings for the portal naming menu.
+  enter_name:
+    # The title for the naming menu.
+    title: "§8§lPortal Adını Girin"
+
+  # Settings for the portal settings menu.
+  settings:
+    # The title for the settings menu.
+    # %1$s: Portal name
+    title: "§8§lAyarlar: %1$s"
+    # The title for the icon seletion menu.
+    select_icon_title: "§8§lİkon Seç"
+
+    # This item is used to rename the portal.
+    rename:
+      name: "§b§lYeniden Adlandır"
+      lore: []
+
+    # This item is used to select the portal's icon.
+    select_icon:
+      name: "§b§lİkon seç"
+      lore: []
+
+    # This item is used to change the portal's style.
+    select_style:
+      name: "§b§lStil Seç"
+      lore: []
+
+    # This item is used to change and indicate enabled exit orientation lock.
+    exit_orientation_lock_on:
+      name: "§b§lÇıkış Yönlendirme Kilidini Değiştir"
+      lore: ["", "§bMevcut: §e§lKilitli (her zaman önden çık)§r"]
+
+    # This item is used to change and indicate disabled exit orientation lock.
+    exit_orientation_lock_off:
+      name: "§b§lÇıkış Yönlendirme Kilidini Değiştir"
+      lore: ["", "§bMevcut: §a§lKilitsiz (girildiği gibi aynı taraftan çık)§r"]
+
+    # This item is used to cycle visibility and indicate public visibility.
+    visibility_public:
+      name: "§b§lGörünürlüğü Değiştir"
+      lore: ["", "§bMevcut: §a§lHerkese Açık§r"]
+
+    # This item is used to cycle visibility and indicate group visibility.
+    visibility_group:
+      name: "§b§lGörünürlüğü Değiştir"
+      lore: ["", "§bMevcut: §e§lBölge Grubu (oyuncular)§r"]
+
+    # This item is used to cycle visibility and indicate group visibility.
+    visibility_group_internal:
+      name: "§b§lGörünürlüğü Değiştir"
+      lore: ["", "§bMevcut: §e§lBölge Grubu (sadece dahili olarak görünür)§r"]
+
+    # This item is used to cycle visibility and indicate private visibility.
+    visibility_private:
+      name: "§b§lGörünürlüğü Değiştir"
+      lore: ["", "§bMevcut: §c§lGizli§r"]
+
+    # This item is used to change and indicate enabled target lock.
+    target_lock_on:
+      name: "§b§lHedef Kilidini Değiştir"
+      lore: ["", "§bMevcut: §c§lKilitli§r"]
+
+    # This item is used to change and indicate disabled target lock.
+    target_lock_off:
+      name: "§b§lHedef Kilidini Değiştir"
+      lore: ["", "§bMevcut: §a§lKilitsiz§r"]
+
+    # This item is used to return to the previous menu.
+    back:
+      name: "§6↩ §lGeri"
+      lore: []
+
+  # Settings for the portal style menu.
+  style:
+    # The title for the style menu.
+    # %1$s: Portal name
+    title: "§8§lStil: %1$s"
+    # The title for the block selector for the active console block.
+    select_block_console_active_title:       "Etkin Konsol bloğunu seçin."
+    # The title for the block selector for the active origin block.
+    select_block_origin_active_title:        "Aktif Orijin bloğunu seçin."
+    # The title for the block selector for the active portal block.
+    select_block_portal_active_title:        "Aktif Portal Alan bloğunu seçin."
+    # The title for the block selector for the active boundary variant 1 block.
+    select_block_boundardy_1_active_title:   "Aktif Sınır Varyantı 1 bloğunu seçin."
+    # The title for the block selector for the active boundary variant 2 block.
+    select_block_boundardy_2_active_title:   "Aktif Sınır Varyantı 2 bloğunu seçin."
+    # The title for the block selector for the active boundary variant 3 block.
+    select_block_boundardy_3_active_title:   "Aktif Sınır Varyantı 3 bloğunu seçin."
+    # The title for the block selector for the active boundary variant 4 block.
+    select_block_boundardy_4_active_title:   "Aktif Sınır Varyantı 4 bloğunu seçin."
+    # The title for the block selector for the active boundary variant 5 block.
+    select_block_boundardy_5_active_title:   "Aktif Sınır Varyantı 5 bloğunu seçin."
+    # The title for the block selector for the inactive console block.
+    select_block_console_inactive_title:     "Etkin olmayan Konsol bloğunu seçin."
+    # The title for the block selector for the inactive origin block.
+    select_block_origin_inactive_title:      "Etkin olmayan Orijin bloğunu seçin."
+    # The title for the block selector for the inactive portal block.
+    select_block_portal_inactive_title:      "Etkin olmayan Portal Alan bloğunu seçin."
+    # The title for the block selector for the inactive boundary variant 1 block.
+    select_block_boundardy_1_inactive_title: "Etkin olmayan Sınır Varyantı 1 bloğunu seçin."
+    # The title for the block selector for the inactive boundary variant 2 block.
+    select_block_boundardy_2_inactive_title: "Etkin olmayan Sınır Varyantı 2 bloğunu seçin."
+    # The title for the block selector for the inactive boundary variant 3 block.
+    select_block_boundardy_3_inactive_title: "Etkin olmayan Sınır Varyantı 3 bloğunu seçin."
+    # The title for the block selector for the inactive boundary variant 4 block.
+    select_block_boundardy_4_inactive_title: "Etkin olmayan Sınır Varyantı 4 bloğunu seçin."
+    # The title for the block selector for the inactive boundary variant 5 block.
+    select_block_boundardy_5_inactive_title: "Etkin olmayan Sınır Varyantı 5 bloğunu seçin."
+
+    # The item used to represent the selected active console block.
+    # %1$s: Building material
+    block_console_active:
+      name: "§b§lKonsol §a(aktif)"
+      lore: []
+    # The item used to represent the selected active origin block.
+    # %1$s: Building material
+    block_origin_active:
+      name: "§b§lOrijin §a(aktif)"
+      lore: []
+    # The item used to represent the selected active portal block.
+    # %1$s: Building material
+    block_portal_active:
+      name: "§b§lPortal alanı §a(aktif)"
+      lore: []
+    # The item used to represent the selected active boundary variant 1 block.
+    # %1$s: Building material
+    block_boundardy_1_active:
+      name: "§b§lSınır §a(aktif)"
+      lore: ["", "§aVaryant 1", "§7Yapı malzemesi: %1$s"]
+    # The item used to represent the selected active boundary variant 2 block.
+    # %1$s: Building material
+    block_boundardy_2_active:
+      name: "§b§lSınır §a(aktif)"
+      lore: ["", "§aVaryant 2", "§7Yapı malzemesi: %1$s"]
+    # The item used to represent the selected active boundary variant 3 block.
+    # %1$s: Building material
+    block_boundardy_3_active:
+      name: "§b§lSınır §a(aktif)"
+      lore: ["", "§aVaryant 3", "§7Yapı malzemesi: %1$s"]
+    # The item used to represent the selected active boundary variant 4 block.
+    # %1$s: Building material
+    block_boundardy_4_active:
+      name: "§b§lSınır §a(aktif)"
+      lore: ["", "§aVaryant 4", "§7Yapı malzemesi: %1$s"]
+    # The item used to represent the selected active boundary variant 5 block.
+    # %1$s: Building material
+    block_boundardy_5_active:
+      name: "§b§lSınır §a(aktif)"
+      lore: ["", "§aVaryant 5", "§7Yapı malzemesi: %1$s"]
+    # The item used to represent the selected inactive console block.
+    # %1$s: Building material
+    block_console_inactive:
+      name: "§b§lKonsol §e(inactive)"
+      lore: []
+    # The item used to represent the selected inactive origin block.
+    # %1$s: Building material
+    block_origin_inactive:
+      name: "§b§lOrijin §e(inactive)"
+      lore: []
+    # The item used to represent the selected inactive portal block.
+    # %1$s: Building material
+    block_portal_inactive:
+      name: "§b§lPortal bölgesi §e(inactive)"
+      lore: []
+    # The item used to represent the selected inactive boundary variant 1 block.
+    # %1$s: Building material
+    block_boundardy_1_inactive:
+      name: "§b§lSınır §e(aktif olmayan)"
+      lore: ["", "§aVaryant 1", "§7Yapı malzemesi: %1$s"]
+    # The item used to represent the selected inactive boundary variant 2 block.
+    # %1$s: Building material
+    block_boundardy_2_inactive:
+      name: "§b§lSınır §e(aktif olmayan)"
+      lore: ["", "§aVaryant 2", "§7Yapı malzemesi: %1$s"]
+    # The item used to represent the selected inactive boundary variant 3 block.
+    # %1$s: Building material
+    block_boundardy_3_inactive:
+      name: "§b§lSınır §e(aktif olmayan)"
+      lore: ["", "§aVaryant 3", "§7Yapı malzemesi: %1$s"]
+    # The item used to represent the selected inactive boundary variant 4 block.
+    # %1$s: Building material
+    block_boundardy_4_inactive:
+      name: "§b§lSınır §e(aktif olmayan)"
+      lore: ["", "§aVaryant 4", "§7Yapı malzemesi: %1$s"]
+    # The item used to represent the selected inactive boundary variant 5 block.
+    # %1$s: Building material
+    block_boundardy_5_inactive:
+      name: "§b§lSınır §e(aktif olmayan)"
+      lore: ["", "§aVaryant 5", "§7Yapı malzemesi: %1$s"]
+
+    # The item used to apply the style to the portal.
+    accept:
+      name: "§a§lStili Uygula"
+      lore: []
+
+    # The item used to reset all changes made in this menu.
+    reset:
+      name: "§6§lDeğişiklikleri sıfırla"
+      lore: []
+
+    # The title for the predefined style selector.
+    select_style_title: "§8§lStil Seç"
+    # The filter title for the predefined style selector.
+    filter_styles_title: "§8§lStilleri Filtrele"
+    # The item used to open the style selector for predefined styles.
+    select_defined:
+      name: "§b§lTanımlı Stili Seçin"
+      lore: []
+    # The item used to represent a predefined style.
+    # %1$s: Name of the style
+    select_style:
+      name: "%1$s"
+      lore: []
+
+    # The item used to discard any changes and return to the previous menu.
+    cancel:
+      name: "§6↩ §lDeğişiklikleri Gözardı Et"
+      lore: []
+
+  # Settings for the portal console menu.
+  console:
+    # The title for the console menu.
+    # %1$s: Portal name
+    title: "§8§lPortal: %1$s"
+
+    # The item used to open the portal's settings.
+    settings:
+      name: "§b§lAyarlar"
+      lore: []
+
+    # The item used to open the portal's target selector.
+    # %1$s: The currently selected target
+    select_target:
+      name: "§d§lHedef Seç"
+      lore:
+        - ""
+        - "§7Mevcut: %1$s"
+    # The item used to show the current target when the target is locked.
+    # %1$s: The currently selected target
+    select_target_locked:
+      name: "§d§lHedef Seç"
+      lore:
+        - ""
+        - "§7Mevcut: %1$s"
+        - "§8Seçilen hedefe §6§lKİLİTLENİLDİ§r§8!"
+
+    select_target_title: "§8§lHedef Portalı Seçin"
+    filter_portals_title: "§8§lPortalları Filtrele"
+    # The item used to represent a target portal.
+    # %1$s: Portal name
+    # %2$s: Portal distance
+    # %3$s: Portal world
+    # %4$s: Portal visibility (defined below, public, private, ...)
+    select_target_portal:
+      name: "%1$s"
+      lore:
+        - ""
+        - "§7Mesafe: %2$s§6m"
+        - "§7Dünya: %3$s"
+        - "§7%4$s"
+    select_target_portal_visibility_public: "§aHerkese Açık"
+    select_target_portal_visibility_group: "§eBölge Grubu (üyeler)"
+    select_target_portal_visibility_group_internal: "§eBölge Grubu (Sadece dahili olarak görünür)"
+    select_target_portal_visibility_private: "§cGizli"
+
+    # The item used to unlink the current console.
+    unlink_console:
+      name: "§c§lKonsol Bağlantısını Kes"
+      lore: []
+    # The title for the unlink confirmation dialog.
+    unlink_console_confirm_title: "§c§lKonsol Bağlantısını Kesmek istiyor musun?"
+    # The item to accept unlinking.
+    unlink_console_confirm_accept:
+      name: "§c§lKONSOL BAĞLANTISINI KES"
+      lore: []
+    # The item to cancel unlinking.
+    unlink_console_confirm_cancel:
+      name: "§a§lİptal Etmek"
+      lore: []
+
+    # The item used to destroy the portal.
+    destroy_portal:
+      name: "§c§lPortalı yok et"
+      lore: []
+    # The title for the destroy portal confirmation dialog.
+    destroy_portal_confirm_title: "§c§lPortalı Yok Etmek İster Misin?"
+    # The item to accept destroying.
+    destroy_portal_confirm_accept:
+      name: "§c§lPORTALI YOK ET"
+      lore: []
+    # The item to cancel destroying.
+    destroy_portal_confirm_cancel:
+      name: "§a§lİptal Etmek"
+      lore: []

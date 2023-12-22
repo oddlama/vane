@@ -1,0 +1,73 @@
+# vim: set tabstop=2 softtabstop=0 expandtab shiftwidth=2:
+#
+# >> See lang-en.yml for variable descriptions <<
+#
+# +-----------------------------------+
+# | CAUTION: Do NOT change this file! |
+# +-----------------------------------+
+#
+# It will be silently overwritten with updates! If you want
+# to customize strings yourself, copy this file to lang-custom.yml
+# and set the language in the config.yml to "lang: 'custom'"
+
+# DO NOT CHANGE! The version of this language file. Used to determine
+# if the file needs to be updated.
+version: 4
+# The corresponding language code used in resource packs. Used for
+# resource pack generation. Typically this is a combination of the
+# language code (ISO 639) and the country code (ISO 3166).
+resource_pack_lang_code: 'zh_cn'
+
+item_ancient_tome:
+  name: "古老的卷轴"
+
+item_enchanted_ancient_tome:
+  name: "古老的卷轴"
+
+item_ancient_tome_of_knowledge:
+  name: "古老知识卷轴"
+
+item_enchanted_ancient_tome_of_knowledge:
+  name: "古老知识卷轴"
+
+item_ancient_tome_of_the_gods:
+  name: "古老众神卷轴"
+
+item_enchanted_ancient_tome_of_the_gods:
+  name: "古老众神卷轴"
+
+enchantment_angel:
+  name: "天使"
+
+enchantment_grappling_hook:
+  name: "抓钩"
+
+enchantment_hell_bent:
+  name: "铁头功"
+
+enchantment_leafchopper:
+  name: "园丁"
+
+enchantment_lightning:
+  name: "闪电"
+
+enchantment_rake:
+  name: "快速耕地"
+
+enchantment_seeding:
+  name: "播种"
+
+enchantment_soulbound:
+  name: "灵魂绑定"
+  drop_lock_warning: "灵魂绑定物品只能使用鼠标丢弃"
+  drop_cooldown: "再次丢弃以确认丢弃"
+  dropped_notification: "灵魂绑定物品已丢弃：%1$s"
+
+enchantment_take_off:
+  name: "起飞"
+
+enchantment_unbreakable:
+  name: "牢不可破"
+
+enchantment_wings:
+  name: "飞行加速"

@@ -59,7 +59,7 @@ public class MaterialUtil {
 			default:
 				return false;
 			case TALL_GRASS:
-			case GRASS:
+			case SHORT_GRASS:
 				return true;
 		}
 	}

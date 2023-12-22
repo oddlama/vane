@@ -1,0 +1,78 @@
+# vim: set tabstop=2 softtabstop=0 expandtab shiftwidth=2:
+#
+# >> See lang-en.yml for variable descriptions <<
+#
+# +-----------------------------------+
+# | CAUTION: Do NOT change this file! |
+# +-----------------------------------+
+#
+# It will be silently overwritten with updates! If you want
+# to customize strings yourself, copy this file to lang-custom.yml
+# and set the language in the config.yml to "lang: 'custom'"
+
+# DO NOT CHANGE! The version of this language file. Used to determine
+# if the file needs to be updated.
+version: 1
+# The corresponding language code used in resource packs. Used for
+# resource pack generation. Typically this is a combination of the
+# language code (ISO 639) and the country code (ISO 3166).
+resource_pack_lang_code: 'tr_tr'
+
+command_permission:
+  # This message is used to represent the empty list
+  list_empty: "§b∅"
+  # This message is sent as a first header line for group list output
+  list_header_groups: "Tüm kayıtlı grupların listesi:"
+  # This message is sent as a first header line for permission list output
+  list_header_permissions: "Kayıtlı tüm izinleri listeleme:\nFormat: <yetki> (<varsayılan>): <açıklama>"
+  # This message is sent as a first header line for player group list output
+  # %1$s: Player name
+  list_header_player_groups: "%1$s için tüm gruplar listeleniyor:"
+  # This message is sent as a first header line for player permission list output
+  # %1$s: Player name
+  list_header_player_permissions: "%1$s için tüm gruplar listeleniyor:\nFormat: <yetki> (<varsayılan>): <açıklama>"
+  # This message is sent as a first header line for group permission list output
+  # %1$s: Group name
+  list_header_group_permissions: "%1$s için tüm gruplar listeleniyor:\nFormat: <yetki> (<varsayılan>): <açıklama>"
+  # This message is sent when permissions are queried on an offline player
+  list_player_offline: "§6İstenen oyuncu çevrimdışı. Yalnızca yapılandırılmış izinler gösterilecektir. Diğer izin yönetimi eklentilerinden alınan izinler eksik olabilir."
+  # This message is sent for each group when a list of all groups is requested.
+  # %1$s: Group name
+  list_group: "§7 - %1$s"
+  # This message is sent for each permission when a list of all permissions is requested.
+  # %1$s: Permission name
+  # %2$s: Permission value
+  # %3$s: Permission description
+  list_permission: "§7 - %1$s§7 (%2$s§7): %3$s"
+  # This message is sent when a group is added to a player.
+  # %1$s: Player name
+  # %2$s: Group name
+  group_assigned: "%1$s adlı oyuncu %2$s grubuna katıldı"
+  # This message is sent when a group is removed from a player.
+  # %1$s: Player name
+  # %2$s: Group name
+  group_removed: "%1$s adlı oyuncu %2$s grubundan ayrıldı"
+  # This message is sent when a group is added to a player, but it is already assigned.
+  # %1$s: Player name
+  # %2$s: Group name
+  group_already_assigned: "§6Zaten bu grupta var"
+  # This message is sent when a group is removed from a player, but it wasn't assigned.
+  # %1$s: Player name
+  # %2$s: Group name
+  group_not_assigned: "§6Grupta yok"
+  usage: "%1$s §7<§alist§7|§aadd§7|§aremove§7>"
+  description: "Oyuncu izinlerini yönetir."
+  help: "§alist §7<§agruplar§7|§ayetkiler§7>:§r Mevcut tüm izinleri veya izin gruplarını listeler.\n\
+    §aadd §boyuncu §bgrup§7:§r Oyuncuyu verilen izin grubuna ekler.\n\
+    §aremove §boyuncu §bgrup§7:§r Oyuncuyu verilen izin grubundan çıkarın."
+
+command_vouch:
+  # This message is sent when a player successfully vouches for a player
+  # %1$s: Player name
+  vouched: "§a%1$s §aiçin kefil oldunuz!"
+  # This message is sent when a player tries to vouch for a player for whom he already has vouched
+  # %1$s: Player name
+  already_vouched: "§6Zaten %1$s§6 için kefil oldunuz!"
+  usage: "%1$s §boyuncu"
+  description: "Bir oyuncunun sunucuda oynama izni alması için kefil olur."
+  help: "Bir oyuncunun sunucuda oynama izni alması için kefil olur."

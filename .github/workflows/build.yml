@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        project: [ 'admin', 'bedtime', 'core', 'enchantments', 'permissions', 'plexmap', 'portals', 'regions', 'trifles', 'waterfall', 'velocity' ]
+        project: [ 'admin', 'bedtime', 'core', 'enchantments', 'permissions', 'portals', 'regions', 'trifles', 'waterfall', 'velocity' ]
 
     steps:
       - uses: actions/checkout@v3.0.0
