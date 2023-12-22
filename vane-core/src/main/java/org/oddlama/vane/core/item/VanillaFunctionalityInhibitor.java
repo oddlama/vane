@@ -4,7 +4,7 @@ import static org.oddlama.vane.util.MaterialUtil.is_tillable;
 import static org.oddlama.vane.util.Nms.item_handle;
 
 import org.bukkit.Keyed;
-import org.bukkit.craftbukkit.v1_20_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_20_R3.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;

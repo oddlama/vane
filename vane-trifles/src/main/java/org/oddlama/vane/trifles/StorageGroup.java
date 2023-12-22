@@ -54,7 +54,7 @@ public class StorageGroup extends Listener<Trifles> {
 
 		// Put non-storage items in a right-clicked storage item
 		if (event.getClick() == ClickType.RIGHT && event.getAction() == InventoryAction.SWAP_WITH_CURSOR
-				&& is_storage_item(event.getCurrentItem())) {
+				&& is_storage_item(event.getCurrentItem()) && event.getCurrentItem().getAmount() == 1) {
 
 			// Allow putting in any items that are not a storage item, or storage items that have nothing in them.
 			if (!(is_storage_item(event.getCursor()) && event.getCursor().hasItemMeta())) {

@@ -27,6 +27,8 @@ import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.util.ItemUtil;
 import org.oddlama.vane.util.StorageUtil;
 
+import org.bukkit.craftbukkit.v1_20_R3.enchantments.CraftEnchantment;
+
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TranslatableComponent;
 
@@ -35,15 +37,6 @@ public class EnchantmentManager extends Listener<Core> {
 
 	public EnchantmentManager(Context<Core> context) {
 		super(context);
-
-		try {
-			final var accepting = Enchantment.class.getDeclaredField("acceptingNew");
-			accepting.setAccessible(true);
-			accepting.set(null, true);
-		} catch (NoSuchFieldException | IllegalAccessException e) {
-			get_module().log.severe("Could not re-enable enchantment registration! Shutting down.");
-			get_module().getServer().shutdown();
-		}
 	}
 
 	public ItemStack update_enchanted_item(ItemStack item_stack) {
@@ -88,8 +81,9 @@ public class EnchantmentManager extends Listener<Core> {
 		// 1. Build a list of all enchantments that would be removed, because
 		//    they are superseded by some enchantment.
 		final var to_remove_inclusive = enchantments.keySet().stream()
-			.filter(x -> x instanceof BukkitEnchantmentWrapper)
-			.map(x -> ((BukkitEnchantmentWrapper)x).custom_enchantment().supersedes())
+			.map(x -> ((CraftEnchantment)x).getHandle())
+			.filter(x -> x instanceof NativeEnchantmentWrapper)
+			.map(x -> ((NativeEnchantmentWrapper)x).custom().supersedes())
 			.flatMap(Set::stream)
 			.collect(Collectors.toSet());
 
@@ -99,13 +93,19 @@ public class EnchantmentManager extends Listener<Core> {
 		//    enchantments to remove. Consider this: A supersedes B, and B supersedes C, but
 		//    A doesn't supersede C. Now an item with A B and C should get reduced to
 		//    A and C, not just to A.
-		enchantments.keySet().stream()
-			.filter(x -> x instanceof BukkitEnchantmentWrapper)
-			.filter(x -> !to_remove_inclusive.contains(x.getKey())) // Ignore enchantments that are themselves removed.
-			.map(x -> ((BukkitEnchantmentWrapper)x).custom_enchantment().supersedes())
+		var to_remove = enchantments.keySet().stream()
+			.map(x -> ((CraftEnchantment)x).getHandle())
+			.filter(x -> x instanceof NativeEnchantmentWrapper)
+			.filter(x -> !to_remove_inclusive.contains(((NativeEnchantmentWrapper)x).custom().key())) // Ignore enchantments that are themselves removed.
+			.map(x -> ((NativeEnchantmentWrapper)x).custom().supersedes())
 			.flatMap(Set::stream)
-			.map(Enchantment::getByKey)
-			.forEach(item_stack::removeEnchantment);
+			.map(x -> org.bukkit.Registry.ENCHANTMENT.get(x))
+			.collect(Collectors.toSet());
+
+		for (var e : to_remove) {
+			item_stack.removeEnchantment(e);
+			enchantments.remove(e);
+		}
 	}
 
 	private void update_lore(ItemStack item_stack, Map<Enchantment, Integer> enchantments) {
@@ -114,7 +114,7 @@ public class EnchantmentManager extends Listener<Core> {
 		final var vane_enchantments = enchantments
 			.entrySet()
 			.stream()
-			.filter(p -> p.getKey() instanceof BukkitEnchantmentWrapper)
+			.filter(p -> ((CraftEnchantment)p.getKey()).getHandle() instanceof NativeEnchantmentWrapper)
 			.sorted(Map.Entry.<Enchantment, Integer>comparingByKey(Comparator.comparing(x -> x.getKey().toString()))
 				.thenComparing(Map.Entry.comparingByValue())
 			)
@@ -127,7 +127,7 @@ public class EnchantmentManager extends Listener<Core> {
 
 		lore.removeIf(this::is_enchantment_lore);
 		lore.addAll(0, vane_enchantments.stream().map(ench ->
-			ItemUtil.add_sentinel(((BukkitEnchantmentWrapper) ench.getKey()).custom_enchantment().display_name(ench.getValue()), SENTINEL)
+			ItemUtil.add_sentinel(((NativeEnchantmentWrapper)((CraftEnchantment) ench.getKey()).getHandle()).custom().display_name(ench.getValue()), SENTINEL)
 		).toList());
 
 		// Set lore

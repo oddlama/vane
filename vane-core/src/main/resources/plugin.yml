@@ -6,7 +6,7 @@ authors: [oddlama]
 website: 'https://github.com/oddlama/vane'
 
 depend: [ProtocolLib]
-softdepend: [Pl3xMap]
+softdepend: []
 
 main: org.oddlama.vane.core.Core
 database: false

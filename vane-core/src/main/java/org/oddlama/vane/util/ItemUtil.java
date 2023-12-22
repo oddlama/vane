@@ -20,8 +20,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.craftbukkit.v1_20_R1.enchantments.CraftEnchantment;
-import org.bukkit.craftbukkit.v1_20_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_20_R3.enchantments.CraftEnchantment;
+import org.bukkit.craftbukkit.v1_20_R3.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -157,12 +157,12 @@ public class ItemUtil {
 		final var a_rarity = ae
 				.keySet()
 				.stream()
-				.mapToInt(e -> CraftEnchantment.getRaw(e).getRarity().getWeight())
+				.mapToInt(e -> ((CraftEnchantment)e).getHandle().getRarity().getWeight())
 				.sum();
 		final var b_rarity = be
 				.keySet()
 				.stream()
-				.mapToInt(e -> CraftEnchantment.getRaw(e).getRarity().getWeight())
+				.mapToInt(e -> ((CraftEnchantment)e).getHandle().getRarity().getWeight())
 				.sum();
 		if (a_rarity != b_rarity) {
 			return b_rarity - a_rarity;
@@ -267,7 +267,7 @@ public class ItemUtil {
 	}
 
 	public static ItemStack skull_with_texture(final String name, final String base64_texture) {
-		final var profile = Bukkit.createProfile(SKULL_OWNER);
+		final var profile = Bukkit.createProfileExact(SKULL_OWNER, "-");
 		profile.setProperty(new ProfileProperty("textures", base64_texture));
 
 		final var item = new ItemStack(Material.PLAYER_HEAD);
@@ -334,7 +334,7 @@ public class ItemUtil {
 				key = key.substring(0, level_delim);
 			}
 
-			final var ench = Enchantment.getByKey(NamespacedKey.fromString(key));
+			final var ench = org.bukkit.Registry.ENCHANTMENT.get(NamespacedKey.fromString(key));
 			if (ench == null) {
 				throw new IllegalArgumentException(
 						"Cannot apply unknown enchantment '" + key + "' to item '" + item_stack + "'");

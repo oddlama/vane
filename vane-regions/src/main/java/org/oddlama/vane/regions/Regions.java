@@ -184,7 +184,6 @@ public class Regions extends Module<Regions> {
 
 	public RegionDynmapLayer dynmap_layer;
 	public RegionBlueMapLayer blue_map_layer;
-	public RegionPlexMapLayer plexmap_layer;
 
 	public RegionEconomyDelegate economy;
 	public boolean vane_portals_available = false;
@@ -205,7 +204,6 @@ public class Regions extends Module<Regions> {
 		new RegionSelectionListener(this);
 		dynmap_layer = new RegionDynmapLayer(this);
 		blue_map_layer = new RegionBlueMapLayer(this);
-		plexmap_layer = new RegionPlexMapLayer(this);
 
 		// Register admin permission
 		admin_permission =
@@ -532,13 +530,11 @@ public class Regions extends Module<Regions> {
 	public void update_marker(final Region region) {
 		dynmap_layer.update_marker(region);
 		blue_map_layer.update_marker(region);
-		plexmap_layer.update_marker(region);
 	}
 
 	public void remove_marker(final UUID region_id) {
 		dynmap_layer.remove_marker(region_id);
 		blue_map_layer.remove_marker(region_id);
-		plexmap_layer.remove_marker(region_id);
 	}
 
 	private void index_region(final Region region) {
@@ -641,7 +637,7 @@ public class Regions extends Module<Regions> {
 	public boolean may_administrate(final Player player, final RegionGroup group) {
 		return (
 			player.getUniqueId().equals(group.owner()) ||
-			group.get_role(player.getUniqueId()).get_setting(RoleSetting.ADMIN)
+			(group != null && group.get_role(player.getUniqueId()).get_setting(RoleSetting.ADMIN))
 		);
 	}
 
