@@ -15,6 +15,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Skull;
+import org.bukkit.craftbukkit.v1_20_R1.CraftWorld;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -212,6 +213,16 @@ public class BlockUtil {
 
 		// We are outside of the radius.
 		return null;
+	}
+
+	public static void update_lever(final Block block, final BlockFace face) {
+		final var level = ((CraftWorld)block.getWorld()).getHandle();
+		final var connected_block = block.getRelative(face.getOppositeFace());
+		final var block_pos_1 = new BlockPos(block.getX(), block.getY(), block.getZ());
+		final var block_pos_2 = new BlockPos(connected_block.getX(), connected_block.getY(), connected_block.getZ());
+		final var initiator_block = level.getBlockIfLoaded(block_pos_1);
+		level.updateNeighborsAt(block_pos_1, initiator_block);
+		level.updateNeighborsAt(block_pos_2, initiator_block);
 	}
 
 	public static class Corner {

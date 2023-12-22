@@ -119,7 +119,7 @@ to make vane compatible with a new minecraft release.
 
 12. Copy the generated resource pack to `docs/resourcepacks/<new_version>.zip`, and update
 	vane's version numer in `build.gradle.kts` (always bump minor version for mojang version updates).
-	Commit and add signed tag: `git commit -S -m 'chore: version bump' && git tag -s -m ''`.
+	Commit and add signed tag: `git commit -S -m 'chore: version bump' && git tag -s -m '' v1.11.0`.
 
 13. Push to main: `git push && git push --tags && git switch main && git merge --ff-only develop && git push && git switch develop`.
 

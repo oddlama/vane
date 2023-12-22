@@ -1,0 +1,93 @@
+# vim: set tabstop=2 softtabstop=0 expandtab shiftwidth=2:
+#
+# >> Ver lang-en.yml para descripciones de variables <<
+#
+# +-----------------------------------------+
+# | ¡PRECAUCIÓN: NO modificar este archivo! |
+# +-----------------------------------------+
+#
+# ¡Se sobrescribirá silenciosamente con actualizaciones! Si deseas
+# personalizar las cadenas tú mismo, copia este archivo a lang-custom.yml
+# y establece el idioma en config.yml como "lang: 'custom'"
+
+# ¡NO CAMBIAR! Versión de este archivo de idioma. Se utiliza para determinar
+# si el archivo necesita actualizarse.
+version: 2
+# Código de idioma correspondiente utilizado en paquetes de recursos. Utilizado para
+# generación de paquetes de recursos. Normalmente es una combinación de
+# código de idioma (ISO 639) y código de país (ISO 3166).
+resource_pack_lang_code: 'es_es'
+
+chat_message_formatter:
+  # Este es el formato para los mensajes de chat de los jugadores
+  # %1$s: nombre del jugador
+  # %2$s: mensaje
+  player_chat_format: '%1$s§7: %2$s'
+
+  # Este mensaje se envía cuando un jugador se une al servidor
+  # %1$s: nombre del jugador
+  player_join: "%1$s§e se ha unido al servidor"
+
+  # Este mensaje se envía cuando un jugador es expulsado del servidor
+  # %1$s: nombre del jugador
+  player_kick: "%1$s§e ha sido expulsado del servidor"
+
+  # Este mensaje se envía cuando un jugador abandona el servidor
+  # %1$s: nombre del jugador
+  player_quit: "%1$s§e ha abandonado el servidor"
+
+autostop:
+  # Este mensaje se envía cuando la detención automática se interrumpe debido a un comando administrativo
+  # o un jugador se une al servidor.
+  aborted: "§dDetención automática interrumpida"
+  # Este mensaje se envía cuando se programa la detención automática debido a un comando administrativo
+  # o cuando el último jugador abandona el servidor.
+  # %1$s: Tiempo hasta la detención
+  scheduled: "§dDetención automática programada en %1$s"
+  # Este mensaje se envía cuando se solicita el estado de la detención automática y ya está programada.
+  # %1$s: Tiempo hasta la detención
+  status: "§7Detención automática en %1$s"
+  # Este mensaje se envía cuando se solicita el estado de la detención automática pero no está programada.
+  status_not_scheduled: "§dDetención automática no programada"
+  # Este mensaje se envía cuando se realiza la detención automática real.
+  shutdown: "§dDetención automática iniciada"
+
+  command_autostop:
+    usage: "%1$s §7<§aabort§7|§aschedule§7|§astatus§7>"
+    description: "Administra la detención automática."
+    help: "§aabort§7:§r Cancela la tarea programada de detención automática.\n\
+      §aschedule §7[§bretardo§7]:§r Programa la tarea de detención automática de inmediato, sin importar la cantidad de jugadores. Acepta un retardo para anular el valor configurado.\n\
+      §astatus§7:§r Muestra el estado actual de la detención automática."
+
+hazard_protection:
+  # Este mensaje se envía cuando se impide que el Wither aparezca en un mundo que no está en la lista blanca
+  # %1$s: nombre del mundo
+  wither_spawn_prohibited: "§7El Wither no puede aparecer en este mundo"
+
+command_gamemode:
+  # Este mensaje se envía cuando el modo de juego de un jugador es cambiado con el comando gamemode.
+  # %1$s: nombre del jugador
+  # %2$s: nombre del modo de juego
+  set: "§7Se ha establecido el modo de juego de %1$s§7 a %2$s"
+  usage: "%1$s §bgamemode §7[§bjugador§7]"
+  description: "§bgamemode §7[§bjugador§7]"
+  help: "Establece el modo de juego de un jugador."
+
+command_slimechunk:
+  # Este mensaje se envía cuando el jugador está en un chunk de slime
+  slime_chunk_yes: "§aEste es un chunk de slime"
+  # Este mensaje se envía cuando el jugador no está en un chunk de slime
+  slime_chunk_no: "§cEsto no es un chunk de slime"
+  usage: "%1$s"
+  description: "Comprueba si el chunk actual es un chunk de slime"
+  help: "Comprueba si el chunk actual es un chunk de slime"
+
+command_time:
+  usage: "%1$s §btime §7[§bmundo§7]"
+  description: "Establece el tiempo del mundo actual o dado"
+  help: "Establece el tiempo del mundo actual o dado"
+
+command_weather:
+  usage: "%1$s §bweather §7[§bmundo§7]"
+  description: "Establece el clima del mundo actual o dado"
+  help: "Establece el clima del mundo actual o dado"

@@ -42,7 +42,6 @@ public class NorthCompass extends CustomItem<Trifles> {
 		final var worlds = get_module().getServer().getWorlds();
 		if (worlds.size() > 0) {
 			final var world = worlds.get(0);
-			System.out.println("update noth " + world);
 			if (world != null) {
 				item_stack.editMeta(CompassMeta.class, meta -> meta.setLodestone(new Location(world, 0.0, 0.0, -999999999.0)));
 			}

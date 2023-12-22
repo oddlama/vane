@@ -3,6 +3,7 @@ package org.oddlama.vane.portals.portal;
 import static org.oddlama.vane.core.persistent.PersistentSerializer.from_json;
 import static org.oddlama.vane.core.persistent.PersistentSerializer.to_json;
 import static org.oddlama.vane.util.BlockUtil.adjacent_blocks_3d;
+import static org.oddlama.vane.util.BlockUtil.update_lever;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -289,6 +290,7 @@ public class Portal {
 			final var lever = (Switch) l.getBlockData();
 			lever.setPowered(activated);
 			l.setBlockData(lever);
+			update_lever(l, lever.getFacing());
 		}
 	}
 
@@ -377,6 +379,7 @@ public class Portal {
 				// Disable beam
 				final var end_gateway = (EndGateway) portal_block.block().getState(false);
 				end_gateway.setAge(200l);
+				end_gateway.update(true, false);
 			}
 			if (portal_block.type() == PortalBlock.Type.CONSOLE) {
 				portals.update_console_item(this, portal_block.block());

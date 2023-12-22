@@ -7,7 +7,8 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Tag;
 import org.bukkit.inventory.Recipe;
-import org.bukkit.inventory.SmithingRecipe;
+import org.bukkit.inventory.RecipeChoice;
+import org.bukkit.inventory.SmithingTransformRecipe;
 import org.oddlama.vane.util.ItemUtil;
 
 public class SmithingRecipeDefinition extends RecipeDefinition {
@@ -102,6 +103,6 @@ public class SmithingRecipeDefinition extends RecipeDefinition {
 
 	@Override
 	public Recipe to_recipe(NamespacedKey base_key) {
-		return new SmithingRecipe(key(base_key), ItemUtil.itemstack_from_string(this.result).getLeft(), RecipeDefinition.recipe_choice(base), RecipeDefinition.recipe_choice(addition), copy_nbt);
+		return new SmithingTransformRecipe(key(base_key), ItemUtil.itemstack_from_string(this.result).getLeft(), new RecipeChoice.MaterialChoice(Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE), RecipeDefinition.recipe_choice(base), RecipeDefinition.recipe_choice(addition), copy_nbt);
 	}
 }

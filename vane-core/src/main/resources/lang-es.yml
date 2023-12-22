@@ -1,0 +1,156 @@
+# vim: set tabstop=2 softtabstop=0 expandtab shiftwidth=2:
+#
+# >> Consulta lang-en.yml para descripciones de variables <<
+#
+# +-----------------------------------------+
+# | ¡PRECAUCIÓN: NO modificar este archivo! |
+# +-----------------------------------------+
+#
+# ¡Se sobrescribirá silenciosamente con actualizaciones! Si deseas
+# personalizar las cadenas tú mismo, copia este archivo a lang-custom.yml
+# y establece el idioma en config.yml como "lang: 'custom'"
+
+# ¡NO CAMBIAR! Versión de este archivo de idioma. Se utiliza para determinar
+# si el archivo necesita actualizarse.
+version: 4
+# Código de idioma correspondiente utilizado en paquetes de recursos. Utilizado para
+# generación de paquetes de recursos. Normalmente es una combinación de
+# código de idioma (ISO 639) y código de país (ISO 3166).
+resource_pack_lang_code: 'es_es'
+
+# Este mensaje se envía cuando un comando requiere un jugador pero es ejecutado
+# por un no jugador.
+command_not_a_player: "§cerror:§6 el comando debe ser ejecutado por un jugador."
+# Este mensaje se envía cuando el remitente del comando no tiene los permisos requeridos.
+command_permission_denied: "§cerror:§6 permiso denegado."
+
+# Este mensaje se envía cuando se encuentra un formato de tiempo inválido.
+# %1$s: mensaje de error de formato
+invalid_time_format: "§cerror:§6 tiempo inválido: %1$s"
+
+# Este mensaje se envía cuando se intenta romper un bloque con una tabla de botín por primera vez.
+break_loot_block_prevented: "§6Este bloque tiene una tabla de botín y se volverá a llenar automáticamente después de cierto tiempo. Si realmente quieres destruir este bloque, espera 5 segundos y vuelve a romperlo."
+
+command_customitem:
+  usage: "%1$s §agive §7<§bobjeto§7>"
+  description: "Da un objeto personalizado específico al jugador."
+  help: "§agive §7<§bobjeto§7>:§r Da un objeto personalizado específico al jugador."
+
+command_enchant:
+  # Este mensaje se envía cuando se proporciona un nivel de encantamiento demasiado bajo para el encantamiento elegido.
+  # %1$s: nivel dado
+  # %2$s: nivel mínimo
+  level_too_low: "§cerror:§6 el nivel %1$s§6 es demasiado bajo, debe ser al menos %2$s"
+  # Este mensaje se envía cuando se proporciona un nivel de encantamiento demasiado alto para el encantamiento elegido.
+  # %1$s: nivel dado
+  # %2$s: nivel máximo
+  level_too_high: "§cerror:§6 el nivel %1$s§6 es demasiado alto, debe ser como máximo %2$s"
+  # Este mensaje se envía cuando el encantamiento seleccionado no se puede aplicar al objeto en mano.
+  # %1$s: encantamiento
+  # %2$s: objeto en mano
+  invalid_enchantment: "§cerror: %1$s§6 no se puede aplicar a %2$s"
+  usage: "%1$s §bencantamiento §7[§bnivel§7]"
+  description: "Encanta el objeto en tu mano."
+  help: "Encanta el objeto en tu mano."
+
+command_vane:
+  # Este mensaje se envía cuando un módulo se ha recargado correctamente.
+  # %1$s: módulo
+  reload_success: "%1$s§7: §aRecarga exitosa"
+  # Este mensaje se envía cuando un módulo no se pudo recargar.
+  # %1$s: módulo
+  reload_fail: "%1$s§7: §cRecarga fallida"
+  # Este mensaje se envía cuando se ha generado correctamente el paquete de recursos.
+  # %1$s: ruta del archivo del paquete de recursos
+  resource_pack_generate_success: "§aPaquete de recursos generado correctamente: %1$s"
+  # Este mensaje se envía cuando no se pudo generar el paquete de recursos.
+  resource_pack_generate_fail: "§cSe produjo un error al generar el paquete de recursos"
+  usage: "%1$s §7<§areload§7|§agenerate_resource_pack§7>"
+  description: "Administra los plugins de Vane."
+  help: "§areload §7[§bmódulo§7]:§r Recarga todos o el módulo Vane especificado.\n\
+    §agenerate_resource_pack§7:§r Genera el paquete de recursos de Vane."
+
+resource_pack:
+  # Este mensaje de expulsión se utiliza cuando un paquete de recursos obligatorio fue rechazado por un jugador.
+  declined: "Necesitas aceptar el paquete de recursos para jugar en este servidor.\n\
+    Se necesita para la localización y las texturas. Si lo rechazaste accidentalmente,\n\
+    puedes cambiar esto editando la entrada de este servidor en tu lista de servidores."
+  # Este mensaje de expulsión se utiliza cuando no se pudo descargar un paquete de recursos obligatorio para un jugador.
+  download_failed: "§cParece que ha fallado la descarga de tu paquete de recursos.§r\n\
+    §7(Se te ha desconectado para evitar errores de visualización)\n\
+    \n\
+    §dPor favor, inténtalo de nuevo."
+
+menus:
+  head_selector:
+    # El título para el menú de selección de cabezas.
+    # %1$s: Cantidad total de cabezas en la biblioteca
+    title: "%1$s §8§lCabezas"
+    # El título para el menú de filtrado.
+    filter_title: "§8§lFiltrar Biblioteca de Cabezas"
+    # Representa una cabeza en la biblioteca.
+    # %1$s: Nombre de la cabeza
+    # %2$s: Categoría de la cabeza
+    # %3$s: Etiquetas de la cabeza
+    select_head:
+      name: "%1$s"
+      lore:
+        - ""
+        - "§7Categoría: %2$s"
+        - "§7Etiquetas: %3$s"
+
+  # Menú de selección de objetos.
+  item_selector:
+    # El objeto utilizado para aceptar la selección.
+    accept:
+      name: "§a§lAceptar"
+      lore: ["§bSelecciona§7 el objeto actualmente seleccionado."]
+
+    # El objeto utilizado para cancelar la selección.
+    cancel:
+      name: "§c§lCancelar"
+      lore: ["§6Cancelar§7 la selección."]
+
+    # El objeto que representa el objeto actualmente seleccionado.
+    selected:
+      name: "§d§lObjeto Seleccionado"
+      lore:
+        - ""
+        - "Haz clic en cualquier objeto de tu inventario para seleccionarlo."
+        - ""
+        - "§bHaz clic izquierdo§7 para restablecer los cambios."
+        - "§bHaz clic derecho§7 para borrar (si está permitido)."
+
+  # Menú de selección genérico.
+  generic_selector:
+    # El objeto que selecciona la n-ésima página
+    # %1$s: Número de página
+    page:
+      name: "§bPágina %1$s"
+      lore: []
+
+    # El objeto que muestra la página actual
+    # %1$s: Número de página
+    # %2$s: Cantidad total de páginas
+    # %3$s: Cantidad total de objetos (filtrados)
+    # %4$s: Cantidad total de objetos (sin filtrar)
+    current_page:
+      name: "§aPágina Actual %1$s §7/ %2$s"
+      lore:
+        - ""
+        - "§b#Objetos Filtrados: %3$s"
+
+    # El objeto utilizado para abrir el menú de filtrado.
+    # Al hacer clic derecho se restablece el filtro.
+    filter:
+      name: "§d§lFiltrar"
+      lore:
+        - ""
+        - "§bHaz clic izquierdo§7 para abrir el menú de filtrado."
+        - "§bHaz clic derecho§7 para restablecer el filtro."
+
+    # El objeto utilizado para cancelar la selección.
+    cancel:
+      name: "§c§lCancelar"
+      lore: ["§6Abortar§7 la selección."]
+

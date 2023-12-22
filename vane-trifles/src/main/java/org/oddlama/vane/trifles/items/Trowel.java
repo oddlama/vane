@@ -13,7 +13,8 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
-import org.bukkit.craftbukkit.v1_19_R3.block.CraftBlock;
+import org.bukkit.Tag;
+import org.bukkit.craftbukkit.v1_20_R1.block.CraftBlock;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -196,7 +197,7 @@ public class Trowel extends CustomItem<Trifles> {
 			final var index = random.nextInt(count);
 			final var item_stack = inventory.getItem(possible_slots[index]);
 			// Skip empty slots and items that are not placeable blocks
-			if (item_stack == null || !item_stack.getType().isBlock()) {
+			if (item_stack == null || !item_stack.getType().isBlock() || Tag.SHULKER_BOXES.isTagged(item_stack.getType())) {
 				// Eliminate end of list, so copy item at end of list to the index (< count).
 				possible_slots[index] = possible_slots[--count];
 				continue;
