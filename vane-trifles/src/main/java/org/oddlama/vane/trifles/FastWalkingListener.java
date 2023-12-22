@@ -1,9 +1,11 @@
 package org.oddlama.vane.trifles;
 
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.oddlama.vane.annotation.config.ConfigBoolean;
 import org.oddlama.vane.core.Listener;
 
 import io.papermc.paper.event.entity.EntityMoveEvent;
@@ -16,6 +18,9 @@ public class FastWalkingListener extends Listener<Trifles> {
 		super(context);
 		this.fast_walking = context;
 	}
+	
+	@ConfigBoolean(def = true, desc = "wether or not to speed villagers on path blocks.")
+	public boolean villager_speedwalk;
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void on_player_move(final PlayerMoveEvent event) {
@@ -44,6 +49,8 @@ public class FastWalkingListener extends Listener<Trifles> {
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void on_entity_move(final EntityMoveEvent event) {
 		final var entity = event.getEntity();
+
+		if(entity.getType()  == EntityType.VILLAGER && villager_speedwalk == false) return;
 
 		// Inspect block type just a little below
 		var block = event.getTo().clone().subtract(0.0, 0.1, 0.0).getBlock();
