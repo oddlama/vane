@@ -9,6 +9,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.craftbukkit.v1_20_R3.enchantments.CraftEnchantment;
 import org.jetbrains.annotations.NotNull;
 import org.oddlama.vane.annotation.enchantment.Rarity;
 import org.oddlama.vane.annotation.enchantment.VaneEnchantment;
@@ -36,7 +37,6 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 	private String name;
 	private NamespacedKey key;
 	private NativeEnchantmentWrapper native_wrapper;
-	private BukkitEnchantmentWrapper bukkit_wrapper;
 
 	private final Set<NamespacedKey> supersedes = new HashSet<>();
 
@@ -68,12 +68,9 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 		instances.put(getClass(), this);
 
 		// Register and create wrappers
+		get_module().core.unfreeze_registries();
 		native_wrapper = new NativeEnchantmentWrapper(this);
 		Nms.register_enchantment(key(), native_wrapper);
-
-		// After registering in NMS we can create a wrapper for bukkit
-		bukkit_wrapper = new BukkitEnchantmentWrapper(this, native_wrapper);
-		Enchantment.registerEnchantment(bukkit_wrapper);
 
 		// Automatic recipes and loot table config and registration
 		recipes = new Recipes<T>(get_context(), this.key, this::default_recipes);
@@ -81,17 +78,10 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 	}
 
 	/**
-	 * Returns the bukkit wrapper for the given custom enchantment.
-	 */
-	public static BukkitEnchantmentWrapper bukkit(Class<? extends CustomEnchantment<?>> cls) {
-		return instances.get(cls).bukkit();
-	}
-
-	/**
 	 * Returns the bukkit wrapper for this enchantment.
 	 */
-	public final BukkitEnchantmentWrapper bukkit() {
-		return bukkit_wrapper;
+	public final Enchantment bukkit() {
+		return CraftEnchantment.minecraftToBukkit(native_wrapper);
 	}
 
 	/**

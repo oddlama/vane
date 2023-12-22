@@ -1,0 +1,138 @@
+# vim: set tabstop=2 softtabstop=0 expandtab shiftwidth=2:
+#
+# >> See lang-en.yml for variable descriptions <<
+#
+# +-----------------------------------+
+# | CAUTION: Do NOT change this file! |
+# +-----------------------------------+
+#
+# It will be silently overwritten with updates! If you want
+# to customize strings yourself, copy this file to lang-custom.yml
+# and set the language in the config.yml to "lang: 'custom'"
+
+# DO NOT CHANGE! The version of this language file. Used to determine
+# if the file needs to be updated.
+version: 4
+# The corresponding language code used in resource packs. Used for
+# resource pack generation. Typically this is a combination of the
+# language code (ISO 639) and the country code (ISO 3166).
+resource_pack_lang_code: 'tr_tr'
+
+command_heads:
+  usage: "%1$s"
+  description: "Kafa kitaplığından kafaları alın."
+  help: "Kafa kitaplığını açmak için yazın."
+
+command_finditem:
+  usage: "%1$s"
+  description: "Verilen malzemeyi yakındaki sandıklarda ve varlıklarda arar."
+  help: "Verilen malzemeyi yakındaki sandıklarda ve varlıklarda arar."
+
+command_setspawn:
+  usage: "%1$s"
+  description: "Küresel spawn konumunu geçerli konumunuza ayarlar."
+  help: "Küresel spawn konumunu geçerli konumunuza ayarlar."
+
+storage:
+  open_stacked_item: "Bu öğeleri açmak için önce stackten çıkarmanız gerekir."
+  item_pouch:
+    # The display name of this item variant.
+    name: "Kese"
+  item_backpack:
+    # The display name of this item variant.
+    name: "Sırt Çantası"
+
+xp_bottles:
+  item_small_xp_bottle:
+    # The display name of this item variant.
+    name: "Küçük Deneyim Şişesi"
+  item_medium_xp_bottle:
+    # The display name of this item variant.
+    name: "Orta Deneyim Şişesi"
+  item_large_xp_bottle:
+    # The display name of this item variant.
+    name: "Büyük Deneyim Şişesi"
+
+item_empty_xp_bottle:
+  # The display name of this item variant.
+  name: "Boş Deneyim Şişesi"
+
+item_north_compass:
+  # The display name of this item variant.
+  name: "Kuzey Pusulası"
+
+item_reinforced_elytra:
+  # The display name of this item variant.
+  name: "Netherite Elytra"
+
+item_file:
+  # The display name of this item variant.
+  name: "Dosya"
+
+item_slime_bucket:
+  # The display name of this item variant.
+  name: "Bir Kovada Balçık"
+
+item_papyrus_scroll:
+  # The display name of this item variant.
+  name: "Papirüs Parşömeni"
+
+item_trowel:
+  # The display name of this item variant.
+  name: "Mala"
+  # The lore of every trowel
+  # %1$s: The current feed source
+  lore:
+    - "§7Besleme kaynağını değiştirmek için envanterinizdeki bu öğeye sağ tıklayın."
+    - "§7Mevcut besleme kaynağı: %1$s"
+
+sickles:
+  item_wooden_sickle:
+    # The display name of this item variant.
+    name: "Tahta Orak"
+  item_stone_sickle:
+    # The display name of this item variant.
+    name: "Taş Orak"
+  item_iron_sickle:
+    # The display name of this item variant.
+    name: "Demir Orak"
+  item_golden_sickle:
+    # The display name of this item variant.
+    name: "Altın Orak"
+  item_diamond_sickle:
+    # The display name of this item variant.
+    name: "Elmas Orak"
+  item_netherite_sickle:
+    # The display name of this item variant.
+    name: "Netherite Orak"
+
+scrolls:
+  item_home_scroll:
+    # The display name of this item variant.
+    name: "Portal Parşömeni (Ev)"
+  item_unstable_scroll:
+    # The display name of this item variant.
+    name: "Portal Parşömeni (Stabil Değil!)"
+    # Shown when used but no scroll was used previously.
+    teleport_no_previous_teleport: "§cDaha önce hiç başka parşömen kullanmadın."
+  item_spawn_scroll:
+    # The display name of this item variant.
+    name: "Portal Parşömeni (Spawn)"
+  item_lodestone_scroll:
+    # The display name of this item variant.
+    name: "Portal Parşömeni (Mıknatıs taşı)"
+    # Shown when used but no lodestone was ever bound.
+    teleport_no_bound_lodestone: "§bBu parşömeni (yeniden) bağlamak için önce bir mıknatıs taşına gizlice girin ve sağ tıklayın."
+    # Shown when used but the bound lodestone doesn't exist anymore.
+    teleport_missing_lodestone: "§cParşömen hiçbir şey yapmıyor gibi görünüyor.. &6Bağlı mıknatıs taşının kaybolmuş olabileceğinden korkuyorsun."
+    # The lore of a bound scoll
+    # %1$s: Bound lodestone's world name
+    # %2$s: Bound lodestone's X position
+    # %3$s: Bound lodestone's Y position
+    # %4$s: Bound lodestone's Z position
+    bound_lore: "§7%1$s (%2$s§7, %3$s§7, %4$s§7) kordinatlarına bağlı."
+  item_death_scroll:
+    # The display name of this item variant.
+    name: "Portal Parşömeni (Ölü)"
+    # Sent when a death scroll is used but the user hasn't died recently or already used a scroll of this type.
+    teleport_no_recent_death: "§cSon zamanlarda ölmediniz veya zaten bir ölüm parşömeni kullandın!"

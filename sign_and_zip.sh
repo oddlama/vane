@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env nix-shell
+#!nix-shell -i bash -p bash zip
 
 die() {
     echo "[1;31merror:[m $*" >&2

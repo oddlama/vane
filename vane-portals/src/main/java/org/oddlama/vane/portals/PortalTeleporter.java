@@ -17,7 +17,7 @@ import org.bukkit.event.entity.EntityTeleportEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.util.Vector;
 import org.oddlama.vane.core.Listener;
-import org.oddlama.vane.core.event.EntityMoveEvent;
+import org.oddlama.vane.portals.event.EntityMoveEvent;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.portals.portal.Portal;
 import org.oddlama.vane.util.Nms;
@@ -181,7 +181,7 @@ public class PortalTeleporter extends Listener<Portals> {
 				entities_portalling.put(entity_id, event.getFrom().clone());
 			} else if (!get_module().portal_area_materials.contains(block.getType())) {
 				// At least 2 blocks away and outside of portal area → finish portalling.
-				if (event.getFrom().distance(loc) > 2.0) {
+				if (loc.getWorld() == event.getFrom().getWorld() && event.getFrom().distance(loc) > 2.0) {
 					entities_portalling.remove(entity_id);
 				}
 			}

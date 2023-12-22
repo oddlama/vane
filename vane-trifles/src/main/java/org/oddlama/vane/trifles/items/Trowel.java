@@ -14,7 +14,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.Tag;
-import org.bukkit.craftbukkit.v1_20_R1.block.CraftBlock;
+import org.bukkit.craftbukkit.v1_20_R3.block.CraftBlock;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -224,7 +224,7 @@ public class Trowel extends CustomItem<Trifles> {
 			}
 
 			// Place the item by calling NMS to get correct placing behavior
-			final var result = nms_item.useOn(action_context, InteractionHand.MAIN_HAND);
+			final var result = nms_item.useOn(action_context);
 
 			// Don't consume item in creative mode
 			if (player.getGameMode() == GameMode.CREATIVE) {

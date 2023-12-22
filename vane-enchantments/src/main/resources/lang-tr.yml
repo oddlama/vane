@@ -1,0 +1,90 @@
+# vim: set tabstop=2 softtabstop=0 expandtab shiftwidth=2:
+#
+# >> See lang-en.yml for variable descriptions <<
+#
+# +-----------------------------------+
+# | CAUTION: Do NOT change this file! |
+# +-----------------------------------+
+#
+# It will be silently overwritten with updates! If you want
+# to customize strings yourself, copy this file to lang-custom.yml
+# and set the language in the config.yml to "lang: 'custom'"
+
+# DO NOT CHANGE! The version of this language file. Used to determine
+# if the file needs to be updated.
+version: 4
+# The corresponding language code used in resource packs. Used for
+# resource pack generation. Typically this is a combination of the
+# language code (ISO 639) and the country code (ISO 3166).
+resource_pack_lang_code: 'tr_tr'
+
+item_ancient_tome:
+  # The display name of this item variant.
+  name: "Antik Cilt"
+
+item_enchanted_ancient_tome:
+  # The display name of this item variant.
+  name: "Antik Cilt"
+
+item_ancient_tome_of_knowledge:
+  # The display name of this item variant.
+  name: "Antik Bilgi Kitabı"
+
+item_enchanted_ancient_tome_of_knowledge:
+  # The display name of this item variant.
+  name: "Antik Bilgi Kitabı"
+
+item_ancient_tome_of_the_gods:
+  # The display name of this item variant.
+  name: "Tanrıların Antik Kitabı"
+
+item_enchanted_ancient_tome_of_the_gods:
+  # The display name of this item variant.
+  name: "Tanrıların Antik Kitabı"
+
+enchantment_angel:
+  # The display name of this enchantment. Will be packed into a resource pack.
+  name: "Melek"
+
+enchantment_grappling_hook:
+  # The display name of this enchantment. Will be packed into a resource pack.
+  name: "Kanca"
+
+enchantment_hell_bent:
+  # The display name of this enchantment. Will be packed into a resource pack.
+  name: "Cehennem Kemeri"
+
+enchantment_leafchopper:
+  # The display name of this enchantment. Will be packed into a resource pack.
+  name: "Yaprak Kıyıcı"
+
+enchantment_lightning:
+  # The display name of this enchantment. Will be packed into a resource pack.
+  name: "Yıldırım"
+  
+enchantment_rake:
+  # The display name of this enchantment. Will be packed into a resource pack.
+  name: "Tırmık"
+
+enchantment_seeding:
+  # The display name of this enchantment. Will be packed into a resource pack.
+  name: "Tohumlama"
+
+enchantment_soulbound:
+  # The display name of this enchantment. Will be packed into a resource pack.
+  name: "Ruh Bağlılığı"
+  drop_lock_warning: "Ruh Bağlılığı olan Öğeleri yalnızca fare kullanılarak düşürülebilir"
+  drop_cooldown: "Düşüşü onaylamak için tekrar bırakın"
+  dropped_notification: "Düşen Ruh Bağlılığı olan Öğe: %1$s"
+
+enchantment_take_off:
+  # The display name of this enchantment. Will be packed into a resource pack.
+  name: "Kalkış"
+
+enchantment_unbreakable:
+  # The display name of this enchantment. Will be packed into a resource pack.
+  name: "Kırılmaz"
+
+enchantment_wings:
+  # The display name of this enchantment. Will be packed into a resource pack.
+  name: "Kanatlar"

@@ -38,6 +38,10 @@ public class NativeEnchantmentWrapper extends Enchantment {
 		}
 	}
 
+	public CustomEnchantment<?> custom() {
+		return this.enchantment;
+	}
+
 	@Override
 	public int getMinLevel() {
 		return enchantment.min_level();

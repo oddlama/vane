@@ -10,7 +10,7 @@ public class Maintenance implements SimpleCommand {
 	ProxyMaintenanceCommand cmd;
 
 	public Maintenance(final Velocity plugin) {
-		this.cmd = new ProxyMaintenanceCommand("vane_proxy.commands.ping", plugin);
+		this.cmd = new ProxyMaintenanceCommand("vane_proxy.commands.maintenance", plugin);
 	}
 
 	@Override

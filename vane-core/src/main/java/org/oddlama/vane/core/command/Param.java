@@ -292,14 +292,14 @@ public interface Param {
 		return choice(
 			"enchantment",
 			sender ->
-				Arrays.stream(Enchantment.values()).filter(e -> filter.apply(sender, e)).collect(Collectors.toList()),
+				org.bukkit.Registry.ENCHANTMENT.stream().filter(e -> filter.apply(sender, e)).collect(Collectors.toList()),
 			(sender, e) -> e.getKey().toString(),
 			(sender, str) -> {
 				var parts = str.split(":");
 				if (parts.length != 2) {
 					return null;
 				}
-				var e = Enchantment.getByKey(namespaced_key(parts[0], parts[1]));
+				var e = org.bukkit.Registry.ENCHANTMENT.get(namespaced_key(parts[0], parts[1]));
 				if (!filter.apply(sender, e)) {
 					return null;
 				}

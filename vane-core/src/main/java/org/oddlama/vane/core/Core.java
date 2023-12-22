@@ -32,7 +32,6 @@ import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.menu.MenuManager;
 import org.oddlama.vane.core.misc.AuthMultiplexer;
 import org.oddlama.vane.core.misc.CommandHider;
-import org.oddlama.vane.core.misc.EntityMoveProcessor;
 import org.oddlama.vane.core.misc.HeadLibrary;
 import org.oddlama.vane.core.misc.LootChestProtector;
 import org.oddlama.vane.core.module.Module;
@@ -47,6 +46,8 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.enchantment.Enchantment;
 
 @VaneModule(name = "core", bstats = 8637, config_version = 6, lang_version = 4, storage_version = 1)
 public class Core extends Module<Core> {
@@ -126,7 +127,6 @@ public class Core extends Module<Core> {
 		// Components
 		enchantment_manager = new EnchantmentManager(this);
 		new HeadLibrary(this);
-		new EntityMoveProcessor(this);
 		new AuthMultiplexer(this);
 		new LootChestProtector(this);
 		new VanillaFunctionalityInhibitor(this);
@@ -153,7 +153,7 @@ public class Core extends Module<Core> {
 		schedule_next_tick(() -> freeze_registries());
 	}
 
-	private void unfreeze_registries() {
+	public void unfreeze_registries() {
 		// NOTE: MAGIC VALUES! Introduced for 1.18.2 when registries were frozen. Sad, no workaround at the time.
 		try {
 			// Make relevant fields accessible
@@ -166,13 +166,14 @@ public class Core extends Module<Core> {
 			frozen.set(BuiltInRegistries.ENTITY_TYPE, false);
 			frozen.set(BuiltInRegistries.ENCHANTMENT, false);
 			intrusive_holder_cache.set(BuiltInRegistries.ENTITY_TYPE, new IdentityHashMap<EntityType<?>, Holder.Reference<EntityType<?>>>());
-			// BuiltInRegistries.ENCHANTMENT is a "simple registry" that doesn't require intrusive holders
+			// Since 1.20.2 this is also needed for enchantments:
+			intrusive_holder_cache.set(BuiltInRegistries.ENCHANTMENT, new IdentityHashMap<Enchantment, Holder.Reference<Enchantment>>());
 		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
 			e.printStackTrace();
 		}
 	}
 
-	private void freeze_registries() {
+	public void freeze_registries() {
 		BuiltInRegistries.ENTITY_TYPE.freeze();
 		BuiltInRegistries.ENCHANTMENT.freeze();
 	}

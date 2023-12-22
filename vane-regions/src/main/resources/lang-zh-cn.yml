@@ -1,0 +1,294 @@
+# vim: set tabstop=2 softtabstop=0 expandtab shiftwidth=2:
+#
+# >> See lang-en.yml for variable descriptions <<
+#
+# +-----------------------------------+
+# | CAUTION: Do NOT change this file! |
+# +-----------------------------------+
+#
+# It will be silently overwritten with updates! If you want
+# to customize strings yourself, copy this file to lang-custom.yml
+# and set the language in the config.yml to "lang: 'custom'"
+
+# DO NOT CHANGE! The version of this language file. Used to determine
+# if the file needs to be updated.
+version: 3
+# The corresponding language code used in resource packs. Used for
+# resource pack generation. Typically this is a combination of the
+# language code (ISO 639) and the country code (ISO 3166).
+resource_pack_lang_code: 'zh_cn'
+
+start_region_selection: "§a透过空手左、右键选择两个区块，选择一个区域"
+select_primary_block: "§a选择主要区块 (%1$s§a, %2$s§a, %3$s§a)"
+select_secondary_block: "§a选择次要区块 (%1$s§a, %2$s§a, %3$s§a)"
+
+command_region:
+  usage: "%1$s"
+  description: "打开区域管理菜单"
+  help: "执行以打开区域管理菜单"
+
+dynmap:
+  layer_label: "区域"
+  marker_label: "%1$s"
+
+blue_map:
+  layer_label: "区域"
+  marker_label: "%1$s"
+
+menus:
+  enter_region_group_name:
+    title: "§8§l输入区域群组名称"
+  enter_region_name:
+    title: "§8§l输入区域名称"
+  enter_role_name:
+    title: "§8§l输入权限组名称"
+  main:
+    title: "§8§l管理区域"
+    create_region_start_selection:
+      name: "§a§l创建区域"
+      lore:
+        - ""
+        - "§7开始新的区域选择手持空手，"
+        - "§6左键§7选择第一个方块，"
+        - "§6右键§7选择第二个方块"
+        - "§7两个方块之间的空间将成为区域"
+    create_region_invalid_selection:
+      name: "§c§l无效选择"
+      lore:
+        - ""
+        - "§6你的选择 (%8$s§6 x %9$s§6 x %10$s§6) 无效！"
+        - "§6必须符合以下要求："
+        - "§7- %1$s§7 设置了主要方块"
+        - "§7- %2$s§7 设置了次要方块"
+        - "§7- %3$s§7 所有方块在同一个世界内"
+        - "§7- %4$s§7 不重叠已有区域"
+        - "§7- %5$s§7 覆盖面积不小于 (%11$s§7 x %12$s§7 x %13$s§7)"
+        - "§7- %6$s§7 大小不超过 (%14$s§7 x %15$s§7 x %16$s§7)"
+        - "§7- %7$s§7 能够支付 (%17$s§7)"
+    create_region_valid_selection:
+      name: "§a§l创建区域"
+      lore:
+        - ""
+        - "§7你的选择 (%1$s§7 x %2$s§7 x %3$s§7) 有效"
+        - "§7点击此处创建新的区域"
+        - ""
+        - "§7- §a✓§7 设置了主要方块"
+        - "§7- §a✓§7 设置了次要方块"
+        - "§7- §a✓§7 所有方块在同一个世界内"
+        - "§7- §a✓§7 不重叠已有区域"
+        - "§7- §a✓§7 覆盖面积不小于 (%4$s§7 x %5$s§7 x %6$s§7)"
+        - "§7- §a✓§7 大小不超过 (%7$s§7 x %8$s§7 x %9$s§7)"
+        - "§7- §a✓§7 能够支付 (%10$s§7)"
+    cancel_selection:
+      name: "§c§l取消选择"
+      lore: []
+    list_regions:
+      name: "§b§l选择区域"
+      lore: []
+    select_region_title: "§8§l选择区域"
+    filter_regions_title: "§8§l筛选区域"
+    select_region:
+      name: "%1$s"
+      lore: []
+    current_region:
+      name: "§b§l当前区域"
+      lore:
+        - ""
+        - "§7区域: %1$s"
+        - ""
+        - "§7选择你正在站立的区域."
+    create_region_group:
+      name: "§a§l创建区域组"
+      lore:
+        - ""
+        - "§7创建一个新的§b区域组§7区域组"
+        - "§7通常用于为玩家设置权限"
+        - "§7，通过指定角色该区域组中的"
+        - "§7所有区域都将共享这些权限"
+    list_region_groups:
+      name: "§b§l选择区域组"
+      lore: []
+    current_region_group:
+      name: "§b§l当前区域组"
+      lore:
+        - ""
+        - "§7区域组: %1$s"
+        - ""
+        - "§7选择你正在站立的区域所属的区域组"
+        - ""
+    select_region_group_title: "§8§l选择区域组"
+    filter_region_groups_title: "§8§l筛选区域组"
+    select_region_group:
+      name: "%1$s"
+      lore: []
+  region:
+    title: "§8§l区域: %1$s"
+    rename:
+      name: "§b§l重新命名区域"
+      lore: []
+    delete:
+      name: "§c§l删除区域"
+      lore: []
+    delete_confirm_title: "§c§l确定要删除区域吗？"
+    delete_confirm_accept:
+      name: "§c§l删除区域"
+      lore: []
+    delete_confirm_cancel:
+      name: "§a§l取消"
+      lore: []
+    assign_region_group:
+      name: "§b§l指定群组"
+      lore: []
+
+    select_region_group_title: "§8§l选择区域群组"
+    filter_region_groups_title: "§8§l筛选区域群组"
+    select_region_group:
+      name: "%1$s"
+      lore: []
+  region_group:
+    title: "§8§l群组: %1$s"
+    setting_toggle_on:
+      name: "§a§l启用"
+      lore: []
+    setting_toggle_off:
+      name: "§c§l停用"
+      lore: []
+    setting_info_animals:
+      name: "§b§l动物"
+      lore:
+        - ""
+        - "§7控制动物的产生"
+    setting_info_monsters:
+      name: "§b§l怪物"
+      lore:
+        - ""
+        - "§7控制怪物（敌对生物）的产生"
+    setting_info_explosions:
+      name: "§b§l爆炸"
+      lore:
+        - ""
+        - "§7控制所有类型的爆炸"
+    setting_info_fire:
+      name: "§b§l火焰"
+      lore:
+        - ""
+        - "§7控制火焰是否能燃烧方块和扩散"
+    setting_info_pvp:
+      name: "§b§lPVP"
+      lore:
+        - ""
+        - "§7控制是否允许 PVP 战斗"
+    setting_info_trample:
+      name: "§b§l践踏"
+      lore:
+        - ""
+        - "§7控制是否允许耕地被践踏"
+    setting_info_vine_growth:
+      name: "§b§l藤蔓生长"
+      lore:
+        - ""
+        - "§7控制是否允许藤蔓在区域内生长"
+    rename:
+      name: "§b§l重新命名群组"
+      lore: []
+    delete:
+      name: "§c§l删除群组"
+      lore:
+        - ""
+        - "§6删除要求:"
+        - "§7- %1$s §7没有区域使用此群组"
+    delete_confirm_title: "§c§l删除区域群组？"
+    delete_confirm_accept:
+      name: "§c§l删除区域群组"
+      lore: []
+    delete_confirm_cancel:
+      name: "§a§l取消"
+      lore: []
+    create_role:
+      name: "§a§l创建角色"
+      lore:
+        - ""
+        - "§7创建新的§b角色"
+        - "§7角色用于为一群玩家设置权限"
+    list_roles:
+      name: "§b§lRoles"
+      lore: []
+    select_role_title: "§8§lSelect Role"
+    filter_roles_title: "§8§lFilter Roles"
+    select_role:
+      name: "%1$s"
+      lore: []
+  role:
+    title: "§8§l群组：%1$s"
+
+    setting_toggle_on:
+      name: "§a§l启用"
+      lore: []
+    setting_toggle_off:
+      name: "§c§l禁用"
+      lore: []
+    setting_info_admin:
+      name: "§b§l管理员"
+      lore:
+        - ""
+        - "§7管理员标志无法切换"
+        - "§7只对管理员组启用"
+    setting_info_build:
+      name: "§b§l建造"
+      lore:
+        - ""
+        - "§7允许建造和挖掘方块"
+    setting_info_use:
+      name: "§b§l使用物品"
+      lore:
+        - ""
+        - "§7允许使用各种物品，如门、"
+        - "§7操纵杆、按钮或红石元件"
+        - "§7还控制对库存的§6查看访问权限§7"
+    setting_info_container:
+      name: "§b§l容器"
+      lore:
+        - ""
+        - "§7允许修改与库存的交互"
+        - "§7没有此标志，无法从中取出任何东西，"
+        - "§7也无法将任何东西放入其中"
+    setting_info_portal:
+      name: "§b§l使用传送门"
+      lore:
+        - ""
+        - "§7允许与传送门交互"
+    rename:
+      name: "§b§l重命名角色"
+      lore: []
+    delete:
+      name: "§c§l删除角色"
+      lore: []
+    delete_confirm_title: "§c§l删除角色？"
+    delete_confirm_accept:
+      name: "§c§l删除角色"
+      lore: []
+    delete_confirm_cancel:
+      name: "§a§l取消"
+      lore: []
+    assign_player:
+      name: "§b§l指定玩家"
+      lore:
+        - ""
+        - "§7通过点击玩家将其分配给此角色"
+        - "§7如果玩家之前有不同的角色"
+        - "§7他们将被重新分配到此角色"
+        - "§7列表只会显示未分配到此角色的玩家"
+        - "§7您可以使用§b删除玩家§7菜单删除玩家"
+    remove_player:
+      name: "§b§l移除玩家"
+      lore:
+        - ""
+        - "§7点击以将玩家从此角色中移除"
+        - "§7这意味着他们之后将没有指定的角色，"
+        - "§7并且将由万能角色 §6[others] §7处理"
+    select_assign_player_title: "§8§l选择玩家"
+    select_remove_player_title: "§8§l移除玩家"
+    filter_players_title: "§8§l过滤玩家"
+    select_player:
+      name: "%1$s"
+      lore: []
