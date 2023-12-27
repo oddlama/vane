@@ -1,6 +1,5 @@
 package org.oddlama.vane.trifles;
 
-import org.bukkit.entity.EntityCategory;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
@@ -10,7 +9,6 @@ import org.oddlama.vane.annotation.config.ConfigBoolean;
 import org.oddlama.vane.core.Listener;
 
 import io.papermc.paper.event.entity.EntityMoveEvent;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.monster.Monster;
 
 public class FastWalkingListener extends Listener<Trifles> {
