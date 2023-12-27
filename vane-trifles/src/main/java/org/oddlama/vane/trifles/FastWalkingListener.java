@@ -1,5 +1,6 @@
 package org.oddlama.vane.trifles;
 
+import org.bukkit.entity.EntityCategory;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
@@ -9,6 +10,8 @@ import org.oddlama.vane.annotation.config.ConfigBoolean;
 import org.oddlama.vane.core.Listener;
 
 import io.papermc.paper.event.entity.EntityMoveEvent;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.monster.Monster;
 
 public class FastWalkingListener extends Listener<Trifles> {
 
@@ -18,9 +21,14 @@ public class FastWalkingListener extends Listener<Trifles> {
 		super(context);
 		this.fast_walking = context;
 	}
+	@ConfigBoolean(def = false, desc = "Enable to allow hostile mobs to speed walk on paths.")
+	public boolean hostile_speedwalk;
+
+	@ConfigBoolean(def = true, desc = "Disable to PREVENT villagers from speed walking on paths.")
+	public boolean villiager_speedwalk;
 	
-	@ConfigBoolean(def = true, desc = "wether or not to speed villagers on path blocks.")
-	public boolean villager_speedwalk;
+	@ConfigBoolean(def = false, desc = "Enable to allow ONLY players to speed walk on paths. (will override other path walk settings)")
+	public boolean players_only_speedwalk;
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void on_player_move(final PlayerMoveEvent event) {
@@ -50,7 +58,14 @@ public class FastWalkingListener extends Listener<Trifles> {
 	public void on_entity_move(final EntityMoveEvent event) {
 		final var entity = event.getEntity();
 
-		if(entity.getType()  == EntityType.VILLAGER && villager_speedwalk == false) return;
+		// Cancel event if speedwalking is only enabled for players
+		if(players_only_speedwalk) return;
+
+		// Cancel event if speedwalking is disabled for Hostile mobs
+		if(entity instanceof Monster && !hostile_speedwalk) return;
+		
+		// Cancel event if speedwalking is disabled for Villiagers
+		if(entity.getType() == EntityType.VILLAGER && !villiager_speedwalk) return;
 
 		// Inspect block type just a little below
 		var block = event.getTo().clone().subtract(0.0, 0.1, 0.0).getBlock();
