@@ -4,7 +4,10 @@ import com.google.common.hash.Hashing;
 import com.google.common.io.Files;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.StandardCopyOption;
 import java.util.Properties;
+import java.util.logging.Level;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -73,7 +76,11 @@ public class ResourcePackDistributor extends Listener<Core> {
 	public void on_enable() {
 		if (localDev) {
 			try {
-				var pack_output = new File("vane-resource-pack.zip");
+				File pack_output = new File("vane-resource-pack.zip");
+				if(!pack_output.exists()) {
+					get_module().log.info("Resource Pack Missing, first run? Generating resource pack.");
+					pack_output = get_module().generate_resource_pack();
+				}
 				file_watcher = new ResourcePackFileWatcher(this, pack_output);
 				dev_server = new ResourcePackDevServer(this, pack_output);
 				dev_server.serve();
