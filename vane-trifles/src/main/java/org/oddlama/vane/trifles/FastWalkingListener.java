@@ -19,13 +19,13 @@ public class FastWalkingListener extends Listener<Trifles> {
 		super(context);
 		this.fast_walking = context;
 	}
-	@ConfigBoolean(def = false, desc = "Enable to allow hostile mobs to speed walk on paths.")
+	@ConfigBoolean(def = false, desc = "Whether hostile mobs should be allowed to fast walk on paths.")
 	public boolean hostile_speedwalk;
 
-	@ConfigBoolean(def = true, desc = "Disable to PREVENT villagers from speed walking on paths.")
+	@ConfigBoolean(def = true, desc = "Whether villagers should be allowed to fast walk on paths.")
 	public boolean villager_speedwalk;
 	
-	@ConfigBoolean(def = false, desc = "Enable to allow ONLY players to speed walk on paths. (will override other path walk settings)")
+	@ConfigBoolean(def = false, desc = "Whether players should be the only entities allowed to fast walk on paths (will override other path walk settings).")
 	public boolean players_only_speedwalk;
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
