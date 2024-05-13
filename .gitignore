@@ -2,6 +2,7 @@
 env.sh
 .gradle
 .classpath
+.direnv
 .project
 .settings
 .idea
