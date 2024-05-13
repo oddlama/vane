@@ -1,7 +1,7 @@
 ```toml
 title = "Account Multiplexing"
 icon = "minecraft:honeycomb"
-module = "vane-waterfall"
+module = "vane-velocity"
 ```
 ---
 A multiplexer is an additional port for your server. When someone connects

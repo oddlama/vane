@@ -57,44 +57,18 @@ Grab the `all-plugins.zip` if you don't want to download each file by hand. You 
 
 - You are using the correct Paper (or Purpur) server version (compatible versions are listed in the title on the download page)
 - You have the latest version of [ProtocolLib](https://ci.dmulloy2.net/job/ProtocolLib/).
-- Beware that `vane-waterfall`, `vane-velocity` and `vane-plexmap` (plexmap addon) are not classical server plugins! Use them only if you know what you are doing.
+- Beware that `vane-velocity` and `vane-plexmap` (plexmap addon) are not classical server plugins! Use them only if you know what you are doing.
 
 For a comprehensive guide, visit the [Installation Guide](https://github.com/oddlama/vane/wiki/Installation-Guide) on the wiki.
 
-## Proxy Installation (vane-waterfall, vane-velocity)
+## Proxy Installation (vane-velocity)
 
-Download the applicable jar (`vane-waterfall.jar` or `vane-velocity.jar`) and place it in the proxy server's `plugins/` directory. The configuration will be generated on first start.
-
-<details>
-<summary>
-Enabling Authentication Multiplexing
-</summary>
-</br>
-
-**Waterfall:** Before using multiplexers, you must define listeners (distinct ports) for your servers in the
-proxy's `config.yml`. Afterwards, all further configuration is handled in the plugin's `config.toml`.
-
-**Velocity:** All configuration is handled in the plugin's `config.toml`
-</details>
-
-<details>
-<summary>
-Permission management
-</summary>
-</br>
+Download `vane-velocity.jar` and place it in the velocity proxy server's `plugins/` directory. The configuration will be generated on first start.
+All configuration is handled in the plugin's `config.toml`.
 
 There are permissions players will need to perform certain actions, such as starting offline
-servers and joining servers in maintenance mode.
-
-**Waterfall:** Permissions **must** be defined in the proxy's `config.yml`! External permissions plugins
-will **not** work.
-These permissions must be assigned to the player's **UUID**. *THIS IS IMPORTANT* and
-won't work with player names.
-
-**Velocity:** Permissions can be handled by any external permissions plugin, such as [LuckPerms](https://luckperms.net).
-Unlike Waterfall, this **will** work with player names or UUIDs.
-Check the config for additional settings to manage your servers.
-</details>
+servers and joining servers in maintenance mode. Permissions can be handled by any external
+permissions plugin, such as [LuckPerms](https://luckperms.net).
 
 ## Building from source
 
@@ -115,7 +89,7 @@ Please refer to the [FAQ](https://github.com/oddlama/vane/wiki/FAQ) in the wiki.
 I would like to thank the following projects and people maintaining them:
 
 - [Spigot](https://www.spigotmc.org/) for the awesome baseline server software.
-- [PaperMC](https://papermc.io/) for the valuable additions missing from Spigot, and for Waterfall.
+- [PaperMC](https://papermc.io/) for the valuable additions missing from Spigot.
 - [ProtocolLib](https://github.com/dmulloy2/ProtocolLib) for the awesome protocol layer library.
 - [DynmapCoreAPI](https://github.com/webbukkit/DynmapCoreAPI) (Apache-2.0), dynmap integration
 - [BlueMapAPI](https://github.com/BlueMap-Minecraft/BlueMapAPI) (MIT), [BlueMap](https://bluemap.bluecolored.de/) integration

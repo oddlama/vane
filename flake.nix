@@ -60,6 +60,12 @@
           packages = [
             pkgs.temurin-bin-17
             (pkgs.gradle.override {java = pkgs.temurin-bin-17;})
+            (pkgs.python3.withPackages (ps: [
+              ps.markdown
+              ps.toml
+              ps.pyyaml
+            ]))
+            pkgs.nodejs
           ];
         };
 

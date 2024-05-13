@@ -7,7 +7,7 @@ vane-permissions = "red"
 vane-portals = "indigo"
 vane-regions = "sky"
 vane-trifles = "sky"
-vane-waterfall = "gray"
+vane-velocity = "gray"
 
 [[categories]]
 id = "gameplay"
@@ -98,7 +98,7 @@ content = [
 	"vane-core/translations.md",
 	"vane-core/configurability.md",
 	"vane-admin/autostop.md",
-	"vane-waterfall/autostart.md",
-	"vane-waterfall/multiplexing.md",
+	"vane-velocity/autostart.md",
+	"vane-velocity/multiplexing.md",
 	"vane-core/uninstalling.md",
 ]
