@@ -180,17 +180,19 @@ public class ManagedServer {
 
 	}
 
-	private static class ServerStart {
+	public static class ServerStart {
 
 		private static final int DEFAULT_TIMEOUT_SECONDS = 10;
 		public String[] cmd;
 		public Integer timeout;
 		public String kick_msg;
+		public boolean allow_anyone;
 
 		public ServerStart(String id, String display_name, CommentedConfig config) {
 			List<String> cmd = config.get("cmd");
 			var timeout = config.get("timeout");
 			var kick_msg = config.get("kick_msg");
+			var allow_anyone = config.get("allow_anyone");
 
 			if (cmd != null) this.cmd = cmd.stream().map(s -> s.replace("{SERVER}", id)).toArray(String[]::new);
 			else this.cmd = null;
@@ -201,6 +203,10 @@ public class ManagedServer {
 			if (kick_msg != null)
 				this.kick_msg = ((String) kick_msg).replace("{SERVER}", id).replace("{SERVER_DISPLAY_NAME}", display_name);
 			else this.kick_msg = null;
+
+			if (allow_anyone != null)
+				this.allow_anyone = (boolean)allow_anyone;
+			else this.allow_anyone = false;
 
 			if (timeout == null) {
 				this.timeout = DEFAULT_TIMEOUT_SECONDS;

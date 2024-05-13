@@ -4,8 +4,8 @@ plugins {
 
 dependencies {
     compileOnly(fileTree(mapOf("dir" to "external", "include" to listOf("*.jar"))))
-    implementation(group = "com.velocitypowered", name = "velocity-api", version = "3.0.1")
-    annotationProcessor(group = "com.velocitypowered", name = "velocity-api", version = "3.0.1")
+    implementation(group = "com.velocitypowered", name = "velocity-api", version = "3.1.1")
+    annotationProcessor(group = "com.velocitypowered", name = "velocity-api", version = "3.1.1")
     implementation(group = "org.bstats", name = "bstats-velocity", version = "3.0.0")
     implementation(group = "org.bstats", name = "bstats-base", version = "3.0.0")
     implementation(group = "org.json", name = "json", version = "20200518")
