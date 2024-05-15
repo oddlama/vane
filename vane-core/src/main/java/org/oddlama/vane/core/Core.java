@@ -5,6 +5,7 @@ import static org.oddlama.vane.util.IOUtil.read_json_from_url;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.Properties;
@@ -246,7 +247,7 @@ public class Core extends Module<Core> {
 				log.warning("Please update as soon as possible to get the latest features and fixes.");
 				log.warning("Get the latest release here: https://github.com/oddlama/vane/releases/latest");
 			}
-		} catch (IOException | JSONException e) {
+		} catch (IOException | JSONException | URISyntaxException e) {
 			log.warning("Could not check for updates: " + e);
 		}
 	}

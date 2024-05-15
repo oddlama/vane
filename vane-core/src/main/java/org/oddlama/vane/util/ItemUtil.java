@@ -41,6 +41,7 @@ import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.minecraft.commands.arguments.item.ItemParser;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
 
 public class ItemUtil {
@@ -52,6 +53,8 @@ public class ItemUtil {
 	public static final UUID MODIFIER_UUID_GENERIC_ATTACK_SPEED = UUID.fromString(
 			"FA233E1C-4180-4865-B01B-BCCE9785ACA3");
 
+	private static RandomSource randomSource = RandomSource.create();
+
 	public static void damage_item(final Player player, final ItemStack item_stack, final int amount) {
 		if (amount <= 0) {
 			return;
@@ -62,8 +65,7 @@ public class ItemUtil {
 			return;
 		}
 
-		handle.hurtAndBreak(amount, player_handle(player), onBreak -> {
-		});
+		handle.hurtAndBreak(amount, randomSource, player_handle(player), () -> {});
 	}
 
 	public static String name_of(final ItemStack item) {

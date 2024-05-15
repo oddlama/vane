@@ -41,25 +41,26 @@ public class NativeEnchantmentWrapper extends Enchantment {
 		return this.enchantment;
 	}
 
-	@Override
-	public int getMinLevel() {
-		return enchantment.min_level();
-	}
+	// FIXME these overriden methods are final
+	// @Override
+	// public int getMinLevel() {
+	// 	return enchantment.min_level();
+	// }
 
-	@Override
-	public int getMaxLevel() {
-		return enchantment.max_level();
-	}
+	// @Override
+	// public int getMaxLevel() {
+	// 	return enchantment.max_level();
+	// }
 
-	@Override
-	public int getMinCost(int level) {
-		return enchantment.min_cost(level);
-	}
+	// @Override
+	// public int getMinCost(int level) {
+	// 	return enchantment.min_cost(level);
+	// }
 
-	@Override
-	public int getMaxCost(int level) {
-		return enchantment.max_cost(level);
-	}
+	// @Override
+	// public int getMaxCost(int level) {
+	// 	return enchantment.max_cost(level);
+	// }
 
 	@Override
 	public boolean isTreasureOnly() {
