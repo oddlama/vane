@@ -13,7 +13,7 @@ import javax.lang.model.type.DeclaredType;
 import javax.tools.Diagnostic;
 
 @SupportedAnnotationTypes("org.oddlama.vane.annotation.VaneModule")
-@SupportedSourceVersion(SourceVersion.RELEASE_17)
+@SupportedSourceVersion(SourceVersion.RELEASE_21)
 public class VaneModuleProcessor extends AbstractProcessor {
 
 	@Override

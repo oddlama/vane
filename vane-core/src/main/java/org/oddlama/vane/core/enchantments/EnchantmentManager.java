@@ -27,7 +27,7 @@ import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.util.ItemUtil;
 import org.oddlama.vane.util.StorageUtil;
 
-import org.bukkit.craftbukkit.v1_20_R3.enchantments.CraftEnchantment;
+import org.bukkit.craftbukkit.enchantments.CraftEnchantment;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TranslatableComponent;
