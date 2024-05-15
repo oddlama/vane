@@ -152,22 +152,7 @@ public class ItemUtil {
 		if (a_count != b_count) {
 			return b_count - a_count;
 		}
-
-		// Sort by combined rarity (rare = low value) first
-		final var a_rarity = ae
-				.keySet()
-				.stream()
-				.mapToInt(e -> ((CraftEnchantment)e).getHandle().getRarity().getWeight())
-				.sum();
-		final var b_rarity = be
-				.keySet()
-				.stream()
-				.mapToInt(e -> ((CraftEnchantment)e).getHandle().getRarity().getWeight())
-				.sum();
-		if (a_rarity != b_rarity) {
-			return b_rarity - a_rarity;
-		}
-
+		
 		final var a_sorted = ae
 				.entrySet()
 				.stream()
