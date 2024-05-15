@@ -1,15 +1,15 @@
 plugins {
 	`java-library`
-	id("io.papermc.paperweight.userdev") version "1.5.11"
-	id("xyz.jpenilla.run-paper") version "2.2.0" // Adds runServer and runMojangMappedServer tasks for testing
+	id("io.papermc.paperweight.userdev") version "1.7.1"
+	id("xyz.jpenilla.run-paper") version "2.3.0" // Adds runServer and runMojangMappedServer tasks for testing
 }
 
 dependencies {
-	paperDevBundle("1.20.4-R0.1-SNAPSHOT")
+	paperDevBundle("1.20.6-R0.1-SNAPSHOT")
 }
 
 java {
-	sourceCompatibility = JavaVersion.VERSION_17
+	toolchain.languageVersion.set(JavaLanguageVersion.of(21))
 }
 
 // We don't need to generate an empty `vane.jar`
@@ -28,7 +28,7 @@ subprojects {
 	repositories() {
 		mavenCentral()
 		maven("https://papermc.io/repo/repository/maven-public/")
-		//maven("https://repo.dmulloy2.net/nexus/repository/public/")
+		maven("https://repo.dmulloy2.net/nexus/repository/public/")
 		maven("https://repo.mikeprimm.com/")
 		maven("https://repo.codemc.org/repository/maven-public/")
 		maven("https://jitpack.io")
@@ -53,7 +53,7 @@ configure(subprojects.filter {
 	apply(plugin = "io.papermc.paperweight.userdev")
 
 	dependencies {
-		paperDevBundle("1.20.4-R0.1-SNAPSHOT")
+		paperDevBundle("1.20.6-R0.1-SNAPSHOT")
 	}
 
 	tasks {
@@ -85,7 +85,7 @@ configure(subprojects.filter {
 	}
 
 	dependencies {
-		implementation(group = "com.comphenix.protocol", name = "ProtocolLib", version = "5.0.0-SNAPSHOT")
+		implementation(group = "com.comphenix.protocol", name = "ProtocolLib", version = "5.2.0-SNAPSHOT")
 
 		compileOnly(project(":vane-annotations"))
 		annotationProcessor(project(path = ":vane-annotations", configuration = "reobf"))
