@@ -118,6 +118,6 @@ public class Angel extends CustomEnchantment<Enchantments> {
 		// Spawn particles
 		loc
 			.getWorld()
-			.spawnParticle(Particle.FIREWORKS_SPARK, loc, 0, -new_vel.getX(), -new_vel.getY(), -new_vel.getZ(), 0.4);
+			.spawnParticle(Particle.FIREWORK, loc, 0, -new_vel.getX(), -new_vel.getY(), -new_vel.getZ(), 0.4);
 	}
 }
