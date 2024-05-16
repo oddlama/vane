@@ -375,19 +375,21 @@ public class ItemUtil {
 		if (nbt_delim == -1) {
 			return Pair.of(apply_enchants(item_stack, enchants), emat.is_simple_material() && enchants == null);
 		}
-
+		// HACK NBT seem to be unused here, so I disabled it for now
 		// Parse the NBT by using minecraft's internal parser with the base material
 		// of whatever the extended material gave us.
 		final var vanilla_definition = item_stack.getType().key() + definition.substring(nbt_delim);
 		try {
-			final var parsed_nbt = ItemParser
-					.parseForItem(BuiltInRegistries.ITEM.asLookup(), new StringReader(vanilla_definition)).nbt();
-			final var inherent_nbt = CraftItemStack.asNMSCopy(item_stack).getOrCreateTag();
+		// 	final var parsed_nbt = ItemParser
+		// 			.parseForItem(BuiltInRegistries.ITEM.asLookup(), new StringReader(vanilla_definition)).nbt();
+		// 	final var inherent_nbt = CraftItemStack.asNMSCopy(item_stack).getOrCreateTag();
 			// Now apply the NBT be parsed by minecraft's internal parser to the itemstack.
 			final var nms_item = item_handle(item_stack).copy();
-			nms_item.setTag(inherent_nbt.merge(parsed_nbt));
+			// nms_item.setTag(inherent_nbt.merge(parsed_nbt));
 			return Pair.of(apply_enchants(CraftItemStack.asCraftMirror(nms_item), enchants), false);
-		} catch (final CommandSyntaxException e) {
+		} catch (Exception e) {
+
+		// } catch (final CommandSyntaxException e) {
 			throw new IllegalArgumentException("Could not parse NBT of item definition: " + definition, e);
 		}
 	}
