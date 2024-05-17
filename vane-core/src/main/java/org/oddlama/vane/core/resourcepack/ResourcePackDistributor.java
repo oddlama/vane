@@ -2,10 +2,21 @@ package org.oddlama.vane.core.resourcepack;
 
 import com.google.common.hash.Hashing;
 import com.google.common.io.Files;
+
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.resource.ResourcePackInfo;
+import net.kyori.adventure.resource.ResourcePackInfoLike;
+import net.kyori.adventure.resource.ResourcePackRequest;
+import net.kyori.adventure.text.Component;
+import net.minecraft.server.packs.resources.Resource;
+
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.StandardCopyOption;
 import java.util.Properties;
+import java.util.UUID;
 import java.util.logging.Level;
 
 import org.bukkit.entity.Player;
@@ -162,7 +173,13 @@ public class ResourcePackDistributor extends Listener<Core> {
 			url2 = url + "?" + counter;
 			player.sendMessage(url2 + " " + sha1);
 		}
-		player.setResourcePack(url2, sha1);
+		// FIXME random UUID
+		try {
+			ResourcePackInfo info = ResourcePackInfo.resourcePackInfo(UUID.randomUUID(), new URI(url2), sha1);
+			Audience.audience(player).sendResourcePacks(ResourcePackRequest.addingRequest(info));
+		} catch (URISyntaxException e) {
+			get_module().log.warning("The provided resource pack URL is incorrect: " + url2);
+		};
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
