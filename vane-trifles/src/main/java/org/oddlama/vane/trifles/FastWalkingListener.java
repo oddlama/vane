@@ -20,13 +20,13 @@ public class FastWalkingListener extends Listener<Trifles> {
 		this.fast_walking = context;
 	}
 	@ConfigBoolean(def = false, desc = "Whether hostile mobs should be allowed to fast walk on paths.")
-	public boolean hostile_speedwalk;
+	public boolean config_hostile_speedwalk;
 
 	@ConfigBoolean(def = true, desc = "Whether villagers should be allowed to fast walk on paths.")
-	public boolean villager_speedwalk;
+	public boolean config_villager_speedwalk;
 	
 	@ConfigBoolean(def = false, desc = "Whether players should be the only entities allowed to fast walk on paths (will override other path walk settings).")
-	public boolean players_only_speedwalk;
+	public boolean config_players_only_speedwalk;
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void on_player_move(final PlayerMoveEvent event) {
@@ -57,13 +57,13 @@ public class FastWalkingListener extends Listener<Trifles> {
 		final var entity = event.getEntity();
 
 		// Cancel event if speedwalking is only enabled for players
-		if(players_only_speedwalk) return;
+		if(config_players_only_speedwalk) return;
 
 		// Cancel event if speedwalking is disabled for Hostile mobs
-		if(entity instanceof Monster && !hostile_speedwalk) return;
+		if(entity instanceof Monster && !config_hostile_speedwalk) return;
 		
 		// Cancel event if speedwalking is disabled for villagers
-		if(entity.getType() == EntityType.VILLAGER && !villager_speedwalk) return;
+		if(entity.getType() == EntityType.VILLAGER && !config_villager_speedwalk) return;
 
 		// Inspect block type just a little below
 		var block = event.getTo().clone().subtract(0.0, 0.1, 0.0).getBlock();
