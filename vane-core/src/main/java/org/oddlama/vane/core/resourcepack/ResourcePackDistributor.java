@@ -1,23 +1,11 @@
 package org.oddlama.vane.core.resourcepack;
 
-import com.google.common.hash.Hashing;
-import com.google.common.io.Files;
-
-import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.resource.ResourcePackInfo;
-import net.kyori.adventure.resource.ResourcePackInfoLike;
-import net.kyori.adventure.resource.ResourcePackRequest;
-import net.kyori.adventure.text.Component;
-import net.minecraft.server.packs.resources.Resource;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.file.StandardCopyOption;
 import java.util.Properties;
 import java.util.UUID;
-import java.util.logging.Level;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -34,6 +22,13 @@ import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.ModuleGroup;
 import org.oddlama.vane.util.Nms;
+
+import com.google.common.hash.Hashing;
+import com.google.common.io.Files;
+
+import net.kyori.adventure.resource.ResourcePackInfo;
+import net.kyori.adventure.resource.ResourcePackRequest;
+import net.kyori.adventure.text.Component;
 
 public class ResourcePackDistributor extends Listener<Core> {
 
@@ -56,6 +51,7 @@ public class ResourcePackDistributor extends Listener<Core> {
 
 	public String url = null;
 	public String sha1 = null;
+	public UUID uuid = null;
 	public int counter = 0;
 
 	// The permission to bypass the resource pack
@@ -105,6 +101,7 @@ public class ResourcePackDistributor extends Listener<Core> {
 			get_module().log.info("Serving custom resource pack");
 			url = custom_resource_pack_config.config_url;
 			sha1 = custom_resource_pack_config.config_sha1;
+			uuid = UUID.nameUUIDFromBytes(sha1.getBytes());
 		} else {
 			get_module().log.info("Serving official vane resource pack");
 			try {
@@ -112,10 +109,12 @@ public class ResourcePackDistributor extends Listener<Core> {
 				properties.load(Core.class.getResourceAsStream("/vane-core.properties"));
 				url = properties.getProperty("resource_pack_url");
 				sha1 = properties.getProperty("resource_pack_sha1");
+				uuid = UUID.nameUUIDFromBytes(sha1.getBytes());
 			} catch (IOException e) {
 				get_module().log.severe("Could not load official resource pack sha1 from included properties file");
 				url = "";
 				sha1 = "";
+				uuid = UUID.randomUUID();
 			}
 		}
 
@@ -173,10 +172,11 @@ public class ResourcePackDistributor extends Listener<Core> {
 			url2 = url + "?" + counter;
 			player.sendMessage(url2 + " " + sha1);
 		}
-		// FIXME random UUID
+
 		try {
-			ResourcePackInfo info = ResourcePackInfo.resourcePackInfo(UUID.randomUUID(), new URI(url2), sha1);
-			Audience.audience(player).sendResourcePacks(ResourcePackRequest.addingRequest(info));
+			ResourcePackInfo info = ResourcePackInfo.resourcePackInfo(uuid, new URI(url2), sha1);
+			// HACK can't send resource packs without prompts, seems to be a Paper/Adventure bug
+			player.sendResourcePacks(ResourcePackRequest.resourcePackRequest().packs(info).prompt(Component.empty()).asResourcePackRequest());
 		} catch (URISyntaxException e) {
 			get_module().log.warning("The provided resource pack URL is incorrect: " + url2);
 		};
