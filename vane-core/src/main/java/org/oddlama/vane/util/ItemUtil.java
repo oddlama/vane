@@ -38,9 +38,11 @@ import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.item.ItemParser;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
 
@@ -346,7 +348,7 @@ public class ItemUtil {
 	 * material.
 	 */
 	public static @NotNull Pair<ItemStack, Boolean> itemstack_from_string(String definition) {
-		// namespace:key[{nbtdata}][#enchants{}], where the key can reference a
+		// namespace:key[[components]][#enchants{}], where the key can reference a
 		// material, head material or customitem.
 		final var enchants_delim = definition.indexOf("#enchants{");
 		String enchants = null;
@@ -355,7 +357,7 @@ public class ItemUtil {
 			definition = definition.substring(0, enchants_delim);
 		}
 
-		final var nbt_delim = definition.indexOf('{');
+		final var nbt_delim = definition.indexOf('[');
 		NamespacedKey key;
 		if (nbt_delim == -1) {
 			key = NamespacedKey.fromString(definition);
@@ -375,17 +377,17 @@ public class ItemUtil {
 		if (nbt_delim == -1) {
 			return Pair.of(apply_enchants(item_stack, enchants), emat.is_simple_material() && enchants == null);
 		}
-		// HACK NBT seem to be unused here, so I disabled it for now
+
 		// Parse the NBT by using minecraft's internal parser with the base material
 		// of whatever the extended material gave us.
 		final var vanilla_definition = item_stack.getType().key() + definition.substring(nbt_delim);
 		try {
-		// 	final var parsed_nbt = ItemParser
-		// 			.parseForItem(BuiltInRegistries.ITEM.asLookup(), new StringReader(vanilla_definition)).nbt();
-		// 	final var inherent_nbt = CraftItemStack.asNMSCopy(item_stack).getOrCreateTag();
+			final var parsed_nbt = new ItemParser(Commands.createValidationContext(MinecraftServer.getDefaultRegistryAccess())).parse(new StringReader(vanilla_definition)).components();
+
 			// Now apply the NBT be parsed by minecraft's internal parser to the itemstack.
 			final var nms_item = item_handle(item_stack).copy();
-			// nms_item.setTag(inherent_nbt.merge(parsed_nbt));
+			nms_item.applyComponents(parsed_nbt);
+
 			return Pair.of(apply_enchants(CraftItemStack.asCraftMirror(nms_item), enchants), false);
 		} catch (Exception e) {
 
