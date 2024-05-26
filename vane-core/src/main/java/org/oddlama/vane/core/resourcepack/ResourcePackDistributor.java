@@ -175,7 +175,6 @@ public class ResourcePackDistributor extends Listener<Core> {
 
 		try {
 			ResourcePackInfo info = ResourcePackInfo.resourcePackInfo(uuid, new URI(url2), sha1);
-			// HACK can't send resource packs without prompts, seems to be a Paper/Adventure bug
 			player.sendResourcePacks(ResourcePackRequest.resourcePackRequest().packs(info).asResourcePackRequest());
 		} catch (URISyntaxException e) {
 			get_module().log.warning("The provided resource pack URL is incorrect: " + url2);
