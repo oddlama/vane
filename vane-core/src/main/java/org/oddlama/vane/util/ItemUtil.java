@@ -389,9 +389,7 @@ public class ItemUtil {
 			nms_item.applyComponents(parsed_nbt);
 
 			return Pair.of(apply_enchants(CraftItemStack.asCraftMirror(nms_item), enchants), false);
-		} catch (Exception e) {
-
-		// } catch (final CommandSyntaxException e) {
+		} catch (final CommandSyntaxException e) {
 			throw new IllegalArgumentException("Could not parse NBT of item definition: " + definition, e);
 		}
 	}
