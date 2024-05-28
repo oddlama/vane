@@ -101,7 +101,7 @@ public class ResourcePackDistributor extends Listener<Core> {
 			get_module().log.info("Serving custom resource pack");
 			url = custom_resource_pack_config.config_url;
 			sha1 = custom_resource_pack_config.config_sha1;
-			uuid = UUID.nameUUIDFromBytes(sha1.getBytes());
+			uuid = UUID.fromString(custom_resource_pack_config.config_uuid);
 		} else {
 			get_module().log.info("Serving official vane resource pack");
 			try {
@@ -109,7 +109,7 @@ public class ResourcePackDistributor extends Listener<Core> {
 				properties.load(Core.class.getResourceAsStream("/vane-core.properties"));
 				url = properties.getProperty("resource_pack_url");
 				sha1 = properties.getProperty("resource_pack_sha1");
-				uuid = UUID.nameUUIDFromBytes(sha1.getBytes());
+				uuid = UUID.fromString(properties.getProperty("resource_pack_uuid"));
 			} catch (IOException e) {
 				get_module().log.severe("Could not load official resource pack sha1 from included properties file");
 				url = "";

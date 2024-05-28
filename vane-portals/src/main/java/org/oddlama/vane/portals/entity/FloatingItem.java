@@ -99,7 +99,6 @@ public class FloatingItem extends ItemEntity {
 	@Override
 	public void setItem(ItemStack itemStack) {
 		super.setItem(itemStack);
-		// FIXME not sure
 		if (itemStack.getHoverName().toFlatList().size() > 0) {
 			setCustomNameVisible(true);
 			setCustomName(itemStack.getHoverName());
