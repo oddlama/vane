@@ -16,6 +16,9 @@ public class CustomResourcePackConfig extends ModuleComponent<Core> {
 	@ConfigString(def = "", desc = "Resource pack SHA-1 sum. Required to verify resource pack integrity.")
 	public String config_sha1;
 
+	@ConfigString(def = "", desc = "Resource pack UUID.")
+	public String config_uuid;
+
 	public CustomResourcePackConfig(Context<Core> context) {
 		super(
 			context.group(

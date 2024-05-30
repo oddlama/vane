@@ -22,7 +22,7 @@ public class Unbreakable extends CustomEnchantment<Enchantments> {
 
 	public Unbreakable(Context<Enchantments> context) {
 		super(context);
-		supersedes(Enchantment.DURABILITY);
+		supersedes(Enchantment.UNBREAKING);
 		supersedes(Enchantment.MENDING);
 	}
 

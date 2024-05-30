@@ -43,6 +43,7 @@ public class NorthCompass extends CustomItem<Trifles> {
 		if (worlds.size() > 0) {
 			final var world = worlds.get(0);
 			if (world != null) {
+				item_stack.editMeta(CompassMeta.class, meta -> meta.setLodestoneTracked(true));
 				item_stack.editMeta(CompassMeta.class, meta -> meta.setLodestone(new Location(world, 0.0, 0.0, -999999999.0)));
 			}
 		}

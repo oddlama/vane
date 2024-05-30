@@ -1,7 +1,10 @@
 package org.oddlama.vane.util;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.UUID;
+
+import org.json.JSONException;
 
 public class Resolve {
 	public static class Skin {
@@ -10,7 +13,7 @@ public class Resolve {
 		public String signature;
 	}
 
-	public static Skin resolve_skin(UUID id) throws IOException {
+	public static Skin resolve_skin(UUID id) throws IOException, JSONException, URISyntaxException {
 		final var url = "https://sessionserver.mojang.com/session/minecraft/profile/" + id + "?unsigned=false";
 
 		final var json = IOUtil.read_json_from_url(url);
@@ -21,7 +24,7 @@ public class Resolve {
 		return skin;
 	}
 
-	public static UUID resolve_uuid(String name) throws IOException {
+	public static UUID resolve_uuid(String name) throws IOException, JSONException, URISyntaxException {
 		final var url = "https://api.mojang.com/users/profiles/minecraft/" + name;
 
 		final var json = IOUtil.read_json_from_url(url);

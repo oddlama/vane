@@ -320,7 +320,7 @@ public class Regions extends Module<Regions> {
 
 		// Spawn colored particles indicating validity
 		world.spawnParticle(
-			Particle.REDSTONE,
+			Particle.DUST,
 			mx,
 			my,
 			mz,

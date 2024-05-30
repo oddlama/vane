@@ -5,6 +5,7 @@ import static org.oddlama.vane.util.IOUtil.read_json_from_url;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.Properties;
@@ -21,6 +22,7 @@ import org.json.JSONException;
 import org.oddlama.vane.annotation.VaneModule;
 import org.oddlama.vane.annotation.config.ConfigBoolean;
 import org.oddlama.vane.annotation.lang.LangMessage;
+import org.oddlama.vane.core.enchantments.CustomEnchantmentFixer;
 import org.oddlama.vane.core.enchantments.EnchantmentManager;
 import org.oddlama.vane.core.functional.Consumer1;
 import org.oddlama.vane.core.item.CustomItemRegistry;
@@ -45,7 +47,6 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.minecraft.core.Holder;
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.enchantment.Enchantment;
 
@@ -77,6 +78,8 @@ public class Core extends Module<Core> {
 	private SortedSet<Module<?>> vane_modules = new TreeSet<>((a, b) -> a.get_name().compareTo(b.get_name()));
 
 	public final ResourcePackDistributor resource_pack_distributor;
+
+	public final CustomEnchantmentFixer custom_enchantment_fixer;
 
 	public void register_module(Module<?> module) {
 		vane_modules.add(module);
@@ -136,6 +139,7 @@ public class Core extends Module<Core> {
 		new org.oddlama.vane.core.commands.Enchant(this);
 		menu_manager = new MenuManager(this);
 		resource_pack_distributor = new ResourcePackDistributor(this);
+		custom_enchantment_fixer = new CustomEnchantmentFixer(this);
 		new CommandHider(this);
 		model_data_registry = new CustomModelDataRegistry();
 		item_registry = new CustomItemRegistry();
@@ -246,7 +250,7 @@ public class Core extends Module<Core> {
 				log.warning("Please update as soon as possible to get the latest features and fixes.");
 				log.warning("Get the latest release here: https://github.com/oddlama/vane/releases/latest");
 			}
-		} catch (IOException | JSONException e) {
+		} catch (IOException | JSONException | URISyntaxException e) {
 			log.warning("Could not check for updates: " + e);
 		}
 	}

@@ -4,7 +4,8 @@ import static org.oddlama.vane.util.MaterialUtil.is_tillable;
 import static org.oddlama.vane.util.Nms.item_handle;
 
 import org.bukkit.Keyed;
-import org.bukkit.craftbukkit.v1_20_R3.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.entity.CraftItem;
+import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
@@ -129,10 +130,10 @@ public class VanillaFunctionalityInhibitor extends Listener<Core> {
 		}
 
 		final var input = event.getInventory().getInputEquipment();
-		final var input_nbt = CraftItemStack.asNMSCopy(input).getOrCreateTag();
-		final var result_nbt = CraftItemStack.asNMSCopy(result).getOrCreateTag();
-		final var nms_result = item_handle(result).copy();
-		nms_result.setTag(result_nbt.merge(input_nbt));
+		final var input_components = CraftItemStack.asNMSCopy(input).getComponents();
+		final var nms_result = CraftItemStack.asNMSCopy(result);
+		nms_result.applyComponents(input_components);
+
 		event.setResult(custom_item_result.convertExistingStack(CraftItemStack.asCraftMirror(nms_result)));
 	}
 
@@ -195,7 +196,7 @@ public class VanillaFunctionalityInhibitor extends Listener<Core> {
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void on_item_burn(final EntityDamageEvent event) {
 		// Only burn damage on dropped items
-		if (event.getEntity().getType() != EntityType.DROPPED_ITEM) {
+		if (event.getEntity().getType() != EntityType.ITEM) {
 			return;
 		}
 

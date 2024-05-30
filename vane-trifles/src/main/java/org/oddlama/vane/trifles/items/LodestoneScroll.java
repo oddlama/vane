@@ -119,7 +119,7 @@ public class LodestoneScroll extends Scroll {
 
 		// Effects and sound
 		swing_arm(player, event.getHand());
-		block.getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE, block.getLocation().add(0.5, 2.0, 0.5), 100, 0.1, 0.3, 0.1, 2.0);
+		block.getWorld().spawnParticle(Particle.ENCHANT, block.getLocation().add(0.5, 2.0, 0.5), 100, 0.1, 0.3, 0.1, 2.0);
 		block.getWorld().playSound(block.getLocation(), Sound.BLOCK_RESPAWN_ANCHOR_CHARGE, SoundCategory.BLOCKS, 1.0f, 3.0f);
 
 		// Prevent offhand from triggering (e.g. placing torches)

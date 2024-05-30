@@ -511,7 +511,7 @@ public class Portals extends Module<Portals> {
 		// Spawn effect if not portal area
 		if (portal_block.type() != PortalBlock.Type.PORTAL) {
 			portal_block.block().getWorld()
-				.spawnParticle(Particle.ENCHANTMENT_TABLE, portal_block.block().getLocation().add(0.5, 0.5, 0.5), 50, 0.0, 0.0, 0.0, 1.0);
+				.spawnParticle(Particle.ENCHANT, portal_block.block().getLocation().add(0.5, 0.5, 0.5), 50, 0.0, 0.0, 0.0, 1.0);
 		}
 	}
 

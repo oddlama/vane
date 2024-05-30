@@ -8,13 +8,12 @@ import com.mojang.datafixers.types.Type;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.craftbukkit.v1_20_R3.CraftServer;
-import org.bukkit.craftbukkit.v1_20_R3.CraftWorld;
-import org.bukkit.craftbukkit.v1_20_R3.enchantments.CraftEnchantment;
-import org.bukkit.craftbukkit.v1_20_R3.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_20_R3.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_20_R3.inventory.CraftItemStack;
-import org.bukkit.craftbukkit.v1_20_R3.util.CraftNamespacedKey;
+import org.bukkit.craftbukkit.CraftServer;
+import org.bukkit.craftbukkit.CraftWorld;
+import org.bukkit.craftbukkit.enchantments.CraftEnchantment;
+import org.bukkit.craftbukkit.entity.CraftEntity;
+import org.bukkit.craftbukkit.entity.CraftPlayer;
+import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -27,6 +26,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.dedicated.DedicatedServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.datafix.DataFixers;
 import net.minecraft.util.datafix.fixes.References;
 import net.minecraft.world.Clearable;
@@ -34,8 +35,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentCategory;
 
 public class Nms {
 
@@ -59,37 +60,36 @@ public class Nms {
 	public static org.bukkit.inventory.ItemStack bukkit_item_stack(ItemStack stack) {
 		return CraftItemStack.asCraftMirror(stack);
 	}
-
-	public static EnchantmentCategory enchantment_slot_type(EnchantmentTarget target) {
+	public static TagKey<Item> enchantment_slot_type(EnchantmentTarget target) {
 		switch (target) {
 			case ARMOR:
-				return EnchantmentCategory.ARMOR;
+				return ItemTags.ARMOR_ENCHANTABLE;
 			case ARMOR_FEET:
-				return EnchantmentCategory.ARMOR_FEET;
+				return ItemTags.FOOT_ARMOR_ENCHANTABLE;
 			case ARMOR_HEAD:
-				return EnchantmentCategory.ARMOR_HEAD;
+				return ItemTags.HEAD_ARMOR_ENCHANTABLE;
 			case ARMOR_LEGS:
-				return EnchantmentCategory.ARMOR_LEGS;
+				return ItemTags.LEG_ARMOR_ENCHANTABLE;
 			case ARMOR_TORSO:
-				return EnchantmentCategory.ARMOR_CHEST;
+				return ItemTags.CHEST_ARMOR_ENCHANTABLE;
 			case TOOL:
-				return EnchantmentCategory.DIGGER;
+				return ItemTags.MINING_ENCHANTABLE;
 			case WEAPON:
-				return EnchantmentCategory.WEAPON;
+				return ItemTags.WEAPON_ENCHANTABLE;
 			case BOW:
-				return EnchantmentCategory.BOW;
+				return ItemTags.BOW_ENCHANTABLE;
 			case FISHING_ROD:
-				return EnchantmentCategory.FISHING_ROD;
+				return ItemTags.FISHING_ENCHANTABLE;
 			case BREAKABLE:
-				return EnchantmentCategory.BREAKABLE;
+				return ItemTags.DURABILITY_ENCHANTABLE;
 			case WEARABLE:
-				return EnchantmentCategory.WEARABLE;
+				return ItemTags.EQUIPPABLE_ENCHANTABLE;
 			case TRIDENT:
-				return EnchantmentCategory.TRIDENT;
+				return ItemTags.TRIDENT_ENCHANTABLE;
 			case CROSSBOW:
-				return EnchantmentCategory.CROSSBOW;
+				return ItemTags.CROSSBOW_ENCHANTABLE;
 			case VANISHABLE:
-				return EnchantmentCategory.VANISHABLE;
+				return ItemTags.VANISHING_ENCHANTABLE;
 			default:
 				return null;
 		}

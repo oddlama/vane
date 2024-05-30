@@ -1,12 +1,11 @@
 package org.oddlama.vane.core.resourcepack;
 
-import com.google.common.hash.Hashing;
-import com.google.common.io.Files;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.StandardCopyOption;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Properties;
-import java.util.logging.Level;
+import java.util.UUID;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -23,6 +22,13 @@ import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.ModuleGroup;
 import org.oddlama.vane.util.Nms;
+
+import com.google.common.hash.Hashing;
+import com.google.common.io.Files;
+
+import net.kyori.adventure.resource.ResourcePackInfo;
+import net.kyori.adventure.resource.ResourcePackRequest;
+import net.kyori.adventure.text.Component;
 
 public class ResourcePackDistributor extends Listener<Core> {
 
@@ -45,6 +51,7 @@ public class ResourcePackDistributor extends Listener<Core> {
 
 	public String url = null;
 	public String sha1 = null;
+	public UUID uuid = null;
 	public int counter = 0;
 
 	// The permission to bypass the resource pack
@@ -94,6 +101,7 @@ public class ResourcePackDistributor extends Listener<Core> {
 			get_module().log.info("Serving custom resource pack");
 			url = custom_resource_pack_config.config_url;
 			sha1 = custom_resource_pack_config.config_sha1;
+			uuid = UUID.fromString(custom_resource_pack_config.config_uuid);
 		} else {
 			get_module().log.info("Serving official vane resource pack");
 			try {
@@ -101,10 +109,12 @@ public class ResourcePackDistributor extends Listener<Core> {
 				properties.load(Core.class.getResourceAsStream("/vane-core.properties"));
 				url = properties.getProperty("resource_pack_url");
 				sha1 = properties.getProperty("resource_pack_sha1");
+				uuid = UUID.fromString(properties.getProperty("resource_pack_uuid"));
 			} catch (IOException e) {
 				get_module().log.severe("Could not load official resource pack sha1 from included properties file");
 				url = "";
 				sha1 = "";
+				uuid = UUID.randomUUID();
 			}
 		}
 
@@ -162,7 +172,13 @@ public class ResourcePackDistributor extends Listener<Core> {
 			url2 = url + "?" + counter;
 			player.sendMessage(url2 + " " + sha1);
 		}
-		player.setResourcePack(url2, sha1);
+
+		try {
+			ResourcePackInfo info = ResourcePackInfo.resourcePackInfo(uuid, new URI(url2), sha1);
+			player.sendResourcePacks(ResourcePackRequest.resourcePackRequest().packs(info).asResourcePackRequest());
+		} catch (URISyntaxException e) {
+			get_module().log.warning("The provided resource pack URL is incorrect: " + url2);
+		};
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)

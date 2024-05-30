@@ -5,6 +5,7 @@ import static org.oddlama.vane.util.Resolve.resolve_skin;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -88,7 +89,7 @@ public class AuthMultiplexer extends Listener<Core> implements PluginMessageList
 		Resolve.Skin skin;
 		try {
 			skin = resolve_skin(original_player_id);
-		} catch (IOException e) {
+		} catch (IOException | URISyntaxException e) {
 			Bukkit.getLogger().log(Level.WARNING, "Failed to resolve skin for uuid '" + id + "'", e);
 			return;
 		}
