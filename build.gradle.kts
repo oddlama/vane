@@ -26,6 +26,7 @@ subprojects {
 	version = "1.14.0"
 
 	repositories() {
+		mavenLocal()
 		mavenCentral()
 		maven("https://papermc.io/repo/repository/maven-public/")
 		maven("https://repo.dmulloy2.net/nexus/repository/public/")
@@ -60,7 +61,7 @@ configure(subprojects.filter {
 		build {
 			dependsOn("reobfJar")
 		}
-	 }
+	}
 }
 
 // All Projects except proxies and annotations.
@@ -85,7 +86,7 @@ configure(subprojects.filter {
 	}
 
 	dependencies {
-		implementation(group = "com.comphenix.protocol", name = "ProtocolLib", version = "5.2.0-SNAPSHOT")
+		implementation(group = "com.comphenix.protocol", name = "ProtocolLib", version = "5.2.1-SNAPSHOT")
 
 		compileOnly(project(":vane-annotations"))
 		annotationProcessor(project(path = ":vane-annotations", configuration = "reobf"))
