@@ -2,6 +2,7 @@ package org.oddlama.vane.core.item;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.NamespacedKey;
+import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
@@ -9,6 +10,10 @@ import org.jetbrains.annotations.Nullable;
 import org.oddlama.vane.core.Core;
 import org.oddlama.vane.core.item.api.CustomItem;
 import org.oddlama.vane.util.StorageUtil;
+
+import io.papermc.paper.adventure.PaperAdventure;
+import net.minecraft.core.component.DataComponentPatch;
+import net.minecraft.core.component.DataComponents;
 
 public class CustomItemHelper {
 	/** Used in persistent item storage to identify custom items. */
@@ -82,8 +87,10 @@ public class CustomItemHelper {
 	 */
 	public static ItemStack newStack(final CustomItem customItem, final int amount) {
 		final var itemStack = new ItemStack(customItem.baseMaterial(), amount);
-		itemStack.editMeta(meta -> meta.displayName(customItem.displayName()));
-		return CustomItemHelper.updateItemStack(customItem, itemStack);
+		final var itemStackNms = CraftItemStack.asNMSCopy(itemStack);
+		final var itemName = PaperAdventure.asVanilla(customItem.displayName());
+		itemStackNms.applyComponents(DataComponentPatch.builder().set(DataComponents.ITEM_NAME, itemName).build());
+		return CustomItemHelper.updateItemStack(customItem, itemStackNms.asBukkitMirror());
 	}
 
 	/**
