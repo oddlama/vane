@@ -8,7 +8,6 @@ import java.util.Set;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
-import org.bukkit.inventory.EquipmentSlotGroup;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.oddlama.vane.annotation.enchantment.Rarity;
@@ -24,11 +23,8 @@ import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.util.StorageUtil;
 
+import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
-import io.papermc.paper.registry.TypedKey;
-import io.papermc.paper.registry.data.EnchantmentRegistryEntry;
-import io.papermc.paper.registry.event.RegistryFreezeEvent;
-import io.papermc.paper.registry.keys.tags.ItemTypeTagKeys;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -85,9 +81,7 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 	 * Returns the bukkit wrapper for this enchantment.
 	 */
 	public final Enchantment bukkit() {
-		// return CraftEnchantment.minecraftToBukkit(native_wrapper);
-		// FIXME Debug value
-		return Enchantment.AQUA_AFFINITY;
+		return RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT).get(key);
 	}
 
 	/**

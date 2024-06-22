@@ -9,15 +9,15 @@ public class Enchantments extends Module<Enchantments> {
 		new org.oddlama.vane.enchantments.items.Tomes(this);
 
 		new org.oddlama.vane.enchantments.enchantments.Angel(this);
-		new org.oddlama.vane.enchantments.enchantments.GrapplingHook(this);
-		new org.oddlama.vane.enchantments.enchantments.HellBent(this);
-		new org.oddlama.vane.enchantments.enchantments.Leafchopper(this);
-		new org.oddlama.vane.enchantments.enchantments.Lightning(this);
+		// new org.oddlama.vane.enchantments.enchantments.GrapplingHook(this);
+		// new org.oddlama.vane.enchantments.enchantments.HellBent(this);
+		// new org.oddlama.vane.enchantments.enchantments.Leafchopper(this);
+		// new org.oddlama.vane.enchantments.enchantments.Lightning(this);
 		new org.oddlama.vane.enchantments.enchantments.Rake(this);
-		new org.oddlama.vane.enchantments.enchantments.Seeding(this);
-		new org.oddlama.vane.enchantments.enchantments.Soulbound(this);
-		new org.oddlama.vane.enchantments.enchantments.TakeOff(this);
-		new org.oddlama.vane.enchantments.enchantments.Unbreakable(this);
-		new org.oddlama.vane.enchantments.enchantments.Wings(this);
+		// new org.oddlama.vane.enchantments.enchantments.Seeding(this);
+		// new org.oddlama.vane.enchantments.enchantments.Soulbound(this);
+		// new org.oddlama.vane.enchantments.enchantments.TakeOff(this);
+		// new org.oddlama.vane.enchantments.enchantments.Unbreakable(this);
+		// new org.oddlama.vane.enchantments.enchantments.Wings(this);
 	}
 }

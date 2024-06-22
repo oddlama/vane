@@ -1,0 +1,13 @@
+name: vane-enchantments
+main: org.oddlama.vane.enchantments.Enchantments
+version: ${version}
+description: Immersive and lore friendly extensions for vanilla minecraft
+bootstrapper: org.oddlama.vane.enchantments.EnchantmentsBootstrapper
+
+api-version: '1.21'
+dependencies:
+  server:
+    vane-core:
+      join-classpath: true
+      required: true
+      load: BEFORE
