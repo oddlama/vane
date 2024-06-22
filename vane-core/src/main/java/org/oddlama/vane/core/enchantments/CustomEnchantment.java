@@ -8,8 +8,8 @@ import java.util.Set;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
+import org.bukkit.inventory.EquipmentSlotGroup;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.craftbukkit.enchantments.CraftEnchantment;
 import org.jetbrains.annotations.NotNull;
 import org.oddlama.vane.annotation.enchantment.Rarity;
 import org.oddlama.vane.annotation.enchantment.VaneEnchantment;
@@ -22,9 +22,13 @@ import org.oddlama.vane.core.config.recipes.Recipes;
 import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.Module;
-import org.oddlama.vane.util.Nms;
 import org.oddlama.vane.util.StorageUtil;
 
+import io.papermc.paper.registry.RegistryKey;
+import io.papermc.paper.registry.TypedKey;
+import io.papermc.paper.registry.data.EnchantmentRegistryEntry;
+import io.papermc.paper.registry.event.RegistryFreezeEvent;
+import io.papermc.paper.registry.keys.tags.ItemTypeTagKeys;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -36,12 +40,12 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 	private VaneEnchantment annotation = getClass().getAnnotation(VaneEnchantment.class);
 	private String name;
 	private NamespacedKey key;
-	private NativeEnchantmentWrapper native_wrapper;
 
 	private final Set<NamespacedKey> supersedes = new HashSet<>();
 
 	public Recipes<T> recipes;
 	public LootTables<T> loot_tables;
+
 
 	// Language
 	@LangMessage
@@ -68,9 +72,9 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 		instances.put(getClass(), this);
 
 		// Register and create wrappers
-		get_module().core.unfreeze_registries();
-		native_wrapper = new NativeEnchantmentWrapper(this);
-		Nms.register_enchantment(key(), native_wrapper);
+		// get_module().core.unfreeze_registries();
+		// native_wrapper = new NativeEnchantmentWrapper(this);
+		// Nms.register_enchantment(key(), native_wrapper);
 
 		// Automatic recipes and loot table config and registration
 		recipes = new Recipes<T>(get_context(), this.key, this::default_recipes);
@@ -81,7 +85,9 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 	 * Returns the bukkit wrapper for this enchantment.
 	 */
 	public final Enchantment bukkit() {
-		return CraftEnchantment.minecraftToBukkit(native_wrapper);
+		// return CraftEnchantment.minecraftToBukkit(native_wrapper);
+		// FIXME Debug value
+		return Enchantment.AQUA_AFFINITY;
 	}
 
 	/**

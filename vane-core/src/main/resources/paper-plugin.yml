@@ -1,0 +1,12 @@
+name: vane-core
+main: org.oddlama.vane.core.Core
+version: ${version}
+description: Immersive and lore friendly extensions for vanilla minecraft
+
+
+api-version: '1.21'
+dependencies:
+  server:
+    ProtocolLib:
+      load: BEFORE
+      required: true

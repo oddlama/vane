@@ -5,7 +5,7 @@ plugins {
 }
 
 dependencies {
-	paperDevBundle("1.20.6-R0.1-SNAPSHOT")
+	paperDevBundle("1.21-R0.1-SNAPSHOT")
 }
 
 java {
@@ -55,7 +55,7 @@ configure(subprojects.filter {
 	apply(plugin = "io.papermc.paperweight.userdev")
 
 	dependencies {
-		paperDevBundle("1.20.6-R0.1-SNAPSHOT")
+		paperDevBundle("1.21-R0.1-SNAPSHOT")
 	}
 }
 
