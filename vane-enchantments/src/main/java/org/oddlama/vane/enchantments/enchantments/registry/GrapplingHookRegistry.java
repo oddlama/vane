@@ -7,12 +7,10 @@ import io.papermc.paper.registry.data.EnchantmentRegistryEntry;
 import io.papermc.paper.registry.event.RegistryFreezeEvent;
 import io.papermc.paper.registry.keys.tags.ItemTypeTagKeys;
 
-public class RakeRegistry extends CustomEnchantmentRegistry {
+public class GrapplingHookRegistry extends CustomEnchantmentRegistry {
 
-    public RakeRegistry(RegistryFreezeEvent<Enchantment, EnchantmentRegistryEntry.Builder> freezeEvent) {
-        super("rake",
-                ItemTypeTagKeys.HOES,
-                4);
+    public GrapplingHookRegistry(RegistryFreezeEvent<Enchantment, EnchantmentRegistryEntry.Builder> freezeEvent) {
+        super("grappling_hook", ItemTypeTagKeys.ENCHANTABLE_FISHING, 3);
         this.register(freezeEvent);
     }
 

@@ -7,13 +7,9 @@ import io.papermc.paper.registry.data.EnchantmentRegistryEntry;
 import io.papermc.paper.registry.event.RegistryFreezeEvent;
 import io.papermc.paper.registry.keys.tags.ItemTypeTagKeys;
 
-public class RakeRegistry extends CustomEnchantmentRegistry {
-
-    public RakeRegistry(RegistryFreezeEvent<Enchantment, EnchantmentRegistryEntry.Builder> freezeEvent) {
-        super("rake",
-                ItemTypeTagKeys.HOES,
-                4);
+public class SeedingRegistry extends CustomEnchantmentRegistry {
+    public SeedingRegistry(RegistryFreezeEvent<Enchantment, EnchantmentRegistryEntry.Builder> freezeEvent) {
+        super("seeding", ItemTypeTagKeys.HOES, 4);
         this.register(freezeEvent);
     }
-
 }

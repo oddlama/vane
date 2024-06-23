@@ -37,8 +37,6 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 	private String name;
 	private NamespacedKey key;
 
-	private final Set<NamespacedKey> supersedes = new HashSet<>();
-
 	public Recipes<T> recipes;
 	public LootTables<T> loot_tables;
 
@@ -67,11 +65,6 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 		}
 		instances.put(getClass(), this);
 
-		// Register and create wrappers
-		// get_module().core.unfreeze_registries();
-		// native_wrapper = new NativeEnchantmentWrapper(this);
-		// Nms.register_enchantment(key(), native_wrapper);
-
 		// Automatic recipes and loot table config and registration
 		recipes = new Recipes<T>(get_context(), this.key, this::default_recipes);
 		loot_tables = new LootTables<T>(get_context(), this.key, this::default_loot_tables);
@@ -82,29 +75,6 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 	 */
 	public final Enchantment bukkit() {
 		return RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT).get(key);
-	}
-
-	/**
-	 * Returns all enchantments that are superseded by this enchantment.
-	 */
-	public final Set<NamespacedKey> supersedes() {
-		return supersedes;
-	}
-
-	/**
-	 * Adds a superseded enchantment. Superseded enchantments will be removed
-	 * from the item when this enchantment is added.
-	 */
-	public final void supersedes(NamespacedKey e) {
-		supersedes.add(e);
-	}
-
-	/**
-	 * Adds a superseded enchantment. Superseded enchantments will be removed
-	 * from the item when this enchantment is added.
-	 */
-	public final void supersedes(Enchantment e) {
-		supersedes(e.getKey());
 	}
 
 	/**

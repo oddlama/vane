@@ -7,13 +7,11 @@ import io.papermc.paper.registry.data.EnchantmentRegistryEntry;
 import io.papermc.paper.registry.event.RegistryFreezeEvent;
 import io.papermc.paper.registry.keys.tags.ItemTypeTagKeys;
 
-public class RakeRegistry extends CustomEnchantmentRegistry {
+public class HellBentRegistry extends CustomEnchantmentRegistry{
 
-    public RakeRegistry(RegistryFreezeEvent<Enchantment, EnchantmentRegistryEntry.Builder> freezeEvent) {
-        super("rake",
-                ItemTypeTagKeys.HOES,
-                4);
+    public HellBentRegistry(RegistryFreezeEvent<Enchantment, EnchantmentRegistryEntry.Builder> freezeEvent) {
+        super("hell_bent", ItemTypeTagKeys.ENCHANTABLE_HEAD_ARMOR, 1);
         this.register(freezeEvent);
     }
-
+    
 }
