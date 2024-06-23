@@ -109,6 +109,7 @@ public class DurabilityManager extends Listener<Core> {
 		}
 
 		set_damage_and_update_item(custom_item, item_stack, actual_damage);
+
 		return true;
 	}
 
@@ -123,7 +124,7 @@ public class DurabilityManager extends Listener<Core> {
 			return;
 		}
 
-		if(remove_old_damage(custom_item, item)){
+		if(remove_old_damage(custom_item, item) || update_damage(custom_item, item)){
 			item.editMeta(Damageable.class, damage_meta ->
 				damage_meta.setDamage(Math.max(0, damage_meta.getDamage() - event.getDamage())));
 
