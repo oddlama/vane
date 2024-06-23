@@ -1,7 +1,5 @@
 package org.oddlama.vane.core.item;
 
-import java.util.ArrayList;
-
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -68,7 +66,7 @@ public class DurabilityManager extends Listener<Core> {
 		final int finalDamage = damage;
 		item_stack.editMeta(Damageable.class, meta -> {
 			meta.setDamage(finalDamage);
-			meta.setMaxDamage(null);
+			meta.setMaxDamage(custom_item.durability());
 		});
 	}
 
@@ -139,7 +137,7 @@ public class DurabilityManager extends Listener<Core> {
 		if (!(item_stack.getItemMeta() instanceof Damageable meta))
 			return false; // everything should be damageable now
 		int old_max_damage = meta.hasMaxDamage() ? meta.getMaxDamage() : item_stack.getType().getMaxDurability();
-		int old_damage = meta.hasDamage() ? meta.getDamage() : old_max_damage;
+		int old_damage = meta.hasDamage() ? meta.getDamage() : 0;
 		float percentage = (float) old_damage / (float) old_max_damage;
 
 		final int max_damage = custom_item.durability() != 0
@@ -154,9 +152,6 @@ public class DurabilityManager extends Listener<Core> {
 			itemMeta.setMaxDamage(max_damage);
 			itemMeta.setDamage(Math.min(damage, max_damage));
 		});
-
-		// int oldDamage = meta.getPersistentDataContainer().get(ITEM_DURABILITY_DAMAGE,
-		// PersistentDataType.INTEGER);
 	}
 
 	/**
@@ -171,7 +166,7 @@ public class DurabilityManager extends Listener<Core> {
 
 		// get old values stored in the data
 		final int oldDamage = data.getOrDefault(ITEM_DURABILITY_DAMAGE, PersistentDataType.INTEGER, 0);
-		final int oldMaxDamage = data.getOrDefault(ITEM_DURABILITY_MAX, PersistentDataType.INTEGER, custom_item.durability());
+		final int oldMaxDamage = data.getOrDefault(ITEM_DURABILITY_MAX, PersistentDataType.INTEGER, custom_item.durability() == 0 ? item_stack.getType().getMaxDurability() : custom_item.durability());
 
 		final int newDamage = oldMaxDamage == custom_item.durability()
 			? oldDamage // to avoid precision errors on bigger numbers
