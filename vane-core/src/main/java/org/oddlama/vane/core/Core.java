@@ -130,7 +130,7 @@ public class Core extends Module<Core> {
 		new LootChestProtector(this);
 		new VanillaFunctionalityInhibitor(this);
 		new DurabilityManager(this);
-		// new org.oddlama.vane.core.commands.Vane(this);
+		new org.oddlama.vane.core.commands.Vane(this);
 		new org.oddlama.vane.core.commands.CustomItem(this);
 		// new org.oddlama.vane.core.commands.Enchant(this);
 		menu_manager = new MenuManager(this);
