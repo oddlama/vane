@@ -19,6 +19,13 @@ import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.core.module.ModuleComponent;
 
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.tree.LiteralCommandNode;
+
+import io.papermc.paper.command.brigadier.CommandSourceStack;
+import io.papermc.paper.command.brigadier.Commands;
+
 @VaneCommand
 public abstract class Command<T extends Module<T>> extends ModuleComponent<T> {
 
@@ -101,6 +108,9 @@ public abstract class Command<T extends Module<T>> extends ModuleComponent<T> {
 	// Root parameter
 	private AnyParam<String> root_param;
 
+	private LiteralArgumentBuilder<CommandSourceStack> brigadier_command;
+	private Aliases aliases;
+
 	public Command(Context<T> context) {
 		this(context, PermissionDefault.OP);
 	}
@@ -133,7 +143,9 @@ public abstract class Command<T extends Module<T>> extends ModuleComponent<T> {
 		bukkit_command.setLabel(name);
 		bukkit_command.setName(name);
 
-		var aliases = getClass().getAnnotation(Aliases.class);
+		
+		aliases = getClass().getAnnotation(Aliases.class);
+		brigadier_command = Commands.literal(name).requires(stack -> stack.getSender().hasPermission(permission));
 		if (aliases != null) {
 			bukkit_command.setAliases(List.of(aliases.value()));
 		}
@@ -159,6 +171,23 @@ public abstract class Command<T extends Module<T>> extends ModuleComponent<T> {
 		return root_param;
 	}
 
+	public LiteralArgumentBuilder<CommandSourceStack> get_command_base() {
+		return brigadier_command;
+	}
+
+	public LiteralCommandNode<CommandSourceStack> get_command() {
+		return get_command_base().build();
+	}
+
+	public List<String> get_aliases() {
+		if (aliases != null && aliases.value().length > 0) {
+			return List.of(aliases.value());
+		} else {
+			return Collections.emptyList();
+		}
+		
+	}
+
 	@Override
 	protected void on_enable() {
 		get_module().register_command(this);
@@ -173,4 +202,11 @@ public abstract class Command<T extends Module<T>> extends ModuleComponent<T> {
 		lang_usage.send(sender, "§7/§3" + name);
 		lang_help.send(sender);
 	}
+
+	public int print_help2(CommandContext<CommandSourceStack> ctx) {
+		lang_usage.send(ctx.getSource().getSender(), "§7/§3" + name);
+		lang_help.send(ctx.getSource().getSender());
+		return com.mojang.brigadier.Command.SINGLE_SUCCESS;
+	}
+	
 }
