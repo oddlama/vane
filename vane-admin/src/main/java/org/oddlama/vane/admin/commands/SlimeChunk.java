@@ -32,7 +32,7 @@ public class SlimeChunk extends Command<Admin> {
 	public LiteralArgumentBuilder<CommandSourceStack> get_command_base() {
 		return super.get_command_base()
 			.requires(stack -> stack.getSender() instanceof Player)
-			.then(literal("help").executes(ctx -> {this.print_help2(ctx); return SINGLE_SUCCESS;}))
+			.then(help())
 			.executes(ctx -> {is_slimechunk((Player) ctx.getSource().getSender()); return SINGLE_SUCCESS;});
 	}
 

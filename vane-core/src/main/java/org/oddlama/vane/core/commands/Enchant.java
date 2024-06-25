@@ -37,23 +37,6 @@ public class Enchant extends Command<Core> {
 
 	public Enchant(Context<Core> context) {
 		super(context);
-		// // Add help
-		// params().fixed("help").ignore_case().exec(this::print_help);
-		// // Command parameters
-		// var enchantment = params().choose_enchantment(this::filter_by_held_item);
-		// enchantment.exec_player(this::enchant_current_item_level_1);
-		// enchantment
-		// 	.any(
-		// 		"level",
-		// 		str -> {
-		// 			try {
-		// 				return Integer.parseUnsignedInt(str);
-		// 			} catch (NumberFormatException e) {
-		// 				return null;
-		// 			}
-		// 		}
-		// 	)
-		// 	.exec_player(this::enchant_current_item);
 	}
 
 	@Override

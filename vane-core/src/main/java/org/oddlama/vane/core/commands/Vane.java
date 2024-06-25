@@ -45,7 +45,7 @@ public class Vane extends Command<Core> {
 	@Override
 	public LiteralArgumentBuilder<CommandSourceStack> get_command_base() {
 		return super.get_command_base()
-			.then(literal("help").executes(ctx -> { print_help2(ctx); return SINGLE_SUCCESS; }))
+			.then(help())
 
 			.then(literal("reload").executes(ctx -> { reload_all(ctx.getSource().getSender()); return SINGLE_SUCCESS;})
 				.then(argument("module", ModuleArgumentType.module(get_module()))

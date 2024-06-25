@@ -31,10 +31,7 @@ public class CustomItem extends Command<Core> {
 			print_help2(stack);
 			return SINGLE_SUCCESS;
 		})
-		.then(literal("help").executes(stack -> {
-			print_help2(stack);
-			return SINGLE_SUCCESS;
-		}))
+		.then(help())
 		// Give custom item
 		.then(literal("give")
 			.requires(stack -> stack.getSender() instanceof Player)

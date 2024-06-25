@@ -38,7 +38,7 @@ public class Weather extends Command<Admin> {
 	@Override
 	public LiteralArgumentBuilder<CommandSourceStack> get_command_base() {
 		return super.get_command_base()
-			.then(literal("help").executes(ctx -> { print_help2(ctx); return SINGLE_SUCCESS; }))
+			.then(help())
 			.then(argument("weather", WeatherArgumentType.weather())
 				.executes(ctx -> { set_weather_current_world((Player) ctx.getSource().getSender(), weather(ctx)); return SINGLE_SUCCESS;})
 				.then(argument("world", ArgumentTypes.world())

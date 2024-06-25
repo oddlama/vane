@@ -30,7 +30,7 @@ public class Autostop extends Command<Admin> {
 	public LiteralArgumentBuilder<CommandSourceStack> get_command_base() {
 		return super.get_command_base()
 			.executes(ctx -> { status(ctx.getSource().getSender()); return SINGLE_SUCCESS; })
-			.then(literal("help").executes(ctx -> { print_help2(ctx); return SINGLE_SUCCESS; }))
+			.then(help())
 			.then(literal("status").executes(ctx -> { status(ctx.getSource().getSender()); return SINGLE_SUCCESS; }))
 			.then(literal("abort").executes(ctx -> { abort(ctx.getSource().getSender()); return SINGLE_SUCCESS;}))
 			.then(literal("schedule")

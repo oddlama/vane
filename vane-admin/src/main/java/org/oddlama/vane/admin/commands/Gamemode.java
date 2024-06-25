@@ -39,7 +39,7 @@ public class Gamemode extends Command<Admin> {
 	@Override
 	public LiteralArgumentBuilder<CommandSourceStack> get_command_base() {
 		return super.get_command_base()
-			.then(literal("help").executes(ctx -> print_help2(ctx)))
+			.then(help())
 
 			.executes(ctx -> {toggle_gamemode_self((Player) ctx.getSource().getSender()); return SINGLE_SUCCESS;})
 			
