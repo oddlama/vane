@@ -10,7 +10,7 @@ public class Admin extends Module<Admin> {
 		new org.oddlama.vane.admin.commands.Gamemode(this);
 		new org.oddlama.vane.admin.commands.SlimeChunk(this);
 		new org.oddlama.vane.admin.commands.Time(this);
-		// new org.oddlama.vane.admin.commands.Weather(this);
+		new org.oddlama.vane.admin.commands.Weather(this);
 
 		var autostop_group = new AutostopGroup(this);
 		new AutostopListener(autostop_group);
