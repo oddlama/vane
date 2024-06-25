@@ -132,7 +132,7 @@ public class Core extends Module<Core> {
 		new DurabilityManager(this);
 		new org.oddlama.vane.core.commands.Vane(this);
 		new org.oddlama.vane.core.commands.CustomItem(this);
-		// new org.oddlama.vane.core.commands.Enchant(this);
+		new org.oddlama.vane.core.commands.Enchant(this);
 		menu_manager = new MenuManager(this);
 		resource_pack_distributor = new ResourcePackDistributor(this);
 		new CommandHider(this);

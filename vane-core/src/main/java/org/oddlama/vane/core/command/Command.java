@@ -1,5 +1,7 @@
 package org.oddlama.vane.core.command;
 
+import static com.mojang.brigadier.Command.SINGLE_SUCCESS;
+import static io.papermc.paper.command.brigadier.Commands.literal;
 import static org.oddlama.vane.util.ArrayUtil.prepend;
 
 import java.util.Collections;
@@ -207,6 +209,10 @@ public abstract class Command<T extends Module<T>> extends ModuleComponent<T> {
 		lang_usage.send(ctx.getSource().getSender(), "§7/§3" + name);
 		lang_help.send(ctx.getSource().getSender());
 		return com.mojang.brigadier.Command.SINGLE_SUCCESS;
+	}
+
+	public LiteralArgumentBuilder<CommandSourceStack> help(){
+		return literal("help").executes(ctx -> {print_help2(ctx); return SINGLE_SUCCESS;});
 	}
 	
 }
