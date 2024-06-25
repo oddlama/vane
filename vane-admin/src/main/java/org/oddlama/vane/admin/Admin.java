@@ -7,10 +7,10 @@ import org.oddlama.vane.core.module.Module;
 public class Admin extends Module<Admin> {
 	public Admin() {
 		// Create components
-		new org.oddlama.vane.admin.commands.Gamemode(this);
+		// new org.oddlama.vane.admin.commands.Gamemode(this);
 		new org.oddlama.vane.admin.commands.SlimeChunk(this);
-		new org.oddlama.vane.admin.commands.Time(this);
-		new org.oddlama.vane.admin.commands.Weather(this);
+		// new org.oddlama.vane.admin.commands.Time(this);
+		// new org.oddlama.vane.admin.commands.Weather(this);
 
 		var autostop_group = new AutostopGroup(this);
 		new AutostopListener(autostop_group);
