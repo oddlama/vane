@@ -43,7 +43,7 @@ public class CustomItemArgumentType implements CustomArgumentType.Converted<Cust
     }
 
     @Override
-    public <Context> @NotNull CompletableFuture<Suggestions> listSuggestions(@NotNull CommandContext<Context> context,
+    public <S> @NotNull CompletableFuture<Suggestions> listSuggestions(@NotNull CommandContext<S> context,
             @NotNull SuggestionsBuilder builder) {
         Stream<CustomItem> stream = this.module.item_registry().all().stream();
         if(!builder.getRemaining().isBlank()){
