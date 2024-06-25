@@ -2,6 +2,7 @@ package org.oddlama.vane.core.command.argumentType;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.NotNull;
@@ -44,7 +45,11 @@ public class CustomItemArgumentType implements CustomArgumentType.Converted<Cust
     @Override
     public <Context> @NotNull CompletableFuture<Suggestions> listSuggestions(@NotNull CommandContext<Context> context,
             @NotNull SuggestionsBuilder builder) {
-        this.module.item_registry().all().stream().collect(Collectors.toMap(item -> item.key().toString(), CustomItem::displayName))
+        Stream<CustomItem> stream = this.module.item_registry().all().stream();
+        if(!builder.getRemaining().isBlank()){
+            stream = stream.filter(item -> item.key().toString().contains(builder.getRemainingLowerCase()));
+        }
+        stream.collect(Collectors.toMap(item -> item.key().toString(), CustomItem::displayName))
             .forEach((key, name) -> builder.suggest(key, MessageComponentSerializer.message().serialize(name)));
         return builder.buildFuture();
 
