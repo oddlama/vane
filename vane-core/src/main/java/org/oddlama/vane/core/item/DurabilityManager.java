@@ -63,15 +63,11 @@ public class DurabilityManager extends Listener<Core> {
 		if (ro_meta.isUnbreakable()) {
 			damage = 0;
 		}
-		final int finalDamage = damage;
-		item_stack.editMeta(Damageable.class, meta -> {
-			meta.setDamage(finalDamage);
-			meta.setMaxDamage(custom_item.durability());
-		});
+		set_damage_and_max_damage(custom_item, item_stack, damage);
 	}
 
 	/**
-	 * Initialized damage tags on the item, or removes them if custom durability
+	 * Initializes damage on the item, or removes them if custom durability
 	 * is disabled for the given custom item.
 	 */
 	public static boolean initialize_or_update_max(final CustomItem custom_item, final ItemStack item_stack) {
@@ -119,72 +115,61 @@ public class DurabilityManager extends Listener<Core> {
 		final var item = event.getItem();
 		final var custom_item = get_module().item_registry().get(item);
 
-		// Ignore normal items or custom items with standard durability.
-		if (custom_item == null || custom_item.durability() == 0) {
+		// Ignore normal items
+		if (custom_item == null) {
 			return;
 		}
 
-		if(remove_old_damage(custom_item, item) || update_damage(custom_item, item)){
-			item.editMeta(Damageable.class, damage_meta ->
-				damage_meta.setDamage(Math.max(0, damage_meta.getDamage() - event.getDamage())));
-
-		};
+		update_damage(custom_item, item);
 	}
 
 	/**
 	 * Update existing max damage to match the configuration
 	 */
-	static public boolean update_damage(CustomItem custom_item, ItemStack item_stack) {
+	static public void update_damage(CustomItem custom_item, ItemStack item_stack) {
 		if (!(item_stack.getItemMeta() instanceof Damageable meta))
-			return false; // everything should be damageable now
-		int old_max_damage = meta.hasMaxDamage() ? meta.getMaxDamage() : item_stack.getType().getMaxDurability();
-		int old_damage = meta.hasDamage() ? meta.getDamage() : 0;
-		float percentage = (float) old_damage / (float) old_max_damage;
-
-		final int max_damage = custom_item.durability() != 0
-			? custom_item.durability() 
-			: item_stack.getType().getMaxDurability();
-
-		if (old_max_damage == max_damage) return false; // same max damage, so no need to change it
-
-		final int damage = Math.round(max_damage * percentage);
-		return item_stack.editMeta(Damageable.class, itemMeta -> {
-			itemMeta.setDamage(0);
-			itemMeta.setMaxDamage(max_damage);
-			itemMeta.setDamage(Math.min(damage, max_damage));
-		});
-	}
-
-	/**
-	 * Replace custom durability mechanic with vanilla one
-	 */
-	static public boolean remove_old_damage(CustomItem custom_item, ItemStack item_stack) {
-		if (custom_item == null) return false;
-		if (!(item_stack.getItemMeta() instanceof Damageable meta)) return false;
+			return; // everything should be damageable now
 		
+		boolean updated = false;
 		PersistentDataContainer data = meta.getPersistentDataContainer();
-		if(!data.has(ITEM_DURABILITY_DAMAGE) && !data.has(ITEM_DURABILITY_MAX)) return false;
 
-		// get old values stored in the data
-		final int oldDamage = data.getOrDefault(ITEM_DURABILITY_DAMAGE, PersistentDataType.INTEGER, 0);
-		final int oldMaxDamage = data.getOrDefault(ITEM_DURABILITY_MAX, PersistentDataType.INTEGER, custom_item.durability() == 0 ? item_stack.getType().getMaxDurability() : custom_item.durability());
-
-		final int newDamage = oldMaxDamage == custom_item.durability()
-			? oldDamage // to avoid precision errors on bigger numbers
-			: Math.round(custom_item.durability() * ((float) oldDamage / (float) oldMaxDamage));			
-
+		final int new_max_damage = custom_item.durability() == 0 ? item_stack.getType().getMaxDurability() : custom_item.durability();
+		
+		int old_damage;
+		int old_max_damage;
+		// if the item has damage in their data, get the value and remove it from PDC
+		if(data.has(ITEM_DURABILITY_DAMAGE) && data.has(ITEM_DURABILITY_MAX)) {
+			old_damage = data.get(ITEM_DURABILITY_DAMAGE, PersistentDataType.INTEGER);
+			old_max_damage = data.get(ITEM_DURABILITY_MAX, PersistentDataType.INTEGER);
+			data.remove(ITEM_DURABILITY_DAMAGE);
+			data.remove(ITEM_DURABILITY_MAX);
+			updated = true;
+		} else {
+			old_damage = meta.hasDamage() ? meta.getDamage() : 0;
+			old_max_damage = meta.hasMaxDamage() ? meta.getMaxDamage() : item_stack.getType().getMaxDurability();
+		}
+		
 		remove_lore(item_stack);
 
-		return item_stack.editMeta(Damageable.class, itemMeta -> {
-			if(custom_item.durability() != 0) {
-				itemMeta.setMaxDamage(custom_item.durability());
-			} else {
-				itemMeta.setMaxDamage((int) item_stack.getType().getMaxDurability());
-			}	
-			itemMeta.setDamage(newDamage);
-			itemMeta.getPersistentDataContainer().remove(ITEM_DURABILITY_DAMAGE);
-			itemMeta.getPersistentDataContainer().remove(ITEM_DURABILITY_MAX);
-		});
+		if(!updated) updated = old_max_damage != new_max_damage; // only update if there was old data or a different max durability
+		if(!updated) return; // and do nothing if nothing changed
+		final int new_damage = scale_damage(old_damage, old_max_damage, new_max_damage);
+		set_damage_and_max_damage(custom_item, item_stack, new_damage);
+	}
 
+	static public int scale_damage(int old_damage, int old_max_damage, int new_max_damage) {
+ 		return old_max_damage == new_max_damage ? old_damage : (int)(new_max_damage * ((float) old_damage / (float) old_max_damage));
+	}
+
+	static public boolean set_damage_and_max_damage(CustomItem custom_item, ItemStack item, int damage) {
+		return item.editMeta(Damageable.class, meta -> {	
+			if(custom_item.durability() != 0) {
+				meta.setMaxDamage(custom_item.durability());
+			} else {
+				meta.setMaxDamage((int) item.getType().getMaxDurability());
+			}
+			
+			meta.setDamage(damage);
+		});
 	}
 }

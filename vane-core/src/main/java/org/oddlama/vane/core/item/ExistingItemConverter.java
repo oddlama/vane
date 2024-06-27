@@ -113,18 +113,11 @@ public class ExistingItemConverter extends Listener<Core> {
 			Damageable damageableMeta = (Damageable) contents[i].getItemMeta();
 			int max_damage = damageableMeta.hasMaxDamage() ? damageableMeta.getMaxDamage() : contents[i].getType().getMaxDurability();
 			int correct_max_damage = custom_item.durability() == 0 ? contents[i].getType().getMaxDurability() : custom_item.durability();
-			if (max_damage != correct_max_damage) {
+			if (max_damage != correct_max_damage || meta.getPersistentDataContainer().has(DurabilityManager.ITEM_DURABILITY_DAMAGE)) {
 				get_module().log.info("Updated item durability " + custom_item.key());
 				DurabilityManager.update_damage(custom_item, contents[i]);
 				++changed;
 				continue;
-			}
-
-			// Update custom durability to vanilla one
-			if(meta.getPersistentDataContainer().has(DurabilityManager.ITEM_DURABILITY_DAMAGE)) {
-				get_module().log.info("Updated item durability mechanic " + custom_item.key());
-				DurabilityManager.remove_old_damage(custom_item, contents[i]);
-				++changed;
 			}
 		}
 
