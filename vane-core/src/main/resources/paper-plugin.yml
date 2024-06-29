@@ -1,10 +1,15 @@
-name: vane-core
-main: org.oddlama.vane.core.Core
+name: ${name}
 version: ${version}
 description: Immersive and lore friendly extensions for vanilla minecraft
 
+authors:
+  - oddlama
+website: 'https://github.com/oddlama/vane'
+
+main: org.oddlama.vane.core.Core
 
 api-version: '1.21'
+
 dependencies:
   server:
     ProtocolLib:

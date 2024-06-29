@@ -1,14 +1,12 @@
 name: ${name}
 version: ${version}
-description: Enchantments module for vane
+description: Bedtime module for vane
 
 authors:
   - oddlama
 website: 'https://github.com/oddlama/vane'
 
-
-main: org.oddlama.vane.enchantments.Enchantments
-bootstrapper: org.oddlama.vane.enchantments.EnchantmentsBootstrapper
+main: org.oddlama.vane.bedtime.Bedtime
 
 api-version: '1.21'
 
@@ -17,3 +15,9 @@ dependencies:
     vane-core:
       required: true
       load: BEFORE
+    dynmap:
+      required: false
+      load: AFTER
+    BlueMap:
+      required: false
+      load: AFTER
