@@ -5,6 +5,7 @@ import java.util.EnumSet;
 import java.util.List;
 
 import org.apache.commons.lang3.tuple.Pair;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -22,8 +23,11 @@ import org.oddlama.vane.core.resourcepack.ResourcePackGenerator;
 import org.oddlama.vane.trifles.Trifles;
 import org.oddlama.vane.util.StorageUtil;
 
+import net.kyori.adventure.text.Component;
+
 @VaneItem(name = "north_compass", base = Material.COMPASS, model_data = 0x760013, version = 1)
 public class NorthCompass extends CustomItem<Trifles> {
+
 	public NorthCompass(final Context<Trifles> context) {
 		super(context);
 	}
@@ -43,8 +47,10 @@ public class NorthCompass extends CustomItem<Trifles> {
 		if (worlds.size() > 0) {
 			final var world = worlds.get(0);
 			if (world != null) {
-				item_stack.editMeta(CompassMeta.class, meta -> meta.setLodestoneTracked(true));
-				item_stack.editMeta(CompassMeta.class, meta -> meta.setLodestone(new Location(world, 0.0, 0.0, -999999999.0)));
+				item_stack.editMeta(CompassMeta.class, meta -> {
+					meta.setLodestone(new Location(world, 0.0, 0.0, -300000000.0));
+					meta.setLodestoneTracked(false);
+				});
 			}
 		}
 		return item_stack;
@@ -71,7 +77,7 @@ public class NorthCompass extends CustomItem<Trifles> {
 			// is stored forever.
 			if (!meta.hasLodestone()) {
 				meta.setLodestoneTracked(false);
-				meta.setLodestone(new Location(event.getWhoClicked().getWorld(), 0.0, 0.0, -999999999.0));
+				meta.setLodestone(new Location(event.getWhoClicked().getWorld(), 0.0, 0.0, -300000000.0));
 			}
 		});
 	}
