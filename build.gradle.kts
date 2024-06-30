@@ -34,6 +34,7 @@ subprojects {
 		maven("https://repo.codemc.org/repository/maven-public/")
 		maven("https://jitpack.io")
 		maven("https://api.modrinth.com/maven")
+		maven("https://repo.bluecolored.de/releases")
 	}
 
 	tasks.withType<JavaCompile> {
@@ -42,8 +43,8 @@ subprojects {
 	}
 
 	dependencies {
-		compileOnly(group = "org.jetbrains", name = "annotations", version = "24.0.1")
-		annotationProcessor("org.jetbrains:annotations:24.0.1")
+		compileOnly(group = "org.jetbrains", name = "annotations", version = "24.1.0")
+		annotationProcessor("org.jetbrains:annotations:24.1.0")
 	}
 }
 
@@ -86,7 +87,7 @@ configure(subprojects.filter {
 	}
 
 	dependencies {
-		implementation(group = "com.comphenix.protocol", name = "ProtocolLib", version = "5.2.1-SNAPSHOT")
+		implementation(group = "com.comphenix.protocol", name = "ProtocolLib", version = "5.3.0-SNAPSHOT")
 
 		compileOnly(project(":vane-annotations"))
 		annotationProcessor(project(path = ":vane-annotations", configuration = "reobf"))
@@ -124,7 +125,7 @@ configure(subprojects.filter {
 }) {
 	dependencies {
 		implementation(group = "us.dynmap", name = "dynmap-api", version = "3.2-SNAPSHOT")
-		implementation(group = "com.github.BlueMap-Minecraft", name = "BlueMapAPI", version = "v2.3.0")
+		implementation(group = "de.bluecolored.bluemap", name = "BlueMapAPI", version = "2.7.2")
 	}
 }
 
