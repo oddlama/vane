@@ -67,9 +67,8 @@ public class ItemUtil {
 		if (handle == null) {
 			return;
 		}
-		RandomSource random = Nms.world_handle(player.getWorld()).getRandom();
 		
-		handle.hurtAndBreak(amount, random, player_handle(player), () -> { player.broadcastSlotBreak(EquipmentSlot.HAND); item_stack.subtract(); });
+		handle.hurtAndBreak(amount, Nms.world_handle(player.getWorld()), player_handle(player), (item) -> { player.broadcastSlotBreak(EquipmentSlot.HAND); item_stack.subtract(); });
 	}
 
 	public static String name_of(final ItemStack item) {
