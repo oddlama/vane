@@ -11,19 +11,16 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import com.destroystokyo.paper.profile.ProfileProperty;
-import com.mojang.brigadier.StringReader;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
 import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.craftbukkit.enchantments.CraftEnchantment;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -31,6 +28,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.oddlama.vane.core.Core;
 import org.oddlama.vane.core.material.ExtendedMaterial;
+
+import com.destroystokyo.paper.profile.ProfileProperty;
+import com.mojang.brigadier.StringReader;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
@@ -40,8 +41,6 @@ import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.item.ItemParser;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
@@ -55,9 +54,11 @@ public class ItemUtil {
 	public static final UUID MODIFIER_UUID_GENERIC_ATTACK_SPEED = UUID.fromString(
 			"FA233E1C-4180-4865-B01B-BCCE9785ACA3");
 
-	private static RandomSource randomSource = RandomSource.create();
-
 	public static void damage_item(final Player player, final ItemStack item_stack, final int amount) {
+		if (player.getGameMode() == GameMode.CREATIVE) { // don't damage the tool if the player is in creative
+			return;
+		} 
+
 		if (amount <= 0) {
 			return;
 		}
@@ -66,8 +67,9 @@ public class ItemUtil {
 		if (handle == null) {
 			return;
 		}
-
-		handle.hurtAndBreak(amount, randomSource, player_handle(player), () -> {});
+		RandomSource random = Nms.world_handle(player.getWorld()).getRandom();
+		
+		handle.hurtAndBreak(amount, random, player_handle(player), () -> { player.broadcastSlotBreak(EquipmentSlot.HAND); item_stack.subtract(); });
 	}
 
 	public static String name_of(final ItemStack item) {
