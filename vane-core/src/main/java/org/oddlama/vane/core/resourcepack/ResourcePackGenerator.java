@@ -15,10 +15,11 @@ import java.util.function.Consumer;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.NamespacedKey;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import net.kyori.adventure.key.Key;
 
 public class ResourcePackGenerator {
 
@@ -26,7 +27,7 @@ public class ResourcePackGenerator {
 	private byte[] icon_png_content = null;
 	private Map<String, Map<String, JSONObject>> translations = new HashMap<>();
 	private Map<NamespacedKey, List<JSONObject>> item_overrides = new HashMap<>();
-	private Map<NamespacedKey, Pair<byte[], byte[]>> item_textures = new HashMap<>();
+	private Map<NamespacedKey, PackEntry> item_textures = new HashMap<>();
 
 	public void set_description(String description) {
 		this.description = description;
@@ -49,13 +50,13 @@ public class ResourcePackGenerator {
 		}
 		return lang_map;
 	}
-
-	public void add_item_model(NamespacedKey key, InputStream texture_png) throws IOException {
-		item_textures.put(key, Pair.of(texture_png.readAllBytes(), null));
+	
+	public void add_item_model(NamespacedKey key, InputStream texture_png, Key parent) throws IOException {
+		item_textures.put(key, new PackEntry(texture_png.readAllBytes(), parent));
 	}
 
-	public void add_item_model(NamespacedKey key, InputStream texture_png, InputStream texture_png_mcmeta) throws IOException {
-		item_textures.put(key, Pair.of(texture_png.readAllBytes(), texture_png_mcmeta.readAllBytes()));
+	public void add_item_model(NamespacedKey key, InputStream texture_png, InputStream texture_png_mcmeta, Key parent) throws IOException {
+		item_textures.put(key, new PackEntry(texture_png.readAllBytes(), texture_png_mcmeta.readAllBytes(), parent));
 	}
 
 	public void add_item_override(
@@ -98,22 +99,20 @@ public class ResourcePackGenerator {
 		}
 	}
 
-	private JSONObject create_item_model_handheld(NamespacedKey texture) {
+	private JSONObject create_item_model(NamespacedKey texture, Key item_type) {
 		// Create model json
 		final var model = new JSONObject();
 
 		// FIXME: hardcoded fixes. better rewrite RP generator
 		// and use static files for all items. just language should be generated.
-		if (texture.getNamespace().equals("minecraft") && texture.getKey().equals("dropper")) {
-			model.put("parent", "minecraft:block/dropper");
-		} else if (texture.getNamespace().equals("minecraft") && texture.getKey().endsWith("shulker_box")) {
+		final var textures = new JSONObject();
+		if (texture.getNamespace().equals("minecraft") && texture.getKey().endsWith("shulker_box")) {
 			model.put("parent", "minecraft:item/template_shulker_box");
-			final var textures = new JSONObject();
+			
 			textures.put("particle", "minecraft:block/" + texture.getKey());
 			model.put("textures", textures);
 		} else {
-			model.put("parent", "minecraft:item/handheld");
-			final var textures = new JSONObject();
+			model.put("parent", item_type.toString());
 			if (texture.getNamespace().equals("minecraft") && texture.getKey().equals("compass")) {
 				textures.put("layer0", texture.getNamespace() + ":item/compass_16");
 			} else {
@@ -128,8 +127,8 @@ public class ResourcePackGenerator {
 	private void write_item_models(final ZipOutputStream zip) throws IOException {
 		for (var entry : item_textures.entrySet()) {
 			final var key = entry.getKey();
-			final var texture_png = entry.getValue().getLeft();
-			final var texture_png_mcmeta = entry.getValue().getRight();
+			final var texture_png = entry.getValue().texture_png;
+			final var texture_png_mcmeta = entry.getValue().texture_png_mcmeta;
 
 			// Write texture
 			zip.putNextEntry(new ZipEntry("assets/" + key.getNamespace() + "/textures/item/" + key.getKey() + ".png"));
@@ -137,14 +136,14 @@ public class ResourcePackGenerator {
 			zip.closeEntry();
 
 			// Write mcmeta if given
-			if (texture_png_mcmeta != null) {
+			if (texture_png_mcmeta.length > 0) {
 				zip.putNextEntry(new ZipEntry("assets/" + key.getNamespace() + "/textures/item/" + key.getKey() + ".png.mcmeta"));
 				zip.write(texture_png_mcmeta);
 				zip.closeEntry();
 			}
 
 			// Write model json
-			final var model = create_item_model_handheld(key);
+			final var model = create_item_model(key, entry.getValue().parent);
 			zip.putNextEntry(new ZipEntry("assets/" + key.getNamespace() + "/models/item/" + key.getKey() + ".json"));
 			zip.write(model.toString().getBytes(StandardCharsets.UTF_8));
 			zip.closeEntry();
@@ -171,7 +170,7 @@ public class ResourcePackGenerator {
 			})).forEach(overrides::put);
 
 			// Create model json
-			final var model = create_item_model_handheld(key);
+			final var model = create_item_model(key, override_parent(key));
 			model.put("overrides", overrides);
 
 			// Write item model override
@@ -198,6 +197,48 @@ public class ResourcePackGenerator {
 			write_item_overrides(zip);
 		} catch (IOException e) {
 			throw e;
+		}
+	}
+
+	class PackEntry {
+		final byte[] texture_png;
+		final byte[] texture_png_mcmeta;
+		final Key parent;
+
+		PackEntry(byte[] texture_png, byte[] texture_png_mcmeta, Key parent) {
+			this.texture_png = texture_png;
+			this.texture_png_mcmeta = texture_png_mcmeta;
+			this.parent = parent;
+		}
+
+		PackEntry(byte[] texture_png, Key parent) {
+			this.texture_png = texture_png;
+			this.texture_png_mcmeta = new byte[0];
+			this.parent = parent;
+		}
+	}
+
+	/**
+	 * Gives the type of parent used by the given item
+	 * 
+	 * @param item_key
+	 * @return a key containing the parent type
+	 */
+	private Key override_parent(NamespacedKey item_key){
+		switch(item_key.getKey()){
+			case "wooden_hoe":
+			case "stone_hoe":
+			case "iron_hoe":
+			case "golden_hoe":
+			case "diamond_hoe":
+			case "netherite_hoe":
+				return Key.key("minecraft:item/handheld");
+			case "warped_fungus_on_a_stick":
+				return Key.key("minecraft:item/handheld_rod");
+			case "dropper":
+				return Key.key("minecraft:block/dropper");
+			default:
+				return Key.key("minecraft:item/generated");
 		}
 	}
 }

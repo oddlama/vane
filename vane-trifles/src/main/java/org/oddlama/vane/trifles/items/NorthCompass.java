@@ -5,7 +5,6 @@ import java.util.EnumSet;
 import java.util.List;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -23,7 +22,7 @@ import org.oddlama.vane.core.resourcepack.ResourcePackGenerator;
 import org.oddlama.vane.trifles.Trifles;
 import org.oddlama.vane.util.StorageUtil;
 
-import net.kyori.adventure.text.Component;
+import net.kyori.adventure.key.Key;
 
 @VaneItem(name = "north_compass", base = Material.COMPASS, model_data = 0x760013, version = 1)
 public class NorthCompass extends CustomItem<Trifles> {
@@ -141,7 +140,7 @@ public class NorthCompass extends CustomItem<Trifles> {
 				throw new RuntimeException("Missing resource '" + resource_name + "'. This is a bug.");
 			}
 			final var key_num = StorageUtil.namespaced_key(key().namespace(), String.format("%s_%02d", key().value(), num));
-			rp.add_item_model(key_num, resource);
+			rp.add_item_model(key_num, resource, Key.key(Key.MINECRAFT_NAMESPACE, "item/generated"));
 			rp.add_item_override(base_key, key_num, predicate -> {
 				predicate.put("custom_model_data", customModelData());
 				predicate.put("angle", angle);

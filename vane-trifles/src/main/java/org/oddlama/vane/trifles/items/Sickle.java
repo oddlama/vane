@@ -17,6 +17,8 @@ import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.trifles.Trifles;
 import org.oddlama.vane.util.BlockUtil;
 
+import net.kyori.adventure.key.Key;
+
 public abstract class Sickle extends CustomItem<Trifles> {
 	@ConfigDouble(def = Double.NaN, desc = "Attack damage modifier.")
 	public double config_attack_damage;
@@ -59,5 +61,10 @@ public abstract class Sickle extends CustomItem<Trifles> {
 	@Override
 	public EnumSet<InhibitBehavior> inhibitedBehaviors() {
 		return EnumSet.of(InhibitBehavior.USE_IN_VANILLA_RECIPE, InhibitBehavior.HOE_TILL, InhibitBehavior.USE_OFFHAND);
+	}
+
+	@Override
+	public Key itemType() {
+		return Key.key(Key.MINECRAFT_NAMESPACE, "item/handheld");
 	}
 }
