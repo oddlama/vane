@@ -11,7 +11,7 @@ main: org.oddlama.vane.enchantments.Enchantments
 bootstrapper: org.oddlama.vane.enchantments.EnchantmentsBootstrapper
 
 api-version: '1.21'
-
+load: STARTUP
 dependencies:
   server:
     vane-core:

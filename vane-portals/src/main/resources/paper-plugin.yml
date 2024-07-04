@@ -8,7 +8,7 @@ website: 'https://github.com/oddlama/vane'
 main: org.oddlama.vane.portals.Portals
 
 api-version: '1.21'
-
+load: STARTUP
 dependencies:
   server:
     vane-core:
