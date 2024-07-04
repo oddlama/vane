@@ -4,6 +4,7 @@ import static org.oddlama.vane.util.MaterialUtil.is_tillable;
 import static org.oddlama.vane.util.Nms.item_handle;
 
 import org.bukkit.Keyed;
+import org.bukkit.Material;
 import org.bukkit.craftbukkit.entity.CraftItem;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
@@ -14,6 +15,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockDispenseEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
@@ -232,6 +234,18 @@ public class VanillaFunctionalityInhibitor extends Listener<Core> {
 		final var main_custom_item = get_module().item_registry().get(main_item);
 		if (inhibit(main_custom_item, InhibitBehavior.USE_OFFHAND)) {
 			event.setUseItemInHand(Event.Result.DENY);
+		}
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void on_dispense(BlockDispenseEvent event) {
+		if(event.getBlock().getType() != Material.DISPENSER) {
+			return;
+		}
+
+		final var custom_item = get_module().item_registry().get(event.getItem());
+		if(inhibit(custom_item, InhibitBehavior.DISPENSE)) {
+			event.setCancelled(true);
 		}
 	}
 }
