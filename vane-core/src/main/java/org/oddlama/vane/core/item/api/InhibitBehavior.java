@@ -21,4 +21,6 @@ public enum InhibitBehavior {
 	MEND,
 	/** Prevents players from adding new enchantments via the anvil. */
 	NEW_ENCHANTS,
+	/** Prevents dispensers from dispense this item */
+	DISPENSE
 }

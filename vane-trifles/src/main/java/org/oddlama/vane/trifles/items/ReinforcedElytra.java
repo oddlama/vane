@@ -20,6 +20,8 @@ import org.oddlama.vane.core.resourcepack.ResourcePackGenerator;
 import org.oddlama.vane.trifles.Trifles;
 import org.oddlama.vane.util.StorageUtil;
 
+import net.kyori.adventure.key.Key;
+
 @VaneItem(name = "reinforced_elytra", base = Material.ELYTRA, durability = 864, model_data = 0x760002, version = 1)
 public class ReinforcedElytra extends CustomItem<Trifles> {
 	public static final UUID MODIFIER_UUID_REINFORCED_ELYTRA_DEFENSE = UUID.fromString("8d3a5a3c-06d4-40c5-be66-41ebf6a46435"); // Self-generated; Must always be the same!
@@ -69,7 +71,7 @@ public class ReinforcedElytra extends CustomItem<Trifles> {
 		}
 
 		final var key_broken = StorageUtil.subkey(key(), "broken");
-		rp.add_item_model(key_broken, broken_resource);
+		rp.add_item_model(key_broken, broken_resource, Key.key(Key.MINECRAFT_NAMESPACE, "item/generated"));
 		rp.add_item_override(baseMaterial().getKey(), key_broken, predicate -> {
 			predicate.put("custom_model_data", customModelData());
 			predicate.put("broken", 1);

@@ -39,6 +39,8 @@ import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.trifles.Trifles;
 import org.oddlama.vane.util.BlockUtil;
 
+import net.kyori.adventure.key.Key;
+
 @VaneItem(name = "file", base = Material.WARPED_FUNGUS_ON_A_STICK, durability = 4000, model_data = 0x760003, version = 1)
 public class File extends CustomItem<Trifles> {
 	public File(Context<Trifles> context) {
@@ -418,5 +420,10 @@ public class File extends CustomItem<Trifles> {
 		// Damage item and swing arm
 		damage_item(player, item, 1);
 		swing_arm(player, event.getHand());
+	}
+
+	@Override
+	public Key itemType() {
+		return Key.key(Key.MINECRAFT_NAMESPACE, "item/handheld");
 	}
 }

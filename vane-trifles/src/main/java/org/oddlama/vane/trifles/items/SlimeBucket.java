@@ -28,6 +28,8 @@ import org.oddlama.vane.core.resourcepack.ResourcePackGenerator;
 import org.oddlama.vane.trifles.Trifles;
 import org.oddlama.vane.util.StorageUtil;
 
+import net.kyori.adventure.key.Key;
+
 @VaneItem(name = "slime_bucket", base = Material.SLIME_BALL, model_data = 0x760014 /* and 0x760015 */, version = 1)
 public class SlimeBucket extends CustomItem<Trifles> {
 	private static final int CUSTOM_MODEL_DATA_QUIET = 0x760014;
@@ -148,7 +150,7 @@ public class SlimeBucket extends CustomItem<Trifles> {
 			if (resource == null) {
 				throw new RuntimeException("Missing resource '" + resource_name + "'. This is a bug.");
 			}
-			rp.add_item_model(key(), resource);
+			rp.add_item_model(key(), resource, Key.key(Key.MINECRAFT_NAMESPACE, "item/generated"));
 			rp.add_item_override(baseMaterial().getKey(), key(), predicate -> {
 				predicate.put("custom_model_data", CUSTOM_MODEL_DATA_QUIET);
 			});
@@ -165,7 +167,7 @@ public class SlimeBucket extends CustomItem<Trifles> {
 			if (resource_mcmeta == null) {
 				throw new RuntimeException("Missing resource '" + resource_name + ".mcmeta'. This is a bug.");
 			}
-			rp.add_item_model(excited_key, resource, resource_mcmeta);
+			rp.add_item_model(excited_key, resource, resource_mcmeta, Key.key(Key.MINECRAFT_NAMESPACE, "item/generated"));
 			rp.add_item_override(baseMaterial().getKey(), excited_key, predicate -> {
 				predicate.put("custom_model_data", CUSTOM_MODEL_DATA_JUMPY);
 			});
