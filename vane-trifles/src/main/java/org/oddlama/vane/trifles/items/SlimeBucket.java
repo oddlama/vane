@@ -46,9 +46,9 @@ public class SlimeBucket extends CustomItem<Trifles> {
 			return;
 		}
 
-        if (entity.isDead()) {
-            return;
-        }
+		if (entity.isDead()) {
+			return;
+		}
 
 		// With a empty bucket in main hand
 		final var player = event.getPlayer();
