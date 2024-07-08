@@ -109,7 +109,7 @@ public class BedtimeDynmapLayerDelegate {
 			return false;
 		}
 
-		final var loc = player.getBedSpawnLocation();
+		final var loc = player.getRespawnLocation();
 		if (loc == null) {
 			return false;
 		}
