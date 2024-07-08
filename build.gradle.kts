@@ -57,11 +57,28 @@ configure(subprojects.filter {
 	dependencies {
 		paperDevBundle("1.20.6-R0.1-SNAPSHOT")
 	}
+}
 
-	tasks {
-		build {
-			dependsOn("reobfJar")
-		}
+// All Projects with jar shadow
+configure(subprojects.filter {
+	listOf("vane-regions", "vane-core", "vane-portals", "vane-regions").contains(it.name)
+}) {
+	tasks.create<Copy>("copyJar") {
+		evaluationDependsOn(project.path)
+		from(tasks.findByPath("shadowJar"))
+		into("${project.rootProject.projectDir}/target")
+		rename("(.+)-dev-all.jar", "$1.jar")
+	}
+}
+
+// All Projects without jar shadow
+configure(subprojects.filter {
+	listOf("vane-admin", "vane-bedtime", "vane-enchantments", "vane-permissions", "vane-trifles").contains(it.name)
+}) {
+	tasks.create<Copy>("copyJar") {
+		from(tasks.jar)
+		into("${project.rootProject.projectDir}/target")
+		rename("(.+)-dev.jar", "$1.jar")
 	}
 }
 
@@ -69,11 +86,6 @@ configure(subprojects.filter {
 configure(subprojects.filter {
 	!listOf("vane-annotations", "vane-velocity", "vane-proxy-core").contains(it.name)
 }) {
-	tasks.create<Copy>("copyJar") {
-		from(tasks.reobfJar)
-		into("${project.rootProject.projectDir}/target")
-	}
-
 	tasks {
 		build {
 			dependsOn("copyJar")
