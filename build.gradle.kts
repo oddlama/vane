@@ -5,7 +5,7 @@ plugins {
 }
 
 dependencies {
-	paperDevBundle("1.21-R0.1-SNAPSHOT")
+	paperweight.paperDevBundle("1.21-R0.1-SNAPSHOT")
 }
 
 java {
@@ -55,7 +55,7 @@ configure(subprojects.filter {
 	apply(plugin = "io.papermc.paperweight.userdev")
 
 	dependencies {
-		paperDevBundle("1.21-R0.1-SNAPSHOT")
+		paperweight.paperDevBundle("1.21-R0.1-SNAPSHOT")
 	}
 }
 
@@ -136,7 +136,7 @@ configure(subprojects.filter {
 	listOf("vane-bedtime", "vane-portals", "vane-regions").contains(it.name)
 }) {
 	dependencies {
-		implementation(group = "us.dynmap", name = "DynmapCoreAPI", version = "3.4")
+		implementation(group = "us.dynmap", name = "DynmapCoreAPI", version = "3.7-beta-6")
 		implementation(group = "de.bluecolored.bluemap", name = "BlueMapAPI", version = "2.7.2")
 	}
 }
