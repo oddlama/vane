@@ -4,7 +4,7 @@ import org.oddlama.vane.proxycore.Maintenance;
 import org.oddlama.vane.proxycore.ProxyPlayer;
 import org.oddlama.vane.proxycore.VaneProxyPlugin;
 
-import static org.oddlama.vane.util.TimeUtil.parse_time;
+import static org.oddlama.vane.proxycore.util.TimeUtil.parse_time;
 
 public class ProxyMaintenanceCommand extends ProxyCommand {
 

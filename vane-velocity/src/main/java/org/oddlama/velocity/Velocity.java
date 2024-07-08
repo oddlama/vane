@@ -16,7 +16,7 @@ import com.velocitypowered.proxy.network.ConnectionManager;
 import org.bstats.velocity.Metrics;
 import org.oddlama.vane.proxycore.VaneProxyPlugin;
 import org.oddlama.vane.proxycore.log.slf4jCompatLogger;
-import org.oddlama.vane.util.Version;
+import org.oddlama.vane.proxycore.util.Version;
 import org.oddlama.velocity.commands.Maintenance;
 import org.oddlama.velocity.commands.Ping;
 import org.oddlama.velocity.compat.VelocityCompatProxyServer;
