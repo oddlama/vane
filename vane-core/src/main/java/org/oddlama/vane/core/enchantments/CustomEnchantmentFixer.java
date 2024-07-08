@@ -112,7 +112,8 @@ public class CustomEnchantmentFixer extends Listener<Core> {
         public void onPacketSending(PacketEvent event) {
             if (event.getPacket().getHandle() instanceof ClientboundSetEntityDataPacket edp) {
                 var newlist = edp.packedItems().stream().map(x -> {
-                    if (x.value() instanceof net.minecraft.world.item.ItemStack itemStack) {
+                    if (x.value() instanceof net.minecraft.world.item.ItemStack itemStack && !itemStack.isEmpty()) {
+
                         var bukkititem = CustomEnchantmentFixer.removeVaneEnchants(itemStack.asBukkitCopy());
                         var newitem = Nms.item_handle(bukkititem);
                         return new DataValue<net.minecraft.world.item.ItemStack>(x.id(),
