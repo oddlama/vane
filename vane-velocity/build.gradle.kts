@@ -13,6 +13,12 @@ dependencies {
     implementation(rootProject.project(":vane-proxy-core"))
 }
 
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
 tasks.create<Copy>("copyJar") {
     from(tasks.shadowJar)
     into("${project.rootProject.projectDir}/target")
@@ -27,19 +33,6 @@ tasks {
             include(dependency("org.bstats:bstats-base"))
             include(dependency("org.json:json"))
             include(dependency(rootProject.project(":vane-proxy-core")))
-
-            // Utilities to include from vane-core.util
-            val includedUtils = listOf(
-                "Resolve",
-                "TimeUtil",
-                "IOUtil"
-            )
-
-            from(rootProject.project(":vane-core").sourceSets.main.get().output) {
-                for (i in includedUtils) {
-                    include("org/oddlama/vane/util/$i*.class")
-                }
-            }
         }
 
         relocate("org.json", "org.oddlama.vane.vane_velocity.external.json")

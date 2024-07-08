@@ -13,7 +13,7 @@ import java.util.UUID;
 import java.util.logging.Level;
 
 import static org.oddlama.vane.proxycore.Util.add_uuid;
-import static org.oddlama.vane.util.Resolve.resolve_uuid;
+import static org.oddlama.vane.proxycore.util.Resolve.resolve_uuid;
 
 public abstract class PreLoginEvent implements ProxyEvent, ProxyCancellableEvent {
 
