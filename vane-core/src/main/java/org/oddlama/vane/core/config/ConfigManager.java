@@ -88,7 +88,7 @@ public class ConfigManager {
 		assert annotation != null;
 		final var atype = annotation.annotationType();
 
-		// Return correct wrapper object
+		// Return a correct wrapper object
 		if (atype.equals(ConfigBoolean.class)) {
 			return new ConfigBooleanField(owner, field, map_name, (ConfigBoolean) annotation);
 		} else if (atype.equals(ConfigDict.class)) {
@@ -177,7 +177,7 @@ public class ConfigManager {
 						.map(f -> compile_field(owner, f, map_name)).toList()
 		);
 
-		// Sort fields alphabetically, and by precedence (e.g. put version last and lang first)
+		// Sort fields alphabetically, and by precedence (e.g., put a version last and lang first)
 		Collections.sort(config_fields);
 
 		if (owner == module && field_version == null) {
@@ -206,7 +206,7 @@ public class ConfigManager {
 				final var new_indent_level = f.group_count();
 				final var common_indent_level = ConfigField.common_group_count(last_field, f);
 
-				// Build full common section path
+				// Build a full common section path
 				var section_path = "";
 				for (int i = 0; i < common_indent_level; ++i) {
 					section_path = Context.append_yaml_path(section_path, f.components()[i], ".");
@@ -216,7 +216,7 @@ public class ConfigManager {
 				for (int i = common_indent_level; i < new_indent_level; ++i) {
 					indent = indent_str(i);
 
-					// Get full section path
+					// Get a full section path
 					section_path = Context.append_yaml_path(section_path, f.components()[i], ".");
 
 					// Append section description, if given.
@@ -349,8 +349,8 @@ public class ConfigManager {
 
 	public void register_metrics(Metrics metrics) {
 		// Track config values. Fields automatically know whether they want to be tracked or not via the annotation.
-		// By default, annotations use sensible defaults, so e.g. no strings will be tracked automatically, except
-		// when explicitly requested (e.g. language).
+		// By default, annotations use sensible defaults, so e.g., no strings will be tracked automatically, except
+		// when explicitly requested (e.g., language).
 		for (var f : config_fields) {
 			f.register_metrics(metrics);
 		}

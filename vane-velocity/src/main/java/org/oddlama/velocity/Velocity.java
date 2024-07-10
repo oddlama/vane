@@ -86,7 +86,7 @@ public class Velocity extends VaneProxyPlugin {
 			try {
 				get_logger().log(Level.INFO, "Attempting to register auth multiplexers");
 
-				// Velocity doesn't let you register multiple listeners like Bungeecord
+				// Velocity doesn't let you register multiple listeners like Bungeecord,
 				// So we have to take matters into our own hands :)
 				handle_listeners("Registering", ConnectionManager::bind);
 			} catch (Exception e) {

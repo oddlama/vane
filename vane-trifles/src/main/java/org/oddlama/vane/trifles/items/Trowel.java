@@ -182,7 +182,7 @@ public class Trowel extends CustomItem<Trifles> {
 			return;
 		}
 
-		// Prevent offhand from triggering (e.g. placing torches)
+		// Prevent offhand from triggering (e.g., placing torches)
 		event.setUseInteractedBlock(Event.Result.DENY);
 		event.setUseItemInHand(Event.Result.DENY);
 
@@ -197,7 +197,7 @@ public class Trowel extends CustomItem<Trifles> {
 			final var item_stack = inventory.getItem(possible_slots[index]);
 			// Skip empty slots and items that are not placeable blocks
 			if (item_stack == null || !item_stack.getType().isBlock() || Tag.SHULKER_BOXES.isTagged(item_stack.getType())) {
-				// Eliminate end of list, so copy item at end of list to the index (< count).
+				// Eliminate the end of list, so copy item at the end of list to the index (< count).
 				possible_slots[index] = possible_slots[--count];
 				continue;
 			}

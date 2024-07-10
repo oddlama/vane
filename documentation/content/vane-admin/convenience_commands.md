@@ -7,7 +7,7 @@ module = "vane-admin"
 Several commands were introduced for your convenience. If not noted otherwise, these
 commands are only available to ops and players in the `admin` permission group.
 
-`/gm` or `/gamemode`: Quickly toggle between creative and survial mode.
+`/gm` or `/gamemode`: Quickly toggle between creative and survival mode.
 
 `/slimechunk`: Tells you whether you are standing in a slimechunk.
 

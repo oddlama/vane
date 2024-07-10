@@ -40,7 +40,7 @@ public interface CustomItem {
 	/**
 	 * Returns a version number of this item. Increasing this value will cause {@link #convertExistingStack(ItemStack)}
 	 * to be called on any encountered itemstack of this custom item. Useful to force an update of existing
-	 * items when you for example change the {@link #updateItemStack(ItemStack)} function to add custom
+	 * items when you, for example, change the {@link #updateItemStack(ItemStack)} function to add custom
 	 * properties to your custom item.
 	 */
 	public int version();
@@ -52,7 +52,7 @@ public interface CustomItem {
 	 * To ensure that a breakage of the plugin never creates value for players,
 	 * use a material with less net-worth than what the custom item provides.
 	 * For crafting ingredients, we recommend using an item that has no other use than in crafting.
-	 * Generally it is a good idea to pick materials that have an item with similar properties.
+	 * Generally, it is a good idea to pick materials that have an item with similar properties.
 	 *
 	 * By default, no attempts will be made to remove the vanilla behavior of the base items,
 	 * except for inhibiting use in crafting recipes that require the base material.
@@ -65,7 +65,7 @@ public interface CustomItem {
 	 * Returns the custom model data used as a selector in a resource pack.
 	 * If this is changed, any encountered item will automatically be updated.
 	 * We recommend reserving a set of ids using {@link CustomModelDataRegistry#reserveRange(NamespacedKey, int, int)} when your plugin starts.
-	 * This allows you freely use and re-use the registerd ids without having to worry about clashes with other plugins.
+	 * This allows you to freely use and re-use the registered ids without having to worry about clashes with other plugins.
 	 */
 	public int customModelData();
 
@@ -95,7 +95,7 @@ public interface CustomItem {
 	 * The durability bar of the base item then acts solely as an indicative value of a separately stored durability.
 	 * Changes to the item's durability by classical means are automatically reflected in this property.
 	 *
-	 * If this is value changed while item stacks of this custom item already exist with a different maximum durability,
+	 * If this value is changed while item stacks of this custom item already exist with a different maximum durability,
 	 * the affected items will be updated and keep their current durability, but clamped to the new maximum.
 	 */
 	public int durability();
@@ -107,13 +107,14 @@ public interface CustomItem {
 	 * will be disabled when this custom item is used in the recipe's inputs, as well as any
 	 * smithing recipe with this item as any input.
 	 *
-	 * So a custom item based with paper as the base material cannot be used to craft
-	 * for example books (which require paper as an ingredient), or a diamond hoe
-	 * based item will not be converted to a vanilla netherite hoe in the smithing table.
+	 * So a custom item based on paper as the base material cannot be used to craft,
+	 * for example,	* books (which require paper as an ingredient),
+	 * or a diamond hoe-	* based item will not be converted to a vanilla netherite hoe in the smithing table.
 	 *
 	 * If you require a hoe that doesn't till blocks or a carrot/fungus on a stick
 	 * that doesn't attract certain entities, you can override {@link #inhibitedBehaviors()}
-	 * to specify what should be prohibited. Anything else must be handeled by the user.
+	 * to specify what should be prohibited.
+	 * The user must handle anything else.
 	 */
 	default public EnumSet<InhibitBehavior> inhibitedBehaviors() {
 		return EnumSet.of(InhibitBehavior.USE_IN_VANILLA_RECIPE);
@@ -130,7 +131,7 @@ public interface CustomItem {
 	 * This function will be called when a custom item of this type is newly created,
 	 * or when an existing stack needs to be updated. This can include cases where
 	 * no base information actually changed, but an item still is considered to
-	 * be updated, for example anvil results.
+	 * be updated, for example, anvil results.
 	 */
 	default public ItemStack updateItemStack(@NotNull final ItemStack itemStack) {
 		return itemStack;

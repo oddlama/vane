@@ -69,7 +69,7 @@ public class ChestSorter extends Listener<Trifles> {
 	}
 
 	private void sort_inventory(final Inventory inventory) {
-		// Find amount of non null item stacks
+		// Find number of non-null item stacks
 		final var saved_contents = inventory.getStorageContents();
 		int non_null = 0;
 		for (final var i : saved_contents) {
@@ -78,7 +78,7 @@ public class ChestSorter extends Listener<Trifles> {
 			}
 		}
 
-		// Make new array without null items
+		// Make a new array without null items
 		final var saved_contents_condensed = new ItemStack[non_null];
 		int cur = 0;
 		for (final var i : saved_contents) {
@@ -137,7 +137,7 @@ public class ChestSorter extends Listener<Trifles> {
 		}
 
 		if (persistent_chest != chest) {
-			// Save left side block state if we are the right side
+			// Save the left side block state if we are the right side
 			persistent_chest.update(true, false);
 		}
 

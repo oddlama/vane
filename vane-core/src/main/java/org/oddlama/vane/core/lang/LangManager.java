@@ -66,7 +66,7 @@ public class LangManager {
 		assert annotation != null;
 		final var atype = annotation.annotationType();
 
-		// Return correct wrapper object
+		// Return a correct wrapper object
 		if (atype.equals(LangMessage.class)) {
 			return new LangMessageField(module, owner, field, map_name, (LangMessage) annotation);
 		} else if (atype.equals(LangMessageArray.class)) {

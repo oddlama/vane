@@ -43,7 +43,7 @@ public class SentinelExecutorParam<T> extends BaseParam implements Executor {
 	}
 
 	private boolean check_signature(final Method method, final List<Object> args) {
-		// Assert same amount of given and expected parameters
+		// Assert the same number of given and expected parameters
 		if (args.size() != method.getParameters().length) {
 			throw new RuntimeException(
 				"Invalid command functor " +
@@ -102,7 +102,7 @@ public class SentinelExecutorParam<T> extends BaseParam implements Executor {
 		// Disable logger while reflecting on the lambda.
 		// FIXME? This is an ugly workaround to prevent Spigot from displaying
 		// a warning, that we load a class from a plugin we do not depend on,
-		// but this is absolutely intended, and errornous behavior in any way.
+		// but this is absolutely intended, and erroneous behavior in any way.
 		var log = command.get_module().core.log;
 		var saved_filter = log.getFilter();
 		log.setFilter(record -> false);

@@ -3,7 +3,7 @@ package org.oddlama.vane.core.module;
 import org.oddlama.vane.annotation.config.ConfigBoolean;
 
 /**
- * A ModuleGroup is a ModuleContext that automatically adds an enable variable
+ * A ModuleGroup is a ModuleContext that automatically adds an enabled variable
  * with description to the context. If the group is disabled, on_enable() will
  * not be called.
  */

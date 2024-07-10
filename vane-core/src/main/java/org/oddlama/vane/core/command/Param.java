@@ -318,7 +318,7 @@ public interface Param {
 				.stream()
 				.map(p -> p.check_accept(sender, args, offset + 1)).toList();
 
-		// Return first executor result, if any
+		// Return the first executor result, if any
 		for (var r : results) {
 			if (r.good()) {
 				return r;

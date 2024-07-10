@@ -12,19 +12,19 @@
 
 # About vane
 
-Vane is a plugin-suite which provides many immersive and lore friendly additions to vanilla minecraft.
+Vane is a plugin-suite that provides many immersive and lore-friendly additions to vanilla minecraft.
 It will run on any [PaperMC](https://papermc.io) based minecraft server.
 
 [**For a comprehensive feature overview, visit the official website.**](https://oddlama.github.io/vane/)
 
 - <img width="auto" height="20px" src="https://github.com/oddlama/vane/blob/main/docs/assets/minecraft/textures/item/firework_rocket.png"> Lore friendly and properly integrated immersive features.
   Vane augments the classic vanilla experience, and doesn't try to replace it.
-  Generally, player's are not supposed to notice which features were introduced by vane.
+  Generally, players are not supposed to notice which features were introduced by vane.
 - <img width="auto" height="20px" src="https://github.com/oddlama/vane/blob/main/docs/assets/minecraft/textures/item/wheat.png"> Countless quality-of-life, gameplay and system improvements
 - <img width="auto" height="20px" src="https://github.com/oddlama/vane/blob/main/docs/assets/minecraft/textures/item/end_crystal.png"> Fully-configurable. Disable or configure anything you dislike
 - <img width="auto" height="20px" src="https://github.com/oddlama/vane/blob/main/docs/assets/vane-trifles/items/golden_sickle.png"> Several carefully designed custom items
 - <img width="auto" height="20px" src="https://github.com/oddlama/vane/blob/main/docs/assets/vane-enchantments/items/ancient_tome_of_the_gods.png"> Many custom enchantments for a selection of tools, including the elytra
-- <img width="auto" height="20px" src="https://github.com/oddlama/vane/blob/main/docs/assets/minecraft/textures/item/ender_pearl.png"> The best portals you can imagine. Expensive but worthwile for long distance travel. Supports all entities including minecarts!
+- <img width="auto" height="20px" src="https://github.com/oddlama/vane/blob/main/docs/assets/minecraft/textures/item/ender_pearl.png"> The best portals you can imagine. Expensive but worthwhile for long distance travel. Supports all entities including minecarts!
 - <img width="auto" height="20px" src="https://github.com/oddlama/vane/blob/main/docs/assets/minecraft/textures/item/writable_book.png"> A simple but powerful region system for grief protection
 - <img width="auto" height="20px" src="https://github.com/oddlama/vane/blob/main/docs/assets/minecraft/textures/item/map.png"> [BlueMap](https://bluemap.bluecolored.de/), [Dynmap](https://www.spigotmc.org/resources/dynmap%C2%AE.274/) and [Pl3xMap](https://github.com/BillyGalbreath/Pl3xMap) integration
 - [And a lot more!](https://oddlama.github.io/vane/)
@@ -45,14 +45,14 @@ refer to [**the official website**](https://oddlama.github.io/vane/) for a compl
 <img width="32%" height="auto" src="https://cdn.modrinth.com/data/698NGGtb/images/5b12bef32c5b544ae7cd807117410b1bc5bd5346.gif">
 </p>
 
-(And a whole lot more!)
+(And a lot more!)
 
 ## 📥 Installation
 
 <sup><sub>If you are setting up a new server, check out our [Server Installer](https://oddlama.github.io/minecraft-server)
-for an easy way to properly setup a minecraft server with vane, autostart, 3D online map, and more awesome features.</sub></sup>
+for an easy way to properly set up a minecraft server with vane, autostart, 3D online map, and more awesome features.</sub></sup>
 
-Simply download all desired jars files from the [Releases](https://github.com/oddlama/vane/releases/latest) and put them into the `plugins/` directory.
+Download all desired jars files from the [Releases](https://github.com/oddlama/vane/releases/latest) and put them into the `plugins/` directory.
 Grab the `all-plugins.zip` if you don't want to download each file by hand. You can also download vane from [Modrinth](https://modrinth.com/plugin/vane). Make sure that:
 
 - You are using the correct Paper (or Purpur) server version (compatible versions are listed in the title on the download page)
@@ -72,13 +72,13 @@ permissions plugin, such as [LuckPerms](https://luckperms.net).
 
 ## Building from source
 
-You can of course build the plugin yourself. To do that you need at least JDK 17.
+You can, of course, build the plugin yourself. To do that, you need at least JDK 17.
 
 1. Execute `./gradlew build`
 2. All resulting jar files that can be used on a server will be in `target/`.
 
-If you experience "peer not authenticated" issues from gradle, just retry.
-Seems to be a skittish integration between gradle and maven repositories.
+If you experience "peer not authenticated" issues from Gradle, just retry.
+Seems to be a skittish integration between Gradle and Maven repositories.
 
 ## FAQ
 

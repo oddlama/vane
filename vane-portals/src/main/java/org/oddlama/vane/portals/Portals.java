@@ -343,7 +343,7 @@ public class Portals extends Module<Portals> {
 		}
 
 		portal_area_materials.clear();
-		// Acquire material set from styles. Will be used to accelerate event checking.
+		// Acquire material set from styles. Will be used to speed up event checking.
 		for (final var style : styles.values()) {
 			portal_area_materials.add(style.material(true, PortalBlock.Type.PORTAL));
 		}
@@ -488,7 +488,7 @@ public class Portals extends Module<Portals> {
 			case PORTAL:     portal_block.block().setType(constructor.config_material_portal_area); break;
 		}
 
-		// Remove console item if block is a console
+		// Remove console item if a block is a console
 		if (portal_block.type() == PortalBlock.Type.CONSOLE) {
 			remove_console_item(portal_block.block());
 		}
@@ -630,7 +630,7 @@ public class Portals extends Module<Portals> {
 	}
 
 	public void load_portal_chunks(final Portal portal) {
-		// Load chunks and adds a ticket so they get loaded and are kept loaded
+		// Load chunks and adds a ticket, so they get loaded and are kept loaded
 		for (final var chunk : chunks_for(portal)) {
 			final var chunk_key = chunk.getChunkKey();
 			final var ticket_counter = chunk_ticket_count.get(chunk_key);
@@ -688,7 +688,7 @@ public class Portals extends Module<Portals> {
 		allow_unload_portal_chunks(src);
 		allow_unload_portal_chunks(dst);
 
-		// Remove from map
+		// Remove from a map
 		connected_portals.remove(src.id());
 		connected_portals.remove(dst.id());
 
@@ -703,7 +703,7 @@ public class Portals extends Module<Portals> {
 			src.update_blocks(this);
 		}
 
-		// Remove automatic disable task if existing
+		// Remove an automatic disable task if existing
 		stop_disable_task(src, dst);
 	}
 
@@ -816,7 +816,7 @@ public class Portals extends Module<Portals> {
 	}
 
 	public void update_portal_visibility(final Portal portal) {
-		// Replace references to the portal everywhere, if visibility
+		// Replace references to the portal everywhere if visibility
 		// has changed.
 		switch (portal.visibility()) {
 			case PRIVATE:
@@ -829,7 +829,7 @@ public class Portals extends Module<Portals> {
 				}
 				break;
 			case GROUP_INTERNAL:
-				// Remove from portals outside of the group
+				// Remove from portals outside the group
 				for (final var other : portals.values()) {
 					if (Objects.equals(other.target_id(), portal.id()) && !is_in_same_region_group(other, portal)) {
 						other.target_id(null);

@@ -31,7 +31,7 @@ public class DurabilityManager extends Listener<Core> {
 	}
 
 	/**
-	 * Returns true if the given component is associated to our custom durabiltiy.
+	 * Returns true if the given component is associated to our custom durability.
 	 */
 	private static boolean is_durability_lore(final Component component) {
 		return ItemUtil.has_sentinel(component, SENTINEL);

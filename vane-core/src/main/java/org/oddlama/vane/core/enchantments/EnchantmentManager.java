@@ -78,7 +78,7 @@ public class EnchantmentManager extends Listener<Core> {
 			return;
 		}
 
-		// 1. Build a list of all enchantments that would be removed, because
+		// 1. Build a list of all enchantments that would be removed because
 		//    they are superseded by some enchantment.
 		final var to_remove_inclusive = enchantments.keySet().stream()
 			.map(x -> ((CraftEnchantment)x).getHandle())
@@ -87,7 +87,7 @@ public class EnchantmentManager extends Listener<Core> {
 			.flatMap(Set::stream)
 			.collect(Collectors.toSet());
 
-		// 2. Before removing these enchantment, first re-build the list but
+		// 2. Before removing these enchantments, first re-build the list but
 		//    ignore any enchantments in the calculation that would themselves
 		//    be removed. This prevents them from contributing to the list of
 		//    enchantments to remove. Consider this: A supersedes B, and B supersedes C, but
@@ -170,7 +170,7 @@ public class EnchantmentManager extends Listener<Core> {
 	private MerchantRecipe process_recipe(final MerchantRecipe recipe) {
 		var result = recipe.getResult().clone();
 
-		// Create new recipe
+		// Create a new recipe
 		final var new_recipe = new MerchantRecipe(
 			update_enchanted_item(result, true),
 			recipe.getUses(),

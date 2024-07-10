@@ -83,7 +83,7 @@ public class VanillaFunctionalityInhibitor extends Listener<Core> {
 			return;
 		}
 
-		// Only consider to cancel minecraft's recipes
+		// Only consider canceling minecraft's recipes
 		if (!keyed.getKey().getNamespace().equals("minecraft")) {
 			return;
 		}
@@ -105,7 +105,7 @@ public class VanillaFunctionalityInhibitor extends Listener<Core> {
 			return;
 		}
 
-		// Only consider to cancel minecraft's recipes
+		// Only consider canceling minecraft's recipes
 		if (!keyed.getKey().getNamespace().equals("minecraft")) {
 			return;
 		}
@@ -124,7 +124,7 @@ public class VanillaFunctionalityInhibitor extends Listener<Core> {
 			return;
 		}
 
-        // Actually use recipe result, as copynbt has already modified the result
+        // Actually use a recipe result, as copynbt has already modified the result
 		result = recipe.getResult();
 		final var custom_item_result = get_module().item_registry().get(result);
 		if (custom_item_result == null) {
@@ -222,7 +222,7 @@ public class VanillaFunctionalityInhibitor extends Listener<Core> {
 		}
 	}
 
-	// Deny off-hand usage if main hand is a custom item that inhibits off-hand usage.
+	// Deny off-hand usage if the main hand is a custom item that inhibits off-hand usage.
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void on_player_right_click(final PlayerInteractEvent event) {
 		if (event.getHand() != EquipmentSlot.OFF_HAND) {

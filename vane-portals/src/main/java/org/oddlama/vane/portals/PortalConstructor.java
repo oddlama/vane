@@ -200,7 +200,7 @@ public class PortalConstructor extends Listener<Portals> {
 		final Block console,
 		boolean check_only
 	) {
-		// Gather all portal blocks that arent consoles
+		// Gather all portal blocks that aren't consoles
 		final var blocks = portal
 			.blocks()
 			.stream()
@@ -217,7 +217,7 @@ public class PortalConstructor extends Listener<Portals> {
 		@Nullable final Portal existing_portal,
 		boolean check_only
 	) {
-		// Check console block type
+		// Check a console block type
 		if (console.getType() != config_material_console) {
 			lang_console_invalid_type.send(player);
 			return false;
@@ -281,7 +281,7 @@ public class PortalConstructor extends Listener<Portals> {
 		// Check for error
 		switch (boundary.error_state()) {
 			case NONE:
-				/* Boundary is fine */break;
+				/* The Boundary is fine */break;
 			case NO_ORIGIN:
 				lang_no_origin.send(player);
 				return null;
@@ -404,7 +404,7 @@ public class PortalConstructor extends Listener<Portals> {
 		} else {
 			get_module()
 				.log.warning(
-					"Invalid block type '" + mat + "' encounterd in portal block creation. Assuming boundary variant 1."
+					"Invalid block type '" + mat + "' encountered in portal block creation. Assuming boundary variant 1."
 				);
 			type = PortalBlock.Type.BOUNDARY_1;
 		}

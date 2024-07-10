@@ -18,7 +18,7 @@ import java.util.zip.ZipFile;
 public class ResourceList {
 
 	/**
-	 * For all elements of java.class.path get a Collection of resources Pattern
+	 * For all elements of java.class.path get a Collection of resource Pattern
 	 * pattern = Pattern.compile(".*"); gets all resources
 	 *
 	 * @param pattern the pattern to match

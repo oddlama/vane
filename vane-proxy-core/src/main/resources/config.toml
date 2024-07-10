@@ -15,7 +15,7 @@
     # This will allow *only* UUID "b4a6717f-e3ab-4348-8e18-022827ef3177"
     # to use this multiplexer. You can add as many UUIDs as you want.
     #
-    # To make it public, simply leave out the `allowed_uuids` field.
+    # To make it public, leave out the `allowed_uuids` field.
     #
     # It is *not* possible to have multiple multiplexers on the same port.
 

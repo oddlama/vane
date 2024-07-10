@@ -38,7 +38,7 @@ public class SpawnScroll extends Scroll {
 				loc = world.getSpawnLocation();
 			}
 		}
-		// Fallback to spawn location of first world
+		// Fallback to spawn location of the first world
 		if (loc == null) {
 			loc = get_module().getServer().getWorlds().get(0).getSpawnLocation();
 		}

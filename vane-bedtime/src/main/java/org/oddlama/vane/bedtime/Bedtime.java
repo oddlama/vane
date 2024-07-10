@@ -113,7 +113,7 @@ public class Bedtime extends Module<Bedtime> {
 		schedule_next_tick(() -> {
 			// Register the new player as sleeping
 			add_sleeping(world, player);
-			// Start sleep check task
+			// Start a sleep check task
 			start_check_world_task(world);
 		});
 	}
@@ -125,7 +125,7 @@ public class Bedtime extends Module<Bedtime> {
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void on_player_quit(PlayerQuitEvent event) {
-		// Start sleep check task
+		// Start a sleep check task
 		start_check_world_task(event.getPlayer().getWorld());
 	}
 
@@ -171,7 +171,7 @@ public class Bedtime extends Module<Bedtime> {
 
 		sleepers.add(player.getUniqueId());
 
-		// Broadcast sleeping message
+		// Broadcast a sleeping message
 		var percent = get_percentage_sleeping(world);
 		var count_sleeping = get_amount_sleeping(world);
 		var count_required = (int)Math.ceil(get_potential_sleepers_in_world(world) * config_sleep_threshold);
@@ -195,7 +195,7 @@ public class Bedtime extends Module<Bedtime> {
 		}
 
 		if (sleepers.remove(player.getUniqueId())) {
-			// Broadcast sleeping message
+			// Broadcast a sleeping message
 			var percent = get_percentage_sleeping(world);
 			var count_sleeping = get_amount_sleeping(world);
 			var count_required = (int)Math.ceil(get_potential_sleepers_in_world(world) * config_sleep_threshold);

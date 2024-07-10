@@ -153,7 +153,7 @@ public class Sickles extends Listener<Trifles> {
 			return;
 		}
 
-		// Only seed when right clicking a plant
+		// Only seed when right-clicking a plant
 		final var root_block = event.getClickedBlock();
 		final var plant_type = root_block.getType();
 		if (!is_seeded_plant(plant_type)) {
@@ -186,7 +186,7 @@ public class Sickles extends Listener<Trifles> {
 				.playSound(root_block.getLocation(), Sound.ITEM_HOE_TILL, SoundCategory.BLOCKS, 1.0f, 2.0f);
 		}
 
-		// Prevent offhand from triggering (e.g. placing torches)
+		// Prevent offhand from triggering (e.g., placing torches)
 		event.setUseInteractedBlock(Event.Result.DENY);
 		event.setUseItemInHand(Event.Result.DENY);
 	}

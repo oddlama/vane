@@ -44,14 +44,14 @@ public class WorldUtil {
 
 								@Override
 								public void run() {
-									// Remove task if we finished interpolation
+									// Remove a task if we finished interpolation
 									if (elapsed > interpolation_ticks) {
 										synchronized (running_time_change_tasks) {
 											running_time_change_tasks.remove(world.getUID()).cancel();
 										}
 									}
 
-									// Make transition smooth by applying a cosine
+									// Make the transition smooth by applying a cosine
 									var lin_delta = (float) elapsed / interpolation_ticks;
 									var delta = (1f - (float) Math.cos(Math.PI * lin_delta)) / 2f;
 

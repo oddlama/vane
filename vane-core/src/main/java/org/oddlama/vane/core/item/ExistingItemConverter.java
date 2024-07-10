@@ -95,7 +95,7 @@ public class ExistingItemConverter extends Listener<Core> {
 				continue;
 			}
 
-			// Update custom items to new version, or if another detectable property changed.
+			// Update custom items to a new version, or if another detectable property changed.
 			final var key_and_version = CustomItemHelper.customItemTagsFromItemStack(is);
 			final var meta = is.getItemMeta();
 			if (meta.getCustomModelData() != custom_item.customModelData() ||

@@ -374,7 +374,7 @@ public class RoleMenu extends ModuleComponent<Regions> {
 				2 * 9 + col,
 				null,
 				(player, menu, self) -> {
-					// Prevent toggling when the setting is forced by the server
+					// Prevent toggling when the server forces the setting
 					if (setting.has_override()) {
 						return ClickResult.ERROR;
 					}

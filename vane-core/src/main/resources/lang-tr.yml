@@ -14,7 +14,7 @@
 # if the file needs to be updated.
 version: 4
 # The corresponding language code used in resource packs. Used for
-# resource pack generation. Typically this is a combination of the
+# resource pack generation. Typically, this is a combination of the
 # language code (ISO 639) and the country code (ISO 3166).
 resource_pack_lang_code: 'tr_tr'
 
@@ -76,7 +76,7 @@ resource_pack:
   declined: "Bu sunucuda oynamak için kaynak paketini kabul etmeniz gerekiyor.\n\
     Bu Yerelleştirme ve dokular için gereklidir. Yanlışlıkla reddetmeniz durumunda,\n\
     sunucu listenizdeki bu sunucunun girişini düzenleyerek bunu değiştirebilirsiniz."
-  # This kick message is used when a mandatory resource pack failed to download for  player.
+  # This kick message is used when a mandatory resource pack failed to download for player.
   download_failed: "§cKaynak paketi indirmeniz başarısız olmuş gibi görünüyor.§r\n\
     §7(Görsel hataları önlemek için bağlantınız kesildi)\n\
     \n\
@@ -85,7 +85,7 @@ resource_pack:
 menus:
   head_selector:
     # The title for the head selection menu.
-    # %1$s: Total heads in library
+    # %1$s: Total heads in a library
     title: "%1$s §8§lKafalar"
     # The title for the filter menu.
     filter_title: "§8§lKafa kütüphanesini filtrele"
@@ -133,8 +133,8 @@ menus:
     # The item showing the current page
     # %1$s: Page number
     # %2$s: Total amount of pages
-    # %3$s: Total amount of items (filtered)
-    # %4$s: Total amount of items (unfiltered)
+    # %3$s: Total number of items (filtered)
+    # %4$s: Total number of items (unfiltered)
     current_page:
       name: "§aMevcut sayfa %1$s §7/ %2$s"
       lore:
@@ -142,7 +142,7 @@ menus:
         - "§b#Filtrelenmiş eşyalar: %3$s"
 
     # The item used to open the filter menu.
-    # Right clicking resets the filter.
+    # Right-clicking resets the filter.
     filter:
       name: "§d§lFiltre"
       lore:

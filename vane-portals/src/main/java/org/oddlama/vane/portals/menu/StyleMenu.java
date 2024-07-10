@@ -41,19 +41,19 @@ public class StyleMenu extends ModuleComponent<Portals> {
 	public TranslatedMessage lang_select_block_portal_active_title;
 
 	@LangMessage
-	public TranslatedMessage lang_select_block_boundardy_1_active_title;
+	public TranslatedMessage lang_select_block_boundary_1_active_title;
 
 	@LangMessage
-	public TranslatedMessage lang_select_block_boundardy_2_active_title;
+	public TranslatedMessage lang_select_block_boundary_2_active_title;
 
 	@LangMessage
-	public TranslatedMessage lang_select_block_boundardy_3_active_title;
+	public TranslatedMessage lang_select_block_boundary_3_active_title;
 
 	@LangMessage
-	public TranslatedMessage lang_select_block_boundardy_4_active_title;
+	public TranslatedMessage lang_select_block_boundary_4_active_title;
 
 	@LangMessage
-	public TranslatedMessage lang_select_block_boundardy_5_active_title;
+	public TranslatedMessage lang_select_block_boundary_5_active_title;
 
 	@LangMessage
 	public TranslatedMessage lang_select_block_console_inactive_title;
@@ -65,19 +65,19 @@ public class StyleMenu extends ModuleComponent<Portals> {
 	public TranslatedMessage lang_select_block_portal_inactive_title;
 
 	@LangMessage
-	public TranslatedMessage lang_select_block_boundardy_1_inactive_title;
+	public TranslatedMessage lang_select_block_boundary_1_inactive_title;
 
 	@LangMessage
-	public TranslatedMessage lang_select_block_boundardy_2_inactive_title;
+	public TranslatedMessage lang_select_block_boundary_2_inactive_title;
 
 	@LangMessage
-	public TranslatedMessage lang_select_block_boundardy_3_inactive_title;
+	public TranslatedMessage lang_select_block_boundary_3_inactive_title;
 
 	@LangMessage
-	public TranslatedMessage lang_select_block_boundardy_4_inactive_title;
+	public TranslatedMessage lang_select_block_boundary_4_inactive_title;
 
 	@LangMessage
-	public TranslatedMessage lang_select_block_boundardy_5_inactive_title;
+	public TranslatedMessage lang_select_block_boundary_5_inactive_title;
 
 	@LangMessage
 	public TranslatedMessage lang_select_style_title;
@@ -88,19 +88,19 @@ public class StyleMenu extends ModuleComponent<Portals> {
 	private TranslatedItemStack<?> item_block_console_active;
 	private TranslatedItemStack<?> item_block_origin_active;
 	private TranslatedItemStack<?> item_block_portal_active;
-	private TranslatedItemStack<?> item_block_boundardy_1_active;
-	private TranslatedItemStack<?> item_block_boundardy_2_active;
-	private TranslatedItemStack<?> item_block_boundardy_3_active;
-	private TranslatedItemStack<?> item_block_boundardy_4_active;
-	private TranslatedItemStack<?> item_block_boundardy_5_active;
+	private TranslatedItemStack<?> item_block_boundary_1_active;
+	private TranslatedItemStack<?> item_block_boundary_2_active;
+	private TranslatedItemStack<?> item_block_boundary_3_active;
+	private TranslatedItemStack<?> item_block_boundary_4_active;
+	private TranslatedItemStack<?> item_block_boundary_5_active;
 	private TranslatedItemStack<?> item_block_console_inactive;
 	private TranslatedItemStack<?> item_block_origin_inactive;
 	private TranslatedItemStack<?> item_block_portal_inactive;
-	private TranslatedItemStack<?> item_block_boundardy_1_inactive;
-	private TranslatedItemStack<?> item_block_boundardy_2_inactive;
-	private TranslatedItemStack<?> item_block_boundardy_3_inactive;
-	private TranslatedItemStack<?> item_block_boundardy_4_inactive;
-	private TranslatedItemStack<?> item_block_boundardy_5_inactive;
+	private TranslatedItemStack<?> item_block_boundary_1_inactive;
+	private TranslatedItemStack<?> item_block_boundary_2_inactive;
+	private TranslatedItemStack<?> item_block_boundary_3_inactive;
+	private TranslatedItemStack<?> item_block_boundary_4_inactive;
+	private TranslatedItemStack<?> item_block_boundary_5_inactive;
 
 	private TranslatedItemStack<?> item_accept;
 	private TranslatedItemStack<?> item_reset;
@@ -135,42 +135,42 @@ public class StyleMenu extends ModuleComponent<Portals> {
 				1,
 				"Used to select active portal area block. Defaults to end gateway if unset."
 			);
-		item_block_boundardy_1_active =
+		item_block_boundary_1_active =
 			new TranslatedItemStack<>(
 				ctx,
-				"block_boundardy_1_active",
+				"block_boundary_1_active",
 				Material.BARRIER,
 				1,
 				"Used to select active boundary variant 1 block."
 			);
-		item_block_boundardy_2_active =
+		item_block_boundary_2_active =
 			new TranslatedItemStack<>(
 				ctx,
-				"block_boundardy_2_active",
+				"block_boundary_2_active",
 				Material.BARRIER,
 				1,
 				"Used to select active boundary variant 2 block."
 			);
-		item_block_boundardy_3_active =
+		item_block_boundary_3_active =
 			new TranslatedItemStack<>(
 				ctx,
-				"block_boundardy_3_active",
+				"block_boundary_3_active",
 				Material.BARRIER,
 				1,
 				"Used to select active boundary variant 3 block."
 			);
-		item_block_boundardy_4_active =
+		item_block_boundary_4_active =
 			new TranslatedItemStack<>(
 				ctx,
-				"block_boundardy_4_active",
+				"block_boundary_4_active",
 				Material.BARRIER,
 				1,
 				"Used to select active boundary variant 4 block."
 			);
-		item_block_boundardy_5_active =
+		item_block_boundary_5_active =
 			new TranslatedItemStack<>(
 				ctx,
-				"block_boundardy_5_active",
+				"block_boundary_5_active",
 				Material.BARRIER,
 				1,
 				"Used to select active boundary variant 5 block."
@@ -199,42 +199,42 @@ public class StyleMenu extends ModuleComponent<Portals> {
 				1,
 				"Used to select inactive portal area block."
 			);
-		item_block_boundardy_1_inactive =
+		item_block_boundary_1_inactive =
 			new TranslatedItemStack<>(
 				ctx,
-				"block_boundardy_1_inactive",
+				"block_boundary_1_inactive",
 				Material.BARRIER,
 				1,
 				"Used to select inactive boundary variant 1 block."
 			);
-		item_block_boundardy_2_inactive =
+		item_block_boundary_2_inactive =
 			new TranslatedItemStack<>(
 				ctx,
-				"block_boundardy_2_inactive",
+				"block_boundary_2_inactive",
 				Material.BARRIER,
 				1,
 				"Used to select inactive boundary variant 2 block."
 			);
-		item_block_boundardy_3_inactive =
+		item_block_boundary_3_inactive =
 			new TranslatedItemStack<>(
 				ctx,
-				"block_boundardy_3_inactive",
+				"block_boundary_3_inactive",
 				Material.BARRIER,
 				1,
 				"Used to select inactive boundary variant 3 block."
 			);
-		item_block_boundardy_4_inactive =
+		item_block_boundary_4_inactive =
 			new TranslatedItemStack<>(
 				ctx,
-				"block_boundardy_4_inactive",
+				"block_boundary_4_inactive",
 				Material.BARRIER,
 				1,
 				"Used to select inactive boundary variant 4 block."
 			);
-		item_block_boundardy_5_inactive =
+		item_block_boundary_5_inactive =
 			new TranslatedItemStack<>(
 				ctx,
-				"block_boundardy_5_inactive",
+				"block_boundary_5_inactive",
 				Material.BARRIER,
 				1,
 				"Used to select inactive boundary variant 5 block."
@@ -312,9 +312,9 @@ public class StyleMenu extends ModuleComponent<Portals> {
 				portal,
 				style_container,
 				4,
-				item_block_boundardy_1_inactive,
+				item_block_boundary_1_inactive,
 				get_module().constructor.config_material_boundary_1,
-				lang_select_block_boundardy_1_inactive_title.str(),
+				lang_select_block_boundary_1_inactive_title.str(),
 				PortalBlock.Type.BOUNDARY_1,
 				false
 			)
@@ -324,9 +324,9 @@ public class StyleMenu extends ModuleComponent<Portals> {
 				portal,
 				style_container,
 				5,
-				item_block_boundardy_2_inactive,
+				item_block_boundary_2_inactive,
 				get_module().constructor.config_material_boundary_2,
-				lang_select_block_boundardy_2_inactive_title.str(),
+				lang_select_block_boundary_2_inactive_title.str(),
 				PortalBlock.Type.BOUNDARY_2,
 				false
 			)
@@ -336,9 +336,9 @@ public class StyleMenu extends ModuleComponent<Portals> {
 				portal,
 				style_container,
 				6,
-				item_block_boundardy_3_inactive,
+				item_block_boundary_3_inactive,
 				get_module().constructor.config_material_boundary_3,
-				lang_select_block_boundardy_3_inactive_title.str(),
+				lang_select_block_boundary_3_inactive_title.str(),
 				PortalBlock.Type.BOUNDARY_3,
 				false
 			)
@@ -348,9 +348,9 @@ public class StyleMenu extends ModuleComponent<Portals> {
 				portal,
 				style_container,
 				7,
-				item_block_boundardy_4_inactive,
+				item_block_boundary_4_inactive,
 				get_module().constructor.config_material_boundary_4,
-				lang_select_block_boundardy_4_inactive_title.str(),
+				lang_select_block_boundary_4_inactive_title.str(),
 				PortalBlock.Type.BOUNDARY_4,
 				false
 			)
@@ -360,9 +360,9 @@ public class StyleMenu extends ModuleComponent<Portals> {
 				portal,
 				style_container,
 				8,
-				item_block_boundardy_5_inactive,
+				item_block_boundary_5_inactive,
 				get_module().constructor.config_material_boundary_5,
-				lang_select_block_boundardy_5_inactive_title.str(),
+				lang_select_block_boundary_5_inactive_title.str(),
 				PortalBlock.Type.BOUNDARY_5,
 				false
 			)
@@ -397,9 +397,9 @@ public class StyleMenu extends ModuleComponent<Portals> {
 				portal,
 				style_container,
 				columns + 4,
-				item_block_boundardy_1_active,
+				item_block_boundary_1_active,
 				get_module().constructor.config_material_boundary_1,
-				lang_select_block_boundardy_1_active_title.str(),
+				lang_select_block_boundary_1_active_title.str(),
 				PortalBlock.Type.BOUNDARY_1,
 				true
 			)
@@ -409,9 +409,9 @@ public class StyleMenu extends ModuleComponent<Portals> {
 				portal,
 				style_container,
 				columns + 5,
-				item_block_boundardy_2_active,
+				item_block_boundary_2_active,
 				get_module().constructor.config_material_boundary_2,
-				lang_select_block_boundardy_2_active_title.str(),
+				lang_select_block_boundary_2_active_title.str(),
 				PortalBlock.Type.BOUNDARY_2,
 				true
 			)
@@ -421,9 +421,9 @@ public class StyleMenu extends ModuleComponent<Portals> {
 				portal,
 				style_container,
 				columns + 6,
-				item_block_boundardy_3_active,
+				item_block_boundary_3_active,
 				get_module().constructor.config_material_boundary_3,
-				lang_select_block_boundardy_3_active_title.str(),
+				lang_select_block_boundary_3_active_title.str(),
 				PortalBlock.Type.BOUNDARY_3,
 				true
 			)
@@ -433,9 +433,9 @@ public class StyleMenu extends ModuleComponent<Portals> {
 				portal,
 				style_container,
 				columns + 7,
-				item_block_boundardy_4_active,
+				item_block_boundary_4_active,
 				get_module().constructor.config_material_boundary_4,
-				lang_select_block_boundardy_4_active_title.str(),
+				lang_select_block_boundary_4_active_title.str(),
 				PortalBlock.Type.BOUNDARY_4,
 				true
 			)
@@ -445,9 +445,9 @@ public class StyleMenu extends ModuleComponent<Portals> {
 				portal,
 				style_container,
 				columns + 8,
-				item_block_boundardy_5_active,
+				item_block_boundary_5_active,
 				get_module().constructor.config_material_boundary_5,
-				lang_select_block_boundardy_5_active_title.str(),
+				lang_select_block_boundary_5_active_title.str(),
 				PortalBlock.Type.BOUNDARY_5,
 				true
 			)

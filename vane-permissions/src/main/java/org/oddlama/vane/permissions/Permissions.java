@@ -34,7 +34,7 @@ public class Permissions extends Module<Permissions> {
 	// Configuration
 	@ConfigBoolean(
 		def = false,
-		desc = "Remove all default permissions from ANY SOURCE (including other plugins and minecraft permissions) to start with a clean preset. This will allow you to exactly set which player have which permissions instead of having to resort to volatile stateful changes like negative permissions. This will result in OPped players to lose access to commands, if not explicitly added back via permissions. The wildcard permissions can be viewed using `perms list permissions`. The wildcard permissions `minecraft` and `craftbukkit` may be especially useful."
+		desc = "Remove all default permissions from ANY SOURCE (including other plugins and minecraft permissions) to start with a clean preset. This will allow you to exactly set which player have which permissions instead of having to resort to volatile stateful changes like negative permissions. This will result in OPed players to lose access to commands, if not explicitly added back via permissions. The wildcard permissions can be viewed using `perms list permissions`. The wildcard permissions `minecraft` and `craftbukkit` may be especially useful."
 	)
 	public boolean config_remove_defaults;
 
@@ -219,7 +219,7 @@ public class Permissions extends Module<Permissions> {
 		// Add permissions again
 		var groups = storage_player_groups.get(player.getUniqueId());
 		if (groups == null || groups.isEmpty()) {
-			// Assign player to default permission group
+			// Assign player to a default permission group
 			groups = Set.of(config_default_group);
 		}
 

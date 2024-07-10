@@ -76,7 +76,7 @@ public class GrapplingHook extends CustomEnchantment<Enchantments> {
 			}
 		}
 
-		// Grapple when stuck in ground
+		// Grapple when stuck in the ground
 		switch (event.getState()) {
 			case FAILED_ATTEMPT:
 				// Assume stuck in ground if velocity is < 0.01

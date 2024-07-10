@@ -113,7 +113,7 @@ public class TranslatedMessage {
 	public void send_and_log(final CommandSender sender, Object... args) {
 		module.clog.info(str_component(args));
 
-		// Also send to sender if it's not the console
+		// Also send it to sender if it's not the console
 		if (sender != null && sender != module.getServer().getConsoleSender()) {
 			sender.sendMessage(format(args));
 		}

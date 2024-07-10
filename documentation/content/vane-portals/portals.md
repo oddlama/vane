@@ -8,7 +8,7 @@ module = "vane-portals"
 
 ![](images/portal_boundary.png)
 
-Portals are structures that let you travel to specific other portals - as many times as you want.
+Portals are structures that let you travel to specific other portals—as many times as you want.
 You can build them in almost any shape, and style them to externally match your building style.
 It is the best way to travel great distances quickly. But beware, portals are expensive!
 
@@ -18,7 +18,7 @@ Afterwards, activate the portal lever and step through.
 ### Trivia
 
 - Portals close automatically after 10 seconds.
-- Any entity can traverse a portal, including items horses and minecarts!
+- Any entity can traverse a portal, including items, horses and minecarts!
 - Portals can be built horizontally.
 - A portal cannot be activated if the destination portal is already connected somewhere else.
 - Public portals can be activated by a redstone repeater.
