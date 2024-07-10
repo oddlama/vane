@@ -1,0 +1,20 @@
+root = true
+
+[*]
+end_of_line = lf
+charset = utf-8
+
+[*.{java,kts,toml,html,md,yml}]
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+[*.{java,kts,js}]
+indent_style = tab
+
+[*.py] 
+indent_style = space
+indent_size = 4
+
+[*.yml]
+indent_style = space
+indent_size = 2
