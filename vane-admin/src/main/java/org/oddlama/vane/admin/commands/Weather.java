@@ -2,9 +2,6 @@ package org.oddlama.vane.admin.commands;
 
 import static com.mojang.brigadier.Command.SINGLE_SUCCESS;
 import static io.papermc.paper.command.brigadier.Commands.argument;
-import static io.papermc.paper.command.brigadier.Commands.literal;
-
-import java.util.List;
 
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
@@ -27,12 +24,6 @@ public class Weather extends Command<Admin> {
 
 	public Weather(Context<Admin> context) {
 		super(context);
-		// Add help
-		params().fixed("help").ignore_case().exec(this::print_help);
-		// Command parameters
-		var time = params().choice("weather", List.of(WeatherValue.values()), t -> t.name()).ignore_case();
-		time.exec_player(this::set_weather_current_world);
-		time.choose_world().exec(this::set_weather);
 	}
 
 	@Override

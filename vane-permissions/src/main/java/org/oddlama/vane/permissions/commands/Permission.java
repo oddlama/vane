@@ -69,55 +69,6 @@ public class Permission extends Command<Permissions> {
 
 	public Permission(Context<Permissions> context) {
 		super(context);
-		// Add help
-		params().fixed("help").ignore_case().exec(this::print_help);
-
-		// Command parameters
-		var list = params().fixed("list").ignore_case();
-
-		// list groups
-		var groups = list.fixed("groups").ignore_case();
-		groups.exec(this::list_groups);
-		groups.choose_any_player().exec(this::list_groups_for_player);
-
-		// list permissions
-		var permissions = list.fixed("permissions").ignore_case();
-		permissions.exec(this::list_permissions);
-		permissions.choose_any_player().exec(this::list_permissions_for_player);
-		permissions
-			.choice(
-				"permission_group",
-				sender -> get_module().permission_groups.keySet(),
-				(sender, g) -> g,
-				(sender, str) -> get_module().permission_groups.containsKey(str) ? str : null
-			)
-			.exec(this::list_permissions_for_group);
-
-		// add a group to player
-		params()
-			.fixed("add")
-			.ignore_case()
-			.choose_any_player()
-			.choice(
-				"permission_group",
-				sender -> get_module().permission_groups.keySet(),
-				(sender, g) -> g,
-				(sender, str) -> get_module().permission_groups.containsKey(str) ? str : null
-			)
-			.exec(this::add_player_to_group);
-
-		// remove a group from player
-		params()
-			.fixed("remove")
-			.ignore_case()
-			.choose_any_player()
-			.choice(
-				"permission_group",
-				sender -> get_module().permission_groups.keySet(),
-				(sender, g) -> g,
-				(sender, str) -> get_module().permission_groups.containsKey(str) ? str : null
-			)
-			.exec(this::remove_player_from_group);
 	}
 
 	@Override
@@ -143,20 +94,20 @@ public class Permission extends Command<Permissions> {
 					.executes(ctx -> {list_permissions(ctx.getSource().getSender()); return SINGLE_SUCCESS;})
 				)
 			)
-			
+
 			.then(literal("add")
 				.then(argument("offline_player", OfflinePlayerArgumentType.offlinePlayer())
 					.then(argument("permission_group", PermissionGroupArgumentType.permissionGroup(get_module().permission_groups))
 						.executes(ctx -> {add_player_to_group(ctx.getSource().getSender(), offline_player(ctx), permission_group(ctx)); return SINGLE_SUCCESS;})
 					)
-				)				
+				)
 			)
 			.then(literal("remove")
 				.then(argument("offline_player", OfflinePlayerArgumentType.offlinePlayer())
 					.then(argument("permission_group", PermissionGroupArgumentType.permissionGroup(get_module().permission_groups))
 						.executes(ctx -> {remove_player_from_group(ctx.getSource().getSender(), offline_player(ctx), permission_group(ctx)); return SINGLE_SUCCESS;})
 					)
-				)	
+				)
 			)
 			;
 	}
