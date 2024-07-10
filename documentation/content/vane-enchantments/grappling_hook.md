@@ -1,5 +1,5 @@
 ```toml
-title = "Grappling hook [I-III]"
+title = "Grappling Hook [I-III]"
 module = "vane-enchantments"
 itemlike = "vane-enchantments:enchantment_grappling_hook"
 ```

@@ -1,0 +1,9 @@
+{
+  "name": "documentation",
+  "devDependencies": {
+    "@tailwindcss/typography": "^0.5.13",
+    "@types/bun": "latest",
+    "flowbite": "^2.4.1",
+    "tailwindcss": "^3.4.4"
+  }
+}
