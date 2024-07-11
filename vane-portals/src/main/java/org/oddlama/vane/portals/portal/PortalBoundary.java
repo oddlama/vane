@@ -57,7 +57,7 @@ public class PortalBoundary {
 
 	/**
 	 * Returns the origin block (which is part of the portal outline but not included in boundary_blocks()).
-	 * can be null if no origin block was used but a portal shape was found
+	 * Can be null if no origin block was used but a portal shape was found
 	 */
 	public Block origin_block() {
 		return origin_block;
@@ -212,7 +212,7 @@ public class PortalBoundary {
 			return Pair.of(boundary1, portal_area1);
 		}
 
-		// Can not occur.
+		// Cannot occur.
 		return null;
 	}
 
@@ -289,7 +289,7 @@ public class PortalBoundary {
 		int area_index = 0;
 		boolean had_boundary_block_before = false;
 		for (final var surrounding_block : surrounding_blocks) {
-			// Examine block type
+			// Examine a block type
 			if (portal_constructor.is_type_part_of_boundary_or_origin(surrounding_block.getType())) {
 				if (!had_boundary_block_before) area_index = (area_index + 1) % 2;
 
@@ -297,14 +297,14 @@ public class PortalBoundary {
 			} else {
 				areas[area_index] = surrounding_block;
 
-				// Check if other area is also set
+				// Check if another area is also set
 				if (areas[(area_index + 1) % 2] != null) return areas;
 
 				had_boundary_block_before = false;
 			}
 		}
 
-		// Only less then two areas were found.
+		// Only less than two areas were found.
 		return areas;
 	}
 
@@ -387,7 +387,7 @@ public class PortalBoundary {
 		boundary.boundary_blocks = result.getLeft();
 		boundary.portal_area_blocks = result.getRight();
 
-		// Remove origin block from boundary list
+		// Remove origin block from a boundary list
 		final var iterator = boundary.boundary_blocks.iterator();
 		while (iterator.hasNext()) {
 			final var block = iterator.next();
@@ -460,7 +460,7 @@ public class PortalBoundary {
 
 		// Determine spawn point and check minimum size constraints (these are only important at the portal's spawn point)
 		if (boundary.plane == Plane.XZ) {
-			// Find middle of portal, then find first (2,3x2,3) (even,uneven) area in direction of origin block (the greater x/z distance is chosen)
+			// Find middle of portal, then find first (2,3x2,3) (even,uneven) area in the direction of origin block (the greater x/z distance is chosen)
 			final var middle_small_coords = boundary
 				.origin_block()
 				.getWorld()
@@ -473,7 +473,7 @@ public class PortalBoundary {
 			int diff_x = middle_small_coords.getX() - boundary.origin_block().getX();
 			int diff_z = middle_small_coords.getZ() - boundary.origin_block().getZ();
 
-			// Calculate mod to add to middle block to get more into direction of origin block
+			// Calculate mod to add to middle block to get more into the direction of origin block
 			int mod_x, mod_z;
 			int abs_mod_x, abs_mod_z;
 			if (Math.abs(diff_x) > Math.abs(diff_z)) {
@@ -488,7 +488,7 @@ public class PortalBoundary {
 
 			// Find a strip of portal blocks last along the axis defined by the origin block.
 			// If there are less than 2 blocks inside, the spawn area is too small.
-			// Therefore, walk to origin until block inside area is found.
+			// Therefore, walk to origin until a block inside the area is found.
 			var first_inside = middle_small_coords;
 			while (!boundary.portal_area_blocks.contains(first_inside)) {
 				if (mod_x != 0) {
@@ -511,7 +511,7 @@ public class PortalBoundary {
 			// Find "backwards" last block inside
 			Block next = first_inside;
 			Block back_last_inside;
-			int total_blocks_inside = -1; // -1 because both forward and backward search include first_inside
+			int total_blocks_inside = -1; // -1 because both forward and backward search includes first_inside
 			do {
 				back_last_inside = next;
 				next = back_last_inside.getRelative(-mod_x, 0, -mod_z);
@@ -544,14 +544,14 @@ public class PortalBoundary {
 
 			final var middle_inside = last_inside.getWorld().getBlockAt(m_x, last_inside.getY(), m_z);
 
-			// The origin axis will have it's evenness determined by the amount of connected air blocks
+			// The origin axis will have its evenness determined by the number of connected air blocks
 			boolean even_along_origin_axis = total_blocks_inside % 2 == 0;
 			boolean even_along_side_axis = (mod_x == 0 ? boundary.dim_z : boundary.dim_x) % 2 == 0;
 
 			double spawn_offset_along_origin_axis;
 			double spawn_offset_along_side_axis;
 			if (even_along_origin_axis) {
-				// Include coords of middle plus one along origin direction
+				// Include coords of a middle plus one along origin direction
 				if (!boundary.portal_area_blocks().contains(middle_inside.getRelative(abs_mod_x, 0, abs_mod_z))) {
 					boundary.error_state = mod_x == 0 ? ErrorState.TOO_SMALL_SPAWN_Z : ErrorState.TOO_SMALL_SPAWN_X;
 					return boundary;
@@ -574,7 +574,7 @@ public class PortalBoundary {
 			}
 
 			if (even_along_side_axis) {
-				// Include coords of middle plus one along side direction
+				// Include coords of a middle plus one along a side direction
 				if (!boundary.portal_area_blocks().contains(middle_inside.getRelative(abs_mod_z, 0, abs_mod_x))) {
 					boundary.error_state = mod_x == 0 ? ErrorState.TOO_SMALL_SPAWN_X : ErrorState.TOO_SMALL_SPAWN_Z;
 					return boundary;
@@ -582,7 +582,7 @@ public class PortalBoundary {
 
 				spawn_offset_along_side_axis = 1.0;
 			} else {
-				// Include coords of middle plus and minus one along side direction
+				// Include coords of middle plus and minus one along a side direction
 				if (!boundary.portal_area_blocks().contains(middle_inside.getRelative(abs_mod_z, 0, abs_mod_x))) {
 					boundary.error_state = mod_x == 0 ? ErrorState.TOO_SMALL_SPAWN_X : ErrorState.TOO_SMALL_SPAWN_Z;
 					return boundary;
@@ -607,7 +607,7 @@ public class PortalBoundary {
 
 			boundary.spawn = new Location(middle_inside.getWorld(), spawn_x, middle_inside.getY() + 0.5, spawn_z);
 		} else {
-			// Find air (above) boundary (below) combinations at origin block, determine middle, check if minimum size rectangle is part of the block list
+			// Find the air (above) boundary (below) combinations at origin block, determine middle, check if minimum size rectangle is part of the blocklist
 
 			// The block above the origin block must be part of the portal
 			final var air_above_origin = boundary.origin_block().getRelative(0, 1, 0);

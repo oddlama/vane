@@ -65,7 +65,7 @@ public class Seeding extends CustomEnchantment<Enchantments> {
 			return;
 		}
 
-		// Only seed when right clicking a plant
+		// Only seed when right-clicking a plant
 		final var plant_type = event.getClickedBlock().getType();
 		if (!is_seeded_plant(plant_type)) {
 			return;

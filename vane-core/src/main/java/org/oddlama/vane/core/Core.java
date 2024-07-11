@@ -109,7 +109,7 @@ public class Core extends Module<Core> {
 	)
 	public boolean config_client_side_translations;
 
-	@ConfigBoolean(def = true, desc = "Send update notices to OPped player when a new version of vane is available.")
+	@ConfigBoolean(def = true, desc = "Send update notices to OPed player when a new version of vane is available.")
 	public boolean config_update_notices;
 
 	public String current_version = null;
@@ -149,7 +149,7 @@ public class Core extends Module<Core> {
 	@Override
 	public void on_enable() {
 		if (config_update_notices) {
-			// Now, and every hour after that check if a new version is available.
+			// Now, and every hour after that, check if a new version is available.
 			// OPs will get a message about this when they join.
 			schedule_task_timer(this::check_for_update, 1l, ms_to_ticks(2 * 60l * 60l * 1000l));
 		}
@@ -261,7 +261,7 @@ public class Core extends Module<Core> {
 			return;
 		}
 
-		// Send update message if new version is available and player is OP.
+		// Send an update message if a new version is available and player is OP.
 		if (latest_version != null && !latest_version.equals(current_version) && event.getPlayer().isOp()) {
 			// This message is intentionally not translated to ensure it will
 			// be displayed correctly and so that everyone understands it.

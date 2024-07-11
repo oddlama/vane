@@ -20,13 +20,13 @@ import org.oddlama.vane.core.material.HeadMaterialLibrary;
 import org.oddlama.vane.core.module.Context;
 
 public class HeadLibrary extends Listener<Core> {
-	@ConfigBoolean(def = true, desc = "When a player head is broken by a player that exists in /heads, drop the correctly named item as seen in /heads. You can disable this if it interferes with similarily textured heads from other plugins.")
+	@ConfigBoolean(def = true, desc = "When a player head is broken by a player that exists in /heads, drop the correctly named item as seen in /heads. You can disable this if it interferes with similarly textured heads from other plugins.")
 	public boolean config_player_head_drops;
 
 	public HeadLibrary(Context<Core> context) {
 		super(context);
 
-		// Load head material library
+		// Load a head material library
 		get_module().log.info("Loading head library...");
 		try {
 			HeadMaterialLibrary.load(IOUtils.toString(get_module().getResource("head_library.json"), StandardCharsets.UTF_8));
@@ -36,7 +36,7 @@ public class HeadLibrary extends Listener<Core> {
 		}
 	}
 
-	// Restore correct head item from head library when broken
+	// Restore correct head item from a head library when broken
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void on_block_break(final BlockBreakEvent event) {
 		if (!config_player_head_drops) {

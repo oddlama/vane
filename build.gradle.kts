@@ -25,7 +25,7 @@ subprojects {
 	group = "org.oddlama.vane"
 	version = "1.14.0"
 
-	repositories() {
+	repositories {
 		mavenLocal()
 		mavenCentral()
 		maven("https://papermc.io/repo/repository/maven-public/")
@@ -122,7 +122,7 @@ configure(subprojects.filter {
 }) {
 	dependencies {
 		// https://imperceptiblethoughts.com/shadow/multi-project/#depending-on-the-shadow-jar-from-another-project
-		// In a multi-project build there may be one project that applies Shadow and another that requires the shadowed
+		// In a multi-project build, there may be one project that applies Shadow and another that requires the shadowed
 		// JAR as a dependency. In this case, use Gradle's normal dependency declaration mechanism to depend on the
 		// shadow configuration of the shadowed project.
 		implementation(project(path = ":vane-core", configuration = "shadow"))

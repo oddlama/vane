@@ -112,7 +112,7 @@ public class Portal {
 	private UUID target_id = null;
 	private boolean target_locked = false;
 
-	// Whether the portal should be saved on next occasion.
+	// Whether the portal should be saved on the next occasion.
 	// Not a saved field.
 	public boolean invalidated = true;
 
@@ -381,8 +381,8 @@ public class Portal {
 				end_gateway.setAge(200l);
 				end_gateway.update(true, false);
 
-				// If there's no exit location then the game will generate a natural gateway when the portal is used.
-				// Setting any location will do, since the teleports are cancelled via their events anyway.
+				// If there's no exit location, then the game will generate a natural gateway when the portal is used.
+				// Setting any location will do, since the teleporting is canceled via their events anyway.
 				if (spawn.location().getWorld().getEnvironment() == World.Environment.THE_END){
 					end_gateway.setExitLocation(spawn.location());
 					end_gateway.setExactTeleport(true);

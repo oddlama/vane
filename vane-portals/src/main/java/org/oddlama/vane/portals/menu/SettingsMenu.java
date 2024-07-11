@@ -137,7 +137,7 @@ public class SettingsMenu extends ModuleComponent<Portals> {
 	}
 
 	// HINT: We don't capture the previous menu and open a new one on exit,
-	// to correctly reflect changes done in here. (e.g. menu title due to portal name)
+	// to correctly reflect changes done in here. (e.g., menu title due to portal name)
 	public Menu create(final Portal portal, final Player player, final Block console) {
 		final var columns = 9;
 		final var title = lang_title.str_component("§5§l" + portal.name());
@@ -298,7 +298,7 @@ public class SettingsMenu extends ModuleComponent<Portals> {
 				}
 
 				Portal.Visibility new_vis = portal.visibility();
-				// If regions is not installed, we need to skip group visibility.
+				// If the "regions" plugin is not installed, we need to skip group visibility.
 				do {
 					new_vis = event.getClick() == ClickType.RIGHT ? new_vis.prev() : new_vis.next();
 				} while (new_vis.requires_regions() && !get_module().is_regions_installed());

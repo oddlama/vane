@@ -259,7 +259,7 @@ public class MainMenu extends ModuleComponent<Regions> {
 						is_secondary_set &&
 						selection.primary.getWorld().equals(selection.secondary.getWorld());
 
-					boolean minimum_satisified, maximum_satisfied, no_intersection, can_afford;
+					boolean minimum_satisfied, maximum_satisfied, no_intersection, can_afford;
 					String sdx, sdy, sdz;
 					String price;
 					if (is_primary_set && is_secondary_set && same_world) {
@@ -270,7 +270,7 @@ public class MainMenu extends ModuleComponent<Regions> {
 						sdy = Integer.toString(dy);
 						sdz = Integer.toString(dz);
 
-						minimum_satisified =
+						minimum_satisfied =
 							dx >= get_module().config_min_region_extent_x &&
 							dy >= get_module().config_min_region_extent_y &&
 							dz >= get_module().config_min_region_extent_z;
@@ -285,21 +285,21 @@ public class MainMenu extends ModuleComponent<Regions> {
 						sdx = "§7?";
 						sdy = "§7?";
 						sdz = "§7?";
-						minimum_satisified = false;
+						minimum_satisfied = false;
 						maximum_satisfied = false;
 						no_intersection = true;
 						can_afford = false;
 						price = "§7?";
 					}
 
-					final var extent_color = minimum_satisified && maximum_satisfied ? "§a" : "§c";
+					final var extent_color = minimum_satisfied && maximum_satisfied ? "§a" : "§c";
 					super.item(
 						item_create_region_invalid_selection.item(
 							is_primary_set ? "§a✓" : "§c✕",
 							is_secondary_set ? "§a✓" : "§c✕",
 							same_world ? "§a✓" : "§c✕",
 							no_intersection ? "§a✓" : "§c✕",
-							minimum_satisified ? "§a✓" : "§c✕",
+							minimum_satisfied ? "§a✓" : "§c✕",
 							maximum_satisfied ? "§a✓" : "§c✕",
 							can_afford ? "§a✓" : "§c✕",
 							extent_color + sdx,

@@ -31,7 +31,7 @@ public class RegionExtent {
 	}
 
 	// Both inclusive, so we don't run into errors with
-	// blocks outside of the world (y<min_height || y>max_height).
+	// blocks outside the world (y<min_height || y>max_height).
 	// Also, coordinates are sorted, so min is always the smaller coordinate on each axis.
 	// For each x,y,z: min.[x,y,z] <= max.[x,y,z]
 	private LazyBlock min; // inclusive
@@ -139,13 +139,13 @@ public class RegionExtent {
 		final var extent_global_y = (hhy - lly) + 1;
 		final var extent_global_z = (hhz - llz) + 1;
 
-		// Compute sum of local extent lengths
+		// Compute a sum of local extent lengths
 		final var extent_sum_x = (h2.getX() - l2.getX()) + (h1.getX() - l1.getX()) + 2;
 		final var extent_sum_y = (h2.getY() - l2.getY()) + (h1.getY() - l1.getY()) + 2;
 		final var extent_sum_z = (h2.getZ() - l2.getZ()) + (h1.getZ() - l1.getZ()) + 2;
 
 		// It intersects exactly when:
-		//   for all a in axis: global_extent(a) < individual_extent_sum(a)
+		//   for all and in axis: global_extent(a) < individual_extent_sum(a)
 		return extent_global_x < extent_sum_x && extent_global_y < extent_sum_y && extent_global_z < extent_sum_z;
 	}
 
@@ -171,12 +171,12 @@ public class RegionExtent {
 		final var extent_global_x = (hhx - llx) + 1;
 		final var extent_global_z = (hhz - llz) + 1;
 
-		// Compute sum of local extent lengths
+		// Compute a sum of local extent lengths
 		final var extent_sum_x = (h2x - l2x) + (h1.getX() - l1.getX()) + 2;
 		final var extent_sum_z = (h2z - l2z) + (h1.getZ() - l1.getZ()) + 2;
 
 		// It intersects exactly when:
-		//   for all a in axis: global_extent(a) < individual_extent_sum(a)
+		//   for all and in axis: global_extent(a) < individual_extent_sum(a)
 		return extent_global_x < extent_sum_x && extent_global_z < extent_sum_z;
 	}
 }

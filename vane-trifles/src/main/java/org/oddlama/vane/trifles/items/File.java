@@ -110,18 +110,18 @@ public class File extends CustomItem<Trifles> {
 		var corner = oct.corner();
 		final var is_stair_top = stairs.getHalf() == Bisected.Half.TOP;
 
-		// If we clicked on the base part, toggle the corner up state,
+		// If we clicked on the base part, toggle the corner upstate,
 		// as we always want to reason abount the corner to add/remove.
 		if (corner.up() == is_stair_top) {
 			corner = corner.up(!corner.up());
 		}
 
-		// Rotate corner so that we can interpret it from
+		// Rotate a corner so that we can interpret it from
 		// the reference facing (north)
 		final var original_facing = stairs.getFacing();
 		corner = corner.rotate_to_north_reference(original_facing);
 
-		// Determine resulting shape, face and wether the oct got added or removed
+		// Determine the resulting shape, face and wether the oct got added or removed
 		Stairs.Shape shape = null;
 		BlockFace face = null;
 		boolean added = false;
@@ -264,7 +264,7 @@ public class File extends CustomItem<Trifles> {
 				return null;
 			}
 
-			// Only replace facing choice, if we did hit a side,
+			// Only replace facing choice if we did hit a side,
 			// or if the dominance was big enough.
 			if (result.dominance > .2 || (clicked_face != BlockFace.UP && clicked_face != BlockFace.DOWN)) {
 				clicked_face = result.face;
@@ -301,7 +301,7 @@ public class File extends CustomItem<Trifles> {
 		}
 
 		final BlockFace adjusted_clicked_face;
-		// Only replace facing choice, if we did hit a side,
+		// Only replace facing choice if we did hit a side,
 		// or if the dominance was big enough.
 		if (result.dominance > .2 || (clicked_face != BlockFace.UP && clicked_face != BlockFace.DOWN)) {
 			adjusted_clicked_face = result.face;
@@ -378,7 +378,7 @@ public class File extends CustomItem<Trifles> {
 			return;
 		}
 
-		// Create block break event for block to transmute and check if it gets cancelled
+		// Create a block break event for block to transmute and check if it gets canceled
 		final var block = event.getClickedBlock();
 		final var break_event = new BlockBreakEvent(block, player);
 		get_module().getServer().getPluginManager().callEvent(break_event);

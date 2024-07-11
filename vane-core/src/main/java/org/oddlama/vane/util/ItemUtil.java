@@ -154,7 +154,7 @@ public class ItemUtil {
 			return 1;
 		}
 
-		// More enchantments before less enchantments
+		// More enchantments before fewer enchantments
 		if (a_count != b_count) {
 			return b_count - a_count;
 		}
@@ -274,7 +274,7 @@ public class ItemUtil {
 	}
 
 	/**
-	 * Returns true if the given component is guared by the given sentinel.
+	 * Returns true if the given component is guarded by the given sentinel.
 	 */
 	public static boolean has_sentinel(final Component component, final NamespacedKey sentiel) {
 		if (component == null) {
@@ -372,7 +372,7 @@ public class ItemUtil {
 			throw new IllegalArgumentException("Invalid extended material definition: " + definition);
 		}
 
-		// First create the itemstack as if we had no NBT information.
+		// First, create the itemstack as if we had no NBT information.
 		final var item_stack = emat.item();
 
 		// If there is no NBT information, we can return here.

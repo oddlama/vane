@@ -331,7 +331,7 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 	}
 
 	private boolean try_reload_localization() {
-		// Copy all embedded lang files, if their version is newer.
+		// Copy all embedded lang files if their version is newer.
 		get_resources(getClass(), Pattern.compile("lang-.*\\.yml")).stream().forEach(this::update_lang_file);
 
 		// Get configured language code

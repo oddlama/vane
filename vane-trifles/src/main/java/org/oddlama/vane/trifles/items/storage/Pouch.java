@@ -54,7 +54,7 @@ public class Pouch extends CustomItem<Trifles> {
 			return;
 		}
 
-		// Never use anything else (e.g. offhand)
+		// Never use anything else (e.g., offhand)
 		event.setUseInteractedBlock(Event.Result.DENY);
 		event.setUseItemInHand(Event.Result.DENY);
 

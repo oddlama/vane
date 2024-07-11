@@ -156,8 +156,9 @@ public class ResourcePackGenerator {
 
 			final var overrides = new JSONArray();
 			// Be sure to iterate in sorted order, as predicates must
-			// be sorted in the final json. otherwise minecraft will
-			// select wrong items.
+			// be sorted in the final json.
+			// Otherwise, minecraft will
+			//  select the wrong items.
 			entry.getValue().stream().sorted(Comparator.comparing(o -> {
 				if (!o.has("predicate")) {
 					return 0;

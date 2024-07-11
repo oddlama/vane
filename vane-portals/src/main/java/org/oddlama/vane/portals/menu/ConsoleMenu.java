@@ -322,7 +322,7 @@ public class ConsoleMenu extends ModuleComponent<Portals> {
 
 							final var portal_block = portal.portal_block_for(console);
 							if (portal_block == null) {
-								// Console was likely already removed by another player
+								// The Console was likely already removed by another player
 								return ClickResult.ERROR;
 							}
 

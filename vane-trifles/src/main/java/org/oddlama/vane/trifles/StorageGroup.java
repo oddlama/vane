@@ -163,7 +163,7 @@ public class StorageGroup extends Listener<Trifles> {
 
 	private boolean is_storage_item(@Nullable ItemStack item) {
 		// Any item that has a container block state as the meta is a container to us.
-		// If the item has no meta (i.e. is empty) it doesnt count.
+		// If the item has no meta (i.e., is empty), it doesn't count.
 		return item != null
 				&& item.getItemMeta() instanceof BlockStateMeta meta
 				&& meta.getBlockState() instanceof Container;

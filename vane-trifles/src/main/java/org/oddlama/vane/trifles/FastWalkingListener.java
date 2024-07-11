@@ -41,7 +41,7 @@ public class FastWalkingListener extends Listener<Trifles> {
 			effect_entity = vehicle;
 		}
 
-		// Inspect block type just a little below
+		// Inspect a block type just a little below
 		var block = effect_entity.getLocation().clone().subtract(0.0, 0.1, 0.0).getBlock();
 		if (!fast_walking.config_materials.contains(block.getType())) {
 			return;
@@ -65,7 +65,7 @@ public class FastWalkingListener extends Listener<Trifles> {
 		// Cancel event if speedwalking is disabled for villagers
 		if(entity.getType() == EntityType.VILLAGER && !config_villager_speedwalk) return;
 
-		// Inspect block type just a little below
+		// Inspect a block type just a little below
 		var block = event.getTo().clone().subtract(0.0, 0.1, 0.0).getBlock();
 		if (!fast_walking.config_materials.contains(block.getType())) {
 			return;

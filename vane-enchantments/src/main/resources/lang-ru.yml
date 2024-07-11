@@ -14,7 +14,7 @@
 # if the file needs to be updated.
 version: 4
 # The corresponding language code used in resource packs. Used for
-# resource pack generation. Typically this is a combination of the
+# resource pack generation. Typically, this is a combination of the
 # language code (ISO 639) and the country code (ISO 3166).
 resource_pack_lang_code: 'ru_ru'
 

@@ -46,19 +46,19 @@ public abstract class Command<T extends Module<T>> extends ModuleComponent<T> {
 
 		@Override
 		public boolean execute(CommandSender sender, String alias, String[] args) {
-			// Pre check permission
+			// Pre-check permission
 			if (!sender.hasPermission(Command.this.permission)) {
 				get_module().core.lang_command_permission_denied.send(sender);
 				return true;
 			}
 
-			// Ambigous matches will always execute the
+			// Ambiguous matches will always execute the
 			// first chain based on definition order.
 			try {
 				return root_param.check_accept(sender, prepend(args, alias), 0).apply(Command.this, sender);
 			} catch (Exception e) {
 				sender.sendMessage(
-					"§cAn unexpected error occurred. Please examine the console log and/or notify a server administator."
+					"§cAn unexpected error occurred. Please examine the console log and/or notify a server administrator."
 				);
 				throw e;
 			}
@@ -67,7 +67,7 @@ public abstract class Command<T extends Module<T>> extends ModuleComponent<T> {
 		@Override
 		public List<String> tabComplete(CommandSender sender, String alias, String[] args)
 			throws IllegalArgumentException {
-			// Don't allow information exfiltration!
+			// Don't allow information filtration!
 			if (!sender.hasPermission(getPermission())) {
 				return Collections.emptyList();
 			}
@@ -76,7 +76,7 @@ public abstract class Command<T extends Module<T>> extends ModuleComponent<T> {
 				return root_param.build_completions(sender, prepend(args, alias), 0);
 			} catch (Exception e) {
 				sender.sendMessage(
-					"§cAn unexpected error occurred. Please examine the console log and/or notify a server administator."
+					"§cAn unexpected error occurred. Please examine the console log and/or notify a server administrator."
 				);
 				throw e;
 			}

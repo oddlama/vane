@@ -81,7 +81,7 @@ public class Permission extends Command<Permissions> {
 			)
 			.exec(this::list_permissions_for_group);
 
-		// add group to player
+		// add a group to player
 		params()
 			.fixed("add")
 			.ignore_case()
@@ -94,7 +94,7 @@ public class Permission extends Command<Permissions> {
 			)
 			.exec(this::add_player_to_group);
 
-		// remove group from player
+		// remove a group from player
 		params()
 			.fixed("remove")
 			.ignore_case()

@@ -136,7 +136,7 @@ public class PlayerMessageDelayer extends Listener<Core> {
 	public void on_player_status(final PlayerResourcePackStatusEvent event) {
 		switch (event.getStatus()) {
 			case ACCEPTED:
-				// Wait until next status.
+				// Wait until the next status.
 				return;
 			case DECLINED:
 			case FAILED_DOWNLOAD:

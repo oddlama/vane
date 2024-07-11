@@ -151,7 +151,7 @@ public class Nms {
 		// Inject the new custom entity (this registers the key/id with the server,
 		// so it will be available in vanilla constructs like the /summon command)
 		data_types_map.put("minecraft:" + id, data_types_map.get(base_entity_type.toString()));
-		// Store new type in registry
+		// Store a new type in registry
 		Registry.register(BuiltInRegistries.ENTITY_TYPE, id, builder.build(id));
 	}
 

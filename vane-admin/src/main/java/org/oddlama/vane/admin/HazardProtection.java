@@ -117,7 +117,7 @@ public class HazardProtection extends Listener<Admin> {
 			return;
 		}
 
-		// Check if world is whitelisted
+		// Check if the world is whitelisted
 		final var world = event.getEntity().getWorld();
 		if (config_wither_world_whitelist.contains(world.getName())) {
 			return;

@@ -86,14 +86,14 @@ public class EmptyXpBottle extends CustomItem<Trifles> {
 			case RIGHT_CLICK_AIR:
 				break;
 			case RIGHT_CLICK_BLOCK:
-				// Require non-cancelled state (so it won't trigger for block-actions like chests)
+				// Require non-canceled state (so it won't trigger for block-actions like chests)
 				if (event.useInteractedBlock() != Event.Result.DENY) {
 					return;
 				}
 				break;
 		}
 
-		// Check if last consume time is too recent, to prevent accidential re-filling
+		// Check if last consume time is too recent, to prevent accidental re-filling
 		final var now = System.currentTimeMillis();
 		final var last_consume = get_module().last_xp_bottle_consume_time.getOrDefault(player.getUniqueId(), 0l);
 		if (now - last_consume < 1000) {
