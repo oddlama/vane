@@ -81,5 +81,6 @@ public class DeathScroll extends Scroll {
 		final var pdc = event.getPlayer().getPersistentDataContainer();
 		StorageUtil.storage_set_location(pdc, RECENT_DEATH_LOCATION, event.getPlayer().getLocation());
 		pdc.set(RECENT_DEATH_TIME, PersistentDataType.LONG, System.currentTimeMillis());
+		event.getPlayer().setCooldown(this.baseMaterial(), 0);
 	}
 }
