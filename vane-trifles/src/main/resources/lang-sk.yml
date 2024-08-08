@@ -67,7 +67,7 @@ item_reinforced_elytra:
 
 item_file:
   # The display name of this item variant.
-  name: "Súbor"
+  name: "Rozpájačka"
 
 item_slime_bucket:
   # The display name of this item variant.
