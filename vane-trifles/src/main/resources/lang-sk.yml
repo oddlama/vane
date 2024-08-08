@@ -1,0 +1,138 @@
+# vim: set tabstop=2 softtabstop=0 expandtab shiftwidth=2:
+#
+# >> See lang-en.yml for variable descriptions <<
+#
+# +-----------------------------------+
+# | CAUTION: Do NOT change this file! |
+# +-----------------------------------+
+#
+# It will be silently overwritten with updates! If you want
+# to customize strings yourself, copy this file to lang-custom.yml
+# and set the language in the config.yml to "lang: 'custom'"
+
+# DO NOT CHANGE! The version of this language file. Used to determine
+# if the file needs to be updated.
+version: 4
+# The corresponding language code used in resource packs. Used for
+# resource pack generation. Typically this is a combination of the
+# language code (ISO 639) and the country code (ISO 3166).
+resource_pack_lang_code: 'sk_sk'
+
+command_heads:
+  usage: "%1$s"
+  description: "Získaj hlavy z knižnice hláv."
+  help: "Spustením sa otvorí knižnica hláv."
+
+command_finditem:
+  usage: "%1$s"
+  description: "Vyhľadá zadaný materiál v blízkych kontajneroch a entitách."
+  help: "Vyhľadá zadaný materiál v blízkych kontajneroch a entitách."
+
+command_setspawn:
+  usage: "%1$s"
+  description: "Nastaví globálny spawn na tvoji aktuálnu pozíciu."
+  help: "Nastaví globálny spawn na tvoji aktuálnu pozíciu."
+
+storage:
+  open_stacked_item: "Musíš najskúr rozložiť kopu, aby si tieto veci mohol otvoriť."
+  item_pouch:
+    # The display name of this item variant.
+    name: "Vrecúško"
+  item_backpack:
+    # The display name of this item variant.
+    name: "Batoh"
+
+xp_bottles:
+  item_small_xp_bottle:
+    # The display name of this item variant.
+    name: "Malá fľaštička so skúsenosťami"
+  item_medium_xp_bottle:
+    # The display name of this item variant.
+    name: "Stredná fľaštička so skúsenosťami"
+  item_large_xp_bottle:
+    # The display name of this item variant.
+    name: "Veľká fľaštička so skúsenosťami"
+
+item_empty_xp_bottle:
+  # The display name of this item variant.
+  name: "Prázdna fľaštička so skúsenosťami"
+
+item_north_compass:
+  # The display name of this item variant.
+  name: "Kompas na sever"
+
+item_reinforced_elytra:
+  # The display name of this item variant.
+  name: "Netheritová Elytra"
+
+item_file:
+  # The display name of this item variant.
+  name: "Súbor"
+
+item_slime_bucket:
+  # The display name of this item variant.
+  name: "Vedro so slizom"
+
+item_papyrus_scroll:
+  # The display name of this item variant.
+  name: "Papyrusový zvitok"
+
+item_trowel:
+  # The display name of this item variant.
+  name: "Murárska lyžica"
+  # The lore of every trowel
+  # %1$s: The current feed source
+  lore:
+    - "§7Klikni pravým tlačitkom myši na túto vec vo svojom inventári, aby si zmenil zdrojový materiál."
+    - "§7Aktuálny zdrojový materiál: %1$s"
+
+sickles:
+  item_wooden_sickle:
+    # The display name of this item variant.
+    name: "Drevený kosák"
+  item_stone_sickle:
+    # The display name of this item variant.
+    name: "Kamenný kosák"
+  item_iron_sickle:
+    # The display name of this item variant.
+    name: "Železný kosák"
+  item_golden_sickle:
+    # The display name of this item variant.
+    name: "Zlatý kosák"
+  item_diamond_sickle:
+    # The display name of this item variant.
+    name: "Diamantový kosák"
+  item_netherite_sickle:
+    # The display name of this item variant.
+    name: "Netheritový kosák"
+
+scrolls:
+  item_home_scroll:
+    # The display name of this item variant.
+    name: "Teleportačný zvitok (Domov)"
+  item_unstable_scroll:
+    # The display name of this item variant.
+    name: "Teleportačný zvitok (Nestabilný)"
+    # Shown when used but no scroll was used previously.
+    teleport_no_previous_teleport: "§cNikdy predtým si nepoužil iný zvitok."
+  item_spawn_scroll:
+    # The display name of this item variant.
+    name: "Teleportačný zvitok (Spawn)"
+  item_lodestone_scroll:
+    # The display name of this item variant.
+    name: "Teleportačný zvitok (Navigačný kameň)"
+    # Shown when used but no lodestone was ever bound.
+    teleport_no_bound_lodestone: "§bNajskôr sa prikrč a klikni pravým tlačítkom na navigačný kameň, aby si ho prepojil s týmto zvitkom."
+    # Shown when used but the bound lodestone doesn't exist anymore.
+    teleport_missing_lodestone: "§cNezdá sa, že by tento zvitok niečo robil. &6Bojíš sa, že prepojený navigačný kameň sa stratil."
+    # The lore of a bound scoll
+    # %1$s: Bound lodestone's world name
+    # %2$s: Bound lodestone's X position
+    # %3$s: Bound lodestone's Y position
+    # %4$s: Bound lodestone's Z position
+    bound_lore: "§7Prepojený na pozíciu (%2$s§7, %3$s§7, %4$s§7) vo svete %1$s"
+  item_death_scroll:
+    # The display name of this item variant.
+    name: "Teleportačný zvitok (Smrť)"
+    # Sent when a death scroll is used but the user hasn't died recently or already used a scroll of this type.
+    teleport_no_recent_death: "§cNezomrel si nedávno, alebo si už zvitok smrti použil!"
