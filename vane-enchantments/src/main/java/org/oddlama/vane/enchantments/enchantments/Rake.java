@@ -50,7 +50,7 @@ public class Rake extends CustomEnchantment<Enchantments> {
 			return;
 		}
 
-		// Only till additional blocks when right clicking farmland
+		// Only till additional blocks when right-clicking farmland
 		if (event.getClickedBlock().getType() != Material.FARMLAND) {
 			return;
 		}

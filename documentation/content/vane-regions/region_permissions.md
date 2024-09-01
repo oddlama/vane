@@ -9,11 +9,11 @@ module = "vane-regions"
 ![](images/region_default_group.png)
 
 Newly created regions are initially assigned to your default region-group.
-In summary, this region-group allows you to do anything, and restrict everyone else from building or using your chests.
+In summary, this region-group allows you to do anything and restrict everyone else from building or using your chests.
 Refer to [Regions](#feature-vane-regions--regions) for more information about the default permissions.
 
 It's generally a good idea to keep your private regions in this default group.
-Add your friends to the friends role to allow them to build and use chests.
+Add your friends to the "friends" role to allow them to build and use chests.
 
 ## Creating a Region-Group
 
@@ -36,7 +36,7 @@ Finally, you need to assign your region to the newly created group, which you ca
 
 ![](images/region_group_settings.png)
 
-Each region-group has a set of environmental settings that apply to the actualy regions in this region-group themselves and not to any players.
+Each region-group has a set of environmental settings that apply to the actual regions in this region-group themselves and not to any players.
 These are settings like: Disabling monster spawn, controlling whether PVP is allowed, whether fire spreads or similar things.
 You can see and change all settings in the menu related to the region-group.
 

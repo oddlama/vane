@@ -14,7 +14,7 @@
 # if the file needs to be updated.
 version: 2
 # The corresponding language code used in resource packs. Used for
-# resource pack generation. Typically this is a combination of the
+# resource pack generation. Typically, this is a combination of the
 # language code (ISO 639) and the country code (ISO 3166).
 resource_pack_lang_code: 'tr_tr'
 
@@ -47,7 +47,7 @@ autostop:
   # This message is sent when autostop status is requested and autostop is already scheduled.
   # %1$s: Time until stop
   status: "§7Otomatik durdurmaya %1$s"
-  # This message is sent when autostop status is requested but autostop is not scheduled.
+  # This message is sent when autostop status is requested, but autostop is not scheduled.
   status_not_scheduled: "§dOtomatik durdurma planlanmadı"
   # This message is sent when the actual autostop is performed.
   shutdown: "§dOtomatik durdurma başlatıldı!"

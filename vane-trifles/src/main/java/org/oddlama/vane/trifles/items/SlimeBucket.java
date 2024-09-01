@@ -28,6 +28,8 @@ import org.oddlama.vane.core.resourcepack.ResourcePackGenerator;
 import org.oddlama.vane.trifles.Trifles;
 import org.oddlama.vane.util.StorageUtil;
 
+import net.kyori.adventure.key.Key;
+
 @VaneItem(name = "slime_bucket", base = Material.SLIME_BALL, model_data = 0x760014 /* and 0x760015 */, version = 1)
 public class SlimeBucket extends CustomItem<Trifles> {
 	private static final int CUSTOM_MODEL_DATA_QUIET = 0x760014;
@@ -46,7 +48,11 @@ public class SlimeBucket extends CustomItem<Trifles> {
 			return;
 		}
 
-		// With a empty bucket in main hand
+		if (entity.isDead()) {
+			return;
+		}
+
+		// With an empty bucket in the main hand
 		final var player = event.getPlayer();
 		final var item_in_hand = player.getEquipment().getItem(event.getHand());
 		if (item_in_hand.getType() != Material.BUCKET) {
@@ -69,7 +75,7 @@ public class SlimeBucket extends CustomItem<Trifles> {
 			// Replace with Slime Bucket
 			player.getEquipment().setItem(event.getHand(), new_stack);
 		} else {
-			// Reduce amount and add SlimeBucket to inventory
+			// Reduce the amount and add SlimeBucket to inventory
 			item_in_hand.setAmount(item_in_hand.getAmount() - 1);
 			give_items(player, new_stack, 1);
 		}
@@ -90,11 +96,11 @@ public class SlimeBucket extends CustomItem<Trifles> {
 			return;
 		}
 
-		// Prevent offhand from triggering (e.g. placing torches)
+		// Prevent offhand from triggering (e.g., placing torches)
 		event.setUseInteractedBlock(Event.Result.DENY);
 		event.setUseItemInHand(Event.Result.DENY);
 
-		// Place slime back into world
+		// Place slime back into the world
 		final var loc = event.getInteractionPoint();
 		loc.getWorld().spawnEntity(loc, EntityType.SLIME, CreatureSpawnEvent.SpawnReason.CUSTOM, entity -> {
 			if (entity instanceof Slime slime) {
@@ -108,7 +114,7 @@ public class SlimeBucket extends CustomItem<Trifles> {
 			// Replace with empty bucket
 			player.getEquipment().setItem(event.getHand(), new ItemStack(Material.BUCKET));
 		} else {
-			// Reduce amount and add empty bucket to inventory
+			// Reduce the amount and add empty bucket to inventory
 			item_in_hand.setAmount(item_in_hand.getAmount() - 1);
 			give_items(player, new ItemStack(Material.BUCKET), 1);
 		}
@@ -148,7 +154,7 @@ public class SlimeBucket extends CustomItem<Trifles> {
 			if (resource == null) {
 				throw new RuntimeException("Missing resource '" + resource_name + "'. This is a bug.");
 			}
-			rp.add_item_model(key(), resource);
+			rp.add_item_model(key(), resource, Key.key(Key.MINECRAFT_NAMESPACE, "item/generated"));
 			rp.add_item_override(baseMaterial().getKey(), key(), predicate -> {
 				predicate.put("custom_model_data", CUSTOM_MODEL_DATA_QUIET);
 			});
@@ -165,7 +171,7 @@ public class SlimeBucket extends CustomItem<Trifles> {
 			if (resource_mcmeta == null) {
 				throw new RuntimeException("Missing resource '" + resource_name + ".mcmeta'. This is a bug.");
 			}
-			rp.add_item_model(excited_key, resource, resource_mcmeta);
+			rp.add_item_model(excited_key, resource, resource_mcmeta, Key.key(Key.MINECRAFT_NAMESPACE, "item/generated"));
 			rp.add_item_override(baseMaterial().getKey(), excited_key, predicate -> {
 				predicate.put("custom_model_data", CUSTOM_MODEL_DATA_JUMPY);
 			});

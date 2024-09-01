@@ -190,7 +190,7 @@ public class RegionGroupMenu extends ModuleComponent<Regions> {
 		final var is_owner = player.getUniqueId().equals(group.owner());
 		if (is_owner) {
 			region_group_menu.add(menu_item_rename(group));
-			// Delete only if this isn't the default group
+			// Delete it only if this isn't the default group
 			if (!get_module().get_or_create_default_region_group(player).id().equals(group.id())) {
 				region_group_menu.add(menu_item_delete(group));
 			}
@@ -362,7 +362,7 @@ public class RegionGroupMenu extends ModuleComponent<Regions> {
 				2 * 9 + col,
 				null,
 				(player, menu, self) -> {
-					// Prevent toggling when the setting is forced by the server
+					// Prevent toggling when the server forces the setting
 					if (setting.has_override()) {
 						return ClickResult.ERROR;
 					}

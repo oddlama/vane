@@ -99,7 +99,7 @@ public abstract class RecipeDefinition {
 			return new RecipeChoice.MaterialChoice(parts);
 		}
 
-		// Check if amount is included
+		// Check if the amount is included
 		final var mult = definition.indexOf('*');
 		int amount = 1;
 		if (mult != -1) {

@@ -19,7 +19,7 @@ public class EntityMoveProcessor extends ModuleComponent<Portals> {
 	// This is the queue of entity move events that need processing.
 	// It is a linked hash map, so we can update moved entity positions
 	// without changing iteration order. Processed entries will be removed from
-	// the front and new entities are added to the back. If an entity moves twice
+	// the front, and new entities are added to the back. If an entity moves twice
 	// but wasn't processed, we don't need to update it. This ensures that no entities
 	// will be accidentally skipped when we are struggling to keep up.
 	// This stores entity_id -> (entity, old location).
@@ -50,7 +50,7 @@ public class EntityMoveProcessor extends ModuleComponent<Portals> {
 	}
 
 	private void process_entity_movements() {
-		// This custom event detector is necessary as PaperMC's entity move events trigger for LivingEntites,
+		// This custom event detector is necessary as PaperMC's entity move events trigger for LivingEntities,
 		// but we need move events for all entities. Wanna throw that potion through the portal?
 		// Yes. Shoot players through a portal? Ohh, definitely. Throw junk right into their bases? Abso-fucking-lutely.
 
@@ -65,7 +65,7 @@ public class EntityMoveProcessor extends ModuleComponent<Portals> {
 		// 2. Iterate through entities that moved in FIFO order
 		//    and call event handlers, but make sure to immediately abort
 		//    processing after exceeding a threshold time. This ensures
-		//    that it will alawys at least process one entity, but never
+		//    that it will always at least process one entity, but never
 		//    hog any performance from other tasks.
 
 		// Phase 1 - Movement detection
@@ -89,9 +89,9 @@ public class EntityMoveProcessor extends ModuleComponent<Portals> {
 		}
 
 		// For each entity that has an old position (computed efficiently via Sets.intersection),
-		// but isn't already contained in the entities to process, we check whether the position
+		// but isn't yet contained in the entities to process, we check whether the position
 		// has changed. If so, we add the entity to the processing queue.
-		// If the processing queue already contained the enitity, we remove it before iterating
+		// If the processing queue already contained the entity, we remove it before iterating
 		// as there is nothing to do - we simply lose information about the intermediate position.
 		for (final var eid : Sets.difference(
 					Sets.intersection(move_event_old_positions.keySet(), move_event_current_positions.keySet()),
@@ -138,7 +138,7 @@ public class EntityMoveProcessor extends ModuleComponent<Portals> {
 	@Override
 	protected void on_enable() {
 		// Each tick we need to recalculate whether entities moved.
-		// This is uses a scheduling algorithm (see function implementation) to
+		// This is using a scheduling algorithm (see function implementation) to
 		// keep it lightweight and to prevent lags.
 		task = schedule_task_timer(this::process_entity_movements, 1l, 1l);
 	}

@@ -41,7 +41,7 @@ public class ProxyGameProfileRequestListener {
 		PreLoginEvent.MultiplexedPlayer player = pending_multiplexer_logins.remove(target_uuid);
 		if (player == null) {
 			// We somehow have a multiplexer connection, but it wasn't registered in `pending_multiplexer_logins`
-			// Not much to do here, the event isn't cancellable
+			// Not much to do here; the event isn't cancellable
 			velocity.get_logger().log(Level.WARNING, "Unregistered multiplexer connection managed to get through!");
 			return;
 		}

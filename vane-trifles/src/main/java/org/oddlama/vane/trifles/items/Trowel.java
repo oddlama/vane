@@ -6,7 +6,6 @@ import static org.oddlama.vane.util.PlayerUtil.swing_arm;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -14,7 +13,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.Tag;
-import org.bukkit.craftbukkit.v1_20_R3.block.CraftBlock;
+import org.bukkit.craftbukkit.block.CraftBlock;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -40,7 +39,10 @@ import org.oddlama.vane.util.Nms;
 import org.oddlama.vane.util.StorageUtil;
 
 import net.kyori.adventure.text.Component;
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.protocol.game.ClientboundBlockUpdatePacket;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -48,9 +50,6 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.network.protocol.game.ClientboundBlockUpdatePacket;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.advancements.CriteriaTriggers;
 
 @VaneItem(name = "trowel", base = Material.WARPED_FUNGUS_ON_A_STICK, durability = 800, model_data = 0x76000e, version = 1)
 public class Trowel extends CustomItem<Trifles> {
@@ -183,7 +182,7 @@ public class Trowel extends CustomItem<Trifles> {
 			return;
 		}
 
-		// Prevent offhand from triggering (e.g. placing torches)
+		// Prevent offhand from triggering (e.g., placing torches)
 		event.setUseInteractedBlock(Event.Result.DENY);
 		event.setUseItemInHand(Event.Result.DENY);
 
@@ -198,7 +197,13 @@ public class Trowel extends CustomItem<Trifles> {
 			final var item_stack = inventory.getItem(possible_slots[index]);
 			// Skip empty slots and items that are not placeable blocks
 			if (item_stack == null || !item_stack.getType().isBlock() || Tag.SHULKER_BOXES.isTagged(item_stack.getType())) {
-				// Eliminate end of list, so copy item at end of list to the index (< count).
+				// Eliminate the end of list, so copy item at the end of list to the index (< count).
+				possible_slots[index] = possible_slots[--count];
+				continue;
+			}
+			org.oddlama.vane.core.item.api.CustomItem custom_item_slot = get_module().core.item_registry().get(item_stack);
+			// if the item is a custom item, don't place it
+			if(custom_item_slot != null) {
 				possible_slots[index] = possible_slots[--count];
 				continue;
 			}

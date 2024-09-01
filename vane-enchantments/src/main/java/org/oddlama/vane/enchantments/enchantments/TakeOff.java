@@ -107,7 +107,7 @@ public class TakeOff extends CustomEnchantment<Enchantments> {
 			loc
 				.getWorld()
 				.spawnParticle(
-					Particle.FIREWORKS_SPARK,
+					Particle.FIREWORK,
 					loc.add(rnd),
 					0,
 					dir.getX(),

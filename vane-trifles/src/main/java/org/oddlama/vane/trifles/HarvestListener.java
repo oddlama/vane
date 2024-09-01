@@ -31,7 +31,7 @@ public class HarvestListener extends Listener<Trifles> {
 			return;
 		}
 
-		// Only harvest when right clicking some plant type
+		// Only harvest when right-clicking some plant type
 		final var type = event.getClickedBlock().getType();
 		if (!is_seeded_plant(type)) {
 			return;

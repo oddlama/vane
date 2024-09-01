@@ -7,7 +7,7 @@ import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.inventory.meta.Damageable;
 import org.jetbrains.annotations.NotNull;
 import org.oddlama.vane.core.Core;
 import org.oddlama.vane.core.Listener;
@@ -80,7 +80,7 @@ public class ExistingItemConverter extends Listener<Core> {
 				}
 
 				contents[i] = convert_to_custom_item.convertExistingStack(is);
-				contents[i].editMeta(meta -> meta.displayName(convert_to_custom_item.displayName()));
+				contents[i].editMeta(meta -> meta.itemName(convert_to_custom_item.displayName()));
 				get_module().enchantment_manager.update_enchanted_item(contents[i]);
 				get_module().log.info("Converted legacy item to " + convert_to_custom_item.key());
 				++changed;
@@ -95,7 +95,7 @@ public class ExistingItemConverter extends Listener<Core> {
 				continue;
 			}
 
-			// Update custom items to new version, or if another detectable property changed.
+			// Update custom items to a new version, or if another detectable property changed.
 			final var key_and_version = CustomItemHelper.customItemTagsFromItemStack(is);
 			final var meta = is.getItemMeta();
 			if (meta.getCustomModelData() != custom_item.customModelData() ||
@@ -110,10 +110,14 @@ public class ExistingItemConverter extends Listener<Core> {
 			}
 
 			// Update maximum durability on existing items if changed.
-			if (meta.getPersistentDataContainer().getOrDefault(DurabilityManager.ITEM_DURABILITY_MAX, PersistentDataType.INTEGER, 0) != custom_item.durability()) {
+			Damageable damageableMeta = (Damageable) contents[i].getItemMeta();
+			int max_damage = damageableMeta.hasMaxDamage() ? damageableMeta.getMaxDamage() : contents[i].getType().getMaxDurability();
+			int correct_max_damage = custom_item.durability() == 0 ? contents[i].getType().getMaxDurability() : custom_item.durability();
+			if (max_damage != correct_max_damage || meta.getPersistentDataContainer().has(DurabilityManager.ITEM_DURABILITY_DAMAGE)) {
 				get_module().log.info("Updated item durability " + custom_item.key());
-				DurabilityManager.initialize_or_update_max(custom_item, contents[i]);
+				DurabilityManager.update_damage(custom_item, contents[i]);
 				++changed;
+				continue;
 			}
 		}
 

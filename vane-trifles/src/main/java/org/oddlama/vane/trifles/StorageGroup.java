@@ -23,6 +23,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.core.Listener;
+import org.oddlama.vane.core.item.api.CustomItem;
 import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Context;
 
@@ -162,7 +163,7 @@ public class StorageGroup extends Listener<Trifles> {
 
 	private boolean is_storage_item(@Nullable ItemStack item) {
 		// Any item that has a container block state as the meta is a container to us.
-		// If the item has no meta (i.e. is empty) it doesnt count.
+		// If the item has no meta (i.e., is empty), it doesn't count.
 		return item != null
 				&& item.getItemMeta() instanceof BlockStateMeta meta
 				&& meta.getBlockState() instanceof Container;
@@ -192,9 +193,17 @@ public class StorageGroup extends Listener<Trifles> {
 		}
 
 		// Transfer item name to block-state
-		Component name = null;
+		Component name = Component.text("");
 		if (meta.getBlockState() instanceof Nameable nameable) {
-			name = meta.hasDisplayName() ? meta.displayName() : null;
+			name = meta.hasDisplayName() ? meta.displayName() :
+				meta.hasItemName() ? meta.itemName() : null;
+
+
+			// if the item has neither custom name nor item name (an old item with custom name reset), get the name from registry if possible
+			if(name == null) {
+				CustomItem custom_item = get_module().core.item_registry().get(item);
+				name = custom_item != null ? custom_item.displayName() : Component.text(""); 
+			}
 			nameable.customName(name);
 		}
 

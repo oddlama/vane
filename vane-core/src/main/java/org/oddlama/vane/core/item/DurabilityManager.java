@@ -1,15 +1,12 @@
 package org.oddlama.vane.core.item;
 
-import java.util.ArrayList;
-
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.event.player.PlayerItemDamageEvent;
-import org.bukkit.event.player.PlayerItemMendEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.oddlama.vane.core.Core;
 import org.oddlama.vane.core.Listener;
@@ -19,6 +16,9 @@ import org.oddlama.vane.util.ItemUtil;
 import org.oddlama.vane.util.StorageUtil;
 
 import net.kyori.adventure.text.Component;
+
+
+// TODO: what about inventory based item repair?
 
 public class DurabilityManager extends Listener<Core> {
 	public static final NamespacedKey ITEM_DURABILITY_MAX = StorageUtil.namespaced_key("vane", "durability.max");
@@ -31,7 +31,7 @@ public class DurabilityManager extends Listener<Core> {
 	}
 
 	/**
-	 * Returns true if the given component is associated to our custom durabiltiy.
+	 * Returns true if the given component is associated to our custom durability.
 	 */
 	private static boolean is_durability_lore(final Component component) {
 		return ItemUtil.has_sentinel(component, SENTINEL);
@@ -53,68 +53,6 @@ public class DurabilityManager extends Listener<Core> {
 	}
 
 	/**
-	 * Returns the remaining uses for a given item, if it has custom durability.
-	 * Returns -1 otherwise.
-	 */
-	private static int remaining_uses(final ItemStack item_stack) {
-		if (item_stack == null || !item_stack.hasItemMeta()) {
-			return -1;
-		}
-		final var data = item_stack.getItemMeta().getPersistentDataContainer();
-		final var max = data.getOrDefault(ITEM_DURABILITY_MAX, PersistentDataType.INTEGER, -1);
-		if (max == -1) {
-			return -1;
-		}
-		final var damage = data.getOrDefault(ITEM_DURABILITY_DAMAGE, PersistentDataType.INTEGER, 0);
-		return Math.max(0, Math.min(max - damage, max));
-	}
-
-	/**
-	 * Updates lore on an item. Both persistent data field should exist,
-	 * otherwise result is unspecified.
-	 */
-	private static void update_lore(final CustomItem custom_item, final ItemStack item_stack) {
-		var lore = item_stack.lore();
-		if (lore == null) {
-			lore = new ArrayList<Component>();
-		}
-
-		// Remove old component
-		lore.removeIf(DurabilityManager::is_durability_lore);
-
-		// Add new component only if requested
-		final var lore_component = custom_item.durabilityLore();
-		if (lore_component != null) {
-			final var max = item_stack.getItemMeta().getPersistentDataContainer().getOrDefault(ITEM_DURABILITY_MAX, PersistentDataType.INTEGER, custom_item.durability());
-			final var remaining_uses = remaining_uses(item_stack);
-			lore.add(ItemUtil.add_sentinel(lore_component.args(Component.text(remaining_uses), Component.text(max)), SENTINEL));
-		}
-
-		item_stack.lore(lore);
-	}
-
-	/**
-	 * Calculates visual damage value given the visual max durability,
-	 * the actual damage and actual maximum damage. The actual damage value
-	 * will be automatically clamped to reasonable values.
-	 */
-	private static int visual_damage(final int actual_damage, final int actual_max, final short visual_max) {
-		if (actual_damage <= 0) {
-			return 0;
-		} else if (actual_damage == actual_max - 1) {
-			// This forces item's that have 1 durability left to also show 1 durability left
-			// in their visual damage, which allows client mods to swap items if necessary.
-			return visual_max - 1;
-		} else if (actual_damage >= actual_max) {
-			return visual_max;
-		} else {
-			final var damage_percentage = (double)actual_damage / actual_max;
-			// Never allow the calculation to show the item as 0 visual durability,
-			return Math.min(visual_max - 1, (int)(damage_percentage * visual_max));
-		}
-	}
-
-	/**
 	 * Sets the item's damage regarding our custom durability. The durability will get
 	 * clamped to plausible values. Damage values >= max will result in item breakage.
 	 * The maximum value will be taken from the item tag if it exists.
@@ -125,32 +63,11 @@ public class DurabilityManager extends Listener<Core> {
 		if (ro_meta.isUnbreakable()) {
 			damage = 0;
 		}
-
-		// Clamp values below or above defined damage values.
-		final var actual_max = ro_meta.getPersistentDataContainer().getOrDefault(ITEM_DURABILITY_MAX, PersistentDataType.INTEGER, custom_item.durability());
-		final var actual_damage = Math.min(actual_max, Math.max(0, damage));
-
-		// Store new damage values
-		item_stack.editMeta(meta -> {
-			final var data = meta.getPersistentDataContainer();
-			data.set(ITEM_DURABILITY_DAMAGE, PersistentDataType.INTEGER, actual_damage);
-			if (!data.has(ITEM_DURABILITY_MAX, PersistentDataType.INTEGER)) {
-				data.set(ITEM_DURABILITY_MAX, PersistentDataType.INTEGER, actual_max);
-			}
-		});
-
-		// Update lore
-		update_lore(custom_item, item_stack);
-
-		// Update visual damage if base item is damageable.
-		item_stack.editMeta(Damageable.class, damage_meta -> {
-			final var visual_max = item_stack.getType().getMaxDurability();
-			damage_meta.setDamage(visual_damage(actual_damage, actual_max, visual_max));
-		});
+		set_damage_and_max_damage(custom_item, item_stack, damage);
 	}
 
 	/**
-	 * Initialized damage tags on the item, or removes them if custom durability
+	 * Initializes damage on the item, or removes them if custom durability
 	 * is disabled for the given custom item.
 	 */
 	public static boolean initialize_or_update_max(final CustomItem custom_item, final ItemStack item_stack) {
@@ -188,91 +105,71 @@ public class DurabilityManager extends Listener<Core> {
 		}
 
 		set_damage_and_update_item(custom_item, item_stack, actual_damage);
+
 		return true;
 	}
 
-	/**
-	 * Damages item by given amount regarding our custom durability.
-	 * Negative amounts repair the item.
-	 */
-	private static void damage_and_update_item(final CustomItem custom_item, final ItemStack item_stack, final int amount) {
-		if (!item_stack.getItemMeta().getPersistentDataContainer().has(ITEM_DURABILITY_DAMAGE, PersistentDataType.INTEGER)) {
-			if (!initialize_or_update_max(custom_item, item_stack)) {
-				return;
-			}
-		}
-
-		final var damage = item_stack.getItemMeta().getPersistentDataContainer().getOrDefault(ITEM_DURABILITY_DAMAGE, PersistentDataType.INTEGER, 0);
-		set_damage_and_update_item(custom_item, item_stack, damage + amount);
-	}
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void on_item_damage(final PlayerItemDamageEvent event) {
 		final var item = event.getItem();
 		final var custom_item = get_module().item_registry().get(item);
 
-		// Ignore normal items or custom items with standard durability.
-		if (custom_item == null || custom_item.durability() <= 0) {
+		// Ignore normal items
+		if (custom_item == null) {
 			return;
 		}
 
-		damage_and_update_item(custom_item, item, event.getDamage());
-
-		// Wow this is hacky but the only workaround to prevent recusivly
-		// calling this event. We always increase the visual durability by 1
-		// and let the server implementation decrease it again to
-		// allow the item to break.
-		item.editMeta(Damageable.class, damage_meta -> damage_meta.setDamage(damage_meta.getDamage() - 1));
-		event.setDamage(1);
+		update_damage(custom_item, item);
 	}
 
+	/**
+	 * Update existing max damage to match the configuration
+	 */
+	static public void update_damage(CustomItem custom_item, ItemStack item_stack) {
+		if (!(item_stack.getItemMeta() instanceof Damageable meta))
+			return; // everything should be damageable now
+		
+		boolean updated = false;
+		PersistentDataContainer data = meta.getPersistentDataContainer();
 
-	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-	public void on_item_mend(final PlayerItemMendEvent event) {
-		// TODO: Durability Overridden items can not yet support mending effectively.
-		// see: https://github.com/PaperMC/Paper/issues/7313
-		final var item = event.getItem();
-		final var custom_item = get_module().item_registry().get(item);
-
-		// Ignore normal items or custom items with standard durability.
-		if (custom_item == null || custom_item.durability() <= 0) {
-			return;
-		}
-
-		final var mend_amount = 2 * event.getExperienceOrb().getExperience();
-		damage_and_update_item(custom_item, item, -mend_amount);
-
-		// Never let the server do any repairing, our durability bar is our percentage indicator.
-		event.setCancelled(true);
-	}
-
-	// TODO: what about inventory based item repair?
-	// Update durability on result items.
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void on_prepare_anvil(final PrepareAnvilEvent event) {
-		if (event.getResult() == null) {
-			return;
-		}
-
-		final var r = event.getResult();
-		final var custom_item_r = get_module().item_registry().get(r);
-		if (custom_item_r == null) {
-			return;
-		}
-
-		if (custom_item_r.durability() <= 0) {
-			// Remove leftover components
-			damage_and_update_item(custom_item_r, r, 0);
+		final int new_max_damage = custom_item.durability() == 0 ? item_stack.getType().getMaxDurability() : custom_item.durability();
+		
+		int old_damage;
+		int old_max_damage;
+		// if the item has damage in their data, get the value and remove it from PDC
+		if(data.has(ITEM_DURABILITY_DAMAGE) && data.has(ITEM_DURABILITY_MAX)) {
+			old_damage = data.get(ITEM_DURABILITY_DAMAGE, PersistentDataType.INTEGER);
+			old_max_damage = data.get(ITEM_DURABILITY_MAX, PersistentDataType.INTEGER);
+			data.remove(ITEM_DURABILITY_DAMAGE);
+			data.remove(ITEM_DURABILITY_MAX);
+			updated = true;
 		} else {
-			final var uses_a = remaining_uses(event.getInventory().getFirstItem());
-			final var uses_b = remaining_uses(event.getInventory().getSecondItem());
-
-			final var max = r.getItemMeta().getPersistentDataContainer().getOrDefault(ITEM_DURABILITY_MAX, PersistentDataType.INTEGER, custom_item_r.durability());
-			if (uses_a >= 0 && uses_b >= 0) {
-				set_damage_and_update_item(custom_item_r, r, max - (uses_a + uses_b));
-			}
+			old_damage = meta.hasDamage() ? meta.getDamage() : 0;
+			old_max_damage = meta.hasMaxDamage() ? meta.getMaxDamage() : item_stack.getType().getMaxDurability();
 		}
+		
+		remove_lore(item_stack);
 
-		event.setResult(r);
+		if(!updated) updated = old_max_damage != new_max_damage; // only update if there was old data or a different max durability
+		if(!updated) return; // and do nothing if nothing changed
+		final int new_damage = scale_damage(old_damage, old_max_damage, new_max_damage);
+		set_damage_and_max_damage(custom_item, item_stack, new_damage);
+	}
+
+	static public int scale_damage(int old_damage, int old_max_damage, int new_max_damage) {
+ 		return old_max_damage == new_max_damage ? old_damage : (int)(new_max_damage * ((float) old_damage / (float) old_max_damage));
+	}
+
+	static public boolean set_damage_and_max_damage(CustomItem custom_item, ItemStack item, int damage) {
+		return item.editMeta(Damageable.class, meta -> {	
+			if(custom_item.durability() != 0) {
+				meta.setMaxDamage(custom_item.durability());
+			} else {
+				meta.setMaxDamage((int) item.getType().getMaxDurability());
+			}
+			
+			meta.setDamage(damage);
+		});
 	}
 }

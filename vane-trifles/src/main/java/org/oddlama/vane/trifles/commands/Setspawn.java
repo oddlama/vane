@@ -29,7 +29,7 @@ public class Setspawn extends Command<Trifles> {
 			world.getPersistentDataContainer().remove(IS_SPAWN_WORLD);
 		}
 
-		// Set spawn and mark as default world
+		// Set spawn and mark as the default world
 		final var world = player.getWorld();
 		world.setSpawnLocation(loc);
 		world.getPersistentDataContainer().set(IS_SPAWN_WORLD, PersistentDataType.INTEGER, 1);

@@ -24,6 +24,7 @@ import org.oddlama.vane.core.data.CooldownData;
 import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.enchantments.CustomEnchantment;
+import org.oddlama.vane.core.enchantments.CustomEnchantmentFixer;
 import org.oddlama.vane.enchantments.Enchantments;
 import org.oddlama.vane.util.StorageUtil;
 
@@ -116,7 +117,7 @@ public class Soulbound extends CustomEnchantment<Enchantments> {
 		) {
 			boolean too_slow = drop_cooldown.peek_cooldown(event.getCursor().getItemMeta());
 			if (too_slow) {
-				// Dropped too slow, refresh and cancel
+				// Dropped too slowly, refresh and cancel
 				final ItemMeta meta = event.getCursor().getItemMeta();
 				drop_cooldown.check_or_update_cooldown(meta);
 				event.getCursor().setItemMeta(meta);
@@ -130,9 +131,9 @@ public class Soulbound extends CustomEnchantment<Enchantments> {
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void on_player_drop_item(final PlayerDropItemEvent event) {
-		// Soulbound items cannot be dropped by a player.
+		// A player cannot drop soulbound items.
 		// Prevents yeeting your best sword out of existence.
-		// (It's okay to put them into chests)
+		// (It's okay to put them into chests.)
 		final var dropped_item = event.getItemDrop().getItemStack();
 		if (is_soulbound(dropped_item)) {
 			boolean too_slow = drop_cooldown.peek_cooldown(dropped_item.getItemMeta());
@@ -140,7 +141,7 @@ public class Soulbound extends CustomEnchantment<Enchantments> {
 				var meta = dropped_item.getItemMeta();
 				drop_cooldown.clear(dropped_item.getItemMeta());
 				dropped_item.setItemMeta(meta);
-				lang_dropped_notification.send(event.getPlayer(), dropped_item.displayName());
+				lang_dropped_notification.send(event.getPlayer(), CustomEnchantmentFixer.removeVaneEnchants(dropped_item).displayName());
 				return;
 			}
 			final var inventory = event.getPlayer().getInventory();
@@ -149,10 +150,10 @@ public class Soulbound extends CustomEnchantment<Enchantments> {
 				event.setCancelled(true);
 				lang_drop_lock_warning.send_action_bar(
 					event.getPlayer(),
-					event.getItemDrop().getItemStack().displayName()
+					CustomEnchantmentFixer.removeVaneEnchants(event.getItemDrop().getItemStack()).displayName()
 				);
 			} else {
-				// Inventory is full (e.g. when exiting crafting table with soulbound item in it)
+				// Inventory is full (e.g., when exiting crafting table with soulbound item in it)
 				// so we drop the first non-soulbound item (if any) instead.
 				final var it = inventory.iterator();
 				ItemStack non_soulbound_item = null;
@@ -169,7 +170,7 @@ public class Soulbound extends CustomEnchantment<Enchantments> {
 
 				if (non_soulbound_item == null) {
 					// We can't prevent dropping a soulbound item.
-					// Well that sucks.
+					// Well, that sucks.
 					return;
 				}
 
@@ -177,7 +178,7 @@ public class Soulbound extends CustomEnchantment<Enchantments> {
 				final var player = event.getPlayer();
 				inventory.setItem(non_soulbound_item_slot, dropped_item);
 				player.getLocation().getWorld().dropItem(player.getLocation(), non_soulbound_item);
-				lang_drop_lock_warning.send_action_bar(player, event.getItemDrop().getItemStack().displayName());
+				lang_drop_lock_warning.send_action_bar(player, CustomEnchantmentFixer.removeVaneEnchants(event.getItemDrop().getItemStack()).displayName());
 				event.setCancelled(true);
 			}
 		}

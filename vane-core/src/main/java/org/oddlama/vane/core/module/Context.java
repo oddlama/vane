@@ -19,22 +19,22 @@ public interface Context<T extends Module<T>> {
 		return ns1 + separator + ns2;
 	}
 
-	/** create a subcontext namespace */
+	/** create a sub-context namespace */
 	public default ModuleContext<T> namespace(String name) {
 		return new ModuleContext<T>(this, name, null, ".");
 	}
 
-	/** create a subcontext namespace */
+	/** create a sub-context namespace */
 	public default ModuleContext<T> namespace(String name, String description) {
 		return new ModuleContext<T>(this, name, description, ".");
 	}
 
-	/** create a subcontext namespace */
+	/** create a sub-context namespace */
 	public default ModuleContext<T> namespace(String name, String description, String separator) {
 		return new ModuleContext<T>(this, name, description, separator);
 	}
 
-	/** create a subcontext group */
+	/** create a sub-context group */
 	public default ModuleGroup<T> group(String group, String description) {
 		return new ModuleGroup<T>(this, group, description);
 	}
@@ -45,7 +45,7 @@ public interface Context<T extends Module<T>> {
 		return g;
 	}
 
-	/** create a subcontext group */
+	/** create a sub-context group */
 	public default ModuleGroup<T> group_default_disabled(String group, String description) {
 		final var g = group(group, description);
 		g.config_enabled_def = false;

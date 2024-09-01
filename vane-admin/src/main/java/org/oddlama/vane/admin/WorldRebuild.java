@@ -45,7 +45,7 @@ public class WorldRebuild extends Listener<Admin> {
 		);
 	}
 
-	private List<Rebuilder> rebuilders = new ArrayList<>();
+	private final List<Rebuilder> rebuilders = new ArrayList<>();
 
 	public void rebuild(final List<Block> blocks) {
 		// Store a snapshot of all block states
@@ -94,7 +94,7 @@ public class WorldRebuild extends Listener<Admin> {
 			center.multiply(1.0 / this.states.size());
 			center.setY(max_y + 1);
 
-			// Sort blocks to rebuild them in a ordered fashion
+			// Sort blocks to rebuild them in an ordered fashion
 			this.states.sort(new RebuildComparator(center));
 
 			// Initialize delay
@@ -119,7 +119,7 @@ public class WorldRebuild extends Listener<Admin> {
 				block.breakNaturally();
 			}
 
-			// Force update without physics to set block type
+			// Force update without physics to set a block type
 			state.update(true, false);
 			// Second update forces block state specific update
 			state.update(true, false);
@@ -175,7 +175,7 @@ public class WorldRebuild extends Listener<Admin> {
 
 		@Override
 		public int compare(final BlockState a, final BlockState b) {
-			// Sort by distance to top-most center. Last block will be rebuilt first.
+			// Sort by distance to top-most center. The Last block will be rebuilt first.
 			final var da = a.getLocation().toVector().subtract(reference_point).lengthSquared();
 			final var db = b.getLocation().toVector().subtract(reference_point).lengthSquared();
 			return Double.compare(da, db);

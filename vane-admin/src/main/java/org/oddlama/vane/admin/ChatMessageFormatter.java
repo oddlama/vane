@@ -68,10 +68,10 @@ public class ChatMessageFormatter extends Listener<Admin> {
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void on_player_kick(final PlayerKickEvent event) {
-		// Bug in Spigot, doesn't actually do anything. But fixed in Paper since 1.17.
+		// Bug in Spigot, doesn't do anything. But fixed in Paper since 1.17.
 		// https://hub.spigotmc.org/jira/browse/SPIGOT-3034
 		event.leaveMessage(Component.text(""));
-		// message is handeled in quit event
+		// message is handled in quit event
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

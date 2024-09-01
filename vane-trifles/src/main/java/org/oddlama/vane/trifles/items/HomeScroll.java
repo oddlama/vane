@@ -42,11 +42,11 @@ public class HomeScroll extends Scroll {
 		if (imminent_teleport && to_location == null) {
 			final var to_potential_location = player.getPotentialBedLocation();
 			if (to_potential_location != null) {
-				// "You have no home bed or charged respawn anchor, or it was obstructed"
+				// "You have no home bed or charge respawn anchor, or it was obstructed"
 				// The most cursed sentence in minecraft.
 				player.sendActionBar(Component.translatable("block.minecraft.spawn.not_valid"));
 			} else {
-				// "Sleep in a bed to change your respawn point"
+				// "Sleep in a bed to change your respawn point."
 				player.sendActionBar(Component.translatable("advancements.adventure.sleep_in_bed.description"));
 			}
 		}

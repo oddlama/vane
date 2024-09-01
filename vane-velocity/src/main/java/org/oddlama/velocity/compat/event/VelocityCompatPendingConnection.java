@@ -50,7 +50,7 @@ public class VelocityCompatPendingConnection implements ProxyPendingConnection {
 
 	@Override
 	public boolean has_permission(ProxyServer server, String... permission) {
-		// Safe cast, we don't use this outside of the case where this is constructed
+		// Safe cast, we don't use this outside the case where this is constructed
 		// with a Player
 		return Arrays.stream(permission).anyMatch(perm -> ((Player)connection).hasPermission(perm));
 	}

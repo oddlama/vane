@@ -2,9 +2,11 @@
 env.sh
 .gradle
 .classpath
+.direnv
 .project
 .settings
 .idea
+.vscode
 build
 libs/
 target/

@@ -9,7 +9,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.craftbukkit.v1_20_R3.enchantments.CraftEnchantment;
+import org.bukkit.craftbukkit.enchantments.CraftEnchantment;
 import org.jetbrains.annotations.NotNull;
 import org.oddlama.vane.annotation.enchantment.Rarity;
 import org.oddlama.vane.annotation.enchantment.VaneEnchantment;
@@ -58,10 +58,10 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 		context = context.group("enchantment_" + name, "Enable enchantment " + name, default_enabled);
 		set_context(context);
 
-		// Create namespaced key
+		// Create a namespaced key
 		key = StorageUtil.namespaced_key(get_module().namespace(), name);
 
-		// Check if instance is already exists
+		// Check if instance already exists
 		if (instances.get(getClass()) != null) {
 			throw new RuntimeException("Cannot create two instances of a custom enchantment!");
 		}
@@ -123,7 +123,7 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 
 	/**
 	 * Returns the display format for the display name.
-	 * By default the color is dependent on the rarity.
+	 * By default, the color is dependent on the rarity.
 	 * COMMON: gray
 	 * UNCOMMON: dark blue
 	 * RARE: gold
@@ -249,7 +249,7 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 
 	/**
 	 * Determines if this enchantment is compatible with the given enchantment.
-	 * By default all enchantments are compatible. Override this if you want
+	 * By default, all enchantments are compatible. Override this if you want
 	 * to express conflicting enchantments.
 	 */
 	public boolean is_compatible(@NotNull Enchantment other) {
@@ -258,8 +258,9 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 
 	/**
 	 * Determines if this enchantment can be applied to the given item.
-	 * By default this returns true if the {@link #target()} category includes
-	 * the given itemstack. Unfortunately this method cannot be used to widen
+	 * By default, this returns true if the {@link #target()} category includes
+	 * the given itemstack.
+	 * Unfortunately, this method cannot be used to widen
 	 * the allowed items, just to narrow it (limitation due to minecraft server internals).
 	 * So for best results, always check super.can_enchant first when overriding.
 	 */
@@ -275,7 +276,7 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 		return LootTableList.of();
 	}
 
-	/** Applies this enchant to the given string item definition. */
+	/** Applies this enchantment to the given string item definition. */
 	protected String on(String item_definition) {
 		return on(item_definition, 1);
 	}

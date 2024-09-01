@@ -19,7 +19,7 @@ public class ProxyPreLoginListener {
 	public void pre_login(final com.velocitypowered.api.event.connection.PreLoginEvent event) {
 		PreLoginEvent proxy_event = new VelocityCompatPreLoginEvent(velocity, event);
 
-		// For Velocity, our multiplexer connections need more work, they
+		// For Velocity, our multiplexer connections need more work; they
 		// later get handled in `ProxyGameProfileRequestListener`
 		proxy_event.fire(PreLoginEvent.PreLoginDestination.PENDING_MULTIPLEXED_LOGINS);
 	}

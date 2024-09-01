@@ -4,12 +4,13 @@ icon = "minecraft:iron_bars"
 module = "vane-admin"
 ```
 ---
-Vane provides a slightly more sophisticated spawn protection than what is available in vanilla.
+Vane provides slightly more sophisticated spawn protection than what is available in vanilla.
 It defines an actual radius (not a square) around some block to be protected from player modification.
 
-By default players are still allowed to use things like doors, chests and buttons.
-Player can be exempt from the protection by granting them the permission
-'vane.admin.bypass_spawn_protection'. By default is is given to ops and members of the `admin` group.
+By default, players are still allowed to use things like doors, chests and buttons.
+Players can be exempt from the protection by granting them the permission
+'vane.admin.bypass_spawn_protection.'
+By default, is given to ops and members of the `admin` group.
 
 If you need even more control, use a [Region](#feature-vane-regions--regions).
 

@@ -12,9 +12,9 @@
 
 # DO NOT CHANGE! The version of this language file. Used to determine
 # if the file needs to be updated.
-version: 4
+version: 5
 # The corresponding language code used in resource packs. Used for
-# resource pack generation. Typically this is a combination of the
+# resource pack generation. Typically, this is a combination of the
 # language code (ISO 639) and the country code (ISO 3166).
 resource_pack_lang_code: 'fr_fr'
 
@@ -24,10 +24,9 @@ command_heads:
   help: "Exécuter la commande pour ouvrir le répertoire de Têtes."
 
 command_finditem:
-  # FIXME: missing translation
   usage: "%1$s"
-  description: "Searches for the given material in nearby containers and entities."
-  help: "Searches for the given material in nearby containers and entities."
+  description: "Recherche un objet donné dans les conteneurs et entités alentours."
+  help: "Recherche un objet donné dans les conteneurs et entités alentours."
 
 command_setspawn:
   usage: "%1$s"
@@ -35,12 +34,11 @@ command_setspawn:
   help: "Change la position du point d'apparition global vers votre position actuelle."
 
 storage:
-  # FIXME: missing translation
-  open_stacked_item: "You need to unstack these items to open them."
+  open_stacked_item: "Vous devez désempiler ces objets pour pouvoir les ouvrir."
   item_pouch:
-    name: "Pouch"
+    name: "Bourse"
   item_backpack:
-    name: "Backpack"
+    name: "Sac à dos"
 
 xp_bottles:
   item_small_xp_bottle:
@@ -54,29 +52,25 @@ item_empty_xp_bottle:
   name: "Fiole d'Expérience vide"
 
 item_north_compass:
-  # FIXME: missing translation
-  name: "North Compass"
+  name: "Boussole du Nord"
 
 item_reinforced_elytra:
-  name: "Élytres en netherite"
+  name: "Élytres en Netherite"
 
 item_file:
   name: "Lime"
 
 item_slime_bucket:
-  # FIXME: missing translation
-  name: "Slime in a Bucket"
+  name: "Slime dans un seau"
 
 item_papyrus_scroll:
-  # FIXME: missing translations
-  name: "Papyrus Scroll"
+  name: "Rouleau de papyrus"
 
 item_trowel:
   name: "Truelle"
-  # FIXME: missing translations
   lore:
-    - "§7Right-click this item in your inventory to change the feed source."
-    - "§7Current feed source: %1$s"
+    - "§7Clic droit sur cet objet dans votre inventaire pour en changer la source."
+    - "§7Source actuelle : %1$s"
 
 sickles:
   item_wooden_sickle:
@@ -90,25 +84,21 @@ sickles:
   item_diamond_sickle:
     name: "Faucille en diamant"
   item_netherite_sickle:
-    name: "Faucille en netherite"
+    name: "Faucille en Netherite"
 
 scrolls:
   item_home_scroll:
     name: "Parchemin de Rappel (Foyer)"
   item_unstable_scroll:
-    name: "Parchemin de Rappel (instable)"
-    # FIXME: missing translations
-    teleport_no_previous_teleport: "§cYou have never used a scroll before."
+    name: "Parchemin de Rappel (Instable)"
+    teleport_no_previous_teleport: "§cVous n'avez pas encore utilisé de parchemin."
   item_spawn_scroll:
-    # FIXME: missing translations
-    name: "Parchemin de Rappel (Spawn)"
+    name: "Parchemin de Rappel (Point d'apparition)"
   item_lodestone_scroll:
-    # FIXME: missing translations
-    name: "Parchemin de Rappel (Lodestone)"
-    teleport_no_bound_lodestone: "§bFirst sneak and right-click a lodestone to (re-)bind this scroll."
-    teleport_missing_lodestone: "§cThe scroll doesn't seem to do anything.. &6You fear the bound lodestone might be missing."
-    bound_lore: "§7Bound to (%2$s§7, %3$s§7, %4$s§7) in %1$s"
+    name: "Parchemin de Rappel (Magnétite)"
+    teleport_no_bound_lodestone: "§bAccroupissez-vous et cliquez droit sur une magnétite pour (ré)assigner ce parchemin."
+    teleport_missing_lodestone: "§cLe parchemin ne semble pas faire effet... §6Vous craignez que la magnétite liée ait disparu."
+    bound_lore: "§7Liée à (%2$s§7, %3$s§7, %4$s§7) dans %1$s"
   item_death_scroll:
-    # FIXME: missing translations
-    name: "Parchemin de Rappel (Death)"
-    teleport_no_recent_death: "§cYou have not died recently, or already used a Death Scroll!"
+    name: "Parchemin de Rappel (Mort)"
+    teleport_no_recent_death: "§cVous n'êtes pas mort·e récemment, ou avez déjà utilisé un Parchemin de Rappel de Mort !"

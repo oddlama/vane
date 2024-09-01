@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 function die() { echo "[1;31merror:[m $*" >&2; exit 1; }
 

@@ -16,7 +16,7 @@ public class CooldownData {
 	}
 
 	/**
-	 * Updates the cooldown data, if and only if the cooldown has been exceeded.
+	 * Updates the cooldown data if and only if the cooldown has been exceeded.
 	 * @return returns true if cooldown_time has been exceeded.
 	 */
 	public boolean check_or_update_cooldown(final PersistentDataHolder holder) {

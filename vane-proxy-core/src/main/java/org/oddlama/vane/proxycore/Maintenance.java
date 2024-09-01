@@ -7,7 +7,7 @@ import java.io.*;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
-import static org.oddlama.vane.util.TimeUtil.format_time;
+import static org.oddlama.vane.proxycore.util.TimeUtil.format_time;
 
 public class Maintenance {
 

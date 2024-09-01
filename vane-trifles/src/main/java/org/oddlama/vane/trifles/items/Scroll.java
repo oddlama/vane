@@ -32,7 +32,7 @@ public abstract class Scroll extends CustomItem<Trifles> {
 	/**
 	 * Get the teleport location for the given player. Return null to prevent teleporting.
 	 * Cooldown is already handled by the base class, you only need to assert that
-	 * a valid location is available. For example home scrolls may prevent teleport
+	 * a valid location is available. For example, home scrolls may prevent teleport
 	 * because of a missing bed or respawn point here and notify the player about that.
 	 * If imminent_teleport is true, the player will be teleported if this function returns
 	 * a valid location. The player should only be notified of errors if this is set.

@@ -80,7 +80,7 @@ public class Enchant extends Command<Core> {
 		}
 
 		try {
-			// Convert book if necessary
+			// Convert a book if necessary
 			if (item_stack.getType() == Material.BOOK) {
 				// FIXME this technically yields wrong items when this was a tome,
 				// as just changing the base item is not equivalent to custom item conversion.

@@ -55,9 +55,9 @@ public class PortalTeleporter extends Listener<Portals> {
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void on_entity_teleport_end_gateway_event(final EntityTeleportEndGatewayEvent event) {
 		// End gateway teleport can be initiated when the bounding boxes overlap, so
-		// the entities location will not necessarily be at the position where the end gateway block is.
-		// Therefore we additionally check whether the initiating end gateway block is part of a portal structure.
-		// Otherwise, this event would already be handeled by EntityTeleportEvent.
+		// the entity location will not necessarily be at the position where the end gateway block is.
+		// Therefore, we additionally check whether the initiating end gateway block is part of a portal structure.
+		// Otherwise, this event would already be handled by EntityTeleportEvent.
 		if (get_module().is_portal_block(event.getGateway().getBlock())) {
 			event.setCancelled(true);
 		}
@@ -75,11 +75,11 @@ public class PortalTeleporter extends Listener<Portals> {
 		final var entity_location = entity.getLocation();
 		final var nms_entity = Nms.entity_handle(entity);
 
-		// Now teleport. There are many ways to do it, but some are preferrable over others.
+		// Now teleport. There are many ways to do it, but some are preferred over others.
 		// Primarily, entity.teleport() will dismount any passengers. Meh.
 		if (target_location.getWorld() == entity_location.getWorld()) {
 			if (entity instanceof Player player) {
-				// For players travelling in the same world, we can use the NMS player's connection's
+				// For players traveling in the same world, we can use the NMS player's connection's
 				// teleport method, which only modifies player position without dismounting.
 				Nms.get_player(player).connection.teleport(target_location.getX(), target_location.getY(), target_location.getZ(), target_location.getYaw(), target_location.getPitch());
 			} else {
@@ -92,8 +92,8 @@ public class PortalTeleporter extends Listener<Portals> {
 		} else {
 			final var passengers = new ArrayList<Entity>(entity.getPassengers());
 
-			// Entities travelling to a different dimension need to be despawned and respawned as both worlds are distinct levels.
-			// This means they must be ardismounted (or un-ridden) before teleportation.
+			// Entities traveling to a different dimension need to be despawned and respawned as both worlds are distinct levels.
+			// This means they must be dismounted (or unridden) before teleportation.
 			passengers.stream().forEach(entity::removePassenger);
 			entity.teleport(target_location);
 
@@ -105,7 +105,7 @@ public class PortalTeleporter extends Listener<Portals> {
 
 		// Retain velocity. Previously we needed to force-set it in the next tick,
 		// as apparently the movement event overrides might override the velocity.
-		// Now we are using our own movement events which are run outside of any
+		// Now we are using our own movement events which are run outside any
 		// entity ticking, so no such workaround is necessary.
 		//schedule_next_tick(() -> {
 		//entity.setVelocity(new_velocity);
@@ -122,8 +122,8 @@ public class PortalTeleporter extends Listener<Portals> {
 			}
 
 
-			// Increase Y value if entity is currently flying through a portal that
-			// has extent in the y direction (i.e. is built upright)
+			// Increase Y value if an entity is currently flying through a portal that
+			// has extent in the y direction (i.e., is built upright)
 			if (living_entity.isGliding() && source.orientation().plane().y()) {
 				target_location.setY(target_location.getY() + 1.5);
 			}
@@ -139,9 +139,9 @@ public class PortalTeleporter extends Listener<Portals> {
 		target_location.setYaw(entity_location.getYaw());
 
 		// If the exit orientation of the target portal is locked, we make sure that
-		// the orientation of the entered portal is flipped, if an entity (player) enters from the back.
-		// We have to flip the source portal orientation, if the vector to be transformed
-		// is NOT opposing the source portal vector (i.e. not pointing against the front).
+		// the orientation of the entered portal is flipped if an entity (player) enters from the back.
+		// We have to flip the source portal orientation if the vector to be transformed
+		// is NOT opposing the source portal vector (i.e., not pointing against the front).
 		// Calculate new location (pitch, yaw) and velocity.
 		final var source_orientation = source.orientation();
 		target_location = source_orientation.apply(target.orientation(), target_location, target.exit_orientation_locked());
@@ -176,7 +176,7 @@ public class PortalTeleporter extends Listener<Portals> {
 		} else {
 			final var loc = entities_portalling.get(entity_id);
 			if (loc == null) {
-				// Initial teleport. Remember current location, so we can check
+				// Initial teleport. Remember the current location, so we can check
 				// that the entity moved away far enough to allow another teleport
 				entities_portalling.put(entity_id, event.getFrom().clone());
 			} else if (!get_module().portal_area_materials.contains(block.getType())) {

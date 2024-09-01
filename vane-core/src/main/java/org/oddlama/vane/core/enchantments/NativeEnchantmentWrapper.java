@@ -3,7 +3,11 @@ package org.oddlama.vane.core.enchantments;
 import static org.oddlama.vane.util.Nms.bukkit_enchantment;
 import static org.oddlama.vane.util.Nms.enchantment_slot_type;
 
+import java.util.Optional;
+
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.flag.FeatureFlagSet;
+import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import org.jetbrains.annotations.NotNull;
@@ -18,49 +22,45 @@ public class NativeEnchantmentWrapper extends Enchantment {
 	private CustomEnchantment<?> enchantment;
 
 	public NativeEnchantmentWrapper(CustomEnchantment<?> enchantment) {
-		super(Enchantment.Rarity.VERY_RARE, enchantment_slot_type(enchantment.target()), new EquipmentSlot[] {});
+		// FIXME not sure of this constructor
+		super(new EnchantmentDefinition(
+			enchantment_slot_type(enchantment.target()),
+			Optional.empty(),
+			0,
+			enchantment.max_level(),
+			new Enchantment.Cost(0, 0),
+			new Enchantment.Cost(0, 0),
+			0,
+			FeatureFlags.VANILLA_SET,
+			new EquipmentSlot[] {}
+		));
 		this.enchantment = enchantment;
-	}
-
-	@Override
-	public Enchantment.Rarity getRarity() {
-		switch (enchantment.rarity()) {
-			case COMMON:
-				return Enchantment.Rarity.COMMON;
-			case UNCOMMON:
-				return Enchantment.Rarity.UNCOMMON;
-			case RARE:
-				return Enchantment.Rarity.RARE;
-			case VERY_RARE:
-				return Enchantment.Rarity.VERY_RARE;
-			default:
-				return Enchantment.Rarity.VERY_RARE;
-		}
 	}
 
 	public CustomEnchantment<?> custom() {
 		return this.enchantment;
 	}
 
-	@Override
-	public int getMinLevel() {
-		return enchantment.min_level();
-	}
+	// FIXME these overriden methods are final
+	// @Override
+	// public int getMinLevel() {
+	// 	return enchantment.min_level();
+	// }
 
-	@Override
-	public int getMaxLevel() {
-		return enchantment.max_level();
-	}
+	// @Override
+	// public int getMaxLevel() {
+	// 	return enchantment.max_level();
+	// }
 
-	@Override
-	public int getMinCost(int level) {
-		return enchantment.min_cost(level);
-	}
+	// @Override
+	// public int getMinCost(int level) {
+	// 	return enchantment.min_cost(level);
+	// }
 
-	@Override
-	public int getMaxCost(int level) {
-		return enchantment.max_cost(level);
-	}
+	// @Override
+	// public int getMaxCost(int level) {
+	// 	return enchantment.max_cost(level);
+	// }
 
 	@Override
 	public boolean isTreasureOnly() {
