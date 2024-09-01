@@ -1,6 +1,6 @@
 ## Updating vane to a new minecraft release
 
-There are some things that need to be done 
+There are some things that need to be done
 to make vane compatible with a new minecraft release.
 
 1. First, we need to compile against the newest paper API and mojang mappings.
@@ -102,7 +102,7 @@ to make vane compatible with a new minecraft release.
    compatible.
    Read the changelog to see whether anything crucial (file layout, override rules)
    has changed and adjust the resource pack generator if necessary.
-   Often there are no breaking changes, 
+   Often there are no breaking changes,
    and we just need to bump the resource pack version in the mcmeta file.
    To do that,
    open `ResourcePackGenerator.java` (search for `pack_format`)
