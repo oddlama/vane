@@ -106,7 +106,7 @@ to make vane compatible with a new minecraft release.
    and we just need to bump the resource pack version in the mcmeta file.
    To do that,
    open `ResourcePackGenerator.java` (search for `pack_format`)
-   and enter the [newest value](https://minecraft.fandom.com/wiki/Pack_format).
+   and enter the [newest value](https://minecraft.wiki/w/Pack_format).
    You'll see in testing whether that worked or not.
 
 10. Make a commit detailing the update and what issues were encountered if any.
