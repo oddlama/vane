@@ -19,5 +19,5 @@ public class AngelRegistry extends CustomEnchantmentRegistry {
         this.exclusive_with(List.of(TypedKey.create(RegistryKey.ENCHANTMENT, Key.key(NAMESPACE, "wings"))))
         .register(freezeEvent);
     }
-    
+
 }

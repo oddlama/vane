@@ -29,7 +29,7 @@ public abstract class CustomEnchantmentRegistry {
 
     TagKey<Enchantment> exclusive_with_tags;
     List<TypedKey<Enchantment>> exclusive_with = List.of();
-            
+
     public CustomEnchantmentRegistry(String name, TagKey<ItemType> supported_item_tags, int max_level) {
         this.key = Key.key(NAMESPACE, name);
         this.description = Component.translatable(String.format(TRANSLATE_KEY, name));
@@ -67,7 +67,7 @@ public abstract class CustomEnchantmentRegistry {
      */
     public RegistryKeySet<Enchantment> exclusive_with(RegistryFreezeEvent<Enchantment, EnchantmentRegistryEntry.Builder> freezeEvent) {
         if(this.exclusive_with_tags != null) {
-            return freezeEvent.getOrCreateTag(exclusive_with_tags); 
+            return freezeEvent.getOrCreateTag(exclusive_with_tags);
         } else {
             return RegistrySet.keySet(RegistryKey.ENCHANTMENT, this.exclusive_with);
         }
@@ -75,7 +75,7 @@ public abstract class CustomEnchantmentRegistry {
 
     /**
      * Register the enchantment in the registry
-     * 
+     *
      * @see https://docs.papermc.io/paper/dev/registries#create-new-entries
      */
     public void register(RegistryFreezeEvent<Enchantment, EnchantmentRegistryEntry.Builder> freezeEvent){
