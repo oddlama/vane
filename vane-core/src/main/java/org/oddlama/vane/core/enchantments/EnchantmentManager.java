@@ -56,20 +56,7 @@ public class EnchantmentManager extends Listener<Core> {
 		Map<Enchantment, Integer> additional_enchantments,
 		boolean only_if_enchanted
 	) {
-		final var enchantments = new HashMap<>(additional_enchantments);
-		final var meta = item_stack.getItemMeta();
-		if (meta instanceof EnchantmentStorageMeta) {
-			enchantments.putAll(((EnchantmentStorageMeta) meta).getStoredEnchants());
-		} else {
-			enchantments.putAll(item_stack.getEnchantments());
-		}
-
-		if (enchantments.isEmpty() && only_if_enchanted) {
-			return item_stack;
-		}
-
-		remove_superseded(item_stack, enchantments);
-		update_lore(item_stack, enchantments);
+		remove_old_lore(item_stack);
 		return item_stack;
 	}
 
@@ -108,30 +95,16 @@ public class EnchantmentManager extends Listener<Core> {
 		// }
 	}
 
-	private void update_lore(ItemStack item_stack, Map<Enchantment, Integer> enchantments) {
-		// Create lore by converting enchantment name and level to string
-		// and prepend rarity color (can be overwritten in description)
-		// final var vane_enchantments = enchantments
-		// 	.entrySet()
-		// 	.stream()
-		// 	.filter(p -> ((CraftEnchantment)p.getKey()).getHandle() instanceof NativeEnchantmentWrapper)
-		// 	.sorted(Map.Entry.<Enchantment, Integer>comparingByKey(Comparator.comparing(x -> x.getKey().toString()))
-		// 		.thenComparing(Map.Entry.comparingByValue())
-		// 	)
-		// 	.toList();
+	private void remove_old_lore(ItemStack item_stack) {
+		var lore = item_stack.lore();
+		if (lore == null) {
+			lore = new ArrayList<Component>();
+		}
 
-		// var lore = item_stack.lore();
-		// if (lore == null) {
-		// 	lore = new ArrayList<Component>();
-		// }
+		lore.removeIf(this::is_enchantment_lore);
 
-		// lore.removeIf(this::is_enchantment_lore);
-		// lore.addAll(0, vane_enchantments.stream().map(ench ->
-		// 	ItemUtil.add_sentinel(((NativeEnchantmentWrapper)((CraftEnchantment) ench.getKey()).getHandle()).custom().display_name(ench.getValue()), SENTINEL)
-		// ).toList());
-
-		// // Set lore
-		// item_stack.lore(lore.isEmpty() ? null : lore);
+		// Set lore
+		item_stack.lore(lore.isEmpty() ? null : lore);
 	}
 
 	private boolean is_enchantment_lore(final Component component) {
@@ -143,21 +116,21 @@ public class EnchantmentManager extends Listener<Core> {
 		return ItemUtil.has_sentinel(component, SENTINEL);
 	}
 
-	// // Triggers on Anvils, grindstones, and smithing tables.
-	// @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-	// public void on_prepare_enchanted_edit(final PrepareResultEvent event) {
-	// 	if (event.getResult() == null) {
-	// 		return;
-	// 	}
+	// Triggers on Anvils, grindstones, and smithing tables.
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	public void on_prepare_enchanted_edit(final PrepareResultEvent event) {
+		if (event.getResult() == null) {
+			return;
+		}
 
-	// 	event.setResult(update_enchanted_item(event.getResult().clone()));
-	// }
+		event.setResult(update_enchanted_item(event.getResult().clone()));
+	}
 
-	// @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-	// public void on_enchant_item(final EnchantItemEvent event) {
-	// 	final var map = new HashMap<Enchantment, Integer>(event.getEnchantsToAdd());
-	// 	update_enchanted_item(event.getItem(), map);
-	// }
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	public void on_enchant_item(final EnchantItemEvent event) {
+		final var map = new HashMap<Enchantment, Integer>(event.getEnchantsToAdd());
+		update_enchanted_item(event.getItem(), map);
+	}
 
 	// @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	// public void on_loot_generate(final LootGenerateEvent event) {

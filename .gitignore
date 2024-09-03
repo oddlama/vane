@@ -1,6 +1,7 @@
 *.sw?
 env.sh
 .gradle
+.factorypath
 .classpath
 .direnv
 .project
