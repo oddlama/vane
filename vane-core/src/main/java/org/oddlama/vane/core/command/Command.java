@@ -55,9 +55,11 @@ public abstract class Command<T extends Module<T>> extends ModuleComponent<T> {
 
 		@Override
 		public boolean execute(CommandSender sender, String alias, String[] args) {
+			System.out.println("exec " + alias + " from " + sender);
 			// Pre-check permission
 			if (!sender.hasPermission(Command.this.permission)) {
 				get_module().core.lang_command_permission_denied.send(sender);
+				System.out.println("no perms!");
 				return true;
 			}
 
@@ -76,7 +78,7 @@ public abstract class Command<T extends Module<T>> extends ModuleComponent<T> {
 		@Override
 		public List<String> tabComplete(CommandSender sender, String alias, String[] args)
 			throws IllegalArgumentException {
-			// Don't allow information filtration!
+			// Don't allow information exfiltration!
 			if (!sender.hasPermission(getPermission())) {
 				return Collections.emptyList();
 			}
@@ -145,9 +147,9 @@ public abstract class Command<T extends Module<T>> extends ModuleComponent<T> {
 		bukkit_command.setLabel(name);
 		bukkit_command.setName(name);
 
-		
+
 		aliases = getClass().getAnnotation(Aliases.class);
-		brigadier_command = Commands.literal(name).requires(stack -> stack.getSender().hasPermission(permission));
+		brigadier_command = Commands.literal(name);
 		if (aliases != null) {
 			bukkit_command.setAliases(List.of(aliases.value()));
 		}
@@ -178,7 +180,11 @@ public abstract class Command<T extends Module<T>> extends ModuleComponent<T> {
 	}
 
 	public LiteralCommandNode<CommandSourceStack> get_command() {
-		return get_command_base().build();
+		var cmd = get_command_base();
+		var old_requirement = cmd.getRequirement();
+		return cmd
+			.requires(stack -> stack.getSender().hasPermission(permission) && old_requirement.test(stack))
+			.build();
 	}
 
 	public List<String> get_aliases() {
@@ -187,7 +193,7 @@ public abstract class Command<T extends Module<T>> extends ModuleComponent<T> {
 		} else {
 			return Collections.emptyList();
 		}
-		
+
 	}
 
 	@Override
@@ -214,5 +220,5 @@ public abstract class Command<T extends Module<T>> extends ModuleComponent<T> {
 	public LiteralArgumentBuilder<CommandSourceStack> help(){
 		return literal("help").executes(ctx -> {print_help2(ctx); return SINGLE_SUCCESS;});
 	}
-	
+
 }

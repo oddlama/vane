@@ -23,7 +23,7 @@ public class Setspawn extends Command<Trifles> {
 	public Setspawn(Context<Trifles> context) {
 		super(context);
 	}
-	
+
 	@Override
 	public LiteralArgumentBuilder<CommandSourceStack> get_command_base() {
 		return super.get_command_base()
