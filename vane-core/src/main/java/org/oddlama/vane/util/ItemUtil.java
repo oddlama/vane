@@ -33,6 +33,8 @@ import com.destroystokyo.paper.profile.ProfileProperty;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
+import io.papermc.paper.registry.RegistryAccess;
+import io.papermc.paper.registry.RegistryKey;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.HoverEvent;
@@ -42,7 +44,6 @@ import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.item.ItemParser;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
 
 public class ItemUtil {
@@ -67,9 +68,8 @@ public class ItemUtil {
 		if (handle == null) {
 			return;
 		}
-		RandomSource random = Nms.world_handle(player.getWorld()).getRandom();
 		
-		handle.hurtAndBreak(amount, random, player_handle(player), () -> { player.broadcastSlotBreak(EquipmentSlot.HAND); item_stack.subtract(); });
+		handle.hurtAndBreak(amount, Nms.world_handle(player.getWorld()), player_handle(player), (item) -> { player.broadcastSlotBreak(EquipmentSlot.HAND); item_stack.subtract(); });
 	}
 
 	public static String name_of(final ItemStack item) {
@@ -325,7 +325,7 @@ public class ItemUtil {
 				key = key.substring(0, level_delim);
 			}
 
-			final var ench = org.bukkit.Registry.ENCHANTMENT.get(NamespacedKey.fromString(key));
+			final var ench = RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT).get(NamespacedKey.fromString(key));
 			if (ench == null) {
 				throw new IllegalArgumentException(
 						"Cannot apply unknown enchantment '" + key + "' to item '" + item_stack + "'");

@@ -5,22 +5,18 @@ import static org.oddlama.vane.util.ItemUtil.damage_item;
 import static org.oddlama.vane.util.PlayerUtil.swing_arm;
 import static org.oddlama.vane.util.PlayerUtil.till_block;
 
-import com.destroystokyo.paper.MaterialTags;
-
 import org.bukkit.Material;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
 import org.oddlama.vane.annotation.enchantment.Rarity;
 import org.oddlama.vane.annotation.enchantment.VaneEnchantment;
 import org.oddlama.vane.core.config.recipes.RecipeList;
 import org.oddlama.vane.core.config.recipes.ShapedRecipeDefinition;
-import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.enchantments.CustomEnchantment;
+import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.enchantments.Enchantments;
 
 @VaneEnchantment(name = "rake", max_level = 4, rarity = Rarity.COMMON, treasure = true, target = EnchantmentTarget.TOOL)
@@ -37,11 +33,6 @@ public class Rake extends CustomEnchantment<Enchantments> {
 			.set_ingredient('b', "vane_enchantments:ancient_tome_of_knowledge")
 			.set_ingredient('h', Material.GOLDEN_HOE)
 			.result(on("vane_enchantments:enchanted_ancient_tome_of_knowledge")));
-	}
-
-	@Override
-	public boolean can_enchant(@NotNull ItemStack item_stack) {
-		return MaterialTags.HOES.isTagged(item_stack);
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)

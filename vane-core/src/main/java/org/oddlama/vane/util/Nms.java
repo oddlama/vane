@@ -48,10 +48,6 @@ public class Nms {
 		return ((CraftEntity) entity).getHandle();
 	}
 
-	public static void register_enchantment(NamespacedKey key, Enchantment enchantment) {
-		Registry.register(BuiltInRegistries.ENCHANTMENT, new ResourceLocation(key.getNamespace(), key.getKey()), enchantment);
-	}
-
 	public static org.bukkit.enchantments.Enchantment bukkit_enchantment(Enchantment enchantment) {
 		return CraftEnchantment.minecraftToBukkit(enchantment);
 	}

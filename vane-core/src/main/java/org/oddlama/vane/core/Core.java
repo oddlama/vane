@@ -22,7 +22,6 @@ import org.json.JSONException;
 import org.oddlama.vane.annotation.VaneModule;
 import org.oddlama.vane.annotation.config.ConfigBoolean;
 import org.oddlama.vane.annotation.lang.LangMessage;
-import org.oddlama.vane.core.enchantments.CustomEnchantmentFixer;
 import org.oddlama.vane.core.enchantments.EnchantmentManager;
 import org.oddlama.vane.core.functional.Consumer1;
 import org.oddlama.vane.core.item.CustomItemRegistry;
@@ -48,7 +47,6 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.item.enchantment.Enchantment;
 
 @VaneModule(name = "core", bstats = 8637, config_version = 6, lang_version = 4, storage_version = 1)
 public class Core extends Module<Core> {
@@ -78,8 +76,6 @@ public class Core extends Module<Core> {
 	private SortedSet<Module<?>> vane_modules = new TreeSet<>((a, b) -> a.get_name().compareTo(b.get_name()));
 
 	public final ResourcePackDistributor resource_pack_distributor;
-
-	public final CustomEnchantmentFixer custom_enchantment_fixer;
 
 	public void register_module(Module<?> module) {
 		vane_modules.add(module);
@@ -139,7 +135,6 @@ public class Core extends Module<Core> {
 		new org.oddlama.vane.core.commands.Enchant(this);
 		menu_manager = new MenuManager(this);
 		resource_pack_distributor = new ResourcePackDistributor(this);
-		custom_enchantment_fixer = new CustomEnchantmentFixer(this);
 		new CommandHider(this);
 		model_data_registry = new CustomModelDataRegistry();
 		item_registry = new CustomItemRegistry();
@@ -168,10 +163,8 @@ public class Core extends Module<Core> {
 
 			// Unfreeze required registries
 			frozen.set(BuiltInRegistries.ENTITY_TYPE, false);
-			frozen.set(BuiltInRegistries.ENCHANTMENT, false);
 			intrusive_holder_cache.set(BuiltInRegistries.ENTITY_TYPE, new IdentityHashMap<EntityType<?>, Holder.Reference<EntityType<?>>>());
 			// Since 1.20.2 this is also needed for enchantments:
-			intrusive_holder_cache.set(BuiltInRegistries.ENCHANTMENT, new IdentityHashMap<Enchantment, Holder.Reference<Enchantment>>());
 		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
 			e.printStackTrace();
 		}
@@ -179,7 +172,6 @@ public class Core extends Module<Core> {
 
 	public void freeze_registries() {
 		BuiltInRegistries.ENTITY_TYPE.freeze();
-		BuiltInRegistries.ENCHANTMENT.freeze();
 	}
 
 	@Override

@@ -38,7 +38,7 @@ public class HomeScroll extends Scroll {
 
 	@Override
 	public Location teleport_location(final ItemStack scroll, Player player, boolean imminent_teleport) {
-		final var to_location = player.getBedSpawnLocation();
+		final var to_location = player.getRespawnLocation();
 		if (imminent_teleport && to_location == null) {
 			final var to_potential_location = player.getPotentialBedLocation();
 			if (to_potential_location != null) {

@@ -384,7 +384,11 @@ public class PortalConstructor extends Listener<Portals> {
 
 	private PortalBlock create_portal_block(final Block block) {
 		final PortalBlock.Type type;
-		final var mat = block.getType();
+		var mat = block.getType();
+		// treat cave air and void air as normal air
+		if(mat == Material.CAVE_AIR || mat == Material.VOID_AIR) {
+			mat = Material.AIR;
+		}
 		if (mat == config_material_console) {
 			type = PortalBlock.Type.CONSOLE;
 		} else if (mat == config_material_boundary_1) {

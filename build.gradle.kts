@@ -1,11 +1,11 @@
 plugins {
 	`java-library`
-	id("io.papermc.paperweight.userdev") version "1.7.1"
+	id("io.papermc.paperweight.userdev") version "1.7.2"
 	id("xyz.jpenilla.run-paper") version "2.3.0" // Adds runServer and runMojangMappedServer tasks for testing
 }
 
 dependencies {
-	paperDevBundle("1.20.6-R0.1-SNAPSHOT")
+	paperweight.paperDevBundle("1.21.1-R0.1-SNAPSHOT")
 }
 
 java {
@@ -55,7 +55,7 @@ configure(subprojects.filter {
 	apply(plugin = "io.papermc.paperweight.userdev")
 
 	dependencies {
-		paperDevBundle("1.20.6-R0.1-SNAPSHOT")
+		paperweight.paperDevBundle("1.21.1-R0.1-SNAPSHOT")
 	}
 }
 
@@ -92,7 +92,7 @@ configure(subprojects.filter {
 		}
 
 		processResources {
-			filesMatching("**/plugin.yml") {
+			filesMatching("**/*plugin.yml") {
 				expand(project.properties)
 			}
 		}
@@ -136,7 +136,7 @@ configure(subprojects.filter {
 	listOf("vane-bedtime", "vane-portals", "vane-regions").contains(it.name)
 }) {
 	dependencies {
-		implementation(group = "us.dynmap", name = "dynmap-api", version = "3.2-SNAPSHOT")
+		implementation(group = "us.dynmap", name = "DynmapCoreAPI", version = "3.7-beta-6")
 		implementation(group = "de.bluecolored.bluemap", name = "BlueMapAPI", version = "2.7.2")
 	}
 }

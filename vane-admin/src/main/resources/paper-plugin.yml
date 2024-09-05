@@ -1,0 +1,17 @@
+name: ${name}
+version: ${version}
+description: Admin module for vane
+
+authors:
+  - oddlama
+website: 'https://github.com/oddlama/vane'
+
+main: org.oddlama.vane.admin.Admin
+
+api-version: '1.21'
+load: STARTUP
+dependencies:
+  server:
+    vane-core:
+      required: true
+      load: BEFORE

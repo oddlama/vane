@@ -24,7 +24,6 @@ import org.oddlama.vane.core.data.CooldownData;
 import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.enchantments.CustomEnchantment;
-import org.oddlama.vane.core.enchantments.CustomEnchantmentFixer;
 import org.oddlama.vane.enchantments.Enchantments;
 import org.oddlama.vane.util.StorageUtil;
 
@@ -141,7 +140,7 @@ public class Soulbound extends CustomEnchantment<Enchantments> {
 				var meta = dropped_item.getItemMeta();
 				drop_cooldown.clear(dropped_item.getItemMeta());
 				dropped_item.setItemMeta(meta);
-				lang_dropped_notification.send(event.getPlayer(), CustomEnchantmentFixer.removeVaneEnchants(dropped_item).displayName());
+				lang_dropped_notification.send(event.getPlayer(), dropped_item.displayName());
 				return;
 			}
 			final var inventory = event.getPlayer().getInventory();
@@ -150,7 +149,7 @@ public class Soulbound extends CustomEnchantment<Enchantments> {
 				event.setCancelled(true);
 				lang_drop_lock_warning.send_action_bar(
 					event.getPlayer(),
-					CustomEnchantmentFixer.removeVaneEnchants(event.getItemDrop().getItemStack()).displayName()
+					event.getItemDrop().getItemStack().displayName()
 				);
 			} else {
 				// Inventory is full (e.g., when exiting crafting table with soulbound item in it)
@@ -178,7 +177,7 @@ public class Soulbound extends CustomEnchantment<Enchantments> {
 				final var player = event.getPlayer();
 				inventory.setItem(non_soulbound_item_slot, dropped_item);
 				player.getLocation().getWorld().dropItem(player.getLocation(), non_soulbound_item);
-				lang_drop_lock_warning.send_action_bar(player, CustomEnchantmentFixer.removeVaneEnchants(event.getItemDrop().getItemStack()).displayName());
+				lang_drop_lock_warning.send_action_bar(player, event.getItemDrop().getItemStack().displayName());
 				event.setCancelled(true);
 			}
 		}

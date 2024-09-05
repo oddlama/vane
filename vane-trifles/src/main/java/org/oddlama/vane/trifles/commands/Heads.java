@@ -1,5 +1,6 @@
 package org.oddlama.vane.trifles.commands;
 
+import static com.mojang.brigadier.Command.SINGLE_SUCCESS;
 import static org.oddlama.vane.util.PlayerUtil.give_items;
 import static org.oddlama.vane.util.PlayerUtil.take_items;
 
@@ -16,6 +17,10 @@ import org.oddlama.vane.core.menu.MenuFactory;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.trifles.Trifles;
 
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+
+import io.papermc.paper.command.brigadier.CommandSourceStack;
+
 @Name("heads")
 public class Heads extends Command<Trifles> {
 
@@ -28,10 +33,14 @@ public class Heads extends Command<Trifles> {
 	public Heads(Context<Trifles> context) {
 		// Anyone may use this by default.
 		super(context, PermissionDefault.TRUE);
-		// Add help
-		params().fixed("help").ignore_case().exec(this::print_help);
-		// Command parameters
-		params().exec_player(this::open_head_library);
+	}
+
+	@Override
+	public LiteralArgumentBuilder<CommandSourceStack> get_command_base() {
+		return super.get_command_base()
+		.requires(ctx -> ctx.getSender() instanceof Player)
+		.then(help())
+		.executes(ctx -> {open_head_library((Player) ctx.getSource().getSender()); return SINGLE_SUCCESS;});
 	}
 
 	private void open_head_library(final Player player) {

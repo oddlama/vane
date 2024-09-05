@@ -1,0 +1,29 @@
+name: ${name}
+version: ${version}
+description: Regions module for vane
+
+authors: [oddlama]
+website: 'https://github.com/oddlama/vane'
+
+main: org.oddlama.vane.regions.Regions
+
+api-version: '1.21'
+load: STARTUP
+dependencies:
+  server:
+    vane-core:
+      required: true
+      load: BEFORE
+    dynmap:
+      required: false
+      load: AFTER
+    BlueMap:
+      required: false
+      load: AFTER
+    vane-portals:
+      required: false
+      load: AFTER
+    Vault:
+      required: false
+      load: AFTER
+    

@@ -75,7 +75,7 @@ public class BedtimeBlueMapLayerDelegate {
 
 	public void update_marker(final OfflinePlayer player) {
 		remove_marker(player.getUniqueId());
-		final var loc = player.getBedSpawnLocation();
+		final var loc = player.getRespawnLocation();
 		if (loc == null) {
 			return;
 		}

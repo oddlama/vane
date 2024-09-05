@@ -1,12 +1,20 @@
 package org.oddlama.vane.admin.commands;
 
-import static org.oddlama.vane.util.TimeUtil.parse_time;
+import static com.mojang.brigadier.Command.SINGLE_SUCCESS;
+import static io.papermc.paper.command.brigadier.Commands.argument;
+import static io.papermc.paper.command.brigadier.Commands.literal;
 
 import org.bukkit.command.CommandSender;
 import org.oddlama.vane.admin.Admin;
 import org.oddlama.vane.admin.AutostopGroup;
 import org.oddlama.vane.annotation.command.Name;
 import org.oddlama.vane.core.command.Command;
+import org.oddlama.vane.util.Conversions;
+
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+
+import io.papermc.paper.command.brigadier.CommandSourceStack;
+import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
 
 @Name("autostop")
 public class Autostop extends Command<Admin> {
@@ -16,16 +24,20 @@ public class Autostop extends Command<Admin> {
 	public Autostop(AutostopGroup context) {
 		super(context);
 		this.autostop = context;
+	}
 
-		// Add help
-		params().fixed("help").ignore_case().exec(this::print_help);
-		// Command parameters
-		params().exec(this::status);
-		params().fixed("abort").ignore_case().exec(this::abort);
-		params().fixed("status").ignore_case().exec(this::status);
-		var schedule = params().fixed("schedule").ignore_case();
-		schedule.exec(this::schedule);
-		schedule.any_string().exec(this::schedule_delay);
+	@Override
+	public LiteralArgumentBuilder<CommandSourceStack> get_command_base() {
+		return super.get_command_base()
+			.executes(ctx -> { status(ctx.getSource().getSender()); return SINGLE_SUCCESS; })
+			.then(help())
+			.then(literal("status").executes(ctx -> { status(ctx.getSource().getSender()); return SINGLE_SUCCESS; }))
+			.then(literal("abort").executes(ctx -> { abort(ctx.getSource().getSender()); return SINGLE_SUCCESS;}))
+			.then(literal("schedule")
+				.executes(ctx -> { schedule(ctx.getSource().getSender()); return SINGLE_SUCCESS; })
+				.then(argument("time", ArgumentTypes.time())
+					.executes(ctx -> { schedule_delay(ctx.getSource().getSender(), ctx.getArgument("time", Integer.class)); return SINGLE_SUCCESS;}))
+			);
 	}
 
 	private void status(CommandSender sender) {
@@ -40,11 +52,7 @@ public class Autostop extends Command<Admin> {
 		autostop.schedule(sender);
 	}
 
-	private void schedule_delay(CommandSender sender, String delay) {
-		try {
-			autostop.schedule(sender, parse_time(delay));
-		} catch (NumberFormatException e) {
-			get_module().core.lang_invalid_time_format.send(sender, e.getMessage());
-		}
+	private void schedule_delay(CommandSender sender, int delay){
+		autostop.schedule(sender, Conversions.ticks_to_ms(delay));
 	}
 }

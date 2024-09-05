@@ -1,0 +1,19 @@
+name: ${name}
+version: ${version}
+description: Enchantments module for vane
+
+authors:
+  - oddlama
+website: 'https://github.com/oddlama/vane'
+
+
+main: org.oddlama.vane.enchantments.Enchantments
+bootstrapper: org.oddlama.vane.enchantments.EnchantmentsBootstrapper
+
+api-version: '1.21'
+load: STARTUP
+dependencies:
+  server:
+    vane-core:
+      required: true
+      load: BEFORE
