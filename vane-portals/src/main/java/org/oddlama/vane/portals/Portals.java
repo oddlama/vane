@@ -76,7 +76,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import org.oddlama.vane.util.StorageUtil;
 
-@VaneModule(name = "portals", bstats = 8642, config_version = 3, lang_version = 5, storage_version = 2)
+@VaneModule(name = "portals", bstats = 8642, config_version = 3, lang_version = 6, storage_version = 2)
 public class Portals extends Module<Portals> {
 	// Add (de-)serializers
 	static {
