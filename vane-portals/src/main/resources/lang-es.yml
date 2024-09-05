@@ -12,7 +12,7 @@
 
 # ¡NO CAMBIAR! La versión de este archivo de idioma. Se utiliza para determinar
 # si el archivo necesita actualizarse.
-version: 5
+version: 6
 # El código de idioma correspondiente utilizado en paquetes de recursos. Utilizado para
 # generación de paquetes de recursos. Por lo general, es una combinación de
 # el código de idioma (ISO 639) y el código de país (ISO 3166).
@@ -360,7 +360,7 @@ menus:
         - ""
         - "§7Actual: %1$s"
         - "§8¡La selección de destino está §6§lBLOQUEADA§r§8!"
-   
+
 
     select_target_title: "§8§lSeleccionar Portal de Destino"
     filter_portals_title: "§8§lFiltrar Portales"
@@ -380,7 +380,7 @@ menus:
     select_target_portal_visibility_group: "§eGrupo de Región (miembros)"
     select_target_portal_visibility_group_internal: "§eGrupo de Región (solo visible internamente)"
     select_target_portal_visibility_private: "§cPrivado"
-    
+
     # El ítem utilizado para desvincular la consola actual.
     unlink_console:
       name: "§c§lDesvincular Consola"
@@ -395,7 +395,7 @@ menus:
     unlink_console_confirm_cancel:
       name: "§a§lCancelar"
       lore: []
-    
+
     # El ítem utilizado para destruir el portal.
     destroy_portal:
       name: "§c§lDestruir Portal"
