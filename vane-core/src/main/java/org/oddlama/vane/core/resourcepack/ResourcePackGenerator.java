@@ -50,7 +50,7 @@ public class ResourcePackGenerator {
 		}
 		return lang_map;
 	}
-	
+
 	public void add_item_model(NamespacedKey key, InputStream texture_png, Key parent) throws IOException {
 		item_textures.put(key, new PackEntry(texture_png.readAllBytes(), parent));
 	}
@@ -77,7 +77,7 @@ public class ResourcePackGenerator {
 
 	private String generate_pack_mcmeta() {
 		final var pack = new JSONObject();
-		pack.put("pack_format", 32);
+		pack.put("pack_format", 34);
 		pack.put("description", description);
 
 		final var root = new JSONObject();
@@ -108,7 +108,7 @@ public class ResourcePackGenerator {
 		final var textures = new JSONObject();
 		if (texture.getNamespace().equals("minecraft") && texture.getKey().endsWith("shulker_box")) {
 			model.put("parent", "minecraft:item/template_shulker_box");
-			
+
 			textures.put("particle", "minecraft:block/" + texture.getKey());
 			model.put("textures", textures);
 		} else {
@@ -221,7 +221,7 @@ public class ResourcePackGenerator {
 
 	/**
 	 * Gives the type of parent used by the given item
-	 * 
+	 *
 	 * @param item_key
 	 * @return a key containing the parent type
 	 */

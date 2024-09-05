@@ -58,8 +58,8 @@
 
           devshell.startup.pre-commit.text = self.checks.${localSystem}.pre-commit.shellHook;
           packages = [
-            pkgs.temurin-bin-17
-            (pkgs.gradle.override {java = pkgs.temurin-bin-17;})
+            pkgs.temurin-bin
+            (pkgs.gradle.override {java = pkgs.temurin-bin;})
             (pkgs.python3.withPackages (ps: [
               ps.markdown
               ps.toml
