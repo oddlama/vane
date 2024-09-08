@@ -12,9 +12,9 @@
 
 # DO NOT CHANGE! The version of this language file. Used to determine
 # if the file needs to be updated.
-version: 5
+version: 6
 # The corresponding language code used in resource packs. Used for
-# resource pack generation. Typically this is a combination of the
+# resource pack generation. Typically, this is a combination of the
 # language code (ISO 639) and the country code (ISO 3166).
 resource_pack_lang_code: 'sk_sk'
 
@@ -25,7 +25,7 @@ select_boundary_now: "§6Teraz klikni pravým tlačítko na okraj portálu"
 # type anymore. This can happen when a player replaces the console block
 # while it is selected as a pending console.
 console_invalid_type: "§cBlok konzoly je nesprávny typ bloku!"
-# This message is sent when the selected console is in a another world than the portal boundary.
+# This message is sent when the selected console is in another world than the portal boundary.
 console_different_world: "§cKonzola musí byť v tom istom svete ako portál"
 # This message is sent when the selected portal console is too far away from
 # the portal boundary.
@@ -41,7 +41,7 @@ no_origin: "§cPortál nemá základný blok!"
 multiple_origins: "§cPortál nemôže mať viac základných blokov!"
 # This message is sent when the selected vertical portal boundary has no portal area above the origin block
 no_portal_block_above_origin: "§cZákladný blok musí mať nad sebou portál!"
-# This message is sent when the selected vertical portal boundary has not enough portal area above the origin block
+# This message is sent when the selected vertical portal boundary has not enough portal areas above the origin block
 not_enough_portal_blocks_above_origin: "§cZákladný blok musí mať nad sebou aspoň 3 bloky priestoru pre vlastný portál!"
 # This message is sent when the selected portal boundary is too large in a given direction.
 # %1$s: The direction (x,y,z)
@@ -51,9 +51,9 @@ too_large: "§cPortál je v smere %1$s§c príliš veľký!"
 too_small_spawn: "§cMiesto výstupu z portál je v smere %1$s§c príliš malé!"
 # This message is sent when the selected portal boundary contains too many portal area blocks.
 # %1$s: Current amount of blocks
-# %2$s: Maximum allowed amount of blocks
+# %2$s: Maximum allowed number of blocks
 too_many_portal_area_blocks: "§cPriestor portálu je príliš veľký! %1$s§6/%2$s§c blokov"
-# This message is sent when a portal boundary is selected but
+# This message is sent when a portal boundary is selected, but
 # a part of the area is obstructed.
 portal_area_obstructed: "§cPriestor portálu je zablokovaný!"
 # This message is sent when the selected boundary instersects an existing portal.
@@ -377,7 +377,7 @@ menus:
     unlink_console:
       name: "§c§lOdpoj konzolu"
       lore: []
-    # The title for the unlink confirmation dialog.
+    # The title for the unlinking confirmation dialog.
     unlink_console_confirm_title: "§c§lNaozaj odpojiť konzolu?"
     # The item to accept unlinking.
     unlink_console_confirm_accept:
