@@ -7,9 +7,7 @@ import org.bukkit.Particle;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.loot.LootTables;
-import org.jetbrains.annotations.NotNull;
 import org.oddlama.vane.annotation.config.ConfigDouble;
 import org.oddlama.vane.annotation.config.ConfigDoubleList;
 import org.oddlama.vane.annotation.enchantment.Rarity;
@@ -21,7 +19,6 @@ import org.oddlama.vane.core.config.recipes.ShapedRecipeDefinition;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.enchantments.CustomEnchantment;
 import org.oddlama.vane.enchantments.Enchantments;
-import org.oddlama.vane.util.StorageUtil;
 
 @VaneEnchantment(name = "angel", max_level = 5, rarity = Rarity.VERY_RARE, treasure = true, allow_custom = true)
 public class Angel extends CustomEnchantment<Enchantments> {
@@ -43,7 +40,6 @@ public class Angel extends CustomEnchantment<Enchantments> {
 
 	public Angel(Context<Enchantments> context) {
 		super(context);
-		supersedes(StorageUtil.namespaced_key("vane_enchantments", "wings"));
 	}
 
 	@Override
@@ -68,11 +64,6 @@ public class Angel extends CustomEnchantment<Enchantments> {
 			.in(LootTables.UNDERWATER_RUIN_BIG)
 			.in(LootTables.VILLAGE_TEMPLE)
 			.add(1.0 / 250, 1, 1, on("vane_enchantments:enchanted_ancient_tome_of_the_gods")));
-	}
-
-	@Override
-	public boolean can_enchant(@NotNull ItemStack item_stack) {
-		return item_stack.getType() == Material.ELYTRA;
 	}
 
 	private double get_speed(int level) {
@@ -118,6 +109,6 @@ public class Angel extends CustomEnchantment<Enchantments> {
 		// Spawn particles
 		loc
 			.getWorld()
-			.spawnParticle(Particle.FIREWORKS_SPARK, loc, 0, -new_vel.getX(), -new_vel.getY(), -new_vel.getZ(), 0.4);
+			.spawnParticle(Particle.FIREWORK, loc, 0, -new_vel.getX(), -new_vel.getY(), -new_vel.getZ(), 0.4);
 	}
 }

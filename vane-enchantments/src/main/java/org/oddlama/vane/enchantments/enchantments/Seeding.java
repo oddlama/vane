@@ -8,22 +8,18 @@ import static org.oddlama.vane.util.MaterialUtil.seed_for;
 import static org.oddlama.vane.util.PlayerUtil.seed_block;
 import static org.oddlama.vane.util.PlayerUtil.swing_arm;
 
-import com.destroystokyo.paper.MaterialTags;
-
 import org.bukkit.Material;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
 import org.oddlama.vane.annotation.enchantment.Rarity;
 import org.oddlama.vane.annotation.enchantment.VaneEnchantment;
 import org.oddlama.vane.core.config.recipes.RecipeList;
 import org.oddlama.vane.core.config.recipes.ShapedRecipeDefinition;
-import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.enchantments.CustomEnchantment;
+import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.enchantments.Enchantments;
 
 @VaneEnchantment(
@@ -54,18 +50,13 @@ public class Seeding extends CustomEnchantment<Enchantments> {
 			.result(on("vane_enchantments:enchanted_ancient_tome_of_knowledge")));
 	}
 
-	@Override
-	public boolean can_enchant(@NotNull ItemStack item_stack) {
-		return MaterialTags.HOES.isTagged(item_stack);
-	}
-
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void on_player_right_click_plant(final PlayerInteractEvent event) {
 		if (!event.hasBlock() || event.getAction() != Action.RIGHT_CLICK_BLOCK) {
 			return;
 		}
 
-		// Only seed when right clicking a plant
+		// Only seed when right-clicking a plant
 		final var plant_type = event.getClickedBlock().getType();
 		if (!is_seeded_plant(plant_type)) {
 			return;

@@ -4,7 +4,9 @@ import static org.oddlama.vane.util.MaterialUtil.is_tillable;
 import static org.oddlama.vane.util.Nms.item_handle;
 
 import org.bukkit.Keyed;
-import org.bukkit.craftbukkit.v1_20_R3.inventory.CraftItemStack;
+import org.bukkit.Material;
+import org.bukkit.craftbukkit.entity.CraftItem;
+import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
@@ -13,6 +15,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockDispenseEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
@@ -80,7 +83,7 @@ public class VanillaFunctionalityInhibitor extends Listener<Core> {
 			return;
 		}
 
-		// Only consider to cancel minecraft's recipes
+		// Only consider canceling minecraft's recipes
 		if (!keyed.getKey().getNamespace().equals("minecraft")) {
 			return;
 		}
@@ -102,7 +105,7 @@ public class VanillaFunctionalityInhibitor extends Listener<Core> {
 			return;
 		}
 
-		// Only consider to cancel minecraft's recipes
+		// Only consider canceling minecraft's recipes
 		if (!keyed.getKey().getNamespace().equals("minecraft")) {
 			return;
 		}
@@ -121,7 +124,7 @@ public class VanillaFunctionalityInhibitor extends Listener<Core> {
 			return;
 		}
 
-        // Actually use recipe result, as copynbt has already modified the result
+        // Actually use a recipe result, as copynbt has already modified the result
 		result = recipe.getResult();
 		final var custom_item_result = get_module().item_registry().get(result);
 		if (custom_item_result == null) {
@@ -129,10 +132,10 @@ public class VanillaFunctionalityInhibitor extends Listener<Core> {
 		}
 
 		final var input = event.getInventory().getInputEquipment();
-		final var input_nbt = CraftItemStack.asNMSCopy(input).getOrCreateTag();
-		final var result_nbt = CraftItemStack.asNMSCopy(result).getOrCreateTag();
-		final var nms_result = item_handle(result).copy();
-		nms_result.setTag(result_nbt.merge(input_nbt));
+		final var input_components = CraftItemStack.asNMSCopy(input).getComponents();
+		final var nms_result = CraftItemStack.asNMSCopy(result);
+		nms_result.applyComponents(input_components);
+
 		event.setResult(custom_item_result.convertExistingStack(CraftItemStack.asCraftMirror(nms_result)));
 	}
 
@@ -195,7 +198,7 @@ public class VanillaFunctionalityInhibitor extends Listener<Core> {
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void on_item_burn(final EntityDamageEvent event) {
 		// Only burn damage on dropped items
-		if (event.getEntity().getType() != EntityType.DROPPED_ITEM) {
+		if (event.getEntity().getType() != EntityType.ITEM) {
 			return;
 		}
 
@@ -219,7 +222,7 @@ public class VanillaFunctionalityInhibitor extends Listener<Core> {
 		}
 	}
 
-	// Deny off-hand usage if main hand is a custom item that inhibits off-hand usage.
+	// Deny off-hand usage if the main hand is a custom item that inhibits off-hand usage.
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void on_player_right_click(final PlayerInteractEvent event) {
 		if (event.getHand() != EquipmentSlot.OFF_HAND) {
@@ -231,6 +234,18 @@ public class VanillaFunctionalityInhibitor extends Listener<Core> {
 		final var main_custom_item = get_module().item_registry().get(main_item);
 		if (inhibit(main_custom_item, InhibitBehavior.USE_OFFHAND)) {
 			event.setUseItemInHand(Event.Result.DENY);
+		}
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void on_dispense(BlockDispenseEvent event) {
+		if(event.getBlock().getType() != Material.DISPENSER) {
+			return;
+		}
+
+		final var custom_item = get_module().item_registry().get(event.getItem());
+		if(inhibit(custom_item, InhibitBehavior.DISPENSE)) {
+			event.setCancelled(true);
 		}
 	}
 }

@@ -12,9 +12,9 @@
 
 # DO NOT CHANGE! The version of this language file. Used to determine
 # if the file needs to be updated.
-version: 5
+version: 6
 # The corresponding language code used in resource packs. Used for
-# resource pack generation. Typically this is a combination of the
+# resource pack generation. Typically, this is a combination of the
 # language code (ISO 639) and the country code (ISO 3166).
 resource_pack_lang_code: 'de_de'
 
@@ -120,19 +120,19 @@ menus:
     select_block_console_active_title:       "Aktive Konsole auswählen."
     select_block_origin_active_title:        "Aktiven Hauptblock auswählen."
     select_block_portal_active_title:        "Aktiven Portalbereich auswählen."
-    select_block_boundardy_1_active_title:   "Aktiven Portalrahmen Variante 1 auswählen."
-    select_block_boundardy_2_active_title:   "Aktiven Portalrahmen Variante 2 auswählen."
-    select_block_boundardy_3_active_title:   "Aktiven Portalrahmen Variante 3 auswählen."
-    select_block_boundardy_4_active_title:   "Aktiven Portalrahmen Variante 4 auswählen."
-    select_block_boundardy_5_active_title:   "Aktiven Portalrahmen Variante 5 auswählen."
+    select_block_boundary_1_active_title:   "Aktiven Portalrahmen Variante 1 auswählen."
+    select_block_boundary_2_active_title:   "Aktiven Portalrahmen Variante 2 auswählen."
+    select_block_boundary_3_active_title:   "Aktiven Portalrahmen Variante 3 auswählen."
+    select_block_boundary_4_active_title:   "Aktiven Portalrahmen Variante 4 auswählen."
+    select_block_boundary_5_active_title:   "Aktiven Portalrahmen Variante 5 auswählen."
     select_block_console_inactive_title:     "Inaktive Konsole auswählen."
     select_block_origin_inactive_title:      "Inaktiven Hauptblock auswählen."
     select_block_portal_inactive_title:      "Inaktiven Portalbereich auswählen."
-    select_block_boundardy_1_inactive_title: "Inaktiven Portalrahmen Variante 1 auswählen."
-    select_block_boundardy_2_inactive_title: "Inaktiven Portalrahmen Variante 2 auswählen."
-    select_block_boundardy_3_inactive_title: "Inaktiven Portalrahmen Variante 3 auswählen."
-    select_block_boundardy_4_inactive_title: "Inaktiven Portalrahmen Variante 4 auswählen."
-    select_block_boundardy_5_inactive_title: "Inaktiven Portalrahmen Variante 5 auswählen."
+    select_block_boundary_1_inactive_title: "Inaktiven Portalrahmen Variante 1 auswählen."
+    select_block_boundary_2_inactive_title: "Inaktiven Portalrahmen Variante 2 auswählen."
+    select_block_boundary_3_inactive_title: "Inaktiven Portalrahmen Variante 3 auswählen."
+    select_block_boundary_4_inactive_title: "Inaktiven Portalrahmen Variante 4 auswählen."
+    select_block_boundary_5_inactive_title: "Inaktiven Portalrahmen Variante 5 auswählen."
 
     block_console_active:
       name: "§b§lKonsole §a(aktiv)"
@@ -143,19 +143,19 @@ menus:
     block_portal_active:
       name: "§b§lPortalbereich §a(aktiv)"
       lore: []
-    block_boundardy_1_active:
+    block_boundary_1_active:
       name: "§b§lPortalrahmen §a(aktiv)"
       lore: ["", "§aVariante 1", "§7Baumaterial: %1$s"]
-    block_boundardy_2_active:
+    block_boundary_2_active:
       name: "§b§lPortalrahmen §a(aktiv)"
       lore: ["", "§aVariante 2", "§7Baumaterial: %1$s"]
-    block_boundardy_3_active:
+    block_boundary_3_active:
       name: "§b§lPortalrahmen §a(aktiv)"
       lore: ["", "§aVariante 3", "§7Baumaterial: %1$s"]
-    block_boundardy_4_active:
+    block_boundary_4_active:
       name: "§b§lPortalrahmen §a(aktiv)"
       lore: ["", "§aVariante 4", "§7Baumaterial: %1$s"]
-    block_boundardy_5_active:
+    block_boundary_5_active:
       name: "§b§lPortalrahmen §a(aktiv)"
       lore: ["", "§aVariante 5", "§7Baumaterial: %1$s"]
     block_console_inactive:
@@ -167,19 +167,19 @@ menus:
     block_portal_inactive:
       name: "§b§lPortalbereich §e(inaktiv)"
       lore: []
-    block_boundardy_1_inactive:
+    block_boundary_1_inactive:
       name: "§b§lPortalrahmen §e(inaktiv)"
       lore: ["", "§aVariante 1", "§7Baumaterial: %1$s"]
-    block_boundardy_2_inactive:
+    block_boundary_2_inactive:
       name: "§b§lPortalrahmen §e(inaktiv)"
       lore: ["", "§aVariante 2", "§7Baumaterial: %1$s"]
-    block_boundardy_3_inactive:
+    block_boundary_3_inactive:
       name: "§b§lPortalrahmen §e(inaktiv)"
       lore: ["", "§aVariante 3", "§7Baumaterial: %1$s"]
-    block_boundardy_4_inactive:
+    block_boundary_4_inactive:
       name: "§b§lPortalrahmen §e(inaktiv)"
       lore: ["", "§aVariante 4", "§7Baumaterial: %1$s"]
-    block_boundardy_5_inactive:
+    block_boundary_5_inactive:
       name: "§b§lPortalrahmen §e(inaktiv)"
       lore: ["", "§aVariante 5", "§7Baumaterial: %1$s"]
 

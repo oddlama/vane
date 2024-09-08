@@ -9,7 +9,6 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.craftbukkit.v1_20_R3.enchantments.CraftEnchantment;
 import org.jetbrains.annotations.NotNull;
 import org.oddlama.vane.annotation.enchantment.Rarity;
 import org.oddlama.vane.annotation.enchantment.VaneEnchantment;
@@ -22,9 +21,10 @@ import org.oddlama.vane.core.config.recipes.Recipes;
 import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.Module;
-import org.oddlama.vane.util.Nms;
 import org.oddlama.vane.util.StorageUtil;
 
+import io.papermc.paper.registry.RegistryAccess;
+import io.papermc.paper.registry.RegistryKey;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -36,12 +36,10 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 	private VaneEnchantment annotation = getClass().getAnnotation(VaneEnchantment.class);
 	private String name;
 	private NamespacedKey key;
-	private NativeEnchantmentWrapper native_wrapper;
-
-	private final Set<NamespacedKey> supersedes = new HashSet<>();
 
 	public Recipes<T> recipes;
 	public LootTables<T> loot_tables;
+
 
 	// Language
 	@LangMessage
@@ -58,19 +56,14 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 		context = context.group("enchantment_" + name, "Enable enchantment " + name, default_enabled);
 		set_context(context);
 
-		// Create namespaced key
+		// Create a namespaced key
 		key = StorageUtil.namespaced_key(get_module().namespace(), name);
 
-		// Check if instance is already exists
+		// Check if instance already exists
 		if (instances.get(getClass()) != null) {
 			throw new RuntimeException("Cannot create two instances of a custom enchantment!");
 		}
 		instances.put(getClass(), this);
-
-		// Register and create wrappers
-		get_module().core.unfreeze_registries();
-		native_wrapper = new NativeEnchantmentWrapper(this);
-		Nms.register_enchantment(key(), native_wrapper);
 
 		// Automatic recipes and loot table config and registration
 		recipes = new Recipes<T>(get_context(), this.key, this::default_recipes);
@@ -81,30 +74,7 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 	 * Returns the bukkit wrapper for this enchantment.
 	 */
 	public final Enchantment bukkit() {
-		return CraftEnchantment.minecraftToBukkit(native_wrapper);
-	}
-
-	/**
-	 * Returns all enchantments that are superseded by this enchantment.
-	 */
-	public final Set<NamespacedKey> supersedes() {
-		return supersedes;
-	}
-
-	/**
-	 * Adds a superseded enchantment. Superseded enchantments will be removed
-	 * from the item when this enchantment is added.
-	 */
-	public final void supersedes(NamespacedKey e) {
-		supersedes.add(e);
-	}
-
-	/**
-	 * Adds a superseded enchantment. Superseded enchantments will be removed
-	 * from the item when this enchantment is added.
-	 */
-	public final void supersedes(Enchantment e) {
-		supersedes(e.getKey());
+		return RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT).get(key);
 	}
 
 	/**
@@ -123,7 +93,7 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 
 	/**
 	 * Returns the display format for the display name.
-	 * By default the color is dependent on the rarity.
+	 * By default, the color is dependent on the rarity.
 	 * COMMON: gray
 	 * UNCOMMON: dark blue
 	 * RARE: gold
@@ -249,7 +219,7 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 
 	/**
 	 * Determines if this enchantment is compatible with the given enchantment.
-	 * By default all enchantments are compatible. Override this if you want
+	 * By default, all enchantments are compatible. Override this if you want
 	 * to express conflicting enchantments.
 	 */
 	public boolean is_compatible(@NotNull Enchantment other) {
@@ -258,8 +228,9 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 
 	/**
 	 * Determines if this enchantment can be applied to the given item.
-	 * By default this returns true if the {@link #target()} category includes
-	 * the given itemstack. Unfortunately this method cannot be used to widen
+	 * By default, this returns true if the {@link #target()} category includes
+	 * the given itemstack.
+	 * Unfortunately, this method cannot be used to widen
 	 * the allowed items, just to narrow it (limitation due to minecraft server internals).
 	 * So for best results, always check super.can_enchant first when overriding.
 	 */
@@ -275,7 +246,7 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 		return LootTableList.of();
 	}
 
-	/** Applies this enchant to the given string item definition. */
+	/** Applies this enchantment to the given string item definition. */
 	protected String on(String item_definition) {
 		return on(item_definition, 1);
 	}

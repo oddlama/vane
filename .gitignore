@@ -1,10 +1,13 @@
 *.sw?
 env.sh
 .gradle
+.factorypath
 .classpath
+.direnv
 .project
 .settings
 .idea
+.vscode
 build
 libs/
 target/

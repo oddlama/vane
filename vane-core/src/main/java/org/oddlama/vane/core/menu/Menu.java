@@ -27,7 +27,7 @@ public class Menu {
 
 	// A tainted menu will refuse to be opened.
 	// Useful to prevent an invalid menu from reopening
-	// after it's state has been captured.
+	// after its state has been captured.
 	protected boolean tainted = false;
 
 	protected Menu(final Context<?> context) {

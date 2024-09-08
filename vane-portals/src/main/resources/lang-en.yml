@@ -12,9 +12,9 @@
 
 # DO NOT CHANGE! The version of this language file. Used to determine
 # if the file needs to be updated.
-version: 5
+version: 6
 # The corresponding language code used in resource packs. Used for
-# resource pack generation. Typically this is a combination of the
+# resource pack generation. Typically, this is a combination of the
 # language code (ISO 639) and the country code (ISO 3166).
 resource_pack_lang_code: 'en_us'
 
@@ -25,7 +25,7 @@ select_boundary_now: "§6Right-click the portal boundary now"
 # type anymore. This can happen when a player replaces the console block
 # while it is selected as a pending console.
 console_invalid_type: "§cThe console block has an invalid block type!"
-# This message is sent when the selected console is in a another world than the portal boundary.
+# This message is sent when the selected console is in another world than the portal boundary.
 console_different_world: "§cThe console must be in the same world as the portal"
 # This message is sent when the selected portal console is too far away from
 # the portal boundary.
@@ -41,7 +41,7 @@ no_origin: "§cThe portal has no origin block!"
 multiple_origins: "§cThe portal cannot have multiple origin blocks!"
 # This message is sent when the selected vertical portal boundary has no portal area above the origin block
 no_portal_block_above_origin: "§cThe origin block needs portal area above!"
-# This message is sent when the selected vertical portal boundary has not enough portal area above the origin block
+# This message is sent when the selected vertical portal boundary has not enough portal areas above the origin block
 not_enough_portal_blocks_above_origin: "§cThe origin block needs at least 3 portal area blocks above!"
 # This message is sent when the selected portal boundary is too large in a given direction.
 # %1$s: The direction (x,y,z)
@@ -51,13 +51,13 @@ too_large: "§cThe portal is too large in %1$s§c direction!"
 too_small_spawn: "§cThe spawn area is too small in %1$s§c direction!"
 # This message is sent when the selected portal boundary contains too many portal area blocks.
 # %1$s: Current amount of blocks
-# %2$s: Maximum allowed amount of blocks
+# %2$s: Maximum allowed number of blocks
 too_many_portal_area_blocks: "§cThe portal area is too large! %1$s§6/%2$s§c blocks"
-# This message is sent when a portal boundary is selected but
+# This message is sent when a portal boundary is selected, but
 # a part of the area is obstructed.
 portal_area_obstructed: "§cThe portal area is obstructed!"
-# This message is sent when the selected boundary instersects an existing portal.
-intersects_existing_portal: "§cThe portal instersects another portal!"
+# This message is sent when the selected boundary intersects an existing portal.
+intersects_existing_portal: "§cThe portal intersects another portal!"
 
 # This message is sent when a player has no permission to build a portal in the area.
 build_restricted: "§cYou have no permission to build a portal here!"
@@ -116,7 +116,7 @@ menus:
     # The title for the settings menu.
     # %1$s: Portal name
     title: "§8§lSettings: %1$s"
-    # The title for the icon seletion menu.
+    # The title for the icon selection menu.
     select_icon_title: "§8§lSelect Icon"
 
     # This item is used to rename the portal.
@@ -191,15 +191,15 @@ menus:
     # The title for the block selector for the active portal block.
     select_block_portal_active_title:        "Select active portal area block."
     # The title for the block selector for the active boundary variant 1 block.
-    select_block_boundardy_1_active_title:   "Select active boundary variant 1 block."
+    select_block_boundary_1_active_title:   "Select active boundary variant 1 block."
     # The title for the block selector for the active boundary variant 2 block.
-    select_block_boundardy_2_active_title:   "Select active boundary variant 2 block."
+    select_block_boundary_2_active_title:   "Select active boundary variant 2 block."
     # The title for the block selector for the active boundary variant 3 block.
-    select_block_boundardy_3_active_title:   "Select active boundary variant 3 block."
+    select_block_boundary_3_active_title:   "Select active boundary variant 3 block."
     # The title for the block selector for the active boundary variant 4 block.
-    select_block_boundardy_4_active_title:   "Select active boundary variant 4 block."
+    select_block_boundary_4_active_title:   "Select active boundary variant 4 block."
     # The title for the block selector for the active boundary variant 5 block.
-    select_block_boundardy_5_active_title:   "Select active boundary variant 5 block."
+    select_block_boundary_5_active_title:   "Select active boundary variant 5 block."
     # The title for the block selector for the inactive console block.
     select_block_console_inactive_title:     "Select inactive console block."
     # The title for the block selector for the inactive origin block.
@@ -207,15 +207,15 @@ menus:
     # The title for the block selector for the inactive portal block.
     select_block_portal_inactive_title:      "Select inactive portal area block."
     # The title for the block selector for the inactive boundary variant 1 block.
-    select_block_boundardy_1_inactive_title: "Select inactive boundary variant 1 block."
+    select_block_boundary_1_inactive_title: "Select inactive boundary variant 1 block."
     # The title for the block selector for the inactive boundary variant 2 block.
-    select_block_boundardy_2_inactive_title: "Select inactive boundary variant 2 block."
+    select_block_boundary_2_inactive_title: "Select inactive boundary variant 2 block."
     # The title for the block selector for the inactive boundary variant 3 block.
-    select_block_boundardy_3_inactive_title: "Select inactive boundary variant 3 block."
+    select_block_boundary_3_inactive_title: "Select inactive boundary variant 3 block."
     # The title for the block selector for the inactive boundary variant 4 block.
-    select_block_boundardy_4_inactive_title: "Select inactive boundary variant 4 block."
+    select_block_boundary_4_inactive_title: "Select inactive boundary variant 4 block."
     # The title for the block selector for the inactive boundary variant 5 block.
-    select_block_boundardy_5_inactive_title: "Select inactive boundary variant 5 block."
+    select_block_boundary_5_inactive_title: "Select inactive boundary variant 5 block."
 
     # The item used to represent the selected active console block.
     # %1$s: Building material
@@ -234,27 +234,27 @@ menus:
       lore: []
     # The item used to represent the selected active boundary variant 1 block.
     # %1$s: Building material
-    block_boundardy_1_active:
+    block_boundary_1_active:
       name: "§b§lBoundary §a(active)"
       lore: ["", "§aVariant 1", "§7Building material: %1$s"]
     # The item used to represent the selected active boundary variant 2 block.
     # %1$s: Building material
-    block_boundardy_2_active:
+    block_boundary_2_active:
       name: "§b§lBoundary §a(active)"
       lore: ["", "§aVariant 2", "§7Building material: %1$s"]
     # The item used to represent the selected active boundary variant 3 block.
     # %1$s: Building material
-    block_boundardy_3_active:
+    block_boundary_3_active:
       name: "§b§lBoundary §a(active)"
       lore: ["", "§aVariant 3", "§7Building material: %1$s"]
     # The item used to represent the selected active boundary variant 4 block.
     # %1$s: Building material
-    block_boundardy_4_active:
+    block_boundary_4_active:
       name: "§b§lBoundary §a(active)"
       lore: ["", "§aVariant 4", "§7Building material: %1$s"]
     # The item used to represent the selected active boundary variant 5 block.
     # %1$s: Building material
-    block_boundardy_5_active:
+    block_boundary_5_active:
       name: "§b§lBoundary §a(active)"
       lore: ["", "§aVariant 5", "§7Building material: %1$s"]
     # The item used to represent the selected inactive console block.
@@ -274,27 +274,27 @@ menus:
       lore: []
     # The item used to represent the selected inactive boundary variant 1 block.
     # %1$s: Building material
-    block_boundardy_1_inactive:
+    block_boundary_1_inactive:
       name: "§b§lBoundary §e(inactive)"
       lore: ["", "§aVariant 1", "§7Building material: %1$s"]
     # The item used to represent the selected inactive boundary variant 2 block.
     # %1$s: Building material
-    block_boundardy_2_inactive:
+    block_boundary_2_inactive:
       name: "§b§lBoundary §e(inactive)"
       lore: ["", "§aVariant 2", "§7Building material: %1$s"]
     # The item used to represent the selected inactive boundary variant 3 block.
     # %1$s: Building material
-    block_boundardy_3_inactive:
+    block_boundary_3_inactive:
       name: "§b§lBoundary §e(inactive)"
       lore: ["", "§aVariant 3", "§7Building material: %1$s"]
     # The item used to represent the selected inactive boundary variant 4 block.
     # %1$s: Building material
-    block_boundardy_4_inactive:
+    block_boundary_4_inactive:
       name: "§b§lBoundary §e(inactive)"
       lore: ["", "§aVariant 4", "§7Building material: %1$s"]
     # The item used to represent the selected inactive boundary variant 5 block.
     # %1$s: Building material
-    block_boundardy_5_inactive:
+    block_boundary_5_inactive:
       name: "§b§lBoundary §e(inactive)"
       lore: ["", "§aVariant 5", "§7Building material: %1$s"]
 
@@ -377,7 +377,7 @@ menus:
     unlink_console:
       name: "§c§lUnlink Console"
       lore: []
-    # The title for the unlink confirmation dialog.
+    # The title for the unlinking confirmation dialog.
     unlink_console_confirm_title: "§c§lUnlink console?"
     # The item to accept unlinking.
     unlink_console_confirm_accept:

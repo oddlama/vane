@@ -55,7 +55,7 @@ public class Backpack extends CustomItem<Trifles> {
 			return;
 		}
 
-		// Never use anything else (e.g. offhand)
+		// Never use anything else (e.g., offhand)
 		event.setUseInteractedBlock(Event.Result.DENY);
 		event.setUseItemInHand(Event.Result.DENY);
 
@@ -67,6 +67,6 @@ public class Backpack extends CustomItem<Trifles> {
 
 	@Override
 	public EnumSet<InhibitBehavior> inhibitedBehaviors() {
-		return EnumSet.of(InhibitBehavior.USE_IN_VANILLA_RECIPE);
+		return EnumSet.of(InhibitBehavior.USE_IN_VANILLA_RECIPE, InhibitBehavior.DISPENSE);
 	}
 }

@@ -1,6 +1,6 @@
 #### Important
 
-- Wrong world name in config should issue warning --> hazard protection doesnt do this on wither worlds
+- Wrong world name in config should issue warning --> hazard protection doesn't do this on wither worlds
 
 #### IDEAS
 
@@ -11,8 +11,8 @@
 - [ ] trampelpfad (a trail of path-block that is created automatically when players take a route often, could get fancy.)
 - [ ] add a mechanic to update in-game maps (e.g. with a custom item, or redstone)
 - [ ] player heads from /heads
-- [ ] lodestone portal scrolls teleport ontop of the stone
-- [ ] world rebuild check for armorstands and item frames. dont let them be destroyed
+- [ ] lodestone portal scrolls teleport on top of the stone
+- [ ] world rebuild check for armor stands and item frames. don't let them be destroyed
 - [ ] minecart speed ++++++ only if player in minecart, or maybe with an extra type of minecart. is it time for the netherite minecart?
 - [ ] on first join message: e.g. for link to map and discord link
 

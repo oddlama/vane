@@ -30,7 +30,7 @@ public interface CustomItemRegistry {
 	/**
 	 * Tries to retrieve a custom item definition from an ItemStack.
 	 * Returns null if the itemstack is not a custom item, or references a custom item
-	 * that has not been registered (e.g. previously installed plugin).
+	 * that has not been registered (e.g., previously installed plugin).
 	 */
 	// TODO: make command /clearcustomitems namespace:key that queues an item for deletion even if the original plugin is gone now. Maybe even allow clearing a whole namespace.
 	// TODO: for an immediate operation on a whole world, NBTExplorer can be used together with a removal filter filtering on the custom item id.

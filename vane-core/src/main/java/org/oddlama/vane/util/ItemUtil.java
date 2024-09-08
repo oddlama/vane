@@ -11,19 +11,16 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import com.destroystokyo.paper.profile.ProfileProperty;
-import com.mojang.brigadier.StringReader;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
 import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.craftbukkit.v1_20_R3.enchantments.CraftEnchantment;
-import org.bukkit.craftbukkit.v1_20_R3.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -32,15 +29,21 @@ import org.jetbrains.annotations.Nullable;
 import org.oddlama.vane.core.Core;
 import org.oddlama.vane.core.material.ExtendedMaterial;
 
+import com.destroystokyo.paper.profile.ProfileProperty;
+import com.mojang.brigadier.StringReader;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+
+import io.papermc.paper.registry.RegistryAccess;
+import io.papermc.paper.registry.RegistryKey;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.item.ItemParser;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.item.Item;
 
 public class ItemUtil {
@@ -53,6 +56,10 @@ public class ItemUtil {
 			"FA233E1C-4180-4865-B01B-BCCE9785ACA3");
 
 	public static void damage_item(final Player player, final ItemStack item_stack, final int amount) {
+		if (player.getGameMode() == GameMode.CREATIVE) { // don't damage the tool if the player is in creative
+			return;
+		} 
+
 		if (amount <= 0) {
 			return;
 		}
@@ -61,9 +68,8 @@ public class ItemUtil {
 		if (handle == null) {
 			return;
 		}
-
-		handle.hurtAndBreak(amount, player_handle(player), onBreak -> {
-		});
+		
+		handle.hurtAndBreak(amount, Nms.world_handle(player.getWorld()), player_handle(player), (item) -> { player.broadcastSlotBreak(EquipmentSlot.HAND); item_stack.subtract(); });
 	}
 
 	public static String name_of(final ItemStack item) {
@@ -148,26 +154,11 @@ public class ItemUtil {
 			return 1;
 		}
 
-		// More enchantments before less enchantments
+		// More enchantments before fewer enchantments
 		if (a_count != b_count) {
 			return b_count - a_count;
 		}
-
-		// Sort by combined rarity (rare = low value) first
-		final var a_rarity = ae
-				.keySet()
-				.stream()
-				.mapToInt(e -> ((CraftEnchantment)e).getHandle().getRarity().getWeight())
-				.sum();
-		final var b_rarity = be
-				.keySet()
-				.stream()
-				.mapToInt(e -> ((CraftEnchantment)e).getHandle().getRarity().getWeight())
-				.sum();
-		if (a_rarity != b_rarity) {
-			return b_rarity - a_rarity;
-		}
-
+		
 		final var a_sorted = ae
 				.entrySet()
 				.stream()
@@ -283,7 +274,7 @@ public class ItemUtil {
 	}
 
 	/**
-	 * Returns true if the given component is guared by the given sentinel.
+	 * Returns true if the given component is guarded by the given sentinel.
 	 */
 	public static boolean has_sentinel(final Component component, final NamespacedKey sentiel) {
 		if (component == null) {
@@ -334,7 +325,7 @@ public class ItemUtil {
 				key = key.substring(0, level_delim);
 			}
 
-			final var ench = org.bukkit.Registry.ENCHANTMENT.get(NamespacedKey.fromString(key));
+			final var ench = RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT).get(NamespacedKey.fromString(key));
 			if (ench == null) {
 				throw new IllegalArgumentException(
 						"Cannot apply unknown enchantment '" + key + "' to item '" + item_stack + "'");
@@ -359,7 +350,7 @@ public class ItemUtil {
 	 * material.
 	 */
 	public static @NotNull Pair<ItemStack, Boolean> itemstack_from_string(String definition) {
-		// namespace:key[{nbtdata}][#enchants{}], where the key can reference a
+		// namespace:key[[components]][#enchants{}], where the key can reference a
 		// material, head material or customitem.
 		final var enchants_delim = definition.indexOf("#enchants{");
 		String enchants = null;
@@ -368,7 +359,7 @@ public class ItemUtil {
 			definition = definition.substring(0, enchants_delim);
 		}
 
-		final var nbt_delim = definition.indexOf('{');
+		final var nbt_delim = definition.indexOf('[');
 		NamespacedKey key;
 		if (nbt_delim == -1) {
 			key = NamespacedKey.fromString(definition);
@@ -381,7 +372,7 @@ public class ItemUtil {
 			throw new IllegalArgumentException("Invalid extended material definition: " + definition);
 		}
 
-		// First create the itemstack as if we had no NBT information.
+		// First, create the itemstack as if we had no NBT information.
 		final var item_stack = emat.item();
 
 		// If there is no NBT information, we can return here.
@@ -393,12 +384,12 @@ public class ItemUtil {
 		// of whatever the extended material gave us.
 		final var vanilla_definition = item_stack.getType().key() + definition.substring(nbt_delim);
 		try {
-			final var parsed_nbt = ItemParser
-					.parseForItem(BuiltInRegistries.ITEM.asLookup(), new StringReader(vanilla_definition)).nbt();
-			final var inherent_nbt = CraftItemStack.asNMSCopy(item_stack).getOrCreateTag();
+			final var parsed_nbt = new ItemParser(Commands.createValidationContext(MinecraftServer.getDefaultRegistryAccess())).parse(new StringReader(vanilla_definition)).components();
+
 			// Now apply the NBT be parsed by minecraft's internal parser to the itemstack.
 			final var nms_item = item_handle(item_stack).copy();
-			nms_item.setTag(inherent_nbt.merge(parsed_nbt));
+			nms_item.applyComponents(parsed_nbt);
+
 			return Pair.of(apply_enchants(CraftItemStack.asCraftMirror(nms_item), enchants), false);
 		} catch (final CommandSyntaxException e) {
 			throw new IllegalArgumentException("Could not parse NBT of item definition: " + definition, e);

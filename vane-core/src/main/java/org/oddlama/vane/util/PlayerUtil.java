@@ -46,7 +46,7 @@ public class PlayerUtil {
 	}
 
 	// ItemStack amounts are discarded, only the mapped value counts.
-	// CAUTION: There must no be duplicate item keys that could stack.
+	// CAUTION: There must not be duplicate item keys that could stack.
 	public static boolean has_items(final Player player, final Map<ItemStack, Integer> items) {
 		if (player.getGameMode() == GameMode.CREATIVE) {
 			return true;
@@ -139,7 +139,7 @@ public class PlayerUtil {
 	}
 
 	public static boolean till_block(final Player player, final Block block) {
-		// Create block break event for block to till and check if it gets cancelled
+		// Create block break event for block to till and check if it gets canceled
 		final var break_event = new BlockBreakEvent(block, player);
 		Bukkit.getPluginManager().callEvent(break_event);
 		if (break_event.isCancelled()) {
@@ -160,7 +160,7 @@ public class PlayerUtil {
 			final Block block,
 			final Material plant_type,
 			final Material seed_type) {
-		// Create block place event for seed to place and check if it gets cancelled
+		// Create block place event for seed to place and check if it gets canceled
 		final var below = block.getRelative(BlockFace.DOWN);
 		final var place_event = new BlockPlaceEvent(
 				block,
@@ -235,14 +235,14 @@ public class PlayerUtil {
 			return false;
 		}
 
-		// Create block break event for block to harvest and check if it gets cancelled
+		// Create a block break event for block to harvest and check if it gets canceled
 		final var break_event = new BlockBreakEvent(block, player);
 		Bukkit.getPluginManager().callEvent(break_event);
 		if (break_event.isCancelled()) {
 			return false;
 		}
 
-		// Simply reset crop state
+		// Reset crop state
 		ageable.setAge(0);
 		block.setBlockData(ageable);
 

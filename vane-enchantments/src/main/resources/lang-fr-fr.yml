@@ -12,9 +12,9 @@
 
 # DO NOT CHANGE! The version of this language file. Used to determine
 # if the file needs to be updated.
-version: 4
+version: 5
 # The corresponding language code used in resource packs. Used for
-# resource pack generation. Typically this is a combination of the
+# resource pack generation. Typically, this is a combination of the
 # language code (ISO 639) and the country code (ISO 3166).
 resource_pack_lang_code: 'fr_fr'
 
@@ -48,21 +48,20 @@ enchantment_hell_bent:
 enchantment_leafchopper:
   name: "Taille-feuille"
 
-# FIXME: translation missing
 enchantment_lightning:
-  name: "Lightning"
+  name: "Foudre"
 
 enchantment_rake:
-  name: "Rateau"
+  name: "Râteau"
 
 enchantment_seeding:
   name: "Semences"
 
 enchantment_soulbound:
   name: "Lié à l'âme"
-  drop_lock_warning: "Soulbound Items can only be dropped using mouse"
-  drop_cooldown: "Drop again to confirm drop"
-  dropped_notification: "Soulbound Item Dropped: %1$s"
+  drop_lock_warning: "Les objets liés à l'âme ne peuvent être jetés qu'avec la souris"
+  drop_cooldown: "Jetez encore pour confirmer"
+  dropped_notification: "Objet lié à l'âme jeté : %1$s"
 
 enchantment_take_off:
   name: "Décollage"

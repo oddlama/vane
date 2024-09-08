@@ -1,16 +1,28 @@
 package org.oddlama.vane.permissions.commands;
 
+import static com.mojang.brigadier.Command.SINGLE_SUCCESS;
+import static io.papermc.paper.command.brigadier.Commands.argument;
+import static io.papermc.paper.command.brigadier.Commands.literal;
+
 import java.util.Collections;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionDefault;
 import org.oddlama.vane.annotation.command.Aliases;
 import org.oddlama.vane.annotation.command.Name;
 import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.core.command.Command;
+import org.oddlama.vane.core.command.argumentType.OfflinePlayerArgumentType;
 import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.permissions.Permissions;
+import org.oddlama.vane.permissions.argumentTypes.PermissionGroupArgumentType;
+
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
+
+import io.papermc.paper.command.brigadier.CommandSourceStack;
 
 @Name("permission")
 @Aliases({ "perm" })
@@ -57,55 +69,59 @@ public class Permission extends Command<Permissions> {
 
 	public Permission(Context<Permissions> context) {
 		super(context);
-		// Add help
-		params().fixed("help").ignore_case().exec(this::print_help);
+	}
 
-		// Command parameters
-		var list = params().fixed("list").ignore_case();
+	@Override
+	public LiteralArgumentBuilder<CommandSourceStack> get_command_base() {
+		return super.get_command_base()
+			.then(help())
 
-		// list groups
-		var groups = list.fixed("groups").ignore_case();
-		groups.exec(this::list_groups);
-		groups.choose_any_player().exec(this::list_groups_for_player);
-
-		// list permissions
-		var permissions = list.fixed("permissions").ignore_case();
-		permissions.exec(this::list_permissions);
-		permissions.choose_any_player().exec(this::list_permissions_for_player);
-		permissions
-			.choice(
-				"permission_group",
-				sender -> get_module().permission_groups.keySet(),
-				(sender, g) -> g,
-				(sender, str) -> get_module().permission_groups.containsKey(str) ? str : null
+			.then(literal("list")
+				.then(literal("groups")
+					.executes(ctx -> {list_groups(ctx.getSource().getSender()); return SINGLE_SUCCESS;})
+					.then(argument("offline_player", OfflinePlayerArgumentType.offlinePlayer())
+						.executes(ctx -> {list_groups_for_player(sender(ctx), offline_player(ctx)); return SINGLE_SUCCESS;})
+						)
+					)
+				.then(literal("permissions")
+					// FIXME weirdly autocompletion works in the console but not in game ??
+					.then(argument("permission_group", PermissionGroupArgumentType.permissionGroup(get_module().permission_groups))
+						.executes(ctx -> {list_permissions_for_group(ctx.getSource().getSender(), permission_group(ctx)); return SINGLE_SUCCESS;})
+					)
+					.then(argument("offline_player", OfflinePlayerArgumentType.offlinePlayer())
+						.executes(ctx -> {list_permissions_for_player(ctx.getSource().getSender(), offline_player(ctx)); return SINGLE_SUCCESS;})
+					)
+					.executes(ctx -> {list_permissions(ctx.getSource().getSender()); return SINGLE_SUCCESS;})
+				)
 			)
-			.exec(this::list_permissions_for_group);
 
-		// add group to player
-		params()
-			.fixed("add")
-			.ignore_case()
-			.choose_any_player()
-			.choice(
-				"permission_group",
-				sender -> get_module().permission_groups.keySet(),
-				(sender, g) -> g,
-				(sender, str) -> get_module().permission_groups.containsKey(str) ? str : null
+			.then(literal("add")
+				.then(argument("offline_player", OfflinePlayerArgumentType.offlinePlayer())
+					.then(argument("permission_group", PermissionGroupArgumentType.permissionGroup(get_module().permission_groups))
+						.executes(ctx -> {add_player_to_group(ctx.getSource().getSender(), offline_player(ctx), permission_group(ctx)); return SINGLE_SUCCESS;})
+					)
+				)
 			)
-			.exec(this::add_player_to_group);
+			.then(literal("remove")
+				.then(argument("offline_player", OfflinePlayerArgumentType.offlinePlayer())
+					.then(argument("permission_group", PermissionGroupArgumentType.permissionGroup(get_module().permission_groups))
+						.executes(ctx -> {remove_player_from_group(ctx.getSource().getSender(), offline_player(ctx), permission_group(ctx)); return SINGLE_SUCCESS;})
+					)
+				)
+			)
+			;
+	}
 
-		// remove group from player
-		params()
-			.fixed("remove")
-			.ignore_case()
-			.choose_any_player()
-			.choice(
-				"permission_group",
-				sender -> get_module().permission_groups.keySet(),
-				(sender, g) -> g,
-				(sender, str) -> get_module().permission_groups.containsKey(str) ? str : null
-			)
-			.exec(this::remove_player_from_group);
+	private String permission_group(CommandContext<CommandSourceStack> ctx){
+		return ctx.getArgument("permission_group", String.class);
+	}
+
+	private Player sender(CommandContext<CommandSourceStack> ctx){
+		return (Player) ctx.getSource().getSender();
+	}
+
+	private OfflinePlayer offline_player(CommandContext<CommandSourceStack> ctx){
+		return ctx.getArgument("offline_player", OfflinePlayer.class);
 	}
 
 	private String permission_default_value_color_code(PermissionDefault def) {

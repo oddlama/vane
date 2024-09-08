@@ -1,8 +1,8 @@
 package org.oddlama.vane.enchantments.enchantments;
 
+import static org.oddlama.vane.util.Conversions.ms_to_ticks;
 import static org.oddlama.vane.util.ItemUtil.damage_item;
 import static org.oddlama.vane.util.PlayerUtil.apply_elytra_boost;
-import static org.oddlama.vane.util.Conversions.ms_to_ticks;
 
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -12,10 +12,8 @@ import org.bukkit.Particle;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.loot.LootTables;
 import org.bukkit.util.Vector;
-import org.jetbrains.annotations.NotNull;
 import org.oddlama.vane.annotation.config.ConfigDoubleList;
 import org.oddlama.vane.annotation.config.ConfigIntList;
 import org.oddlama.vane.annotation.enchantment.Rarity;
@@ -24,8 +22,8 @@ import org.oddlama.vane.core.config.loot.LootDefinition;
 import org.oddlama.vane.core.config.loot.LootTableList;
 import org.oddlama.vane.core.config.recipes.RecipeList;
 import org.oddlama.vane.core.config.recipes.ShapedRecipeDefinition;
-import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.enchantments.CustomEnchantment;
+import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.enchantments.Enchantments;
 
 @VaneEnchantment(name = "wings", max_level = 4, rarity = Rarity.RARE, treasure = true, allow_custom = true)
@@ -74,11 +72,6 @@ public class Wings extends CustomEnchantment<Enchantments> {
 				.in(LootTables.BASTION_TREASURE)
 				.add(1.0 / 10, 1, 1, on("vane_enchantments:enchanted_ancient_tome_of_knowledge"))
 			);
-	}
-
-	@Override
-	public boolean can_enchant(@NotNull ItemStack item_stack) {
-		return item_stack.getType() == Material.ELYTRA;
 	}
 
 	private int get_boost_cooldown(int level) {
@@ -130,7 +123,7 @@ public class Wings extends CustomEnchantment<Enchantments> {
 			loc
 				.getWorld()
 				.spawnParticle(
-					Particle.FIREWORKS_SPARK,
+					Particle.FIREWORK,
 					loc.add(rnd),
 					0,
 					dir.getX(),

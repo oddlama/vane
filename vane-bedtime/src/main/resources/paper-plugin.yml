@@ -1,0 +1,23 @@
+name: ${name}
+version: ${version}
+description: Bedtime module for vane
+
+authors:
+  - oddlama
+website: 'https://github.com/oddlama/vane'
+
+main: org.oddlama.vane.bedtime.Bedtime
+
+api-version: '1.21'
+load: STARTUP
+dependencies:
+  server:
+    vane-core:
+      required: true
+      load: BEFORE
+    dynmap:
+      required: false
+      load: AFTER
+    BlueMap:
+      required: false
+      load: AFTER

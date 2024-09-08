@@ -9,11 +9,11 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * An abstract short-lived container to manage door states.
- * All state is assumed from the bottom half, relies on Minecraft to restore bad block states.
+ * All states are assumed from the bottom half, rely on Minecraft to restore bad block states.
  */
 public class SingleDoor {
 
-	private final Block lower_block; // Must be lower block
+	private final Block lower_block; // Must be the lower block
 	private Door lower;
 	private Door upper;
 
@@ -28,7 +28,8 @@ public class SingleDoor {
 	}
 
 	/**
-	 * Factory method for creating SingleDoors. validates that the block is a door, and has a 2nd half.
+	 * Factory method for creating SingleDoors.
+	 * Validates that the block is a door, and has a 2nd half.
 	 * Accepts either top or bottom blocks, generally from an interaction event.
 	 * Will fail and return null if block is not a door, or not a complete door.
 	 * @param originBlock any block to create a SingleDoor instance from.
@@ -36,7 +37,7 @@ public class SingleDoor {
 	 */
 	@Nullable
 	public static SingleDoor create_door_from_block(final Block originBlock) {
-		// if half is null, door was not valid.
+		// if half is null, a door was not valid.
 		if (!validate_single_door(originBlock)) {
 			return null;
 		}
@@ -62,12 +63,12 @@ public class SingleDoor {
 
 		final var other_half = other_vertical_half(originBlock);
 
-		// other half must be door.
+		// another half must be door.
 		if (!is_door(other_half)) {
 			return false;
 		}
 
-		// door components must be a matching pair, e.g. top and bottom.
+		// door components must be a matching pair, e.g., top and bottom.
 		return door_vertical_halves_match(originBlock, other_half);
 	}
 
@@ -148,18 +149,18 @@ public class SingleDoor {
 		// ------
 		// in this instance, the door is facing 'south' with the hinge in the NW corner.
 		//
-		// It's hinge is 'right' as it is facing south.
+		// Its hinge is 'right' as it is facing south.
 		// It is currently 'closed'.
 		//
-		// The 'open' door is strange. it retains all properties, except it's now open.
+		// The 'open' door is strange. It retains all properties, except it's now open.
 		//
-		// O----- // X = door hitbox
-		// X    | // o = door hinge.
-		// X    | // (the rest is empty)
+		// O----- // X = door hit box
+		// X | // o = door hinge.
+		// X | // (the rest is empty)
 		// X-----
 		// in this instance, the door is *STILL* facing 'south' with the hinge in the NW corner.
 		//
-		// It's hinge is *still* 'right' and it is defined as facing south, even though it has rotated.
+		// Its hinge is *still* 'right' and it is defined as facing south, even though it has rotated.
 		//
 		// # Double Doors (built by a player facing north)
 		//        1      2
@@ -186,8 +187,8 @@ public class SingleDoor {
 		//
 		// Players often employ a trick when constructing doors.
 		// Mobs will only navigate through open doors and will treat closed doors as unpassable.
-		// It is possible to construct doors that confuse mobs, (and us) to have doors that mob's won't break.
-		// or ever pass through.
+		// It is possible to construct doors that confuse mobs (and us) to have doors that mobs won't break.
+		// Or ever pass through.
 		//
 		// ## 'closed' (but open to the player).
 		//        1      2
@@ -216,7 +217,7 @@ public class SingleDoor {
 
 		// Because of this, it is possible to construct a set of double doors, and a door can simultaneously
 		// belong to 2 different door sets, a 'hacked' door-set, and a normal door-set.
-		// trying to account for this would end up with a cellular automata of updates, so instead we prioritize
+		// Trying to account for this would end up with a cellular automata of updates, so instead we prioritize
 		// opening over closing.
 
 		var normal_door = find_other_door(false);
@@ -251,11 +252,11 @@ public class SingleDoor {
 		// heights must match
 		if (potential_other_door_state.getHalf() != lower.getHalf()) return null;
 
-		// door states must match, or else the door shouldn't be flapped.
+		// Door states must match, or else the door shouldn't be flapped.
 		// This works for hacked doors, and normal doors, but not franken-doors (half-half)
 		if (potential_other_door_state.isOpen() != lower.isOpen()) return null;
 
-		// Other door must agree that our door is its partner!
+		// Another door must agree that our door is its partner!
 		final var other_pointing = other_door_direction(potential_other_door_state, hacked);
 
 		var should_be_us = potentialOtherDoor.getRelative(other_pointing);
@@ -269,14 +270,14 @@ public class SingleDoor {
 	}
 
 	private BlockFace other_door_direction(Door our_door, boolean hacked) {
-		// So, in order to find a door, we simply trace the way the door is pointing.
+		// So, to find a door, we simply trace the way the door is pointing.
 		// We can safely ignore opened status, since it relies upon their closed state, even for hacked doors.
 		final var blank_part_when_closed = our_door.getFacing();
 		// hacked doors always face their partner.
 		if (hacked) return our_door.getFacing();
 
-		// closed doors point towards other door depending on the hinge.
-		// this is still true for open doors, since the blockstate is based on the closed state.
+		// closed doors point towards another door depending on the hinge.
+		// this is still true for open doors, since the block state is based on the closed state.
 		return switch (our_door.getHinge()) {
 			case LEFT -> rotateCW(blank_part_when_closed);
 			case RIGHT -> rotateCCW(blank_part_when_closed);

@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -103,7 +104,7 @@ public abstract class VaneProxyPlugin {
 	}
 
 	public void try_start_server(ManagedServer server) {
-		// FIXME: this is not async-safe and there might be conditions where two start commands can be executed 
+		// FIXME: this is not async-safe and there might be conditions where two start commands can be executed
 		// simultaneously. Don't rely on this as a user - instead use a start command that is atomic.
 		if (server_starting) return;
 
@@ -113,10 +114,13 @@ public abstract class VaneProxyPlugin {
 						() -> {
 							try {
 								server_starting = true;
-								get_logger().log(Level.INFO, "Running start command for server " + server.id());
-								System.out.println("run start cmd for " + server.id()  + ": " + server.start_cmd());
+								get_logger().log(Level.INFO, "Running start command for server '" + server.id() + "': " + Arrays.toString(server.start_cmd()));
 								final var timeout = server.command_timeout();
-								final var process = Runtime.getRuntime().exec(server.start_cmd());
+
+								final var processBuilder = new ProcessBuilder(server.start_cmd());
+								processBuilder.redirectOutput(ProcessBuilder.Redirect.INHERIT);
+								processBuilder.redirectError(ProcessBuilder.Redirect.INHERIT);
+								final var process = processBuilder.start();
 
 								if (!process.waitFor(timeout, TimeUnit.SECONDS)) {
 									get_logger().log(
@@ -124,7 +128,9 @@ public abstract class VaneProxyPlugin {
 											"Server '"
 													+ server.id()
 													+ "'s start command timed out!");
-								} else if (process.exitValue() != 0) {
+								}
+
+								if (process.exitValue() != 0) {
 									get_logger().log(
 											Level.SEVERE,
 											"Server '"
@@ -144,7 +150,7 @@ public abstract class VaneProxyPlugin {
 	public boolean can_join_maintenance(UUID uuid) {
 		if (maintenance.enabled()) {
 			// Client is connecting while maintenance is on
-			// Players with bypass_maintenance flag may join
+			// Players with a bypass_maintenance flag may join
 			return this.server.has_permission(uuid, "vane_proxy.bypass_maintenance");
 		}
 

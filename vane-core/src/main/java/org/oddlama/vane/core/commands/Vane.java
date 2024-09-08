@@ -1,5 +1,9 @@
 package org.oddlama.vane.core.commands;
 
+import static com.mojang.brigadier.Command.SINGLE_SUCCESS;
+import static io.papermc.paper.command.brigadier.Commands.argument;
+import static io.papermc.paper.command.brigadier.Commands.literal;
+
 import java.util.Random;
 
 import org.bukkit.command.CommandSender;
@@ -10,9 +14,14 @@ import org.oddlama.vane.annotation.command.Name;
 import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.core.Core;
 import org.oddlama.vane.core.command.Command;
+import org.oddlama.vane.core.command.argumentType.ModuleArgumentType;
 import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.Module;
+
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+
+import io.papermc.paper.command.brigadier.CommandSourceStack;
 
 @Name("vane")
 public class Vane extends Command<Core> {
@@ -31,16 +40,20 @@ public class Vane extends Command<Core> {
 
 	public Vane(Context<Core> context) {
 		super(context);
-		// Add help
-		params().fixed("help").ignore_case().exec(this::print_help);
+	}
 
-		// Command parameters
-		var reload = params().fixed("reload").ignore_case();
-		reload.exec(this::reload_all);
-		reload.choose_module().exec(this::reload_module);
+	@Override
+	public LiteralArgumentBuilder<CommandSourceStack> get_command_base() {
+		return super.get_command_base()
+			.then(help())
 
-		params().fixed("generate_resource_pack").ignore_case().exec(this::generate_resource_pack);
-		params().fixed("test_do_not_use_if_you_are_not_a_dev").ignore_case().exec(this::test);
+			.then(literal("reload").executes(ctx -> { reload_all(ctx.getSource().getSender()); return SINGLE_SUCCESS;})
+				.then(argument("module", ModuleArgumentType.module(get_module()))
+					.executes(ctx -> { reload_module(ctx.getSource().getSender(), ctx.getArgument("module", Module.class)); return SINGLE_SUCCESS;})
+				)
+			)
+			.then(literal("generate_resource_pack").executes(ctx -> { generate_resource_pack(ctx.getSource().getSender()); return SINGLE_SUCCESS; }))
+			.then(literal("test_do_not_use_if_you_are_not_a_dev").executes(ctx -> { test(ctx.getSource().getSender()); return SINGLE_SUCCESS; }));
 	}
 
 	private void reload_module(CommandSender sender, Module<?> module) {

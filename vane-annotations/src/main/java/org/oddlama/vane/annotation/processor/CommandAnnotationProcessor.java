@@ -20,7 +20,7 @@ import org.oddlama.vane.annotation.command.Name;
 		"org.oddlama.vane.annotation.command.VaneCommand",
 	}
 )
-@SupportedSourceVersion(SourceVersion.RELEASE_17)
+@SupportedSourceVersion(SourceVersion.RELEASE_21)
 public class CommandAnnotationProcessor extends AbstractProcessor {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })

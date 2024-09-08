@@ -1,5 +1,7 @@
 package org.oddlama.vane.core.command;
 
+import static com.mojang.brigadier.Command.SINGLE_SUCCESS;
+import static io.papermc.paper.command.brigadier.Commands.literal;
 import static org.oddlama.vane.util.ArrayUtil.prepend;
 
 import java.util.Collections;
@@ -18,6 +20,13 @@ import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.core.module.ModuleComponent;
+
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.tree.LiteralCommandNode;
+
+import io.papermc.paper.command.brigadier.CommandSourceStack;
+import io.papermc.paper.command.brigadier.Commands;
 
 @VaneCommand
 public abstract class Command<T extends Module<T>> extends ModuleComponent<T> {
@@ -46,19 +55,21 @@ public abstract class Command<T extends Module<T>> extends ModuleComponent<T> {
 
 		@Override
 		public boolean execute(CommandSender sender, String alias, String[] args) {
-			// Pre check permission
+			System.out.println("exec " + alias + " from " + sender);
+			// Pre-check permission
 			if (!sender.hasPermission(Command.this.permission)) {
 				get_module().core.lang_command_permission_denied.send(sender);
+				System.out.println("no perms!");
 				return true;
 			}
 
-			// Ambigous matches will always execute the
+			// Ambiguous matches will always execute the
 			// first chain based on definition order.
 			try {
 				return root_param.check_accept(sender, prepend(args, alias), 0).apply(Command.this, sender);
 			} catch (Exception e) {
 				sender.sendMessage(
-					"§cAn unexpected error occurred. Please examine the console log and/or notify a server administator."
+					"§cAn unexpected error occurred. Please examine the console log and/or notify a server administrator."
 				);
 				throw e;
 			}
@@ -76,7 +87,7 @@ public abstract class Command<T extends Module<T>> extends ModuleComponent<T> {
 				return root_param.build_completions(sender, prepend(args, alias), 0);
 			} catch (Exception e) {
 				sender.sendMessage(
-					"§cAn unexpected error occurred. Please examine the console log and/or notify a server administator."
+					"§cAn unexpected error occurred. Please examine the console log and/or notify a server administrator."
 				);
 				throw e;
 			}
@@ -100,6 +111,9 @@ public abstract class Command<T extends Module<T>> extends ModuleComponent<T> {
 
 	// Root parameter
 	private AnyParam<String> root_param;
+
+	private LiteralArgumentBuilder<CommandSourceStack> brigadier_command;
+	private Aliases aliases;
 
 	public Command(Context<T> context) {
 		this(context, PermissionDefault.OP);
@@ -133,7 +147,9 @@ public abstract class Command<T extends Module<T>> extends ModuleComponent<T> {
 		bukkit_command.setLabel(name);
 		bukkit_command.setName(name);
 
-		var aliases = getClass().getAnnotation(Aliases.class);
+
+		aliases = getClass().getAnnotation(Aliases.class);
+		brigadier_command = Commands.literal(name);
 		if (aliases != null) {
 			bukkit_command.setAliases(List.of(aliases.value()));
 		}
@@ -159,6 +175,27 @@ public abstract class Command<T extends Module<T>> extends ModuleComponent<T> {
 		return root_param;
 	}
 
+	public LiteralArgumentBuilder<CommandSourceStack> get_command_base() {
+		return brigadier_command;
+	}
+
+	public LiteralCommandNode<CommandSourceStack> get_command() {
+		var cmd = get_command_base();
+		var old_requirement = cmd.getRequirement();
+		return cmd
+			.requires(stack -> stack.getSender().hasPermission(permission) && old_requirement.test(stack))
+			.build();
+	}
+
+	public List<String> get_aliases() {
+		if (aliases != null && aliases.value().length > 0) {
+			return List.of(aliases.value());
+		} else {
+			return Collections.emptyList();
+		}
+
+	}
+
 	@Override
 	protected void on_enable() {
 		get_module().register_command(this);
@@ -173,4 +210,15 @@ public abstract class Command<T extends Module<T>> extends ModuleComponent<T> {
 		lang_usage.send(sender, "§7/§3" + name);
 		lang_help.send(sender);
 	}
+
+	public int print_help2(CommandContext<CommandSourceStack> ctx) {
+		lang_usage.send(ctx.getSource().getSender(), "§7/§3" + name);
+		lang_help.send(ctx.getSource().getSender());
+		return com.mojang.brigadier.Command.SINGLE_SUCCESS;
+	}
+
+	public LiteralArgumentBuilder<CommandSourceStack> help(){
+		return literal("help").executes(ctx -> {print_help2(ctx); return SINGLE_SUCCESS;});
+	}
+
 }

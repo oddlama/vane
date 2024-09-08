@@ -116,7 +116,7 @@ public class Soulbound extends CustomEnchantment<Enchantments> {
 		) {
 			boolean too_slow = drop_cooldown.peek_cooldown(event.getCursor().getItemMeta());
 			if (too_slow) {
-				// Dropped too slow, refresh and cancel
+				// Dropped too slowly, refresh and cancel
 				final ItemMeta meta = event.getCursor().getItemMeta();
 				drop_cooldown.check_or_update_cooldown(meta);
 				event.getCursor().setItemMeta(meta);
@@ -130,9 +130,9 @@ public class Soulbound extends CustomEnchantment<Enchantments> {
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void on_player_drop_item(final PlayerDropItemEvent event) {
-		// Soulbound items cannot be dropped by a player.
+		// A player cannot drop soulbound items.
 		// Prevents yeeting your best sword out of existence.
-		// (It's okay to put them into chests)
+		// (It's okay to put them into chests.)
 		final var dropped_item = event.getItemDrop().getItemStack();
 		if (is_soulbound(dropped_item)) {
 			boolean too_slow = drop_cooldown.peek_cooldown(dropped_item.getItemMeta());
@@ -152,7 +152,7 @@ public class Soulbound extends CustomEnchantment<Enchantments> {
 					event.getItemDrop().getItemStack().displayName()
 				);
 			} else {
-				// Inventory is full (e.g. when exiting crafting table with soulbound item in it)
+				// Inventory is full (e.g., when exiting crafting table with soulbound item in it)
 				// so we drop the first non-soulbound item (if any) instead.
 				final var it = inventory.iterator();
 				ItemStack non_soulbound_item = null;
@@ -169,7 +169,7 @@ public class Soulbound extends CustomEnchantment<Enchantments> {
 
 				if (non_soulbound_item == null) {
 					// We can't prevent dropping a soulbound item.
-					// Well that sucks.
+					// Well, that sucks.
 					return;
 				}
 

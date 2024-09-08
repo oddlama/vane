@@ -14,7 +14,7 @@
 # if the file needs to be updated.
 version: 3
 # The corresponding language code used in resource packs. Used for
-# resource pack generation. Typically this is a combination of the
+# resource pack generation. Typically, this is a combination of the
 # language code (ISO 639) and the country code (ISO 3166).
 resource_pack_lang_code: 'tr_tr'
 
@@ -411,7 +411,7 @@ menus:
         - "§7yeniden atanacaktır. Liste yalnızca bu role henüz"
         - "§7atanmamış oyuncuları gösterecektir."
         - "§bOyuncu kaldırma§7 menüsünü kullanarak oyuncuları kaldırabilirsiniz."
-    # This item is used to open the player removing menu for a role.
+    # This item is used to open the player removing a menu for a role.
     remove_player:
       name: "§b§lOyuncuları Kaldır"
       lore:

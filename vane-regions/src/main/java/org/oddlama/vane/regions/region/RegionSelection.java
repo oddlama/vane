@@ -73,12 +73,12 @@ public class RegionSelection {
 	}
 
 	public boolean is_valid(final Player player) {
-		// Both blocks set
+		// Both block sets
 		if (primary == null || secondary == null) {
 			return false;
 		}
 
-		// Worlds match
+		// World match
 		if (!primary.getWorld().equals(secondary.getWorld())) {
 			return false;
 		}

@@ -3,7 +3,7 @@ package org.oddlama.vane.core.item.api;
 public enum InhibitBehavior {
 	/**
 	 * Prevents the item from being used as an ingredient in
-	 * any (recognized) vanilla crafting recipe, i.e. recipe in the "minecraft" namespace.
+	 * any (recognized) vanilla crafting recipe, i.e., recipe in the "minecraft" namespace.
 	 */
 	USE_IN_VANILLA_RECIPE,
 	/**
@@ -21,4 +21,6 @@ public enum InhibitBehavior {
 	MEND,
 	/** Prevents players from adding new enchantments via the anvil. */
 	NEW_ENCHANTS,
+	/** Prevents dispensers from dispense this item */
+	DISPENSE
 }

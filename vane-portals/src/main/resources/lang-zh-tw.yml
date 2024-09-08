@@ -12,9 +12,9 @@
 
 # DO NOT CHANGE! The version of this language file. Used to determine
 # if the file needs to be updated.
-version: 5
+version: 6
 # The corresponding language code used in resource packs. Used for
-# resource pack generation. Typically this is a combination of the
+# resource pack generation. Typically, this is a combination of the
 # language code (ISO 639) and the country code (ISO 3166).
 resource_pack_lang_code: 'zh_tw'
 
@@ -100,19 +100,19 @@ menus:
     select_block_console_active_title: "選擇激活的 控制 方塊。"
     select_block_origin_active_title: "選擇激活的 起點 方塊。"
     select_block_portal_active_title: "選擇激活的 區域 方塊。"
-    select_block_boundardy_1_active_title: "選擇激活的邊界 1方塊。"
-    select_block_boundardy_2_active_title: "選擇激活的邊界 2方塊。"
-    select_block_boundardy_3_active_title: "選擇激活的邊界 3方塊。"
-    select_block_boundardy_4_active_title: "選擇激活的邊界 4方塊。"
-    select_block_boundardy_5_active_title: "選擇激活的邊界 5方塊。"
+    select_block_boundary_1_active_title: "選擇激活的邊界 1方塊。"
+    select_block_boundary_2_active_title: "選擇激活的邊界 2方塊。"
+    select_block_boundary_3_active_title: "選擇激活的邊界 3方塊。"
+    select_block_boundary_4_active_title: "選擇激活的邊界 4方塊。"
+    select_block_boundary_5_active_title: "選擇激活的邊界 5方塊。"
     select_block_console_inactive_title: "選擇未啟用的控制台方塊。"
     select_block_origin_inactive_title: "選擇未啟用的原點方塊。"
     select_block_portal_inactive_title: "選擇未啟用的傳送門區域方塊。"
-    select_block_boundardy_1_inactive_title: "選擇未啟用的 邊界 1 方塊。"
-    select_block_boundardy_2_inactive_title: "選擇未啟用的 邊界 2 方塊。"
-    select_block_boundardy_3_inactive_title: "選擇未啟用的 邊界 3 方塊。"
-    select_block_boundardy_4_inactive_title: "選擇未啟用的 邊界 4 方塊。"
-    select_block_boundardy_5_inactive_title: "選擇未啟用的 邊界 5 方塊。"
+    select_block_boundary_1_inactive_title: "選擇未啟用的 邊界 1 方塊。"
+    select_block_boundary_2_inactive_title: "選擇未啟用的 邊界 2 方塊。"
+    select_block_boundary_3_inactive_title: "選擇未啟用的 邊界 3 方塊。"
+    select_block_boundary_4_inactive_title: "選擇未啟用的 邊界 4 方塊。"
+    select_block_boundary_5_inactive_title: "選擇未啟用的 邊界 5 方塊。"
 
 
     block_console_active:
@@ -124,19 +124,19 @@ menus:
     block_portal_active:
       name: "§b§l傳送門區域 §a(啟用中)"
       lore: []
-    block_boundardy_1_active:
+    block_boundary_1_active:
       name: "§b§l邊界 §a(啟用中)"
       lore: ["", "§a變體 1", "§7建造材料: %1$s"]
-    block_boundardy_2_active:
+    block_boundary_2_active:
       name: "§b§l邊界 §a(啟用中)"
       lore: ["", "§a變體 2", "§7建造材料: %1$s"]
-    block_boundardy_3_active:
+    block_boundary_3_active:
       name: "§b§l邊界 §a(啟用中)"
       lore: ["", "§a變體 3", "§7建造材料: %1$s"]
-    block_boundardy_4_active:
+    block_boundary_4_active:
       name: "§b§l邊界 §a(啟用中)"
       lore: ["", "§a變體 4", "§7建造材料: %1$s"]
-    block_boundardy_5_active:
+    block_boundary_5_active:
       name: "§b§l邊界 §a(啟用中)"
       lore: ["", "§a變體 5", "§7建造材料: %1$s"]
     block_console_inactive:
@@ -148,19 +148,19 @@ menus:
     block_portal_inactive:
       name: "§b§l傳送門區域 §e(未啟用)"
       lore: []
-    block_boundardy_1_inactive:
+    block_boundary_1_inactive:
       name: "§b§l邊界 §e(未啟用)"
       lore: ["", "§a變體 1", "§7建造材料：%1$s"]
-    block_boundardy_2_inactive:
+    block_boundary_2_inactive:
       name: "§b§l邊界 §e(未啟用)"
       lore: ["", "§a變體 2", "§7建造材料：%1$s"]
-    block_boundardy_3_inactive:
+    block_boundary_3_inactive:
       name: "§b§l邊界 §e(未啟用)"
       lore: ["", "§a變體 3", "§7建造材料：%1$s"]
-    block_boundardy_4_inactive:
+    block_boundary_4_inactive:
       name: "§b§l邊界 §e(未啟用)"
       lore: ["", "§a變體 4", "§7建造材料：%1$s"]
-    block_boundardy_5_inactive:
+    block_boundary_5_inactive:
       name: "§b§l邊界 §e(未啟用)"
       lore: ["", "§a變體 5", "§7建造材料：%1$s"]
     accept:

@@ -8,11 +8,12 @@ import org.oddlama.vane.proxycore.config.IVaneProxyServerInfo;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.UUID;
 import java.util.logging.Level;
 
 import static org.oddlama.vane.proxycore.Util.add_uuid;
-import static org.oddlama.vane.util.Resolve.resolve_uuid;
+import static org.oddlama.vane.proxycore.util.Resolve.resolve_uuid;
 
 public abstract class PreLoginEvent implements ProxyEvent, ProxyCancellableEvent {
 
@@ -45,7 +46,7 @@ public abstract class PreLoginEvent implements ProxyEvent, ProxyCancellableEvent
 
 		try {
 			uuid = resolve_uuid(playerName);
-		} catch (IOException e) {
+		} catch (IOException | URISyntaxException e) {
 			plugin.get_logger().log(Level.WARNING, "Failed to resolve UUID for player '" + playerName + "'", e);
 			return;
 		}

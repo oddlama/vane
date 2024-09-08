@@ -26,7 +26,7 @@ public class RegionSelectionListener extends Listener<Regions> {
 
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = false)
 	public void on_player_interact(final PlayerInteractEvent event) {
-		// Require main hand event
+		// Require the main hand event
 		if (event.getHand() != EquipmentSlot.HAND) {
 			return;
 		}

@@ -1,5 +1,8 @@
 package org.oddlama.vane.permissions.commands;
 
+import static com.mojang.brigadier.Command.SINGLE_SUCCESS;
+import static io.papermc.paper.command.brigadier.Commands.argument;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -12,9 +15,14 @@ import org.oddlama.vane.annotation.config.ConfigString;
 import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.annotation.persistent.Persistent;
 import org.oddlama.vane.core.command.Command;
+import org.oddlama.vane.core.command.argumentType.OfflinePlayerArgumentType;
 import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.permissions.Permissions;
+
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+
+import io.papermc.paper.command.brigadier.CommandSourceStack;
 
 @Name("vouch")
 public class Vouch extends Command<Permissions> {
@@ -34,10 +42,15 @@ public class Vouch extends Command<Permissions> {
 
 	public Vouch(Context<Permissions> context) {
 		super(context);
-		// Add help
-		params().fixed("help").ignore_case().exec(this::print_help);
-		// Player vouch for player
-		params().choose_any_player().exec_player(this::vouch_for_player);
+	}
+
+	@Override
+	public LiteralArgumentBuilder<CommandSourceStack> get_command_base() {
+		return super.get_command_base()
+			.then(help())
+			.then(argument("offline_player", OfflinePlayerArgumentType.offlinePlayer())
+				.executes(ctx -> {vouch_for_player((Player) ctx.getSource().getSender(), ctx.getArgument("offline_player", OfflinePlayer.class)); return SINGLE_SUCCESS;})
+			);
 	}
 
 	private void vouch_for_player(final Player sender, final OfflinePlayer vouched_player) {

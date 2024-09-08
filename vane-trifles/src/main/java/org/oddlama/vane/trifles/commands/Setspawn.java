@@ -1,5 +1,8 @@
 package org.oddlama.vane.trifles.commands;
 
+import static com.mojang.brigadier.Command.SINGLE_SUCCESS;
+
+import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
@@ -9,16 +12,25 @@ import org.oddlama.vane.core.command.Command;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.util.StorageUtil;
 
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+
+import io.papermc.paper.command.brigadier.CommandSourceStack;
+
 @Name("setspawn")
 public class Setspawn extends Command<Trifles> {
 	public static final NamespacedKey IS_SPAWN_WORLD = StorageUtil.namespaced_key("vane", "is_spawn_world");
 
 	public Setspawn(Context<Trifles> context) {
 		super(context);
-		// Add help
-		params().fixed("help").ignore_case().exec(this::print_help);
-		// Command parameters
-		params().exec_player(this::set_spawn);
+	}
+
+	@Override
+	public LiteralArgumentBuilder<CommandSourceStack> get_command_base() {
+		return super.get_command_base()
+			.requires(ctx -> ctx.getSender() instanceof Player)
+			.then(help())
+			.executes(ctx -> {set_spawn((Player) ctx.getSource().getSender()); return SINGLE_SUCCESS;})
+		;
 	}
 
 	private void set_spawn(Player player) {
@@ -29,7 +41,7 @@ public class Setspawn extends Command<Trifles> {
 			world.getPersistentDataContainer().remove(IS_SPAWN_WORLD);
 		}
 
-		// Set spawn and mark as default world
+		// Set spawn and mark as the default world
 		final var world = player.getWorld();
 		world.setSpawnLocation(loc);
 		world.getPersistentDataContainer().set(IS_SPAWN_WORLD, PersistentDataType.INTEGER, 1);

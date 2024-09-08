@@ -76,7 +76,7 @@ public class PersistentStorageManager {
 		assert annotation != null;
 		final var atype = annotation.annotationType();
 
-		// Return correct wrapper object
+		// Return a correct wrapper object
 		if (atype.equals(Persistent.class)) {
 			return new PersistentField(owner, field, map_name);
 		} else {
@@ -149,7 +149,7 @@ public class PersistentStorageManager {
 		try {
 			for (final var f : persistent_fields) {
 				// If we have just initialized a new json object, we only load values that
-				// have defined keys (e.g. from initialization migrations)
+				// have defined keys (e.g., from initialization migrations)
 				if (version == 0 && !json.has(f.path())) {
 					continue;
 				}

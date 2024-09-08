@@ -2,11 +2,11 @@ package org.oddlama.vane.core.command;
 
 import static org.oddlama.vane.util.StorageUtil.namespaced_key;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+
 import org.bukkit.GameMode;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
@@ -36,6 +36,9 @@ import org.oddlama.vane.core.functional.Function4;
 import org.oddlama.vane.core.functional.Function5;
 import org.oddlama.vane.core.functional.Function6;
 import org.oddlama.vane.core.module.Module;
+
+import io.papermc.paper.registry.RegistryAccess;
+import io.papermc.paper.registry.RegistryKey;
 
 @SuppressWarnings("overloads")
 public interface Param {
@@ -292,14 +295,14 @@ public interface Param {
 		return choice(
 			"enchantment",
 			sender ->
-				org.bukkit.Registry.ENCHANTMENT.stream().filter(e -> filter.apply(sender, e)).collect(Collectors.toList()),
+				RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT).stream().filter(e -> filter.apply(sender, e)).collect(Collectors.toList()),
 			(sender, e) -> e.getKey().toString(),
 			(sender, str) -> {
 				var parts = str.split(":");
 				if (parts.length != 2) {
 					return null;
 				}
-				var e = org.bukkit.Registry.ENCHANTMENT.get(namespaced_key(parts[0], parts[1]));
+				var e = RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT).get(namespaced_key(parts[0], parts[1]));
 				if (!filter.apply(sender, e)) {
 					return null;
 				}
@@ -318,7 +321,7 @@ public interface Param {
 				.stream()
 				.map(p -> p.check_accept(sender, args, offset + 1)).toList();
 
-		// Return first executor result, if any
+		// Return the first executor result, if any
 		for (var r : results) {
 			if (r.good()) {
 				return r;

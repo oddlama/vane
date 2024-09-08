@@ -41,7 +41,7 @@ public class WrapperPlayServerChat extends AbstractPacket {
 	/**
 	 * Retrieve the chat message.
 	 * <p>
-	 * Limited to 32767 bytes
+	 * Limited to 32.767 bytes
 	 *
 	 * @return The current message
 	 */
@@ -69,7 +69,7 @@ public class WrapperPlayServerChat extends AbstractPacket {
 	/**
 	 * Retrieve Position.
 	 * <p>
-	 * Notes: 0 - Chat (chat box) ,1 - System Message (chat box), 2 - Above
+	 * Notes: 0 - Chat (chat box), 1 - System Message (chat box), 2 - Above
 	 * action bar
 	 *
 	 * @return The current Position

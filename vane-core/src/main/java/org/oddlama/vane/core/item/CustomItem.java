@@ -18,6 +18,7 @@ import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.core.resourcepack.ResourcePackGenerator;
 import org.oddlama.vane.util.StorageUtil;
 
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 
@@ -126,6 +127,13 @@ public class CustomItem<T extends Module<T>> extends Listener<T> implements org.
 		return LootTableList.of();
 	}
 
+	/**
+	 * Returns the type of item for the resource pack
+	 */
+	public Key itemType(){
+		return Key.key(Key.MINECRAFT_NAMESPACE, "item/generated");
+	}
+
 	@Override
 	public void addResources(final ResourcePackGenerator rp) throws IOException {
 		final var resource_name = "items/" + key().value() + ".png";
@@ -133,7 +141,7 @@ public class CustomItem<T extends Module<T>> extends Listener<T> implements org.
 		if (resource == null) {
 			throw new RuntimeException("Missing resource '" + resource_name + "'. This is a bug.");
 		}
-		rp.add_item_model(key(), resource);
+		rp.add_item_model(key(), resource, itemType());
 		rp.add_item_override(baseMaterial().getKey(), key(), predicate -> predicate.put("custom_model_data", customModelData()));
 	}
 }

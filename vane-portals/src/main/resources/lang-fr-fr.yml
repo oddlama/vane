@@ -12,9 +12,9 @@
 
 # DO NOT CHANGE! The version of this language file. Used to determine
 # if the file needs to be updated.
-version: 5
+version: 6
 # The corresponding language code used in resource packs. Used for
-# resource pack generation. Typically this is a combination of the
+# resource pack generation. Typically, this is a combination of the
 # language code (ISO 639) and the country code (ISO 3166).
 resource_pack_lang_code: 'fr_fr'
 
@@ -120,19 +120,19 @@ menus:
     select_block_console_active_title:       "Sélectionner le bloc de console actif."
     select_block_origin_active_title:        "Sélectionner le bloc d'ancrage actif."
     select_block_portal_active_title:        "Sélectionner le bloc d'intérieur de portail actif."
-    select_block_boundardy_1_active_title:   "Sélectionner le bloc de bord actif (variante 1)."
-    select_block_boundardy_2_active_title:   "Sélectionner le bloc de bord actif (variante 2)."
-    select_block_boundardy_3_active_title:   "Sélectionner le bloc de bord actif (variante 3)."
-    select_block_boundardy_4_active_title:   "Sélectionner le bloc de bord actif (variante 4)."
-    select_block_boundardy_5_active_title:   "Sélectionner le bloc de bord actif (variante 5)."
+    select_block_boundary_1_active_title:   "Sélectionner le bloc de bord actif (variante 1)."
+    select_block_boundary_2_active_title:   "Sélectionner le bloc de bord actif (variante 2)."
+    select_block_boundary_3_active_title:   "Sélectionner le bloc de bord actif (variante 3)."
+    select_block_boundary_4_active_title:   "Sélectionner le bloc de bord actif (variante 4)."
+    select_block_boundary_5_active_title:   "Sélectionner le bloc de bord actif (variante 5)."
     select_block_console_inactive_title:     "Sélectionner le bloc de console inactif."
     select_block_origin_inactive_title:      "Sélectionner le bloc d'ancrage inactif."
     select_block_portal_inactive_title:      "Sélectionner le bloc d'intérieur de portail inactif."
-    select_block_boundardy_1_inactive_title: "Sélectionner le bloc de bord inactif (variante 1)."
-    select_block_boundardy_2_inactive_title: "Sélectionner le bloc de bord inactif (variante 2)."
-    select_block_boundardy_3_inactive_title: "Sélectionner le bloc de bord inactif (variante 3)."
-    select_block_boundardy_4_inactive_title: "Sélectionner le bloc de bord inactif (variante 4)."
-    select_block_boundardy_5_inactive_title: "Sélectionner le bloc de bord inactif (variante 5)."
+    select_block_boundary_1_inactive_title: "Sélectionner le bloc de bord inactif (variante 1)."
+    select_block_boundary_2_inactive_title: "Sélectionner le bloc de bord inactif (variante 2)."
+    select_block_boundary_3_inactive_title: "Sélectionner le bloc de bord inactif (variante 3)."
+    select_block_boundary_4_inactive_title: "Sélectionner le bloc de bord inactif (variante 4)."
+    select_block_boundary_5_inactive_title: "Sélectionner le bloc de bord inactif (variante 5)."
 
     block_console_active:
       name: "§b§lConsole §a(active)"
@@ -143,19 +143,19 @@ menus:
     block_portal_active:
       name: "§b§lIntérieur de portail §a(actif)"
       lore: []
-    block_boundardy_1_active:
+    block_boundary_1_active:
       name: "§b§lBord §a(actif)"
       lore: ["", "§aVariante 1", "§7Matériau: %1$s"]
-    block_boundardy_2_active:
+    block_boundary_2_active:
       name: "§b§lBord §a(actif)"
       lore: ["", "§aVariante 2", "§7Matériau: %1$s"]
-    block_boundardy_3_active:
+    block_boundary_3_active:
       name: "§b§lBord §a(actif)"
       lore: ["", "§aVariante 3", "§7Matériau: %1$s"]
-    block_boundardy_4_active:
+    block_boundary_4_active:
       name: "§b§lBord §a(actif)"
       lore: ["", "§aVariante 4", "§7Matériau: %1$s"]
-    block_boundardy_5_active:
+    block_boundary_5_active:
       name: "§b§lBord §a(actif)"
       lore: ["", "§aVariante 5", "§7Matériau: %1$s"]
     block_console_inactive:
@@ -167,19 +167,19 @@ menus:
     block_portal_inactive:
       name: "§b§lIntérieur de portail §e(inactif)"
       lore: []
-    block_boundardy_1_inactive:
+    block_boundary_1_inactive:
       name: "§b§lBord §e(inactif)"
       lore: ["", "§aVariante 1", "§7Matériau: %1$s"]
-    block_boundardy_2_inactive:
+    block_boundary_2_inactive:
       name: "§b§lBord §e(inactif)"
       lore: ["", "§aVariante 2", "§7Matériau: %1$s"]
-    block_boundardy_3_inactive:
+    block_boundary_3_inactive:
       name: "§b§lBord §e(inactif)"
       lore: ["", "§aVariante 3", "§7Matériau: %1$s"]
-    block_boundardy_4_inactive:
+    block_boundary_4_inactive:
       name: "§b§lBord §e(inactif)"
       lore: ["", "§aVariante 4", "§7Matériau: %1$s"]
-    block_boundardy_5_inactive:
+    block_boundary_5_inactive:
       name: "§b§lBord §e(inactif)"
       lore: ["", "§aVariante 5", "§7Matériau: %1$s"]
 

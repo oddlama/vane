@@ -128,7 +128,7 @@ public class GenericSelector<T, F extends Filter<T>> {
 		private final int slot_from; // Inclusive
 		private final int slot_to; // Exclusive
 
-		// Shows page selector from [from,to)
+		// Shows page selector from [from, too)
 		public PageSelector(final GenericSelector<T, F> generic_selector, int slot_from, int slot_to) {
 			this.generic_selector = generic_selector;
 			this.slot_from = slot_from;

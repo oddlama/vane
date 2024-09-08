@@ -2,8 +2,6 @@ package org.oddlama.vane.core.module;
 
 import static org.oddlama.vane.util.ResourceList.get_resources;
 
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.ProtocolManager;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -19,6 +17,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+
 import org.bstats.bukkit.Metrics;
 import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
@@ -32,6 +31,7 @@ import org.bukkit.loot.LootTables;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionDefault;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.oddlama.vane.annotation.VaneModule;
 import org.oddlama.vane.annotation.config.ConfigBoolean;
@@ -41,15 +41,19 @@ import org.oddlama.vane.annotation.lang.LangVersion;
 import org.oddlama.vane.annotation.persistent.Persistent;
 import org.oddlama.vane.core.Core;
 import org.oddlama.vane.core.LootTable;
-import org.oddlama.vane.core.resourcepack.ResourcePackGenerator;
-
-import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
-
 import org.oddlama.vane.core.command.Command;
 import org.oddlama.vane.core.config.ConfigManager;
 import org.oddlama.vane.core.functional.Consumer1;
 import org.oddlama.vane.core.lang.LangManager;
 import org.oddlama.vane.core.persistent.PersistentStorageManager;
+import org.oddlama.vane.core.resourcepack.ResourcePackGenerator;
+
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
+
+import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
+import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
+import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 
 public abstract class Module<T extends Module<T>> extends JavaPlugin implements Context<T>, org.bukkit.event.Listener {
 
@@ -331,7 +335,7 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 	}
 
 	private boolean try_reload_localization() {
-		// Copy all embedded lang files, if their version is newer.
+		// Copy all embedded lang files if their version is newer.
 		get_resources(getClass(), Pattern.compile("lang-.*\\.yml")).stream().forEach(this::update_lang_file);
 
 		// Get configured language code
@@ -429,14 +433,10 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 	}
 
 	public void register_command(Command<?> command) {
-		if (
-			!getServer()
-				.getCommandMap()
-				.register(command.get_name(), command.get_prefix(), command.get_bukkit_command())
-		) {
-			log.warning("Command " + command.get_name() + " was registered using the fallback prefix!");
-			log.warning("Another command with the same name already exists!");
-		}
+		LifecycleEventManager<Plugin> manager = this.getLifecycleManager();
+		manager.registerEventHandler(LifecycleEvents.COMMANDS, event -> {
+			event.registrar().register(command.get_command(), command.lang_description.str(), command.get_aliases());
+		});
 	}
 
 	public void unregister_command(Command<?> command) {

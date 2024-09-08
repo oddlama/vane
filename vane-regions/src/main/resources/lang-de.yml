@@ -14,7 +14,7 @@
 # if the file needs to be updated.
 version: 3
 # The corresponding language code used in resource packs. Used for
-# resource pack generation. Typically this is a combination of the
+# resource pack generation. Typically, this is a combination of the
 # language code (ISO 639) and the country code (ISO 3166).
 resource_pack_lang_code: 'de_de'
 
@@ -82,9 +82,9 @@ menus:
         - "§7- §a✓§7 Zweiter block gesetzt"
         - "§7- §a✓§7 Blöcke sind in der selben Welt"
         - "§7- §a✓§7 Schneidet keine vorhandene Region"
-        - "§7- §a✓§7 Größer gleich (%11$s§7 x %12$s§7 x %13$s§7)"
-        - "§7- §a✓§7 Kleiner gleich (%14$s§7 x %15$s§7 x %16$s§7)"
-        - "§7- §a✓§7 Außreichend Währung im Inventar (%17$s§7)"
+        - "§7- §a✓§7 Größer gleich (%4$s§7 x %5$s§7 x %6$s§7)"
+        - "§7- §a✓§7 Kleiner gleich (%7$s§7 x %8$s§7 x %9$s§7)"
+        - "§7- §a✓§7 Außreichend Währung im Inventar (%10$s§7)"
 
     cancel_selection:
       name: "§c§lAuswahl abbrechen"

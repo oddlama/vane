@@ -12,10 +12,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityToggleGlideEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.loot.LootTables;
 import org.bukkit.util.Vector;
-import org.jetbrains.annotations.NotNull;
 import org.oddlama.vane.annotation.config.ConfigDoubleList;
 import org.oddlama.vane.annotation.enchantment.Rarity;
 import org.oddlama.vane.annotation.enchantment.VaneEnchantment;
@@ -23,8 +21,8 @@ import org.oddlama.vane.core.config.loot.LootDefinition;
 import org.oddlama.vane.core.config.loot.LootTableList;
 import org.oddlama.vane.core.config.recipes.RecipeList;
 import org.oddlama.vane.core.config.recipes.ShapedRecipeDefinition;
-import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.enchantments.CustomEnchantment;
+import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.enchantments.Enchantments;
 
 @VaneEnchantment(name = "take_off", max_level = 3, rarity = Rarity.UNCOMMON, treasure = true, allow_custom = true)
@@ -61,11 +59,6 @@ public class TakeOff extends CustomEnchantment<Enchantments> {
 			.in(LootTables.VILLAGE_TEMPLE)
 			.in(LootTables.WOODLAND_MANSION)
 			.add(1.0 / 150, 1, 1, on("vane_enchantments:enchanted_ancient_tome_of_the_gods")));
-	}
-
-	@Override
-	public boolean can_enchant(@NotNull ItemStack item_stack) {
-		return item_stack.getType() == Material.ELYTRA;
 	}
 
 	private double get_boost_strength(int level) {
@@ -107,7 +100,7 @@ public class TakeOff extends CustomEnchantment<Enchantments> {
 			loc
 				.getWorld()
 				.spawnParticle(
-					Particle.FIREWORKS_SPARK,
+					Particle.FIREWORK,
 					loc.add(rnd),
 					0,
 					dir.getX(),

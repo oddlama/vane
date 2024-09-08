@@ -27,7 +27,7 @@ import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.util.ItemUtil;
 import org.oddlama.vane.util.StorageUtil;
 
-import org.bukkit.craftbukkit.v1_20_R3.enchantments.CraftEnchantment;
+import org.bukkit.craftbukkit.enchantments.CraftEnchantment;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TranslatableComponent;
@@ -56,79 +56,52 @@ public class EnchantmentManager extends Listener<Core> {
 		Map<Enchantment, Integer> additional_enchantments,
 		boolean only_if_enchanted
 	) {
-		final var enchantments = new HashMap<>(additional_enchantments);
-		final var meta = item_stack.getItemMeta();
-		if (meta instanceof EnchantmentStorageMeta) {
-			enchantments.putAll(((EnchantmentStorageMeta) meta).getStoredEnchants());
-		} else {
-			enchantments.putAll(item_stack.getEnchantments());
-		}
-
-		if (enchantments.isEmpty() && only_if_enchanted) {
-			return item_stack;
-		}
-
-		remove_superseded(item_stack, enchantments);
-		update_lore(item_stack, enchantments);
+		remove_old_lore(item_stack);
 		return item_stack;
 	}
 
 	private void remove_superseded(ItemStack item_stack, Map<Enchantment, Integer> enchantments) {
-		if (enchantments.isEmpty()) {
-			return;
-		}
+		// if (enchantments.isEmpty()) {
+		// 	return;
+		// }
 
-		// 1. Build a list of all enchantments that would be removed, because
+		// 1. Build a list of all enchantments that would be removed because
 		//    they are superseded by some enchantment.
-		final var to_remove_inclusive = enchantments.keySet().stream()
-			.map(x -> ((CraftEnchantment)x).getHandle())
-			.filter(x -> x instanceof NativeEnchantmentWrapper)
-			.map(x -> ((NativeEnchantmentWrapper)x).custom().supersedes())
-			.flatMap(Set::stream)
-			.collect(Collectors.toSet());
+		// final var to_remove_inclusive = enchantments.keySet().stream()
+		// 	.map(x -> ((CraftEnchantment)x).getHandle())
+		// 	.filter(x -> x instanceof NativeEnchantmentWrapper)
+		// 	.map(x -> ((NativeEnchantmentWrapper)x).custom().supersedes())
+		// 	.flatMap(Set::stream)
+		// 	.collect(Collectors.toSet());
 
-		// 2. Before removing these enchantment, first re-build the list but
+		// 2. Before removing these enchantments, first re-build the list but
 		//    ignore any enchantments in the calculation that would themselves
 		//    be removed. This prevents them from contributing to the list of
 		//    enchantments to remove. Consider this: A supersedes B, and B supersedes C, but
 		//    A doesn't supersede C. Now an item with A B and C should get reduced to
 		//    A and C, not just to A.
-		var to_remove = enchantments.keySet().stream()
-			.map(x -> ((CraftEnchantment)x).getHandle())
-			.filter(x -> x instanceof NativeEnchantmentWrapper)
-			.filter(x -> !to_remove_inclusive.contains(((NativeEnchantmentWrapper)x).custom().key())) // Ignore enchantments that are themselves removed.
-			.map(x -> ((NativeEnchantmentWrapper)x).custom().supersedes())
-			.flatMap(Set::stream)
-			.map(x -> org.bukkit.Registry.ENCHANTMENT.get(x))
-			.collect(Collectors.toSet());
+		// var to_remove = enchantments.keySet().stream()
+		// 	.map(x -> ((CraftEnchantment)x).getHandle())
+		// 	.filter(x -> x instanceof NativeEnchantmentWrapper)
+		// 	.filter(x -> !to_remove_inclusive.contains(((NativeEnchantmentWrapper)x).custom().key())) // Ignore enchantments that are themselves removed.
+		// 	.map(x -> ((NativeEnchantmentWrapper)x).custom().supersedes())
+		// 	.flatMap(Set::stream)
+		// 	.map(x -> org.bukkit.Registry.ENCHANTMENT.get(x))
+		// 	.collect(Collectors.toSet());
 
-		for (var e : to_remove) {
-			item_stack.removeEnchantment(e);
-			enchantments.remove(e);
-		}
+		// for (var e : to_remove) {
+		// 	item_stack.removeEnchantment(e);
+		// 	enchantments.remove(e);
+		// }
 	}
 
-	private void update_lore(ItemStack item_stack, Map<Enchantment, Integer> enchantments) {
-		// Create lore by converting enchantment name and level to string
-		// and prepend rarity color (can be overwritten in description)
-		final var vane_enchantments = enchantments
-			.entrySet()
-			.stream()
-			.filter(p -> ((CraftEnchantment)p.getKey()).getHandle() instanceof NativeEnchantmentWrapper)
-			.sorted(Map.Entry.<Enchantment, Integer>comparingByKey(Comparator.comparing(x -> x.getKey().toString()))
-				.thenComparing(Map.Entry.comparingByValue())
-			)
-			.toList();
-
+	private void remove_old_lore(ItemStack item_stack) {
 		var lore = item_stack.lore();
 		if (lore == null) {
 			lore = new ArrayList<Component>();
 		}
 
 		lore.removeIf(this::is_enchantment_lore);
-		lore.addAll(0, vane_enchantments.stream().map(ench ->
-			ItemUtil.add_sentinel(((NativeEnchantmentWrapper)((CraftEnchantment) ench.getKey()).getHandle()).custom().display_name(ench.getValue()), SENTINEL)
-		).toList());
 
 		// Set lore
 		item_stack.lore(lore.isEmpty() ? null : lore);
@@ -159,18 +132,18 @@ public class EnchantmentManager extends Listener<Core> {
 		update_enchanted_item(event.getItem(), map);
 	}
 
-	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void on_loot_generate(final LootGenerateEvent event) {
-		for (final var item : event.getLoot()) {
-			// Update all item lore in case they are enchanted
-			update_enchanted_item(item, true);
-		}
-	}
+	// @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	// public void on_loot_generate(final LootGenerateEvent event) {
+	// 	for (final var item : event.getLoot()) {
+	// 		// Update all item lore in case they are enchanted
+	// 		update_enchanted_item(item, true);
+	// 	}
+	// }
 
 	private MerchantRecipe process_recipe(final MerchantRecipe recipe) {
 		var result = recipe.getResult().clone();
 
-		// Create new recipe
+		// Create a new recipe
 		final var new_recipe = new MerchantRecipe(
 			update_enchanted_item(result, true),
 			recipe.getUses(),
@@ -183,27 +156,27 @@ public class EnchantmentManager extends Listener<Core> {
 		return new_recipe;
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void on_acquire_trade(final VillagerAcquireTradeEvent event) {
-		event.setRecipe(process_recipe(event.getRecipe()));
-	}
+	// @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	// public void on_acquire_trade(final VillagerAcquireTradeEvent event) {
+	// 	event.setRecipe(process_recipe(event.getRecipe()));
+	// }
 
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void on_right_click_villager(final PlayerInteractEntityEvent event) {
-		final var entity = event.getRightClicked();
-		if (!(entity instanceof Merchant)) {
-			return;
-		}
+	// @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	// public void on_right_click_villager(final PlayerInteractEntityEvent event) {
+	// 	final var entity = event.getRightClicked();
+	// 	if (!(entity instanceof Merchant)) {
+	// 		return;
+	// 	}
 
-		final var merchant = (Merchant) entity;
-		final var recipes = new ArrayList<MerchantRecipe>();
+	// 	final var merchant = (Merchant) entity;
+	// 	final var recipes = new ArrayList<MerchantRecipe>();
 
-		// Check all recipes
-		for (final var r : merchant.getRecipes()) {
-			recipes.add(process_recipe(r));
-		}
+	// 	// Check all recipes
+	// 	for (final var r : merchant.getRecipes()) {
+	// 		recipes.add(process_recipe(r));
+	// 	}
 
-		// Update recipes
-		merchant.setRecipes(recipes);
-	}
+	// 	// Update recipes
+	// 	merchant.setRecipes(recipes);
+	// }
 }

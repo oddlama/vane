@@ -12,9 +12,9 @@
 
 # DO NOT CHANGE! The version of this language file. Used to determine
 # if the file needs to be updated.
-version: 5
+version: 6
 # The corresponding language code used in resource packs. Used for
-# resource pack generation. Typically this is a combination of the
+# resource pack generation. Typically, this is a combination of the
 # language code (ISO 639) and the country code (ISO 3166).
 resource_pack_lang_code: 'ru_ru'
 
@@ -25,7 +25,7 @@ select_boundary_now: "Теперь §6ПКМ по рамке портала"
 # type anymore. This can happen when a player replaces the console block
 # while it is selected as a pending console.
 console_invalid_type: "§cБлок консоли имеет неправильный тип!"
-# This message is sent when the selected console is in a another world than the portal boundary.
+# This message is sent when the selected console is in another world than the portal boundary.
 console_different_world: "§cКонсоль должна быть в том-же мире что и портал"
 # This message is sent when the selected portal console is too far away from
 # the portal boundary.
@@ -41,7 +41,7 @@ no_origin: "§cУ портала нет основного блока!"
 multiple_origins: "§cПортал не может иметь несколько основных блоков!"
 # This message is sent when the selected vertical portal boundary has no portal area above the origin block
 no_portal_block_above_origin: "§cНад основным блоком должно быть пространство для портала!"
-# This message is sent when the selected vertical portal boundary has not enough portal area above the origin block
+# This message is sent when the selected vertical portal boundary has not enough portal areas above the origin block
 not_enough_portal_blocks_above_origin: "§cНад основным блоком должно быть как минимум 3 свободных блока!"
 # This message is sent when the selected portal boundary is too large in a given direction.
 # %1$s: The direction (x,y,z)
@@ -51,9 +51,9 @@ too_large: "§cПортал слишком большой в %1$s§c напра�
 too_small_spawn: "§cМесто спавна слишком маленькое в %1$s§c направлении!"
 # This message is sent when the selected portal boundary contains too many portal area blocks.
 # %1$s: Current amount of blocks
-# %2$s: Maximum allowed amount of blocks
+# %2$s: Maximum allowed number of blocks
 too_many_portal_area_blocks: "§cПортал слишком большой! %1$s§6/%2$s§c блоков"
-# This message is sent when a portal boundary is selected but
+# This message is sent when a portal boundary is selected, but
 # a part of the area is obstructed.
 portal_area_obstructed: "§cПорталу что-то мешает!"
 # This message is sent when the selected boundary instersects an existing portal.
@@ -160,19 +160,19 @@ menus:
     select_block_console_active_title:       "Выберите активный блок консоли."
     select_block_origin_active_title:        "Выберите активный основной блок."
     select_block_portal_active_title:        "Выберите активный блок заполнения."
-    select_block_boundardy_1_active_title:   "Выберите активную рамку портала - 1 вариант."
-    select_block_boundardy_2_active_title:   "Выберите активную рамку портала - 2 вариант."
-    select_block_boundardy_3_active_title:   "Выберите активную рамку портала - 3 вариант."
-    select_block_boundardy_4_active_title:   "Выберите активную рамку портала - 4 вариант."
-    select_block_boundardy_5_active_title:   "Выберите активную рамку портала - 5 вариант."
+    select_block_boundary_1_active_title:   "Выберите активную рамку портала - 1 вариант."
+    select_block_boundary_2_active_title:   "Выберите активную рамку портала - 2 вариант."
+    select_block_boundary_3_active_title:   "Выберите активную рамку портала - 3 вариант."
+    select_block_boundary_4_active_title:   "Выберите активную рамку портала - 4 вариант."
+    select_block_boundary_5_active_title:   "Выберите активную рамку портала - 5 вариант."
     select_block_console_inactive_title:     "Выберите неактивный блок консоли."
     select_block_origin_inactive_title:      "Выберите неактивный основной блок."
     select_block_portal_inactive_title:      "Выберите неактивный блок заполнения."
-    select_block_boundardy_1_inactive_title: "Выберите неактивную рамку портала - 1 вариант."
-    select_block_boundardy_2_inactive_title: "Выберите неактивную рамку портала - 2 вариант."
-    select_block_boundardy_3_inactive_title: "Выберите неактивную рамку портала - 3 вариант."
-    select_block_boundardy_4_inactive_title: "Выберите неактивную рамку портала - 4 вариант."
-    select_block_boundardy_5_inactive_title: "Выберите неактивную рамку портала - 5 вариант."
+    select_block_boundary_1_inactive_title: "Выберите неактивную рамку портала - 1 вариант."
+    select_block_boundary_2_inactive_title: "Выберите неактивную рамку портала - 2 вариант."
+    select_block_boundary_3_inactive_title: "Выберите неактивную рамку портала - 3 вариант."
+    select_block_boundary_4_inactive_title: "Выберите неактивную рамку портала - 4 вариант."
+    select_block_boundary_5_inactive_title: "Выберите неактивную рамку портала - 5 вариант."
 
     block_console_active:
       name: "§b§lКонсоль §a(активная)"
@@ -183,19 +183,19 @@ menus:
     block_portal_active:
       name: "§b§lБлок заполнения §a(активный)"
       lore: []
-    block_boundardy_1_active:
+    block_boundary_1_active:
       name: "§b§lРамка §a(активная)"
       lore: ["", "§aВариант 1", "§7Строительный материал: %1$s"]
-    block_boundardy_2_active:
+    block_boundary_2_active:
       name: "§b§lРамка §a(активная)"
       lore: ["", "§aВариант 2", "§7Строительный материал: %1$s"]
-    block_boundardy_3_active:
+    block_boundary_3_active:
       name: "§b§lРамка §a(активная)"
       lore: ["", "§aВариант 3", "§7Строительный материал: %1$s"]
-    block_boundardy_4_active:
+    block_boundary_4_active:
       name: "§b§lРамка §a(активная)"
       lore: ["", "§aВариант 4", "§7Строительный материал: %1$s"]
-    block_boundardy_5_active:
+    block_boundary_5_active:
       name: "§b§lРамка §a(активная)"
       lore: ["", "§aВариант 5", "§7Строительный материал: %1$s"]
     block_console_inactive:
@@ -207,19 +207,19 @@ menus:
     block_portal_inactive:
       name: "§b§lБлок заполнения §e(неактивный)"
       lore: []
-    block_boundardy_1_inactive:
+    block_boundary_1_inactive:
       name: "§b§lРамка §e(неактивная)"
       lore: ["", "§aВариант 1", "§7Строительный материал: %1$s"]
-    block_boundardy_2_inactive:
+    block_boundary_2_inactive:
       name: "§b§lРамка §e(неактивная)"
       lore: ["", "§aВариант 2", "§7Строительный материал: %1$s"]
-    block_boundardy_3_inactive:
+    block_boundary_3_inactive:
       name: "§b§lРамка §e(неактивная)"
       lore: ["", "§aВариант 3", "§7Строительный материал: %1$s"]
-    block_boundardy_4_inactive:
+    block_boundary_4_inactive:
       name: "§b§lРамка §e(неактивная)"
       lore: ["", "§aВариант 4", "§7Строительный материал: %1$s"]
-    block_boundardy_5_inactive:
+    block_boundary_5_inactive:
       name: "§b§lРамка §e(неактивная)"
       lore: ["", "§aВариант 5", "§7Строительный материал: %1$s"]
 

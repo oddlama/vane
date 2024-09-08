@@ -1,26 +1,22 @@
 package org.oddlama.vane.enchantments.enchantments;
 
 import org.bukkit.Material;
+import org.bukkit.enchantments.EnchantmentTarget;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.enchantments.EnchantmentTarget;
-import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 import org.oddlama.vane.annotation.config.ConfigBoolean;
 import org.oddlama.vane.annotation.config.ConfigInt;
 import org.oddlama.vane.annotation.enchantment.Rarity;
 import org.oddlama.vane.annotation.enchantment.VaneEnchantment;
 import org.oddlama.vane.core.config.recipes.RecipeList;
 import org.oddlama.vane.core.config.recipes.ShapedRecipeDefinition;
-import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.enchantments.CustomEnchantment;
+import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.enchantments.Enchantments;
-
-import com.destroystokyo.paper.MaterialTags;
 
 @VaneEnchantment(
     name = "lightning", 
@@ -66,15 +62,10 @@ public class Lightning extends CustomEnchantment<Enchantments> {
         .result(on("vane_enchantments:enchanted_ancient_tome_of_knowledge")));
     }
 
-    @Override
-    public boolean can_enchant(@NotNull ItemStack item_stack) {
-        return MaterialTags.SWORDS.isTagged(item_stack);
-    }
-
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void on_lightning_attack(final EntityDamageEvent event) {
 
-        // Check if entity is a player
+        // Check if an entity is a player
         if(!(event.getEntity() instanceof Player)) return;
 
         // Check to see if they were struck by lightning
@@ -96,7 +87,7 @@ public class Lightning extends CustomEnchantment<Enchantments> {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void on_sword_attack(final EntityDamageByEntityEvent event) {
-        // Only strike when entity is a player
+        // Only strike when an entity is a player
         if(!(event.getDamager() instanceof Player)) return;
 
         //if not an attack with a weapon exit

@@ -1,19 +1,24 @@
 import java.security.MessageDigest
 
 plugins {
-	id("com.github.johnrengelman.shadow") version "7.1.0"
-	id("net.kyori.blossom") version "1.2.0" // Text replacement for version numbers
+	id("io.github.goooler.shadow") version "8.1.7"
+	id("net.kyori.blossom") version "2.1.0" // Text replacement for version numbers
 }
 
-blossom {
-	replaceToken("\$VERSION", project.version)
+sourceSets {
+	main {
+		blossom {
+			javaSources {
+				property("\$VERSION", project.version.toString())
+			}
+		}
+	}
 }
-
 dependencies {
-	implementation(group = "org.bstats", name = "bstats-base", version = "3.0.0")
-	implementation(group = "org.bstats", name = "bstats-bukkit", version = "3.0.0")
+	implementation(group = "org.bstats", name = "bstats-base", version = "3.0.2")
+	implementation(group = "org.bstats", name = "bstats-bukkit", version = "3.0.2")
 	implementation(group = "org.reflections", name = "reflections", version = "0.10.2")
-	implementation(group = "org.json", name = "json", version = "20200518")
+	api(group = "org.json", name = "json", version = "20240303")
 	implementation(project(":vane-annotations"))
 }
 

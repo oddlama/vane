@@ -9,7 +9,7 @@ module = "vane-portals"
 ![](images/portal_menus.png)
 
 You as the owner of the portal will see additional entries in the menu to personalize or delete the portal.
-The settings menu allows you change several things about the portal:
+The settings menu allows you to change several things about the portal:
 
 **Name:** Change the name of your portal
 
@@ -21,15 +21,15 @@ You can also use one of the many decorative heads from `/heads`.
 
 ![](assets/gifs/portal-style.gif)
 
-**Style:** In the style selector, you can either use one of the predefined styles, or create your own.
-Every type of block used in the portal frame can be disguised as any other block - at no cost.
+**Style:** In the style selector, you can either use one of the predefined styles or create your own.
+Every type of block used in the portal frame can be disguised as any other block—at no cost.
 By default, everything is made of obsidian. You can even apply a different block based on whether the portal is currently active or not.
 Please share the styles you've created on our [discord](https://discord.gg/RueJ6A59x2)!
 
-> Don't forget to press **Apply** at the end to make your changes visible.
+> Remember to press **Apply** at the end to make your changes visible.
 
 <!---->
-> You can hide your portal by changing the inavtive portal area block.
+> You can hide your portal by changing the inactive portal area block.
 
 **Orientation lock:** Activate this to ensure that entities always exit the portal on the front-side. Usually portals behave relative to one another: Enter front, exit front - enter back, exit back.
 This locking can be useful when there's a wall behind your portal, and exiting on the back makes no sense.

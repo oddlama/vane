@@ -12,9 +12,9 @@
 
 # DO NOT CHANGE! The version of this language file. Used to determine
 # if the file needs to be updated.
-version: 5
+version: 6
 # The corresponding language code used in resource packs. Used for
-# resource pack generation. Typically this is a combination of the
+# resource pack generation. Typically, this is a combination of the
 # language code (ISO 639) and the country code (ISO 3166).
 resource_pack_lang_code: 'tr_tr'
 
@@ -25,7 +25,7 @@ select_boundary_now: "§6Şimdi portal sınırına sağ tıklayın"
 # type anymore. This can happen when a player replaces the console block
 # while it is selected as a pending console.
 console_invalid_type: "§cKonsol bloğunda geçersiz bir blok türü var!"
-# This message is sent when the selected console is in a another world than the portal boundary.
+# This message is sent when the selected console is in another world than the portal boundary.
 console_different_world: "§cKonsol, portal ile aynı dünyada olmalıdır"
 # This message is sent when the selected portal console is too far away from
 # the portal boundary.
@@ -41,7 +41,7 @@ no_origin: "§cPortalın kaynak bloğu yok!"
 multiple_origins: "§cPortalda birden fazla başlangıç bloğu olamaz!"
 # This message is sent when the selected vertical portal boundary has no portal area above the origin block
 no_portal_block_above_origin: "§cOrijin bloğunun yukarıda portal alanına ihtiyacı var!"
-# This message is sent when the selected vertical portal boundary has not enough portal area above the origin block
+# This message is sent when the selected vertical portal boundary has not enough portal areas above the origin block
 not_enough_portal_blocks_above_origin: "§cOrijin bloğunun yukarıda en az 3 portal alan bloğuna ihtiyacı var!"
 # This message is sent when the selected portal boundary is too large in a given direction.
 # %1$s: The direction (x,y,z)
@@ -51,9 +51,9 @@ too_large: "§cPortal, %1$s§c yönünde çok büyük!"
 too_small_spawn: "§cOluşturma alanı %1$s§c yönünde çok küçük!"
 # This message is sent when the selected portal boundary contains too many portal area blocks.
 # %1$s: Current amount of blocks
-# %2$s: Maximum allowed amount of blocks
+# %2$s: Maximum allowed number of blocks
 too_many_portal_area_blocks: "§cPortal alanı çok büyük! %1$s§6/%2$s§c blok"
-# This message is sent when a portal boundary is selected but
+# This message is sent when a portal boundary is selected, but
 # a part of the area is obstructed.
 portal_area_obstructed: "§cPortal alanı engellendi!"
 # This message is sent when the selected boundary instersects an existing portal.
@@ -191,15 +191,15 @@ menus:
     # The title for the block selector for the active portal block.
     select_block_portal_active_title:        "Aktif Portal Alan bloğunu seçin."
     # The title for the block selector for the active boundary variant 1 block.
-    select_block_boundardy_1_active_title:   "Aktif Sınır Varyantı 1 bloğunu seçin."
+    select_block_boundary_1_active_title:   "Aktif Sınır Varyantı 1 bloğunu seçin."
     # The title for the block selector for the active boundary variant 2 block.
-    select_block_boundardy_2_active_title:   "Aktif Sınır Varyantı 2 bloğunu seçin."
+    select_block_boundary_2_active_title:   "Aktif Sınır Varyantı 2 bloğunu seçin."
     # The title for the block selector for the active boundary variant 3 block.
-    select_block_boundardy_3_active_title:   "Aktif Sınır Varyantı 3 bloğunu seçin."
+    select_block_boundary_3_active_title:   "Aktif Sınır Varyantı 3 bloğunu seçin."
     # The title for the block selector for the active boundary variant 4 block.
-    select_block_boundardy_4_active_title:   "Aktif Sınır Varyantı 4 bloğunu seçin."
+    select_block_boundary_4_active_title:   "Aktif Sınır Varyantı 4 bloğunu seçin."
     # The title for the block selector for the active boundary variant 5 block.
-    select_block_boundardy_5_active_title:   "Aktif Sınır Varyantı 5 bloğunu seçin."
+    select_block_boundary_5_active_title:   "Aktif Sınır Varyantı 5 bloğunu seçin."
     # The title for the block selector for the inactive console block.
     select_block_console_inactive_title:     "Etkin olmayan Konsol bloğunu seçin."
     # The title for the block selector for the inactive origin block.
@@ -207,15 +207,15 @@ menus:
     # The title for the block selector for the inactive portal block.
     select_block_portal_inactive_title:      "Etkin olmayan Portal Alan bloğunu seçin."
     # The title for the block selector for the inactive boundary variant 1 block.
-    select_block_boundardy_1_inactive_title: "Etkin olmayan Sınır Varyantı 1 bloğunu seçin."
+    select_block_boundary_1_inactive_title: "Etkin olmayan Sınır Varyantı 1 bloğunu seçin."
     # The title for the block selector for the inactive boundary variant 2 block.
-    select_block_boundardy_2_inactive_title: "Etkin olmayan Sınır Varyantı 2 bloğunu seçin."
+    select_block_boundary_2_inactive_title: "Etkin olmayan Sınır Varyantı 2 bloğunu seçin."
     # The title for the block selector for the inactive boundary variant 3 block.
-    select_block_boundardy_3_inactive_title: "Etkin olmayan Sınır Varyantı 3 bloğunu seçin."
+    select_block_boundary_3_inactive_title: "Etkin olmayan Sınır Varyantı 3 bloğunu seçin."
     # The title for the block selector for the inactive boundary variant 4 block.
-    select_block_boundardy_4_inactive_title: "Etkin olmayan Sınır Varyantı 4 bloğunu seçin."
+    select_block_boundary_4_inactive_title: "Etkin olmayan Sınır Varyantı 4 bloğunu seçin."
     # The title for the block selector for the inactive boundary variant 5 block.
-    select_block_boundardy_5_inactive_title: "Etkin olmayan Sınır Varyantı 5 bloğunu seçin."
+    select_block_boundary_5_inactive_title: "Etkin olmayan Sınır Varyantı 5 bloğunu seçin."
 
     # The item used to represent the selected active console block.
     # %1$s: Building material
@@ -234,27 +234,27 @@ menus:
       lore: []
     # The item used to represent the selected active boundary variant 1 block.
     # %1$s: Building material
-    block_boundardy_1_active:
+    block_boundary_1_active:
       name: "§b§lSınır §a(aktif)"
       lore: ["", "§aVaryant 1", "§7Yapı malzemesi: %1$s"]
     # The item used to represent the selected active boundary variant 2 block.
     # %1$s: Building material
-    block_boundardy_2_active:
+    block_boundary_2_active:
       name: "§b§lSınır §a(aktif)"
       lore: ["", "§aVaryant 2", "§7Yapı malzemesi: %1$s"]
     # The item used to represent the selected active boundary variant 3 block.
     # %1$s: Building material
-    block_boundardy_3_active:
+    block_boundary_3_active:
       name: "§b§lSınır §a(aktif)"
       lore: ["", "§aVaryant 3", "§7Yapı malzemesi: %1$s"]
     # The item used to represent the selected active boundary variant 4 block.
     # %1$s: Building material
-    block_boundardy_4_active:
+    block_boundary_4_active:
       name: "§b§lSınır §a(aktif)"
       lore: ["", "§aVaryant 4", "§7Yapı malzemesi: %1$s"]
     # The item used to represent the selected active boundary variant 5 block.
     # %1$s: Building material
-    block_boundardy_5_active:
+    block_boundary_5_active:
       name: "§b§lSınır §a(aktif)"
       lore: ["", "§aVaryant 5", "§7Yapı malzemesi: %1$s"]
     # The item used to represent the selected inactive console block.
@@ -274,27 +274,27 @@ menus:
       lore: []
     # The item used to represent the selected inactive boundary variant 1 block.
     # %1$s: Building material
-    block_boundardy_1_inactive:
+    block_boundary_1_inactive:
       name: "§b§lSınır §e(aktif olmayan)"
       lore: ["", "§aVaryant 1", "§7Yapı malzemesi: %1$s"]
     # The item used to represent the selected inactive boundary variant 2 block.
     # %1$s: Building material
-    block_boundardy_2_inactive:
+    block_boundary_2_inactive:
       name: "§b§lSınır §e(aktif olmayan)"
       lore: ["", "§aVaryant 2", "§7Yapı malzemesi: %1$s"]
     # The item used to represent the selected inactive boundary variant 3 block.
     # %1$s: Building material
-    block_boundardy_3_inactive:
+    block_boundary_3_inactive:
       name: "§b§lSınır §e(aktif olmayan)"
       lore: ["", "§aVaryant 3", "§7Yapı malzemesi: %1$s"]
     # The item used to represent the selected inactive boundary variant 4 block.
     # %1$s: Building material
-    block_boundardy_4_inactive:
+    block_boundary_4_inactive:
       name: "§b§lSınır §e(aktif olmayan)"
       lore: ["", "§aVaryant 4", "§7Yapı malzemesi: %1$s"]
     # The item used to represent the selected inactive boundary variant 5 block.
     # %1$s: Building material
-    block_boundardy_5_inactive:
+    block_boundary_5_inactive:
       name: "§b§lSınır §e(aktif olmayan)"
       lore: ["", "§aVaryant 5", "§7Yapı malzemesi: %1$s"]
 
@@ -377,7 +377,7 @@ menus:
     unlink_console:
       name: "§c§lKonsol Bağlantısını Kes"
       lore: []
-    # The title for the unlink confirmation dialog.
+    # The title for the unlinking confirmation dialog.
     unlink_console_confirm_title: "§c§lKonsol Bağlantısını Kesmek istiyor musun?"
     # The item to accept unlinking.
     unlink_console_confirm_accept:

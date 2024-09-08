@@ -12,7 +12,7 @@
 
 # ¡NO CAMBIAR! La versión de este archivo de idioma. Se utiliza para determinar
 # si el archivo necesita actualizarse.
-version: 5
+version: 6
 # El código de idioma correspondiente utilizado en paquetes de recursos. Utilizado para
 # generación de paquetes de recursos. Por lo general, es una combinación de
 # el código de idioma (ISO 639) y el código de país (ISO 3166).
@@ -187,15 +187,15 @@ menus:
     # El título para el selector de bloque para el bloque de área de portal activo.
     select_block_portal_active_title:      "Seleccionar bloque de área de portal activo."
     # El título para el selector de bloque para el bloque de variante de límite activo 1.
-    select_block_boundardy_1_active_title:   "Seleccionar bloque de variante de límite activo 1."
+    select_block_boundary_1_active_title:   "Seleccionar bloque de variante de límite activo 1."
     # El título para el selector de bloque para el bloque de variante de límite activo 2.
-    select_block_boundardy_2_active_title:   "Seleccionar bloque de variante de límite activo 2."
+    select_block_boundary_2_active_title:   "Seleccionar bloque de variante de límite activo 2."
     # El título para el selector de bloque para el bloque de variante de límite activo 3.
-    select_block_boundardy_3_active_title:   "Seleccionar bloque de variante de límite activo 3."
+    select_block_boundary_3_active_title:   "Seleccionar bloque de variante de límite activo 3."
     # El título para el selector de bloque para el bloque de variante de límite activo 4.
-    select_block_boundardy_4_active_title:   "Seleccionar bloque de variante de límite activo 4."
+    select_block_boundary_4_active_title:   "Seleccionar bloque de variante de límite activo 4."
     # El título para el selector de bloque para el bloque de variante de límite activo 5.
-    select_block_boundardy_5_active_title:   "Seleccionar bloque de variante de límite activo 5."
+    select_block_boundary_5_active_title:   "Seleccionar bloque de variante de límite activo 5."
     # El título para el selector de bloque para el bloque de consola inactivo.
     select_block_console_inactive_title:   "Seleccionar bloque de consola inactivo."
     # El título para el selector de bloque para el bloque de origen inactivo.
@@ -203,15 +203,15 @@ menus:
     # El título para el selector de bloque para el bloque de área de portal inactivo.
     select_block_portal_inactive_title:    "Seleccionar bloque de área de portal inactivo."
     # El título para el selector de bloque para el bloque de variante de límite inactivo 1.
-    select_block_boundardy_1_inactive_title: "Seleccionar bloque de variante de límite inactivo 1."
+    select_block_boundary_1_inactive_title: "Seleccionar bloque de variante de límite inactivo 1."
     # El título para el selector de bloque para el bloque de variante de límite inactivo 2.
-    select_block_boundardy_2_inactive_title: "Seleccionar bloque de variante de límite inactivo 2."
+    select_block_boundary_2_inactive_title: "Seleccionar bloque de variante de límite inactivo 2."
     # El título para el selector de bloque para el bloque de variante de límite inactivo 3.
-    select_block_boundardy_3_inactive_title: "Seleccionar bloque de variante de límite inactivo 3."
+    select_block_boundary_3_inactive_title: "Seleccionar bloque de variante de límite inactivo 3."
     # El título para el selector de bloque para el bloque de variante de límite inactivo 4.
-    select_block_boundardy_4_inactive_title: "Seleccionar bloque de variante de límite inactivo 4."
+    select_block_boundary_4_inactive_title: "Seleccionar bloque de variante de límite inactivo 4."
     # El título para el selector de bloque para el bloque de variante de límite inactivo 5.
-    select_block_boundardy_5_inactive_title: "Seleccionar bloque de variante de límite inactivo 5."
+    select_block_boundary_5_inactive_title: "Seleccionar bloque de variante de límite inactivo 5."
 
     # El ítem utilizado para representar el bloque de consola activo seleccionado.
     # %1$s: Material de construcción
@@ -233,31 +233,31 @@ menus:
 
     # El ítem utilizado para representar el bloque de límite activo de variante 1 seleccionado.
     # %1$s: Material de construcción
-    block_boundardy_1_active:
+    block_boundary_1_active:
       name: "§b§lLímite §a(activo)"
       lore: ["", "§aVariante 1", "§7Material de construcción: %1$s"]
 
     # El ítem utilizado para representar el bloque de límite activo de variante 2 seleccionado.
     # %1$s: Material de construcción
-    block_boundardy_2_active:
+    block_boundary_2_active:
       name: "§b§lLímite §a(activo)"
       lore: ["", "§aVariante 2", "§7Material de construcción: %1$s"]
 
     # El ítem utilizado para representar el bloque de límite activo de variante 3 seleccionado.
     # %1$s: Material de construcción
-    block_boundardy_3_active:
+    block_boundary_3_active:
       name: "§b§lLímite §a(activo)"
       lore: ["", "§aVariante 3", "§7Material de construcción: %1$s"]
 
     # El ítem utilizado para representar el bloque de límite activo de variante 4 seleccionado.
     # %1$s: Material de construcción
-    block_boundardy_4_active:
+    block_boundary_4_active:
       name: "§b§lLímite §a(activo)"
       lore: ["", "§aVariante 4", "§7Material de construcción: %1$s"]
 
     # El ítem utilizado para representar el bloque de límite activo de variante 5 seleccionado.
     # %1$s: Material de construcción
-    block_boundardy_5_active:
+    block_boundary_5_active:
       name: "§b§lLímite §a(activo)"
       lore: ["", "§aVariante 5", "§7Material de construcción: %1$s"]
 
@@ -281,27 +281,27 @@ menus:
 
     # El ítem utilizado para representar el bloque de límite inactivo de variante 1 seleccionado.
     # %1$s: Material de construcción
-    block_boundardy_1_inactive:
+    block_boundary_1_inactive:
       name: "§b§lLímite §e(inactivo)"
       lore: ["", "§aVariante 1", "§7Material de construcción: %1$s"]
     # El ítem utilizado para representar el bloque de límite inactivo de la variante 2 seleccionado.
     # %1$s: Material de construcción
-    block_boundardy_2_inactive:
+    block_boundary_2_inactive:
       name: "§b§lLímite §e(inactivo)"
       lore: ["", "§aVariante 2", "§7Material de construcción: %1$s"]
     # El ítem utilizado para representar el bloque de límite inactivo de la variante 3 seleccionado.
     # %1$s: Material de construcción
-    block_boundardy_3_inactive:
+    block_boundary_3_inactive:
       name: "§b§lLímite §e(inactivo)"
       lore: ["", "§aVariante 3", "§7Material de construcción: %1$s"]
     # El ítem utilizado para representar el bloque de límite inactivo de la variante 4 seleccionado.
     # %1$s: Material de construcción
-    block_boundardy_4_inactive:
+    block_boundary_4_inactive:
       name: "§b§lLímite §e(inactivo)"
       lore: ["", "§aVariante 4", "§7Material de construcción: %1$s"]
     # El ítem utilizado para representar el bloque de límite inactivo de la variante 5 seleccionado.
     # %1$s: Material de construcción
-    block_boundardy_5_inactive:
+    block_boundary_5_inactive:
       name: "§b§lLímite §e(inactivo)"
       lore: ["", "§aVariante 5", "§7Material de construcción: %1$s"]
 
@@ -360,7 +360,7 @@ menus:
         - ""
         - "§7Actual: %1$s"
         - "§8¡La selección de destino está §6§lBLOQUEADA§r§8!"
-   
+
 
     select_target_title: "§8§lSeleccionar Portal de Destino"
     filter_portals_title: "§8§lFiltrar Portales"
@@ -380,7 +380,7 @@ menus:
     select_target_portal_visibility_group: "§eGrupo de Región (miembros)"
     select_target_portal_visibility_group_internal: "§eGrupo de Región (solo visible internamente)"
     select_target_portal_visibility_private: "§cPrivado"
-    
+
     # El ítem utilizado para desvincular la consola actual.
     unlink_console:
       name: "§c§lDesvincular Consola"
@@ -395,7 +395,7 @@ menus:
     unlink_console_confirm_cancel:
       name: "§a§lCancelar"
       lore: []
-    
+
     # El ítem utilizado para destruir el portal.
     destroy_portal:
       name: "§c§lDestruir Portal"

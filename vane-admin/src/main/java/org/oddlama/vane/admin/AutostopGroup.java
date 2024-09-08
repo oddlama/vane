@@ -34,16 +34,20 @@ public class AutostopGroup extends ModuleGroup<Admin> {
 	// Variables
 	public BukkitTask task = null;
 	public long start_time = -1;
+	public long stop_time = -1;
 
 	public AutostopGroup(Context<Admin> context) {
 		super(context, "autostop", "Enable automatic server stop after certain time without online players.");
 	}
 
 	public long remaining() {
+		
 		if (start_time == -1) {
 			return -1;
 		}
-		return start_time + (config_delay * 1000) - System.currentTimeMillis();
+		
+		return stop_time - System.currentTimeMillis();
+		
 	}
 
 	public void abort() {
@@ -59,6 +63,7 @@ public class AutostopGroup extends ModuleGroup<Admin> {
 		task.cancel();
 		task = null;
 		start_time = -1;
+		stop_time = -1;
 
 		lang_aborted.send_and_log(sender);
 	}
@@ -77,6 +82,7 @@ public class AutostopGroup extends ModuleGroup<Admin> {
 		}
 
 		start_time = System.currentTimeMillis();
+		stop_time = start_time + delay;
 		task =
 			schedule_task(
 				() -> {
