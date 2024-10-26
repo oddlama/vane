@@ -28,7 +28,7 @@ subprojects {
 	repositories {
 		mavenLocal()
 		mavenCentral()
-		maven("https://papermc.io/repo/repository/maven-public/")
+		maven("https://repo.papermc.io/repository/maven-public/")
 		maven("https://repo.dmulloy2.net/nexus/repository/public/")
 		maven("https://repo.mikeprimm.com/")
 		maven("https://repo.codemc.org/repository/maven-public/")
