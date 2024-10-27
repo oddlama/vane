@@ -1,5 +1,5 @@
 plugins {
-	id("io.github.goooler.shadow") version "8.1.7"
+	id("io.github.goooler.shadow") version "8.1.8"
 }
 
 dependencies {

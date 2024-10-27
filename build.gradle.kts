@@ -1,7 +1,7 @@
 plugins {
 	`java-library`
-	id("io.papermc.paperweight.userdev") version "1.7.2"
-	id("xyz.jpenilla.run-paper") version "2.3.0" // Adds runServer and runMojangMappedServer tasks for testing
+	id("io.papermc.paperweight.userdev") version "1.7.4"
+	id("xyz.jpenilla.run-paper") version "2.3.1" // Adds runServer and runMojangMappedServer tasks for testing
 }
 
 dependencies {
@@ -43,8 +43,8 @@ subprojects {
 	}
 
 	dependencies {
-		compileOnly(group = "org.jetbrains", name = "annotations", version = "24.1.0")
-		annotationProcessor("org.jetbrains:annotations:24.1.0")
+		compileOnly(group = "org.jetbrains", name = "annotations", version = "26.0.1")
+		annotationProcessor("org.jetbrains:annotations:26.0.1")
 	}
 }
 
@@ -136,8 +136,8 @@ configure(subprojects.filter {
 	listOf("vane-bedtime", "vane-portals", "vane-regions").contains(it.name)
 }) {
 	dependencies {
-		implementation(group = "us.dynmap", name = "DynmapCoreAPI", version = "3.7-beta-6")
-		implementation(group = "de.bluecolored.bluemap", name = "BlueMapAPI", version = "2.7.2")
+		implementation(group = "us.dynmap", name = "DynmapCoreAPI", version = "3.7-beta-7")
+		implementation(group = "de.bluecolored.bluemap", name = "BlueMapAPI", version = "2.7.3")
 	}
 }
 
