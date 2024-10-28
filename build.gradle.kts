@@ -136,8 +136,8 @@ configure(subprojects.filter {
 	listOf("vane-bedtime", "vane-portals", "vane-regions").contains(it.name)
 }) {
 	dependencies {
-		implementation(group = "us.dynmap", name = "DynmapCoreAPI", version = "3.7-beta-7")
-		implementation(group = "de.bluecolored.bluemap", name = "BlueMapAPI", version = "2.7.3")
+		implementation(group = "us.dynmap", name = "DynmapCoreAPI", version = "3.7-beta-6")
+		implementation(group = "de.bluecolored", name = "bluemap-api", version = "2.7.3")
 	}
 }
 
