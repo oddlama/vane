@@ -30,7 +30,12 @@ public class OfflinePlayerArgumentType implements CustomArgumentType.Converted<O
 
     @Override
     public @NotNull OfflinePlayer convert(@NotNull String nativeType) throws CommandSyntaxException {
-        return Bukkit.getOfflinePlayer(nativeType);
+		for (var p : Bukkit.getOfflinePlayers()) {
+			if (nativeType.equalsIgnoreCase(p.getName())) {
+				return p;
+			}
+		}
+		return null;
     }
 
     @Override
@@ -43,5 +48,5 @@ public class OfflinePlayerArgumentType implements CustomArgumentType.Converted<O
         }
         stream.forEach(builder::suggest);
         return builder.buildFuture();
-    }    
+    }
 }
