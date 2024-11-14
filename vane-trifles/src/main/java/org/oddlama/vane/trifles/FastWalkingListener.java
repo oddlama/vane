@@ -24,7 +24,7 @@ public class FastWalkingListener extends Listener<Trifles> {
 
 	@ConfigBoolean(def = true, desc = "Whether villagers should be allowed to fast walk on paths.")
 	public boolean config_villager_speedwalk;
-	
+
 	@ConfigBoolean(def = false, desc = "Whether players should be the only entities allowed to fast walk on paths (will override other path walk settings).")
 	public boolean config_players_only_speedwalk;
 
@@ -61,7 +61,7 @@ public class FastWalkingListener extends Listener<Trifles> {
 
 		// Cancel event if speedwalking is disabled for Hostile mobs
 		if(entity instanceof Monster && !config_hostile_speedwalk) return;
-		
+
 		// Cancel event if speedwalking is disabled for villagers
 		if(entity.getType() == EntityType.VILLAGER && !config_villager_speedwalk) return;
 

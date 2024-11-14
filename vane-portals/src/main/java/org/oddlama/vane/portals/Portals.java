@@ -54,6 +54,7 @@ import org.oddlama.vane.annotation.config.ConfigMaterialMapEntry;
 import org.oddlama.vane.annotation.config.ConfigMaterialMapMapEntry;
 import org.oddlama.vane.annotation.config.ConfigMaterialMapMapMap;
 import org.oddlama.vane.annotation.config.ConfigMaterialMapMapMapEntry;
+import org.oddlama.vane.annotation.config.ConfigMaterialSet;
 import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.annotation.persistent.Persistent;
 import org.oddlama.vane.core.functional.Consumer2;
@@ -96,15 +97,13 @@ public class Portals extends Module<Portals> {
 		PersistentSerializer.deserializers.put(Style.class, Style::deserialize);
 	}
 
+	@ConfigMaterialSet(def = { Material.PISTON, Material.STICKY_PISTON }, desc = "Materials which may not be used to decorate portals.")
+	public Set<Material> config_blacklisted_materials;
+
 	// TODO better and more default styles
-	@ConfigMaterialMapMapMap(
-		def = {
-			@ConfigMaterialMapMapMapEntry(
-				key = "vane_portals:portal_style_default",
-				value = {
-					@ConfigMaterialMapMapEntry(
-						key = "active",
-						value = {
+	@ConfigMaterialMapMapMap(def = {
+			@ConfigMaterialMapMapMapEntry(key = "vane_portals:portal_style_default", value = {
+					@ConfigMaterialMapMapEntry(key = "active", value = {
 							@ConfigMaterialMapEntry(key = "boundary_1", value = Material.OBSIDIAN),
 							@ConfigMaterialMapEntry(key = "boundary_2", value = Material.OBSIDIAN),
 							@ConfigMaterialMapEntry(key = "boundary_3", value = Material.OBSIDIAN),
@@ -113,11 +112,8 @@ public class Portals extends Module<Portals> {
 							@ConfigMaterialMapEntry(key = "console", value = Material.ENCHANTING_TABLE),
 							@ConfigMaterialMapEntry(key = "origin", value = Material.OBSIDIAN),
 							@ConfigMaterialMapEntry(key = "portal", value = Material.END_GATEWAY),
-						}
-					),
-					@ConfigMaterialMapMapEntry(
-						key = "inactive",
-						value = {
+					}),
+					@ConfigMaterialMapMapEntry(key = "inactive", value = {
 							@ConfigMaterialMapEntry(key = "boundary_1", value = Material.OBSIDIAN),
 							@ConfigMaterialMapEntry(key = "boundary_2", value = Material.OBSIDIAN),
 							@ConfigMaterialMapEntry(key = "boundary_3", value = Material.OBSIDIAN),
@@ -126,16 +122,10 @@ public class Portals extends Module<Portals> {
 							@ConfigMaterialMapEntry(key = "console", value = Material.ENCHANTING_TABLE),
 							@ConfigMaterialMapEntry(key = "origin", value = Material.OBSIDIAN),
 							@ConfigMaterialMapEntry(key = "portal", value = Material.AIR),
-						}
-					),
-				}
-			),
-			@ConfigMaterialMapMapMapEntry(
-				key = "vane_portals:portal_style_aqua",
-				value = {
-					@ConfigMaterialMapMapEntry(
-						key = "active",
-						value = {
+					}),
+			}),
+			@ConfigMaterialMapMapMapEntry(key = "vane_portals:portal_style_aqua", value = {
+					@ConfigMaterialMapMapEntry(key = "active", value = {
 							@ConfigMaterialMapEntry(key = "boundary_1", value = Material.DARK_PRISMARINE),
 							@ConfigMaterialMapEntry(key = "boundary_2", value = Material.WARPED_PLANKS),
 							@ConfigMaterialMapEntry(key = "boundary_3", value = Material.SEA_LANTERN),
@@ -144,11 +134,8 @@ public class Portals extends Module<Portals> {
 							@ConfigMaterialMapEntry(key = "console", value = Material.ENCHANTING_TABLE),
 							@ConfigMaterialMapEntry(key = "origin", value = Material.DARK_PRISMARINE),
 							@ConfigMaterialMapEntry(key = "portal", value = Material.END_GATEWAY),
-						}
-					),
-					@ConfigMaterialMapMapEntry(
-						key = "inactive",
-						value = {
+					}),
+					@ConfigMaterialMapMapEntry(key = "inactive", value = {
 							@ConfigMaterialMapEntry(key = "boundary_1", value = Material.DARK_PRISMARINE),
 							@ConfigMaterialMapEntry(key = "boundary_2", value = Material.WARPED_PLANKS),
 							@ConfigMaterialMapEntry(key = "boundary_3", value = Material.PRISMARINE_BRICKS),
@@ -157,43 +144,21 @@ public class Portals extends Module<Portals> {
 							@ConfigMaterialMapEntry(key = "console", value = Material.ENCHANTING_TABLE),
 							@ConfigMaterialMapEntry(key = "origin", value = Material.DARK_PRISMARINE),
 							@ConfigMaterialMapEntry(key = "portal", value = Material.AIR),
-						}
-					),
-				}
-			),
-		},
-		desc = "Portal style definitions. Must provide a material for each portal block type and activation state. The default style may be overridden."
-	)
+					}),
+			}),
+	}, desc = "Portal style definitions. Must provide a material for each portal block type and activation state. The default style may be overridden.")
 	public Map<String, Map<String, Map<String, Material>>> config_styles;
 
-	@ConfigLong(
-		def = 10000,
-		min = 1000,
-		max = 110000,
-		desc = "Delay in milliseconds after which two connected portals will automatically be disabled. Purple end-gateway beams do not show up until the maximum value of 110 seconds."
-	)
+	@ConfigLong(def = 10000, min = 1000, max = 110000, desc = "Delay in milliseconds after which two connected portals will automatically be disabled. Purple end-gateway beams do not show up until the maximum value of 110 seconds.")
 	public long config_deactivation_delay;
 
-	@ConfigExtendedMaterial(
-		def = "vane:decoration_end_portal_orb",
-		desc = "The default portal icon. Also accepts heads from the head library."
-	)
+	@ConfigExtendedMaterial(def = "vane:decoration_end_portal_orb", desc = "The default portal icon. Also accepts heads from the head library.")
 	public ExtendedMaterial config_default_icon;
 
-	@ConfigDouble(
-		def = 0.9,
-		min = 0.0,
-		max = 1.0,
-		desc = "Volume for the portal activation sound effect. 0 to disable."
-	)
+	@ConfigDouble(def = 0.9, min = 0.0, max = 1.0, desc = "Volume for the portal activation sound effect. 0 to disable.")
 	public double config_volume_activation;
 
-	@ConfigDouble(
-		def = 1.0,
-		min = 0.0,
-		max = 1.0,
-		desc = "Volume for the portal deactivation sound effect. 0 to disable."
-	)
+	@ConfigDouble(def = 1.0, min = 0.0, max = 1.0, desc = "Volume for the portal deactivation sound effect. 0 to disable.")
 	public double config_volume_deactivation;
 
 	@LangMessage
@@ -231,7 +196,8 @@ public class Portals extends Module<Portals> {
 
 	// All loaded styles
 	public Map<NamespacedKey, Style> styles = new HashMap<>();
-	// Cache possible area materials. This is fine as only predefined styles can change this.
+	// Cache possible area materials. This is fine as only predefined styles can
+	// change this.
 	public Set<Material> portal_area_materials = new HashSet<>();
 
 	// Track console items
@@ -261,43 +227,40 @@ public class Portals extends Module<Portals> {
 		blue_map_layer = new PortalBlueMapLayer(this);
 
 		// Register admin permission
-		admin_permission =
-			new Permission(
+		admin_permission = new Permission(
 				"vane." + get_module().get_name() + ".admin",
 				"Allows administration of any portal",
-				PermissionDefault.OP
-			);
+				PermissionDefault.OP);
 		get_module().register_permission(admin_permission);
 
 		// TODO legacy, remove in v2.
 		persistent_storage_manager.add_migration_to(
-			2,
-			"Portal visibility GROUP_INTERNAL was added. This is a no-op.",
-			json -> {}
-		);
+				2,
+				"Portal visibility GROUP_INTERNAL was added. This is a no-op.",
+				json -> {
+				});
 	}
 
 	@SuppressWarnings("unchecked")
 	private void register_entities() {
 		get_module().core.unfreeze_registries();
 		register_entity(
-			NamespacedKey.minecraft("item"),
-			namespace(),
-			"floating_item",
-			EntityType.Builder.of(FloatingItem::new, MobCategory.MISC).sized(0.0f, 0.0f)
-		);
+				NamespacedKey.minecraft("item"),
+				namespace(),
+				"floating_item",
+				EntityType.Builder.of(FloatingItem::new, MobCategory.MISC).sized(0.0f, 0.0f));
 	}
 
 	private static long block_key(final Block block) {
 		return (block.getY() << 8)
-			| ((block.getX() & 0xF) << 4)
-			| ((block.getZ() & 0xF));
+				| ((block.getX() & 0xF) << 4)
+				| ((block.getZ() & 0xF));
 	}
 
 	private static Block unpack_block_key(final Chunk chunk, long block_key) {
-		int y = (int)(block_key >> 8);
-		int x = (int)((block_key >> 4) & 0xF);
-		int z = (int)(block_key & 0xF);
+		int y = (int) (block_key >> 8);
+		int x = (int) ((block_key >> 4) & 0xF);
+		int z = (int) (block_key & 0xF);
 		return chunk.getBlock(x, y, z);
 	}
 
@@ -361,8 +324,7 @@ public class Portals extends Module<Portals> {
 	private Function2<Player, Portal, Boolean> player_can_use_portals_in_region_group_of_callback = null;
 
 	public void set_player_can_use_portals_in_region_group_of_callback(
-		final Function2<Player, Portal, Boolean> callback
-	) {
+			final Function2<Player, Portal, Boolean> callback) {
 		player_can_use_portals_in_region_group_of_callback = callback;
 	}
 
@@ -416,11 +378,11 @@ public class Portals extends Module<Portals> {
 			if (Objects.equals(other.target_id(), portal.id())) {
 				other.target_id(null);
 				other
-					.blocks()
-					.stream()
-					.filter(pb -> pb.type() == PortalBlock.Type.CONSOLE)
-					.filter(pb -> console_floating_items.containsKey(pb.block()))
-					.forEach(pb -> update_console_item(other, pb.block()));
+						.blocks()
+						.stream()
+						.filter(pb -> pb.type() == PortalBlock.Type.CONSOLE)
+						.filter(pb -> console_floating_items.containsKey(pb.block()))
+						.forEach(pb -> update_console_item(other, pb.block()));
 			}
 		}
 
@@ -429,23 +391,21 @@ public class Portals extends Module<Portals> {
 
 		// Close and taint all related open menus
 		get_module().core.menu_manager.for_each_open((player, menu) -> {
-				if (
-					menu.tag() instanceof PortalMenuTag &&
-					Objects.equals(((PortalMenuTag) menu.tag()).portal_id(), portal.id())
-				) {
-					menu.taint();
-					menu.close(player);
-				}
-			});
+			if (menu.tag() instanceof PortalMenuTag &&
+					Objects.equals(((PortalMenuTag) menu.tag()).portal_id(), portal.id())) {
+				menu.taint();
+				menu.close(player);
+			}
+		});
 
 		// Remove map marker
 		remove_marker(portal.id());
 
 		// Play sound
 		portal
-			.spawn()
-			.getWorld()
-			.playSound(portal.spawn(), Sound.ENTITY_ENDER_EYE_DEATH, SoundCategory.BLOCKS, 1.0f, 1.0f);
+				.spawn()
+				.getWorld()
+				.playSound(portal.spawn(), Sound.ENTITY_ENDER_EYE_DEATH, SoundCategory.BLOCKS, 1.0f, 1.0f);
 	}
 
 	public void add_new_portal(final Portal portal) {
@@ -456,9 +416,9 @@ public class Portals extends Module<Portals> {
 
 		// Play sound
 		portal
-			.spawn()
-			.getWorld()
-			.playSound(portal.spawn(), Sound.ENTITY_ENDER_EYE_DEATH, SoundCategory.BLOCKS, 1.0f, 2.0f);
+				.spawn()
+				.getWorld()
+				.playSound(portal.spawn(), Sound.ENTITY_ENDER_EYE_DEATH, SoundCategory.BLOCKS, 1.0f, 2.0f);
 	}
 
 	public void index_portal(final Portal portal) {
@@ -471,21 +431,37 @@ public class Portals extends Module<Portals> {
 
 	public Collection<Portal> all_available_portals() {
 		return portals.values().stream()
-			.filter(p -> p.spawn().isWorldLoaded())
-			.collect(Collectors.toList());
+				.filter(p -> p.spawn().isWorldLoaded())
+				.collect(Collectors.toList());
 	}
 
 	public void remove_portal_block(final PortalBlock portal_block) {
 		// Restore original block
 		switch (portal_block.type()) {
-			case ORIGIN:     portal_block.block().setType(constructor.config_material_origin); break;
-			case CONSOLE:    portal_block.block().setType(constructor.config_material_console); break;
-			case BOUNDARY_1: portal_block.block().setType(constructor.config_material_boundary_1); break;
-			case BOUNDARY_2: portal_block.block().setType(constructor.config_material_boundary_2); break;
-			case BOUNDARY_3: portal_block.block().setType(constructor.config_material_boundary_3); break;
-			case BOUNDARY_4: portal_block.block().setType(constructor.config_material_boundary_4); break;
-			case BOUNDARY_5: portal_block.block().setType(constructor.config_material_boundary_5); break;
-			case PORTAL:     portal_block.block().setType(constructor.config_material_portal_area); break;
+			case ORIGIN:
+				portal_block.block().setType(constructor.config_material_origin);
+				break;
+			case CONSOLE:
+				portal_block.block().setType(constructor.config_material_console);
+				break;
+			case BOUNDARY_1:
+				portal_block.block().setType(constructor.config_material_boundary_1);
+				break;
+			case BOUNDARY_2:
+				portal_block.block().setType(constructor.config_material_boundary_2);
+				break;
+			case BOUNDARY_3:
+				portal_block.block().setType(constructor.config_material_boundary_3);
+				break;
+			case BOUNDARY_4:
+				portal_block.block().setType(constructor.config_material_boundary_4);
+				break;
+			case BOUNDARY_5:
+				portal_block.block().setType(constructor.config_material_boundary_5);
+				break;
+			case PORTAL:
+				portal_block.block().setType(constructor.config_material_portal_area);
+				break;
 		}
 
 		// Remove console item if a block is a console
@@ -511,7 +487,8 @@ public class Portals extends Module<Portals> {
 		// Spawn effect if not portal area
 		if (portal_block.type() != PortalBlock.Type.PORTAL) {
 			portal_block.block().getWorld()
-				.spawnParticle(Particle.ENCHANT, portal_block.block().getLocation().add(0.5, 0.5, 0.5), 50, 0.0, 0.0, 0.0, 1.0);
+					.spawnParticle(Particle.ENCHANT, portal_block.block().getLocation().add(0.5, 0.5, 0.5), 50, 0.0,
+							0.0, 0.0, 1.0);
 		}
 	}
 
@@ -533,7 +510,8 @@ public class Portals extends Module<Portals> {
 		// Spawn effect if not portal area
 		if (portal_block.type() != PortalBlock.Type.PORTAL) {
 			portal_block.block().getWorld()
-				.spawnParticle(Particle.PORTAL, portal_block.block().getLocation().add(0.5, 0.5, 0.5), 50, 0.0, 0.0, 0.0, 1.0);
+					.spawnParticle(Particle.PORTAL, portal_block.block().getLocation().add(0.5, 0.5, 0.5), 50, 0.0, 0.0,
+							0.0, 1.0);
 		}
 	}
 
@@ -606,7 +584,8 @@ public class Portals extends Module<Portals> {
 			return root_portal;
 		}
 
-		// Find adjacent console blocks in full 3x3x3 cube, which will make this block a controlling block
+		// Find adjacent console blocks in full 3x3x3 cube, which will make this block a
+		// controlling block
 		for (final var adj : adjacent_blocks_3d(block)) {
 			final var portal_block = portal_block_for(adj);
 			if (portal_block != null && portal_block.type() == PortalBlock.Type.CONSOLE) {
@@ -710,9 +689,8 @@ public class Portals extends Module<Portals> {
 	private void start_disable_task(final Portal portal, final Portal target) {
 		stop_disable_task(portal, target);
 		final var task = schedule_task(
-			new PortalDisableRunnable(portal, target),
-			ms_to_ticks(config_deactivation_delay)
-		);
+				new PortalDisableRunnable(portal, target),
+				ms_to_ticks(config_deactivation_delay));
 		disable_tasks.put(portal.id(), task);
 		disable_tasks.put(target.id(), task);
 	}
@@ -848,8 +826,8 @@ public class Portals extends Module<Portals> {
 		var console_item = console_floating_items.get(block);
 		final boolean is_new;
 		if (console_item == null) {
-			console_item =
-				new FloatingItem(block.getWorld(), block.getX() + 0.5, block.getY() + 1.2, block.getZ() + 0.5);
+			console_item = new FloatingItem(block.getWorld(), block.getX() + 0.5, block.getY() + 1.2,
+					block.getZ() + 0.5);
 			is_new = true;
 		} else {
 			is_new = false;
@@ -872,9 +850,8 @@ public class Portals extends Module<Portals> {
 	}
 
 	private void for_each_console_block_in_chunk(
-		final Chunk chunk,
-		final Consumer2<Block, PortalBlockLookup> consumer
-	) {
+			final Chunk chunk,
+			final Consumer2<Block, PortalBlockLookup> consumer) {
 		final var portal_blocks_in_chunk = portal_blocks_in_chunk_in_world.get(chunk.getWorld().getUID());
 		if (portal_blocks_in_chunk == null) {
 			return;
@@ -907,12 +884,11 @@ public class Portals extends Module<Portals> {
 
 		// Enable all consoles in this chunk
 		for_each_console_block_in_chunk(
-			chunk,
-			(block, console) -> {
-				final var portal = portal_for(console.portal_id());
-				update_console_item(portal, block);
-			}
-		);
+				chunk,
+				(block, console) -> {
+					final var portal = portal_for(console.portal_id());
+					update_console_item(portal, block);
+				});
 	}
 
 	public void update_marker(final Portal portal) {
@@ -955,14 +931,14 @@ public class Portals extends Module<Portals> {
 
 		// Load all currently stored portals.
 		final var pdc_portals = data.getKeys().stream()
-			.filter(key -> key.toString().startsWith(storage_portal_prefix))
-			.map(key -> StringUtils.removeStart(key.toString(), storage_portal_prefix))
-			.map(uuid -> UUID.fromString(uuid))
-			.collect(Collectors.toSet());
+				.filter(key -> key.toString().startsWith(storage_portal_prefix))
+				.map(key -> StringUtils.removeStart(key.toString(), storage_portal_prefix))
+				.map(uuid -> UUID.fromString(uuid))
+				.collect(Collectors.toSet());
 
 		for (final var portal_id : pdc_portals) {
 			final var json_bytes = data.get(NamespacedKey.fromString(storage_portal_prefix + portal_id.toString()),
-				PersistentDataType.BYTE_ARRAY);
+					PersistentDataType.BYTE_ARRAY);
 			try {
 				final var portal = PersistentSerializer.from_json(Portal.class, new JSONObject(new String(json_bytes)));
 				index_portal(portal);
@@ -970,7 +946,8 @@ public class Portals extends Module<Portals> {
 				log.log(Level.SEVERE, "error while serializing persistent data!", e);
 			}
 		}
-		log.log(Level.INFO, "Loaded " + pdc_portals.size() + " portals for world " + world.getName() + "(" + world.getUID() + ")");
+		log.log(Level.INFO,
+				"Loaded " + pdc_portals.size() + " portals for world " + world.getName() + "(" + world.getUID() + ")");
 
 		// Convert portals from legacy storage
 		final Set<UUID> remove_from_legacy_storage = new HashSet<>();
@@ -1001,12 +978,11 @@ public class Portals extends Module<Portals> {
 		// to this function, and it can't be synchronized without annoying the server.
 		for (final var chunk : world.getLoadedChunks()) {
 			for_each_console_block_in_chunk(
-				chunk,
-				(block, console) -> {
-					final var portal = portal_for(console.portal_id());
-					update_console_item(portal, block);
-				}
-			);
+					chunk,
+					(block, console) -> {
+						final var portal = portal_for(console.portal_id());
+						update_console_item(portal, block);
+					});
 		}
 
 		// Save if we had any conversions
@@ -1021,29 +997,30 @@ public class Portals extends Module<Portals> {
 
 		// Update invalidated portals
 		portals.values().stream()
-			.filter(x -> x.invalidated && x.spawn_world().equals(world.getUID()))
-			.forEach(portal -> {
-				try {
-					final var json = PersistentSerializer.to_json(Portal.class, portal);
-					data.set(NamespacedKey.fromString(storage_portal_prefix + portal.id().toString()),
-						PersistentDataType.BYTE_ARRAY, json.toString().getBytes());
-				} catch (IOException e) {
-					log.log(Level.SEVERE, "error while serializing persistent data!", e);
-					return;
-				}
+				.filter(x -> x.invalidated && x.spawn_world().equals(world.getUID()))
+				.forEach(portal -> {
+					try {
+						final var json = PersistentSerializer.to_json(Portal.class, portal);
+						data.set(NamespacedKey.fromString(storage_portal_prefix + portal.id().toString()),
+								PersistentDataType.BYTE_ARRAY, json.toString().getBytes());
+					} catch (IOException e) {
+						log.log(Level.SEVERE, "error while serializing persistent data!", e);
+						return;
+					}
 
-				portal.invalidated = false;
-			});
+					portal.invalidated = false;
+				});
 
 		// Get all currently stored portals.
 		final var stored_portals = data.getKeys().stream()
-			.filter(key -> key.toString().startsWith(storage_portal_prefix))
-			.map(key -> StringUtils.removeStart(key.toString(), storage_portal_prefix))
-			.map(uuid -> UUID.fromString(uuid))
-			.collect(Collectors.toSet());
+				.filter(key -> key.toString().startsWith(storage_portal_prefix))
+				.map(key -> StringUtils.removeStart(key.toString(), storage_portal_prefix))
+				.map(uuid -> UUID.fromString(uuid))
+				.collect(Collectors.toSet());
 
 		// Remove all portals that no longer exist
-		Sets.difference(stored_portals, portals.keySet()).forEach(id -> data.remove(NamespacedKey.fromString(storage_portal_prefix + id.toString())));
+		Sets.difference(stored_portals, portals.keySet())
+				.forEach(id -> data.remove(NamespacedKey.fromString(storage_portal_prefix + id.toString())));
 	}
 
 	private class PortalDisableRunnable implements Runnable {
