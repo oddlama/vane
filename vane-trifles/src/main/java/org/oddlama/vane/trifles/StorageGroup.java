@@ -8,6 +8,7 @@ import java.util.UUID;
 import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.Nameable;
 import org.bukkit.block.Container;
+import org.bukkit.block.ShulkerBox;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -26,6 +27,8 @@ import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.item.api.CustomItem;
 import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Context;
+import org.oddlama.vane.trifles.items.storage.Backpack;
+import org.oddlama.vane.trifles.items.storage.Pouch;
 
 import net.kyori.adventure.text.Component;
 
@@ -47,7 +50,8 @@ public class StorageGroup extends Listener<Trifles> {
 			return;
 		}
 
-		// Only if no block state inventory is open, else we could delete items by accident
+		// Only if no block state inventory is open, else we could delete items by
+		// accident
 		final var owner_and_item = open_block_state_inventories.get(event.getInventory());
 		if (owner_and_item != null) {
 			return;
@@ -57,8 +61,8 @@ public class StorageGroup extends Listener<Trifles> {
 		if (event.getClick() == ClickType.RIGHT && event.getAction() == InventoryAction.SWAP_WITH_CURSOR
 				&& is_storage_item(event.getCurrentItem()) && event.getCurrentItem().getAmount() == 1) {
 
-			// Allow putting in any items that are not a storage item, or storage items that have nothing in them.
-			if (!(is_storage_item(event.getCursor()) && event.getCursor().hasItemMeta())) {
+			// Allow putting in any items that are not a storage item.
+			if (!is_storage_item(event.getCursor())) {
 				final var custom_item = get_module().core.item_registry().get(event.getCurrentItem());
 
 				// Only if the clicked storage item is a custom item
@@ -95,10 +99,42 @@ public class StorageGroup extends Listener<Trifles> {
 			return;
 		}
 
-		// Prevent putting non-empty storage items in other storage items
-		if (is_storage_item(event.getCurrentItem()) || (is_storage_item(event.getCursor()) && event.getCursor().hasItemMeta())) {
+		var clicked_item_is_storage = is_storage_item(event.getCurrentItem());
+		var cursor_item_is_storage = is_storage_item(event.getCursor());
+		var clicked_inventory_is_player_inventory = event.getClickedInventory() == player.getInventory();
+
+		var cancel = false;
+		switch (event.getAction()) {
+			case DROP_ALL_CURSOR:
+			case DROP_ALL_SLOT:
+			case DROP_ONE_CURSOR:
+			case DROP_ONE_SLOT:
+			case PLACE_ALL:
+			case PLACE_ONE:
+			case PLACE_SOME:
+			case SWAP_WITH_CURSOR:
+				// Only deny placing storage items in storage inventory
+				cancel = cursor_item_is_storage && !clicked_inventory_is_player_inventory;
+				break;
+			case MOVE_TO_OTHER_INVENTORY:
+				// Only deny moving storage item from player inventory to storage inventory
+				cancel = clicked_item_is_storage && clicked_inventory_is_player_inventory;
+				break;
+			case PICKUP_ALL:
+			case PICKUP_HALF:
+			case PICKUP_ONE:
+			case PICKUP_SOME:
+				// Always allow pickup
+				cancel = false;
+				break;
+			default:
+				// Restrictive default prevents moving of any storage items
+				cancel = clicked_item_is_storage || cursor_item_is_storage;
+				break;
+		}
+
+		if (cancel) {
 			event.setCancelled(true);
-			return;
 		}
 	}
 
@@ -162,11 +198,19 @@ public class StorageGroup extends Listener<Trifles> {
 	}
 
 	private boolean is_storage_item(@Nullable ItemStack item) {
+		if (item == null) {
+			return false;
+		}
+
+		var custom_item = get_module().core.item_registry().get(item);
+		if (custom_item != null && (custom_item instanceof Backpack || custom_item instanceof Pouch)) {
+			return true;
+		}
+
 		// Any item that has a container block state as the meta is a container to us.
 		// If the item has no meta (i.e., is empty), it doesn't count.
-		return item != null
-				&& item.getItemMeta() instanceof BlockStateMeta meta
-				&& meta.getBlockState() instanceof Container;
+		return item.getItemMeta() instanceof BlockStateMeta meta
+				&& meta.getBlockState() instanceof ShulkerBox;
 	}
 
 	private void update_storage_item(@NotNull ItemStack item, @NotNull Inventory inventory) {
@@ -195,14 +239,13 @@ public class StorageGroup extends Listener<Trifles> {
 		// Transfer item name to block-state
 		Component name = Component.text("");
 		if (meta.getBlockState() instanceof Nameable nameable) {
-			name = meta.hasDisplayName() ? meta.displayName() :
-				meta.hasItemName() ? meta.itemName() : null;
+			name = meta.hasDisplayName() ? meta.displayName() : meta.hasItemName() ? meta.itemName() : null;
 
-
-			// if the item has neither custom name nor item name (an old item with custom name reset), get the name from registry if possible
-			if(name == null) {
+			// if the item has neither custom name nor item name (an old item with custom
+			// name reset), get the name from registry if possible
+			if (name == null) {
 				CustomItem custom_item = get_module().core.item_registry().get(item);
-				name = custom_item != null ? custom_item.displayName() : Component.text(""); 
+				name = custom_item != null ? custom_item.displayName() : Component.text("");
 			}
 			nameable.customName(name);
 		}
