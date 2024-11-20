@@ -3,13 +3,11 @@ package org.oddlama.vane.proxycore.config;
 import java.net.SocketAddress;
 
 public interface IVaneProxyServerInfo {
+    String getName();
 
-	String getName();
+    SocketAddress getSocketAddress();
 
-	SocketAddress getSocketAddress();
+    void sendData(byte[] data);
 
-	void sendData(byte[] data);
-
-	boolean sendData(byte[] data, boolean queue);
-
+    boolean sendData(byte[] data, boolean queue);
 }

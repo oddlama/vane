@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface ConfigMaterialMapMapMapEntry {
-	String key();
+    String key();
 
-	ConfigMaterialMapMapEntry[] value();
+    ConfigMaterialMapMapEntry[] value();
 }

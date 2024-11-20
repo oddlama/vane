@@ -6,48 +6,48 @@ import org.oddlama.vane.portals.portal.Portal;
 
 public class PortalDestroyEvent extends PortalEvent {
 
-	private static final HandlerList handlers = new HandlerList();
-	private Player player;
-	private Portal portal;
-	private boolean check_only;
-	private boolean cancel_if_not_owner = true;
+    private static final HandlerList handlers = new HandlerList();
+    private Player player;
+    private Portal portal;
+    private boolean check_only;
+    private boolean cancel_if_not_owner = true;
 
-	public PortalDestroyEvent(final Player player, final Portal portal, boolean check_only) {
-		this.player = player;
-		this.portal = portal;
-		this.check_only = check_only;
-	}
+    public PortalDestroyEvent(final Player player, final Portal portal, boolean check_only) {
+        this.player = player;
+        this.portal = portal;
+        this.check_only = check_only;
+    }
 
-	public void setCancelIfNotOwner(boolean cancel_if_not_owner) {
-		this.cancel_if_not_owner = cancel_if_not_owner;
-	}
+    public void setCancelIfNotOwner(boolean cancel_if_not_owner) {
+        this.cancel_if_not_owner = cancel_if_not_owner;
+    }
 
-	public Player getPlayer() {
-		return player;
-	}
+    public Player getPlayer() {
+        return player;
+    }
 
-	public Portal getPortal() {
-		return portal;
-	}
+    public Portal getPortal() {
+        return portal;
+    }
 
-	public boolean checkOnly() {
-		return check_only;
-	}
+    public boolean checkOnly() {
+        return check_only;
+    }
 
-	public HandlerList getHandlers() {
-		return handlers;
-	}
+    public HandlerList getHandlers() {
+        return handlers;
+    }
 
-	public static HandlerList getHandlerList() {
-		return handlers;
-	}
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
 
-	@Override
-	public boolean isCancelled() {
-		var cancelled = super.isCancelled();
-		if (cancel_if_not_owner) {
-			cancelled |= !player.getUniqueId().equals(portal.owner());
-		}
-		return cancelled;
-	}
+    @Override
+    public boolean isCancelled() {
+        var cancelled = super.isCancelled();
+        if (cancel_if_not_owner) {
+            cancelled |= !player.getUniqueId().equals(portal.owner());
+        }
+        return cancelled;
+    }
 }

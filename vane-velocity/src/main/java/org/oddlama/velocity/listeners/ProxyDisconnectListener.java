@@ -8,17 +8,16 @@ import org.oddlama.velocity.Velocity;
 
 public final class ProxyDisconnectListener {
 
-	final Velocity velocity;
+    final Velocity velocity;
 
-	@Inject
-	public ProxyDisconnectListener(Velocity velocity) {
-		this.velocity = velocity;
-	}
+    @Inject
+    public ProxyDisconnectListener(Velocity velocity) {
+        this.velocity = velocity;
+    }
 
-	@Subscribe(order = PostOrder.LAST)
-	public void disconnect(DisconnectEvent event) {
-		final var uuid = event.getPlayer().getUniqueId();
-		velocity.get_multiplexed_uuids().remove(uuid);
-	}
-
+    @Subscribe(order = PostOrder.LAST)
+    public void disconnect(DisconnectEvent event) {
+        final var uuid = event.getPlayer().getUniqueId();
+        velocity.get_multiplexed_uuids().remove(uuid);
+    }
 }

@@ -8,9 +8,9 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface ConfigExtendedMaterial {
-	String def();
+    String def();
 
-	String desc();
+    String desc();
 
-	boolean metrics() default true;
+    boolean metrics() default true;
 }

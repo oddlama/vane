@@ -1,5 +1,8 @@
 package org.oddlama.vane.enchantments;
 
+import io.papermc.paper.plugin.bootstrap.BootstrapContext;
+import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
+import io.papermc.paper.registry.event.RegistryEvents;
 import org.jetbrains.annotations.NotNull;
 import org.oddlama.vane.enchantments.enchantments.registry.AngelRegistry;
 import org.oddlama.vane.enchantments.enchantments.registry.GrapplingHookRegistry;
@@ -13,27 +16,27 @@ import org.oddlama.vane.enchantments.enchantments.registry.TakeOffRegistry;
 import org.oddlama.vane.enchantments.enchantments.registry.UnbreakableRegistry;
 import org.oddlama.vane.enchantments.enchantments.registry.WingsRegistry;
 
-import io.papermc.paper.plugin.bootstrap.BootstrapContext;
-import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
-import io.papermc.paper.registry.event.RegistryEvents;
-
 public class EnchantmentsBootstrapper implements PluginBootstrap {
 
     @Override
     public void bootstrap(@NotNull BootstrapContext context) {
-        context.getLifecycleManager().registerEventHandler(RegistryEvents.ENCHANTMENT.freeze().newHandler(event -> {
-            new AngelRegistry(event);
-            new GrapplingHookRegistry(event);
-            new HellBentRegistry(event);
-            new LeafchopperRegistry(event);
-            new LightningRegistry(event);
-            new RakeRegistry(event);
-            new SeedingRegistry(event);
-            new WingsRegistry(event);
-            new SouldboundRegistry(event);
-            new TakeOffRegistry(event);
-            new UnbreakableRegistry(event);
-        }));
+        context
+            .getLifecycleManager()
+            .registerEventHandler(
+                RegistryEvents.ENCHANTMENT.freeze()
+                    .newHandler(event -> {
+                        new AngelRegistry(event);
+                        new GrapplingHookRegistry(event);
+                        new HellBentRegistry(event);
+                        new LeafchopperRegistry(event);
+                        new LightningRegistry(event);
+                        new RakeRegistry(event);
+                        new SeedingRegistry(event);
+                        new WingsRegistry(event);
+                        new SouldboundRegistry(event);
+                        new TakeOffRegistry(event);
+                        new UnbreakableRegistry(event);
+                    })
+            );
     }
-    
 }

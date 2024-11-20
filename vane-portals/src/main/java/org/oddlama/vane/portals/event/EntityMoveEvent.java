@@ -6,34 +6,35 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 public class EntityMoveEvent extends Event {
-	private static final HandlerList handlers = new HandlerList();
-	private Entity entity;
-	private Location from;
-	private Location to;
 
-	public EntityMoveEvent(final Entity entity, final Location from, final Location to) {
-		this.entity = entity;
-		this.from = from;
-		this.to = to;
-	}
+    private static final HandlerList handlers = new HandlerList();
+    private Entity entity;
+    private Location from;
+    private Location to;
 
-	public Entity getEntity() {
-		return entity;
-	}
+    public EntityMoveEvent(final Entity entity, final Location from, final Location to) {
+        this.entity = entity;
+        this.from = from;
+        this.to = to;
+    }
 
-	public Location getFrom() {
-		return from;
-	}
+    public Entity getEntity() {
+        return entity;
+    }
 
-	public Location getTo() {
-		return to;
-	}
+    public Location getFrom() {
+        return from;
+    }
 
-	public HandlerList getHandlers() {
-		return handlers;
-	}
+    public Location getTo() {
+        return to;
+    }
 
-	public static HandlerList getHandlerList() {
-		return handlers;
-	}
+    public HandlerList getHandlers() {
+        return handlers;
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
 }

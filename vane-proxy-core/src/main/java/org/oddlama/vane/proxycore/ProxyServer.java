@@ -1,18 +1,15 @@
 package org.oddlama.vane.proxycore;
 
-import org.oddlama.vane.proxycore.scheduler.ProxyTaskScheduler;
-
 import java.util.Collection;
 import java.util.UUID;
+import org.oddlama.vane.proxycore.scheduler.ProxyTaskScheduler;
 
 public interface ProxyServer {
+    ProxyTaskScheduler get_scheduler();
 
-	ProxyTaskScheduler get_scheduler();
+    void broadcast(String message);
 
-	void broadcast(String message);
+    Collection<ProxyPlayer> getPlayers();
 
-	Collection<ProxyPlayer> getPlayers();
-
-	boolean has_permission(UUID uuid, String... permission);
-
+    boolean has_permission(UUID uuid, String... permission);
 }

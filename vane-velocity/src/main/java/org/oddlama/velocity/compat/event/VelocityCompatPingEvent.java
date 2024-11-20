@@ -9,21 +9,20 @@ import org.oddlama.velocity.compat.VelocityCompatProxyServerPing;
 
 public class VelocityCompatPingEvent extends PingEvent {
 
-	final ProxyPingEvent event;
+    final ProxyPingEvent event;
 
-	public VelocityCompatPingEvent(VaneProxyPlugin plugin, ProxyPingEvent event, IVaneProxyServerInfo server) {
-		super(plugin, new VelocityCompatProxyServerPing(event.getPing()), server);
-		this.event = event;
-	}
+    public VelocityCompatPingEvent(VaneProxyPlugin plugin, ProxyPingEvent event, IVaneProxyServerInfo server) {
+        super(plugin, new VelocityCompatProxyServerPing(event.getPing()), server);
+        this.event = event;
+    }
 
-	@Override
-	public void send_response() {
-		event.setPing(((VelocityCompatProxyServerPing) ping).ping.build());
-	}
+    @Override
+    public void send_response() {
+        event.setPing(((VelocityCompatProxyServerPing) ping).ping.build());
+    }
 
-	@Override
-	public ProxyPendingConnection get_connection() {
-		return null;
-	}
-
+    @Override
+    public ProxyPendingConnection get_connection() {
+        return null;
+    }
 }

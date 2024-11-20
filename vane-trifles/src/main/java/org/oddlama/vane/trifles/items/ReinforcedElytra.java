@@ -2,7 +2,7 @@ package org.oddlama.vane.trifles.items;
 
 import java.io.IOException;
 import java.util.EnumSet;
-
+import net.kyori.adventure.key.Key;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -19,62 +19,64 @@ import org.oddlama.vane.core.resourcepack.ResourcePackGenerator;
 import org.oddlama.vane.trifles.Trifles;
 import org.oddlama.vane.util.StorageUtil;
 
-import net.kyori.adventure.key.Key;
-
 @VaneItem(name = "reinforced_elytra", base = Material.ELYTRA, durability = 864, model_data = 0x760002, version = 1)
 public class ReinforcedElytra extends CustomItem<Trifles> {
-	@ConfigDouble(def = 6.0, min = 0, desc = "Amount of defense points.")
-	private double config_defense_points;
 
-	public ReinforcedElytra(Context<Trifles> context) {
-		super(context);
-	}
+    @ConfigDouble(def = 6.0, min = 0, desc = "Amount of defense points.")
+    private double config_defense_points;
 
-	@Override
-	public RecipeList default_recipes() {
-		return RecipeList.of(new SmithingRecipeDefinition("generic")
-				.base(Material.ELYTRA)
-				.addition(Material.NETHERITE_INGOT)
-				.copy_nbt(true)
-				.result(key().toString()));
-	}
+    public ReinforcedElytra(Context<Trifles> context) {
+        super(context);
+    }
 
-	@Override
-	public ItemStack updateItemStack(ItemStack item_stack) {
-		item_stack.editMeta(meta -> {
-			final var modifier_defense = new AttributeModifier(
-					namespaced_key("armor"),
-					config_defense_points,
-					AttributeModifier.Operation.ADD_NUMBER,
-					EquipmentSlotGroup.CHEST);
-			meta.removeAttributeModifier(Attribute.ARMOR, modifier_defense);
-			meta.addAttributeModifier(Attribute.ARMOR, modifier_defense);
-		});
-		return item_stack;
-	}
+    @Override
+    public RecipeList default_recipes() {
+        return RecipeList.of(
+            new SmithingRecipeDefinition("generic")
+                .base(Material.ELYTRA)
+                .addition(Material.NETHERITE_INGOT)
+                .copy_nbt(true)
+                .result(key().toString())
+        );
+    }
 
-	@Override
-	public void addResources(final ResourcePackGenerator rp) throws IOException {
-		// Add normal variant
-		super.addResources(rp);
+    @Override
+    public ItemStack updateItemStack(ItemStack item_stack) {
+        item_stack.editMeta(meta -> {
+            final var modifier_defense = new AttributeModifier(
+                namespaced_key("armor"),
+                config_defense_points,
+                AttributeModifier.Operation.ADD_NUMBER,
+                EquipmentSlotGroup.CHEST
+            );
+            meta.removeAttributeModifier(Attribute.ARMOR, modifier_defense);
+            meta.addAttributeModifier(Attribute.ARMOR, modifier_defense);
+        });
+        return item_stack;
+    }
 
-		// Add broken variant
-		final var broken_resource_name = "items/broken_" + key().value() + ".png";
-		final var broken_resource = get_module().getResource(broken_resource_name);
-		if (broken_resource == null) {
-			throw new RuntimeException("Missing resource '" + broken_resource_name + "'. This is a bug.");
-		}
+    @Override
+    public void addResources(final ResourcePackGenerator rp) throws IOException {
+        // Add normal variant
+        super.addResources(rp);
 
-		final var key_broken = StorageUtil.subkey(key(), "broken");
-		rp.add_item_model(key_broken, broken_resource, Key.key(Key.MINECRAFT_NAMESPACE, "item/generated"));
-		rp.add_item_override(baseMaterial().getKey(), key_broken, predicate -> {
-			predicate.put("custom_model_data", customModelData());
-			predicate.put("broken", 1);
-		});
-	}
+        // Add broken variant
+        final var broken_resource_name = "items/broken_" + key().value() + ".png";
+        final var broken_resource = get_module().getResource(broken_resource_name);
+        if (broken_resource == null) {
+            throw new RuntimeException("Missing resource '" + broken_resource_name + "'. This is a bug.");
+        }
 
-	@Override
-	public EnumSet<InhibitBehavior> inhibitedBehaviors() {
-		return EnumSet.of(InhibitBehavior.USE_IN_VANILLA_RECIPE, InhibitBehavior.ITEM_BURN);
-	}
+        final var key_broken = StorageUtil.subkey(key(), "broken");
+        rp.add_item_model(key_broken, broken_resource, Key.key(Key.MINECRAFT_NAMESPACE, "item/generated"));
+        rp.add_item_override(baseMaterial().getKey(), key_broken, predicate -> {
+            predicate.put("custom_model_data", customModelData());
+            predicate.put("broken", 1);
+        });
+    }
+
+    @Override
+    public EnumSet<InhibitBehavior> inhibitedBehaviors() {
+        return EnumSet.of(InhibitBehavior.USE_IN_VANILLA_RECIPE, InhibitBehavior.ITEM_BURN);
+    }
 }

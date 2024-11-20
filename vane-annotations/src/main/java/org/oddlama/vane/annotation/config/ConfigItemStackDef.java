@@ -9,7 +9,7 @@ import org.bukkit.Material;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface ConfigItemStackDef {
-	Material type();
+    Material type();
 
-	int amount() default 1;
+    int amount() default 1;
 }

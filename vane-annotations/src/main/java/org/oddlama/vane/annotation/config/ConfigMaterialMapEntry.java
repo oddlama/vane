@@ -9,7 +9,7 @@ import org.bukkit.Material;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface ConfigMaterialMapEntry {
-	String key();
+    String key();
 
-	Material value();
+    Material value();
 }
