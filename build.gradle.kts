@@ -38,7 +38,7 @@ subprojects {
 	}
 
 	tasks.withType<JavaCompile> {
-		options.compilerArgs.addAll(arrayOf("-Xlint:all", "-Xlint:-processing", "-Xdiags:verbose", "-Xlint:-this-escape"))
+		options.compilerArgs.addAll(arrayOf("-Xlint:all", "-Xlint:-processing", "-Xdiags:verbose"))
 		options.encoding = "UTF-8"
 	}
 
@@ -53,6 +53,10 @@ configure(subprojects.filter {
 	!listOf("vane-velocity", "vane-proxy-core").contains(it.name)
 }) {
 	apply(plugin = "io.papermc.paperweight.userdev")
+
+	tasks.withType<JavaCompile> {
+		options.compilerArgs.addAll(arrayOf("-Xlint:-this-escape"))
+	}
 
 	dependencies {
 		paperweight.paperDevBundle("1.21.3-R0.1-SNAPSHOT")
