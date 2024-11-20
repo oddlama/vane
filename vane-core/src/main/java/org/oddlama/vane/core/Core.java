@@ -148,8 +148,6 @@ public class Core extends Module<Core> {
 			// OPs will get a message about this when they join.
 			schedule_task_timer(this::check_for_update, 1l, ms_to_ticks(2 * 60l * 60l * 1000l));
 		}
-
-		schedule_next_tick(() -> freeze_registries());
 	}
 
 	public void unfreeze_registries() {
@@ -168,10 +166,6 @@ public class Core extends Module<Core> {
 		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
 			e.printStackTrace();
 		}
-	}
-
-	public void freeze_registries() {
-		BuiltInRegistries.ENTITY_TYPE.freeze();
 	}
 
 	@Override

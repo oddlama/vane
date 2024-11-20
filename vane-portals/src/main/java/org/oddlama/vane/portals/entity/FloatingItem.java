@@ -51,11 +51,6 @@ public class FloatingItem extends ItemEntity {
 	}
 
 	@Override
-	public boolean isInvulnerableTo(DamageSource source) {
-		return true;
-	}
-
-	@Override
 	public boolean isInvisible() {
 		return true;
 	}

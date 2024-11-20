@@ -50,15 +50,10 @@ public class ItemUtil {
 
 	private static final UUID SKULL_OWNER = UUID.fromString("00000000-0000-0000-0000-000000000000");
 
-	public static final UUID MODIFIER_UUID_GENERIC_ATTACK_DAMAGE = UUID.fromString(
-			"CB3F55D3-645C-4F38-A497-9C13A33DB5CF");
-	public static final UUID MODIFIER_UUID_GENERIC_ATTACK_SPEED = UUID.fromString(
-			"FA233E1C-4180-4865-B01B-BCCE9785ACA3");
-
 	public static void damage_item(final Player player, final ItemStack item_stack, final int amount) {
 		if (player.getGameMode() == GameMode.CREATIVE) { // don't damage the tool if the player is in creative
 			return;
-		} 
+		}
 
 		if (amount <= 0) {
 			return;
@@ -68,7 +63,7 @@ public class ItemUtil {
 		if (handle == null) {
 			return;
 		}
-		
+
 		handle.hurtAndBreak(amount, Nms.world_handle(player.getWorld()), player_handle(player), (item) -> { player.broadcastSlotBreak(EquipmentSlot.HAND); item_stack.subtract(); });
 	}
 
@@ -158,7 +153,7 @@ public class ItemUtil {
 		if (a_count != b_count) {
 			return b_count - a_count;
 		}
-		
+
 		final var a_sorted = ae
 				.entrySet()
 				.stream()

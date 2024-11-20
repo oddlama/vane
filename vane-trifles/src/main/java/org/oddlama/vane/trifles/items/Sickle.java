@@ -1,13 +1,10 @@
 package org.oddlama.vane.trifles.items;
 
-import static org.oddlama.vane.util.ItemUtil.MODIFIER_UUID_GENERIC_ATTACK_DAMAGE;
-import static org.oddlama.vane.util.ItemUtil.MODIFIER_UUID_GENERIC_ATTACK_SPEED;
-
 import java.util.EnumSet;
 
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
-import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.EquipmentSlotGroup;
 import org.bukkit.inventory.ItemStack;
 import org.oddlama.vane.annotation.config.ConfigDouble;
 import org.oddlama.vane.annotation.config.ConfigInt;
@@ -37,23 +34,19 @@ public abstract class Sickle extends CustomItem<Trifles> {
 	public ItemStack updateItemStack(ItemStack item_stack) {
 		item_stack.editMeta(meta -> {
 			final var modifier_damage = new AttributeModifier(
-				MODIFIER_UUID_GENERIC_ATTACK_DAMAGE,
-				"Tool damage",
-				config_attack_damage,
-				AttributeModifier.Operation.ADD_NUMBER,
-				EquipmentSlot.HAND
-			);
+					namespaced_key("attack_damage"),
+					config_attack_damage,
+					AttributeModifier.Operation.ADD_NUMBER,
+					EquipmentSlotGroup.HAND);
 			final var modifier_speed = new AttributeModifier(
-				MODIFIER_UUID_GENERIC_ATTACK_SPEED,
-				"Tool speed",
-				config_attack_speed,
-				AttributeModifier.Operation.ADD_NUMBER,
-				EquipmentSlot.HAND
-			);
-			meta.removeAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, modifier_damage);
-			meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, modifier_damage);
-			meta.removeAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, modifier_speed);
-			meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, modifier_speed);
+					namespaced_key("attack_speed"),
+					config_attack_speed,
+					AttributeModifier.Operation.ADD_NUMBER,
+					EquipmentSlotGroup.HAND);
+			meta.removeAttributeModifier(Attribute.ATTACK_DAMAGE, modifier_damage);
+			meta.addAttributeModifier(Attribute.ATTACK_DAMAGE, modifier_damage);
+			meta.removeAttributeModifier(Attribute.ATTACK_SPEED, modifier_speed);
+			meta.addAttributeModifier(Attribute.ATTACK_SPEED, modifier_speed);
 		});
 		return item_stack;
 	}

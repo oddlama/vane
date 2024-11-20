@@ -22,6 +22,8 @@ import net.minecraft.SharedConstants;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.dedicated.DedicatedServer;
 import net.minecraft.server.level.ServerLevel;
@@ -56,6 +58,7 @@ public class Nms {
 	public static org.bukkit.inventory.ItemStack bukkit_item_stack(ItemStack stack) {
 		return CraftItemStack.asCraftMirror(stack);
 	}
+
 	public static TagKey<Item> enchantment_slot_type(EnchantmentTarget target) {
 		switch (target) {
 			case ARMOR:
@@ -148,7 +151,8 @@ public class Nms {
 		// so it will be available in vanilla constructs like the /summon command)
 		data_types_map.put("minecraft:" + id, data_types_map.get(base_entity_type.toString()));
 		// Store a new type in registry
-		Registry.register(BuiltInRegistries.ENTITY_TYPE, id, builder.build(id));
+		final var rk = ResourceKey.create(Registries.ENTITY_TYPE, ResourceLocation.withDefaultNamespace(id));
+		Registry.register(BuiltInRegistries.ENTITY_TYPE, id, builder.build(rk));
 	}
 
 	public static void spawn(org.bukkit.World world, Entity entity) {
@@ -162,7 +166,7 @@ public class Nms {
 
 	public static int creative_tab_id(final ItemStack item_stack) {
 		// TODO FIXME BUG this is broken and always returns 0
-		return (int)CreativeModeTabs.allTabs().stream().takeWhile(tab -> tab.contains(item_stack)).count();
+		return (int) CreativeModeTabs.allTabs().stream().takeWhile(tab -> tab.contains(item_stack)).count();
 	}
 
 	public static void set_air_no_drops(final org.bukkit.block.Block block) {

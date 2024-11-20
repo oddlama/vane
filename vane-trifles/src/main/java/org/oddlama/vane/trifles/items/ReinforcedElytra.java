@@ -2,12 +2,11 @@ package org.oddlama.vane.trifles.items;
 
 import java.io.IOException;
 import java.util.EnumSet;
-import java.util.UUID;
 
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
-import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.EquipmentSlotGroup;
 import org.bukkit.inventory.ItemStack;
 import org.oddlama.vane.annotation.config.ConfigDouble;
 import org.oddlama.vane.annotation.item.VaneItem;
@@ -24,8 +23,6 @@ import net.kyori.adventure.key.Key;
 
 @VaneItem(name = "reinforced_elytra", base = Material.ELYTRA, durability = 864, model_data = 0x760002, version = 1)
 public class ReinforcedElytra extends CustomItem<Trifles> {
-	public static final UUID MODIFIER_UUID_REINFORCED_ELYTRA_DEFENSE = UUID.fromString("8d3a5a3c-06d4-40c5-be66-41ebf6a46435"); // Self-generated; Must always be the same!
-
 	@ConfigDouble(def = 6.0, min = 0, desc = "Amount of defense points.")
 	private double config_defense_points;
 
@@ -36,24 +33,22 @@ public class ReinforcedElytra extends CustomItem<Trifles> {
 	@Override
 	public RecipeList default_recipes() {
 		return RecipeList.of(new SmithingRecipeDefinition("generic")
-			.base(Material.ELYTRA)
-			.addition(Material.NETHERITE_INGOT)
-			.copy_nbt(true)
-			.result(key().toString()));
+				.base(Material.ELYTRA)
+				.addition(Material.NETHERITE_INGOT)
+				.copy_nbt(true)
+				.result(key().toString()));
 	}
 
 	@Override
 	public ItemStack updateItemStack(ItemStack item_stack) {
 		item_stack.editMeta(meta -> {
 			final var modifier_defense = new AttributeModifier(
-				MODIFIER_UUID_REINFORCED_ELYTRA_DEFENSE,
-				"Defense",
-				config_defense_points,
-				AttributeModifier.Operation.ADD_NUMBER,
-				EquipmentSlot.CHEST
-			);
-			meta.removeAttributeModifier(Attribute.GENERIC_ARMOR, modifier_defense);
-			meta.addAttributeModifier(Attribute.GENERIC_ARMOR, modifier_defense);
+					namespaced_key("armor"),
+					config_defense_points,
+					AttributeModifier.Operation.ADD_NUMBER,
+					EquipmentSlotGroup.CHEST);
+			meta.removeAttributeModifier(Attribute.ARMOR, modifier_defense);
+			meta.addAttributeModifier(Attribute.ARMOR, modifier_defense);
 		});
 		return item_stack;
 	}
