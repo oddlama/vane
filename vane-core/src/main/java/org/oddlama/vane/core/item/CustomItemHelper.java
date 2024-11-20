@@ -93,8 +93,7 @@ public class CustomItemHelper {
 	 * when those two items are different CustomItem definitions but otherwise share attributes and functionality.
 	 */
 	public static ItemStack convertExistingStack(final CustomItem customItem, ItemStack itemStack) {
-		itemStack = itemStack.clone();
-		itemStack.setType(customItem.baseMaterial());
+		itemStack = itemStack.clone().withType(customItem.baseMaterial());
 		return CustomItemHelper.updateItemStack(customItem, itemStack);
 	}
 }

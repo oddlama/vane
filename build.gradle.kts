@@ -38,7 +38,7 @@ subprojects {
 	}
 
 	tasks.withType<JavaCompile> {
-		options.compilerArgs.addAll(arrayOf("-Xlint:all", "-Xlint:-processing", "-Xdiags:verbose"))
+		options.compilerArgs.addAll(arrayOf("-Xlint:all", "-Xlint:-processing", "-Xdiags:verbose", "-Xlint:-this-escape"))
 		options.encoding = "UTF-8"
 	}
 

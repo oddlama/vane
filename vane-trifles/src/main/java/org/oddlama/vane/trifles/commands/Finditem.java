@@ -23,17 +23,18 @@ import io.papermc.paper.registry.RegistryKey;
 @Name("finditem")
 public class Finditem extends Command<Trifles> {
 	public Finditem(Context<Trifles> context) {
-		super(context, PermissionDefault.TRUE);		
+		super(context, PermissionDefault.TRUE);
 	}
 
 	@Override
 	public LiteralArgumentBuilder<CommandSourceStack> get_command_base() {
 		return super.get_command_base()
-			.then(help())
-			.then(argument("material", ArgumentTypes.resource(RegistryKey.ITEM))
-				.executes(ctx -> {get_module().item_finder.find_item((Player) ctx.getSource().getSender(),
-					ctx.getArgument("material", ItemType.class).asMaterial()); return SINGLE_SUCCESS;})
-			)
-		;
+				.then(help())
+				.then(argument("material", ArgumentTypes.resource(RegistryKey.ITEM))
+						.executes(ctx -> {
+							get_module().item_finder.find_item((Player) ctx.getSource().getSender(),
+									ctx.getArgument("material", ItemType.class).asMaterial());
+							return SINGLE_SUCCESS;
+						}));
 	}
 }

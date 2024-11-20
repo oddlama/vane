@@ -82,7 +82,7 @@ public class Enchant extends Command<Core> {
 			return;
 		}
 
-		final var item_stack = player.getEquipment().getItemInMainHand();
+		var item_stack = player.getEquipment().getItemInMainHand();
 		if (item_stack.getType() == Material.AIR) {
 			lang_invalid_enchantment.send(
 				player,
@@ -100,7 +100,7 @@ public class Enchant extends Command<Core> {
 				// The custom model data and item tag will still be those of a book.
 				// The fix is not straightforward without hardcoding tome identifiers,
 				// so for now we leave it as is.
-				item_stack.setType(Material.ENCHANTED_BOOK);
+				item_stack = item_stack.withType(Material.ENCHANTED_BOOK);
 				/* fallthrough */
 			}
 

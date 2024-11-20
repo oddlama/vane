@@ -28,10 +28,10 @@ public class RepairCostLimiter extends Listener<Trifles> {
 	// Set maximum item repair cost, if configured
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
 	public void on_prepare_anvil(final PrepareAnvilEvent event) {
-		final var inventory = event.getInventory();
-		inventory.setMaximumRepairCost(999999);
-		if (inventory.getRepairCost() > config_max_repair_cost) {
-			inventory.setRepairCost(config_max_repair_cost);
+		final var view = event.getView();
+		view.setMaximumRepairCost(999999);
+		if (view.getRepairCost() > config_max_repair_cost) {
+			view.setRepairCost(config_max_repair_cost);
 		}
 	}
 }

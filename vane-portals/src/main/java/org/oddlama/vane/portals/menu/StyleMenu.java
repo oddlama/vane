@@ -483,9 +483,9 @@ public class StyleMenu extends ModuleComponent<Portals> {
 		) {
 			@Override
 			public void item(final ItemStack item) {
-				final var stack = item_for_type(style_container, active, type);
+				var stack = item_for_type(style_container, active, type);
 				if (stack.getType() == Material.AIR) {
-					stack.setType(Material.BARRIER);
+					stack = stack.withType(Material.BARRIER);
 				}
 				super.item(t_item.alternative(stack, "§6" + building_material.getKey()));
 			}

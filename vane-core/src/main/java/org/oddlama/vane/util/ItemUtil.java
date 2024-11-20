@@ -43,6 +43,7 @@ import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.item.ItemParser;
+import net.minecraft.data.registries.VanillaRegistries;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.item.Item;
 
@@ -64,7 +65,10 @@ public class ItemUtil {
 			return;
 		}
 
-		handle.hurtAndBreak(amount, Nms.world_handle(player.getWorld()), player_handle(player), (item) -> { player.broadcastSlotBreak(EquipmentSlot.HAND); item_stack.subtract(); });
+		handle.hurtAndBreak(amount, Nms.world_handle(player.getWorld()), player_handle(player), (item) -> {
+			player.broadcastSlotBreak(EquipmentSlot.HAND);
+			item_stack.subtract();
+		});
 	}
 
 	public static String name_of(final ItemStack item) {
@@ -161,7 +165,8 @@ public class ItemUtil {
 						Map.Entry
 								.<Enchantment, Integer>comparingByKey(
 										(a, b) -> a.getKey().toString().compareTo(b.getKey().toString()))
-								.thenComparing(Map.Entry.comparingByValue())).toList();
+								.thenComparing(Map.Entry.comparingByValue()))
+				.toList();
 		final var b_sorted = be
 				.entrySet()
 				.stream()
@@ -169,7 +174,8 @@ public class ItemUtil {
 						Map.Entry
 								.<Enchantment, Integer>comparingByKey(
 										(a, b) -> a.getKey().toString().compareTo(b.getKey().toString()))
-								.thenComparing(Map.Entry.comparingByValue())).toList();
+								.thenComparing(Map.Entry.comparingByValue()))
+				.toList();
 
 		// Lastly, compare names and levels
 		final var ait = a_sorted.iterator();
@@ -320,7 +326,8 @@ public class ItemUtil {
 				key = key.substring(0, level_delim);
 			}
 
-			final var ench = RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT).get(NamespacedKey.fromString(key));
+			final var ench = RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT)
+					.get(NamespacedKey.fromString(key));
 			if (ench == null) {
 				throw new IllegalArgumentException(
 						"Cannot apply unknown enchantment '" + key + "' to item '" + item_stack + "'");
@@ -379,7 +386,8 @@ public class ItemUtil {
 		// of whatever the extended material gave us.
 		final var vanilla_definition = item_stack.getType().key() + definition.substring(nbt_delim);
 		try {
-			final var parsed_nbt = new ItemParser(Commands.createValidationContext(MinecraftServer.getDefaultRegistryAccess())).parse(new StringReader(vanilla_definition)).components();
+			final var parsed_nbt = new ItemParser(Commands.createValidationContext(VanillaRegistries.createLookup()))
+					.parse(new StringReader(vanilla_definition)).components();
 
 			// Now apply the NBT be parsed by minecraft's internal parser to the itemstack.
 			final var nms_item = item_handle(item_stack).copy();
