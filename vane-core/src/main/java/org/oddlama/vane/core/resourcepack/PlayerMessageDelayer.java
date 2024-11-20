@@ -32,11 +32,9 @@ public class PlayerMessageDelayer extends Listener<Core> {
 
 	public PlayerMessageDelayer(Context<Core> context) {
 		super(
-			context.group(
-				"message_delaying",
-				"Enable delaying messages to players until their resource pack is fully loaded. This prevents display of untranslated chat messages."
-			)
-		);
+				context.group(
+						"message_delaying",
+						"Enable delaying messages to players until their resource pack is fully loaded. This prevents display of untranslated chat messages."));
 	}
 
 	@Override
@@ -48,10 +46,9 @@ public class PlayerMessageDelayer extends Listener<Core> {
 
 		// Check for message delaying timeouts every 5 seconds.
 		schedule_task_timer(
-			() -> check_message_delay_timeout(),
-			5 * 20,
-			5 * 20
-		);
+				() -> check_message_delay_timeout(),
+				5 * 20,
+				5 * 20);
 	}
 
 	private void check_message_delay_timeout() {
@@ -67,19 +64,16 @@ public class PlayerMessageDelayer extends Listener<Core> {
 
 				final var player = offline_player.getPlayer();
 				relay_messages_and_stop_queueing(player);
-				get_module()
-					.log.warning(
+				get_module().log.warning(
 						"Force stopped delaying messages to player '" +
-						player.getName() +
-						"' after their client didn't report any status after " +
-						message_delaying_timeout +
-						" ms. If this message appears again after they reconnect, it might be a configuration issue."
-					);
+								player.getName() +
+								"' after their client didn't report any status after " +
+								message_delaying_timeout +
+								" ms. If this message appears again after they reconnect, it might be a configuration issue.");
 				player.sendMessage(
-					"Your client failed to report that the resource pack has been applied after " +
-					message_delaying_timeout +
-					" ms. If you encounter text formatting issues, please reconnect. If this message appears again, it might be a plugin configuration issue."
-				);
+						"Your client failed to report that the resource pack has been applied after " +
+								message_delaying_timeout +
+								" ms. If you encounter text formatting issues, please reconnect. If this message appears again, it might be a plugin configuration issue.");
 			}
 		}
 	}
@@ -111,7 +105,8 @@ public class PlayerMessageDelayer extends Listener<Core> {
 	}
 
 	private void relay_messages_and_stop_queueing(final Player player) {
-		// Send delayed messages, which would otherwise be displayed in untranslated form
+		// Send delayed messages, which would otherwise be displayed in untranslated
+		// form
 		// as the resource pack is only now fully loaded
 		final var queue = stop_queueing(player.getUniqueId());
 		if (queue == null) {
@@ -136,11 +131,15 @@ public class PlayerMessageDelayer extends Listener<Core> {
 	public void on_player_status(final PlayerResourcePackStatusEvent event) {
 		switch (event.getStatus()) {
 			case ACCEPTED:
+			case DOWNLOADED:
 				// Wait until the next status.
 				return;
 			case DECLINED:
 			case FAILED_DOWNLOAD:
 			case SUCCESSFULLY_LOADED:
+			case INVALID_URL:
+			case FAILED_RELOAD:
+			case DISCARDED:
 				// Disable queueing
 				break;
 		}
@@ -150,26 +149,20 @@ public class PlayerMessageDelayer extends Listener<Core> {
 
 		switch (event.getStatus()) {
 			case DECLINED:
-				get_module()
-					.log.info(
+				get_module().log.info(
 						"The player " +
-						player.getName() +
-						" rejected the resource pack. This will cause client-side issues with formatted text for them."
-					);
+								player.getName() +
+								" rejected the resource pack. This will cause client-side issues with formatted text for them.");
 				player.sendMessage(
-					"You have rejected the resource pack. This will cause major issues with formatted text and custom items."
-				);
+						"You have rejected the resource pack. This will cause major issues with formatted text and custom items.");
 				break;
 			case FAILED_DOWNLOAD:
-				get_module()
-					.log.info(
+				get_module().log.info(
 						"The resource pack download for player " +
-						player.getName() +
-						" failed. This will cause client-side issues with formatted text for them."
-					);
+								player.getName() +
+								" failed. This will cause client-side issues with formatted text for them.");
 				player.sendMessage(
-					"Your resource pack download failed. Please reconnect to retry, otherwise this will cause major issues with formatted text and custom items."
-				);
+						"Your resource pack download failed. Please reconnect to retry, otherwise this will cause major issues with formatted text and custom items.");
 				break;
 			default:
 				break;
@@ -180,10 +173,9 @@ public class PlayerMessageDelayer extends Listener<Core> {
 
 		public Adapter() {
 			super(
-				PlayerMessageDelayer.this.get_module(),
-				ListenerPriority.HIGHEST,
-				PacketType.Play.Server.SYSTEM_CHAT
-			);
+					PlayerMessageDelayer.this.get_module(),
+					ListenerPriority.HIGHEST,
+					PacketType.Play.Server.SYSTEM_CHAT);
 		}
 
 		@Override
