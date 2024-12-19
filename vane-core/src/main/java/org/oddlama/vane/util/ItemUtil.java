@@ -101,7 +101,11 @@ public class ItemUtil {
     }
 
     public static ItemStack name_item(final ItemStack item, Component name, final List<Component> lore) {
-        final var meta = item.getItemMeta();
+        var meta = item.getItemMeta();
+		if (meta == null) {
+			// Cannot name item without meta (probably air)
+			return item;
+		}
 
         name = name.decoration(TextDecoration.ITALIC, false);
         meta.displayName(name);

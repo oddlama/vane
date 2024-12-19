@@ -539,7 +539,7 @@ public class StyleMenu extends ModuleComponent<Portals> {
             public void item(final ItemStack item) {
                 var stack = item_for_type(style_container, active, type);
                 if (stack.getType() == Material.AIR) {
-                    stack = stack.withType(Material.BARRIER);
+                    stack = new ItemStack(Material.BARRIER);
                 }
                 super.item(t_item.alternative(stack, "§6" + building_material.getKey()));
             }
