@@ -1,0 +1,14 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "minecraft:item/iron_hoe"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "custom_model_data": 7733254
+      },
+      "model": "vane_trifles:item/iron_sickle"
+    }
+  ]
+}

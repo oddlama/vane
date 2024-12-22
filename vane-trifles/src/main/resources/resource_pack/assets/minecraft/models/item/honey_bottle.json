@@ -1,0 +1,26 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "minecraft:item/honey_bottle"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "custom_model_data": 7733259
+      },
+      "model": "vane_trifles:item/small_xp_bottle"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 7733260
+      },
+      "model": "vane_trifles:item/medium_xp_bottle"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 7733261
+      },
+      "model": "vane_trifles:item/large_xp_bottle"
+    }
+  ]
+}

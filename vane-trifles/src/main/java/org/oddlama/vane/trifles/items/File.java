@@ -429,9 +429,4 @@ public class File extends CustomItem<Trifles> {
         damage_item(player, item, 1);
         swing_arm(player, event.getHand());
     }
-
-    @Override
-    public Key itemType() {
-        return Key.key(Key.MINECRAFT_NAMESPACE, "item/handheld");
-    }
 }

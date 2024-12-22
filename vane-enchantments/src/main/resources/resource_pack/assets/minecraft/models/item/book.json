@@ -1,0 +1,26 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "minecraft:item/book"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "custom_model_data": 7798784
+      },
+      "model": "vane_enchantments:item/ancient_tome"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 7798786
+      },
+      "model": "vane_enchantments:item/ancient_tome_of_knowledge"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 7798788
+      },
+      "model": "vane_enchantments:item/ancient_tome_of_the_gods"
+    }
+  ]
+}

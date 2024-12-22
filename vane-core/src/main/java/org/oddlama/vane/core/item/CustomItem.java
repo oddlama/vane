@@ -22,129 +22,108 @@ import org.oddlama.vane.util.StorageUtil;
 
 public class CustomItem<T extends Module<T>> extends Listener<T> implements org.oddlama.vane.core.item.api.CustomItem {
 
-    private VaneItem annotation;
-    public NamespacedKey key;
+	private VaneItem annotation;
+	public NamespacedKey key;
 
-    public Recipes<T> recipes;
-    public LootTables<T> loot_tables;
+	public Recipes<T> recipes;
+	public LootTables<T> loot_tables;
 
-    // Language
-    @LangMessage
-    public TranslatedMessage lang_name;
+	// Language
+	@LangMessage
+	public TranslatedMessage lang_name;
 
-    @ConfigInt(
-        def = 0,
-        min = 0,
-        desc = "The durability of this item. Set to 0 to use the durability properties of whatever base material the item is made of."
-    )
-    private int config_durability;
+	@ConfigInt(def = 0, min = 0, desc = "The durability of this item. Set to 0 to use the durability properties of whatever base material the item is made of.")
+	private int config_durability;
 
-    private final String name_override;
-    private final Integer custom_model_data_override;
+	private final String name_override;
+	private final Integer custom_model_data_override;
 
-    public CustomItem(Context<T> context) {
-        this(context, null, null);
-    }
+	public CustomItem(Context<T> context) {
+		this(context, null, null);
+	}
 
-    public CustomItem(Context<T> context, String name_override, Integer custom_model_data_override) {
-        super(null);
-        Class<?> cls = getClass();
-        while (this.annotation == null && cls != null) {
-            this.annotation = cls.getAnnotation(VaneItem.class);
-            cls = cls.getSuperclass();
-        }
-        if (this.annotation == null) {
-            throw new IllegalStateException("Could not find @VaneItem annotation on " + getClass());
-        }
+	public CustomItem(Context<T> context, String name_override, Integer custom_model_data_override) {
+		super(null);
+		Class<?> cls = getClass();
+		while (this.annotation == null && cls != null) {
+			this.annotation = cls.getAnnotation(VaneItem.class);
+			cls = cls.getSuperclass();
+		}
+		if (this.annotation == null) {
+			throw new IllegalStateException("Could not find @VaneItem annotation on " + getClass());
+		}
 
-        this.name_override = name_override;
-        this.custom_model_data_override = custom_model_data_override;
+		this.name_override = name_override;
+		this.custom_model_data_override = custom_model_data_override;
 
-        // Set namespace delayed, as we need to access instance methods to do so.
-        context = context.group("item_" + name(), "Enable item " + name());
-        set_context(context);
+		// Set namespace delayed, as we need to access instance methods to do so.
+		context = context.group("item_" + name(), "Enable item " + name());
+		set_context(context);
 
-        this.key = StorageUtil.namespaced_key(get_module().namespace(), name());
-        recipes = new Recipes<T>(get_context(), this.key, this::default_recipes);
-        loot_tables = new LootTables<T>(get_context(), this.key, this::default_loot_tables);
+		this.key = StorageUtil.namespaced_key(get_module().namespace(), name());
+		recipes = new Recipes<T>(get_context(), this.key, this::default_recipes);
+		loot_tables = new LootTables<T>(get_context(), this.key, this::default_loot_tables);
 
-        // Register item
-        get_module().core.item_registry().register(this);
-    }
+		// Register item
+		get_module().core.item_registry().register(this);
+	}
 
-    @Override
-    public NamespacedKey key() {
-        return key;
-    }
+	@Override
+	public NamespacedKey key() {
+		return key;
+	}
 
-    public String name() {
-        if (name_override != null) {
-            return name_override;
-        }
-        return annotation.name();
-    }
+	public String name() {
+		if (name_override != null) {
+			return name_override;
+		}
+		return annotation.name();
+	}
 
-    @Override
-    public boolean enabled() {
-        // Explicitly stated to not be forgotten, as enabled() is also part of Listener<T>.
-        return annotation.enabled() && super.enabled();
-    }
+	@Override
+	public boolean enabled() {
+		// Explicitly stated to not be forgotten, as enabled() is also part of
+		// Listener<T>.
+		return annotation.enabled() && super.enabled();
+	}
 
-    @Override
-    public int version() {
-        return annotation.version();
-    }
+	@Override
+	public int version() {
+		return annotation.version();
+	}
 
-    @Override
-    public Material baseMaterial() {
-        return annotation.base();
-    }
+	@Override
+	public Material baseMaterial() {
+		return annotation.base();
+	}
 
-    @Override
-    public int customModelData() {
-        if (custom_model_data_override != null) {
-            return custom_model_data_override;
-        }
-        return annotation.model_data();
-    }
+	@Override
+	public int customModelData() {
+		if (custom_model_data_override != null) {
+			return custom_model_data_override;
+		}
+		return annotation.model_data();
+	}
 
-    @Override
-    public Component displayName() {
-        return lang_name.format().decoration(TextDecoration.ITALIC, false);
-    }
+	@Override
+	public Component displayName() {
+		return lang_name.format().decoration(TextDecoration.ITALIC, false);
+	}
 
-    public int config_durability_def() {
-        return annotation.durability();
-    }
+	public int config_durability_def() {
+		return annotation.durability();
+	}
 
-    @Override
-    public int durability() {
-        return config_durability;
-    }
+	@Override
+	public int durability() {
+		return config_durability;
+	}
 
-    public RecipeList default_recipes() {
-        return RecipeList.of();
-    }
+	public RecipeList default_recipes() {
+		return RecipeList.of();
+	}
 
-    public LootTableList default_loot_tables() {
-        return LootTableList.of();
-    }
-
-    /** Returns the type of item for the resource pack */
-    public Key itemType() {
-        return Key.key(Key.MINECRAFT_NAMESPACE, "item/generated");
-    }
-
-    @Override
-    public void addResources(final ResourcePackGenerator rp) throws IOException {
-        final var resource_name = "items/" + key().value() + ".png";
-        final var resource = get_module().getResource(resource_name);
-        if (resource == null) {
-            throw new RuntimeException("Missing resource '" + resource_name + "'. This is a bug.");
-        }
-        rp.add_item_model(key(), resource, itemType());
-        rp.add_item_override(baseMaterial().getKey(), key(), predicate ->
-            predicate.put("custom_model_data", customModelData())
-        );
-    }
+	public LootTableList default_loot_tables() {
+		return LootTableList.of();
+	}
 }

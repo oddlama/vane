@@ -123,13 +123,6 @@ public interface CustomItem {
     }
 
     /**
-     * This function will be called when the resource pack is generated, and allows you to add the
-     * item's texture, translation strings or any other client side resources to a pack that
-     * can/will be distributed to players.
-     */
-    public void addResources(final ResourcePackGenerator rp) throws IOException;
-
-    /**
      * This function will be called when a custom item of this type is newly created, or when an
      * existing stack needs to be updated. This can include cases where no base information actually
      * changed, but an item still is considered to be updated, for example, anvil results.

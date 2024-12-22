@@ -184,17 +184,10 @@ public class Core extends Module<Core> {
     public File generate_resource_pack() {
         try {
             var file = new File("vane-resource-pack.zip");
-            // TODO pack version number here. warn if merging lower.
             var pack = new ResourcePackGenerator();
-            pack.set_description("Vane plugin resource pack");
-            pack.set_icon_png(getResource("pack.png"));
 
             for (var m : vane_modules) {
                 m.generate_resource_pack(pack);
-            }
-
-            for (final var custom_item : item_registry().all()) {
-                custom_item.addResources(pack);
             }
 
             pack.write(file);

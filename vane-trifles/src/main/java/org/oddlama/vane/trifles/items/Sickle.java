@@ -56,9 +56,4 @@ public abstract class Sickle extends CustomItem<Trifles> {
     public EnumSet<InhibitBehavior> inhibitedBehaviors() {
         return EnumSet.of(InhibitBehavior.USE_IN_VANILLA_RECIPE, InhibitBehavior.HOE_TILL, InhibitBehavior.USE_OFFHAND);
     }
-
-    @Override
-    public Key itemType() {
-        return Key.key(Key.MINECRAFT_NAMESPACE, "item/handheld");
-    }
 }

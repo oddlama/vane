@@ -56,26 +56,6 @@ public class ReinforcedElytra extends CustomItem<Trifles> {
     }
 
     @Override
-    public void addResources(final ResourcePackGenerator rp) throws IOException {
-        // Add normal variant
-        super.addResources(rp);
-
-        // Add broken variant
-        final var broken_resource_name = "items/broken_" + key().value() + ".png";
-        final var broken_resource = get_module().getResource(broken_resource_name);
-        if (broken_resource == null) {
-            throw new RuntimeException("Missing resource '" + broken_resource_name + "'. This is a bug.");
-        }
-
-        final var key_broken = StorageUtil.subkey(key(), "broken");
-        rp.add_item_model(key_broken, broken_resource, Key.key(Key.MINECRAFT_NAMESPACE, "item/generated"));
-        rp.add_item_override(baseMaterial().getKey(), key_broken, predicate -> {
-            predicate.put("custom_model_data", customModelData());
-            predicate.put("broken", 1);
-        });
-    }
-
-    @Override
     public EnumSet<InhibitBehavior> inhibitedBehaviors() {
         return EnumSet.of(InhibitBehavior.USE_IN_VANILLA_RECIPE, InhibitBehavior.ITEM_BURN);
     }

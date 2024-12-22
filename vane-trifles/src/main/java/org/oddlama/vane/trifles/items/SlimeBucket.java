@@ -148,41 +148,4 @@ public class SlimeBucket extends CustomItem<Trifles> {
             }
         }
     }
-
-    @Override
-    public void addResources(final ResourcePackGenerator rp) throws IOException {
-        { // Base
-            final var resource_name = "items/" + key().value() + ".png";
-            final var resource = get_module().getResource(resource_name);
-            if (resource == null) {
-                throw new RuntimeException("Missing resource '" + resource_name + "'. This is a bug.");
-            }
-            rp.add_item_model(key(), resource, Key.key(Key.MINECRAFT_NAMESPACE, "item/generated"));
-            rp.add_item_override(baseMaterial().getKey(), key(), predicate -> {
-                predicate.put("custom_model_data", CUSTOM_MODEL_DATA_QUIET);
-            });
-        }
-
-        { // Excited
-            final var excited_key = StorageUtil.namespaced_key(key().namespace(), key().value() + "_excited");
-            final var resource_name = "items/" + excited_key.value() + ".png";
-            final var resource = get_module().getResource(resource_name);
-            if (resource == null) {
-                throw new RuntimeException("Missing resource '" + resource_name + "'. This is a bug.");
-            }
-            final var resource_mcmeta = get_module().getResource(resource_name + ".mcmeta");
-            if (resource_mcmeta == null) {
-                throw new RuntimeException("Missing resource '" + resource_name + ".mcmeta'. This is a bug.");
-            }
-            rp.add_item_model(
-                excited_key,
-                resource,
-                resource_mcmeta,
-                Key.key(Key.MINECRAFT_NAMESPACE, "item/generated")
-            );
-            rp.add_item_override(baseMaterial().getKey(), excited_key, predicate -> {
-                predicate.put("custom_model_data", CUSTOM_MODEL_DATA_JUMPY);
-            });
-        }
-    }
 }

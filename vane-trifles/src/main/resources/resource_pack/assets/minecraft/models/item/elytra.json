@@ -1,0 +1,21 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "minecraft:item/elytra"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "custom_model_data": 7733250
+      },
+      "model": "vane_trifles:item/reinforced_elytra"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 7733250,
+        "broken": 1
+      },
+      "model": "vane_trifles:item/reinforced_elytra.broken"
+    }
+  ]
+}
