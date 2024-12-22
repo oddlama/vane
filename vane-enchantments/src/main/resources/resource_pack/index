@@ -1,5 +1,5 @@
-assets/minecraft/models/item/book.json
-assets/minecraft/models/item/enchanted_book.json
+assets/minecraft/items/book.json
+assets/minecraft/items/enchanted_book.json
 assets/vane_enchantments/models/item/ancient_tome.json
 assets/vane_enchantments/models/item/ancient_tome_of_knowledge.json
 assets/vane_enchantments/models/item/ancient_tome_of_the_gods.json

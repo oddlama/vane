@@ -1,0 +1,33 @@
+{
+  "model": {
+    "type": "range_dispatch",
+    "property": "minecraft:custom_model_data",
+    "fallback": {
+      "type": "model",
+      "model": "minecraft:item/book"
+    },
+    "entries": [
+      {
+        "threshold": 7798784,
+        "model": {
+          "type": "model",
+          "model": "vane_enchantments:item/ancient_tome"
+        }
+      },
+      {
+        "threshold": 7798786,
+        "model": {
+          "type": "model",
+          "model": "vane_enchantments:item/ancient_tome_of_knowledge"
+        }
+      },
+      {
+        "threshold": 7798788,
+        "model": {
+          "type": "model",
+          "model": "vane_enchantments:item/ancient_tome_of_the_gods"
+        }
+      }
+    ]
+  }
+}

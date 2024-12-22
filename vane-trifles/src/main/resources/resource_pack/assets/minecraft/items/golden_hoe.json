@@ -1,0 +1,19 @@
+{
+  "model": {
+    "type": "range_dispatch",
+    "property": "minecraft:custom_model_data",
+    "fallback": {
+      "type": "model",
+      "model": "minecraft:item/golden_hoe"
+    },
+    "entries": [
+      {
+        "threshold": 7733255,
+        "model": {
+          "type": "model",
+          "model": "vane_trifles:item/golden_sickle"
+        }
+      }
+    ]
+  }
+}
