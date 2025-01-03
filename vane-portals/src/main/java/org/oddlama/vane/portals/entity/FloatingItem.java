@@ -21,8 +21,8 @@ public class FloatingItem extends ItemEntity {
         setPos(x, y, z);
     }
 
-    public FloatingItem(EntityType<? extends ItemEntity> entitytypes, Level world) {
-        super(entitytypes, world);
+    public FloatingItem(EntityType<?> entitytypes, Level world) {
+        super((EntityType<? extends ItemEntity>)entitytypes, world);
         setSilent(true);
         setInvulnerable(true);
         setNoGravity(true);
@@ -72,11 +72,6 @@ public class FloatingItem extends ItemEntity {
 
     @Override
     public void addAdditionalSaveData(CompoundTag nbt) {}
-
-    @Override
-    public boolean serializeEntity(CompoundTag nbt) {
-        return false;
-    }
 
     @Override
     public boolean save(CompoundTag nbt) {

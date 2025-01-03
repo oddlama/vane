@@ -28,6 +28,9 @@ public class ExistingItemConverter extends Listener<Core> {
 
         // If lookups fail, we return null and nothing will be done.
         String new_item_key = null;
+		if (meta.getCustomModelDataComponent().getFloats().isEmpty()) {
+			return null;
+		}
         switch (meta.getCustomModelData()) {
             case 7758190:
                 new_item_key = "vane_trifles:wooden_sickle";
