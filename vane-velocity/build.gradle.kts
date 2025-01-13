@@ -19,7 +19,7 @@ java {
     }
 }
 
-tasks.create<Copy>("copyJar") {
+tasks.register<Copy>("copyJar") {
     from(tasks.shadowJar)
     into("${project.rootProject.projectDir}/target")
     duplicatesStrategy = DuplicatesStrategy.INCLUDE

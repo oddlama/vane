@@ -67,7 +67,7 @@ configure(subprojects.filter {
 configure(subprojects.filter {
 	listOf("vane-regions", "vane-core", "vane-portals", "vane-regions").contains(it.name)
 }) {
-	tasks.create<Copy>("copyJar") {
+	tasks.register<Copy>("copyJar") {
 		evaluationDependsOn(project.path)
 		from(tasks.findByPath("shadowJar"))
 		into("${project.rootProject.projectDir}/target")
@@ -79,7 +79,7 @@ configure(subprojects.filter {
 configure(subprojects.filter {
 	listOf("vane-admin", "vane-bedtime", "vane-enchantments", "vane-permissions", "vane-trifles").contains(it.name)
 }) {
-	tasks.create<Copy>("copyJar") {
+	tasks.register<Copy>("copyJar") {
 		from(tasks.jar)
 		into("${project.rootProject.projectDir}/target")
 		rename("(.+)-dev.jar", "$1.jar")
@@ -149,35 +149,35 @@ runPaper {
 	disablePluginJarDetection()
 }
 
-tasks.create<Delete>("cleanVaneRuntimeTranslations") {
+tasks.register<Delete>("cleanVaneRuntimeTranslations") {
 	group = "run paper"
 	delete(fileTree("run").matching {
 		include("plugins/vane-*/lang-*.yml")
 	})
 }
 
-tasks.create<Delete>("cleanVaneConfigurations") {
+tasks.register<Delete>("cleanVaneConfigurations") {
 	group = "run paper"
 	delete(fileTree("run").matching {
 		include("plugins/vane-*/config.yml")
 	})
 }
 
-tasks.create<Delete>("cleanVaneStorage") {
+tasks.register<Delete>("cleanVaneStorage") {
 	group = "run paper"
 	delete(fileTree("run").matching {
 		include("plugins/vane-*/storage.json")
 	})
 }
 
-tasks.create<Delete>("cleanVane") {
+tasks.register<Delete>("cleanVane") {
 	group = "run paper"
 	delete(fileTree("run").matching {
 		include("plugins/vane-*/")
 	})
 }
 
-tasks.create<Delete>("cleanWorld") {
+tasks.register<Delete>("cleanWorld") {
 	group = "run paper"
 	delete(fileTree("run").matching {
 		include(
