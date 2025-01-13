@@ -14,11 +14,12 @@ sourceSets {
 		}
 	}
 }
+
 dependencies {
 	implementation(group = "org.bstats", name = "bstats-base", version = "3.1.0")
 	implementation(group = "org.bstats", name = "bstats-bukkit", version = "3.1.0")
 	implementation(group = "org.reflections", name = "reflections", version = "0.10.2")
-	api(group = "org.json", name = "json", version = "20240303")
+	api(group = "org.json", name = "json", version = "20250107")
 	implementation(project(":vane-annotations"))
 }
 
