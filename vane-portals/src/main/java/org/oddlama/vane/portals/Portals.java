@@ -289,7 +289,7 @@ public class Portals extends Module<Portals> {
             NamespacedKey.minecraft("item"),
             namespace(),
             "floating_item",
-            EntityType.Builder.of(FloatingItem::new, MobCategory.MISC).sized(0.0f, 0.0f)
+            EntityType.Builder.of(FloatingItem::new, MobCategory.MISC).noSave().sized(0.0f, 0.0f)
         );
     }
 
