@@ -4,7 +4,7 @@
     "property": "minecraft:custom_model_data",
     "fallback": {
       "type": "model",
-      "model": "minecraft:item/dropper"
+      "model": "minecraft:block/dropper"
     },
     "entries": [
       {
