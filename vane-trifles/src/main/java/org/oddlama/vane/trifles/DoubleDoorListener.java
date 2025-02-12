@@ -24,6 +24,9 @@ public class DoubleDoorListener extends Listener<Trifles> {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void on_player_interact(PlayerInteractEvent event) {
         if (event.hasBlock() && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+			if (event.getPlayer().isSneaking()) {
+				return;
+			}
             handle_double_door(event.getClickedBlock());
         }
     }
