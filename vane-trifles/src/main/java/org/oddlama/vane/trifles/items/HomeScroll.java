@@ -48,7 +48,8 @@ public class HomeScroll extends Scroll {
     public Location teleport_location(final ItemStack scroll, Player player, boolean imminent_teleport) {
         final var to_location = player.getRespawnLocation();
         if (imminent_teleport && to_location == null) {
-            final var to_potential_location = player.getPotentialBedLocation();
+            // replaced deprecated call with getPotentialRespawnLocation()
+            final var to_potential_location = player.getPotentialRespawnLocation();
             if (to_potential_location != null) {
                 // "You have no home bed or charge respawn anchor, or it was obstructed"
                 // The most cursed sentence in minecraft.
