@@ -1,5 +1,6 @@
 package org.oddlama.vane.core;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +42,24 @@ public class LootTable {
                 }
             }
         }
+    }
+
+    public ItemStack generate_override(final Random random) {
+        double total_chance = 0;
+        final double threshold = random.nextDouble();
+        final List<ItemStack> result_container = new ArrayList<>(1);
+        for (final var set : possible_loot.values()) {
+            for (final var loot : set) {
+                total_chance += loot.chance;
+                if (total_chance > threshold) {
+                    loot.add_sample(result_container, random);
+                }
+                if (!result_container.isEmpty()) {
+                    return result_container.get(0);
+                }
+            }
+        }
+        return null;
     }
 
     public static class LootTableEntry {

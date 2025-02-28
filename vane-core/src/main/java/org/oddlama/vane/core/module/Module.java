@@ -27,12 +27,19 @@ import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.FishHook;
+import org.bukkit.entity.Item;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.world.LootGenerateEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.loot.LootTables;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
@@ -514,5 +521,46 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 						(loc.getBlockY() & (0xffff << 32)) +
 						(loc.getBlockZ() & (0xffff << 48)));
 		additional_loot_table.generate_loot(event.getLoot(), local_random);
+	}
+
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	public void on_module_player_caught_fish(final PlayerFishEvent event) {
+		// This is a dirty non-commutative way to apply fishing loot tables
+		// that skews subtable probabilities,
+		// consider somehow programmatically generating datapacks or
+		// modifying loot tables directly instead.
+		if (event.getState() != PlayerFishEvent.State.CAUGHT_FISH) {
+			return;
+		}
+		if (event.getCaught() instanceof Item item_entity) {
+			final Player player = event.getPlayer();
+			final FishHook hook_entity = event.getHook();
+			final double player_luck = player.getAttribute(Attribute.LUCK).getValue();
+			final ItemStack rod_stack = player.getInventory().getItem(event.getHand());
+			final double rod_luck = rod_stack.getEnchantmentLevel(Enchantment.LUCK_OF_THE_SEA);  // Can bukkit provide access to fishing_luck_bonus of 1.24 item component system?
+			final double total_luck = player_luck + rod_luck;
+			final double weight_fish     =                               Math.max(0, 85 + total_luck * -1);
+			final double weight_junk     =                               Math.max(0, 10 + total_luck * -2);
+			final double weight_treasure = hook_entity.isInOpenWater() ? Math.max(0, 5 + total_luck * 2) : 0;
+			final double roll = random.nextDouble() * (weight_fish + weight_junk + weight_treasure);
+			NamespacedKey key;
+			if (roll < weight_fish) {
+				key = LootTables.FISHING_FISH.getKey();
+			} else if (roll < weight_fish + weight_junk) {
+				key = LootTables.FISHING_JUNK.getKey();
+			} else {
+				key = LootTables.FISHING_TREASURE.getKey();
+			}
+			final var additional_loot_table = additional_loot_tables.get(key);
+			if (additional_loot_table == null) {
+				// Do not modify the caught item
+				return;
+			}
+			final var new_item = additional_loot_table.generate_override(new Random(random.nextInt()));
+			if (new_item == null) {
+				return;
+			}
+			item_entity.setItemStack(new_item);
+		}
 	}
 }
