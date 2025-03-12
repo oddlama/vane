@@ -1,0 +1,90 @@
+# vim: set tabstop=2 softtabstop=0 expandtab shiftwidth=2:
+#
+# >> See lang-en.yml for variable descriptions <<
+#
+# +-----------------------------------+
+# | CAUTION: Do NOT change this file! |
+# +-----------------------------------+
+#
+# It will be silently overwritten with updates! If you want
+# to customize strings yourself, copy this file to lang-custom.yml
+# and set the language in the config.yml to "lang: 'custom'"
+
+# DO NOT CHANGE! The version of this language file. Used to determine
+# if the file needs to be updated.
+version: 4
+# The corresponding language code used in resource packs. Used for
+# resource pack generation. Typically this is a combination of the
+# language code (ISO 639) and the country code (ISO 3166).
+resource_pack_lang_code: 'pt_br'
+
+item_ancient_tome:
+  # The display name of this item variant.
+  name: "Tomo Antigo"
+
+item_enchanted_ancient_tome:
+  # The display name of this item variant.
+  name: "Tomo Antigo"
+
+item_ancient_tome_of_knowledge:
+  # The display name of this item variant.
+  name: "Tomo Antigo do Conhecimento"
+
+item_enchanted_ancient_tome_of_knowledge:
+  # The display name of this item variant.
+  name: "Tomo Antigo do Conhecimento"
+
+item_ancient_tome_of_the_gods:
+  # The display name of this item variant.
+  name: "Tomo Antigo dos Deuses"
+
+item_enchanted_ancient_tome_of_the_gods:
+  # The display name of this item variant.
+  name: "Tomo Antigo dos Deuses"
+
+enchantment_angel:
+  # The display name of this enchantment. Will be packed into a resource pack.
+  name: "Anjo"
+
+enchantment_grappling_hook:
+  # The display name of this enchantment. Will be packed into a resource pack.
+  name: "Gancho"
+
+enchantment_hell_bent:
+  # The display name of this enchantment. Will be packed into a resource pack.
+  name: "Cabeça de Ferro"
+
+enchantment_leafchopper:
+  # The display name of this enchantment. Will be packed into a resource pack.
+  name: "Cortador de Folhas"
+
+enchantment_lightning:
+  # The display name of this enchantment. Will be packed into a resource pack.
+  name: "Relâmpago"
+  
+enchantment_rake:
+  # The display name of this enchantment. Will be packed into a resource pack.
+  name: "Ancinho"
+
+enchantment_seeding:
+  # The display name of this enchantment. Will be packed into a resource pack.
+  name: "Semeador"
+
+enchantment_soulbound:
+  # The display name of this enchantment. Will be packed into a resource pack.
+  name: "Vinculado"
+  drop_lock_warning: "Itens vinculados só podem ser dropados usando o mouse"
+  drop_cooldown: "Drope novamente para confirmar"
+  dropped_notification: "Item Vinculado foi Dropado: %1$s"
+
+enchantment_take_off:
+  # The display name of this enchantment. Will be packed into a resource pack.
+  name: "Decolar"
+
+enchantment_unbreakable:
+  # The display name of this enchantment. Will be packed into a resource pack.
+  name: "Inquebrável"
+
+enchantment_wings:
+  # The display name of this enchantment. Will be packed into a resource pack.
+  name: "Asas"
