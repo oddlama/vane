@@ -18,6 +18,7 @@ public class Trifles extends Module<Trifles> {
         final var fast_walking_group = new FastWalkingGroup(this);
         new FastWalkingListener(fast_walking_group);
         new DoubleDoorListener(this);
+		new ItemFrameListener(this);
         new HarvestListener(this);
         new RepairCostLimiter(this);
         new RecipeUnlock(this);
