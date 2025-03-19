@@ -53,6 +53,10 @@ blue_map:
   # %1$s: Region name
   marker_label: "%1$s"
 
+squaremap:
+  layer_label: "Bölgeler"
+  marker_label: "%1$s"
+
 menus:
   # Settings for the region group naming menu.
   enter_region_group_name:

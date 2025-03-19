@@ -192,6 +192,7 @@ public class Regions extends Module<Regions> {
 
     public RegionDynmapLayer dynmap_layer;
     public RegionBlueMapLayer blue_map_layer;
+    public RegionSquaremapLayer squaremap_layer;
 
     public RegionEconomyDelegate economy;
     public boolean vane_portals_available = false;
@@ -212,6 +213,7 @@ public class Regions extends Module<Regions> {
         new RegionSelectionListener(this);
         dynmap_layer = new RegionDynmapLayer(this);
         blue_map_layer = new RegionBlueMapLayer(this);
+        squaremap_layer = new RegionSquaremapLayer(this);
 
         // Register admin permission
         admin_permission = new Permission(
@@ -540,11 +542,13 @@ public class Regions extends Module<Regions> {
     public void update_marker(final Region region) {
         dynmap_layer.update_marker(region);
         blue_map_layer.update_marker(region);
+        squaremap_layer.update_marker(region);
     }
 
     public void remove_marker(final UUID region_id) {
         dynmap_layer.remove_marker(region_id);
         blue_map_layer.remove_marker(region_id);
+        squaremap_layer.remove_marker(region_id);
     }
 
     private void index_region(final Region region) {
