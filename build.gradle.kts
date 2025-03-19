@@ -35,6 +35,7 @@ subprojects {
 		maven("https://jitpack.io")
 		maven("https://api.modrinth.com/maven")
 		maven("https://repo.bluecolored.de/releases")
+		maven("https://repo.jpenilla.xyz/snapshots")
 	}
 
 	tasks.withType<JavaCompile> {
@@ -142,6 +143,7 @@ configure(subprojects.filter {
 	dependencies {
 		implementation(group = "us.dynmap", name = "DynmapCoreAPI", version = "3.7-beta-6")
 		implementation(group = "de.bluecolored", name = "bluemap-api", version = "2.7.3")
+		implementation(group = "xyz.jpenilla", name = "squaremap-api", version = "1.2.0")
 	}
 }
 

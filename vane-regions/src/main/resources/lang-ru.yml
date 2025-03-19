@@ -35,6 +35,10 @@ blue_map:
   layer_label: "Регионы"
   marker_label: "%1$s"
 
+squaremap:
+  layer_label: "Регионы"
+  marker_label: "%1$s"
+
 menus:
   enter_region_group_name:
     title: "§8§lВведите название группы региона"
