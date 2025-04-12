@@ -20,6 +20,9 @@ dependencies:
     BlueMap:
       required: false
       load: AFTER
+    squaremap:
+      required: false
+      load: AFTER
     vane-portals:
       required: false
       load: AFTER

@@ -53,6 +53,10 @@ blue_map:
   # %1$s: Nombre de la región
   marker_label: "%1$s"
 
+squaremap:
+  layer_label: "Regiones"
+  marker_label: "%1$s"
+
 menus:
   # Configuración para el menú de nombres de grupos de región.
   enter_region_group_name:
