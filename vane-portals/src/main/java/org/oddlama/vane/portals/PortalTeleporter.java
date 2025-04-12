@@ -94,7 +94,7 @@ public class PortalTeleporter extends Listener<Portals> {
                 );
             } else {
                 // Similarly, we can just move entities.
-                nms_entity.absMoveTo(
+                nms_entity.absSnapTo(
                     target_location.getX(),
                     target_location.getY(),
                     target_location.getZ(),

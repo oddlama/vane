@@ -170,7 +170,6 @@ public class Nms {
         final var entity = world_handle(block.getWorld()).getBlockEntity(
             new BlockPos(block.getX(), block.getY(), block.getZ())
         );
-        Clearable.tryClear(entity);
         block.setType(Material.AIR, false);
     }
 }
