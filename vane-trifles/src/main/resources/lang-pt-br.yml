@@ -1,0 +1,138 @@
+# vim: set tabstop=2 softtabstop=0 expandtab shiftwidth=2:
+#
+# >> See lang-en.yml for variable descriptions <<
+#
+# +-----------------------------------+
+# | CAUTION: Do NOT change this file! |
+# +-----------------------------------+
+#
+# It will be silently overwritten with updates! If you want
+# to customize strings yourself, copy this file to lang-custom.yml
+# and set the language in the config.yml to "lang: 'custom'"
+
+# DO NOT CHANGE! The version of this language file. Used to determine
+# if the file needs to be updated.
+version: 4
+# The corresponding language code used in resource packs. Used for
+# resource pack generation. Typically this is a combination of the
+# language code (ISO 639) and the country code (ISO 3166).
+resource_pack_lang_code: 'pt_br'
+
+command_heads:
+  usage: "%1$s"
+  description: "Pegue cabeças da biblioteca de cabeças."
+  help: "Execute para abrir a biblioteca de cabeças."
+
+command_finditem:
+  usage: "%1$s"
+  description: "Procura pelo material dado em inventários por perto."
+  help: "Procura pelo material dado em inventários por perto."
+
+command_setspawn:
+  usage: "%1$s"
+  description: "Define o spawn global para sua posição atual."
+  help: "Define o spawn global para sua posição atual."
+
+storage:
+  open_stacked_item: "Você precisa desempilhar estes itens para abri-los."
+  item_pouch:
+    # The display name of this item variant.
+    name: "Bolsa"
+  item_backpack:
+    # The display name of this item variant.
+    name: "Mochila"
+
+xp_bottles:
+  item_small_xp_bottle:
+    # The display name of this item variant.
+    name: "Frasco de Experiência Pequeno"
+  item_medium_xp_bottle:
+    # The display name of this item variant.
+    name: "Frasco de Experiência Médio"
+  item_large_xp_bottle:
+    # The display name of this item variant.
+    name: "Frasco de Experiência Grande"
+
+item_empty_xp_bottle:
+  # The display name of this item variant.
+  name: "Frasco de Experiência Vazio"
+
+item_north_compass:
+  # The display name of this item variant.
+  name: "Compasso Norte"
+
+item_reinforced_elytra:
+  # The display name of this item variant.
+  name: "Elytra de Netherita"
+
+item_file:
+  # The display name of this item variant.
+  name: "Lixa"
+
+item_slime_bucket:
+  # The display name of this item variant.
+  name: "Slime em um Balde"
+
+item_papyrus_scroll:
+  # The display name of this item variant.
+  name: "Pergaminho Paryrus"
+
+item_trowel:
+  # The display name of this item variant.
+  name: "Espátula"
+  # The lore of every trowel
+  # %1$s: The current feed source
+  lore:
+    - "§7Clique com o botão direito neste item em seu inventário para mudar a fonte."
+    - "§7Fonte atual: %1$s"
+
+sickles:
+  item_wooden_sickle:
+    # The display name of this item variant.
+    name: "Foice de Madeira"
+  item_stone_sickle:
+    # The display name of this item variant.
+    name: "Foice de Pedra"
+  item_iron_sickle:
+    # The display name of this item variant.
+    name: "Foice de Ferro"
+  item_golden_sickle:
+    # The display name of this item variant.
+    name: "Foice de Ouro"
+  item_diamond_sickle:
+    # The display name of this item variant.
+    name: "Foice de Diamante"
+  item_netherite_sickle:
+    # The display name of this item variant.
+    name: "Foice de Netherita"
+
+scrolls:
+  item_home_scroll:
+    # The display name of this item variant.
+    name: "Pergaminho do Sono"
+  item_unstable_scroll:
+    # The display name of this item variant.
+    name: "Pergaminho Instável"
+    # Shown when used but no scroll was used previously.
+    teleport_no_previous_teleport: "§cVocê nunca usou um pergaminho anteriormente."
+  item_spawn_scroll:
+    # The display name of this item variant.
+    name: "Pergaminho do Spawn"
+  item_lodestone_scroll:
+    # The display name of this item variant.
+    name: "Pergaminho de Magnetita"
+    # Shown when used but no lodestone was ever bound.
+    teleport_no_bound_lodestone: "§bPrimeiro segure shift e clique com obotão direito em uma magnetita para (re-)vincular esse pergaminho."
+    # Shown when used but the bound lodestone doesn't exist anymore.
+    teleport_missing_lodestone: "§cEsse pergaminho parece naõ fazer nada... &6Você teme que um vinculo a magnetita esteja faltando."
+    # The lore of a bound scoll
+    # %1$s: Bound lodestone's world name
+    # %2$s: Bound lodestone's X position
+    # %3$s: Bound lodestone's Y position
+    # %4$s: Bound lodestone's Z position
+    bound_lore: "§7Vinculado a (%2$s§7, %3$s§7, %4$s§7) em %1$s"
+  item_death_scroll:
+    # The display name of this item variant.
+    name: "Pergaminho da Morte"
+    # Sent when a death scroll is used but the user hasn't died recently or already used a scroll of this type.
+    teleport_no_recent_death: "§cVocê não morreu recentemente, ou já usou um pergaminho da morte!"
