@@ -19,6 +19,8 @@ dependencies {
 	implementation(group = "org.bstats", name = "bstats-base", version = "3.1.0")
 	implementation(group = "org.bstats", name = "bstats-bukkit", version = "3.1.0")
 	implementation(group = "org.reflections", name = "reflections", version = "0.10.2")
+    implementation(group = "org.apache.commons", name = "commons-lang3", version = "3.17.0")
+    implementation(group = "org.apache.commons", name = "commons-text", version = "1.13.1")
 	api(group = "org.json", name = "json", version = "20250107")
 	implementation(project(":vane-annotations"))
 }
@@ -44,10 +46,14 @@ tasks {
 			include(dependency("org.reflections:reflections"))
 			include(dependency("org.json:json"))
 			include(dependency(":vane-annotations"))
+            include(dependency("org.apache.commons:commons-lang3"))
+            include(dependency("org.apache.commons:commons-text"))
 		}
 		relocate("org.bstats", "org.oddlama.vane.external.bstats")
 		relocate("org.reflections", "org.oddlama.vane.external.reflections")
 		relocate("org.json", "org.oddlama.vane.external.json")
+        relocate("org.apache.commons.lang3", "org.oddlama.vane.external.apache.commons.lang3")
+        relocate("org.apache.commons.text", "org.oddlama.vane.external.apache.commons.text")
 	}
 
 	processResources {

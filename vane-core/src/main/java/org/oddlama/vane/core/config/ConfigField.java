@@ -5,7 +5,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.function.Function;
 import java.util.function.Supplier;
-import org.apache.commons.lang.WordUtils;
+import org.apache.commons.text.WordUtils;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
 import org.bukkit.configuration.file.YamlConfiguration;

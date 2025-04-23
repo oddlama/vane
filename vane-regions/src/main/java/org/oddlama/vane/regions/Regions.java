@@ -16,7 +16,7 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 import net.minecraft.core.BlockPos;
-import org.apache.commons.lang.StringUtils;
+import org.oddlama.vane.external.apache.commons.lang3.StringUtils;
 import org.bukkit.Chunk;
 import org.bukkit.Color;
 import org.bukkit.Location;

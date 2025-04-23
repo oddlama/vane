@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.EnumSet;
 import java.util.List;
 import net.kyori.adventure.key.Key;
-import org.apache.commons.lang3.tuple.Pair;
+import org.oddlama.vane.external.apache.commons.lang3.tuple.Pair;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;

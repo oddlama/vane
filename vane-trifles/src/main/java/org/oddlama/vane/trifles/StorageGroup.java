@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import net.kyori.adventure.text.Component;
-import org.apache.commons.lang3.tuple.Pair;
+import org.oddlama.vane.external.apache.commons.lang3.tuple.Pair;
 import org.bukkit.Nameable;
 import org.bukkit.block.Container;
 import org.bukkit.block.ShulkerBox;

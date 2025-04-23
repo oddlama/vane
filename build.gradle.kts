@@ -5,7 +5,7 @@ plugins {
 }
 
 dependencies {
-	paperweight.paperDevBundle("1.21.5-no-moonrise-SNAPSHOT")
+	paperweight.paperDevBundle("1.21.5-R0.1-SNAPSHOT")
 }
 
 java {
@@ -59,7 +59,7 @@ configure(subprojects.filter {
 	}
 
 	dependencies {
-		paperweight.paperDevBundle("1.21.5-no-moonrise-SNAPSHOT")
+		paperweight.paperDevBundle("1.21.5-R0.1-SNAPSHOT")
 	}
 }
 
@@ -71,7 +71,7 @@ configure(subprojects.filter {
 		evaluationDependsOn(project.path)
 		from(tasks.findByPath("shadowJar"))
 		into("${project.rootProject.projectDir}/target")
-		rename("(.+)-dev-all.jar", "$1.jar")
+		rename("(.+)-all.jar", "$1.jar")
 	}
 }
 
@@ -82,7 +82,6 @@ configure(subprojects.filter {
 	tasks.register<Copy>("copyJar") {
 		from(tasks.jar)
 		into("${project.rootProject.projectDir}/target")
-		rename("(.+)-dev.jar", "$1.jar")
 	}
 }
 

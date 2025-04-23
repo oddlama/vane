@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 import net.kyori.adventure.text.Component;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
-import org.apache.commons.lang.StringUtils;
+import org.oddlama.vane.external.apache.commons.lang3.StringUtils;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
