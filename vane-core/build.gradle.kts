@@ -1,8 +1,8 @@
 import java.security.MessageDigest
 
 plugins {
-    id("com.gradleup.shadow") version "9.2.2"
-    id("net.kyori.blossom") version "2.1.0" // Text replacement for version numbers
+    alias(libs.plugins.shadow)
+    alias(libs.plugins.blossom) // Text replacement for version numbers
 }
 
 sourceSets {
@@ -16,12 +16,12 @@ sourceSets {
 }
 
 dependencies {
-    implementation("org.bstats:bstats-base:3.1.0")
-    implementation("org.bstats:bstats-bukkit:3.1.0")
-    implementation("org.reflections:reflections:0.10.2")
-    implementation("org.apache.commons:commons-lang3:3.19.0")
-    implementation("org.apache.commons:commons-text:1.14.0")
-    api("org.json:json:20250517")
+    implementation(libs.bstatsBase)
+    implementation(libs.bstatsBukkit)
+    implementation(libs.reflections)
+    implementation(libs.commonsLang)
+    implementation(libs.commonsText)
+    api(libs.json)
     implementation(project(":vane-annotations"))
 }
 

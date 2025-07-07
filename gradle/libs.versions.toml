@@ -1,0 +1,30 @@
+[versions]
+paper = "1.21.7-R0.1-SNAPSHOT"
+bstats = "3.1.0"
+
+[libraries]
+annotations = {group = "org.jetbrains", name="annotations", version = "26.0.2"}
+reflections = {group = "org.reflections", name = "reflections", version = "0.10.2"}
+commonsLang = {group = "org.apache.commons", name = "commons-lang3", version = "3.17.0"}
+commonsText = {group = "org.apache.commons", name = "commons-text", version = "1.13.1"}
+json = {group = "org.json", name = "json", version = "20250107"}
+slf4j = {group = "org.slf4j", name = "slf4j-api", version = "2.0.17"}
+nightConfig = {group = "com.electronwill.night-config", name = "toml", version = "3.8.2"}
+
+# Minecraft
+bstatsBase = {group = "org.bstats", name = "bstats-base", version.ref = "bstats"}
+bstatsBukkit = {group = "org.bstats", name = "bstats-bukkit", version.ref = "bstats"}
+bstatsVelocity = {group = "org.bstats", name = "bstats-velocity", version.ref = "bstats"}
+protocollib = {group = "com.comphenix.protocol", name = "ProtocolLib", version = "5.3.0"}
+vault = {group = "com.github.MilkBowl", name = "VaultAPI", version = "1.7.1"}
+velocity = {group = "com.velocitypowered", name = "velocity-api", version = "3.4.0-SNAPSHOT"}
+
+# maps
+dynmap = {group = "us.dynmap", name = "DynmapCoreAPI", version = "3.7-beta-6"}
+bluemap = {group = "de.bluecolored", name = "bluemap-api", version = "2.7.4"}
+
+[plugins]
+paperweightUserdev = {id = "io.papermc.paperweight.userdev", version = "2.0.0-beta.17"}
+runPaper = {id = "xyz.jpenilla.run-paper", version = "2.3.1"}
+shadow = {id = "io.github.goooler.shadow", version = "8.1.8"}
+blossom = {id = "net.kyori.blossom", version = "2.1.0"}

@@ -1,6 +1,6 @@
 plugins {
-    id("com.gradleup.shadow") version "9.2.2"
-    id("net.kyori.blossom") version "2.1.0"
+    alias(libs.plugins.shadow)
+    alias(libs.plugins.blossom)
 }
 
 sourceSets {
@@ -14,10 +14,10 @@ sourceSets {
 }
 
 dependencies {
-    implementation("com.electronwill.night-config:toml:3.8.3")
-    implementation("org.slf4j:slf4j-api:2.0.17")
+    implementation(libs.nightConfig)
+    implementation(libs.slf4j)
     implementation(rootProject.project(":vane-core"))
-    compileOnly("org.json:json:20250517")
+    compileOnly(libs.json)
 }
 
 java {
