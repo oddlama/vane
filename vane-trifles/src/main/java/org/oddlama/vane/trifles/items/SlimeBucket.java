@@ -3,10 +3,9 @@ package org.oddlama.vane.trifles.items;
 import static org.oddlama.vane.util.PlayerUtil.give_items;
 import static org.oddlama.vane.util.PlayerUtil.swing_arm;
 
-import java.io.IOException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.UUID;
-import net.kyori.adventure.key.Key;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
@@ -24,15 +23,12 @@ import org.bukkit.inventory.ItemStack;
 import org.oddlama.vane.annotation.item.VaneItem;
 import org.oddlama.vane.core.item.CustomItem;
 import org.oddlama.vane.core.module.Context;
-import org.oddlama.vane.core.resourcepack.ResourcePackGenerator;
 import org.oddlama.vane.trifles.Trifles;
-import org.oddlama.vane.util.StorageUtil;
 
-@VaneItem(name = "slime_bucket", base = Material.SLIME_BALL, model_data = 0x760014/* and 0x760015 */, version = 1)
+@VaneItem(name = "slime_bucket", base = Material.SLIME_BALL, model_data = 0x760014 /* and 0x760015 */, version = 1)
 public class SlimeBucket extends CustomItem<Trifles> {
-
-    private static final int CUSTOM_MODEL_DATA_QUIET = 0x760014;
-    private static final int CUSTOM_MODEL_DATA_JUMPY = 0x760015;
+    private static final float CUSTOM_MODEL_DATA_QUIET = 0x760014;
+    private static final float CUSTOM_MODEL_DATA_JUMPY = 0x760015;
     private HashSet<UUID> players_in_slime_chunks = new HashSet<>();
 
     public SlimeBucket(Context<Trifles> context) {
@@ -69,7 +65,7 @@ public class SlimeBucket extends CustomItem<Trifles> {
             final var correct_model_data = player.getChunk().isSlimeChunk()
                 ? CUSTOM_MODEL_DATA_JUMPY
                 : CUSTOM_MODEL_DATA_QUIET;
-            meta.setCustomModelData(correct_model_data);
+            meta.getCustomModelDataComponent().setFloats(List.of(correct_model_data));
         });
 
         if (item_in_hand.getAmount() == 1) {
@@ -142,7 +138,7 @@ public class SlimeBucket extends CustomItem<Trifles> {
                 if (custom_item instanceof SlimeBucket slime_bucket && slime_bucket.enabled()) {
                     // Update slime bucket custom model data
                     item.editMeta(meta -> {
-                        meta.setCustomModelData(correct_model_data);
+                        meta.getCustomModelDataComponent().setFloats(List.of(correct_model_data));
                     });
                 }
             }
