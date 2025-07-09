@@ -137,7 +137,7 @@ public class Nms {
         // https://papermc.io/forums/t/register-and-spawn-a-custom-entity-on-1-13-x/293,
         // adapted for 1.18
         // Get the datafixer
-        final var world_version = SharedConstants.getCurrentVersion().getDataVersion().getVersion();
+        final var world_version = SharedConstants.getCurrentVersion().dataVersion().version();
         final var world_version_key = DataFixUtils.makeKey(world_version);
         final var data_types = DataFixers.getDataFixer()
             .getSchema(world_version_key)
