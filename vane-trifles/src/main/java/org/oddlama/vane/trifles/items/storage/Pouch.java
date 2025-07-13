@@ -29,7 +29,7 @@ import org.oddlama.vane.trifles.Trifles;
 @VaneItem(name = "pouch", base = Material.DROPPER, model_data = 0x760016, version = 1)
 public class Pouch extends CustomItem<Trifles> {
 
-    public String openedText = "§fOpened";
+    private static final String openedText = "§fOpened";
 
     public Pouch(Context<Trifles> context) {
         super(context);
@@ -52,8 +52,8 @@ public class Pouch extends CustomItem<Trifles> {
         final var item = event.getCurrentItem();
         final var custom_item = get_module().core.item_registry().get(item);
 
-        // if pouch inventory open, and the item on cursor is the pouch then cancel action
-        if (custom_item instanceof Pouch pouch && item.getItemMeta().getLore().contains(openedText)) {
+        // If the clicked item is a pouch and it has the "Opened" tooltip, cancel the click event.
+        if (custom_item instanceof Pouch && item.getItemMeta().getLore().contains(openedText)) {
             player.setItemOnCursor(ItemStack.empty());
             event.setCancelled(true);
             player.sendActionBar(Component.text("You can't move opened pouches."));
@@ -73,11 +73,9 @@ public class Pouch extends CustomItem<Trifles> {
 
         ItemMeta pouchMeta = item.getItemMeta();
 
-        if (custom_item instanceof Pouch pouch) {
+        if (custom_item instanceof Pouch) {
             pouchMeta.setLore(List.of());
             item.setItemMeta(pouchMeta);
-            pouch = (Pouch) get_module().core.item_registry().get(item);
-
         }
     }
 
@@ -97,7 +95,7 @@ public class Pouch extends CustomItem<Trifles> {
         final var player = event.getPlayer();
         final var item = player.getEquipment().getItem(event.getHand());
         final var custom_item = get_module().core.item_registry().get(item);
-        if (!(custom_item instanceof Pouch p) || !p.enabled()) {
+        if (!(custom_item instanceof Pouch pouch) || !pouch.enabled()) {
             return;
         }
 
@@ -110,10 +108,8 @@ public class Pouch extends CustomItem<Trifles> {
         if (get_module().storage_group.open_block_state_inventory(player, item)) {
             player.getWorld().playSound(player, Sound.ITEM_BUNDLE_DROP_CONTENTS, 1.0f, 1.2f);
             swing_arm(player, event.getHand());
-//            Trifles.getPlugin(Trifles.class).getLogger().info(String.valueOf(pouch.opened));
             pouchMeta.setLore(List.of(openedText));
             item.setItemMeta(pouchMeta);
-            Pouch pouch = (Pouch) get_module().core.item_registry().get(item);
         }
     }
 
