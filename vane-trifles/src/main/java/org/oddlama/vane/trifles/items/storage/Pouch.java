@@ -3,23 +3,37 @@ package org.oddlama.vane.trifles.items.storage;
 import static org.oddlama.vane.util.PlayerUtil.swing_arm;
 
 import java.util.EnumSet;
+import java.util.List;
+
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.title.Title;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryInteractEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.eclipse.aether.metadata.Metadata;
 import org.oddlama.vane.annotation.item.VaneItem;
 import org.oddlama.vane.core.config.recipes.RecipeList;
 import org.oddlama.vane.core.config.recipes.ShapedRecipeDefinition;
 import org.oddlama.vane.core.item.CustomItem;
 import org.oddlama.vane.core.item.api.InhibitBehavior;
 import org.oddlama.vane.core.module.Context;
+import org.oddlama.vane.trifles.StorageGroup;
 import org.oddlama.vane.trifles.Trifles;
 
 @VaneItem(name = "pouch", base = Material.DROPPER, model_data = 0x760016, version = 1)
 public class Pouch extends CustomItem<Trifles> {
+
+    public String openedText = "§fOpened";
 
     public Pouch(Context<Trifles> context) {
         super(context);
@@ -34,6 +48,41 @@ public class Pouch extends CustomItem<Trifles> {
                 .set_ingredient('l', Material.RABBIT_HIDE)
                 .result(key().toString())
         );
+    }
+
+    @EventHandler
+    public void on_player_click_in_inventory(InventoryClickEvent event) {
+        final var player = event.getWhoClicked();
+        final var item = event.getCurrentItem();
+        final var custom_item = get_module().core.item_registry().get(item);
+
+        // if pouch inventory open, and the item on cursor is the pouch then cancel action
+        if (custom_item instanceof Pouch pouch && item.getItemMeta().getLore().contains(openedText)) {
+            player.setItemOnCursor(ItemStack.empty());
+            event.setCancelled(true);
+            player.sendActionBar(Component.text("You can't move opened pouches."));
+        }
+    }
+
+    @EventHandler
+    public void on_player_close_inventory(final InventoryCloseEvent event) {
+        if (!(event.getPlayer() instanceof Player)) {
+            return;
+        }
+
+        Player player = (Player) event.getPlayer();
+
+        final var item = player.getEquipment().getItem(event.getPlayer().getActiveItemHand());
+        final var custom_item = get_module().core.item_registry().get(item);
+
+        ItemMeta pouchMeta = item.getItemMeta();
+
+        if (custom_item instanceof Pouch pouch) {
+            pouchMeta.setLore(List.of());
+            item.setItemMeta(pouchMeta);
+            pouch = (Pouch) get_module().core.item_registry().get(item);
+
+        }
     }
 
     // ignoreCancelled = false to catch right-click-air events
@@ -52,7 +101,7 @@ public class Pouch extends CustomItem<Trifles> {
         final var player = event.getPlayer();
         final var item = player.getEquipment().getItem(event.getHand());
         final var custom_item = get_module().core.item_registry().get(item);
-        if (!(custom_item instanceof Pouch pouch) || !pouch.enabled()) {
+        if (!(custom_item instanceof Pouch p) || !p.enabled()) {
             return;
         }
 
@@ -60,9 +109,15 @@ public class Pouch extends CustomItem<Trifles> {
         event.setUseInteractedBlock(Event.Result.DENY);
         event.setUseItemInHand(Event.Result.DENY);
 
+        ItemMeta pouchMeta = item.getItemMeta();
+
         if (get_module().storage_group.open_block_state_inventory(player, item)) {
             player.getWorld().playSound(player, Sound.ITEM_BUNDLE_DROP_CONTENTS, 1.0f, 1.2f);
             swing_arm(player, event.getHand());
+//            Trifles.getPlugin(Trifles.class).getLogger().info(String.valueOf(pouch.opened));
+            pouchMeta.setLore(List.of(openedText));
+            item.setItemMeta(pouchMeta);
+            Pouch pouch = (Pouch) get_module().core.item_registry().get(item);
         }
     }
 

@@ -32,7 +32,7 @@ import org.oddlama.vane.trifles.items.storage.Pouch;
 
 public class StorageGroup extends Listener<Trifles> {
 
-    private Map<Inventory, Pair<UUID, ItemStack>> open_block_state_inventories = Collections.synchronizedMap(
+    public Map<Inventory, Pair<UUID, ItemStack>> open_block_state_inventories = Collections.synchronizedMap(
         new HashMap<Inventory, Pair<UUID, ItemStack>>()
     );
 
@@ -41,6 +41,10 @@ public class StorageGroup extends Listener<Trifles> {
 
     public StorageGroup(Context<Trifles> context) {
         super(context.group("storage", "Extensions to storage related stuff will be grouped under here."));
+    }
+
+    public Map<Inventory, Pair<UUID, ItemStack>> get_open_block_state_inventories (){
+        return open_block_state_inventories;
     }
 
     @SuppressWarnings("deprecation")
