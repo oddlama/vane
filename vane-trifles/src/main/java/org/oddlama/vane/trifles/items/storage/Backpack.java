@@ -53,7 +53,6 @@ public class Backpack extends CustomItem<Trifles> {
         final var item = event.getCurrentItem();
         final var custom_item = get_module().core.item_registry().get(item);
 
-        // If the clicked item is a backpack and it has the "Opened" tooltip, cancel the click event.
         if (custom_item instanceof Backpack && item.getItemMeta().getLore().contains(openedText)) {
             player.setItemOnCursor(ItemStack.empty());
             event.setCancelled(true);
