@@ -1,0 +1,19 @@
+{
+  "model": {
+    "type": "range_dispatch",
+    "property": "minecraft:custom_model_data",
+    "fallback": {
+      "type": "model",
+      "model": "minecraft:item/wooden_hoe"
+    },
+    "entries": [
+      {
+        "threshold": 7733252,
+        "model": {
+          "type": "model",
+          "model": "vane_trifles:item/wooden_sickle"
+        }
+      }
+    ]
+  }
+}

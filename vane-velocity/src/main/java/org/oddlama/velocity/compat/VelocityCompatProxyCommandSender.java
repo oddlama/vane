@@ -6,15 +6,14 @@ import org.oddlama.vane.proxycore.commands.ProxyCommandSender;
 
 public class VelocityCompatProxyCommandSender implements ProxyCommandSender {
 
-	CommandSource sender;
+    CommandSource sender;
 
-	public VelocityCompatProxyCommandSender(CommandSource sender) {
-		this.sender = sender;
-	}
+    public VelocityCompatProxyCommandSender(CommandSource sender) {
+        this.sender = sender;
+    }
 
-	@Override
-	public void send_message(String message) {
-		sender.sendMessage(LegacyComponentSerializer.legacySection().deserialize(message));
-	}
-
+    @Override
+    public void send_message(String message) {
+        sender.sendMessage(LegacyComponentSerializer.legacySection().deserialize(message));
+    }
 }

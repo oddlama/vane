@@ -1,0 +1,23 @@
+{
+  "model": {
+    "type": "range_dispatch",
+    "property": "minecraft:custom_model_data",
+    "fallback": {
+      "type": "minecraft:special",
+      "base": "minecraft:item/shulker_box",
+      "model": {
+        "type": "minecraft:shulker_box",
+        "texture": "minecraft:shulker"
+      }
+    },
+    "entries": [
+      {
+        "threshold": 7733271,
+        "model": {
+          "type": "model",
+          "model": "vane_trifles:item/backpack"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "model": {
+    "type": "range_dispatch",
+    "property": "minecraft:custom_model_data",
+    "fallback": {
+      "type": "model",
+      "model": "minecraft:block/dropper"
+    },
+    "entries": [
+      {
+        "threshold": 7733270,
+        "model": {
+          "type": "model",
+          "model": "vane_trifles:item/pouch"
+        }
+      }
+    ]
+  }
+}

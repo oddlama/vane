@@ -8,13 +8,13 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface ConfigInt {
-	int def();
+    int def();
 
-	int min() default Integer.MIN_VALUE;
+    int min() default Integer.MIN_VALUE;
 
-	int max() default Integer.MAX_VALUE;
+    int max() default Integer.MAX_VALUE;
 
-	String desc();
+    String desc();
 
-	boolean metrics() default true;
+    boolean metrics() default true;
 }

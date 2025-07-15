@@ -7,15 +7,14 @@ import org.oddlama.velocity.compat.VelocityCompatProxyCommandSender;
 
 public class Maintenance implements SimpleCommand {
 
-	ProxyMaintenanceCommand cmd;
+    ProxyMaintenanceCommand cmd;
 
-	public Maintenance(final Velocity plugin) {
-		this.cmd = new ProxyMaintenanceCommand("vane_proxy.commands.maintenance", plugin);
-	}
+    public Maintenance(final Velocity plugin) {
+        this.cmd = new ProxyMaintenanceCommand("vane_proxy.commands.maintenance", plugin);
+    }
 
-	@Override
-	public void execute(Invocation invocation) {
-		cmd.execute(new VelocityCompatProxyCommandSender(invocation.source()), invocation.arguments());
-	}
-
+    @Override
+    public void execute(Invocation invocation) {
+        cmd.execute(new VelocityCompatProxyCommandSender(invocation.source()), invocation.arguments());
+    }
 }

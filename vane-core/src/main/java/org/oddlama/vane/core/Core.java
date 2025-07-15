@@ -12,7 +12,13 @@ import java.util.Properties;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.logging.Level;
-
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.minecraft.core.Holder;
+import net.minecraft.core.MappedRegistry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -40,243 +46,230 @@ import org.oddlama.vane.core.module.ModuleComponent;
 import org.oddlama.vane.core.resourcepack.ResourcePackDistributor;
 import org.oddlama.vane.core.resourcepack.ResourcePackGenerator;
 
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.event.ClickEvent;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.minecraft.core.Holder;
-import net.minecraft.core.MappedRegistry;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.world.entity.EntityType;
-
 @VaneModule(name = "core", bstats = 8637, config_version = 6, lang_version = 4, storage_version = 1)
 public class Core extends Module<Core> {
-	/** Use sparingly. */
-	private static Core INSTANCE = null;
-	public static Core instance() {
-		return INSTANCE;
-	}
 
-	public EnchantmentManager enchantment_manager;
-	private CustomModelDataRegistry model_data_registry;
-	private CustomItemRegistry item_registry;
+    /** Use sparingly. */
+    private static Core INSTANCE = null;
 
-	@ConfigBoolean(def = true, desc = "Allow loading of player heads in relevant menus. Disabling this will show all player heads using the Steve skin, which may perform better on low-performance servers and clients.")
-	public boolean config_player_heads_in_menus;
+    public static Core instance() {
+        return INSTANCE;
+    }
 
-	@LangMessage
-	public TranslatedMessage lang_command_not_a_player;
+    public EnchantmentManager enchantment_manager;
+    private CustomModelDataRegistry model_data_registry;
+    private CustomItemRegistry item_registry;
 
-	@LangMessage
-	public TranslatedMessage lang_command_permission_denied;
+    @ConfigBoolean(
+        def = true,
+        desc = "Allow loading of player heads in relevant menus. Disabling this will show all player heads using the Steve skin, which may perform better on low-performance servers and clients."
+    )
+    public boolean config_player_heads_in_menus;
 
-	@LangMessage
-	public TranslatedMessage lang_invalid_time_format;
+    @LangMessage
+    public TranslatedMessage lang_command_not_a_player;
 
-	// Module registry
-	private SortedSet<Module<?>> vane_modules = new TreeSet<>((a, b) -> a.get_name().compareTo(b.get_name()));
+    @LangMessage
+    public TranslatedMessage lang_command_permission_denied;
 
-	public final ResourcePackDistributor resource_pack_distributor;
+    @LangMessage
+    public TranslatedMessage lang_invalid_time_format;
 
-	public void register_module(Module<?> module) {
-		vane_modules.add(module);
-	}
+    // Module registry
+    private SortedSet<Module<?>> vane_modules = new TreeSet<>((a, b) -> a.get_name().compareTo(b.get_name()));
 
-	public void unregister_module(Module<?> module) {
-		vane_modules.remove(module);
-	}
+    public final ResourcePackDistributor resource_pack_distributor;
 
-	public SortedSet<Module<?>> get_modules() {
-		return Collections.unmodifiableSortedSet(vane_modules);
-	}
+    public void register_module(Module<?> module) {
+        vane_modules.add(module);
+    }
 
-	// Vane global command catch-all permission
-	public Permission permission_command_catchall = new Permission(
-		"vane.*.commands.*",
-		"Allow access to all vane commands (ONLY FOR ADMINS!)",
-		PermissionDefault.FALSE
-	);
+    public void unregister_module(Module<?> module) {
+        vane_modules.remove(module);
+    }
 
-	public MenuManager menu_manager;
+    public SortedSet<Module<?>> get_modules() {
+        return Collections.unmodifiableSortedSet(vane_modules);
+    }
 
-	// core-config
-	@ConfigBoolean(
-		def = true,
-		desc = "Let the client translate messages using the generated resource pack. This allows every player to select their preferred language, and all plugin messages will also be translated. Disabling this won't allow you to skip generating the resource pack, as it will be needed for custom item textures."
-	)
-	public boolean config_client_side_translations;
+    // Vane global command catch-all permission
+    public Permission permission_command_catchall = new Permission(
+        "vane.*.commands.*",
+        "Allow access to all vane commands (ONLY FOR ADMINS!)",
+        PermissionDefault.FALSE
+    );
 
-	@ConfigBoolean(def = true, desc = "Send update notices to OPed player when a new version of vane is available.")
-	public boolean config_update_notices;
+    public MenuManager menu_manager;
 
-	public String current_version = null;
-	public String latest_version = null;
+    // core-config
+    @ConfigBoolean(
+        def = true,
+        desc = "Let the client translate messages using the generated resource pack. This allows every player to select their preferred language, and all plugin messages will also be translated. Disabling this won't allow you to skip generating the resource pack, as it will be needed for custom item textures."
+    )
+    public boolean config_client_side_translations;
 
-	public Core() {
-		if (INSTANCE != null) {
-			throw new IllegalStateException("Cannot instanciate Core twice.");
-		}
-		INSTANCE = this;
+    @ConfigBoolean(def = true, desc = "Send update notices to OPed player when a new version of vane is available.")
+    public boolean config_update_notices;
 
-		// Create global command catch-all permission
-		register_permission(permission_command_catchall);
+    public String current_version = null;
+    public String latest_version = null;
 
-		// Allow registration of new enchantments and entities
-		unfreeze_registries();
+    public Core() {
+        if (INSTANCE != null) {
+            throw new IllegalStateException("Cannot instanciate Core twice.");
+        }
+        INSTANCE = this;
 
-		// Components
-		enchantment_manager = new EnchantmentManager(this);
-		new HeadLibrary(this);
-		new AuthMultiplexer(this);
-		new LootChestProtector(this);
-		new VanillaFunctionalityInhibitor(this);
-		new DurabilityManager(this);
-		new org.oddlama.vane.core.commands.Vane(this);
-		new org.oddlama.vane.core.commands.CustomItem(this);
-		new org.oddlama.vane.core.commands.Enchant(this);
-		menu_manager = new MenuManager(this);
-		resource_pack_distributor = new ResourcePackDistributor(this);
-		new CommandHider(this);
-		model_data_registry = new CustomModelDataRegistry();
-		item_registry = new CustomItemRegistry();
-		new ExistingItemConverter(this);
-	}
+        // Create global command catch-all permission
+        register_permission(permission_command_catchall);
 
-	@Override
-	public void on_enable() {
-		if (config_update_notices) {
-			// Now, and every hour after that, check if a new version is available.
-			// OPs will get a message about this when they join.
-			schedule_task_timer(this::check_for_update, 1l, ms_to_ticks(2 * 60l * 60l * 1000l));
-		}
+        // Allow registration of new enchantments and entities
+        unfreeze_registries();
 
-		schedule_next_tick(() -> freeze_registries());
-	}
+        // Components
+        enchantment_manager = new EnchantmentManager(this);
+        new HeadLibrary(this);
+        new AuthMultiplexer(this);
+        new LootChestProtector(this);
+        new VanillaFunctionalityInhibitor(this);
+        new DurabilityManager(this);
+        new org.oddlama.vane.core.commands.Vane(this);
+        new org.oddlama.vane.core.commands.CustomItem(this);
+        new org.oddlama.vane.core.commands.Enchant(this);
+        menu_manager = new MenuManager(this);
+        resource_pack_distributor = new ResourcePackDistributor(this);
+        new CommandHider(this);
+        model_data_registry = new CustomModelDataRegistry();
+        item_registry = new CustomItemRegistry();
+        new ExistingItemConverter(this);
+    }
 
-	public void unfreeze_registries() {
-		// NOTE: MAGIC VALUES! Introduced for 1.18.2 when registries were frozen. Sad, no workaround at the time.
-		try {
-			// Make relevant fields accessible
-			final var frozen = MappedRegistry.class.getDeclaredField("l" /* frozen */);
-			frozen.setAccessible(true);
-			final var intrusive_holder_cache = MappedRegistry.class.getDeclaredField("m" /* unregisteredIntrusiveHolders (1.19.3+), intrusiveHolderCache (until 1.19.2) */);
-			intrusive_holder_cache.setAccessible(true);
+    @Override
+    public void on_enable() {
+        if (config_update_notices) {
+            // Now, and every hour after that, check if a new version is available.
+            // OPs will get a message about this when they join.
+            schedule_task_timer(this::check_for_update, 1l, ms_to_ticks(2 * 60l * 60l * 1000l));
+        }
+    }
 
-			// Unfreeze required registries
-			frozen.set(BuiltInRegistries.ENTITY_TYPE, false);
-			intrusive_holder_cache.set(BuiltInRegistries.ENTITY_TYPE, new IdentityHashMap<EntityType<?>, Holder.Reference<EntityType<?>>>());
-			// Since 1.20.2 this is also needed for enchantments:
-		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
-			e.printStackTrace();
-		}
-	}
+    public void unfreeze_registries() {
+        // NOTE: MAGIC VALUES! Introduced for 1.18.2 when registries were frozen. Sad, no workaround
+        // at the time.
+        try {
+            // Make relevant fields accessible
+            final var frozen = MappedRegistry.class.getDeclaredField("l"/* frozen */);
+            frozen.setAccessible(true);
+            final var intrusive_holder_cache =
+                MappedRegistry.class.getDeclaredField(
+                        "m"/* unregisteredIntrusiveHolders (1.19.3+), intrusiveHolderCache (until 1.19.2) */
+                    );
+            intrusive_holder_cache.setAccessible(true);
 
-	public void freeze_registries() {
-		BuiltInRegistries.ENTITY_TYPE.freeze();
-	}
+            // Unfreeze required registries
+            frozen.set(BuiltInRegistries.ENTITY_TYPE, false);
+            intrusive_holder_cache.set(
+                BuiltInRegistries.ENTITY_TYPE,
+                new IdentityHashMap<EntityType<?>, Holder.Reference<EntityType<?>>>()
+            );
+            // Since 1.20.2 this is also needed for enchantments:
+        } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
 
-	@Override
-	public void on_disable() {
-	}
+    @Override
+    public void on_disable() {}
 
-	public File generate_resource_pack() {
-		try {
-			var file = new File("vane-resource-pack.zip");
-			// TODO pack version number here. warn if merging lower.
-			var pack = new ResourcePackGenerator();
-			pack.set_description("Vane plugin resource pack");
-			pack.set_icon_png(getResource("pack.png"));
+    public File generate_resource_pack() {
+        try {
+            var file = new File("vane-resource-pack.zip");
+            var pack = new ResourcePackGenerator();
 
-			for (var m : vane_modules) {
-				m.generate_resource_pack(pack);
-			}
+            for (var m : vane_modules) {
+                m.generate_resource_pack(pack);
+            }
 
-			for (final var custom_item : item_registry().all()) {
-				custom_item.addResources(pack);
-			}
+            pack.write(file);
+            return file;
+        } catch (Exception e) {
+            log.log(Level.SEVERE, "Error while generating resourcepack", e);
+            return null;
+        }
+    }
 
-			pack.write(file);
-			return file;
-		} catch (Exception e) {
-			log.log(Level.SEVERE, "Error while generating resourcepack", e);
-			return null;
-		}
-	}
+    public void for_all_module_components(final Consumer1<ModuleComponent<?>> f) {
+        for (var m : vane_modules) {
+            m.for_each_module_component(f);
+        }
+    }
 
-	public void for_all_module_components(final Consumer1<ModuleComponent<?>> f) {
-		for (var m : vane_modules) {
-			m.for_each_module_component(f);
-		}
-	}
+    public CustomItemRegistry item_registry() {
+        return item_registry;
+    }
 
-	public CustomItemRegistry item_registry() {
-		return item_registry;
-	}
+    public CustomModelDataRegistry model_data_registry() {
+        return model_data_registry;
+    }
 
-	public CustomModelDataRegistry model_data_registry() {
-		return model_data_registry;
-	}
+    public void check_for_update() {
+        if (current_version == null) {
+            try {
+                Properties properties = new Properties();
+                properties.load(Core.class.getResourceAsStream("/vane-core.properties"));
+                current_version = "v" + properties.getProperty("version");
+            } catch (IOException e) {
+                log.severe("Could not load current version from included properties file: " + e);
+                return;
+            }
+        }
 
-	public void check_for_update() {
-		if (current_version == null) {
-			try {
-				Properties properties = new Properties();
-				properties.load(Core.class.getResourceAsStream("/vane-core.properties"));
-				current_version = "v" + properties.getProperty("version");
-			} catch (IOException e) {
-				log.severe("Could not load current version from included properties file: " + e);
-				return;
-			}
-		}
+        try {
+            final var json = read_json_from_url("https://api.github.com/repos/oddlama/vane/releases/latest");
+            latest_version = json.getString("tag_name");
+            if (latest_version != null && !latest_version.equals(current_version)) {
+                log.warning(
+                    "A newer version of vane is available online! (current=" +
+                    current_version +
+                    ", new=" +
+                    latest_version +
+                    ")"
+                );
+                log.warning("Please update as soon as possible to get the latest features and fixes.");
+                log.warning("Get the latest release here: https://github.com/oddlama/vane/releases/latest");
+            }
+        } catch (IOException | JSONException | URISyntaxException e) {
+            log.warning("Could not check for updates: " + e);
+        }
+    }
 
-		try {
-			final var json = read_json_from_url("https://api.github.com/repos/oddlama/vane/releases/latest");
-			latest_version = json.getString("tag_name");
-			if (latest_version != null && !latest_version.equals(current_version)) {
-				log.warning(
-					"A newer version of vane is available online! (current=" +
-					current_version +
-					", new=" +
-					latest_version +
-					")"
-				);
-				log.warning("Please update as soon as possible to get the latest features and fixes.");
-				log.warning("Get the latest release here: https://github.com/oddlama/vane/releases/latest");
-			}
-		} catch (IOException | JSONException | URISyntaxException e) {
-			log.warning("Could not check for updates: " + e);
-		}
-	}
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
+    public void on_player_join_send_update_notice(PlayerJoinEvent event) {
+        if (!config_update_notices) {
+            return;
+        }
 
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
-	public void on_player_join_send_update_notice(PlayerJoinEvent event) {
-		if (!config_update_notices) {
-			return;
-		}
-
-		// Send an update message if a new version is available and player is OP.
-		if (latest_version != null && !latest_version.equals(current_version) && event.getPlayer().isOp()) {
-			// This message is intentionally not translated to ensure it will
-			// be displayed correctly and so that everyone understands it.
-			event
-				.getPlayer()
-				.sendMessage(
-					Component
-						.text("A new version of vane ", NamedTextColor.GREEN)
-						.append(Component.text("(" + latest_version + ")", NamedTextColor.AQUA))
-						.append(Component.text(" is available!", NamedTextColor.GREEN))
-				);
-			event
-				.getPlayer()
-				.sendMessage(
-					Component.text("Please update soon to get the latest features.", NamedTextColor.GREEN)
-				);
-			event
-				.getPlayer()
-				.sendMessage(
-					Component
-						.text("Click here to go to the download page", NamedTextColor.AQUA)
-						.clickEvent(ClickEvent.openUrl("https://github.com/oddlama/vane/releases/latest"))
-				);
-		}
-	}
+        // Send an update message if a new version is available and player is OP.
+        if (latest_version != null && !latest_version.equals(current_version) && event.getPlayer().isOp()) {
+            // This message is intentionally not translated to ensure it will
+            // be displayed correctly and so that everyone understands it.
+            event
+                .getPlayer()
+                .sendMessage(
+                    Component.text("A new version of vane ", NamedTextColor.GREEN)
+                        .append(Component.text("(" + latest_version + ")", NamedTextColor.AQUA))
+                        .append(Component.text(" is available!", NamedTextColor.GREEN))
+                );
+            event
+                .getPlayer()
+                .sendMessage(Component.text("Please update soon to get the latest features.", NamedTextColor.GREEN));
+            event
+                .getPlayer()
+                .sendMessage(
+                    Component.text("Click here to go to the download page", NamedTextColor.AQUA).clickEvent(
+                        ClickEvent.openUrl("https://github.com/oddlama/vane/releases/latest")
+                    )
+                );
+        }
+    }
 }

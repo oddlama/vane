@@ -6,7 +6,18 @@ import static org.oddlama.vane.util.PlayerUtil.swing_arm;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.Random;
-
+import net.kyori.adventure.text.Component;
+import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.protocol.game.ClientboundBlockUpdatePacket;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -38,230 +49,254 @@ import org.oddlama.vane.util.ItemUtil;
 import org.oddlama.vane.util.Nms;
 import org.oddlama.vane.util.StorageUtil;
 
-import net.kyori.adventure.text.Component;
-import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.core.BlockPos;
-import net.minecraft.network.protocol.game.ClientboundBlockUpdatePacket;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.Vec3;
-
-@VaneItem(name = "trowel", base = Material.WARPED_FUNGUS_ON_A_STICK, durability = 800, model_data = 0x76000e, version = 1)
+@VaneItem(
+    name = "trowel",
+    base = Material.WARPED_FUNGUS_ON_A_STICK,
+    durability = 800,
+    model_data = 0x76000e,
+    version = 1
+)
 public class Trowel extends CustomItem<Trifles> {
-	private static final NamespacedKey SENTINEL = StorageUtil.namespaced_key("vane", "trowel_lore");
-	public static final NamespacedKey FEED_SOURCE = StorageUtil.namespaced_key("vane", "feed_source");
-	private static Random random = new Random(23584982345l);
 
-	public enum FeedSource {
-		HOTBAR("Hotbar", new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8 }),
-		FIRST_ROW("First Inventory Row", new int[] { 9, 10, 11, 12, 13, 14, 15, 16, 17 }),
-		SECOND_ROW("Second Inventory Row", new int[] { 18, 19, 20, 21, 22, 23, 24, 25, 26 }),
-		THIRD_ROW("Third Inventory Row", new int[] { 27, 28, 29, 30, 31, 32, 33, 34, 35 });
+    private static final NamespacedKey SENTINEL = StorageUtil.namespaced_key("vane", "trowel_lore");
+    public static final NamespacedKey FEED_SOURCE = StorageUtil.namespaced_key("vane", "feed_source");
+    private static Random random = new Random(23584982345l);
 
-		private String display_name;
-		private int[] slots;
+    public enum FeedSource {
+        HOTBAR("Hotbar", new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8 }),
+        FIRST_ROW("First Inventory Row", new int[] { 9, 10, 11, 12, 13, 14, 15, 16, 17 }),
+        SECOND_ROW("Second Inventory Row", new int[] { 18, 19, 20, 21, 22, 23, 24, 25, 26 }),
+        THIRD_ROW("Third Inventory Row", new int[] { 27, 28, 29, 30, 31, 32, 33, 34, 35 });
 
-		private FeedSource(final String display_name, int[] slots) {
-			this.display_name = display_name;
-			this.slots = slots;
-		}
+        private String display_name;
+        private int[] slots;
 
-		public String display_name() {
-			return display_name;
-		}
+        private FeedSource(final String display_name, int[] slots) {
+            this.display_name = display_name;
+            this.slots = slots;
+        }
 
-		public FeedSource next() {
-			return FeedSource.values()[(this.ordinal() + 1) % FeedSource.values().length];
-		}
+        public String display_name() {
+            return display_name;
+        }
 
-		public int[] slots() {
-			return slots;
-		}
-	}
+        public FeedSource next() {
+            return FeedSource.values()[(this.ordinal() + 1) % FeedSource.values().length];
+        }
 
-	@LangMessageArray
-	public TranslatedMessageArray lang_lore;
+        public int[] slots() {
+            return slots;
+        }
+    }
 
-	public Trowel(final Context<Trifles> context) {
-		super(context);
-	}
+    @LangMessageArray
+    public TranslatedMessageArray lang_lore;
 
-	@Override
-	public RecipeList default_recipes() {
-		return RecipeList.of(new ShapedRecipeDefinition("generic")
-				.shape("  s", "mm ")
-				.set_ingredient('m', Material.IRON_INGOT)
-				.set_ingredient('s', Material.STICK)
-				.result(key().toString()));
-	}
+    public Trowel(final Context<Trifles> context) {
+        super(context);
+    }
 
-	/**
-	 * Returns true if the given component is associated to the trowel.
-	 */
-	private static boolean is_trowel_lore(final Component component) {
-		return ItemUtil.has_sentinel(component, SENTINEL);
-	}
+    @Override
+    public RecipeList default_recipes() {
+        return RecipeList.of(
+            new ShapedRecipeDefinition("generic")
+                .shape("  s", "mm ")
+                .set_ingredient('m', Material.IRON_INGOT)
+                .set_ingredient('s', Material.STICK)
+                .result(key().toString())
+        );
+    }
 
-	private FeedSource feed_source(final ItemStack item_stack) {
-		if (!item_stack.hasItemMeta()) {
-			return FeedSource.HOTBAR;
-		}
-		final var ord = item_stack.getItemMeta().getPersistentDataContainer().getOrDefault(FEED_SOURCE,
-				PersistentDataType.INTEGER, 0);
-		if (ord < 0 || ord > FeedSource.values().length) {
-			return FeedSource.HOTBAR;
-		}
-		return FeedSource.values()[ord];
-	}
+    /** Returns true if the given component is associated to the trowel. */
+    private static boolean is_trowel_lore(final Component component) {
+        return ItemUtil.has_sentinel(component, SENTINEL);
+    }
 
-	private void feed_source(final ItemStack item_stack, final FeedSource feed_source) {
-		item_stack.editMeta(meta -> meta.getPersistentDataContainer().set(FEED_SOURCE, PersistentDataType.INTEGER, feed_source.ordinal()));
-	}
+    private FeedSource feed_source(final ItemStack item_stack) {
+        if (!item_stack.hasItemMeta()) {
+            return FeedSource.HOTBAR;
+        }
+        final var ord = item_stack
+            .getItemMeta()
+            .getPersistentDataContainer()
+            .getOrDefault(FEED_SOURCE, PersistentDataType.INTEGER, 0);
+        if (ord < 0 || ord > FeedSource.values().length) {
+            return FeedSource.HOTBAR;
+        }
+        return FeedSource.values()[ord];
+    }
 
-	private void update_lore(final ItemStack item_stack) {
-		var lore = item_stack.lore();
-		if (lore == null) {
-			lore = new ArrayList<Component>();
-		}
+    private void feed_source(final ItemStack item_stack, final FeedSource feed_source) {
+        item_stack.editMeta(meta ->
+            meta.getPersistentDataContainer().set(FEED_SOURCE, PersistentDataType.INTEGER, feed_source.ordinal())
+        );
+    }
 
-		// Remove old lore, add updated lore
-		lore.removeIf(Trowel::is_trowel_lore);
+    private void update_lore(final ItemStack item_stack) {
+        var lore = item_stack.lore();
+        if (lore == null) {
+            lore = new ArrayList<Component>();
+        }
 
-		final var feed_source = feed_source(item_stack);
-		lore.addAll(lang_lore
-				.format("§a" + feed_source)
-				.stream()
-				.map(x -> ItemUtil.add_sentinel(x, SENTINEL)).toList());
+        // Remove old lore, add updated lore
+        lore.removeIf(Trowel::is_trowel_lore);
 
-		item_stack.lore(lore);
-	}
+        final var feed_source = feed_source(item_stack);
+        lore.addAll(
+            lang_lore.format("§a" + feed_source).stream().map(x -> ItemUtil.add_sentinel(x, SENTINEL)).toList()
+        );
 
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-	public void on_player_click_inventory(final InventoryClickEvent event) {
-		if (!(event.getWhoClicked() instanceof Player player)) {
-			return;
-		}
+        item_stack.lore(lore);
+    }
 
-		// Only on right-click item, when nothing is on the cursor
-		if (event.getAction() != InventoryAction.PICKUP_HALF || (event.getCursor() != null && event.getCursor().getType() != Material.AIR)) {
-			return;
-		}
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void on_player_click_inventory(final InventoryClickEvent event) {
+        if (!(event.getWhoClicked() instanceof Player player)) {
+            return;
+        }
 
-		final var item = event.getCurrentItem();
-		final var custom_item = get_module().core.item_registry().get(item);
-		if (!(custom_item instanceof Trowel trowel) || !trowel.enabled()) {
-			return;
-		}
+        // Only on right-click item, when nothing is on the cursor
+        if (
+            event.getAction() != InventoryAction.PICKUP_HALF ||
+            (event.getCursor() != null && event.getCursor().getType() != Material.AIR)
+        ) {
+            return;
+        }
 
-		// Use next feed source
-		final var feed_source = feed_source(item);
-		feed_source(item, feed_source.next());
-		update_lore(item);
+        final var item = event.getCurrentItem();
+        final var custom_item = get_module().core.item_registry().get(item);
+        if (!(custom_item instanceof Trowel trowel) || !trowel.enabled()) {
+            return;
+        }
 
-		player.playSound(player, Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 1.0f, 5.0f);
-		event.setCancelled(true);
-	}
+        // Use next feed source
+        final var feed_source = feed_source(item);
+        feed_source(item, feed_source.next());
+        update_lore(item);
 
-	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-	public void on_player_interact_block(final PlayerInteractEvent event) {
-		// Skip if no block was right-clicked or hand isn't main hand
-		if (!event.hasBlock() || event.getAction() != Action.RIGHT_CLICK_BLOCK || event.getHand() != EquipmentSlot.HAND) {
-			return;
-		}
+        player.playSound(player, Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 1.0f, 5.0f);
+        event.setCancelled(true);
+    }
 
-		// With a trowel in main hand
-		final var player = event.getPlayer();
-		final var item_in_hand = player.getEquipment().getItem(EquipmentSlot.HAND);
-		final var custom_item = get_module().core.item_registry().get(item_in_hand);
-		if (!(custom_item instanceof Trowel trowel) || !trowel.enabled()) {
-			return;
-		}
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    public void on_player_interact_block(final PlayerInteractEvent event) {
+        // Skip if no block was right-clicked or hand isn't main hand
+        if (
+            !event.hasBlock() || event.getAction() != Action.RIGHT_CLICK_BLOCK || event.getHand() != EquipmentSlot.HAND
+        ) {
+            return;
+        }
 
-		// Prevent offhand from triggering (e.g., placing torches)
-		event.setUseInteractedBlock(Event.Result.DENY);
-		event.setUseItemInHand(Event.Result.DENY);
+        // With a trowel in main hand
+        final var player = event.getPlayer();
+        final var item_in_hand = player.getEquipment().getItem(EquipmentSlot.HAND);
+        final var custom_item = get_module().core.item_registry().get(item_in_hand);
+        if (!(custom_item instanceof Trowel trowel) || !trowel.enabled()) {
+            return;
+        }
 
-		// Select a random block from the feed source and place it
-		final var block = event.getClickedBlock();
-		final var inventory = player.getInventory();
-		final var feed_source = feed_source(item_in_hand);
-		final var possible_slots = feed_source.slots().clone();
-		int count = possible_slots.length;
-		while (count > 0) {
-			final var index = random.nextInt(count);
-			final var item_stack = inventory.getItem(possible_slots[index]);
-			// Skip empty slots and items that are not placeable blocks
-			if (item_stack == null || !item_stack.getType().isBlock() || Tag.SHULKER_BOXES.isTagged(item_stack.getType())) {
-				// Eliminate the end of list, so copy item at the end of list to the index (< count).
-				possible_slots[index] = possible_slots[--count];
-				continue;
-			}
-			org.oddlama.vane.core.item.api.CustomItem custom_item_slot = get_module().core.item_registry().get(item_stack);
-			// if the item is a custom item, don't place it
-			if(custom_item_slot != null) {
-				possible_slots[index] = possible_slots[--count];
-				continue;
-			}
+        // Prevent offhand from triggering (e.g., placing torches)
+        event.setUseInteractedBlock(Event.Result.DENY);
+        event.setUseItemInHand(Event.Result.DENY);
 
-			final var nms_item = Nms.item_handle(item_stack);
-			final var nms_player = Nms.player_handle(player);
-			final var nms_world = Nms.world_handle(player.getWorld());
+        // Select a random block from the feed source and place it
+        final var block = event.getClickedBlock();
+        final var inventory = player.getInventory();
+        final var feed_source = feed_source(item_in_hand);
+        final var possible_slots = feed_source.slots().clone();
+        int count = possible_slots.length;
+        while (count > 0) {
+            final var index = random.nextInt(count);
+            final var item_stack = inventory.getItem(possible_slots[index]);
+            // Skip empty slots and items that are not placeable blocks
+            if (
+                item_stack == null ||
+                !item_stack.getType().isBlock() ||
+                Tag.SHULKER_BOXES.isTagged(item_stack.getType())
+            ) {
+                // Eliminate the end of list, so copy item at the end of list to the index (<
+                // count).
+                possible_slots[index] = possible_slots[--count];
+                continue;
+            }
+            org.oddlama.vane.core.item.api.CustomItem custom_item_slot = get_module()
+                .core.item_registry()
+                .get(item_stack);
+            // if the item is a custom item, don't place it
+            if (custom_item_slot != null) {
+                possible_slots[index] = possible_slots[--count];
+                continue;
+            }
 
-			// Prepare context to place the item via NMS
-			final var direction = CraftBlock.blockFaceToNotch(event.getBlockFace());
-			final var block_pos = new BlockPos(block.getX(), block.getY(), block.getZ());
-			final var interaction_point = event.getInteractionPoint();
-			final var hit_pos = new Vec3(interaction_point.getX(), interaction_point.getY(), interaction_point.getZ());
-			final var block_hit_result = new BlockHitResult(hit_pos, direction, block_pos, false);
-			final var amount_pre = nms_item.getCount();
-			final var action_context = new UseOnContext(nms_world, nms_player, InteractionHand.MAIN_HAND, nms_item, block_hit_result);
+            final var nms_item = Nms.item_handle(item_stack);
+            final var nms_player = Nms.player_handle(player);
+            final var nms_world = Nms.world_handle(player.getWorld());
 
-			// Get sound now, otherwise the itemstack might be consumed afterwards
-			SoundType sound_type = null;
-			if (nms_item.getItem() instanceof BlockItem block_item) {
-				final var place_state = block_item.getBlock().getStateForPlacement(new BlockPlaceContext(action_context));
-				sound_type = place_state.getSoundType();
-			}
+            // Prepare context to place the item via NMS
+            final var direction = CraftBlock.blockFaceToNotch(event.getBlockFace());
+            final var block_pos = new BlockPos(block.getX(), block.getY(), block.getZ());
+            final var interaction_point = event.getInteractionPoint();
+            final var hit_pos = new Vec3(interaction_point.getX(), interaction_point.getY(), interaction_point.getZ());
+            final var block_hit_result = new BlockHitResult(hit_pos, direction, block_pos, false);
+            final var amount_pre = nms_item.getCount();
+            final var action_context = new UseOnContext(
+                nms_world,
+                nms_player,
+                InteractionHand.MAIN_HAND,
+                nms_item,
+                block_hit_result
+            );
 
-			// Place the item by calling NMS to get correct placing behavior
-			final var result = nms_item.useOn(action_context);
+            // Get sound now, otherwise the itemstack might be consumed afterwards
+            SoundType sound_type = null;
+            if (nms_item.getItem() instanceof BlockItem block_item) {
+                final var place_state = block_item
+                    .getBlock()
+                    .getStateForPlacement(new BlockPlaceContext(action_context));
+                sound_type = place_state.getSoundType();
+            }
 
-			// Don't consume item in creative mode
-			if (player.getGameMode() == GameMode.CREATIVE) {
-				nms_item.setCount(amount_pre);
-			}
+            // Place the item by calling NMS to get correct placing behavior
+            final var result = nms_item.useOn(action_context);
 
-			if (result.consumesAction()) {
-				swing_arm(player, EquipmentSlot.HAND);
-				damage_item(player, item_in_hand, 1);
-				if (sound_type != null) {
-					nms_world.playSound(null, block_pos, sound_type.getPlaceSound(), SoundSource.BLOCKS, (sound_type.getVolume() + 1.0F) / 2.0F, sound_type.getPitch() * 0.8F);
-				}
-				CriteriaTriggers.ITEM_USED_ON_BLOCK.trigger(nms_player, block_pos, nms_item);
-			}
+            // Don't consume item in creative mode
+            if (player.getGameMode() == GameMode.CREATIVE) {
+                nms_item.setCount(amount_pre);
+            }
 
-			nms_player.connection.send(new ClientboundBlockUpdatePacket(nms_world, block_pos));
-			nms_player.connection.send(new ClientboundBlockUpdatePacket(nms_world, block_pos.relative(direction)));
-			return;
-		}
+            if (result.consumesAction()) {
+                swing_arm(player, EquipmentSlot.HAND);
+                damage_item(player, item_in_hand, 1);
+                if (sound_type != null) {
+                    nms_world.playSound(
+                        null,
+                        block_pos,
+                        sound_type.getPlaceSound(),
+                        SoundSource.BLOCKS,
+                        (sound_type.getVolume() + 1.0F) / 2.0F,
+                        sound_type.getPitch() * 0.8F
+                    );
+                }
+                CriteriaTriggers.ITEM_USED_ON_BLOCK.trigger(nms_player, block_pos, nms_item);
+            }
 
-		// No item found in any possible slot.
-		player.playSound(player, Sound.UI_STONECUTTER_SELECT_RECIPE, SoundCategory.MASTER, 1.0f, 2.0f);
-	}
+            nms_player.connection.send(new ClientboundBlockUpdatePacket(nms_world, block_pos));
+            nms_player.connection.send(new ClientboundBlockUpdatePacket(nms_world, block_pos.relative(direction)));
+            return;
+        }
 
-	@Override
-	public ItemStack updateItemStack(final ItemStack item_stack) {
-		update_lore(item_stack);
-		return item_stack;
-	}
+        // No item found in any possible slot.
+        player.playSound(player, Sound.UI_STONECUTTER_SELECT_RECIPE, SoundCategory.MASTER, 1.0f, 2.0f);
+    }
 
-	@Override
-	public EnumSet<InhibitBehavior> inhibitedBehaviors() {
-		return EnumSet.of(InhibitBehavior.USE_IN_VANILLA_RECIPE, InhibitBehavior.USE_OFFHAND);
-	}
+    @Override
+    public ItemStack updateItemStack(final ItemStack item_stack) {
+        update_lore(item_stack);
+        return item_stack;
+    }
+
+    @Override
+    public EnumSet<InhibitBehavior> inhibitedBehaviors() {
+        return EnumSet.of(InhibitBehavior.USE_IN_VANILLA_RECIPE, InhibitBehavior.USE_OFFHAND);
+    }
 }

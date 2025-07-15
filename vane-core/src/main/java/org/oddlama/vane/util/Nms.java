@@ -1,10 +1,29 @@
 package org.oddlama.vane.util;
 
-import java.util.Map;
-
 import com.mojang.datafixers.DataFixUtils;
 import com.mojang.datafixers.types.Type;
-
+import java.util.Map;
+import net.minecraft.SharedConstants;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.dedicated.DedicatedServer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.util.datafix.DataFixers;
+import net.minecraft.util.datafix.fixes.References;
+import net.minecraft.world.Clearable;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -18,157 +37,139 @@ import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import net.minecraft.SharedConstants;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.dedicated.DedicatedServer;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.TagKey;
-import net.minecraft.util.datafix.DataFixers;
-import net.minecraft.util.datafix.fixes.References;
-import net.minecraft.world.Clearable;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.CreativeModeTabs;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.enchantment.Enchantment;
-
 public class Nms {
 
-	public static ServerPlayer get_player(Player player) {
-		return ((CraftPlayer) player).getHandle();
-	}
+    public static ServerPlayer get_player(Player player) {
+        return ((CraftPlayer) player).getHandle();
+    }
 
-	public static Entity entity_handle(final org.bukkit.entity.Entity entity) {
-		return ((CraftEntity) entity).getHandle();
-	}
+    public static Entity entity_handle(final org.bukkit.entity.Entity entity) {
+        return ((CraftEntity) entity).getHandle();
+    }
 
-	public static org.bukkit.enchantments.Enchantment bukkit_enchantment(Enchantment enchantment) {
-		return CraftEnchantment.minecraftToBukkit(enchantment);
-	}
+    public static org.bukkit.enchantments.Enchantment bukkit_enchantment(Enchantment enchantment) {
+        return CraftEnchantment.minecraftToBukkit(enchantment);
+    }
 
-	@NotNull
-	public static org.bukkit.inventory.ItemStack bukkit_item_stack(ItemStack stack) {
-		return CraftItemStack.asCraftMirror(stack);
-	}
-	public static TagKey<Item> enchantment_slot_type(EnchantmentTarget target) {
-		switch (target) {
-			case ARMOR:
-				return ItemTags.ARMOR_ENCHANTABLE;
-			case ARMOR_FEET:
-				return ItemTags.FOOT_ARMOR_ENCHANTABLE;
-			case ARMOR_HEAD:
-				return ItemTags.HEAD_ARMOR_ENCHANTABLE;
-			case ARMOR_LEGS:
-				return ItemTags.LEG_ARMOR_ENCHANTABLE;
-			case ARMOR_TORSO:
-				return ItemTags.CHEST_ARMOR_ENCHANTABLE;
-			case TOOL:
-				return ItemTags.MINING_ENCHANTABLE;
-			case WEAPON:
-				return ItemTags.WEAPON_ENCHANTABLE;
-			case BOW:
-				return ItemTags.BOW_ENCHANTABLE;
-			case FISHING_ROD:
-				return ItemTags.FISHING_ENCHANTABLE;
-			case BREAKABLE:
-				return ItemTags.DURABILITY_ENCHANTABLE;
-			case WEARABLE:
-				return ItemTags.EQUIPPABLE_ENCHANTABLE;
-			case TRIDENT:
-				return ItemTags.TRIDENT_ENCHANTABLE;
-			case CROSSBOW:
-				return ItemTags.CROSSBOW_ENCHANTABLE;
-			case VANISHABLE:
-				return ItemTags.VANISHING_ENCHANTABLE;
-			default:
-				return null;
-		}
-	}
+    @NotNull
+    public static org.bukkit.inventory.ItemStack bukkit_item_stack(ItemStack stack) {
+        return CraftItemStack.asCraftMirror(stack);
+    }
 
-	public static ItemStack item_handle(org.bukkit.inventory.ItemStack item_stack) {
-		if (item_stack == null) {
-			return null;
-		}
+    public static TagKey<Item> enchantment_slot_type(EnchantmentTarget target) {
+        switch (target) {
+            case ARMOR:
+                return ItemTags.ARMOR_ENCHANTABLE;
+            case ARMOR_FEET:
+                return ItemTags.FOOT_ARMOR_ENCHANTABLE;
+            case ARMOR_HEAD:
+                return ItemTags.HEAD_ARMOR_ENCHANTABLE;
+            case ARMOR_LEGS:
+                return ItemTags.LEG_ARMOR_ENCHANTABLE;
+            case ARMOR_TORSO:
+                return ItemTags.CHEST_ARMOR_ENCHANTABLE;
+            case TOOL:
+                return ItemTags.MINING_ENCHANTABLE;
+            case WEAPON:
+                return ItemTags.WEAPON_ENCHANTABLE;
+            case BOW:
+                return ItemTags.BOW_ENCHANTABLE;
+            case FISHING_ROD:
+                return ItemTags.FISHING_ENCHANTABLE;
+            case BREAKABLE:
+                return ItemTags.DURABILITY_ENCHANTABLE;
+            case WEARABLE:
+                return ItemTags.EQUIPPABLE_ENCHANTABLE;
+            case TRIDENT:
+                return ItemTags.TRIDENT_ENCHANTABLE;
+            case CROSSBOW:
+                return ItemTags.CROSSBOW_ENCHANTABLE;
+            case VANISHABLE:
+                return ItemTags.VANISHING_ENCHANTABLE;
+            default:
+                return null;
+        }
+    }
 
-		if (!(item_stack instanceof CraftItemStack)) {
-			return CraftItemStack.asNMSCopy(item_stack);
-		}
+    public static ItemStack item_handle(org.bukkit.inventory.ItemStack item_stack) {
+        if (item_stack == null) {
+            return null;
+        }
 
-		try {
-			final var handle = CraftItemStack.class.getDeclaredField("handle");
-			handle.setAccessible(true);
-			return (ItemStack) handle.get(item_stack);
-		} catch (NoSuchFieldException | IllegalAccessException e) {
-			return null;
-		}
-	}
+        if (!(item_stack instanceof CraftItemStack)) {
+            return CraftItemStack.asNMSCopy(item_stack);
+        }
 
-	public static ServerPlayer player_handle(org.bukkit.entity.Player player) {
-		if (!(player instanceof CraftPlayer)) {
-			return null;
-		}
-		return ((CraftPlayer) player).getHandle();
-	}
+        try {
+            final var handle = CraftItemStack.class.getDeclaredField("handle");
+            handle.setAccessible(true);
+            return (ItemStack) handle.get(item_stack);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            return null;
+        }
+    }
 
-	public static ServerLevel world_handle(org.bukkit.World world) {
-		return ((CraftWorld) world).getHandle();
-	}
+    public static ServerPlayer player_handle(org.bukkit.entity.Player player) {
+        if (!(player instanceof CraftPlayer)) {
+            return null;
+        }
+        return ((CraftPlayer) player).getHandle();
+    }
 
-	public static DedicatedServer server_handle() {
-		final var bukkit_server = Bukkit.getServer();
-		return ((CraftServer) bukkit_server).getServer();
-	}
+    public static ServerLevel world_handle(org.bukkit.World world) {
+        return ((CraftWorld) world).getHandle();
+    }
 
-	@SuppressWarnings({ "unchecked", "deprecation" })
-	public static void register_entity(
-			final NamespacedKey base_entity_type,
-			final String pseudo_namespace,
-			final String key,
-			final EntityType.Builder<?> builder) {
-		final var id = pseudo_namespace + "_" + key;
-		// From:
-		// https://papermc.io/forums/t/register-and-spawn-a-custom-entity-on-1-13-x/293,
-		// adapted for 1.18
-		// Get the datafixer
-		final var world_version = SharedConstants.getCurrentVersion().getDataVersion().getVersion();
-		final var world_version_key = DataFixUtils.makeKey(world_version);
-		final var data_types = DataFixers
-				.getDataFixer()
-				.getSchema(world_version_key)
-				.findChoiceType(References.ENTITY)
-				.types();
-		final var data_types_map = (Map<Object, Type<?>>) data_types;
-		// Inject the new custom entity (this registers the key/id with the server,
-		// so it will be available in vanilla constructs like the /summon command)
-		data_types_map.put("minecraft:" + id, data_types_map.get(base_entity_type.toString()));
-		// Store a new type in registry
-		Registry.register(BuiltInRegistries.ENTITY_TYPE, id, builder.build(id));
-	}
+    public static DedicatedServer server_handle() {
+        final var bukkit_server = Bukkit.getServer();
+        return ((CraftServer) bukkit_server).getServer();
+    }
 
-	public static void spawn(org.bukkit.World world, Entity entity) {
-		world_handle(world).addFreshEntity(entity);
-	}
+    @SuppressWarnings({ "unchecked", "deprecation" })
+    public static void register_entity(
+        final NamespacedKey base_entity_type,
+        final String pseudo_namespace,
+        final String key,
+        final EntityType.Builder<?> builder
+    ) {
+        final var id = pseudo_namespace + "_" + key;
+        // From:
+        // https://papermc.io/forums/t/register-and-spawn-a-custom-entity-on-1-13-x/293,
+        // adapted for 1.18
+        // Get the datafixer
+        final var world_version = SharedConstants.getCurrentVersion().getDataVersion().getVersion();
+        final var world_version_key = DataFixUtils.makeKey(world_version);
+        final var data_types = DataFixers.getDataFixer()
+            .getSchema(world_version_key)
+            .findChoiceType(References.ENTITY)
+            .types();
+        final var data_types_map = (Map<Object, Type<?>>) data_types;
+        // Inject the new custom entity (this registers the key/id with the server,
+        // so it will be available in vanilla constructs like the /summon command)
+        data_types_map.put("minecraft:" + id, data_types_map.get(base_entity_type.toString()));
+        // Store a new type in registry
+        final var rk = ResourceKey.create(Registries.ENTITY_TYPE, ResourceLocation.withDefaultNamespace(id));
+        Registry.register(BuiltInRegistries.ENTITY_TYPE, id, builder.build(rk));
+    }
 
-	public static int unlock_all_recipes(final org.bukkit.entity.Player player) {
-		final var recipes = server_handle().getRecipeManager().getRecipes();
-		return player_handle(player).awardRecipes(recipes);
-	}
+    public static void spawn(org.bukkit.World world, Entity entity) {
+        world_handle(world).addFreshEntity(entity);
+    }
 
-	public static int creative_tab_id(final ItemStack item_stack) {
-		// TODO FIXME BUG this is broken and always returns 0
-		return (int)CreativeModeTabs.allTabs().stream().takeWhile(tab -> tab.contains(item_stack)).count();
-	}
+    public static int unlock_all_recipes(final org.bukkit.entity.Player player) {
+        final var recipes = server_handle().getRecipeManager().getRecipes();
+        return player_handle(player).awardRecipes(recipes);
+    }
 
-	public static void set_air_no_drops(final org.bukkit.block.Block block) {
-		final var entity = world_handle(block.getWorld())
-				.getBlockEntity(new BlockPos(block.getX(), block.getY(), block.getZ()));
-		Clearable.tryClear(entity);
-		block.setType(Material.AIR, false);
-	}
+    public static int creative_tab_id(final ItemStack item_stack) {
+        // TODO FIXME BUG this is broken and always returns 0
+        return (int) CreativeModeTabs.allTabs().stream().takeWhile(tab -> tab.contains(item_stack)).count();
+    }
+
+    public static void set_air_no_drops(final org.bukkit.block.Block block) {
+        final var entity = world_handle(block.getWorld()).getBlockEntity(
+            new BlockPos(block.getX(), block.getY(), block.getZ())
+        );
+        block.setType(Material.AIR, false);
+    }
 }

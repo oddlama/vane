@@ -8,9 +8,9 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface ConfigDict {
-	Class<?> cls();
+    Class<?> cls();
 
-	String desc();
+    String desc();
 
-	boolean metrics() default false;
+    boolean metrics() default false;
 }

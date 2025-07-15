@@ -8,13 +8,13 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface ConfigDoubleList {
-	double[] def();
+    double[] def();
 
-	double min() default Double.NaN;
+    double min() default Double.NaN;
 
-	double max() default Double.NaN;
+    double max() default Double.NaN;
 
-	String desc();
+    String desc();
 
-	boolean metrics() default true;
+    boolean metrics() default true;
 }

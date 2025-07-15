@@ -8,9 +8,9 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface ConfigStringListMap {
-	ConfigStringListMapEntry[] def();
+    ConfigStringListMapEntry[] def();
 
-	String desc();
+    String desc();
 
-	boolean metrics() default false;
+    boolean metrics() default false;
 }

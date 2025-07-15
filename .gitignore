@@ -1,4 +1,5 @@
 *.sw?
+.pre-commit-config.yaml
 env.sh
 .gradle
 .factorypath

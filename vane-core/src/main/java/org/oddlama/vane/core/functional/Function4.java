@@ -4,14 +4,14 @@ import java.util.List;
 
 @FunctionalInterface
 public interface Function4<T1, T2, T3, T4, R> extends ErasedFunctor, GenericsFinder {
-	R apply(T1 t1, T2 t2, T3 t3, T4 t4);
+    R apply(T1 t1, T2 t2, T3 t3, T4 t4);
 
-	@Override
-	@SuppressWarnings("unchecked")
-	public default Object invoke(List<Object> args) {
-		if (args.size() != 4) {
-			throw new IllegalArgumentException("Functor needs 4 arguments but got " + args.size() + " arguments");
-		}
-		return apply((T1) args.get(0), (T2) args.get(1), (T3) args.get(2), (T4) args.get(3));
-	}
+    @Override
+    @SuppressWarnings("unchecked")
+    public default Object invoke(List<Object> args) {
+        if (args.size() != 4) {
+            throw new IllegalArgumentException("Functor needs 4 arguments but got " + args.size() + " arguments");
+        }
+        return apply((T1) args.get(0), (T2) args.get(1), (T3) args.get(2), (T4) args.get(3));
+    }
 }

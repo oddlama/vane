@@ -1,0 +1,19 @@
+{
+  "model": {
+    "type": "range_dispatch",
+    "property": "minecraft:custom_model_data",
+    "fallback": {
+      "type": "model",
+      "model": "minecraft:item/diamond_hoe"
+    },
+    "entries": [
+      {
+        "threshold": 7733256,
+        "model": {
+          "type": "model",
+          "model": "vane_trifles:item/diamond_sickle"
+        }
+      }
+    ]
+  }
+}

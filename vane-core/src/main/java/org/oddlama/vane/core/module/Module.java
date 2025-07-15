@@ -2,6 +2,12 @@ package org.oddlama.vane.core.module;
 
 import static org.oddlama.vane.util.ResourceList.get_resources;
 
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
+import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
+import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
+
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -17,16 +23,23 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-
+import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.FishHook;
+import org.bukkit.entity.Item;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.world.LootGenerateEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.loot.LootTables;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
@@ -47,13 +60,6 @@ import org.oddlama.vane.core.functional.Consumer1;
 import org.oddlama.vane.core.lang.LangManager;
 import org.oddlama.vane.core.persistent.PersistentStorageManager;
 import org.oddlama.vane.core.resourcepack.ResourcePackGenerator;
-
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.ProtocolManager;
-
-import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
-import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
-import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 
 public abstract class Module<T extends Module<T>> extends JavaPlugin implements Context<T>, org.bukkit.event.Listener {
 
@@ -88,25 +94,17 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 	public long storage_version;
 
 	// Base configuration
-	@ConfigString(
-		def = "inherit",
-		desc = "The language for this module. The corresponding language file must be named lang-{lang}.yml. Specifying 'inherit' will load the value set for vane-core.",
-		metrics = true
-	)
+	@ConfigString(def = "inherit", desc = "The language for this module. The corresponding language file must be named lang-{lang}.yml. Specifying 'inherit' will load the value set for vane-core.", metrics = true)
 	public String config_lang;
 
-	@ConfigBoolean(
-		def = true,
-		desc = "Enable plugin metrics via bStats. You can opt-out here or via the global bStats configuration. All collected information is completely anonymous and publicly available."
-	)
+	@ConfigBoolean(def = true, desc = "Enable plugin metrics via bStats. You can opt-out here or via the global bStats configuration. All collected information is completely anonymous and publicly available.")
 	public boolean config_metrics_enabled;
 
 	// Context<T> interface proxy
 	private ModuleGroup<T> context_group = new ModuleGroup<>(
-		this,
-		"",
-		"The module will only add functionality if this is set to true."
-	);
+			this,
+			"",
+			"The module will only add functionality if this is set to true.");
 
 	@Override
 	public void compile(ModuleComponent<T> component) {
@@ -116,8 +114,10 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 	@Override
 	public void add_child(Context<T> subcontext) {
 		if (context_group == null) {
-			// This happens, when context_group (above) is initialized and calls compile_self(),
-			// while will try to register it to the parent context (us), but we fake that anyway.
+			// This happens, when context_group (above) is initialized and calls
+			// compile_self(),
+			// while will try to register it to the parent context (us), but we fake that
+			// anyway.
 			return;
 		}
 		context_group.add_child(subcontext);
@@ -150,15 +150,20 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 	}
 
 	// Callbacks for derived classes
-	protected void on_load() {}
+	protected void on_load() {
+	}
 
-	public void on_enable() {}
+	public void on_enable() {
+	}
 
-	public void on_disable() {}
+	public void on_disable() {
+	}
 
-	public void on_config_change() {}
+	public void on_config_change() {
+	}
 
-	public void on_generate_resource_pack() throws IOException {}
+	public void on_generate_resource_pack() throws IOException {
+	}
 
 	public final void for_each_module_component(final Consumer1<ModuleComponent<?>> f) {
 		context_group.for_each_module_component(f);
@@ -183,18 +188,14 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 		}
 
 		// Create per module command catch-all permission
-		permission_command_catchall_module =
-			new Permission(
+		permission_command_catchall_module = new Permission(
 				"vane." + get_name() + ".commands.*",
 				"Allow access to all vane-" + get_name() + " commands",
-				PermissionDefault.FALSE
-			);
+				PermissionDefault.FALSE);
 		register_permission(permission_command_catchall_module);
 	}
 
-	/**
-	 * The namespace used in resource packs
-	 */
+	/** The namespace used in resource packs */
 	public final String namespace() {
 		return namespace;
 	}
@@ -229,15 +230,14 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 
 		// Schedule persistent storage saving every minute
 		schedule_task_timer(
-			() -> {
-				if (persistent_storage_dirty) {
-					save_persistent_storage();
-					persistent_storage_dirty = false;
-				}
-			},
-			60 * 20,
-			60 * 20
-		);
+				() -> {
+					if (persistent_storage_dirty) {
+						save_persistent_storage();
+						persistent_storage_dirty = false;
+					}
+				},
+				60 * 20,
+				60 * 20);
 	}
 
 	@Override
@@ -283,20 +283,32 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 	public void generate_resource_pack(final ResourcePackGenerator pack) throws IOException {
 		// Generate language
 		final var pattern = Pattern.compile("lang-.*\\.yml");
-		Arrays
-			.stream(getDataFolder().listFiles((d, name) -> pattern.matcher(name).matches()))
-			.sorted()
-			.forEach(lang_file -> {
-				final var yaml = YamlConfiguration.loadConfiguration(lang_file);
-				try {
-					lang_manager.generate_resource_pack(pack, yaml, lang_file);
-				} catch (Exception e) {
-					throw new RuntimeException(
-						"Error while generating language for '" + lang_file + "' of module " + get_name(),
-						e
-					);
+		Arrays.stream(getDataFolder().listFiles((d, name) -> pattern.matcher(name).matches()))
+				.sorted()
+				.forEach(lang_file -> {
+					final var yaml = YamlConfiguration.loadConfiguration(lang_file);
+					try {
+						lang_manager.generate_resource_pack(pack, yaml, lang_file);
+					} catch (Exception e) {
+						throw new RuntimeException(
+								"Error while generating language for '" + lang_file + "' of module " + get_name(),
+								e);
+					}
+				});
+
+		// Add files
+		final var index = getResource("resource_pack/index");
+		if (index != null) {
+			try (final var reader = new BufferedReader(new InputStreamReader(index))) {
+				String filePath;
+				while ((filePath = reader.readLine()) != null) {
+					final var content = getResource("resource_pack/" + filePath);
+					pack.add_file(filePath, content);
 				}
-			});
+			} catch (IOException e) {
+				log.log(Level.SEVERE, "Could not load resource pack index file of module " + get_name(), e);
+			}
+		}
 
 		on_generate_resource_pack(pack);
 		context_group.generate_resource_pack(pack);
@@ -474,10 +486,9 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 	}
 
 	public List<OfflinePlayer> get_offline_players_with_valid_name() {
-		return Arrays
-			.stream(getServer().getOfflinePlayers())
-			.filter(k -> k.getName() != null)
-			.collect(Collectors.toList());
+		return Arrays.stream(getServer().getOfflinePlayers())
+				.filter(k -> k.getName() != null)
+				.collect(Collectors.toList());
 	}
 
 	public LootTable loot_table(final NamespacedKey key) {
@@ -493,7 +504,8 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 	public void on_module_loot_generate(final LootGenerateEvent event) {
 		final var loot_table = event.getLootTable();
 		// Should never happen because according to the api this is @NotNull,
-		// yet it happens for some people that copied their world from singleplayer to the server.
+		// yet it happens for some people that copied their world from singleplayer to
+		// the server.
 		if (loot_table == null) {
 			return;
 		}
@@ -503,10 +515,52 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 		}
 
 		final var loc = event.getLootContext().getLocation();
-		final var local_random = new Random(random.nextInt()
-				+ (loc.getBlockX() & 0xffff << 16)
-				+ (loc.getBlockY() & 0xffff << 32)
-				+ (loc.getBlockZ() & 0xffff << 48));
+		final var local_random = new Random(
+				random.nextInt() +
+						(loc.getBlockX() & (0xffff << 16)) +
+						(loc.getBlockY() & (0xffff << 32)) +
+						(loc.getBlockZ() & (0xffff << 48)));
 		additional_loot_table.generate_loot(event.getLoot(), local_random);
+	}
+
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	public void on_module_player_caught_fish(final PlayerFishEvent event) {
+		// This is a dirty non-commutative way to apply fishing loot tables
+		// that skews subtable probabilities,
+		// consider somehow programmatically generating datapacks or
+		// modifying loot tables directly instead.
+		if (event.getState() != PlayerFishEvent.State.CAUGHT_FISH) {
+			return;
+		}
+		if (event.getCaught() instanceof Item item_entity) {
+			final Player player = event.getPlayer();
+			final FishHook hook_entity = event.getHook();
+			final double player_luck = player.getAttribute(Attribute.LUCK).getValue();
+			final ItemStack rod_stack = player.getInventory().getItem(event.getHand());
+			final double rod_luck = rod_stack.getEnchantmentLevel(Enchantment.LUCK_OF_THE_SEA);  // Can bukkit provide access to fishing_luck_bonus of 1.24 item component system?
+			final double total_luck = player_luck + rod_luck;
+			final double weight_fish     =                               Math.max(0, 85 + total_luck * -1);
+			final double weight_junk     =                               Math.max(0, 10 + total_luck * -2);
+			final double weight_treasure = hook_entity.isInOpenWater() ? Math.max(0, 5 + total_luck * 2) : 0;
+			final double roll = random.nextDouble() * (weight_fish + weight_junk + weight_treasure);
+			NamespacedKey key;
+			if (roll < weight_fish) {
+				key = LootTables.FISHING_FISH.getKey();
+			} else if (roll < weight_fish + weight_junk) {
+				key = LootTables.FISHING_JUNK.getKey();
+			} else {
+				key = LootTables.FISHING_TREASURE.getKey();
+			}
+			final var additional_loot_table = additional_loot_tables.get(key);
+			if (additional_loot_table == null) {
+				// Do not modify the caught item
+				return;
+			}
+			final var new_item = additional_loot_table.generate_override(new Random(random.nextInt()));
+			if (new_item == null) {
+				return;
+			}
+			item_entity.setItemStack(new_item);
+		}
 	}
 }

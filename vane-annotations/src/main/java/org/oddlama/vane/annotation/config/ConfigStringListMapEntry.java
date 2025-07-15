@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface ConfigStringListMapEntry {
-	String key();
+    String key();
 
-	String[] list();
+    String[] list();
 }

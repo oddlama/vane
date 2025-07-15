@@ -1,11 +1,10 @@
 package org.oddlama.vane.bedtime;
 
-import static org.apache.commons.lang.StringEscapeUtils.escapeHtml;
+import static org.oddlama.vane.external.apache.commons.text.StringEscapeUtils.escapeHtml4;
 
 import de.bluecolored.bluemap.api.BlueMapAPI;
 import de.bluecolored.bluemap.api.markers.HtmlMarker;
 import de.bluecolored.bluemap.api.markers.MarkerSet;
-
 import java.util.HashMap;
 import java.util.UUID;
 import org.bukkit.OfflinePlayer;
@@ -14,92 +13,95 @@ import org.bukkit.plugin.Plugin;
 
 public class BedtimeBlueMapLayerDelegate {
 
-	public static final String MARKER_SET_ID = "vane_bedtime.bedtime";
+    public static final String MARKER_SET_ID = "vane_bedtime.bedtime";
 
-	private final BedtimeBlueMapLayer parent;
+    private final BedtimeBlueMapLayer parent;
 
-	private boolean bluemap_enabled = false;
+    private boolean bluemap_enabled = false;
 
-	public BedtimeBlueMapLayerDelegate(final BedtimeBlueMapLayer parent) {
-		this.parent = parent;
-	}
+    public BedtimeBlueMapLayerDelegate(final BedtimeBlueMapLayer parent) {
+        this.parent = parent;
+    }
 
-	public Bedtime get_module() {
-		return parent.get_module();
-	}
+    public Bedtime get_module() {
+        return parent.get_module();
+    }
 
-	public void on_enable(final Plugin plugin) {
-		BlueMapAPI.onEnable(api -> {
-			get_module().log.info("Enabling BlueMap integration");
-			bluemap_enabled = true;
+    public void on_enable(final Plugin plugin) {
+        BlueMapAPI.onEnable(api -> {
+            get_module().log.info("Enabling BlueMap integration");
+            bluemap_enabled = true;
 
-			// Create marker sets
-			for (final var world : get_module().getServer().getWorlds()) {
-				create_marker_set(api, world);
-			}
+            // Create marker sets
+            for (final var world : get_module().getServer().getWorlds()) {
+                create_marker_set(api, world);
+            }
 
-			update_all_markers();
-		});
-	}
+            update_all_markers();
+        });
+    }
 
-	public void on_disable() {
-		if (!bluemap_enabled) {
-			return;
-		}
+    public void on_disable() {
+        if (!bluemap_enabled) {
+            return;
+        }
 
-		get_module().log.info("Disabling BlueMap integration");
-		bluemap_enabled = false;
-	}
+        get_module().log.info("Disabling BlueMap integration");
+        bluemap_enabled = false;
+    }
 
-	// world_id -> MarkerSet
-	private final HashMap<UUID, MarkerSet> marker_sets = new HashMap<>();
-	private void create_marker_set(final BlueMapAPI api, final World world) {
-		if (marker_sets.containsKey(world.getUID())) {
-			return;
-		}
+    // world_id -> MarkerSet
+    private final HashMap<UUID, MarkerSet> marker_sets = new HashMap<>();
 
-		final var marker_set = MarkerSet.builder()
-			.label(parent.lang_layer_label.str())
-			.toggleable(true)
-			.defaultHidden(parent.config_hide_by_default)
-			.build();
+    private void create_marker_set(final BlueMapAPI api, final World world) {
+        if (marker_sets.containsKey(world.getUID())) {
+            return;
+        }
 
-		api.getWorld(world).ifPresent(bm_world -> {
-			for (final var map : bm_world.getMaps()) {
-				map.getMarkerSets().put(MARKER_SET_ID, marker_set);
-			}
-		});
+        final var marker_set = MarkerSet.builder()
+            .label(parent.lang_layer_label.str())
+            .toggleable(true)
+            .defaultHidden(parent.config_hide_by_default)
+            .build();
 
-		marker_sets.put(world.getUID(), marker_set);
-	}
+        api
+            .getWorld(world)
+            .ifPresent(bm_world -> {
+                for (final var map : bm_world.getMaps()) {
+                    map.getMarkerSets().put(MARKER_SET_ID, marker_set);
+                }
+            });
 
-	public void update_marker(final OfflinePlayer player) {
-		remove_marker(player.getUniqueId());
-		final var loc = player.getRespawnLocation();
-		if (loc == null) {
-			return;
-		}
+        marker_sets.put(world.getUID(), marker_set);
+    }
 
-		final var marker = HtmlMarker.builder()
-			.position(loc.getX(), loc.getY(), loc.getZ())
-			.label("Bed for " + player.getName())
-			.html(parent.lang_marker_label.str(escapeHtml(player.getName())))
-			.build();
+    public void update_marker(final OfflinePlayer player) {
+        remove_marker(player.getUniqueId());
+        final var loc = player.getRespawnLocation();
+        if (loc == null) {
+            return;
+        }
 
-		// Existing markers will be overwritten.
-		marker_sets.get(loc.getWorld().getUID()).getMarkers().put(player.getUniqueId().toString(), marker);
-	}
+        final var marker = HtmlMarker.builder()
+            .position(loc.getX(), loc.getY(), loc.getZ())
+            .label("Bed for " + player.getName())
+            .html(parent.lang_marker_label.str(escapeHtml4(player.getName())))
+            .build();
 
-	public void remove_marker(final UUID player_id) {
-		for (final var marker_set : marker_sets.values()) {
-			marker_set.getMarkers().remove(player_id.toString());
-		}
-	}
+        // Existing markers will be overwritten.
+        marker_sets.get(loc.getWorld().getUID()).getMarkers().put(player.getUniqueId().toString(), marker);
+    }
 
-	public void update_all_markers() {
-		// Update all existing
-		for (final var player : get_module().get_offline_players_with_valid_name()) {
-			update_marker(player);
-		}
-	}
+    public void remove_marker(final UUID player_id) {
+        for (final var marker_set : marker_sets.values()) {
+            marker_set.getMarkers().remove(player_id.toString());
+        }
+    }
+
+    public void update_all_markers() {
+        // Update all existing
+        for (final var player : get_module().get_offline_players_with_valid_name()) {
+            update_marker(player);
+        }
+    }
 }

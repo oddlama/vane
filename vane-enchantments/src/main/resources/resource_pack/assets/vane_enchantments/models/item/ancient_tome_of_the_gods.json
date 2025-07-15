@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "vane_enchantments:item/ancient_tome_of_the_gods"
+  }
+}

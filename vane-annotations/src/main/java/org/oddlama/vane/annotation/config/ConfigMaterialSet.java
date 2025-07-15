@@ -9,9 +9,9 @@ import org.bukkit.Material;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface ConfigMaterialSet {
-	Material[] def();
+    Material[] def();
 
-	String desc();
+    String desc();
 
-	boolean metrics() default true;
+    boolean metrics() default true;
 }

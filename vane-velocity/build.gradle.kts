@@ -1,14 +1,14 @@
 plugins {
-    id("io.github.goooler.shadow") version "8.1.7"
+    id("io.github.goooler.shadow") version "8.1.8"
 }
 
 dependencies {
     compileOnly(fileTree(mapOf("dir" to "external", "include" to listOf("*.jar"))))
-    implementation(group = "com.velocitypowered", name = "velocity-api", version = "3.3.0-SNAPSHOT")
-    annotationProcessor(group = "com.velocitypowered", name = "velocity-api", version = "3.3.0-SNAPSHOT")
-    implementation(group = "org.bstats", name = "bstats-velocity", version = "3.0.2")
-    implementation(group = "org.bstats", name = "bstats-base", version = "3.0.2")
-    implementation(group = "org.json", name = "json", version = "20240303")
+    implementation(group = "com.velocitypowered", name = "velocity-api", version = "3.4.0-SNAPSHOT")
+    annotationProcessor(group = "com.velocitypowered", name = "velocity-api", version = "3.4.0-SNAPSHOT")
+    implementation(group = "org.bstats", name = "bstats-velocity", version = "3.1.0")
+    implementation(group = "org.bstats", name = "bstats-base", version = "3.1.0")
+    implementation(group = "org.json", name = "json", version = "20250107")
     implementation(rootProject.project(":vane-core"))
     implementation(rootProject.project(":vane-proxy-core"))
 }
@@ -19,7 +19,7 @@ java {
     }
 }
 
-tasks.create<Copy>("copyJar") {
+tasks.register<Copy>("copyJar") {
     from(tasks.shadowJar)
     into("${project.rootProject.projectDir}/target")
     duplicatesStrategy = DuplicatesStrategy.INCLUDE

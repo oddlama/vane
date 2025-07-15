@@ -7,20 +7,20 @@ import org.oddlama.vane.core.command.Param;
 
 public abstract class BaseParam implements Param {
 
-	private Command<?> command;
-	private List<Param> params = new ArrayList<>();
+    private Command<?> command;
+    private List<Param> params = new ArrayList<>();
 
-	public BaseParam(Command<?> command) {
-		this.command = command;
-	}
+    public BaseParam(Command<?> command) {
+        this.command = command;
+    }
 
-	@Override
-	public List<Param> get_params() {
-		return params;
-	}
+    @Override
+    public List<Param> get_params() {
+        return params;
+    }
 
-	@Override
-	public Command<?> get_command() {
-		return command;
-	}
+    @Override
+    public Command<?> get_command() {
+        return command;
+    }
 }

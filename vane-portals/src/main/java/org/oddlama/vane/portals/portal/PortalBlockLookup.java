@@ -10,34 +10,34 @@ import org.json.JSONObject;
 
 public class PortalBlockLookup {
 
-	public static Object serialize(@NotNull final Object o) throws IOException {
-		final var lookup = (PortalBlockLookup) o;
-		final var json = new JSONObject();
-		json.put("portal_id", to_json(UUID.class, lookup.portal_id));
-		json.put("type", to_json(PortalBlock.Type.class, lookup.type));
-		return json;
-	}
+    public static Object serialize(@NotNull final Object o) throws IOException {
+        final var lookup = (PortalBlockLookup) o;
+        final var json = new JSONObject();
+        json.put("portal_id", to_json(UUID.class, lookup.portal_id));
+        json.put("type", to_json(PortalBlock.Type.class, lookup.type));
+        return json;
+    }
 
-	public static PortalBlockLookup deserialize(@NotNull final Object o) throws IOException {
-		final var json = (JSONObject) o;
-		final var portal_id = from_json(UUID.class, json.get("portal_id"));
-		final var type = from_json(PortalBlock.Type.class, json.get("type"));
-		return new PortalBlockLookup(portal_id, type);
-	}
+    public static PortalBlockLookup deserialize(@NotNull final Object o) throws IOException {
+        final var json = (JSONObject) o;
+        final var portal_id = from_json(UUID.class, json.get("portal_id"));
+        final var type = from_json(PortalBlock.Type.class, json.get("type"));
+        return new PortalBlockLookup(portal_id, type);
+    }
 
-	private UUID portal_id;
-	private PortalBlock.Type type;
+    private UUID portal_id;
+    private PortalBlock.Type type;
 
-	public PortalBlockLookup(final UUID portal_id, final PortalBlock.Type type) {
-		this.portal_id = portal_id;
-		this.type = type;
-	}
+    public PortalBlockLookup(final UUID portal_id, final PortalBlock.Type type) {
+        this.portal_id = portal_id;
+        this.type = type;
+    }
 
-	public UUID portal_id() {
-		return portal_id;
-	}
+    public UUID portal_id() {
+        return portal_id;
+    }
 
-	public PortalBlock.Type type() {
-		return type;
-	}
+    public PortalBlock.Type type() {
+        return type;
+    }
 }

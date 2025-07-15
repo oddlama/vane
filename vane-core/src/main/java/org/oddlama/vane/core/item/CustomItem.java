@@ -1,7 +1,9 @@
 package org.oddlama.vane.core.item;
 
 import java.io.IOException;
-
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.oddlama.vane.annotation.config.ConfigInt;
@@ -18,11 +20,8 @@ import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.core.resourcepack.ResourcePackGenerator;
 import org.oddlama.vane.util.StorageUtil;
 
-import net.kyori.adventure.key.Key;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextDecoration;
-
 public class CustomItem<T extends Module<T>> extends Listener<T> implements org.oddlama.vane.core.item.api.CustomItem {
+
 	private VaneItem annotation;
 	public NamespacedKey key;
 
@@ -35,6 +34,7 @@ public class CustomItem<T extends Module<T>> extends Listener<T> implements org.
 
 	@ConfigInt(def = 0, min = 0, desc = "The durability of this item. Set to 0 to use the durability properties of whatever base material the item is made of.")
 	private int config_durability;
+
 	private final String name_override;
 	private final Integer custom_model_data_override;
 
@@ -44,7 +44,6 @@ public class CustomItem<T extends Module<T>> extends Listener<T> implements org.
 
 	public CustomItem(Context<T> context, String name_override, Integer custom_model_data_override) {
 		super(null);
-
 		Class<?> cls = getClass();
 		while (this.annotation == null && cls != null) {
 			this.annotation = cls.getAnnotation(VaneItem.class);
@@ -83,7 +82,8 @@ public class CustomItem<T extends Module<T>> extends Listener<T> implements org.
 
 	@Override
 	public boolean enabled() {
-		// Explicitly stated to not be forgotten, as enabled() is also part of Listener<T>.
+		// Explicitly stated to not be forgotten, as enabled() is also part of
+		// Listener<T>.
 		return annotation.enabled() && super.enabled();
 	}
 
@@ -125,23 +125,5 @@ public class CustomItem<T extends Module<T>> extends Listener<T> implements org.
 
 	public LootTableList default_loot_tables() {
 		return LootTableList.of();
-	}
-
-	/**
-	 * Returns the type of item for the resource pack
-	 */
-	public Key itemType(){
-		return Key.key(Key.MINECRAFT_NAMESPACE, "item/generated");
-	}
-
-	@Override
-	public void addResources(final ResourcePackGenerator rp) throws IOException {
-		final var resource_name = "items/" + key().value() + ".png";
-		final var resource = get_module().getResource(resource_name);
-		if (resource == null) {
-			throw new RuntimeException("Missing resource '" + resource_name + "'. This is a bug.");
-		}
-		rp.add_item_model(key(), resource, itemType());
-		rp.add_item_override(baseMaterial().getKey(), key(), predicate -> predicate.put("custom_model_data", customModelData()));
 	}
 }

@@ -1,9 +1,7 @@
 package org.oddlama.vane.proxycore.listeners;
 
 public interface ProxyCancellableEvent {
+    void cancel();
 
-	void cancel();
-
-	void cancel(String reason);
-
+    void cancel(String reason);
 }
