@@ -7,6 +7,7 @@ import java.util.List;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -18,6 +19,9 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.NotNull;
 import org.oddlama.vane.annotation.item.VaneItem;
 import org.oddlama.vane.core.config.recipes.RecipeList;
 import org.oddlama.vane.core.config.recipes.ShapedRecipeDefinition;
@@ -30,19 +34,33 @@ import org.oddlama.vane.trifles.Trifles;
 public class Pouch extends CustomItem<Trifles> {
 
     private static final String openedText = "§fOpened";
+    private final NamespacedKey openedKey;
+
 
     public Pouch(Context<Trifles> context) {
         super(context);
+        this.openedKey = new NamespacedKey(Trifles.getPlugin(Trifles.class), "opened");
+    }
+
+    @Override
+    public @NotNull ItemStack updateItemStack(@NotNull ItemStack item) {
+        ItemMeta meta = item.getItemMeta();
+        if (meta != null) {
+            PersistentDataContainer container = meta.getPersistentDataContainer();
+            container.set(openedKey, PersistentDataType.BOOLEAN, false);
+            item.setItemMeta(meta);
+        }
+        return item;
     }
 
     @Override
     public RecipeList default_recipes() {
         return RecipeList.of(
-            new ShapedRecipeDefinition("generic")
-                .shape("sls", "l l", "lll")
-                .set_ingredient('s', Material.STRING)
-                .set_ingredient('l', Material.RABBIT_HIDE)
-                .result(key().toString())
+                new ShapedRecipeDefinition("generic")
+                        .shape("sls", "l l", "lll")
+                        .set_ingredient('s', Material.STRING)
+                        .set_ingredient('l', Material.RABBIT_HIDE)
+                        .result(key().toString())
         );
     }
 
@@ -53,7 +71,9 @@ public class Pouch extends CustomItem<Trifles> {
         final var custom_item = get_module().core.item_registry().get(item);
 
         // If the clicked item is a pouch and it has the "Opened" tooltip, cancel the click event.
-        if (custom_item instanceof Pouch && item.getItemMeta().getLore().contains(openedText)) {
+        boolean opened = item.getItemMeta().getPersistentDataContainer().get(openedKey, PersistentDataType.BOOLEAN);
+
+        if (custom_item instanceof Pouch && opened) {
             player.setItemOnCursor(ItemStack.empty());
             event.setCancelled(true);
             player.sendActionBar(Component.text("You can't move opened pouches."));
@@ -75,6 +95,7 @@ public class Pouch extends CustomItem<Trifles> {
 
         if (custom_item instanceof Pouch) {
             pouchMeta.setLore(List.of());
+            pouchMeta.getPersistentDataContainer().set(openedKey, PersistentDataType.BOOLEAN, false);
             item.setItemMeta(pouchMeta);
         }
     }
@@ -109,6 +130,7 @@ public class Pouch extends CustomItem<Trifles> {
             player.getWorld().playSound(player, Sound.ITEM_BUNDLE_DROP_CONTENTS, 1.0f, 1.2f);
             swing_arm(player, event.getHand());
             pouchMeta.setLore(List.of(openedText));
+            pouchMeta.getPersistentDataContainer().set(openedKey, PersistentDataType.BOOLEAN, true);
             item.setItemMeta(pouchMeta);
         }
     }
