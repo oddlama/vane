@@ -7,6 +7,8 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.bukkit.Location;
 import org.bukkit.World;
 
@@ -67,24 +69,24 @@ public class FloatingItem extends ItemEntity {
     public void inactiveTick() {}
 
     // Don't save or load
-    @Override
-    public void readAdditionalSaveData(CompoundTag nbt) {}
 
     @Override
-    public void addAdditionalSaveData(CompoundTag nbt) {}
+    public void readAdditionalSaveData(ValueInput output) {}
 
     @Override
-    public boolean save(CompoundTag nbt) {
+    protected void addAdditionalSaveData(ValueOutput output) {}
+
+
+    @Override
+    public boolean save(ValueOutput output) {
         return false;
     }
 
     @Override
-    public CompoundTag saveWithoutId(CompoundTag nbt) {
-        return nbt;
-    }
+    public void saveWithoutId(ValueOutput output) {}
 
     @Override
-    public void load(CompoundTag nbt) {}
+    public void load(ValueInput output) {}
 
     @Override
     public void setItem(ItemStack itemStack) {
