@@ -9,6 +9,7 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -17,6 +18,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -33,7 +35,6 @@ import org.oddlama.vane.trifles.Trifles;
 @VaneItem(name = "pouch", base = Material.DROPPER, model_data = 0x760016, version = 1)
 public class Pouch extends CustomItem<Trifles> {
 
-    private static final String openedText = "§fOpened";
     private final NamespacedKey openedKey;
 
 
@@ -62,6 +63,24 @@ public class Pouch extends CustomItem<Trifles> {
                         .set_ingredient('l', Material.RABBIT_HIDE)
                         .result(key().toString())
         );
+    }
+
+    @EventHandler
+    public void on_player_pickup_item(PlayerPickupItemEvent event) {
+        Item item = event.getItem();
+        ItemStack itemStack = item.getItemStack();
+        final var custom_item = get_module().core.item_registry().get(itemStack);
+        if (custom_item instanceof Pouch) {
+            boolean opened = itemStack.getItemMeta().getPersistentDataContainer().get(openedKey, PersistentDataType.BOOLEAN);
+            ItemMeta itemMeta = itemStack.getItemMeta();
+
+            if (opened) {
+                itemMeta.getPersistentDataContainer().set(openedKey, PersistentDataType.BOOLEAN, false);
+                itemStack.setItemMeta(itemMeta);
+                item.setItemStack(itemStack);
+            }
+        }
+
     }
 
     @EventHandler
@@ -94,7 +113,6 @@ public class Pouch extends CustomItem<Trifles> {
         ItemMeta pouchMeta = item.getItemMeta();
 
         if (custom_item instanceof Pouch) {
-            pouchMeta.setLore(List.of());
             pouchMeta.getPersistentDataContainer().set(openedKey, PersistentDataType.BOOLEAN, false);
             item.setItemMeta(pouchMeta);
         }
@@ -129,7 +147,6 @@ public class Pouch extends CustomItem<Trifles> {
         if (get_module().storage_group.open_block_state_inventory(player, item)) {
             player.getWorld().playSound(player, Sound.ITEM_BUNDLE_DROP_CONTENTS, 1.0f, 1.2f);
             swing_arm(player, event.getHand());
-            pouchMeta.setLore(List.of(openedText));
             pouchMeta.getPersistentDataContainer().set(openedKey, PersistentDataType.BOOLEAN, true);
             item.setItemMeta(pouchMeta);
         }
