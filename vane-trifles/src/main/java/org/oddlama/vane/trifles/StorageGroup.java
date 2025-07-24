@@ -103,10 +103,11 @@ public class StorageGroup extends Listener<Trifles> {
         if (owner_and_item == null || !owner_and_item.getLeft().equals(player.getUniqueId())) {
             return;
         }
-
-        var clicked_item_is_storage = is_storage_item(event.getCurrentItem());
-        var cursor_item_is_storage = is_storage_item(event.getCursor());
-        var clicked_inventory_is_player_inventory = event.getClickedInventory() == player.getInventory();
+        
+        boolean clicked_item_is_storage = is_storage_item(event.getCurrentItem());
+        boolean cursor_item_is_storage = is_storage_item(event.getCursor());
+        boolean hotbar_item_is_storage = is_storage_hotbar_item(event.getHotbarButton(), player);
+        boolean clicked_inventory_is_player_inventory = event.getClickedInventory() == player.getInventory();
 
         var cancel = false;
         switch (event.getAction()) {
@@ -134,7 +135,7 @@ public class StorageGroup extends Listener<Trifles> {
                 break;
             default:
                 // Restrictive default prevents moving of any storage items
-                cancel = clicked_item_is_storage || cursor_item_is_storage;
+                cancel = clicked_item_is_storage || cursor_item_is_storage || hotbar_item_is_storage;
                 break;
         }
 
@@ -215,6 +216,16 @@ public class StorageGroup extends Listener<Trifles> {
         // Any item that has a container block state as the meta is a container to us.
         // If the item has no meta (i.e., is empty), it doesn't count.
         return item.getItemMeta() instanceof BlockStateMeta meta && meta.getBlockState() instanceof ShulkerBox;
+    }
+
+    private boolean is_storage_hotbar_item(int slot_index, Player player){
+        // slot_index is -1 if not hotbar key is pressed
+       if (slot_index < 0){
+            return false;
+       }
+        
+        ItemStack hotbarItem = player.getInventory().getItem(slot_index);
+        return is_storage_item(hotbarItem);
     }
 
     private void update_storage_item(@NotNull ItemStack item, @NotNull Inventory inventory) {
