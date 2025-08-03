@@ -1,6 +1,5 @@
 package org.oddlama.vane.enchantments.enchantments;
 
-import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.event.EventHandler;
@@ -17,6 +16,8 @@ import org.oddlama.vane.core.enchantments.CustomEnchantment;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.enchantments.Enchantments;
 
+import java.util.List;
+
 @VaneEnchantment(
     name = "grappling_hook",
     max_level = 3,
@@ -28,6 +29,7 @@ public class GrapplingHook extends CustomEnchantment<Enchantments> {
 
     // Constant offset to the added velocity, so the player will always move up a little.
     private static final Vector CONSTANT_OFFSET = new Vector(0.0, 0.2, 0.0);
+    private static final double GROUND_CHECK_OFFSET_DISTANCE = -0.01;
 
     @ConfigDouble(
         def = 16.0,
@@ -91,6 +93,13 @@ public class GrapplingHook extends CustomEnchantment<Enchantments> {
                 }
                 break;
             case IN_GROUND:
+                break;
+            case REEL_IN:
+                // Block must be solid to be hooked
+                // Sometimes bobber gets stuck just above the ground, so we add a small offset
+                if (!event.getHook().getLocation().add(0.0, GROUND_CHECK_OFFSET_DISTANCE, 0.0).getBlock().getType().isSolid()) {
+                    return;
+                }
                 break;
             default:
                 return;
