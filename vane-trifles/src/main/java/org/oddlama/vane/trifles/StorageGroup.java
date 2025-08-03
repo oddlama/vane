@@ -1,25 +1,24 @@
 package org.oddlama.vane.trifles;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
 import net.kyori.adventure.text.Component;
-import org.oddlama.vane.external.apache.commons.lang3.tuple.Pair;
 import org.bukkit.Nameable;
+import org.bukkit.NamespacedKey;
 import org.bukkit.block.Container;
 import org.bukkit.block.ShulkerBox;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
+import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.oddlama.vane.annotation.lang.LangMessage;
@@ -27,10 +26,19 @@ import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.item.api.CustomItem;
 import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Context;
+import org.oddlama.vane.external.apache.commons.lang3.tuple.Pair;
 import org.oddlama.vane.trifles.items.storage.Backpack;
 import org.oddlama.vane.trifles.items.storage.Pouch;
+import org.oddlama.vane.util.StorageUtil;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 public class StorageGroup extends Listener<Trifles> {
+
+    public static final NamespacedKey STORAGE_IS_OPEN = StorageUtil.namespaced_key("vane_trifles", "currently_opened_storage");
 
     private Map<Inventory, Pair<UUID, ItemStack>> open_block_state_inventories = Collections.synchronizedMap(
         new HashMap<Inventory, Pair<UUID, ItemStack>>()
@@ -114,6 +122,9 @@ public class StorageGroup extends Listener<Trifles> {
             case DROP_ALL_SLOT:
             case DROP_ONE_CURSOR:
             case DROP_ONE_SLOT:
+                // Allow dropping storage item because we handle this elsewhere
+                cancel = false;
+                break;
             case PLACE_ALL:
             case PLACE_ONE:
             case PLACE_SOME:
@@ -138,9 +149,54 @@ public class StorageGroup extends Listener<Trifles> {
                 break;
         }
 
+        switch (event.getClick()) {
+            case NUMBER_KEY:
+                // Deny swapping storage items with number keys into storage inventory, but allow in player inventory
+                var swapped_item_is_storage = is_storage_item(player.getInventory().getItem(event.getHotbarButton()));
+                cancel = (swapped_item_is_storage || clicked_item_is_storage) && !clicked_inventory_is_player_inventory;
+                break;
+        }
+
         if (cancel) {
             event.setCancelled(true);
         }
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void on_drop_item(PlayerDropItemEvent event) {
+        if (!is_storage_item(event.getItemDrop().getItemStack())) {
+            return;
+        }
+
+        // Close the inventory if the player drops the currently open storage item
+        var storage_item_is_open_state = is_currently_open(event.getItemDrop().getItemStack());
+        if (storage_item_is_open_state) {
+            var is_known_custom_inventory = open_block_state_inventories.containsKey(event.getPlayer().getOpenInventory().getTopInventory());
+            if (is_known_custom_inventory) {
+                event.getPlayer().closeInventory(InventoryCloseEvent.Reason.CANT_USE);
+            } else {
+                // Item shouldn't be tagged as open if a custom inventory is not open, fix open tag
+                event.getItemDrop().getItemStack().editMeta(meta -> {
+                    meta.getPersistentDataContainer().set(STORAGE_IS_OPEN, PersistentDataType.BOOLEAN, false);
+                });
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void on_pickup_item(EntityPickupItemEvent event) {
+        if (!(event.getEntity() instanceof Player player)) {
+            return;
+        }
+
+        if (!is_storage_item(event.getItem().getItemStack())) {
+            return;
+        }
+
+        // Ensure bugged/old storage items are set to closed when picked up just in case
+        event.getItem().getItemStack().editMeta(meta -> {
+            meta.getPersistentDataContainer().set(STORAGE_IS_OPEN, PersistentDataType.BOOLEAN, false);
+        });
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -198,6 +254,10 @@ public class StorageGroup extends Listener<Trifles> {
             return;
         }
 
+        // Set the storage item to closed
+        owner_and_item.getRight().editMeta(meta -> {
+            meta.getPersistentDataContainer().set(STORAGE_IS_OPEN, PersistentDataType.BOOLEAN, false);
+        });
         update_storage_item(owner_and_item.getRight(), event.getInventory());
         open_block_state_inventories.remove(event.getInventory());
     }
@@ -217,7 +277,27 @@ public class StorageGroup extends Listener<Trifles> {
         return item.getItemMeta() instanceof BlockStateMeta meta && meta.getBlockState() instanceof ShulkerBox;
     }
 
+    private boolean is_currently_open(@Nullable ItemStack item) {
+        if (item == null || !item.hasItemMeta()) {
+            return false;
+        }
+            return Boolean.TRUE.equals(item.getPersistentDataContainer().get(STORAGE_IS_OPEN, PersistentDataType.BOOLEAN));
+    }
+
     private void update_storage_item(@NotNull ItemStack item, @NotNull Inventory inventory) {
+        // Find the correct storage item if it was moved from inventory slot and is no longer valid
+        if (item.getType().isAir() && inventory.getHolder() instanceof Player player) {
+            for (ItemStack checked_item : player.getInventory().getContents()) {
+                if (checked_item == null || !checked_item.hasItemMeta()) {
+                    continue;
+                }
+                if (is_currently_open(checked_item)) {
+                    item = checked_item; // Found the storage item that is currently open
+                    open_block_state_inventories.put(inventory, Pair.of(player.getUniqueId(), item)); // Update Map
+                    break;
+                }
+            }
+        }
         item.editMeta(BlockStateMeta.class, meta -> {
             final var block_state = meta.getBlockState();
             if (block_state instanceof Container container) {
