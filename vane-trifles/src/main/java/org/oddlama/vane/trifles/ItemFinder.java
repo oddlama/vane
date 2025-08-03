@@ -41,6 +41,9 @@ import org.oddlama.vane.util.StorageUtil;
 
 import java.util.Objects;
 
+import static org.oddlama.vane.trifles.ItemFinder.FOUND_TASK_ID;
+import static org.oddlama.vane.trifles.ItemFinder.IS_ENTITY_FOUND;
+
 public class ItemFinder extends Listener<Trifles> {
 
     public static final NamespacedKey IS_ENTITY_FOUND = StorageUtil.namespaced_key(
@@ -359,6 +362,12 @@ class UnsetGlowingTask implements Runnable {
     public void run() {
         if (entity.isValid()) {
             entity.setGlowing(false);
+            if (entity.getPersistentDataContainer().has(IS_ENTITY_FOUND)) {
+                entity.getPersistentDataContainer().remove(IS_ENTITY_FOUND);
+            }
+            if (entity.getPersistentDataContainer().has(FOUND_TASK_ID)) {
+                entity.getPersistentDataContainer().remove(FOUND_TASK_ID);
+            }
         }
     }
 }
