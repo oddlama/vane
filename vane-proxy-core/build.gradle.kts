@@ -1,5 +1,5 @@
 plugins {
-    id("io.github.goooler.shadow") version "8.1.8"
+    id("com.gradleup.shadow") version "9.0.0-rc3"
     id("net.kyori.blossom") version "2.1.0"
 }
 
