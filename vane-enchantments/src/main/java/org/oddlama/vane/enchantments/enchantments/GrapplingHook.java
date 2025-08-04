@@ -111,7 +111,7 @@ public class GrapplingHook extends CustomEnchantment<Enchantments> {
 
         // If the hook is below the player, set the Y component to 0.0 and only add the constant offset.
         // This prevents the player from just sliding against the ground when the hook is below them.
-        if (event.getPlayer().getY() - event.getHook().getY() > 0) {
+        if (player.getY() - event.getHook().getY() > 0) {
             adjusted_vector.setY(0.0).add(CONSTANT_OFFSET);
         }
 
