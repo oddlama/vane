@@ -1,10 +1,11 @@
 package org.oddlama.vane.trifles;
 
-import java.util.HashMap;
-import java.util.UUID;
 import org.oddlama.vane.annotation.VaneModule;
 import org.oddlama.vane.core.module.Module;
 import org.oddlama.vane.trifles.items.XpBottles;
+
+import java.util.HashMap;
+import java.util.UUID;
 
 @VaneModule(name = "trifles", bstats = 8644, config_version = 4, lang_version = 4, storage_version = 1)
 public class Trifles extends Module<Trifles> {
@@ -13,6 +14,7 @@ public class Trifles extends Module<Trifles> {
     public XpBottles xp_bottles;
     public ItemFinder item_finder;
     public StorageGroup storage_group;
+    public boolean packet_events_enabled;
 
     public Trifles() {
         final var fast_walking_group = new FastWalkingGroup(this);
@@ -43,5 +45,17 @@ public class Trifles extends Module<Trifles> {
         storage_group = new StorageGroup(this);
         new org.oddlama.vane.trifles.items.storage.Pouch(storage_group.get_context());
         new org.oddlama.vane.trifles.items.storage.Backpack(storage_group.get_context());
+    }
+
+    @Override
+    public void on_enable() {
+        get_module().schedule_next_tick(() -> {
+            var packet_events_plugin = get_module().getServer().getPluginManager().getPlugin("PacketEvents");
+
+            if (packet_events_plugin != null && packet_events_plugin.isEnabled()) {
+                packet_events_enabled = true;
+                get_module().log.info("Enabling PacketEvents integration");
+            }
+        });
     }
 }
