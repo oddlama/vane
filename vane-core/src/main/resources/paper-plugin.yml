@@ -11,8 +11,3 @@ main: org.oddlama.vane.core.Core
 api-version: '1.21'
 
 load: STARTUP
-dependencies:
-  server:
-    ProtocolLib:
-      load: BEFORE
-      required: true

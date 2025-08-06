@@ -1,28 +1,7 @@
 package org.oddlama.vane.core.module;
 
-import static org.oddlama.vane.util.ResourceList.get_resources;
-
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.ProtocolManager;
 import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.NamespacedKey;
@@ -60,6 +39,25 @@ import org.oddlama.vane.core.functional.Consumer1;
 import org.oddlama.vane.core.lang.LangManager;
 import org.oddlama.vane.core.persistent.PersistentStorageManager;
 import org.oddlama.vane.core.resourcepack.ResourcePackGenerator;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
+import static org.oddlama.vane.util.ResourceList.get_resources;
 
 public abstract class Module<T extends Module<T>> extends JavaPlugin implements Context<T>, org.bukkit.event.Listener {
 
@@ -172,9 +170,6 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 	// Loot modification
 	private final Map<NamespacedKey, LootTable> additional_loot_tables = new HashMap<>();
 
-	// ProtocolLib
-	public ProtocolManager protocol_manager;
-
 	// bStats
 	public Metrics metrics;
 
@@ -221,9 +216,6 @@ public abstract class Module<T extends Module<T>> extends JavaPlugin implements 
 
 		// Register in core
 		core.register_module(this);
-
-		// Get protocollib manager
-		protocol_manager = ProtocolLibrary.getProtocolManager();
 
 		load_persistent_storage();
 		reload_configuration();
