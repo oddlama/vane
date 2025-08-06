@@ -26,8 +26,8 @@ public class ResourcePackDevServer implements HttpHandler {
         try {
             final HttpServer httpServer = HttpServer.create(new InetSocketAddress(9000), 0);
             var hash = com.google.common.io.Files.asByteSource(this.file).hash(Hashing.sha1());
-            resource_pack_distributor.sha1 = hash.toString();
-            resource_pack_distributor.url = "http://localhost:9000/vane-resource-pack.zip";
+            resource_pack_distributor.pack_sha1 = hash.toString();
+            resource_pack_distributor.pack_url = "http://localhost:9000/vane-resource-pack.zip";
 
             httpServer.createContext("/", this);
             httpServer.setExecutor(null);

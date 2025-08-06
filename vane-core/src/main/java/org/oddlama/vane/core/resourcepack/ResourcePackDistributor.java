@@ -1,22 +1,22 @@
 package org.oddlama.vane.core.resourcepack;
 
+import com.destroystokyo.paper.event.player.PlayerConnectionCloseEvent;
 import com.google.common.hash.Hashing;
 import com.google.common.io.Files;
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Properties;
-import java.util.UUID;
+import io.papermc.paper.connection.PlayerConfigurationConnection;
+import io.papermc.paper.event.connection.configuration.AsyncPlayerConnectionConfigureEvent;
+import io.papermc.paper.event.connection.configuration.PlayerConnectionReconfigureEvent;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.resource.ResourcePackInfo;
 import net.kyori.adventure.resource.ResourcePackRequest;
-import org.bukkit.entity.Player;
+import net.kyori.adventure.text.Component;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerResourcePackStatusEvent;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
+import org.jetbrains.annotations.NotNull;
 import org.oddlama.vane.annotation.config.ConfigBoolean;
 import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.core.Core;
@@ -25,6 +25,15 @@ import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.ModuleGroup;
 import org.oddlama.vane.util.Nms;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Optional;
+import java.util.Properties;
+import java.util.UUID;
+import java.util.concurrent.CountDownLatch;
 
 public class ResourcePackDistributor extends Listener<Core> {
 
@@ -55,16 +64,15 @@ public class ResourcePackDistributor extends Listener<Core> {
     public final Permission bypass_permission;
 
     public CustomResourcePackConfig custom_resource_pack_config;
-    public PlayerMessageDelayer player_message_delayer;
     private ResourcePackFileWatcher file_watcher;
     private ResourcePackDevServer dev_server;
 
+    private final Object2ObjectOpenHashMap<UUID, CountDownLatch> latches = new Object2ObjectOpenHashMap<>();
+
     public ResourcePackDistributor(Context<Core> context) {
         super(context.group("resource_pack", "Enable resource pack distribution."));
-        // Delay messages if this the distributor is active.
+
         custom_resource_pack_config = new CustomResourcePackConfig(get_context());
-        // Delay messages if this the distributor is active.
-        player_message_delayer = new PlayerMessageDelayer(get_context());
 
         // Register bypass permission
         bypass_permission = new Permission(
@@ -95,53 +103,53 @@ public class ResourcePackDistributor extends Listener<Core> {
             get_module().log.info("Setting up dev lazy server");
         } else if (((ModuleGroup<Core>) custom_resource_pack_config.get_context()).config_enabled) {
             get_module().log.info("Serving custom resource pack");
-            url = custom_resource_pack_config.config_url;
-            sha1 = custom_resource_pack_config.config_sha1;
-            uuid = UUID.fromString(custom_resource_pack_config.config_uuid);
+            pack_url = custom_resource_pack_config.config_url;
+            pack_sha1 = custom_resource_pack_config.config_sha1;
+            pack_uuid = UUID.fromString(custom_resource_pack_config.config_uuid);
         } else {
             get_module().log.info("Serving official vane resource pack");
             try {
                 Properties properties = new Properties();
                 properties.load(Core.class.getResourceAsStream("/vane-core.properties"));
-                url = properties.getProperty("resource_pack_url");
-                sha1 = properties.getProperty("resource_pack_sha1");
-                uuid = UUID.fromString(properties.getProperty("resource_pack_uuid"));
+                pack_url = properties.getProperty("resource_pack_url");
+                pack_sha1 = properties.getProperty("resource_pack_sha1");
+                pack_uuid = UUID.fromString(properties.getProperty("resource_pack_uuid"));
             } catch (IOException e) {
                 get_module().log.severe("Could not load official resource pack sha1 from included properties file");
-                url = "";
-                sha1 = "";
-                uuid = UUID.randomUUID();
+                pack_url = "";
+                pack_sha1 = "";
+                pack_uuid = UUID.randomUUID();
             }
         }
 
         // Check sha1 sum validity
-        if (sha1.length() != 40) {
+        if (pack_sha1.length() != 40) {
             get_module()
                 .log.warning(
                     "Invalid resource pack SHA-1 sum '" +
-                    sha1 +
+                        pack_sha1 +
                     "', should be 40 characters long but has " +
-                    sha1.length() +
+                    pack_sha1.length() +
                     " characters"
                 );
             get_module().log.warning("Disabling resource pack serving and message delaying");
 
             // Disable resource pack
-            url = "";
+            pack_url = "";
             // Prevent subcontexts from being enabling
             // FIXME this can be coded more cleanly. We need a way
             // to process config changes _before_ the module is enabled.
             // like on_config_change_pre_enable(), where we can override
             // the context group enable state.
-            ((ModuleGroup<Core>) player_message_delayer.get_context()).config_enabled = false;
+            //((ModuleGroup<Core>) player_message_delayer.get_context()).config_enabled = false;
         }
 
         // Propagate enable after determining whether the player message delayer is active,
         // so it is only enabled when needed.
         super.on_enable();
 
-        sha1 = sha1.toLowerCase();
-        if (!url.isEmpty()) {
+        pack_sha1 = pack_sha1.toLowerCase();
+        if (!pack_url.isEmpty()) {
             // Check if the server has a manually configured resource pack.
             // This would conflict.
             Nms.server_handle()
@@ -155,33 +163,71 @@ public class ResourcePackDistributor extends Listener<Core> {
                     }
                 });
 
-            get_module().log.info("Distributing resource pack from '" + url + "' with sha1 " + sha1);
+            get_module().log.info("Distributing resource pack from '" + pack_url + "' with sha1 " + pack_sha1);
         }
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void on_player_join(final PlayerJoinEvent event) {
-        if (url.isEmpty()) {
-            return;
+    @EventHandler
+    public void on_player_async_connection_configure(AsyncPlayerConnectionConfigureEvent event) {
+        var profile_uuid = event.getConnection().getProfile().getId();
+
+        // Block the thread to prevent the question screen from going away
+        var latch = new CountDownLatch(1);
+        latches.put(profile_uuid, latch);
+
+        send_resource_pack_during_configuration(event.getConnection());
+
+        try {
+            latch.await();
+        } catch (InterruptedException ex) {
+            Thread.currentThread().interrupt();
+            get_module().log.warning("Resource pack wait interrupted for player " + profile_uuid);
         }
-        send_resource_pack(event.getPlayer());
+
+        event.getConnection().completeReconfiguration();
     }
 
-    public void send_resource_pack(Player player) {
-        var url2 = url;
+    @EventHandler
+    public void on_player_connection_reconfigure(PlayerConnectionReconfigureEvent event) {
+        send_resource_pack_during_configuration(event.getConnection());
+    }
+
+    @EventHandler
+    public void on_player_connection_close(PlayerConnectionCloseEvent event) {
+        // Cleanup
+        Optional.ofNullable(latches.remove(event.getPlayerUniqueId())).ifPresent(CountDownLatch::countDown);
+    }
+
+    public void send_resource_pack_during_configuration(@NotNull PlayerConfigurationConnection connection) {
+        var info = ResourcePackInfo.resourcePackInfo(pack_uuid, URI.create(pack_url), pack_sha1);
+        var request = ResourcePackRequest.resourcePackRequest()
+            .required(config_force).replace(true)
+            .packs(info).callback((uuid, status, audience) -> {
+                if (!status.intermediate()) {
+                    Optional.ofNullable(latches.remove(connection.getProfile().getId())).ifPresent(CountDownLatch::countDown);
+                }
+            }).build();
+
+        connection.getAudience().sendResourcePacks(request);
+    }
+
+    // For sending the resource pack during gameplay
+    public void send_resource_pack(@NotNull Audience audience) {
+        var url2 = pack_url;
         if (localDev) {
-            url2 = url + "?" + counter;
-            player.sendMessage(url2 + " " + sha1);
+            url2 = pack_url + "?" + counter;
+            audience.sendMessage(Component.text(url2 + " " + pack_sha1));
         }
 
         try {
-            ResourcePackInfo info = ResourcePackInfo.resourcePackInfo(uuid, new URI(url2), sha1);
-            player.sendResourcePacks(ResourcePackRequest.resourcePackRequest().packs(info).asResourcePackRequest());
+            ResourcePackInfo info = ResourcePackInfo.resourcePackInfo(pack_uuid, new URI(url2), pack_sha1);
+            audience.sendResourcePacks(ResourcePackRequest.resourcePackRequest().packs(info).asResourcePackRequest());
         } catch (URISyntaxException e) {
             get_module().log.warning("The provided resource pack URL is incorrect: " + url2);
         }
     }
 
+    // Not sure if this still needed?
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
     public void on_player_status(final PlayerResourcePackStatusEvent event) {
         if (!config_force || event.getPlayer().hasPermission(bypass_permission)) {
@@ -205,7 +251,7 @@ public class ResourcePackDistributor extends Listener<Core> {
         if (!localDev) return;
         try {
             var hash = Files.asByteSource(file).hash(Hashing.sha1());
-            ResourcePackDistributor.this.sha1 = hash.toString();
+            ResourcePackDistributor.this.pack_sha1 = hash.toString();
         } catch (IOException ignored) {}
     }
 }

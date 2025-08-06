@@ -116,8 +116,6 @@ configure(vanePlugins) {
 	}
 
 	dependencies {
-		implementation(rootProject.libs.protocollib)
-
 		compileOnly(project(":vane-annotations"))
 		annotationProcessor(project(path = ":vane-annotations"))
 	}
