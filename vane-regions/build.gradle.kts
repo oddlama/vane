@@ -5,7 +5,7 @@ plugins {
 dependencies {
 	implementation(project(":vane-portals"))
 	compileOnly(group = "com.github.MilkBowl", name = "VaultAPI", version = "1.7.1")
-	compileOnly(group = "org.json", name = "json", version = "20250107")
+	compileOnly(group = "org.json", name = "json", version = "20250517")
 }
 
 tasks {

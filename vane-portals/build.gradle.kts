@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-	compileOnly(group = "org.json", name = "json", version = "20250107")
+	compileOnly(group = "org.json", name = "json", version = "20250517")
 }
 
 tasks {
