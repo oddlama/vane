@@ -87,19 +87,21 @@ configure(subprojects.filter {
 
 // All Projects except proxies and annotations.
 configure(subprojects.filter {
-	!listOf("vane-annotations", "vane-velocity", "vane-proxy-core").contains(it.name)
+    !listOf("vane-annotations", "vane-velocity", "vane-proxy-core").contains(it.name)
 }) {
-	tasks {
-		build {
-			dependsOn("copyJar")
-		}
+    val projectProperties = project.properties
 
-		processResources {
-			filesMatching("**/*plugin.yml") {
-				expand(project.properties)
-			}
-		}
-	}
+    tasks {
+        build {
+            dependsOn("copyJar")
+        }
+
+        processResources {
+            filesMatching("**/*plugin.yml") {
+                expand(projectProperties)
+            }
+        }
+    }
 
 	dependencies {
 		//implementation(group = "com.comphenix.protocol", name = "ProtocolLib", version = "5.4.0")
