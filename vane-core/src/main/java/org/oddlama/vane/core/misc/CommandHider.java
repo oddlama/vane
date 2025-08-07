@@ -43,7 +43,8 @@ public class CommandHider extends Listener<Core> {
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void on_player_command_preprocess(PlayerCommandPreprocessEvent event) {
         if (!allow_command_event(event.getMessage(), event.getPlayer())) {
-            final var msg = get_module().getServer().spigot().getSpigotConfig().getString("messages.unknown-command");
+            // Use a hardcoded default message instead of deprecated getSpigotConfig()
+            final var msg = "Unknown command. Type \"/help\" for help.";
             event.getPlayer().sendMessage(msg);
             event.setCancelled(true);
         }
