@@ -1,7 +1,7 @@
 package org.oddlama.vane.enchantments.enchantments.registry;
 
 import io.papermc.paper.registry.data.EnchantmentRegistryEntry;
-import io.papermc.paper.registry.event.RegistryFreezeEvent;
+import io.papermc.paper.registry.event.RegistryComposeEvent;
 import io.papermc.paper.registry.keys.EnchantmentKeys;
 import io.papermc.paper.registry.keys.tags.ItemTypeTagKeys;
 import java.util.List;
@@ -10,9 +10,9 @@ import org.oddlama.vane.enchantments.CustomEnchantmentRegistry;
 
 public class UnbreakableRegistry extends CustomEnchantmentRegistry {
 
-    public UnbreakableRegistry(RegistryFreezeEvent<Enchantment, EnchantmentRegistryEntry.Builder> freezeEvent) {
+    public UnbreakableRegistry(RegistryComposeEvent<Enchantment, EnchantmentRegistryEntry.Builder> composeEvent) {
         super("unbreakable", ItemTypeTagKeys.ENCHANTABLE_DURABILITY, 1);
         this.exclusive_with(List.of(EnchantmentKeys.UNBREAKING, EnchantmentKeys.MENDING));
-        this.register(freezeEvent);
+        this.register(composeEvent);
     }
 }
