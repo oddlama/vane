@@ -2,7 +2,6 @@ package org.oddlama.vane.trifles;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
@@ -22,15 +21,12 @@ import org.oddlama.vane.annotation.config.ConfigBoolean;
 import org.oddlama.vane.annotation.config.ConfigInt;
 import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.module.Context;
-import org.oddlama.vane.util.StorageUtil;
+
+import static org.oddlama.vane.trifles.ItemFinderPacketUtils.indicate_chest_match;
+import static org.oddlama.vane.trifles.ItemFinderPacketUtils.indicate_container_match;
+import static org.oddlama.vane.trifles.ItemFinderPacketUtils.indicate_entity_match;
 
 public class ItemFinder extends Listener<Trifles> {
-
-    public static final NamespacedKey LAST_FIND_TIME = StorageUtil.namespaced_key(
-        "vane_trifles",
-        "last_item_find_time"
-    );
-
     @ConfigInt(
         def = 2,
         min = 1,
@@ -47,6 +43,8 @@ public class ItemFinder extends Listener<Trifles> {
         desc = "Only allow players to use the shift+rightclick shortcut when they have the shortcut permission `vane.trifles.use_item_find_shortcut`."
     )
     public boolean config_require_permission;
+
+    private static final int FALLBACK_TASK_INTERVAL = 15;
 
     // This permission allows players to use the shift+rightclick.
     public final Permission use_item_find_shortcut_permission;
@@ -99,7 +97,7 @@ public class ItemFinder extends Listener<Trifles> {
         return block.getState() instanceof Container;
     }
 
-    private void indicate_match_at(@NotNull Player player, @NotNull Location location) {
+    private void fallback_indicate_match(@NotNull Player player, @NotNull Location location) {
         player.spawnParticle(Particle.DRIPPING_OBSIDIAN_TEAR, location, 130, 0.4, 0.0, 0.0, 0.0);
         player.spawnParticle(Particle.DRIPPING_OBSIDIAN_TEAR, location, 130, 0.0, 0.4, 0.0, 0.0);
         player.spawnParticle(Particle.DRIPPING_OBSIDIAN_TEAR, location, 130, 0.0, 0.0, 0.4, 0.0);
@@ -111,6 +109,7 @@ public class ItemFinder extends Listener<Trifles> {
         boolean any_found = false;
         final var world = player.getWorld();
         final var origin_chunk = player.getChunk();
+        final var packet_events_enabled = get_module().packet_events_enabled;
         for (int cx = origin_chunk.getX() - config_radius; cx <= origin_chunk.getX() + config_radius; ++cx) {
             for (int cz = origin_chunk.getZ() - config_radius; cz <= origin_chunk.getZ() + config_radius; ++cz) {
                 if (!world.isChunkLoaded(cx, cz)) {
@@ -120,7 +119,19 @@ public class ItemFinder extends Listener<Trifles> {
                 for (final var tile_entity : chunk.getTileEntities(this::is_container, false)) {
                     if (tile_entity instanceof Container container) {
                         if (container.getInventory().contains(material)) {
-                            indicate_match_at(player, container.getLocation().add(0.5, 0.5, 0.5));
+                            if (container.getType() == Material.CHEST) {
+                                if (packet_events_enabled) {
+                                    indicate_chest_match(get_module(), player, container);
+                                } else {
+                                    fallback_indicate_match(player, container.getLocation().add(0.5, 0.5, 0.5));
+                                }
+                            } else {
+                                if (packet_events_enabled) {
+                                    indicate_container_match(get_module(), player, container);
+                                } else {
+                                    fallback_indicate_match(player, container.getLocation().add(0.5, 0.5, 0.5));
+                                }
+                            }
                             any_found = true;
                         }
                     }
@@ -134,7 +145,11 @@ public class ItemFinder extends Listener<Trifles> {
 
                         if (entity instanceof InventoryHolder holder) {
                             if (holder.getInventory().contains(material)) {
-                                indicate_match_at(player, entity.getLocation());
+                                if (packet_events_enabled) {
+                                    indicate_entity_match(get_module(), player, entity);
+                                } else {
+                                    fallback_indicate_match(player, entity.getLocation());
+                                }
                                 any_found = true;
                             }
                         }
