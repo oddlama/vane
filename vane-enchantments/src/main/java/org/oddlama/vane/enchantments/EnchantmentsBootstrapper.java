@@ -23,7 +23,7 @@ public class EnchantmentsBootstrapper implements PluginBootstrap {
         context
             .getLifecycleManager()
             .registerEventHandler(
-                RegistryEvents.ENCHANTMENT.freeze()
+                RegistryEvents.ENCHANTMENT.compose()
                     .newHandler(event -> {
                         new AngelRegistry(event);
                         new GrapplingHookRegistry(event);
