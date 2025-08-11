@@ -19,16 +19,16 @@ dependencies {
 	implementation(group = "org.bstats", name = "bstats-base", version = "3.1.0")
 	implementation(group = "org.bstats", name = "bstats-bukkit", version = "3.1.0")
 	implementation(group = "org.reflections", name = "reflections", version = "0.10.2")
-    implementation(group = "org.apache.commons", name = "commons-lang3", version = "3.17.0")
-    implementation(group = "org.apache.commons", name = "commons-text", version = "1.13.1")
-	api(group = "org.json", name = "json", version = "20250107")
+    implementation(group = "org.apache.commons", name = "commons-lang3", version = "3.18.0")
+    implementation(group = "org.apache.commons", name = "commons-text", version = "1.14.0")
+	api(group = "org.json", name = "json", version = "20250517")
 	implementation(project(":vane-annotations"))
 }
 
 val resource_pack_sha1 by lazy {
 	val resource_pack = File("${projectDir}/../docs/resourcepacks/v" + project.version + ".zip")
 	if (!resource_pack.exists()) {
-		throw GradleException("The resource pack file " + resource_pack + " is missing.")
+		throw GradleException("The resource pack file $resource_pack is missing.")
 	}
 	val md = MessageDigest.getInstance("SHA-1")
 	val resource_pack_bytes = resource_pack.readBytes()
