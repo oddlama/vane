@@ -5,7 +5,7 @@ plugins {
 }
 
 dependencies {
-	paperweight.paperDevBundle("1.21.7-R0.1-SNAPSHOT")
+	paperweight.paperDevBundle("1.21.8-R0.1-SNAPSHOT")
 }
 
 java {
@@ -59,7 +59,7 @@ configure(subprojects.filter {
 	}
 
 	dependencies {
-		paperweight.paperDevBundle("1.21.7-R0.1-SNAPSHOT")
+		paperweight.paperDevBundle("1.21.8-R0.1-SNAPSHOT")
 	}
 }
 
@@ -87,23 +87,25 @@ configure(subprojects.filter {
 
 // All Projects except proxies and annotations.
 configure(subprojects.filter {
-	!listOf("vane-annotations", "vane-velocity", "vane-proxy-core").contains(it.name)
+    !listOf("vane-annotations", "vane-velocity", "vane-proxy-core").contains(it.name)
 }) {
-	tasks {
-		build {
-			dependsOn("copyJar")
-		}
+    val projectProperties = project.properties
 
-		processResources {
-			filesMatching("**/*plugin.yml") {
-				expand(project.properties)
-			}
-		}
-	}
+    tasks {
+        build {
+            dependsOn("copyJar")
+        }
+
+        processResources {
+            filesMatching("**/*plugin.yml") {
+                expand(projectProperties)
+            }
+        }
+    }
 
 	dependencies {
 		//implementation(group = "com.comphenix.protocol", name = "ProtocolLib", version = "5.4.0")
-        implementation("com.github.dmulloy2:ProtocolLib:596e5e424631ca4ba6f4279da0fd0886ff64db47")
+        implementation("com.comphenix.protocol:ProtocolLib:5.4.0-20250730.145634-1")
 
 		compileOnly(project(":vane-annotations"))
 		annotationProcessor(project(path = ":vane-annotations", configuration = "reobf"))
@@ -141,7 +143,7 @@ configure(subprojects.filter {
 }) {
 	dependencies {
 		implementation(group = "us.dynmap", name = "DynmapCoreAPI", version = "3.7-beta-6")
-		implementation(group = "de.bluecolored", name = "bluemap-api", version = "2.7.4")
+		implementation(group = "de.bluecolored", name = "bluemap-api", version = "2.7.5")
 	}
 }
 

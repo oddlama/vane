@@ -147,7 +147,7 @@ public class AuthMultiplexer extends Listener<Core> implements PluginMessageList
                 try_init_multiplexed_player_name(multiplexed_player.getPlayer());
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            get_module().log.log(Level.SEVERE, "Failed to process auth multiplex message", e);
         }
     }
 }

@@ -3,7 +3,7 @@ package org.oddlama.vane.enchantments;
 import io.papermc.paper.registry.RegistryKey;
 import io.papermc.paper.registry.TypedKey;
 import io.papermc.paper.registry.data.EnchantmentRegistryEntry;
-import io.papermc.paper.registry.event.RegistryFreezeEvent;
+import io.papermc.paper.registry.event.RegistryComposeEvent;
 import io.papermc.paper.registry.set.RegistryKeySet;
 import io.papermc.paper.registry.set.RegistrySet;
 import io.papermc.paper.registry.tag.TagKey;
@@ -62,10 +62,10 @@ public abstract class CustomEnchantmentRegistry {
 
     /** Get exclusive enchantments */
     public RegistryKeySet<Enchantment> exclusive_with(
-        RegistryFreezeEvent<Enchantment, EnchantmentRegistryEntry.Builder> freezeEvent
+        RegistryComposeEvent<Enchantment, EnchantmentRegistryEntry.Builder> composeEvent
     ) {
         if (this.exclusive_with_tags != null) {
-            return freezeEvent.getOrCreateTag(exclusive_with_tags);
+            return composeEvent.getOrCreateTag(exclusive_with_tags);
         } else {
             return RegistrySet.keySet(RegistryKey.ENCHANTMENT, this.exclusive_with);
         }
@@ -74,10 +74,10 @@ public abstract class CustomEnchantmentRegistry {
     /**
      * Register the enchantment in the registry
      *
-     * @see https://docs.papermc.io/paper/dev/registries#create-new-entries
+     * @see <a href="https://docs.papermc.io/paper/dev/registries#create-new-entries">Paper Registry Documentation</a>
      */
-    public void register(RegistryFreezeEvent<Enchantment, EnchantmentRegistryEntry.Builder> freezeEvent) {
-        freezeEvent
+    public void register(RegistryComposeEvent<Enchantment, EnchantmentRegistryEntry.Builder> composeEvent) {
+        composeEvent
             .registry()
             .register(TypedKey.create(RegistryKey.ENCHANTMENT, key), e ->
                 e
@@ -85,7 +85,7 @@ public abstract class CustomEnchantmentRegistry {
                     .supportedItems(
                         supported_items.size() > 0
                             ? RegistrySet.keySet(RegistryKey.ITEM, supported_items)
-                            : freezeEvent.getOrCreateTag(supported_item_tags)
+                            : composeEvent.getOrCreateTag(supported_item_tags)
                     )
                     .anvilCost(1)
                     .maxLevel(max_level)
@@ -93,7 +93,7 @@ public abstract class CustomEnchantmentRegistry {
                     .minimumCost(EnchantmentRegistryEntry.EnchantmentCost.of(1, 1))
                     .maximumCost(EnchantmentRegistryEntry.EnchantmentCost.of(3, 1))
                     .activeSlots(EquipmentSlotGroup.ANY)
-                    .exclusiveWith(this.exclusive_with(freezeEvent))
+                    .exclusiveWith(this.exclusive_with(composeEvent))
             );
     }
 
