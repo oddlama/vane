@@ -1,5 +1,5 @@
 plugins {
-	id("io.github.goooler.shadow") version "8.1.8"
+	id("com.gradleup.shadow") version "9.2.2"
 }
 
 repositories {
@@ -8,8 +8,8 @@ repositories {
 }
 
 dependencies {
-	compileOnly("com.github.retrooper:packetevents-spigot:2.9.4")
-	compileOnly(group = "org.json", name = "json", version = "20250107")
+	compileOnly("com.github.retrooper:packetevents-spigot:2.9.5")
+	compileOnly("org.json:json:20250517")
 }
 
 tasks {

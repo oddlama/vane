@@ -1,7 +1,7 @@
 plugins {
 	`java-library`
 	id("io.papermc.paperweight.userdev") version "2.0.0-beta.18"
-	id("xyz.jpenilla.run-paper") version "2.3.1" // Adds runServer and runMojangMappedServer tasks for testing
+	id("xyz.jpenilla.run-paper") version "3.0.0" // Adds runServer and runMojangMappedServer tasks for testing
 }
 
 dependencies {
@@ -29,7 +29,6 @@ subprojects {
 		mavenLocal()
 		mavenCentral()
 		maven("https://repo.papermc.io/repository/maven-public/")
-		maven("https://repo.dmulloy2.net/repository/public/")
 		maven("https://repo.mikeprimm.com/")
 		maven("https://repo.codemc.org/repository/maven-public/")
 		maven("https://jitpack.io")
@@ -43,8 +42,8 @@ subprojects {
 	}
 
 	dependencies {
-		compileOnly(group = "org.jetbrains", name = "annotations", version = "26.0.2")
-		annotationProcessor("org.jetbrains:annotations:26.0.2")
+		compileOnly("org.jetbrains:annotations:26.0.2-1")
+		annotationProcessor("org.jetbrains:annotations:26.0.2-1")
 	}
 }
 
@@ -87,31 +86,31 @@ configure(subprojects.filter {
 
 // All Projects except proxies and annotations.
 configure(subprojects.filter {
-    !listOf("vane-annotations", "vane-velocity", "vane-proxy-core").contains(it.name)
+	!listOf("vane-annotations", "vane-velocity", "vane-proxy-core").contains(it.name)
 }) {
-    val projectProperties = project.properties
+	val projectProperties = project.properties
 
-    tasks {
-        build {
-            dependsOn("copyJar")
-        }
+	tasks {
+		build {
+			dependsOn("copyJar")
+		}
 
-        processResources {
-            filesMatching("**/*plugin.yml") {
-                expand(projectProperties)
-            }
-        }
-    }
+		processResources {
+			filesMatching("**/*plugin.yml") {
+				expand(projectProperties)
+			}
+		}
+	}
 
 	dependencies {
-		//implementation(group = "com.comphenix.protocol", name = "ProtocolLib", version = "5.4.0")
-        implementation("com.comphenix.protocol:ProtocolLib:5.4.0-20250730.145634-1")
+		//implementation("com.comphenix.protocol:ProtocolLib:5.4.0")
+        implementation("net.dmulloy2:ProtocolLib:5.4.0")
 
 		compileOnly(project(":vane-annotations"))
 		annotationProcessor(project(path = ":vane-annotations", configuration = "reobf"))
 	}
 
-	rootProject.tasks.runMojangMappedServer {
+	rootProject.tasks.runDevBundleServer {
 		// the input to reobf, is the mojmapped jars.
 		pluginJars(tasks.named<io.papermc.paperweight.tasks.RemapJar>("reobfJar").flatMap { it.inputJar })
 	}
@@ -142,8 +141,8 @@ configure(subprojects.filter {
 	listOf("vane-bedtime", "vane-portals", "vane-regions").contains(it.name)
 }) {
 	dependencies {
-		implementation(group = "us.dynmap", name = "DynmapCoreAPI", version = "3.7-beta-6")
-		implementation(group = "de.bluecolored", name = "bluemap-api", version = "2.7.5")
+		implementation("us.dynmap:DynmapCoreAPI:3.7-beta-6")
+		implementation("de.bluecolored:bluemap-api:2.7.5")
 	}
 }
 
