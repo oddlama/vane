@@ -106,17 +106,13 @@ configure(subprojects.filter {
 		implementation(rootProject.libs.protocollib)
 
 		compileOnly(project(":vane-annotations"))
-		annotationProcessor(project(path = ":vane-annotations", configuration = "reobf"))
+		annotationProcessor(project(path = ":vane-annotations"))
 	}
 
-	rootProject.tasks.runDevBundleServer {
-		// the input to reobf, is the mojmapped jars.
-		pluginJars(tasks.named<io.papermc.paperweight.tasks.RemapJar>("reobfJar").flatMap { it.inputJar })
-	}
 
 	rootProject.tasks.runServer {
 		// the output is the obfuscated jars.
-		pluginJars(tasks.named<io.papermc.paperweight.tasks.RemapJar>("reobfJar").flatMap { it.outputJar })
+		pluginJars(tasks.named<Jar>("jar").map { it.outputs })
 	}
 }
 

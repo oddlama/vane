@@ -8,8 +8,8 @@ repositories {
 }
 
 dependencies {
-	compileOnly("com.github.retrooper:packetevents-spigot:2.9.5")
-	compileOnly("org.json:json:20250517")
+	compileOnly(libs.packetEvents)
+	compileOnly(libs.json)
 }
 
 tasks {
