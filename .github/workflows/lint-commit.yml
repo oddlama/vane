@@ -8,15 +8,15 @@ jobs:
     if: always() && github.repository == 'oddlama/vane'
 
     steps:
-      - uses: actions/checkout@v2.3.1
+      - uses: actions/checkout@v5.0.0
         with:
           fetch-depth: 0
           persist-credentials: false
           ref: ${{ github.event.pull_request.head.sha }}
 
-      - uses: actions/setup-node@v3.4.1
+      - uses: actions/setup-node@v5.0.0
         with:
-          node-version: 16
+          node-version: 22
       - run: |
           # Setup commitlint
           if ! yarn add {ts-node, @commitlint/{config-conventional,cli}} >> /dev/null 2>&1; then
@@ -52,7 +52,7 @@ jobs:
 
       - name: Comment on PR
         if: ${{ failure() && env.CONTAINS_ERRORS == '1' && !github.event.pull_request.draft }}
-        uses: thollander/actions-comment-pull-request@v1
+        uses: thollander/actions-comment-pull-request@v3
         with:
           message: |
             Hello!

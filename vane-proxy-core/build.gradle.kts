@@ -1,23 +1,23 @@
 plugins {
-    id("com.gradleup.shadow") version "9.0.0-rc3"
+    id("com.gradleup.shadow") version "9.2.2"
     id("net.kyori.blossom") version "2.1.0"
 }
 
 sourceSets {
-	main {
-		blossom {
-			javaSources {
-				property("\$VERSION", project.version.toString())
-			}
-		}
-	}
+    main {
+        blossom {
+            javaSources {
+                property("\$VERSION", project.version.toString())
+            }
+        }
+    }
 }
 
 dependencies {
-    implementation(group = "com.electronwill.night-config", name = "toml", version = "3.8.2")
-    implementation(group = "org.slf4j", name = "slf4j-api", version = "2.0.17")
+    implementation("com.electronwill.night-config:toml:3.8.3")
+    implementation("org.slf4j:slf4j-api:2.0.17")
     implementation(rootProject.project(":vane-core"))
-    compileOnly(group = "org.json", name = "json", version = "20250517")
+    compileOnly("org.json:json:20250517")
 }
 
 java {
