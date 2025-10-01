@@ -1,5 +1,5 @@
 plugins {
-	id("com.gradleup.shadow") version "9.2.2"
+	alias(libs.plugins.shadow)
 }
 
 repositories {

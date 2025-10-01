@@ -17,6 +17,10 @@ tasks.withType<Jar> {
 	enabled = false
 }
 
+tasks.runServer {
+    pluginJars(vanePlugins.map { it.tasks.findByName("copyJar")?.inputs?.files })
+}
+
 // Common settings to all subprojects.
 subprojects {
 	apply(plugin = "java-library")
@@ -53,10 +57,15 @@ configure(subprojects.filter {
 }) {
 	apply(plugin = "io.papermc.paperweight.userdev")
 
-	tasks.withType<JavaCompile> {
+    tasks.withType<JavaCompile> {
 		options.compilerArgs.addAll(arrayOf("-Xlint:-this-escape"))
 	}
 
+    tasks {
+        reobfJar {
+            enabled = false
+        }
+    }
 	dependencies {
 		paperweight.paperDevBundle(rootProject.libs.versions.paper)
 	}
@@ -85,9 +94,10 @@ configure(subprojects.filter {
 }
 
 // All Projects except proxies and annotations.
-configure(subprojects.filter {
+val vanePlugins = subprojects.filter {
 	!listOf("vane-annotations", "vane-velocity", "vane-proxy-core").contains(it.name)
-}) {
+}
+configure(vanePlugins) {
 	val projectProperties = project.properties
 
 	tasks {
@@ -107,12 +117,6 @@ configure(subprojects.filter {
 
 		compileOnly(project(":vane-annotations"))
 		annotationProcessor(project(path = ":vane-annotations"))
-	}
-
-
-	rootProject.tasks.runServer {
-		// the output is the obfuscated jars.
-		pluginJars(tasks.named<Jar>("jar").map { it.outputs })
 	}
 }
 
