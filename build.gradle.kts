@@ -19,6 +19,9 @@ tasks.withType<Jar> {
 
 tasks.runServer {
     pluginJars(vanePlugins.map { it.tasks.findByName("copyJar")?.inputs?.files })
+    downloadPlugins {
+        github("dmulloy2", "ProtocolLib", "dev-build", "ProtocolLib.jar")
+    }
 }
 
 // Common settings to all subprojects.
