@@ -64,9 +64,11 @@ public class SlimeBucket extends CustomItem<Trifles> {
         final var new_stack = newStack();
         new_stack.editMeta(meta -> {
             final var correct_model_data = player.getChunk().isSlimeChunk()
-                ? CUSTOM_MODEL_DATA_JUMPY
-                : CUSTOM_MODEL_DATA_QUIET;
-            meta.getCustomModelDataComponent().setFloats(List.of(correct_model_data));
+               ? CUSTOM_MODEL_DATA_JUMPY
+               : CUSTOM_MODEL_DATA_QUIET;
+            CustomModelDataComponent customModelDataComponent = meta.getCustomModelDataComponent();
+            customModelDataComponent.setFloats(List.of(correct_model_data));
+            meta.setCustomModelDataComponent(customModelDataComponent);
         });
 
         if (item_in_hand.getAmount() == 1) {
