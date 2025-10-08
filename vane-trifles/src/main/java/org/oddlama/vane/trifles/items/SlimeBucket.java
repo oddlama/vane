@@ -20,6 +20,7 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.components.CustomModelDataComponent;
 import org.oddlama.vane.annotation.item.VaneItem;
 import org.oddlama.vane.core.item.CustomItem;
 import org.oddlama.vane.core.module.Context;
@@ -138,7 +139,9 @@ public class SlimeBucket extends CustomItem<Trifles> {
                 if (custom_item instanceof SlimeBucket slime_bucket && slime_bucket.enabled()) {
                     // Update slime bucket custom model data
                     item.editMeta(meta -> {
-                        meta.getCustomModelDataComponent().setFloats(List.of(correct_model_data));
+                        CustomModelDataComponent customModelDataComponent = meta.getCustomModelDataComponent();
+                        customModelDataComponent.setFloats(List.of(correct_model_data));
+                        meta.setCustomModelDataComponent(customModelDataComponent);
                     });
                 }
             }
