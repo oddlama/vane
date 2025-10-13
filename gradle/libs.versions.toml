@@ -22,7 +22,7 @@ packetEvents = {group = "com.github.retrooper", name = "packetevents-spigot", ve
 
 # maps
 dynmap = {group = "us.dynmap", name = "DynmapCoreAPI", version = "3.7-beta-6"}
-bluemap = {group = "de.bluecolored", name = "bluemap-api", version = "2.7.5"}
+bluemap = {group = "de.bluecolored", name = "bluemap-api", version = "2.7.6"}
 
 [plugins]
 paperweightUserdev = {id = "io.papermc.paperweight.userdev", version = "2.0.0-beta.19"}
