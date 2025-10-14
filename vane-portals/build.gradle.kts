@@ -1,9 +1,9 @@
 plugins {
-    id("com.gradleup.shadow") version "9.2.2"
+    alias(libs.plugins.shadow)
 }
 
 dependencies {
-    compileOnly("org.json:json:20250517")
+    compileOnly(libs.json)
 }
 
 tasks {

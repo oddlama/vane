@@ -15,89 +15,40 @@ import org.oddlama.vane.core.item.api.CustomItem;
 import org.oddlama.vane.core.module.Context;
 
 public class ExistingItemConverter extends Listener<Core> {
-
     public ExistingItemConverter(final Context<Core> context) {
         super(context.namespace("existing_item_converter"));
     }
 
     private CustomItem from_old_item(final ItemStack item_stack) {
-        final var meta = item_stack.getItemMeta();
-        if (meta == null || !meta.hasCustomModelData()) {
+        final var modelDataList = item_stack.getItemMeta().getCustomModelDataComponent().getFloats();
+        if (modelDataList.isEmpty() || modelDataList.getFirst() == null) {
             return null;
         }
 
         // If lookups fail, we return null and nothing will be done.
-        String new_item_key = null;
-		if (meta.getCustomModelDataComponent().getFloats().isEmpty()) {
-			return null;
-		}
-        switch (meta.getCustomModelData()) {
-            case 7758190:
-                new_item_key = "vane_trifles:wooden_sickle";
-                break;
-            case 7758191:
-                new_item_key = "vane_trifles:stone_sickle";
-                break;
-            case 7758192:
-                new_item_key = "vane_trifles:iron_sickle";
-                break;
-            case 7758193:
-                new_item_key = "vane_trifles:golden_sickle";
-                break;
-            case 7758194:
-                new_item_key = "vane_trifles:diamond_sickle";
-                break;
-            case 7758195:
-                new_item_key = "vane_trifles:netherite_sickle";
-                break;
-            case 7758254: // fallthrough
-            case 7758255: // fallthrough
-            case 7758256: // fallthrough
-            case 7758257: // fallthrough
-            case 7758258: // fallthrough
-            case 7758259:
-                new_item_key = "vane_trifles:file";
-                break;
-            case 7758318:
-                new_item_key = "vane_trifles:empty_xp_bottle";
-                break;
-            case 7758382:
-                new_item_key = "vane_trifles:small_xp_bottle";
-                break;
-            case 7758383:
-                new_item_key = "vane_trifles:medium_xp_bottle";
-                break;
-            case 7758384:
-                new_item_key = "vane_trifles:large_xp_bottle";
-                break;
-            case 7758446:
-                new_item_key = "vane_trifles:home_scroll";
-                break;
-            case 7758510:
-                new_item_key = "vane_trifles:unstable_scroll";
-                break;
-            case 7758574:
-                new_item_key = "vane_trifles:reinforced_elytra";
-                break;
-            case 7823726:
-                new_item_key = "vane_enchantments:ancient_tome";
-                break;
-            case 7823727:
-                new_item_key = "vane_enchantments:enchanted_ancient_tome";
-                break;
-            case 7823790:
-                new_item_key = "vane_enchantments:ancient_tome_of_knowledge";
-                break;
-            case 7823791:
-                new_item_key = "vane_enchantments:enchanted_ancient_tome_of_knowledge";
-                break;
-            case 7823854:
-                new_item_key = "vane_enchantments:ancient_tome_of_the_gods";
-                break;
-            case 7823855:
-                new_item_key = "vane_enchantments:enchanted_ancient_tome_of_the_gods";
-                break;
-        }
+        String new_item_key = switch (modelDataList.getFirst().intValue()) {
+            case 7758190 -> "vane_trifles:wooden_sickle";
+            case 7758191 -> "vane_trifles:stone_sickle";
+            case 7758192 -> "vane_trifles:iron_sickle";
+            case 7758193 -> "vane_trifles:golden_sickle";
+            case 7758194 -> "vane_trifles:diamond_sickle";
+            case 7758195 -> "vane_trifles:netherite_sickle";
+            case 7758254,7758255,7758256,7758257,7758258,7758259 -> "vane_trifles:file";
+            case 7758318 -> "vane_trifles:empty_xp_bottle";
+            case 7758382 -> "vane_trifles:small_xp_bottle";
+            case 7758383 -> "vane_trifles:medium_xp_bottle";
+            case 7758384 -> "vane_trifles:large_xp_bottle";
+            case 7758446 -> "vane_trifles:home_scroll";
+            case 7758510 -> "vane_trifles:unstable_scroll";
+            case 7758574 -> "vane_trifles:reinforced_elytra";
+            case 7823726 -> "vane_enchantments:ancient_tome";
+            case 7823727 -> "vane_enchantments:enchanted_ancient_tome";
+            case 7823790 -> "vane_enchantments:ancient_tome_of_knowledge";
+            case 7823791 -> "vane_enchantments:enchanted_ancient_tome_of_knowledge";
+            case 7823854 -> "vane_enchantments:ancient_tome_of_the_gods";
+            case 7823855 -> "vane_enchantments:enchanted_ancient_tome_of_the_gods";
+            default -> null;
+        };
 
         if (new_item_key == null) {
             return null;
@@ -146,8 +97,7 @@ public class ExistingItemConverter extends Listener<Core> {
             if (
                 meta.getCustomModelData() != custom_item.customModelData() ||
                 is.getType() != custom_item.baseMaterial() ||
-                key_and_version.getRight() != custom_item.version()
-            ) {
+                key_and_version.getRight() != custom_item.version()) {
                 // Also includes durability max update.
                 contents[i] = custom_item.convertExistingStack(is);
                 get_module().log.info("Updated item " + custom_item.key());
@@ -165,8 +115,7 @@ public class ExistingItemConverter extends Listener<Core> {
                 : custom_item.durability();
             if (
                 max_damage != correct_max_damage ||
-                meta.getPersistentDataContainer().has(DurabilityManager.ITEM_DURABILITY_DAMAGE)
-            ) {
+                meta.getPersistentDataContainer().has(DurabilityManager.ITEM_DURABILITY_DAMAGE)) {
                 get_module().log.info("Updated item durability " + custom_item.key());
                 DurabilityManager.update_damage(custom_item, contents[i]);
                 ++changed;

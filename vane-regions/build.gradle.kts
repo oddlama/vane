@@ -1,11 +1,11 @@
 plugins {
-    id("com.gradleup.shadow") version "9.2.2"
+	alias(libs.plugins.shadow)
 }
 
 dependencies {
-    implementation(project(":vane-portals"))
-    compileOnly("com.github.MilkBowl:VaultAPI:1.7.1")
-    compileOnly("org.json:json:20250517")
+	implementation(project(":vane-portals"))
+	compileOnly(libs.vault)
+	compileOnly(libs.json)
 }
 
 tasks {
