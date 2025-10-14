@@ -158,11 +158,11 @@ public class Core extends Module<Core> {
         // at the time.
         try {
             // Make relevant fields accessible
-            final var frozen = MappedRegistry.class.getDeclaredField("l"/* frozen */);
+            final var frozen = MappedRegistry.class.getDeclaredField("frozen"/* frozen */);
             frozen.setAccessible(true);
             final var intrusive_holder_cache =
                 MappedRegistry.class.getDeclaredField(
-                        "m"/* unregisteredIntrusiveHolders (1.19.3+), intrusiveHolderCache (until 1.19.2) */
+                        "unregisteredIntrusiveHolders"/* unregisteredIntrusiveHolders (1.19.3+), intrusiveHolderCache (until 1.19.2) */
                     );
             intrusive_holder_cache.setAccessible(true);
 

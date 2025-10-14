@@ -70,7 +70,7 @@ public class Soulbound extends CustomEnchantment<Enchantments> {
             new ShapedRecipeDefinition("generic")
                 .shape("cqc", "obe", "rgt")
                 .set_ingredient('b', "vane_enchantments:ancient_tome_of_the_gods")
-                .set_ingredient('c', Material.CHAIN)
+                .set_ingredient('c', Material.IRON_CHAIN)
                 .set_ingredient('q', Material.WRITABLE_BOOK)
                 .set_ingredient('o', Material.BONE)
                 .set_ingredient('r', "minecraft:enchanted_book#enchants{minecraft:binding_curse*1}")

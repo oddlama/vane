@@ -118,8 +118,8 @@ public class Vane extends Command<Core> {
             loot_table.fillInventory(inventory, random, context);
             for (final var is : inventory.getStorageContents()) {
                 if (is != null && is.hasItemMeta()) {
-                    final var meta = is.getItemMeta();
-                    if (meta.hasCustomModelData() && is.getItemMeta().getCustomModelData() == 0x770000) {
+                    final var modelData = is.getItemMeta().getCustomModelDataComponent().getFloats();
+                    if (!modelData.isEmpty() && modelData.getFirst() == 0x770000) {
                         ++tomes;
                     }
                 }
