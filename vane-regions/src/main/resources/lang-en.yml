@@ -12,7 +12,7 @@
 
 # DO NOT CHANGE! The version of this language file. Used to determine
 # if the file needs to be updated.
-version: 3
+version: 4
 # The corresponding language code used in resource packs. Used for
 # resource pack generation. Typically, this is a combination of the
 # language code (ISO 639) and the country code (ISO 3166).
@@ -34,10 +34,28 @@ select_primary_block: "§aSelected (%1$s§a, %2$s§a, %3$s§a) as primary block.
 # %3$s: Block Z
 select_secondary_block: "§aSelected (%1$s§a, %2$s§a, %3$s§a) as secondary block."
 
+# This message is sent when flying is enabled in a region.
+fly_enabled: "§aFlight enabled! You can fly in regions where you have permission."
+# This message is sent when flying is manually disabled.
+fly_disabled: "§cFlight disabled."
+# This message is sent when the player tries to use /fly but is not in a region.
+fly_not_in_region: "§cYou must be inside a region to use this command."
+# This message is sent when the player tries to use /fly but doesn't have permission.
+fly_no_permission: "§cYou don't have permission to fly here. Ask the region owner for friend or admin role."
+# This message is sent when flying is disabled because the player left the region and they are protected from fall damage.
+fly_disabled_safe_landing: "§eYou left the area! Flight disabled but you're protected from fall damage."
+# This message is sent when flying is disabled because the player left the region but they were close to the ground.
+fly_disabled_region_exit: "§eYou left the area! Flight disabled."
+
 command_region:
   usage: "%1$s"
   description: "Open the region management menu."
   help: "Execute to open the region management menu."
+
+command_fly:
+  usage: "%1$s"
+  description: "Toggle flying in regions where you have permission."
+  help: "Execute to toggle flying. You must be in a region where you have friend or admin permissions."
 
 dynmap:
   # The label for the dynmap layer

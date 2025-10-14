@@ -64,7 +64,7 @@ import org.oddlama.vane.regions.region.Role;
 import org.oddlama.vane.regions.region.RoleSetting;
 import org.oddlama.vane.util.StorageUtil;
 
-@VaneModule(name = "regions", bstats = 8643, config_version = 4, lang_version = 3, storage_version = 1)
+@VaneModule(name = "regions", bstats = 8643, config_version = 4, lang_version = 4, storage_version = 1)
 public class Regions extends Module<Regions> {
     //
     //                                                  ┌───────────────────────┐
@@ -179,9 +179,30 @@ public class Regions extends Module<Regions> {
     // No key → Player not in selection mode
     // extent.min or extent.max null → Selection mode active, but no selection has been made yet
     private Map<UUID, RegionSelection> region_selections = new HashMap<>();
+    
+    // A map containing regions being visualized by players
+    private Map<UUID, Region> region_visualizations = new HashMap<>();
 
     @LangMessage
     public TranslatedMessage lang_start_region_selection;
+
+    @LangMessage
+    public TranslatedMessage lang_fly_enabled;
+
+    @LangMessage
+    public TranslatedMessage lang_fly_disabled;
+
+    @LangMessage
+    public TranslatedMessage lang_fly_not_in_region;
+
+    @LangMessage
+    public TranslatedMessage lang_fly_no_permission;
+
+    @LangMessage
+    public TranslatedMessage lang_fly_disabled_safe_landing;
+
+    @LangMessage
+    public TranslatedMessage lang_fly_disabled_region_exit;
 
     // This permission allows players (usually admins) to always administrate
     // any region (rename, delete), regardless of whether other restrictions
@@ -189,6 +210,7 @@ public class Regions extends Module<Regions> {
     public final Permission admin_permission;
 
     public RegionMenuGroup menus;
+    public RegionFlyManager fly_manager;
 
     public RegionDynmapLayer dynmap_layer;
     public RegionBlueMapLayer blue_map_layer;
@@ -205,11 +227,13 @@ public class Regions extends Module<Regions> {
         environment_overrides = new RegionGlobalEnvironmentOverrides(this);
 
         new org.oddlama.vane.regions.commands.Region(this);
+        new org.oddlama.vane.regions.commands.Fly(this);
 
         new RegionEnvironmentSettingEnforcer(this);
         new RegionRoleSettingEnforcer(this);
 
         new RegionSelectionListener(this);
+        fly_manager = new RegionFlyManager(this);
         dynmap_layer = new RegionDynmapLayer(this);
         blue_map_layer = new RegionBlueMapLayer(this);
 
@@ -287,6 +311,18 @@ public class Regions extends Module<Regions> {
     public RegionSelection get_region_selection(final Player player) {
         return region_selections.get(player.getUniqueId());
     }
+    
+    public void start_visualizing_region(final UUID player_id, final Region region) {
+        region_visualizations.put(player_id, region);
+    }
+    
+    public void stop_visualizing_region(final UUID player_id) {
+        region_visualizations.remove(player_id);
+    }
+    
+    public boolean is_visualizing_region(final UUID player_id) {
+        return region_visualizations.containsKey(player_id);
+    }
 
     private static final int visualize_max_particles = 20000;
     private static final int visualize_particles_per_block = 12;
@@ -294,7 +330,7 @@ public class Regions extends Module<Regions> {
     private static final DustOptions visualize_dust_invalid = new DustOptions(Color.fromRGB(230, 60, 11), 1.0f);
     private static final DustOptions visualize_dust_valid = new DustOptions(Color.fromRGB(120, 220, 60), 1.0f);
 
-    private void visualize_edge(final World world, final BlockPos c1, final BlockPos c2, final boolean valid) {
+    private void visualize_edge(final World world, final BlockPos c1, final BlockPos c2, final boolean valid, final Player viewer) {
         // Unfortunately, particle spawns are normally distributed.
         // To still have a good visualization, we need to calculate a stddev that looks
         // good.
@@ -313,8 +349,8 @@ public class Regions extends Module<Regions> {
         dy *= visualize_stddev_compensation;
         dz *= visualize_stddev_compensation;
 
-        // Spawn base particles
-        world.spawnParticle(
+        // Spawn base particles (local to viewer)
+        viewer.spawnParticle(
             Particle.END_ROD,
             mx,
             my,
@@ -323,13 +359,11 @@ public class Regions extends Module<Regions> {
             dx,
             dy,
             dz,
-            0.0, // speed
-            null, // data
-            true
-        ); // force
+            0.0 // speed
+        );
 
-        // Spawn colored particles indicating validity
-        world.spawnParticle(
+        // Spawn colored particles indicating validity (local to viewer)
+        viewer.spawnParticle(
             Particle.DUST,
             mx,
             my,
@@ -339,12 +373,12 @@ public class Regions extends Module<Regions> {
             dy,
             dz,
             0.0, // speed
-            valid ? visualize_dust_valid : visualize_dust_invalid, // data
-            true
-        ); // force
+            valid ? visualize_dust_valid : visualize_dust_invalid // data
+        );
     }
 
     private void visualize_selections() {
+        // Visualize region selections
         for (final var selection_owner : region_selections.keySet()) {
             final var selection = region_selections.get(selection_owner);
             if (selection == null) {
@@ -390,19 +424,68 @@ public class Regions extends Module<Regions> {
             final var G = new BlockPos(hx, hy, hz);
             final var H = new BlockPos(lx, hy, hz);
 
-            // Visualize each edge
-            visualize_edge(world, A, B, valid);
-            visualize_edge(world, B, C, valid);
-            visualize_edge(world, C, D, valid);
-            visualize_edge(world, D, A, valid);
-            visualize_edge(world, E, F, valid);
-            visualize_edge(world, F, G, valid);
-            visualize_edge(world, G, H, valid);
-            visualize_edge(world, H, E, valid);
-            visualize_edge(world, A, E, valid);
-            visualize_edge(world, B, F, valid);
-            visualize_edge(world, C, G, valid);
-            visualize_edge(world, D, H, valid);
+            // Visualize each edge (local to player)
+            visualize_edge(world, A, B, valid, player);
+            visualize_edge(world, B, C, valid, player);
+            visualize_edge(world, C, D, valid, player);
+            visualize_edge(world, D, A, valid, player);
+            visualize_edge(world, E, F, valid, player);
+            visualize_edge(world, F, G, valid, player);
+            visualize_edge(world, G, H, valid, player);
+            visualize_edge(world, H, E, valid, player);
+            visualize_edge(world, A, E, valid, player);
+            visualize_edge(world, B, F, valid, player);
+            visualize_edge(world, C, G, valid, player);
+            visualize_edge(world, D, H, valid, player);
+        }
+        
+        // Visualize existing regions
+        for (final var visualize_owner : region_visualizations.keySet()) {
+            final var region = region_visualizations.get(visualize_owner);
+            if (region == null) {
+                continue;
+            }
+
+            // Get player for visualization
+            final var offline_player = getServer().getOfflinePlayer(visualize_owner);
+            if (!offline_player.isOnline()) {
+                continue;
+            }
+            final var player = offline_player.getPlayer();
+
+            // Get the region extent
+            final var extent = region.extent();
+            final var world = getServer().getWorld(extent.world());
+            if (world == null) {
+                continue;
+            }
+
+            final var min = extent.min();
+            final var max = extent.max();
+
+            // Corners
+            final var A = new BlockPos(min.getX(), min.getY(), min.getZ());
+            final var B = new BlockPos(max.getX(), min.getY(), min.getZ());
+            final var C = new BlockPos(max.getX(), max.getY(), min.getZ());
+            final var D = new BlockPos(min.getX(), max.getY(), min.getZ());
+            final var E = new BlockPos(min.getX(), min.getY(), max.getZ());
+            final var F = new BlockPos(max.getX(), min.getY(), max.getZ());
+            final var G = new BlockPos(max.getX(), max.getY(), max.getZ());
+            final var H = new BlockPos(min.getX(), max.getY(), max.getZ());
+
+            // Visualize each edge - always valid (green) and local to player
+            visualize_edge(world, A, B, true, player);
+            visualize_edge(world, B, C, true, player);
+            visualize_edge(world, C, D, true, player);
+            visualize_edge(world, D, A, true, player);
+            visualize_edge(world, E, F, true, player);
+            visualize_edge(world, F, G, true, player);
+            visualize_edge(world, G, H, true, player);
+            visualize_edge(world, H, E, true, player);
+            visualize_edge(world, A, E, true, player);
+            visualize_edge(world, B, F, true, player);
+            visualize_edge(world, C, G, true, player);
+            visualize_edge(world, D, H, true, player);
         }
     }
 
@@ -675,8 +758,11 @@ public class Regions extends Module<Regions> {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void on_player_quit(final PlayerQuitEvent event) {
+        final var player_id = event.getPlayer().getUniqueId();
         // Remove pending selection
         cancel_region_selection(event.getPlayer());
+        // Remove region visualization
+        stop_visualizing_region(player_id);
     }
 
     @EventHandler
