@@ -259,7 +259,7 @@ Shift-click for a whole stack, or use the hotbar keys 1–9 to get the respectiv
 </h2>
 <div id="body-feature-vane-bedtime--night_to_day" class="hidden">
 	<div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900">
-		<div class="prose prose-slate prose-img:rounded-xl prose-img:w-1/3 prose-img:sm:m-4 prose-img:w-full prose-img:sm:w-1/2 prose-img:lg:w-2/5 prose-img:min-w-32 prose-img:max-w-full prose-img:float-right prose-img:clear-right prose-h1:clear-right prose-h2:clear-right prose-img:float-right dark:prose-invert max-w-none"><p>Once at least 50% of all players in the world are asleep, the night is skipped with a smooth transition to the next day.</p></div>
+		<div class="prose prose-slate prose-img:rounded-xl prose-img:w-1/3 prose-img:sm:m-4 prose-img:w-full prose-img:sm:w-1/2 prose-img:lg:w-2/5 prose-img:min-w-32 prose-img:max-w-full prose-img:float-right prose-img:clear-right prose-h1:clear-right prose-h2:clear-right prose-img:float-right dark:prose-invert max-w-none"><p>Once at least 20% of all players in the world are asleep, the night is skipped with a smooth transition to the next day.</p></div>
 		<div class="clear-right"><!-- spacer --></div>
 	</div>
 </div>
@@ -2159,6 +2159,15 @@ your players need. For more sophisticated permission control, use WorldGuard or 
 <ul>
 <li>Admins of the region can change the portal settings</li>
 <li>The visibility of the portal can be restricted to either players that have the portal permission or other portals that are in a region with the same region group.</li>
+</ul>
+<h2>Flight in Regions</h2>
+<p>Players with admin or friend roles in a region can fly within their claims using the <code>/fly</code> command.</p>
+<ul>
+<li>Upon entering a region where you have permissions, flight is automatically enabled—just double-jump to start flying</li>
+<li>Use <code>/fly</code> to manually toggle flight on/off with visual feedback</li>
+<li>Particle visualization shows region boundaries while flying, automatically updating when moving between regions</li>
+<li>Fall damage protection is provided when exiting a region while airborne</li>
+<li>Flight automatically disables when leaving the region or entering an area without permissions</li>
 </ul></div>
 		<div class="clear-right"><!-- spacer --></div>
 	</div>
