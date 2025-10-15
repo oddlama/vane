@@ -7,7 +7,9 @@ import io.papermc.paper.command.brigadier.CommandSourceStack;
 import org.bukkit.entity.Player;
 import org.oddlama.vane.annotation.command.Aliases;
 import org.oddlama.vane.annotation.command.Name;
+import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.core.command.Command;
+import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.regions.Regions;
 import org.oddlama.vane.regions.region.RoleSetting;
@@ -15,6 +17,18 @@ import org.oddlama.vane.regions.region.RoleSetting;
 @Name("fly")
 @Aliases({ "regionfly" })
 public class Fly extends Command<Regions> {
+
+    @LangMessage
+    public TranslatedMessage lang_fly_enabled;
+
+    @LangMessage
+    public TranslatedMessage lang_fly_disabled;
+
+    @LangMessage
+    public TranslatedMessage lang_fly_not_in_region;
+
+    @LangMessage
+    public TranslatedMessage lang_fly_no_permission;
 
     public Fly(Context<Regions> context) {
         super(context);
@@ -36,7 +50,7 @@ public class Fly extends Command<Regions> {
         final var region = get_module().region_at(player.getLocation());
         
         if (region == null) {
-            player.sendMessage("§cYou must be inside a region to use this command.");
+            lang_fly_not_in_region.send(player);
             return;
         }
 
@@ -50,7 +64,7 @@ public class Fly extends Command<Regions> {
                                      role.get_setting(RoleSetting.BUILD);
         
         if (!hasPermission) {
-            player.sendMessage("§cYou don't have permission to fly here.");
+            lang_fly_no_permission.send(player);
             return;
         }
 
@@ -64,7 +78,7 @@ public class Fly extends Command<Regions> {
             get_module().fly_manager.set_manual_opt_out(player.getUniqueId(), true);
             // Stop visualizing the region
             get_module().stop_visualizing_region(player.getUniqueId());
-            player.sendMessage("§aFlight disabled.");
+            lang_fly_disabled.send(player);
         } else {
             // Enable flying
             player.setAllowFlight(true);
@@ -74,7 +88,7 @@ public class Fly extends Command<Regions> {
             get_module().fly_manager.set_manual_opt_out(player.getUniqueId(), false);
             // Start visualizing the region
             get_module().start_visualizing_region(player.getUniqueId(), region);
-            player.sendMessage("§aFlight enabled.");
+            lang_fly_enabled.send(player);
         }
     }
 }
