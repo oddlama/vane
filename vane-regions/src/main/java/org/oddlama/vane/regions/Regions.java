@@ -16,7 +16,6 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 import net.minecraft.core.BlockPos;
-import org.oddlama.vane.external.apache.commons.lang3.StringUtils;
 import org.bukkit.Chunk;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -43,6 +42,7 @@ import org.oddlama.vane.annotation.VaneModule;
 import org.oddlama.vane.annotation.config.ConfigBoolean;
 import org.oddlama.vane.annotation.config.ConfigDouble;
 import org.oddlama.vane.annotation.config.ConfigInt;
+import org.oddlama.vane.annotation.config.ConfigLong;
 import org.oddlama.vane.annotation.config.ConfigMaterial;
 import org.oddlama.vane.annotation.lang.LangMessage;
 import org.oddlama.vane.annotation.persistent.Persistent;
@@ -157,6 +157,13 @@ public class Regions extends Module<Regions> {
         desc = "The multiplicator determines how much the cost increases for each additional 16 blocks of height. A region of height h will cost multiplicator^(h / 16.0) * base_amount. Rounding is applied at the end."
     )
     public double config_cost_y_multiplicator;
+
+    @ConfigLong(
+        def = 15000,
+        min = 0,
+        desc = "Duration in milliseconds to protect players from fall damage after flight is disabled when leaving a permitted region."
+    )
+    public long config_fall_damage_protection_ms;
 
     // Primary storage for all regions (region.id → region)
     @Persistent
@@ -792,7 +799,7 @@ public class Regions extends Module<Regions> {
             .getKeys()
             .stream()
             .filter(key -> key.toString().startsWith(storage_region_prefix))
-            .map(key -> StringUtils.removeStart(key.toString(), storage_region_prefix))
+            .map(key -> key.toString().substring(storage_region_prefix.length()))
             .map(uuid -> UUID.fromString(uuid))
             .collect(Collectors.toSet());
 
@@ -879,7 +886,7 @@ public class Regions extends Module<Regions> {
             .getKeys()
             .stream()
             .filter(key -> key.toString().startsWith(storage_region_prefix))
-            .map(key -> StringUtils.removeStart(key.toString(), storage_region_prefix))
+            .map(key -> key.toString().substring(storage_region_prefix.length()))
             .map(uuid -> UUID.fromString(uuid))
             .collect(Collectors.toSet());
 

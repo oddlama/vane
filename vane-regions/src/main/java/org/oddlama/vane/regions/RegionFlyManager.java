@@ -28,7 +28,6 @@ public class RegionFlyManager extends Listener<Regions> {
     
     // Track players who are protected from fall damage after leaving a region
     private Map<UUID, Long> fall_damage_protected = new HashMap<>();
-    private static final long FALL_DAMAGE_PROTECTION_MS = 15000; // 15 seconds
 
     // Track players who manually disabled flight via /fly (opt-out of auto-fly)
     private java.util.HashSet<UUID> manual_fly_opt_out = new java.util.HashSet<>();
@@ -93,10 +92,8 @@ public class RegionFlyManager extends Listener<Regions> {
             return;
         }
         
-        // Check if they moved to a different block
-        if (event.getFrom().getBlockX() == event.getTo().getBlockX() &&
-            event.getFrom().getBlockY() == event.getTo().getBlockY() &&
-            event.getFrom().getBlockZ() == event.getTo().getBlockZ()) {
+        // Only proceed when the player actually changed block coordinates
+        if (!event.hasChangedBlock()) {
             return;
         }
         
@@ -154,17 +151,15 @@ public class RegionFlyManager extends Listener<Regions> {
         // Check if player has auto-fly enabled and is starting to fly
         if (event.isFlying() && auto_fly_enabled.containsKey(player_id)) {
             final var region_id = auto_fly_enabled.get(player_id);
-            final var region = get_module().all_regions().stream()
+            get_module().all_regions().stream()
                 .filter(r -> r.id().equals(region_id))
                 .findFirst()
-                .orElse(null);
-            
-            if (region != null) {
-                // Mark as actively flying
-                flying_players.put(player_id, region_id);
-                // Start visualizing the region
-                get_module().start_visualizing_region(player_id, region);
-            }
+                .ifPresent(region -> {
+                    // Mark as actively flying
+                    flying_players.put(player_id, region_id);
+                    // Start visualizing the region
+                    get_module().start_visualizing_region(player_id, region);
+                });
         }
     }
     
@@ -243,7 +238,7 @@ public class RegionFlyManager extends Listener<Regions> {
         if (protection_time != null) {
             final long elapsed = System.currentTimeMillis() - protection_time;
             
-            if (elapsed < FALL_DAMAGE_PROTECTION_MS) {
+            if (elapsed < get_module().config_fall_damage_protection_ms) {
                 // Cancel fall damage
                 event.setCancelled(true);
                 // Remove protection after first use

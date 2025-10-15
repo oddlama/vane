@@ -1,7 +1,6 @@
 package org.oddlama.vane.regions.commands;
 
 import static com.mojang.brigadier.Command.SINGLE_SUCCESS;
-import static com.mojang.brigadier.builder.LiteralArgumentBuilder.literal;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
@@ -9,12 +8,23 @@ import org.bukkit.entity.Player;
 import org.oddlama.vane.annotation.command.Aliases;
 import org.oddlama.vane.annotation.command.Name;
 import org.oddlama.vane.core.command.Command;
+import org.oddlama.vane.annotation.lang.LangMessage;
+import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.regions.Regions;
 
 @Name("region")
 @Aliases({ "regions", "rg" })
 public class Region extends Command<Regions> {
+
+    @LangMessage
+    public TranslatedMessage lang_visualize_disabled;
+
+    @LangMessage
+    public TranslatedMessage lang_visualize_not_in_region;
+
+    @LangMessage
+    public TranslatedMessage lang_visualize_enabled;
 
     public Region(Context<Regions> context) {
         super(context);
@@ -48,16 +58,16 @@ public class Region extends Command<Regions> {
         
         if (get_module().is_visualizing_region(player_id)) {
             get_module().stop_visualizing_region(player_id);
-            player.sendMessage("§cRegion visualization disabled.");
+            lang_visualize_disabled.send(player);
         } else {
             final var region = get_module().region_at(player.getLocation());
             if (region == null) {
-                player.sendMessage("§cYou must be inside a region to visualize it.");
+                lang_visualize_not_in_region.send(player);
                 return;
             }
             
             get_module().start_visualizing_region(player_id, region);
-            player.sendMessage("§aVisualizing region boundaries. Use §b/region visualize§a again to disable.");
+            lang_visualize_enabled.send(player);
         }
     }
 }

@@ -57,6 +57,11 @@ command_fly:
   description: "Toggle flying in regions where you have permission."
   help: "Execute to toggle flying. You must be in a region where you have friend or admin permissions."
 
+# Region visualization toggle messages
+visualize_disabled: "§cRegion visualization disabled."
+visualize_not_in_region: "§cYou must be inside a region to visualize it."
+visualize_enabled: "§aVisualizing region boundaries. Use §b/region visualize§a again to disable."
+
 dynmap:
   # The label for the dynmap layer
   layer_label: "Regions"
