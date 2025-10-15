@@ -11,6 +11,7 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.jetbrains.annotations.NotNull;
 
 public class FloatingItem extends ItemEntity {
 
@@ -69,31 +70,31 @@ public class FloatingItem extends ItemEntity {
     public void inactiveTick() {}
 
     // Don't save or load
+    @Override
+    public void readAdditionalSaveData(@NotNull ValueInput output) {}
 
     @Override
-    public void readAdditionalSaveData(ValueInput output) {}
+    protected void addAdditionalSaveData(@NotNull ValueOutput output) {}
 
     @Override
-    protected void addAdditionalSaveData(ValueOutput output) {}
-
-
-    @Override
-    public boolean save(ValueOutput output) {
+    public boolean save(@NotNull ValueOutput output) {
         return false;
     }
 
     @Override
-    public void saveWithoutId(ValueOutput output) {}
+    public void saveWithoutId(@NotNull ValueOutput output) {}
 
     @Override
-    public void load(ValueInput output) {}
+    public void load(@NotNull ValueInput output) {}
 
     @Override
-    public void setItem(ItemStack itemStack) {
+    public void setItem(@NotNull ItemStack itemStack) {
         super.setItem(itemStack);
-        if (itemStack.getHoverName().toFlatList().size() > 0) {
+        if (itemStack.getHoverName().toFlatList().isEmpty()) {
+            setCustomNameVisible(false);
+        } else {
             setCustomNameVisible(true);
             setCustomName(itemStack.getHoverName());
-        } else setCustomNameVisible(false);
+        }
     }
 }

@@ -48,7 +48,7 @@ public class ResourcePackDistributor extends Listener<Core> {
 
     public String url = null;
     public String sha1 = null;
-    public UUID uuid = null;
+    public UUID uuid = UUID.fromString("fbba121a-8f87-4e97-922d-2059777311bf");
     public int counter = 0;
 
     // The permission to bypass the resource pack
