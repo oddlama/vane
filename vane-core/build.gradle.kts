@@ -45,13 +45,12 @@ tasks {
             include(dependency("org.bstats:bstats-bukkit"))
             include(dependency("org.reflections:reflections"))
             include(dependency("org.json:json"))
-            include(dependency(":vane-annotations"))
+            include(project(":vane-annotations"))
             include(dependency("org.apache.commons:commons-lang3"))
             include(dependency("org.apache.commons:commons-text"))
         }
         relocate("org.bstats", "org.oddlama.vane.external.bstats")
         relocate("org.reflections", "org.oddlama.vane.external.reflections")
-        relocate("org.json", "org.oddlama.vane.external.json")
         relocate("org.apache.commons.lang3", "org.oddlama.vane.external.apache.commons.lang3")
         relocate("org.apache.commons.text", "org.oddlama.vane.external.apache.commons.text")
     }

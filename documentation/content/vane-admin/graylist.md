@@ -18,6 +18,18 @@ you can assign a new player to the `user` group by executing `perm add player_na
 
 This feature is **disabled** by default, as it often caused confusion.
 
+### Quick start
+
+- Enable in `vane-admin` config: set `world_protection.enabled: true`, then run `/vane reload`.
+- Grant a newcomer build rights with `perm add <player> user`.
+- Or allow trusted members to vouch: give them `verified` via `perm add <player> verified`, then they can `/vouch <other_player>`.
+
+### Commands
+
+- `/perm add <player> user` — allow building (bypasses graylist).
+- `/perm add <player> verified` — let a player vouch others.
+- `/vouch <player>` — move a player to the `user` group.
+
 ## Vouching
 
 When using `vane-permissions`, you can also allow trusted members of your community to vouch for other players.

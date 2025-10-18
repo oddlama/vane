@@ -13,8 +13,8 @@ dependencies {
 }
 
 tasks {
-	shadowJar {
-		configurations = listOf()
-		relocate("org.json", "org.oddlama.vane.external.json")
-	}
+    shadowJar {
+        // Do not include dependencies (vane-core is provided as a separate plugin)
+        configurations = listOf()
+    }
 }

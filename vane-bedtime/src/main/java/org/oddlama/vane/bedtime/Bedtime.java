@@ -29,7 +29,7 @@ public class Bedtime extends Module<Bedtime> {
 
     // Configuration
     @ConfigDouble(
-        def = 0.5,
+        def = 0.2,
         min = 0.0,
         max = 1.0,
         desc = "The percentage of sleeping players required to advance time."

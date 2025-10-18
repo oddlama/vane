@@ -10,6 +10,8 @@ dependencies {
 
 java {
 	toolchain.languageVersion.set(JavaLanguageVersion.of(21))
+	sourceCompatibility = JavaVersion.VERSION_21
+	targetCompatibility = JavaVersion.VERSION_21
 }
 
 // We don't need to generate an empty `vane.jar`
@@ -43,9 +45,15 @@ subprojects {
 		maven("https://repo.bluecolored.de/releases")
 	}
 
+	java {
+		sourceCompatibility = JavaVersion.VERSION_21
+		targetCompatibility = JavaVersion.VERSION_21
+	}
+
 	tasks.withType<JavaCompile> {
 		options.compilerArgs.addAll(arrayOf("-Xlint:all", "-Xlint:-processing", "-Xdiags:verbose"))
 		options.encoding = "UTF-8"
+		options.release.set(21)
 	}
 
 	dependencies {
