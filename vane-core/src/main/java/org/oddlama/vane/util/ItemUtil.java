@@ -349,6 +349,11 @@ public class ItemUtil {
 
     /** Returns the itemstack and a boolean indicating whether it was just as simlpe material. */
     public static @NotNull Pair<ItemStack, Boolean> itemstack_from_string(String definition) {
+        // NOTE: Override to allow seamless migration from pre 1.21.9 to 1.21.9+
+        if ("minecraft:chain".equalsIgnoreCase(definition)) {
+            definition = "minecraft:iron_chain";
+        }
+
         // namespace:key[[components]][#enchants{}], where the key can reference a
         // material, head material or customitem.
         final var enchants_delim = definition.indexOf("#enchants{");
