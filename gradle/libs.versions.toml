@@ -15,7 +15,6 @@ nightConfig = {group = "com.electronwill.night-config", name = "toml", version =
 bstatsBase = {group = "org.bstats", name = "bstats-base", version.ref = "bstats"}
 bstatsBukkit = {group = "org.bstats", name = "bstats-bukkit", version.ref = "bstats"}
 bstatsVelocity = {group = "org.bstats", name = "bstats-velocity", version.ref = "bstats"}
-protocollib = {group = "net.dmulloy2", name = "ProtocolLib", version = "5.4.0-SNAPSHOT"}
 vault = {group = "com.github.MilkBowl", name = "VaultAPI", version = "1.7.1"}
 velocity = {group = "com.velocitypowered", name = "velocity-api", version = "3.4.0-SNAPSHOT"}
 packetEvents = {group = "com.github.retrooper", name = "packetevents-spigot", version = "2.9.5"}

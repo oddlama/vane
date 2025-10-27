@@ -12,7 +12,7 @@
 
 # DO NOT CHANGE! The version of this language file. Used to determine
 # if the file needs to be updated.
-version: 4
+version: 5
 # The corresponding language code used in resource packs. Used for
 # resource pack generation. Typically, this is a combination of the
 # language code (ISO 639) and the country code (ISO 3166).
@@ -71,15 +71,8 @@ command_vane:
     §agenerate_resource_pack§7:§r генерирует vane ресурспак."
 
 resource_pack:
-  # This kick message is used when a mandatory resource pack was declined by a player.
-  declined: "Вам необходимо принять ресурспак для игры на этом сервере.\n\
-    Это необходимо для локализации и текстур. Если вы случайно отказались,\n\
-    то вы можете изменить это отредактировав сервер в вашем списке."
-  # This kick message is used when a mandatory resource pack failed to download for player.
-  download_failed: "§cПохоже во время загрузки ресурспака произошла какая-то ошибка.§r\n\
-    §7(Вы были отключены от сервера во избежание ошибок отображения)\n\
-    \n\
-    §dПожалуйста попробуйте снова."
+  pack_required: "§eЭтот необходимый пользовательский пакет ресурсов используется для локализации и пользовательских текстур предметов."
+  pack_suggested: "§eЭтот дополнительный пользовательский пакет ресурсов используется для локализации и пользовательских текстур предметов."
 
 menus:
   head_selector:

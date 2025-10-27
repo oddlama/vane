@@ -12,10 +12,6 @@ import net.kyori.adventure.resource.ResourcePackInfo;
 import net.kyori.adventure.resource.ResourcePackRequest;
 import net.kyori.adventure.text.Component;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.player.PlayerResourcePackStatusEvent;
-import org.bukkit.permissions.Permission;
-import org.bukkit.permissions.PermissionDefault;
 import org.jetbrains.annotations.NotNull;
 import org.oddlama.vane.annotation.config.ConfigBoolean;
 import org.oddlama.vane.annotation.lang.LangMessage;
@@ -45,23 +41,20 @@ public class ResourcePackDistributor extends Listener<Core> {
 
     @ConfigBoolean(
         def = true,
-        desc = "Kick players if they deny to use the specified resource pack (if set). Individual players can be exempt from this rule by giving them the permission 'vane.core.resource_pack.bypass'."
+        desc = "Kick players if they deny to use the specified resource pack (if set)."
     )
     public boolean config_force;
 
     @LangMessage
-    public TranslatedMessage lang_declined;
+    public TranslatedMessage lang_pack_required;
 
     @LangMessage
-    public TranslatedMessage lang_download_failed;
+    public TranslatedMessage lang_pack_suggested;
 
-    public String url = null;
-    public String sha1 = null;
-    public UUID uuid = UUID.fromString("fbba121a-8f87-4e97-922d-2059777311bf");
+    public String pack_url = null;
+    public String pack_sha1 = null;
+    public UUID pack_uuid = UUID.fromString("fbba121a-8f87-4e97-922d-2059777311bf");
     public int counter = 0;
-
-    // The permission to bypass the resource pack
-    public final Permission bypass_permission;
 
     public CustomResourcePackConfig custom_resource_pack_config;
     private ResourcePackFileWatcher file_watcher;
@@ -73,14 +66,6 @@ public class ResourcePackDistributor extends Listener<Core> {
         super(context.group("resource_pack", "Enable resource pack distribution."));
 
         custom_resource_pack_config = new CustomResourcePackConfig(get_context());
-
-        // Register bypass permission
-        bypass_permission = new Permission(
-            "vane." + get_module().get_name() + ".resource_pack.bypass",
-            "Allows bypassing an enforced resource pack",
-            PermissionDefault.FALSE
-        );
-        get_module().register_permission(bypass_permission);
     }
 
     @Override
@@ -136,12 +121,6 @@ public class ResourcePackDistributor extends Listener<Core> {
 
             // Disable resource pack
             pack_url = "";
-            // Prevent subcontexts from being enabling
-            // FIXME this can be coded more cleanly. We need a way
-            // to process config changes _before_ the module is enabled.
-            // like on_config_change_pre_enable(), where we can override
-            // the context group enable state.
-            //((ModuleGroup<Core>) player_message_delayer.get_context()).config_enabled = false;
         }
 
         // Propagate enable after determining whether the player message delayer is active,
@@ -200,13 +179,17 @@ public class ResourcePackDistributor extends Listener<Core> {
 
     public void send_resource_pack_during_configuration(@NotNull PlayerConfigurationConnection connection) {
         var info = ResourcePackInfo.resourcePackInfo(pack_uuid, URI.create(pack_url), pack_sha1);
+        var prompt_lang = (config_force) ? lang_pack_required : lang_pack_suggested;
+        var prompt = prompt_lang.str().isEmpty() ? null : prompt_lang.str_component();
         var request = ResourcePackRequest.resourcePackRequest()
             .required(config_force).replace(true)
             .packs(info).callback((uuid, status, audience) -> {
                 if (!status.intermediate()) {
                     Optional.ofNullable(latches.remove(connection.getProfile().getId())).ifPresent(CountDownLatch::countDown);
                 }
-            }).build();
+            })
+            .prompt(prompt)
+            .build();
 
         connection.getAudience().sendResourcePacks(request);
     }
@@ -224,25 +207,6 @@ public class ResourcePackDistributor extends Listener<Core> {
             audience.sendResourcePacks(ResourcePackRequest.resourcePackRequest().packs(info).asResourcePackRequest());
         } catch (URISyntaxException e) {
             get_module().log.warning("The provided resource pack URL is incorrect: " + url2);
-        }
-    }
-
-    // Not sure if this still needed?
-    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
-    public void on_player_status(final PlayerResourcePackStatusEvent event) {
-        if (!config_force || event.getPlayer().hasPermission(bypass_permission)) {
-            return;
-        }
-
-        switch (event.getStatus()) {
-            case DECLINED:
-                event.getPlayer().kick(lang_declined.str_component());
-                break;
-            case FAILED_DOWNLOAD:
-                event.getPlayer().kick(lang_download_failed.str_component());
-                break;
-            default:
-                break;
         }
     }
 
