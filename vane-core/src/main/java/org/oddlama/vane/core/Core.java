@@ -1,17 +1,5 @@
 package org.oddlama.vane.core;
 
-import static org.oddlama.vane.util.Conversions.ms_to_ticks;
-import static org.oddlama.vane.util.IOUtil.read_json_from_url;
-
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.util.Collections;
-import java.util.IdentityHashMap;
-import java.util.Properties;
-import java.util.SortedSet;
-import java.util.TreeSet;
-import java.util.logging.Level;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -46,7 +34,20 @@ import org.oddlama.vane.core.module.ModuleComponent;
 import org.oddlama.vane.core.resourcepack.ResourcePackDistributor;
 import org.oddlama.vane.core.resourcepack.ResourcePackGenerator;
 
-@VaneModule(name = "core", bstats = 8637, config_version = 6, lang_version = 4, storage_version = 1)
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.Collections;
+import java.util.IdentityHashMap;
+import java.util.Properties;
+import java.util.SortedSet;
+import java.util.TreeSet;
+import java.util.logging.Level;
+
+import static org.oddlama.vane.util.Conversions.ms_to_ticks;
+import static org.oddlama.vane.util.IOUtil.read_json_from_url;
+
+@VaneModule(name = "core", bstats = 8637, config_version = 6, lang_version = 5, storage_version = 1)
 public class Core extends Module<Core> {
 
     /** Use sparingly. */

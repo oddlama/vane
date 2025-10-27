@@ -12,7 +12,7 @@
 
 # DO NOT CHANGE! The version of this language file. Used to determine
 # if the file needs to be updated.
-version: 4
+version: 5
 # The corresponding language code used in resource packs. Used for
 # resource pack generation. Typically, this is a combination of the
 # language code (ISO 639) and the country code (ISO 3166).
@@ -47,13 +47,8 @@ command_vane:
     §agenerate_resource_pack§7:§r génère le pack de ressources de vane."
 
 resource_pack:
-  # FIXME: missing new sentence in declined translation. see lang-en.yml for the new sentence.
-  declined: "Vous devez accepter le pack de ressources pour pouvoir jouer sur ce serveur.\n\
-    Il est indispensable pour les traductions, ainsi que les textures."
-  download_failed: "§cLe téléchargement du pack de ressources semble avoir échoué.§r\n\
-    §7(Vous avez été déconnecté·e afin d'éviter les erreurs d'affichage)\n\
-    \n\
-    §dMerci de bien vouloir essayer à nouveau."
+  pack_required: "§eCe pack de ressources personnalisé requis est utilisé pour la localisation et les textures d'objets personnalisés."
+  pack_suggested: "§eCe pack de ressources personnalisé facultatif est utilisé pour la localisation et les textures d'objets personnalisés."
 
 menus:
   head_selector:

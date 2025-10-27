@@ -12,7 +12,7 @@
 
 # DO NOT CHANGE! The version of this language file. Used to determine
 # if the file needs to be updated.
-version: 4
+version: 5
 # The corresponding language code used in resource packs. Used for
 # resource pack generation. Typically, this is a combination of the
 # language code (ISO 639) and the country code (ISO 3166).
@@ -72,15 +72,8 @@ command_vane:
     §agenerate_resource_pack§7:§r vane kaynak paketini oluşturur."
 
 resource_pack:
-  # This kick message is used when a mandatory resource pack was declined by a player.
-  declined: "Bu sunucuda oynamak için kaynak paketini kabul etmeniz gerekiyor.\n\
-    Bu Yerelleştirme ve dokular için gereklidir. Yanlışlıkla reddetmeniz durumunda,\n\
-    sunucu listenizdeki bu sunucunun girişini düzenleyerek bunu değiştirebilirsiniz."
-  # This kick message is used when a mandatory resource pack failed to download for player.
-  download_failed: "§cKaynak paketi indirmeniz başarısız olmuş gibi görünüyor.§r\n\
-    §7(Görsel hataları önlemek için bağlantınız kesildi)\n\
-    \n\
-    §dLütfen tekrar deneyin."
+  pack_required: "§eBu gerekli özel kaynak paketi yerelleştirme ve özel öğe dokuları için kullanılır."
+  pack_suggested: "§eBu isteğe bağlı özel kaynak paketi yerelleştirme ve özel öğe dokuları için kullanılır."
 
 menus:
   head_selector:

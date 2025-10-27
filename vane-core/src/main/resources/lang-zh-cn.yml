@@ -12,7 +12,7 @@
 
 # DO NOT CHANGE! The version of this language file. Used to determine
 # if the file needs to be updated.
-version: 4
+version: 5
 # The corresponding language code used in resource packs. Used for
 # resource pack generation. Typically, this is a combination of the
 # language code (ISO 639) and the country code (ISO 3166).
@@ -48,13 +48,8 @@ command_vane:
     §agenerate_resource_pack§7:§r 生成vane资源包"
 
 resource_pack:
-  declined: "您需要接受此服务器的资源包才能进行游戏\n\
-    它是用于本地化和材质的如果您是意外拒绝的，\n\
-    您可以通过编辑您的服务器列表中的此服务器条目来更改"
-  download_failed: "§c您的资源包下载似乎失败了§r\n\
-    §7(您已被断开以防止显示错误)\n\
-    \n\
-    §d请再试一次"
+  pack_required: "§e此必需的自定义资源包用于本地化和自定义项目纹理。"
+  pack_suggested: "§e此可选自定义资源包用于本地化和自定义项目纹理。"
 
 menus:
   head_selector:
