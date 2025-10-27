@@ -6,7 +6,6 @@ import com.google.common.io.Files;
 import io.papermc.paper.connection.PlayerConfigurationConnection;
 import io.papermc.paper.event.connection.configuration.AsyncPlayerConnectionConfigureEvent;
 import io.papermc.paper.event.connection.configuration.PlayerConnectionReconfigureEvent;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.resource.ResourcePackInfo;
 import net.kyori.adventure.resource.ResourcePackRequest;
@@ -29,6 +28,7 @@ import java.net.URISyntaxException;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 
 public class ResourcePackDistributor extends Listener<Core> {
@@ -60,7 +60,7 @@ public class ResourcePackDistributor extends Listener<Core> {
     private ResourcePackFileWatcher file_watcher;
     private ResourcePackDevServer dev_server;
 
-    private final Object2ObjectOpenHashMap<UUID, CountDownLatch> latches = new Object2ObjectOpenHashMap<>();
+    private final ConcurrentHashMap<UUID, CountDownLatch> latches = new ConcurrentHashMap<>();
 
     public ResourcePackDistributor(Context<Core> context) {
         super(context.group("resource_pack", "Enable resource pack distribution."));
