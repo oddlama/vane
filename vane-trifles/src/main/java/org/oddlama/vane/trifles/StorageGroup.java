@@ -287,14 +287,21 @@ public class StorageGroup extends Listener<Trifles> {
     private void update_storage_item(@NotNull ItemStack item, @NotNull Inventory inventory) {
         // Find the correct storage item if it was moved from inventory slot and is no longer valid
         if (item.getType().isAir() && inventory.getHolder() instanceof Player player) {
-            for (ItemStack checked_item : player.getInventory().getContents()) {
-                if (checked_item == null || !checked_item.hasItemMeta()) {
-                    continue;
-                }
-                if (is_currently_open(checked_item)) {
-                    item = checked_item; // Found the storage item that is currently open
-                    open_block_state_inventories.put(inventory, Pair.of(player.getUniqueId(), item)); // Update Map
-                    break;
+            // Check cursor item first
+            var cursor_item = player.getOpenInventory().getCursor();
+            if (cursor_item.hasItemMeta() && is_currently_open(cursor_item)) {
+                item = cursor_item; // Found the storage item that is currently open
+                open_block_state_inventories.put(inventory, Pair.of(player.getUniqueId(), item)); // Update Map
+            } else { // else check inventory slots
+                for (ItemStack checked_item : player.getInventory().getContents()) {
+                    if (checked_item == null || !checked_item.hasItemMeta()) {
+                        continue;
+                    }
+                    if (is_currently_open(checked_item)) {
+                        item = checked_item; // Found the storage item that is currently open
+                        open_block_state_inventories.put(inventory, Pair.of(player.getUniqueId(), item)); // Update Map
+                        break;
+                    }
                 }
             }
         }
