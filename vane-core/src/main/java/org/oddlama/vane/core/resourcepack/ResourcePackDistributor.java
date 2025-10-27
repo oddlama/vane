@@ -149,10 +149,14 @@ public class ResourcePackDistributor extends Listener<Core> {
     @EventHandler
     public void on_player_async_connection_configure(AsyncPlayerConnectionConfigureEvent event) {
         var profile_uuid = event.getConnection().getProfile().getId();
+        if (profile_uuid == null) { return; }
 
         // Block the thread to prevent the question screen from going away
         var latch = new CountDownLatch(1);
-        latches.put(profile_uuid, latch);
+        var old_latch = latches.put(profile_uuid, latch);
+        if (old_latch != null) {
+            old_latch.countDown(); // Unblock thread that might still be waiting
+        }
 
         send_resource_pack_during_configuration(event.getConnection());
 
