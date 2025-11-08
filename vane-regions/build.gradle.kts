@@ -10,7 +10,8 @@ dependencies {
 
 tasks {
     shadowJar {
-        configurations = listOf()
-        relocate("org.json", "org.oddlama.vane.external.json")
+        dependencies {
+            include(dependency(":vane-portals"))
+        }
     }
 }
