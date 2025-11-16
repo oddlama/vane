@@ -12,7 +12,7 @@
 
 # ¡NO CAMBIAR! La versión de este archivo de idioma. Se utiliza para determinar
 # si el archivo necesita actualizarse.
-version: 4
+version: 5
 # El código de idioma correspondiente utilizado en paquetes de recursos. Se utiliza para
 # la generación de paquetes de recursos. Típicamente, esto es una combinación del código de
 # idioma (ISO 639) y el código de país (ISO 3166).
@@ -93,6 +93,9 @@ sickles:
   item_stone_sickle:
     # El nombre visual de esta variante de objeto.
     name: "Hoz de piedra"
+  item_copper_sickle:
+    # El nombre visual de esta variante de objeto.
+    name: "Hoz de cobre"
   item_iron_sickle:
     # El nombre visual de esta variante de objeto.
     name: "Hoz de hierro"

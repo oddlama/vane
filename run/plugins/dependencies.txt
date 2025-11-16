@@ -1,3 +1,0 @@
-Download dependencies to this folder to run runMojangMappedServer or runServer.
-
-https://www.spigotmc.org/resources/protocollib.1997/

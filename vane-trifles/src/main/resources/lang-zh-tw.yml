@@ -12,7 +12,7 @@
 
 # DO NOT CHANGE! The version of this language file. Used to determine
 # if the file needs to be updated.
-version: 4
+version: 5
 # The corresponding language code used in resource packs. Used for
 # resource pack generation. Typically, this is a combination of the
 # language code (ISO 639) and the country code (ISO 3166).
@@ -77,6 +77,8 @@ sickles:
     name: "木鐮刀"
   item_stone_sickle:
     name: "石鐮刀"
+  item_copper_sickle:
+    name: "銅鐮刀"
   item_iron_sickle:
     name: "鐵鐮刀"
   item_golden_sickle:
