@@ -88,6 +88,37 @@ public class Sickles extends Listener<Trifles> {
         }
     }
 
+    @VaneItem(name = "copper_sickle", base = Material.COPPER_HOE, model_data = 0x760018, version = 1)
+    public static class CopperSickle extends Sickle {
+
+        public CopperSickle(Context<Trifles> context) {
+            super(context);
+        }
+
+        public double config_attack_damage_def() {
+            return 1.5;
+        }
+
+        public double config_attack_speed_def() {
+            return 1.5;
+        }
+
+        public int config_harvest_radius_def() {
+            return 1;
+        }
+
+        @Override
+        public RecipeList default_recipes() {
+            return RecipeList.of(
+                    new ShapedRecipeDefinition("generic")
+                            .shape(" mm", "  m", " s ")
+                            .set_ingredient('m', Material.COPPER_INGOT)
+                            .set_ingredient('s', Material.STICK)
+                            .result(key().toString())
+            );
+        }
+    }
+
     @VaneItem(name = "iron_sickle", base = Material.IRON_HOE, model_data = 0x760006, version = 1)
     public static class IronSickle extends Sickle {
 
@@ -216,6 +247,7 @@ public class Sickles extends Listener<Trifles> {
         super(context.group("sickles", "Several sickles that allow players to harvest crops in a radius."));
         new WoodenSickle(get_context());
         new StoneSickle(get_context());
+        new CopperSickle(get_context());
         new IronSickle(get_context());
         new GoldenSickle(get_context());
         new DiamondSickle(get_context());

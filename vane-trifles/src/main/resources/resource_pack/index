@@ -1,4 +1,5 @@
 assets/minecraft/items/compass.json
+assets/minecraft/items/copper_hoe.json
 assets/minecraft/items/diamond_hoe.json
 assets/minecraft/items/dropper.json
 assets/minecraft/items/elytra.json
@@ -14,6 +15,7 @@ assets/minecraft/items/stone_hoe.json
 assets/minecraft/items/warped_fungus_on_a_stick.json
 assets/minecraft/items/wooden_hoe.json
 assets/vane_trifles/models/item/backpack.json
+assets/vane_trifles/models/item/copper_sickle.json
 assets/vane_trifles/models/item/death_scroll.json
 assets/vane_trifles/models/item/diamond_sickle.json
 assets/vane_trifles/models/item/empty_xp_bottle.json
@@ -70,6 +72,7 @@ assets/vane_trifles/models/item/trowel.json
 assets/vane_trifles/models/item/unstable_scroll.json
 assets/vane_trifles/models/item/wooden_sickle.json
 assets/vane_trifles/textures/item/backpack.png
+assets/vane_trifles/textures/item/copper_sickle.png
 assets/vane_trifles/textures/item/death_scroll.png
 assets/vane_trifles/textures/item/diamond_sickle.png
 assets/vane_trifles/textures/item/empty_xp_bottle.png

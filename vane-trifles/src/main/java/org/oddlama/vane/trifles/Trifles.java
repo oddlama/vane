@@ -7,7 +7,7 @@ import org.oddlama.vane.trifles.items.XpBottles;
 import java.util.HashMap;
 import java.util.UUID;
 
-@VaneModule(name = "trifles", bstats = 8644, config_version = 4, lang_version = 4, storage_version = 1)
+@VaneModule(name = "trifles", bstats = 8644, config_version = 5, lang_version = 5, storage_version = 1)
 public class Trifles extends Module<Trifles> {
 
     public final HashMap<UUID, Long> last_xp_bottle_consume_time = new HashMap<>();
