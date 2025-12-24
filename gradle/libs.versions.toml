@@ -5,8 +5,8 @@ bstats = "3.1.0"
 [libraries]
 annotations = {group = "org.jetbrains", name = "annotations", version = "26.0.2-1"}
 reflections = {group = "org.reflections", name = "reflections", version = "0.10.2"}
-commonsLang = {group = "org.apache.commons", name = "commons-lang3", version = "3.19.0"}
-commonsText = {group = "org.apache.commons", name = "commons-text", version = "1.14.0"}
+commonsLang = {group = "org.apache.commons", name = "commons-lang3", version = "3.20.0"}
+commonsText = {group = "org.apache.commons", name = "commons-text", version = "1.15.0"}
 json = {group = "org.json", name = "json", version = "20250517"}
 slf4j = {group = "org.slf4j", name = "slf4j-api", version = "2.0.17"}
 nightConfig = {group = "com.electronwill.night-config", name = "toml", version = "3.8.3"}
@@ -18,11 +18,11 @@ bstatsVelocity = {group = "org.bstats", name = "bstats-velocity", version.ref = 
 protocollib = {group = "net.dmulloy2", name = "ProtocolLib", version = "5.4.0"}
 vault = {group = "com.github.MilkBowl", name = "VaultAPI", version = "1.7.1"}
 velocity = {group = "com.velocitypowered", name = "velocity-api", version = "3.4.0-SNAPSHOT"}
-packetEvents = {group = "com.github.retrooper", name = "packetevents-spigot", version = "2.10.0"}
+packetEvents = {group = "com.github.retrooper", name = "packetevents-spigot", version = "2.11.1"}
 
 # maps
 dynmap = {group = "us.dynmap", name = "DynmapCoreAPI", version = "3.7-beta-6"}
-bluemap = {group = "de.bluecolored", name = "bluemap-api", version = "2.7.6"}
+bluemap = {group = "de.bluecolored", name = "bluemap-api", version = "2.7.7"}
 
 [plugins]
 paperweightUserdev = {id = "io.papermc.paperweight.userdev", version = "2.0.0-beta.19"}
