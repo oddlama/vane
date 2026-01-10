@@ -30,7 +30,6 @@ import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.craftbukkit.entity.CraftEntity;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
-import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -49,35 +48,55 @@ public class Nms {
 		return CraftItemStack.asCraftMirror(stack);
 	}
 
-	public static TagKey<Item> enchantment_slot_type(EnchantmentTarget target) {
-		switch (target) {
-			case ARMOR:
+	/**
+	 * Resolve a target string to a TagKey<Item>. The target string may be one of:
+	 * - empty/null: returns null
+	 * - a legacy EnchantmentTarget name (case-insensitive): returns the mapped ItemTags
+	 * - a namespaced tag like "minecraft:durability_enchantable": returns the TagKey for that id
+	 */
+	public static TagKey<Item> enchantment_slot_type(final String target) {
+		if (target == null || target.isEmpty()) return null;
+
+		// Namespaced? contains ':' -> treat as identifier/tag
+		if (target.indexOf(':') >= 0) {
+			try {
+				final var id = Identifier.tryParse(target);
+				if (id == null) return null;
+				return TagKey.create(Registries.ITEM, id);
+			} catch (Throwable t) {
+				return null;
+			}
+		}
+
+		// Legacy mapping: case-insensitive match to known legacy names
+		switch (target.toUpperCase(java.util.Locale.ROOT)) {
+			case "ARMOR":
 				return ItemTags.ARMOR_ENCHANTABLE;
-			case ARMOR_FEET:
+			case "ARMOR_FEET":
 				return ItemTags.FOOT_ARMOR_ENCHANTABLE;
-			case ARMOR_HEAD:
+			case "ARMOR_HEAD":
 				return ItemTags.HEAD_ARMOR_ENCHANTABLE;
-			case ARMOR_LEGS:
+			case "ARMOR_LEGS":
 				return ItemTags.LEG_ARMOR_ENCHANTABLE;
-			case ARMOR_TORSO:
+			case "ARMOR_TORSO":
 				return ItemTags.CHEST_ARMOR_ENCHANTABLE;
-			case TOOL:
+			case "TOOL":
 				return ItemTags.MINING_ENCHANTABLE;
-			case WEAPON:
+			case "WEAPON":
 				return ItemTags.WEAPON_ENCHANTABLE;
-			case BOW:
+			case "BOW":
 				return ItemTags.BOW_ENCHANTABLE;
-			case FISHING_ROD:
+			case "FISHING_ROD":
 				return ItemTags.FISHING_ENCHANTABLE;
-			case BREAKABLE:
+			case "BREAKABLE":
 				return ItemTags.DURABILITY_ENCHANTABLE;
-			case WEARABLE:
+			case "WEARABLE":
 				return ItemTags.EQUIPPABLE_ENCHANTABLE;
-			case TRIDENT:
+			case "TRIDENT":
 				return ItemTags.TRIDENT_ENCHANTABLE;
-			case CROSSBOW:
+			case "CROSSBOW":
 				return ItemTags.CROSSBOW_ENCHANTABLE;
-			case VANISHABLE:
+			case "VANISHABLE":
 				return ItemTags.VANISHING_ENCHANTABLE;
 			default:
 				return null;

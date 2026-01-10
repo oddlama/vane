@@ -4,12 +4,12 @@ import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Locale;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.oddlama.vane.annotation.enchantment.Rarity;
@@ -23,6 +23,7 @@ import org.oddlama.vane.core.config.recipes.Recipes;
 import org.oddlama.vane.core.lang.TranslatedMessage;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.core.module.Module;
+import org.oddlama.vane.util.Nms;
 import org.oddlama.vane.util.StorageUtil;
 
 public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
@@ -62,8 +63,8 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
         instances.put(getClass(), this);
 
         // Automatic recipes and loot table config and registration
-        recipes = new Recipes<T>(get_context(), this.key, this::default_recipes);
-        loot_tables = new LootTables<T>(get_context(), this.key, this::default_loot_tables);
+        recipes = new Recipes<>(get_context(), this.key, this::default_recipes);
+        loot_tables = new LootTables<>(get_context(), this.key, this::default_loot_tables);
     }
 
     /** Returns the bukkit wrapper for this enchantment. */
@@ -181,7 +182,7 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
      * #can_enchant(ItemStack)} can be used to further limit the applicable items. Always reflects
      * the annotation value {@link VaneEnchantment#target()}.
      */
-    public final EnchantmentTarget target() {
+    public final String target() {
         return annotation.target();
     }
 
@@ -208,13 +209,21 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 
     /**
      * Determines if this enchantment can be applied to the given item. By default, this returns
-     * true if the {@link #target()} category includes the given itemstack. Unfortunately, this
-     * method cannot be used to widen the allowed items, just to narrow it (limitation due to
-     * minecraft server internals). So for best results, always check super.can_enchant first when
-     * overriding.
+     * true if the {@link #target()} tag includes the given itemstack. If the annotation target is
+     * empty this defaults to allowing all items. Override to restrict further.
      */
     public boolean can_enchant(@NotNull ItemStack item_stack) {
-        return annotation.target().includes(item_stack);
+        final var t = annotation.target();
+        if (t == null || t.isEmpty()) {
+            return true;
+        }
+
+        // Resolve tag (namespaced tag or legacy name mapped to a tag)
+        final var tag = Nms.enchantment_slot_type(t);
+        if (tag == null) return false;
+        final var nms_item = Nms.item_handle(item_stack);
+        if (nms_item == null) return false;
+        return nms_item.is(tag);
     }
 
     public RecipeList default_recipes() {

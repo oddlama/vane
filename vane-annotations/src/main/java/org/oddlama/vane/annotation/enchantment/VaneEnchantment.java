@@ -4,7 +4,6 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import org.bukkit.enchantments.EnchantmentTarget;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
@@ -23,7 +22,10 @@ public @interface VaneEnchantment {
 
     boolean generate_in_treasure() default false;
 
-    EnchantmentTarget target() default EnchantmentTarget.BREAKABLE;
+    // EnchantmentTarget is deprecated; use a namespaced item-tag string instead.
+    // The string can be a well-known legacy name (e.g. "BREAKABLE", "TOOL", etc.)
+    // or a namespaced tag like "minecraft:durability_enchantable".
+    String target() default "";
 
     boolean allow_custom() default false;
 }
