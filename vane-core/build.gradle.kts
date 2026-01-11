@@ -38,6 +38,9 @@ val resource_pack_sha1 by lazy {
     sha1_hash_string
 }
 
+// Capture project properties at configuration time to avoid accessing `project` during task execution
+val projectProperties = project.properties
+
 tasks {
     shadowJar {
         dependencies {
@@ -58,7 +61,8 @@ tasks {
 
     processResources {
         filesMatching("vane-core.properties") {
-            expand(project.properties + mapOf("resource_pack_sha1" to resource_pack_sha1))
+            // Use the captured `projectProperties` instead of querying `project` here.
+            expand(projectProperties + mapOf("resource_pack_sha1" to resource_pack_sha1))
         }
     }
 }
