@@ -19,7 +19,7 @@ public class ProxyGameProfileRequestListener {
         this.velocity = velocity;
     }
 
-    @Subscribe(order = PostOrder.LAST)
+    @Subscribe(priority = 0)
     public void game_profile_request(final GameProfileRequestEvent event) {
         // ======= Check we even have a valid pending login =======
 

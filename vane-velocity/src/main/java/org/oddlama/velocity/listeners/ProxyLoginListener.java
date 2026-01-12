@@ -21,7 +21,7 @@ public class ProxyLoginListener {
         this.velocity = velocity;
     }
 
-    @Subscribe(order = PostOrder.LAST)
+    @Subscribe(priority = 0)
     public void login(com.velocitypowered.api.event.connection.LoginEvent event) {
         if (!event.getResult().isAllowed()) return;
 
