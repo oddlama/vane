@@ -9,6 +9,9 @@ import org.jetbrains.annotations.Nullable;
 import org.oddlama.vane.core.Core;
 import org.oddlama.vane.core.item.api.CustomItem;
 import org.oddlama.vane.util.StorageUtil;
+import org.bukkit.inventory.meta.components.CustomModelDataComponent;
+
+import java.util.List;
 
 public class CustomItemHelper {
 
@@ -23,7 +26,7 @@ public class CustomItemHelper {
 
     /**
      * Internal function. Used as a dispatcher to update internal information and then call {@link
-     * #updateItemStack(ItemStack)} to let the user update information. This prevents problems with
+     * CustomItem#updateItemStack(ItemStack)} to let the user update information. This prevents problems with
      * information de-sync in case the user would forget to call super.
      */
     public static ItemStack updateItemStack(final CustomItem customItem, @NotNull final ItemStack itemStack) {
@@ -31,7 +34,12 @@ public class CustomItemHelper {
             final var data = meta.getPersistentDataContainer();
             data.set(CUSTOM_ITEM_IDENTIFIER, PersistentDataType.STRING, customItem.key().toString());
             data.set(CUSTOM_ITEM_VERSION, PersistentDataType.INTEGER, customItem.version());
-            meta.setCustomModelData(customItem.customModelData());
+
+            // Use the new CustomModelDataComponent API instead of the deprecated setCustomModelData(Integer).
+            CustomModelDataComponent customModelDataComponent = meta.getCustomModelDataComponent();
+            // Integers from the old API are equivalent to a single float in the component's floats list.
+            customModelDataComponent.setFloats(List.of((float) customItem.customModelData()));
+            meta.setCustomModelDataComponent(customModelDataComponent);
         });
 
         DurabilityManager.initialize_or_update_max(customItem, itemStack);
