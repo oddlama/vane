@@ -11,6 +11,11 @@ import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.Sign;
+import org.bukkit.block.data.Openable;
+import org.bukkit.block.data.Powerable;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -19,6 +24,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.inventory.InventoryHolder;
 import org.oddlama.vane.annotation.config.ConfigInt;
 import org.oddlama.vane.core.Listener;
 import org.oddlama.vane.core.module.Context;
@@ -82,9 +88,18 @@ public class Scrolls extends Listener<Trifles> {
                 // Require non-canceled state (so it won't trigger for block-actions like chests)
                 // But allow if the clicked block can't be interacted with in the first place
                 if (event.useInteractedBlock() != Event.Result.DENY) {
-                    final var block = event.getClickedBlock();
-                    if (block.getType().isInteractable()) {
-                        return;
+                    final Block block = event.getClickedBlock();
+                    if (block != null) {
+                        final BlockState state = block.getState();
+                        final var data = block.getBlockData();
+
+                        // If the block holds an inventory (chest, barrel, furnace...),
+                        // or is a sign, or is openable (doors/trapdoors/gates),
+                        // or is powerable (buttons, levers, some other interactables),
+                        // treat it as interactable and don't use the scroll.
+                        if (state instanceof InventoryHolder || state instanceof Sign || data instanceof Openable || data instanceof Powerable) {
+                            return;
+                        }
                     }
                     event.setUseInteractedBlock(Event.Result.DENY);
                 }
