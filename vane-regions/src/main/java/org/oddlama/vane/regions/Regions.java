@@ -16,7 +16,6 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 import net.minecraft.core.BlockPos;
-import org.oddlama.vane.external.apache.commons.lang3.StringUtils;
 import org.bukkit.Chunk;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -101,7 +100,7 @@ public class Regions extends Module<Regions> {
         PersistentSerializer.serializers.put(Region.class, Region::serialize);
         PersistentSerializer.deserializers.put(Region.class, Region::deserialize);
         PersistentSerializer.serializers.put(RegionExtent.class, RegionExtent::serialize);
-        PersistentSerializer.deserializers.put(RegionExtent.class, RegionExtent::deserialize);
+        PersistentSerializer.deserializers.put(RegionExtent.class, x -> RegionExtent.deserialize((String) x));
     }
 
     @ConfigInt(def = 4, min = 1, desc = "Minimum region extent in x direction.")
@@ -706,7 +705,7 @@ public class Regions extends Module<Regions> {
             .getKeys()
             .stream()
             .filter(key -> key.toString().startsWith(storage_region_prefix))
-            .map(key -> StringUtils.removeStart(key.toString(), storage_region_prefix))
+            .map(key -> { final var s = key.toString(); return s.startsWith(storage_region_prefix) ? s.substring(storage_region_prefix.length()) : s; })
             .map(uuid -> UUID.fromString(uuid))
             .collect(Collectors.toSet());
 
@@ -793,7 +792,7 @@ public class Regions extends Module<Regions> {
             .getKeys()
             .stream()
             .filter(key -> key.toString().startsWith(storage_region_prefix))
-            .map(key -> StringUtils.removeStart(key.toString(), storage_region_prefix))
+            .map(key -> { final var s = key.toString(); return s.startsWith(storage_region_prefix) ? s.substring(storage_region_prefix.length()) : s; })
             .map(uuid -> UUID.fromString(uuid))
             .collect(Collectors.toSet());
 

@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 import net.kyori.adventure.text.Component;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
-import org.oddlama.vane.external.apache.commons.lang3.StringUtils;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -998,7 +997,7 @@ public class Portals extends Module<Portals> {
             .getKeys()
             .stream()
             .filter(key -> key.toString().startsWith(storage_portal_prefix))
-            .map(key -> StringUtils.removeStart(key.toString(), storage_portal_prefix))
+            .map(key -> { final var s = key.toString(); return s.startsWith(storage_portal_prefix) ? s.substring(storage_portal_prefix.length()) : s; })
             .map(uuid -> UUID.fromString(uuid))
             .collect(Collectors.toSet());
 
@@ -1089,7 +1088,7 @@ public class Portals extends Module<Portals> {
             .getKeys()
             .stream()
             .filter(key -> key.toString().startsWith(storage_portal_prefix))
-            .map(key -> StringUtils.removeStart(key.toString(), storage_portal_prefix))
+            .map(key -> { final var s = key.toString(); return s.startsWith(storage_portal_prefix) ? s.substring(storage_portal_prefix.length()) : s; })
             .map(uuid -> UUID.fromString(uuid))
             .collect(Collectors.toSet());
 
