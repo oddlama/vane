@@ -89,7 +89,7 @@ public class ResourcePackDistributor extends Listener<Core> {
                 dev_server.serve();
                 file_watcher.watch_for_changes();
             } catch (IOException | InterruptedException ignored) {
-                ignored.printStackTrace();
+                get_module().log.log(java.util.logging.Level.WARNING, "Failed to setup dev resource pack server or watcher", ignored);
             }
 
             get_module().log.info("Setting up dev lazy server");
@@ -206,6 +206,8 @@ public class ResourcePackDistributor extends Listener<Core> {
         try {
             var hash = Files.asByteSource(file).hash(Hashing.sha1());
             ResourcePackDistributor.this.sha1 = hash.toString();
-        } catch (IOException ignored) {}
+        } catch (IOException ignored) {
+            get_module().log.log(java.util.logging.Level.WARNING, "Failed to recompute resource pack sha1", ignored);
+        }
     }
 }
