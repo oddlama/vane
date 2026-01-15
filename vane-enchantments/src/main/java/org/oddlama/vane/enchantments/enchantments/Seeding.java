@@ -9,7 +9,6 @@ import static org.oddlama.vane.util.PlayerUtil.seed_block;
 import static org.oddlama.vane.util.PlayerUtil.swing_arm;
 
 import org.bukkit.Material;
-import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
@@ -27,7 +26,7 @@ import org.oddlama.vane.enchantments.Enchantments;
     max_level = 4,
     rarity = Rarity.COMMON,
     treasure = true,
-    target = EnchantmentTarget.TOOL
+    target = "TOOL"
 )
 public class Seeding extends CustomEnchantment<Enchantments> {
 

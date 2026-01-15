@@ -7,6 +7,8 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
 import io.papermc.paper.registry.RegistryKey;
+import java.util.Locale;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemType;
 import org.bukkit.permissions.PermissionDefault;
@@ -28,11 +30,33 @@ public class Finditem extends Command<Trifles> {
             .then(help())
             .then(
                 argument("material", ArgumentTypes.resource(RegistryKey.ITEM)).executes(ctx -> {
-                    get_module()
-                        .item_finder.find_item(
-                            (Player) ctx.getSource().getSender(),
-                            ctx.getArgument("material", ItemType.class).asMaterial()
-                        );
+                    final var sender = ctx.getSource().getSender();
+                    final var player = (Player) sender;
+
+                    final var item_type = ctx.getArgument("material", ItemType.class);
+
+                    // Attempt to resolve to a Material without using the deprecated asMaterial().
+                    Material material = null;
+                    final var repr = item_type.toString(); // typically namespace:key
+
+                    // Try direct match with the full representation first.
+                    material = Material.matchMaterial(repr);
+
+                    // If that failed, try the key part after ':' and map to enum name.
+                    if (material == null) {
+                        final var name_part = repr.contains(":") ? repr.substring(repr.indexOf(':') + 1) : repr;
+                        material = Material.matchMaterial(name_part);
+                        if (material == null) {
+                            material = Material.getMaterial(name_part.toUpperCase(Locale.ROOT));
+                        }
+                    }
+
+                    if (material == null) {
+                        player.sendMessage("Unknown material: " + repr);
+                        return SINGLE_SUCCESS;
+                    }
+
+                    get_module().item_finder.find_item(player, material);
                     return SINGLE_SUCCESS;
                 })
             );

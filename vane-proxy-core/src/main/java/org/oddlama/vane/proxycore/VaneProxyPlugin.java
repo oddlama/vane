@@ -142,7 +142,7 @@ public abstract class VaneProxyPlugin {
                             );
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    get_logger().log(Level.SEVERE, "Failed to run server start command", e);
                 }
 
                 server_starting = false;

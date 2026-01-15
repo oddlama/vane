@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.UUID;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.oddlama.vane.proxycore.Maintenance;
 import org.oddlama.vane.proxycore.ProxyPendingConnection;
 import org.oddlama.vane.proxycore.VaneProxyPlugin;
@@ -105,7 +106,7 @@ public abstract class PreLoginEvent implements ProxyEvent, ProxyCancellableEvent
             out.writeUTF(multiplexed_player.new_uuid.toString());
             out.writeUTF(multiplexed_player.new_name);
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.getLogger(PreLoginEvent.class.getName()).log(Level.WARNING, "Failed to write multiplexed player data", e);
         }
 
         server.sendData(stream.toByteArray());
