@@ -1,6 +1,7 @@
 package org.oddlama.vane.regions;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.UUID;
 import org.bukkit.GameMode;
@@ -30,7 +31,7 @@ public class RegionFlyManager extends Listener<Regions> {
     private Map<UUID, Long> fall_damage_protected = new HashMap<>();
 
     // Track players who manually disabled flight via /fly (opt-out of auto-fly)
-    private java.util.HashSet<UUID> manual_fly_opt_out = new java.util.HashSet<>();
+    private HashSet<UUID> manual_fly_opt_out = new HashSet<>();
     
     public RegionFlyManager(Context<Regions> context) {
         super(context);
@@ -172,9 +173,6 @@ public class RegionFlyManager extends Listener<Regions> {
             return;
         }
         
-        // Check if player is high in the air
-        final boolean high_in_air = is_player_high_in_air(player);
-        
         // Disable flying
         player.setAllowFlight(false);
         player.setFlying(false);
@@ -182,40 +180,20 @@ public class RegionFlyManager extends Listener<Regions> {
         // Stop visualizing the region
         get_module().stop_visualizing_region(player_id);
         
-        // If they're high in the air, protect them from fall damage
-        if (high_in_air) {
-            // Stop all downward velocity immediately to prevent momentum damage
-            final var velocity = player.getVelocity();
-            if (velocity.getY() < 0) {
-                player.setVelocity(velocity.setY(0));
-            }
-            
-            // Reset fall distance to prevent accumulated fall damage
-            player.setFallDistance(0);
-            
-            // Enable fall damage protection for 15 seconds
-            fall_damage_protected.put(player_id, System.currentTimeMillis());
+        // Stop all downward velocity immediately to prevent momentum damage
+        final var velocity = player.getVelocity();
+        if (velocity.getY() < 0) {
+            player.setVelocity(velocity.setY(0));
         }
+        
+        // Reset fall distance to prevent accumulated fall damage
+        player.setFallDistance(0);
+        
+        // Enable fall damage protection
+        fall_damage_protected.put(player_id, System.currentTimeMillis());
         
         // No messages - silent auto-disable
         remove_flying_player(player_id);
-    }
-    
-    private boolean is_player_high_in_air(final Player player) {
-        final var location = player.getLocation();
-        final var world = location.getWorld();
-        
-        // Check blocks below the player
-        for (int y = location.getBlockY(); y >= Math.max(world.getMinHeight(), location.getBlockY() - 10); y--) {
-            final var block = world.getBlockAt(location.getBlockX(), y, location.getBlockZ());
-            if (block.getType().isSolid()) {
-                // Found solid ground within 10 blocks, not high in air
-                return false;
-            }
-        }
-        
-        // No solid ground within 10 blocks below
-        return true;
     }
     
     @EventHandler(priority = EventPriority.LOWEST)
@@ -234,18 +212,11 @@ public class RegionFlyManager extends Listener<Regions> {
         final var player_id = player.getUniqueId();
         
         // Check if player is protected from fall damage
-        final var protection_time = fall_damage_protected.get(player_id);
+        final var protection_time = fall_damage_protected.remove(player_id);
         if (protection_time != null) {
             final long elapsed = System.currentTimeMillis() - protection_time;
-            
             if (elapsed < get_module().config_fall_damage_protection_ms) {
-                // Cancel fall damage
                 event.setCancelled(true);
-                // Remove protection after first use
-                fall_damage_protected.remove(player_id);
-            } else {
-                // Protection expired
-                fall_damage_protected.remove(player_id);
             }
         }
     }

@@ -38,3 +38,13 @@ If a portal is inside a region, some additional things apply:
 
 - Admins of the region can change the portal settings
 - The visibility of the portal can be restricted to either players that have the portal permission or other portals that are in a region with the same region group.
+
+## Flight in Regions
+
+Players with admin or friend roles in a region can fly within their claims using the `/fly` command.
+
+- Upon entering a region where you have permissions, flight is automatically enabled—just double-jump to start flying.
+- Use `/fly` to manually toggle flight on/off with visual feedback.
+- Particle visualization shows region boundaries while flying, automatically updating when moving between regions.
+- Fall damage protection is provided when exiting a region while airborne.
+- Flight automatically disables when leaving the region or entering an area without permissions.

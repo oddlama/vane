@@ -20,9 +20,9 @@ This feature is **disabled** by default, as it often caused confusion.
 
 ### Quick start
 
-- Enable in `vane-admin` config: set `world_protection.enabled: true`, then run `/vane reload`.
-- Grant a newcomer build rights with `perm add <player> user`.
-- Or allow trusted members to vouch: give them `verified` via `perm add <player> verified`, then they can `/vouch <other_player>`.
+- Enable in `vane-admin` config: set `world_protection.enabled: true`, then restart the server.
+- Grant a newcomer build rights with `/perm add <player> user`.
+- Or allow trusted members to vouch: give them `verified` via `/perm add <player> verified`, then they can `/vouch <other_player>`.
 
 ### Commands
 
