@@ -129,9 +129,10 @@ public class RegionFlyManager extends Listener<Regions> {
                     get_module().start_visualizing_region(player_id, current_region);
                 }
             }
-        } else if (can_fly) {
+        } else if (can_fly && !player.getAllowFlight()) {
             // Player entered a region where they can fly - enable auto-fly
-            // only if they didn't manually opt-out via /fly
+            // only if they didn't manually opt-out via /fly and don't already
+            // have flight from another source (e.g. Essentials /fly)
             if (!is_manual_opt_out(player_id)) {
                 player.setAllowFlight(true);
                 auto_fly_enabled.put(player_id, current_region.id());
@@ -198,17 +199,14 @@ public class RegionFlyManager extends Listener<Regions> {
     
     @EventHandler(priority = EventPriority.LOWEST)
     public void on_fall_damage(final EntityDamageEvent event) {
-        // Only handle fall damage for players
-        if (!(event.getEntity() instanceof Player)) {
+        if (!(event.getEntity() instanceof Player player)) {
             return;
         }
         
-        // Only handle fall damage
         if (event.getCause() != EntityDamageEvent.DamageCause.FALL) {
             return;
         }
         
-        final var player = (Player) event.getEntity();
         final var player_id = player.getUniqueId();
         
         // Check if player is protected from fall damage
