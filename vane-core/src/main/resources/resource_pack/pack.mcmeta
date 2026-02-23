@@ -2,6 +2,6 @@
   "pack": {
     "description": "Vane plugin resource pack",
     "min_format": 69,
-    "max_format": 69
+    "max_format": 75
   }
 }

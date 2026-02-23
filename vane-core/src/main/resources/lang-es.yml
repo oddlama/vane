@@ -12,7 +12,7 @@
 
 # ¡NO CAMBIAR! Versión de este archivo de idioma. Se utiliza para determinar
 # si el archivo necesita actualizarse.
-version: 4
+version: 5
 # Código de idioma correspondiente utilizado en paquetes de recursos. Utilizado para
 # generación de paquetes de recursos. Normalmente es una combinación de
 # código de idioma (ISO 639) y código de país (ISO 3166).
@@ -71,15 +71,8 @@ command_vane:
     §agenerate_resource_pack§7:§r Genera el paquete de recursos de Vane."
 
 resource_pack:
-  # Este mensaje de expulsión se utiliza cuando un paquete de recursos obligatorio fue rechazado por un jugador.
-  declined: "Necesitas aceptar el paquete de recursos para jugar en este servidor.\n\
-    Se necesita para la localización y las texturas. Si lo rechazaste accidentalmente,\n\
-    puedes cambiar esto editando la entrada de este servidor en tu lista de servidores."
-  # Este mensaje de expulsión se utiliza cuando no se pudo descargar un paquete de recursos obligatorio para un jugador.
-  download_failed: "§cParece que ha fallado la descarga de tu paquete de recursos.§r\n\
-    §7(Se te ha desconectado para evitar errores de visualización)\n\
-    \n\
-    §dPor favor, inténtalo de nuevo."
+  pack_required: "§eEste paquete de recursos personalizados obligatorio se utiliza para la localización y las texturas de elementos personalizados."
+  pack_suggested: "§eEste paquete de recursos personalizados opcional se utiliza para la localización y texturas de elementos personalizados."
 
 menus:
   head_selector:

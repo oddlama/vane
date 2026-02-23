@@ -21,9 +21,6 @@ tasks.withType<Jar> {
 
 tasks.runServer {
     pluginJars(vanePlugins.map { it.tasks.findByName("copyJar")?.inputs?.files })
-    downloadPlugins {
-        github("dmulloy2", "ProtocolLib", "dev-build", "ProtocolLib.jar")
-    }
 }
 
 // Common settings to all subprojects.
@@ -32,7 +29,7 @@ subprojects {
 	apply(plugin = "java")
 
 	group = "org.oddlama.vane"
-	version = "1.19.0"
+	version = "1.21.1"
 
 	repositories {
 		mavenLocal()
@@ -124,8 +121,6 @@ configure(vanePlugins) {
 	}
 
 	dependencies {
-		implementation(rootProject.libs.protocollib)
-
 		compileOnly(project(":vane-annotations"))
 		annotationProcessor(project(path = ":vane-annotations"))
 	}

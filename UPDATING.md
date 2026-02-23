@@ -11,7 +11,7 @@ to make vane compatible with a new minecraft release.
    to figure out which version that is). All occurrences of e.g. `paperDevBundle("1.19.3-R0.1-SNAPSHOT")`
    are updated accordingly.
 
-2. If any other dependencies seem out of date (ProtocolLib, dynmap API, bluemap API, ...)
+2. If any other dependencies seem out of date (dynmap API, bluemap API, ...)
    those should also be bumped. This is not always necessary, since it depends on whether the
    respective API changed in that release—so this is on-demand. If there was a new API and
    you forget to update this, you'll probably run into errors when testing with the new version
@@ -59,7 +59,7 @@ to make vane compatible with a new minecraft release.
 
    - View `work/decompile-latest/net/minecraft/server/SharedConstants.java`
    - Follow definition of `getCurrentVersion()` to `WorldVersion.java`
-   - Observer that there is no more `getWorldVersion()`.
+   - Observe that there is no more `getWorldVersion()`.
      `getDataVersion()` and `getProtocolVersion()` look promising as they contain "version"
    - To see what we need, look where we originally used that value.
      Go to vane source,
@@ -114,7 +114,7 @@ to make vane compatible with a new minecraft release.
 
 11. Now comes testing.
     Build one more time `./gradlew build`, and start a test server
-    with the latest paper build and ProtocolLib.
+    with the latest paper build.
     Disable resource pack distribution.
 	Generate the resource pack with `vane generate_resource_pack`, copy it to your client.
 

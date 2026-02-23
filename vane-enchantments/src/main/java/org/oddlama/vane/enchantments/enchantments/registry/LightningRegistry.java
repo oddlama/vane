@@ -9,7 +9,7 @@ import org.oddlama.vane.enchantments.CustomEnchantmentRegistry;
 public class LightningRegistry extends CustomEnchantmentRegistry {
 
     public LightningRegistry(RegistryComposeEvent<Enchantment, EnchantmentRegistryEntry.Builder> composeEvent) {
-        super("lightning", ItemTypeTagKeys.ENCHANTABLE_SWORD, 1);
+        super("lightning", ItemTypeTagKeys.SWORDS, 1);
         this.register(composeEvent);
     }
 }

@@ -56,7 +56,6 @@ Download all desired jars files from the [Releases](https://github.com/oddlama/v
 Grab the `all-plugins.zip` if you don't want to download each file by hand. You can also download vane from [Modrinth](https://modrinth.com/plugin/vane). Make sure that:
 
 - You are using the correct Paper (or Purpur) server version (compatible versions are listed in the title on the download page)
-- You have the latest version of [ProtocolLib](https://ci.dmulloy2.net/job/ProtocolLib/).
 - Beware that `vane-velocity` and `vane-plexmap` (plexmap addon) are not classical server plugins! Use them only if you know what you are doing.
 
 For a comprehensive guide, visit the [Installation Guide](https://github.com/oddlama/vane/wiki/Installation-Guide) on the wiki.
@@ -90,7 +89,7 @@ I would like to thank the following projects and people maintaining them:
 
 - [Spigot](https://www.spigotmc.org/) for the awesome baseline server software.
 - [PaperMC](https://papermc.io/) for the valuable additions missing from Spigot.
-- [ProtocolLib](https://github.com/dmulloy2/ProtocolLib) for the awesome protocol layer library.
+- [PacketEvents](https://github.com/retrooper/packetevents) for the awesome packet manipulation library
 - [DynmapCoreAPI](https://github.com/webbukkit/DynmapCoreAPI) (Apache-2.0), dynmap integration
 - [BlueMapAPI](https://github.com/BlueMap-Minecraft/BlueMapAPI) (MIT), [BlueMap](https://bluemap.bluecolored.de/) integration
 - [Quark](https://quarkmod.net) (CC-BY-NC-SA 3.0) Assets and texts for the Slime Bucket
