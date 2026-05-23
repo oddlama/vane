@@ -7,8 +7,7 @@ dependencies {
 }
 
 tasks {
-    shadowJar {
-        configurations = listOf()
-        relocate("org.json", "org.oddlama.vane.external.json")
-    }
+	shadowJar {
+		// No special configuration needed
+	}
 }

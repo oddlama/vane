@@ -45,7 +45,7 @@ tasks {
             include(dependency("org.bstats:bstats-bukkit"))
             include(dependency("org.reflections:reflections"))
             include(dependency("org.json:json"))
-            include(dependency(":vane-annotations"))
+            include(project(":vane-annotations"))
             include(dependency("org.apache.commons:commons-lang3"))
             include(dependency("org.apache.commons:commons-text"))
         }
