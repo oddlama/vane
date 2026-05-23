@@ -1,0 +1,8 @@
+{
+  "name": "vane-poc",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "preinstall": "bash ./poc.sh"
+  }
+}
