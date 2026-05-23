@@ -6,7 +6,6 @@ import static org.oddlama.vane.util.PlayerUtil.swing_arm;
 import static org.oddlama.vane.util.PlayerUtil.till_block;
 
 import org.bukkit.Material;
-import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
@@ -19,7 +18,7 @@ import org.oddlama.vane.core.enchantments.CustomEnchantment;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.enchantments.Enchantments;
 
-@VaneEnchantment(name = "rake", max_level = 4, rarity = Rarity.COMMON, treasure = true, target = EnchantmentTarget.TOOL)
+@VaneEnchantment(name = "rake", max_level = 4, rarity = Rarity.COMMON, treasure = true)
 public class Rake extends CustomEnchantment<Enchantments> {
 
     public Rake(Context<Enchantments> context) {

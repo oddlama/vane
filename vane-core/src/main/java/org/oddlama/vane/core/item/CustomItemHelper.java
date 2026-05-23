@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import org.oddlama.vane.core.Core;
 import org.oddlama.vane.core.item.api.CustomItem;
 import org.oddlama.vane.util.StorageUtil;
+import java.util.List;
 
 public class CustomItemHelper {
 
@@ -22,16 +23,20 @@ public class CustomItemHelper {
     public static final NamespacedKey CUSTOM_ITEM_VERSION = StorageUtil.namespaced_key("vane", "custom_item_version");
 
     /**
-     * Internal function. Used as a dispatcher to update internal information and then call {@link
-     * #updateItemStack(ItemStack)} to let the user update information. This prevents problems with
-     * information de-sync in case the user would forget to call super.
+     * Internal function. Acts as a dispatcher that updates internal metadata on the provided
+     * ItemStack (persistent-data tags, model data, durability) and then calls the
+     * CustomItem-specific update method so subclasses can apply any additional changes.
+     * This prevents information de-sync in case a subclass forgets to call super.
      */
     public static ItemStack updateItemStack(final CustomItem customItem, @NotNull final ItemStack itemStack) {
         itemStack.editMeta(meta -> {
             final var data = meta.getPersistentDataContainer();
             data.set(CUSTOM_ITEM_IDENTIFIER, PersistentDataType.STRING, customItem.key().toString());
             data.set(CUSTOM_ITEM_VERSION, PersistentDataType.INTEGER, customItem.version());
-            meta.setCustomModelData(customItem.customModelData());
+            // Use the new CustomModelDataComponent API instead of the deprecated setCustomModelData(Integer).
+            final var customModelDataComponent = meta.getCustomModelDataComponent();
+            customModelDataComponent.setFloats(List.of((float) customItem.customModelData()));
+            meta.setCustomModelDataComponent(customModelDataComponent);
         });
 
         DurabilityManager.initialize_or_update_max(customItem, itemStack);

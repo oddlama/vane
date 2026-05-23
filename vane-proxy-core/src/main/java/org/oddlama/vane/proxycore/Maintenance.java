@@ -191,7 +191,7 @@ public class Maintenance {
                 writer.write(Long.toString(start));
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            plugin.get_logger().log(Level.SEVERE, "Failed to save maintenance state to file", e);
         }
     }
 

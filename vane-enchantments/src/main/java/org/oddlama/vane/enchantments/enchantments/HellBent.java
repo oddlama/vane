@@ -1,7 +1,6 @@
 package org.oddlama.vane.enchantments.enchantments;
 
 import org.bukkit.Material;
-import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -17,7 +16,7 @@ import org.oddlama.vane.core.enchantments.CustomEnchantment;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.enchantments.Enchantments;
 
-@VaneEnchantment(name = "hell_bent", rarity = Rarity.COMMON, treasure = true, target = EnchantmentTarget.ARMOR_HEAD)
+@VaneEnchantment(name = "hell_bent", rarity = Rarity.COMMON, treasure = true)
 public class HellBent extends CustomEnchantment<Enchantments> {
 
     public HellBent(Context<Enchantments> context) {

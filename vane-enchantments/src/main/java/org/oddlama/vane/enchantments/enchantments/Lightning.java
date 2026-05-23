@@ -1,7 +1,6 @@
 package org.oddlama.vane.enchantments.enchantments;
 
 import org.bukkit.Material;
-import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -22,8 +21,7 @@ import org.oddlama.vane.enchantments.Enchantments;
     name = "lightning",
     max_level = 1,
     rarity = Rarity.RARE,
-    treasure = true,
-    target = EnchantmentTarget.WEAPON
+    treasure = true
 )
 public class Lightning extends CustomEnchantment<Enchantments> {
 

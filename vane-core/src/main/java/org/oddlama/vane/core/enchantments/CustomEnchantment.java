@@ -9,7 +9,6 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.oddlama.vane.annotation.enchantment.Rarity;
@@ -177,15 +176,6 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
     }
 
     /**
-     * Determines which item types this enchantment can be applied to. {@link
-     * #can_enchant(ItemStack)} can be used to further limit the applicable items. Always reflects
-     * the annotation value {@link VaneEnchantment#target()}.
-     */
-    public final EnchantmentTarget target() {
-        return annotation.target();
-    }
-
-    /**
      * Determines the enchantment rarity. Always reflects the annotation value {@link
      * VaneEnchantment#rarity()}.
      */
@@ -208,13 +198,11 @@ public class CustomEnchantment<T extends Module<T>> extends Listener<T> {
 
     /**
      * Determines if this enchantment can be applied to the given item. By default, this returns
-     * true if the {@link #target()} category includes the given itemstack. Unfortunately, this
-     * method cannot be used to widen the allowed items, just to narrow it (limitation due to
-     * minecraft server internals). So for best results, always check super.can_enchant first when
-     * overriding.
+     * true for all items. Item compatibility is now primarily managed by tags in the registry system.
+     * This method can still be used for additional custom validation if needed.
      */
     public boolean can_enchant(@NotNull ItemStack item_stack) {
-        return annotation.target().includes(item_stack);
+        return true;
     }
 
     public RecipeList default_recipes() {

@@ -38,7 +38,7 @@ jobs:
 
       - name: Upload JAR
         if: ${{ github.event_name != 'pull_request'}}
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: vane-${{ matrix.project }}-${{ env.git_hash }}.jar
           path: target/vane-${{ matrix.project }}-*.jar

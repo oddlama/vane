@@ -15,6 +15,8 @@ public class ResourcePackFileWatcher {
 
     private final ResourcePackDistributor resource_pack_distributor;
     private final File file;
+    private WatchService eyes;
+    private org.bukkit.scheduler.BukkitTask watchTask;
 
     public ResourcePackFileWatcher(ResourcePackDistributor resource_pack_distributor, File file)
         throws IOException, InterruptedException {
@@ -27,9 +29,22 @@ public class ResourcePackFileWatcher {
         var lang_file_match = FileSystems.getDefault().getPathMatcher("glob:**/lang-*.yml");
         register_directories(Paths.get("plugins"), eyes, this::is_vane_module_folder);
 
-        watch_async(eyes, lang_file_match, this::update_and_send_resource_pack).runTaskAsynchronously(
+        watchTask = watch_async(eyes, lang_file_match, this::update_and_send_resource_pack).runTaskAsynchronously(
             resource_pack_distributor.get_module()
         );
+    }
+
+    public void stop() {
+        if (watchTask != null) {
+            watchTask.cancel();
+            watchTask = null;
+        }
+        if (eyes != null) {
+            try {
+                eyes.close();
+            } catch (IOException ignored) {}
+            eyes = null;
+        }
     }
 
     private void update_and_send_resource_pack() {
@@ -73,8 +88,11 @@ public class ResourcePackFileWatcher {
                     final WatchKey key;
                     try {
                         key = eyes.take();
+                    } catch (java.nio.file.ClosedWatchServiceException e) {
+                        return;
                     } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
+                        Thread.currentThread().interrupt();
+                        return;
                     }
                     // process events
                     for (WatchEvent<?> event : key.pollEvents()) {

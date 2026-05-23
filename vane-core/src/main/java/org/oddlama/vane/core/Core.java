@@ -175,7 +175,7 @@ public class Core extends Module<Core> {
             );
             // Since 1.20.2 this is also needed for enchantments:
         } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
-            e.printStackTrace();
+            log.log(Level.SEVERE, "Failed to unfreeze registries", e);
         }
     }
 

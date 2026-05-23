@@ -12,13 +12,13 @@ jobs:
     if: always() && github.repository == 'oddlama/vane'
 
     steps:
-      - uses: actions/checkout@v6.0.1
+      - uses: actions/checkout@v6.0.2
         with:
           fetch-depth: 0
           persist-credentials: false
           ref: ${{ github.event.pull_request.head.sha }}
 
-      - uses: actions/setup-node@v6.1.0
+      - uses: actions/setup-node@v6.3.0
         with:
           node-version: 24
       - run: |

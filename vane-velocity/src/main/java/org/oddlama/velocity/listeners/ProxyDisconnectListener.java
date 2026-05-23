@@ -15,7 +15,7 @@ public final class ProxyDisconnectListener {
         this.velocity = velocity;
     }
 
-    @Subscribe(order = PostOrder.LAST)
+    @Subscribe(priority = 0)
     public void disconnect(DisconnectEvent event) {
         final var uuid = event.getPlayer().getUniqueId();
         velocity.get_multiplexed_uuids().remove(uuid);

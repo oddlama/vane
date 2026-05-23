@@ -105,7 +105,9 @@ public abstract class PreLoginEvent implements ProxyEvent, ProxyCancellableEvent
             out.writeUTF(multiplexed_player.new_uuid.toString());
             out.writeUTF(multiplexed_player.new_name);
         } catch (IOException e) {
-            e.printStackTrace();
+            // This should not happen in a ByteArrayOutputStream, but log it for diagnostics
+            java.util.logging.Logger.getLogger(PreLoginEvent.class.getName())
+                .log(java.util.logging.Level.SEVERE, "Failed to write multiplexed player data", e);
         }
 
         server.sendData(stream.toByteArray());

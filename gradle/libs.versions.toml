@@ -1,9 +1,9 @@
 [versions]
 paper = "1.21.11-R0.1-SNAPSHOT"
-bstats = "3.1.0"
+bstats = "3.2.1"
 
 [libraries]
-annotations = {group = "org.jetbrains", name = "annotations", version = "26.0.2-1"}
+annotations = {group = "org.jetbrains", name = "annotations", version = "26.1.0"}
 reflections = {group = "org.reflections", name = "reflections", version = "0.10.2"}
 commonsLang = {group = "org.apache.commons", name = "commons-lang3", version = "3.20.0"}
 commonsText = {group = "org.apache.commons", name = "commons-text", version = "1.15.0"}
@@ -16,8 +16,11 @@ bstatsBase = {group = "org.bstats", name = "bstats-base", version.ref = "bstats"
 bstatsBukkit = {group = "org.bstats", name = "bstats-bukkit", version.ref = "bstats"}
 bstatsVelocity = {group = "org.bstats", name = "bstats-velocity", version.ref = "bstats"}
 vault = {group = "com.github.MilkBowl", name = "VaultAPI", version = "1.7.1"}
-velocity = {group = "com.velocitypowered", name = "velocity-api", version = "3.4.0-SNAPSHOT"}
-packetEvents = {group = "com.github.retrooper", name = "packetevents-spigot", version = "2.11.1"}
+velocity = {group = "com.velocitypowered", name = "velocity-api", version = "3.5.0-SNAPSHOT"}
+packetEvents = {group = "com.github.retrooper", name = "packetevents-spigot", version = "2.11.2"}
+
+# spotbugs / findbugs annotations (avoids missing annotation warnings)
+spotbugsAnnotations = {group = "com.github.spotbugs", name = "spotbugs-annotations", version = "4.9.8"}
 
 # maps
 dynmap = {group = "us.dynmap", name = "DynmapCoreAPI", version = "3.7-beta-6"}
@@ -26,5 +29,5 @@ bluemap = {group = "de.bluecolored", name = "bluemap-api", version = "2.7.7"}
 [plugins]
 paperweightUserdev = {id = "io.papermc.paperweight.userdev", version = "2.0.0-beta.19"}
 runPaper = {id = "xyz.jpenilla.run-paper", version = "3.0.2"}
-shadow = {id = "com.gradleup.shadow", version = "9.3.0"}
+shadow = {id = "com.gradleup.shadow", version = "9.3.2"}
 blossom = {id = "net.kyori.blossom", version = "2.2.0"}

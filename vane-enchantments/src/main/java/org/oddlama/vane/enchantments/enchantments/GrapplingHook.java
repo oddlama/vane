@@ -1,7 +1,6 @@
 package org.oddlama.vane.enchantments.enchantments;
 
 import org.bukkit.Material;
-import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerFishEvent;
@@ -23,8 +22,7 @@ import java.util.List;
     name = "grappling_hook",
     max_level = 3,
     rarity = Rarity.UNCOMMON,
-    treasure = true,
-    target = EnchantmentTarget.FISHING_ROD
+    treasure = true
 )
 public class GrapplingHook extends CustomEnchantment<Enchantments> {
 

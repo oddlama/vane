@@ -38,6 +38,8 @@ val resource_pack_sha1 by lazy {
     sha1_hash_string
 }
 
+val projectProperties = project.properties
+
 tasks {
     shadowJar {
         dependencies {
@@ -58,7 +60,7 @@ tasks {
 
     processResources {
         filesMatching("vane-core.properties") {
-            expand(project.properties + mapOf("resource_pack_sha1" to resource_pack_sha1))
+            expand(projectProperties + mapOf("resource_pack_sha1" to resource_pack_sha1))
         }
     }
 }

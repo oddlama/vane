@@ -4,7 +4,6 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.block.data.type.Leaves;
-import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
@@ -18,7 +17,7 @@ import org.oddlama.vane.core.enchantments.CustomEnchantment;
 import org.oddlama.vane.core.module.Context;
 import org.oddlama.vane.enchantments.Enchantments;
 
-@VaneEnchantment(name = "leafchopper", rarity = Rarity.COMMON, treasure = true, target = EnchantmentTarget.TOOL)
+@VaneEnchantment(name = "leafchopper", rarity = Rarity.COMMON, treasure = true)
 public class Leafchopper extends CustomEnchantment<Enchantments> {
 
     public Leafchopper(Context<Enchantments> context) {

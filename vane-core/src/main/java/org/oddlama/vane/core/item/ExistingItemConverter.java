@@ -94,8 +94,14 @@ public class ExistingItemConverter extends Listener<Core> {
             // Update custom items to a new version, or if another detectable property changed.
             final var key_and_version = CustomItemHelper.customItemTagsFromItemStack(is);
             final var meta = is.getItemMeta();
+            final var modelDataList = meta.getCustomModelDataComponent().getFloats();
+            final Integer modelDataInt = (!modelDataList.isEmpty() && modelDataList.getFirst() != null)
+                ? modelDataList.getFirst().intValue()
+                : null;
+
             if (
-                meta.getCustomModelData() != custom_item.customModelData() ||
+                modelDataInt == null ||
+                modelDataInt != custom_item.customModelData() ||
                 is.getType() != custom_item.baseMaterial() ||
                 key_and_version.getRight() != custom_item.version()) {
                 // Also includes durability max update.

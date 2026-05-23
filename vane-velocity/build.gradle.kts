@@ -4,6 +4,7 @@ plugins {
 
 dependencies {
     compileOnly(fileTree(mapOf("dir" to "external", "include" to listOf("*.jar"))))
+    compileOnly(libs.spotbugsAnnotations)
     implementation(libs.velocity)
     annotationProcessor(libs.velocity)
     implementation(libs.bstatsVelocity)
@@ -15,7 +16,7 @@ dependencies {
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
+        languageVersion = JavaLanguageVersion.of(21)
     }
 }
 

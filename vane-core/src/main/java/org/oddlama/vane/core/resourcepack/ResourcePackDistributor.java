@@ -81,8 +81,12 @@ public class ResourcePackDistributor extends Listener<Core> {
                 dev_server = new ResourcePackDevServer(this, pack_output);
                 dev_server.serve();
                 file_watcher.watch_for_changes();
-            } catch (IOException | InterruptedException ignored) {
-                ignored.printStackTrace();
+            } catch (IOException | InterruptedException e) {
+                get_module().log.log(
+                    java.util.logging.Level.SEVERE,
+                    "Failed to initialize resource pack dev server or file watcher",
+                    e
+                );
             }
 
             get_module().log.info("Setting up dev lazy server");
@@ -144,6 +148,26 @@ public class ResourcePackDistributor extends Listener<Core> {
 
             get_module().log.info("Distributing resource pack from '" + pack_url + "' with sha1 " + pack_sha1);
         }
+    }
+
+    @Override
+    public void on_disable() {
+        // Release all pending configuration latches so blocked threads can exit
+        for (var latch : latches.values()) {
+            latch.countDown();
+        }
+        latches.clear();
+
+        if (file_watcher != null) {
+            file_watcher.stop();
+            file_watcher = null;
+        }
+        if (dev_server != null) {
+            dev_server.stop();
+            dev_server = null;
+        }
+
+        super.on_disable();
     }
 
     @EventHandler
