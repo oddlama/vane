@@ -3,6 +3,7 @@ package org.oddlama.vane.util
 import com.mojang.datafixers.DataFixUtils
 import com.mojang.datafixers.types.Type
 import net.minecraft.SharedConstants
+import net.minecraft.core.BlockPos
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
@@ -18,8 +19,8 @@ import net.minecraft.world.entity.EntityType
 import net.minecraft.world.item.CreativeModeTab
 import net.minecraft.world.item.CreativeModeTabs
 import net.minecraft.world.item.crafting.RecipeHolder
+import net.minecraft.world.level.block.Blocks
 import org.bukkit.Bukkit
-import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.World
 import org.bukkit.block.Block
@@ -30,6 +31,7 @@ import org.bukkit.craftbukkit.entity.CraftPlayer
 import org.bukkit.craftbukkit.inventory.CraftItemStack
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
+import net.minecraft.world.level.block.Block as NmsBlock
 
 /**
  * Bridges Bukkit/Paper APIs to internal NMS handles.
@@ -118,9 +120,16 @@ object Nms {
             .count()
     }
 
-    /** Sets a block to air without dropping loot. */
+    /**
+     * Sets a block to air without dropping loot. Block entity side effects are skipped too,
+     * otherwise containers (chests, barrels, ...) spill their contents when removed.
+     */
     @JvmStatic
     fun setAirNoDrops(block: Block) {
-        block.setType(Material.AIR, false)
+        worldHandle(block.world).setBlock(
+            BlockPos(block.x, block.y, block.z),
+            Blocks.AIR.defaultBlockState(),
+            NmsBlock.UPDATE_CLIENTS or NmsBlock.UPDATE_SKIP_ALL_SIDEEFFECTS
+        )
     }
 }
