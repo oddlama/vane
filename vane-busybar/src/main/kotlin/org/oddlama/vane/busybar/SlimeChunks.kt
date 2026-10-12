@@ -44,7 +44,7 @@ class SlimeChunks(context: Context<BusyBar?>) : ModuleComponent<BusyBar?>(contex
         for (player in busybar.server.onlinePlayers) {
             val id = player.uniqueId
             online += id
-            if (busybar.stream.connectedCount(id) == 0) {
+            if (!busybar.hasBridge(id)) {
                 inside -= id
                 continue
             }

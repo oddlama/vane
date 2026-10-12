@@ -1,5 +1,6 @@
 package org.oddlama.vane.proxycore
 
+import org.oddlama.vane.proxycore.busybar.BusyBarProxy
 import org.oddlama.vane.proxycore.config.ConfigManager
 import org.oddlama.vane.proxycore.config.IVaneProxyServerInfo
 import org.oddlama.vane.proxycore.config.ManagedServer
@@ -25,6 +26,10 @@ abstract class VaneProxyPlugin {
     /** Maintenance state controller. */
     @JvmField
     var maintenance: Maintenance = Maintenance(this)
+
+    /** vane-busybar backend links. */
+    @JvmField
+    var busyBar: BusyBarProxy = BusyBarProxy(this)
 
     /** Logger adapter bound by the concrete proxy implementation. */
     @JvmField

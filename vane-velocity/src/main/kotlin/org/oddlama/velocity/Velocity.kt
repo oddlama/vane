@@ -14,6 +14,7 @@ import org.bstats.velocity.Metrics
 import org.oddlama.vane.proxycore.VaneProxyPlugin
 import org.oddlama.vane.proxycore.log.Slf4jCompatLogger
 import org.oddlama.vane.proxycore.util.VERSION
+import org.oddlama.velocity.commands.BusyBar
 import org.oddlama.velocity.commands.Maintenance
 import org.oddlama.velocity.commands.Ping
 import org.oddlama.velocity.compat.VelocityCompatProxyServer
@@ -89,8 +90,10 @@ class Velocity @Inject constructor(
         eventManager.register(this, ProxyGameProfileRequestListener(this))
         eventManager.register(this, ProxyLoginListener(this))
         eventManager.register(this, ProxyDisconnectListener(this))
+        eventManager.register(this, ProxyBusyBarListener(this))
 
         maintenance.load()
+        busyBar.start()
 
         val commandManager = rawProxy.commandManager
 
@@ -99,6 +102,12 @@ class Velocity @Inject constructor(
 
         val maintenanceMeta = commandManager.metaBuilder("maintenance").build()
         commandManager.register(maintenanceMeta, Maintenance(this))
+
+        // Only while serving BUSY Bars: otherwise backends may serve them, and a proxy command
+        // would hide theirs from players.
+        if (busyBar.running) {
+            commandManager.register(commandManager.metaBuilder("busybar").build(), BusyBar(this))
+        }
 
         rawProxy.channelRegistrar.register(CHANNEL)
 
@@ -134,6 +143,7 @@ class Velocity @Inject constructor(
      */
     private fun disable() {
         rawProxy.eventManager.unregisterListeners(this)
+        busyBar.stop()
 
         rawProxy.channelRegistrar.unregister(CHANNEL)
 

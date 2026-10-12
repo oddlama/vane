@@ -1,12 +1,12 @@
-package org.oddlama.vane.busybar
+package org.oddlama.vane.busybar.common
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
-class PublicUrlTest {
+class PairingTest {
     private fun resolve(configured: String?, serverIp: String = "", scheme: String = "https", direct: Boolean = true) =
-        BusyBar.resolvePublicUrl(configured, serverIp, 9123, scheme, direct)
+        Pairing.resolvePublicUrl(configured, serverIp, 9123, scheme, direct)
 
     @Test
     @Suppress("HttpUrlsUsage") // plain HTTP is under test
@@ -61,12 +61,12 @@ class PublicUrlTest {
 
     @Test
     fun `leaves https implied in pairing strings`() {
-        assertEquals("tok@localhost:9123#sha256=PIN", BusyBar.pairingString("tok", "https://localhost:9123", "PIN"))
-        assertEquals("tok@mc.example.com/busybar", BusyBar.pairingString("tok", "https://mc.example.com/busybar", null))
+        assertEquals("tok@localhost:9123#sha256=PIN", Pairing.pairingString("tok", "https://localhost:9123", "PIN"))
+        assertEquals("tok@mc.example.com/busybar", Pairing.pairingString("tok", "https://mc.example.com/busybar", null))
     }
 
     @Test
     fun `keeps plain http explicit in pairing strings`() {
-        assertEquals("http://tok@10.0.0.5:9123", BusyBar.pairingString("tok", "http://10.0.0.5:9123", null))
+        assertEquals("http://tok@10.0.0.5:9123", Pairing.pairingString("tok", "http://10.0.0.5:9123", null))
     }
 }

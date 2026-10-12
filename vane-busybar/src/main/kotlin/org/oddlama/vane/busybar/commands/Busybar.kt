@@ -117,6 +117,10 @@ class Busybar(context: Context<BusyBar?>) :
     @LangMessage
     var langKeyNotRotatable: TranslatedMessage? = null
 
+    /** Any `/busybar` subcommand while a proxy manages BUSY Bars. */
+    @LangMessage
+    var langServedByProxy: TranslatedMessage? = null
+
     /** Builds the `/busybar` command tree. */
     override fun getCommandBase(): LiteralArgumentBuilder<CommandSourceStack> {
         return super.getCommandBase()
@@ -131,13 +135,13 @@ class Busybar(context: Context<BusyBar?>) :
                     .then(Commands.literal("off").executes(forPlayer { setBusy(it, false) }))
             )
             .then(Commands.literal("list").requires(::isAdmin).executes { ctx ->
-                list(ctx.source.sender)
+                unlessProxied(ctx.source.sender) { list(it) }
                 Command.SINGLE_SUCCESS
             })
             .then(adminWithPlayer("clear", ::clear))
             .then(adminWithPlayer("revoke", ::revoke))
             .then(Commands.literal("rotatekey").requires(::isAdmin).executes { ctx ->
-                rotateKey(ctx.source.sender)
+                unlessProxied(ctx.source.sender, ::rotateKey)
                 Command.SINGLE_SUCCESS
             })
     }
@@ -149,15 +153,24 @@ class Busybar(context: Context<BusyBar?>) :
     /** Runs [action] for a player sender; anyone else gets the help text. */
     private fun forPlayer(action: (Player) -> Unit) = { ctx: CommandContext<CommandSourceStack> ->
         val sender = ctx.source.sender
-        if (sender is Player) action(sender) else printHelp(sender)
+        if (sender is Player) unlessProxied(sender, action) else printHelp(sender)
         Command.SINGLE_SUCCESS
+    }
+
+    /**
+     * Runs [action] for [sender], unless a proxy manages BUSY Bars: its `/busybar` is the one that
+     * counts, and players connected through it never reach this one.
+     */
+    private fun <S : CommandSender> unlessProxied(sender: S, action: (S) -> Unit) {
+        if (busybar.proxied()) langServedByProxy!!.send(sender) else action(sender)
     }
 
     /** `/busybar <name> <player>`, for admins; works for offline players. */
     private fun adminWithPlayer(name: String, action: (CommandSender, OfflinePlayer) -> Unit) =
         Commands.literal(name).requires(::isAdmin).then(
             Commands.argument("player", OfflinePlayerArgumentType.offlinePlayer()).executes { ctx ->
-                action(ctx.source.sender, ctx.getArgument("player", OfflinePlayer::class.java))
+                val target = ctx.getArgument("player", OfflinePlayer::class.java)
+                unlessProxied(ctx.source.sender) { action(it, target) }
                 Command.SINGLE_SUCCESS
             }
         )

@@ -103,8 +103,8 @@ class RegionsHook private constructor(private val busybar: BusyBar, private val 
         if (region.regionGroup(regions)?.getRole(player.uniqueId)?.getSetting(RoleSetting.BUILD) == true) return
         // An owner standing in the region sees their visitors already.
         if (current[owner]?.id() == id) return
-        if (busybar.stream.connectedCount(owner) == 0 || !busybar.access.has(owner, busybar.access.receiveRegionVisitors)) return
-        visitors.visit(now, id, region.name() ?: UNNAMED, owner, player.uniqueId, player.name, busybar.heads.remember(player))
+        if (!busybar.hasBridge(owner) || !busybar.access.has(owner, busybar.access.receiveRegionVisitors)) return
+        visitors.visit(now, id, region.name() ?: UNNAMED, owner, player.uniqueId, player.name, busybar.headOf(player))
     }
 
     /** What a player's bridge learns about [region] on entering it. */

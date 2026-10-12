@@ -152,6 +152,38 @@ bridge receives `permissions.updated` with the new list.
 The command itself needs `vane.busybar.commands.busybar` (everyone by default).
 `vane.busybar.admin` defaults to op; the admin subcommands also work from the console.
 
+## Behind a Velocity proxy
+
+On a network behind Velocity with vane-velocity, the proxy can serve every bridge, so a BUSY Bar
+follows its owner across servers with a single pairing:
+
+1. In the proxy's vane-velocity `config.toml`, set `[BusyBar] Enabled = true` and `PublicUrl`, and
+   `[BusyBar.Link] Secret` to a random string (`openssl rand -base64 32`).
+2. On each backend, set `ProxyLinkAddress` to the proxy's `BusyBar.Link` address,
+   `ProxyLinkServerName` to the server's name in `velocity.toml`, and `ProxyLinkSecret` to the same
+   secret.
+3. Players run `/busybar link` on the proxy. Tokens from a backend's own stream no longer work.
+
+The proxy then owns tokens, focus mode, TLS (with the same `Tls` modes, keys in its plugin folder)
+and `/busybar`, which it answers in English. It announces players joining and leaving the network
+itself, sends a bridge a fresh `snapshot` when its owner switches servers, and `server.stop` with a
+`server` field when that backend shuts down or is lost. Everything else comes from the backends:
+each event carries a `server` field and reaches the bridges whose owner should see it. World time,
+bedtime and TPS only go to players on that server, or last on it while offline.
+
+A proxied backend serves no bridges itself; its `/busybar` only points to the proxy's. It opens one
+TCP connection to the proxy carrying one JSON object per line, and reconnects with backoff when it
+drops. In the handshake, each side proves with an HMAC over the other's nonce that it knows the
+secret, which is never sent. The backend forwards its events with their audience and the
+permission they need, and reports each player's grants, which the proxy filters by; players no
+backend has reported yet get the default grants. Permissions can differ between servers, so the
+proxy goes by the server a player is on: reports about offline players only count from the
+server they were last on. The proxy asks for the backend's part of
+snapshots, runs `autostop.abort` (bridges name the stopping `server`), mirrors focus mode to every
+backend for the tab list tag, and tells backends which players have a bridge connected, since
+slime chunk and region visitor checks only run for those. The proxy side lives in
+`org.oddlama.vane.proxycore.busybar`, the shared code in `vane-busybar-common`.
+
 ## Optional integrations
 
 vane-admin, vane-bedtime, vane-permissions, vane-portals, and vane-regions are optional. Their classes are only touched from
@@ -164,6 +196,11 @@ Module entry point, the event stream server, vanilla event forwarding, and focus
 # Package org.oddlama.vane.busybar.commands
 
 The `/busybar` command for linking a bridge.
+
+# Package org.oddlama.vane.busybar.link
+
+The link reporting this backend to a Velocity proxy running vane-velocity, which then serves the
+bridges.
 
 # Package org.oddlama.vane.busybar.hooks
 

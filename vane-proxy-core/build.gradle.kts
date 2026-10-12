@@ -39,4 +39,8 @@ dependencies {
     testImplementation(libs.nightConfig)
     compileOnly(libs.slf4j)
     compileOnly(libs.json)
+    // Shaded into vane-velocity next to this module.
+    compileOnly(project(":vane-busybar-common"))
+    testImplementation(project(":vane-busybar-common"))
+    testImplementation(libs.json)
 }

@@ -14,6 +14,9 @@ interface ProxyPlayer : ProxyCommandSender {
      */
     fun disconnect(message: String?)
 
+    /** The player's name. */
+    val name: String?
+
     /** Stable unique identifier for the player. */
     val uniqueId: UUID?
 

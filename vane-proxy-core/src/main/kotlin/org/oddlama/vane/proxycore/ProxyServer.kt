@@ -28,4 +28,29 @@ interface ProxyServer {
      * @return `true` when permission checks pass.
      */
     fun hasPermission(uuid: UUID?, vararg permission: String?): Boolean
+
+    /**
+     * Checks whether a backend called [name] is registered with the proxy.
+     *
+     * @param name backend server name.
+     * @return `true` when the proxy knows the server.
+     */
+    fun hasServer(name: String): Boolean
+
+    /**
+     * Returns the backend [player] is connected to.
+     *
+     * @param player player UUID.
+     * @return the backend's name, or `null` when the player is offline or between servers.
+     */
+    fun serverOf(player: UUID): String?
+
+    /** Maximum player count shown in the server list. */
+    val maxPlayers: Int
+
+    /** The proxy's server-list icon as a `data:image/png;base64,` URL, or `null` without one. */
+    val favicon: String?
+
+    /** Whether the proxy authenticates players with Mojang, so their connection is encrypted. */
+    val onlineMode: Boolean
 }

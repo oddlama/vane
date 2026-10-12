@@ -1,15 +1,20 @@
-package org.oddlama.vane.busybar
+package org.oddlama.vane.busybar.common
 
-import org.bukkit.entity.Player
+import org.json.JSONException
+import org.json.JSONObject
 import java.awt.image.BufferedImage
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.IOException
+import java.net.MalformedURLException
+import java.net.URI
+import java.net.URISyntaxException
 import java.net.URL
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse
 import java.time.Duration
+import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import javax.imageio.ImageIO
 
@@ -17,7 +22,7 @@ import javax.imageio.ImageIO
  * Player faces for the Bar, cut from skins the server already knows.
  *
  * A skin is identified by the hash at the end of its textures.minecraft.net URL. Only skins of
- * players seen on this server can be requested, so `/head` cannot be used to fetch arbitrary
+ * players seen on this server or proxy can be requested, so `/head` cannot be used to fetch arbitrary
  * URLs. Rendered faces are cached in memory.
  */
 class Heads {
@@ -29,9 +34,9 @@ class Heads {
 
     private val http: HttpClient = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(5)).build()
 
-    /** Remembers the skin of [player] and returns its id, or null without a skin (offline mode). */
-    fun remember(player: Player): String? {
-        val url = player.playerProfile.textures.skin ?: return null
+    /** Remembers the skin at [url] and returns its id, or null without a skin (offline mode). */
+    fun remember(url: URL?): String? {
+        url ?: return null
         val id = url.path.substringAfterLast('/').takeIf { SKIN_ID.matches(it) } ?: return null
         if (known.size >= MAX_ENTRIES) known.clear()
         known[id] = url
@@ -62,6 +67,27 @@ class Heads {
     }
 
     companion object {
+        /**
+         * The skin URL in a game profile's `textures` property, the base64 JSON the session server
+         * signs, or null when it has none or is malformed.
+         */
+        fun skinUrl(textures: String?): URL? {
+            textures ?: return null
+            return try {
+                val json = JSONObject(String(Base64.getDecoder().decode(textures)))
+                val url = json.optJSONObject("textures")?.optJSONObject("SKIN")?.optString("url") ?: return null
+                URI(url).toURL()
+            } catch (_: IllegalArgumentException) {
+                null
+            } catch (_: JSONException) {
+                null
+            } catch (_: URISyntaxException) {
+                null
+            } catch (_: MalformedURLException) {
+                null
+            }
+        }
+
         /** Skin ids are hex hashes. */
         private val SKIN_ID = Regex("[0-9a-f]{16,128}")
 

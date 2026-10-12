@@ -22,6 +22,10 @@ class ConfigManager(private val plugin: VaneProxyPlugin) {
     @JvmField
     val multiplexerById: MutableMap<Int?, AuthMultiplex?> = HashMap()
 
+    /** BUSY Bar settings, or `null` when not configured. */
+    var busyBar: BusyBarConfig? = null
+        private set
+
     /**
      * Returns the location of `config.toml` in the plugin data folder.
      *
@@ -80,6 +84,7 @@ class ConfigManager(private val plugin: VaneProxyPlugin) {
 
         multiplexerById.putAll(authMultiplex)
         this.managedServers.putAll(managedServers)
+        busyBar = parsedConfig.busyBar
 
         return true
     }

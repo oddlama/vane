@@ -47,4 +47,33 @@ class VelocityCompatProxyServer(private val proxy: ProxyServer) : org.oddlama.va
             .map { player -> permission.filterNotNull().any(player::hasPermission) }
             .orElse(false)
     }
+
+    /**
+     * Checks whether a backend called [name] is registered in Velocity.
+     *
+     * @param name backend server name.
+     * @return `true` when Velocity knows the server.
+     */
+    override fun hasServer(name: String): Boolean = proxy.getServer(name).isPresent
+
+    /**
+     * Name of the backend [player] is connected to.
+     *
+     * @param player player UUID.
+     * @return the backend's name, or `null` when offline or between servers.
+     */
+    override fun serverOf(player: UUID): String? =
+        proxy.getPlayer(player).flatMap { it.currentServer }.map { it.serverInfo.name }.orElse(null)
+
+    /** Maximum player count from velocity.toml. */
+    override val maxPlayers: Int
+        get() = proxy.configuration.showMaxPlayers
+
+    /** The proxy's favicon as a data URL. */
+    override val favicon: String?
+        get() = proxy.configuration.favicon.map { it.base64Url }.orElse(null)
+
+    /** Whether velocity.toml enables online mode. */
+    override val onlineMode: Boolean
+        get() = proxy.configuration.isOnlineMode
 }

@@ -1,5 +1,5 @@
 // The shadowJar contents rule for this plugin is applied centrally from the root build
-// script: it bundles nothing and relocates onto the copies vane-core ships.
+// script: it bundles only vane-busybar-common and relocates onto the copies vane-core ships.
 plugins {
     alias(libs.plugins.shadow)
 }
@@ -7,6 +7,7 @@ plugins {
 dependencies {
     compileOnly(project(":vane-core"))
     compileOnly(libs.json)
+    implementation(project(":vane-busybar-common"))
 
     // Optional integrations. Each one lives in its own class under `hooks/`, which is only
     // loaded after the corresponding plugin was found at runtime.
@@ -15,6 +16,10 @@ dependencies {
     compileOnly(project(":vane-permissions"))
     compileOnly(project(":vane-portals"))
     compileOnly(project(":vane-regions"))
+
+    // The proxy side, to test a proxied bridge end to end. The proxy provides night-config at runtime.
+    testImplementation(project(":vane-proxy-core"))
+    testImplementation(libs.nightConfig)
 }
 
 // The BUSY Bar bridge (Python, see bridge/README.md) ships next to the plugin jar, with the same

@@ -19,6 +19,10 @@ class Config(file: File) {
     @JvmField
     var managedServers: LinkedHashMap<String?, ManagedServer?>?
 
+    /** BUSY Bar settings, or `null` when the table is missing. */
+    @JvmField
+    var busyBar: BusyBarConfig?
+
     /** Backup of the file taken before legacy keys were migrated, or `null` if none were found. */
     var legacyBackup: File? = null
 
@@ -83,5 +87,7 @@ class Config(file: File) {
         }
 
         this.managedServers = managedServers
+
+        busyBar = BusyBarConfig.from(config.get<CommentedConfig>("BusyBar"))
     }
 }

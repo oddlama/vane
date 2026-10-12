@@ -74,3 +74,46 @@
 #
 #       KickMsg = "{SERVER_DISPLAY_NAME} §7is being started.\n§7Try again in §b10 Seconds§7 \\(^-^)/"
 
+
+[BusyBar]
+
+# Serves BUSY Bar desk displays (https://busy.bar) for the whole network.
+# Players run /busybar link on the proxy and paste the pairing string into
+# their bridge, which then follows them across servers. Backends running
+# vane-busybar report their events through the link below; see the
+# vane-busybar module documentation.
+
+Enabled = false
+
+# Address and port the bridges connect to. They connect from players' homes,
+# so this port has to be reachable from the internet.
+Bind = "0.0.0.0"
+Port = 9123
+
+# Address bridges reach this proxy at, put into the pairing string by
+# /busybar link: a host such as mc.example.com or 203.0.113.7, which gets
+# Port added, or a full URL. Required, since the proxy cannot know it.
+PublicUrl = ""
+
+# auto: HTTPS with a self-signed certificate generated on first start;
+#       bridges pin its key through the pairing string.
+# keystore: HTTPS with the PKCS#12 certificate in TlsKeystore.
+# off: plain HTTP, only behind a TLS reverse proxy or on a trusted LAN.
+Tls = "auto"
+TlsKeystore = ""
+TlsKeystorePassword = ""
+
+# Requests a linked BUSY Bar may send. Remove an entry to disable it.
+AllowedActions = ["presence.set", "autostop.abort"]
+
+    [BusyBar.Link]
+
+    # Address and port backends connect to. Keep this on the network the
+    # proxy shares with its backends; players never need it.
+    Bind = "127.0.0.1"
+    Port = 9124
+
+    # Shared with every backend's ProxyLinkSecret, at least 16 characters.
+    # It is never sent over the link, only used to prove that both sides
+    # know it. Generate one with: openssl rand -base64 32
+    Secret = ""

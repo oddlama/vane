@@ -155,6 +155,10 @@ the default `Tls: auto` there is nothing to buy or renew: the plugin makes its o
 - **A domain with a real certificate** (`Tls: keystore`) or **a reverse proxy** in front of the
   port (`Tls: off`, `BindAddress: "127.0.0.1"`, `PublicUrl` set to the proxy's `https://` URL) work
   too; see TLS in [Module.md](../Module.md). Neither is needed for a public server.
+- **Behind a Velocity proxy** with vane-velocity, the proxy can serve the bridges for the whole
+  network instead, so a player's Bar follows them from server to server. Players then run
+  `/busybar link` on the proxy, and the proxy's port 9123 is the one to open. See "Behind a
+  Velocity proxy" in [Module.md](../Module.md).
 
 ## Security
 

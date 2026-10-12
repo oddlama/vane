@@ -12,7 +12,7 @@
 
 # DO NOT CHANGE! The version of this language file. Used to determine
 # if the file needs to be updated.
-Version: 6
+Version: 7
 # The corresponding language code used in resource packs. Used for
 # resource pack generation. Typically, this is a combination of the
 # language code (ISO 639) and the country code (ISO 3166).
@@ -50,3 +50,4 @@ CommandBusybar:
   NothingToDo: "§b%1$s§7 没有可清除的内容：既没有 BUSY Bar 令牌，也没有开启专注模式。"
   KeyRotated: "§7已生成新的 TLS 密钥。所有使用 BUSY Bar 的玩家都需要重新执行 §b/busybar link§7。"
   KeyNotRotatable: "§7仅在 §bTls: auto§7 时可用。此服务器使用自己的证书或未启用 TLS。"
+  ServedByProxy: "§7此网络的 BUSY Bar 由代理服务器管理。请在代理服务器上使用 §b/busybar§7。"

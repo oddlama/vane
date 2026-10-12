@@ -12,6 +12,7 @@ dependencies {
     implementation(libs.bstatsBase)
     implementation(libs.json)
     implementation(project(":vane-proxy-core"))
+    implementation(project(":vane-busybar-common"))
 }
 
 tasks.register<Copy>("copyJar") {
@@ -49,6 +50,7 @@ tasks {
             include(dependency("org.bstats:bstats-base"))
             include(dependency("org.json:json"))
             include(dependency("org.oddlama.vane:vane-proxy-core"))
+            include(dependency("org.oddlama.vane:vane-busybar-common"))
             include(dependency("org.jetbrains.kotlin:kotlin-stdlib"))
         }
 

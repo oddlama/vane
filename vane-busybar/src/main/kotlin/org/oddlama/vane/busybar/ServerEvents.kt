@@ -175,7 +175,7 @@ class ServerEvents(context: Context<BusyBar?>) : Listener<BusyBar?>(context) {
             .put("player", player.name)
             .put("online", online)
             .put("max", busybar.server.maxPlayers)
-            .put("head", busybar.heads.remember(player) ?: JSONObject.NULL)
+            .put("head", busybar.headOf(player) ?: JSONObject.NULL)
 
     /** Number of sleeping players in [world]. */
     private fun sleeping(world: World): Int = world.players.count { it.isSleeping }

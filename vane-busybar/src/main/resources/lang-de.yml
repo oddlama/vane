@@ -12,7 +12,7 @@
 
 # DO NOT CHANGE! The version of this language file. Used to determine
 # if the file needs to be updated.
-Version: 6
+Version: 7
 # The corresponding language code used in resource packs. Used for
 # resource pack generation. Typically, this is a combination of the
 # language code (ISO 639) and the country code (ISO 3166).
@@ -50,3 +50,4 @@ CommandBusybar:
   NothingToDo: "§7Bei §b%1$s§7 gibt es nichts zurückzusetzen: kein BUSY-Bar-Token und kein Fokusmodus."
   KeyRotated: "§7Neuer TLS-Schlüssel erzeugt. Alle Spieler mit einer BUSY Bar müssen §b/busybar link§7 erneut ausführen."
   KeyNotRotatable: "§7Nur mit §bTls: auto§7 möglich. Dieser Server nutzt ein eigenes Zertifikat oder kein TLS."
+  ServedByProxy: "§7BUSY Bars werden in diesem Netzwerk vom Proxy verwaltet. Nutze dort §b/busybar§7."

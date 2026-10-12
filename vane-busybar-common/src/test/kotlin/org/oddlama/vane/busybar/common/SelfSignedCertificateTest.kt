@@ -1,4 +1,4 @@
-package org.oddlama.vane.busybar
+package org.oddlama.vane.busybar.common
 
 import java.nio.ByteBuffer
 import java.security.KeyStore
@@ -34,13 +34,13 @@ class SelfSignedCertificateTest {
     @Test
     fun `pins the SHA-256 of the public key in base64url`() {
         val (_, certificate) = SelfSignedCertificate.generate("vane-busybar")
-        val pin = Tls.pinOf(certificate)
+        val pin = BridgeTls.pinOf(certificate)
         assertEquals(43, pin.length)
         assertContentEquals(
             MessageDigest.getInstance("SHA-256").digest(certificate.publicKey.encoded),
             Base64.getUrlDecoder().decode(pin),
         )
-        assertNotEquals(pin, Tls.pinOf(SelfSignedCertificate.generate("vane-busybar").second))
+        assertNotEquals(pin, BridgeTls.pinOf(SelfSignedCertificate.generate("vane-busybar").second))
     }
 
     @Test
@@ -70,7 +70,7 @@ class SelfSignedCertificateTest {
 
         handshake(client, server)
         assertEquals("TLSv1.3", client.session.protocol)
-        assertEquals(Tls.pinOf(certificate), Tls.pinOf(presented!!))
+        assertEquals(BridgeTls.pinOf(certificate), BridgeTls.pinOf(presented!!))
     }
 
     /** Runs a handshake between two engines in memory. */

@@ -46,7 +46,7 @@ class Advancements(context: Context<BusyBar?>) : Listener<BusyBar?>(context) {
         val player = event.player
         val batch = batches.getOrPut(player.uniqueId) {
             scheduleTask({ flush(player.uniqueId) }, BATCH_TICKS)
-            Batch(player.name, busybar.heads.remember(player))
+            Batch(player.name, busybar.headOf(player))
         }
         batch.count++
         // Show the rarest one: challenges outrank goals, which outrank tasks.

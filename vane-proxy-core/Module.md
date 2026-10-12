@@ -4,8 +4,9 @@ Platform-independent implementation of vane's proxy-side features. This module c
 API imports of its own — it defines abstractions that a platform module such as `vane-velocity`
 implements.
 
-It is one of only two vane modules that do not depend on Paper or `vane-core`; the build excludes
-it from the paperweight and core dependency groups for exactly that reason.
+It is one of the few vane modules that do not depend on Paper or `vane-core`, along with
+`vane-velocity` and `vane-busybar-common`; the build excludes them from the paperweight and core
+dependency groups for exactly that reason.
 
 ## The abstraction boundary
 
@@ -21,7 +22,8 @@ platform type belongs in the platform module instead.
 ## Features
 
 `Maintenance` implements scheduled maintenance mode: it persists the schedule, denies logins while
-active, and notifies players. `AuthMultiplex` in the config package supports mapping several
+active, and notifies players. `BusyBarProxy` serves BUSY Bar bridges for the network when
+`[BusyBar]` is enabled; see the vane-busybar module documentation. `AuthMultiplex` in the config package supports mapping several
 accounts onto one identity.
 
 # Package org.oddlama.vane.proxycore
@@ -29,9 +31,15 @@ accounts onto one identity.
 Entry point abstraction and the core proxy models — player, server, pending connection — plus the
 maintenance feature.
 
+# Package org.oddlama.vane.proxycore.busybar
+
+The proxy side of vane-busybar: `BusyBarProxy` serves BUSY Bar bridges for the whole network, fed by
+the `BackendLinkServer` that backends report their events, grants and snapshots to. The bridge
+server, TLS and link protocol come from `vane-busybar-common`, which vane-velocity shades along.
+
 # Package org.oddlama.vane.proxycore.commands
 
-Platform-independent proxy commands (`maintenance`, `ping`) and the command sender abstraction they
+Platform-independent proxy commands (`maintenance`, `ping`, `busybar`) and the command sender abstraction they
 are dispatched through.
 
 # Package org.oddlama.vane.proxycore.config

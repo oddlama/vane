@@ -1,4 +1,4 @@
-package org.oddlama.vane.busybar
+package org.oddlama.vane.busybar.common
 
 import java.io.ByteArrayOutputStream
 import java.security.KeyPair
@@ -21,7 +21,7 @@ import java.time.temporal.ChronoUnit
  * ignore its name and validity. It never expires (RFC 5280 `99991231235959Z`), so it never has to
  * be replaced.
  */
-internal object SelfSignedCertificate {
+object SelfSignedCertificate {
     private const val TAG_INTEGER = 0x02
     private const val TAG_BIT_STRING = 0x03
     private const val TAG_OID = 0x06

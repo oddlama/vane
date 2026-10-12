@@ -11,6 +11,7 @@ import org.bukkit.scheduler.BukkitTask
 import org.json.JSONArray
 import org.json.JSONObject
 import org.oddlama.vane.annotation.persistent.Persistent
+import org.oddlama.vane.busybar.common.BridgePermissions
 import org.oddlama.vane.core.Listener
 import org.oddlama.vane.core.module.Context
 import java.util.*
@@ -32,41 +33,41 @@ class BridgeAccess(context: Context<BusyBar?>) : Listener<BusyBar?>(context) {
         get() = requireNotNull(module)
 
     /** Receive `player.join` and `player.quit`. */
-    val receivePlayers = permission("receive.players", "Receive players joining and leaving", PermissionDefault.TRUE)
+    val receivePlayers = permission(BridgePermissions.RECEIVE_PLAYERS, "Receive players joining and leaving", PermissionDefault.TRUE)
 
     /** Receive `bedtime.*` and `world.time`. */
-    val receiveBedtime = permission("receive.bedtime", "Receive sleeping players, night skips and world time", PermissionDefault.TRUE)
+    val receiveBedtime = permission(BridgePermissions.RECEIVE_BEDTIME, "Receive sleeping players, night skips and world time", PermissionDefault.TRUE)
 
     /** Receive the player's own `portal.*` events. */
-    val receivePortals = permission("receive.portals", "Receive portal use and destruction of your own portals", PermissionDefault.TRUE)
+    val receivePortals = permission(BridgePermissions.RECEIVE_PORTALS, "Receive portal use and destruction of your own portals", PermissionDefault.TRUE)
 
     /** Receive `advancement`. */
-    val receiveAdvancements = permission("receive.advancements", "Receive advancements players make", PermissionDefault.TRUE)
+    val receiveAdvancements = permission(BridgePermissions.RECEIVE_ADVANCEMENTS, "Receive advancements players make", PermissionDefault.TRUE)
 
     /** Receive `slimechunk.*` while carrying a slime bucket. */
-    val receiveSlimeChunk = permission("receive.slimechunk", "Receive entering and leaving slime chunks while carrying a slime bucket", PermissionDefault.TRUE)
+    val receiveSlimeChunk = permission(BridgePermissions.RECEIVE_SLIMECHUNK, "Receive entering and leaving slime chunks while carrying a slime bucket", PermissionDefault.TRUE)
 
     /** Receive `region.enter` and `region.leave` for the regions the player walks through. */
-    val receiveRegions = permission("receive.regions", "Receive entering and leaving vane-regions regions", PermissionDefault.TRUE)
+    val receiveRegions = permission(BridgePermissions.RECEIVE_REGIONS, "Receive entering and leaving vane-regions regions", PermissionDefault.TRUE)
 
     /** Receive `region.visitor` when strangers enter the player's own regions. */
     val receiveRegionVisitors = permission(
-        "receive.region_visitors",
+        BridgePermissions.RECEIVE_REGION_VISITORS,
         "Receive who enters your vane-regions regions, which reveals other players' locations",
         PermissionDefault.OP
     )
 
     /** Receive `server.tps`. */
-    val receiveServer = permission("receive.server", "Receive server performance (TPS and MSPT)", PermissionDefault.OP)
+    val receiveServer = permission(BridgePermissions.RECEIVE_SERVER, "Receive server performance (TPS and MSPT)", PermissionDefault.OP)
 
     /** Receive `autostop.*`. */
-    val receiveAutostop = permission("receive.autostop", "Receive the autostop countdown", PermissionDefault.OP)
+    val receiveAutostop = permission(BridgePermissions.RECEIVE_AUTOSTOP, "Receive the autostop countdown", PermissionDefault.OP)
 
     /** Send `presence.set`. */
-    val actionPresence = permission("action.presence", "Set focus mode from the BUSY Bar", PermissionDefault.TRUE)
+    val actionPresence = permission(BridgePermissions.ACTION_PRESENCE, "Set focus mode from the BUSY Bar", PermissionDefault.TRUE)
 
     /** Send `action.invoke` for `autostop.abort`. */
-    val actionAutostopAbort = permission("action.autostop_abort", "Abort autostop from the BUSY Bar", PermissionDefault.OP)
+    val actionAutostopAbort = permission(BridgePermissions.ACTION_AUTOSTOP_ABORT, "Abort autostop from the BUSY Bar", PermissionDefault.OP)
 
     /** Every permission above, in a stable order. */
     private val all = listOf(
@@ -108,11 +109,19 @@ class BridgeAccess(context: Context<BusyBar?>) : Listener<BusyBar?>(context) {
         super.onDisable()
     }
 
-    /** Refreshes grants once permission plugins had a tick to attach theirs (vane-permissions attaches at MONITOR). */
+    /**
+     * Refreshes grants once permission plugins had a tick to attach theirs (vane-permissions attaches
+     * at MONITOR). Always reports them to the proxy, which may not know them yet even when they are
+     * unchanged here; it ignores reports that change nothing.
+     */
     @EventHandler(priority = EventPriority.MONITOR)
     fun onPlayerJoin(event: PlayerJoinEvent) {
         val player = event.player
-        scheduleNextTick { if (player.isOnline) refresh(player) }
+        scheduleNextTick {
+            if (!player.isOnline) return@scheduleNextTick
+            refresh(player)
+            busybar.proxyLink.sendGrants(player.uniqueId, grantedNames(player.uniqueId), online = true)
+        }
     }
 
     /**
@@ -152,12 +161,14 @@ class BridgeAccess(context: Context<BusyBar?>) : Listener<BusyBar?>(context) {
     /** Re-evaluates the grants of an online [player]. */
     fun refresh(player: Player) = store(player.uniqueId, all.filter(player::hasPermission).map { it.name }.toSet())
 
-    /** Records the grants of [id] and tells their bridge when they changed. */
+    /** Records the grants of [id] and tells their bridge and the proxy when they changed. */
     private fun store(id: UUID, now: Set<String>) {
         if (grants.put(id, now) == now) return
         storageGrants[id] = now.toMutableSet()
         markPersistentStorageDirty()
-        busybar.stream.emit("permissions.updated", JSONObject().put("granted", grantedNames(id)), id)
+        val names = grantedNames(id)
+        busybar.stream.emit("permissions.updated", JSONObject().put("granted", names), id)
+        busybar.proxyLink.sendGrants(id, names, busybar.server.getPlayer(id) != null)
     }
 
     /** Creates a permission below `vane.busybar.`. */
@@ -172,7 +183,7 @@ class BridgeAccess(context: Context<BusyBar?>) : Listener<BusyBar?>(context) {
     }
 
     /** Name without the `vane.busybar.` prefix, for example `receive.autostop`. */
-    private fun shortName(permission: Permission) = permission.name.removePrefix("vane.${busybar.annotationName}.")
+    fun shortName(permission: Permission) = permission.name.removePrefix("vane.${busybar.annotationName}.")
 
     companion object {
         /** Ticks between refreshes of online players. */

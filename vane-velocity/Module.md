@@ -18,7 +18,7 @@ Plugin entry point and Velocity-specific helpers.
 
 # Package org.oddlama.velocity.commands
 
-Registration of the maintenance and ping commands with Velocity's command manager.
+Registration of the maintenance, ping and busybar commands with Velocity's command manager.
 
 # Package org.oddlama.velocity.compat
 

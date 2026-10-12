@@ -82,6 +82,8 @@ class Mirror:
     region: dict[str, Any] | None = None
     autostop_end: float | None = None
     autostop_total: float = 1.0
+    # The server that is stopping, behind a vane-velocity proxy; None on a single server.
+    autostop_server: str | None = None
     busy: bool = False
     permissions: set[str] = field(default_factory=set)
     icon_tag: str | None = None
@@ -177,6 +179,7 @@ class BarState:
         remaining = d.get("autostop_remaining_s")
         m.autostop_end = now + remaining if remaining is not None else None
         m.autostop_total = max(1.0, float(remaining or 1))
+        m.autostop_server = d.get("server")
         if d.get("icon") != m.icon_tag:
             m.icon_tag = d.get("icon")
             self._on_icon_changed(m.icon_tag)
@@ -259,6 +262,7 @@ class BarState:
     def _on_autostop_scheduled(self, d: dict[str, Any], now: float) -> None:
         self.m.autostop_end = now + d["remaining_s"]
         self.m.autostop_total = max(1.0, float(d["remaining_s"]))
+        self.m.autostop_server = d.get("server")
         self.alert("autostop.scheduled", Card("clock-red", "SERVER EMPTY", f"STOP IN {mmss(d['remaining_s'])}", color1=RED), CRITICAL, 3.5)
 
     def _on_autostop_aborted(self, d: dict[str, Any], now: float) -> None:
@@ -457,7 +461,11 @@ class BarState:
     def press_ok(self, now: float) -> None:
         """OK aborts a pending autostop when allowed, otherwise dismisses the alert."""
         if self.m.autostop_end is not None and "action.autostop_abort" in self.m.permissions:
-            self._send({"type": "action.invoke", "action": "autostop.abort"})
+            request = {"type": "action.invoke", "action": "autostop.abort"}
+            # Behind a proxy, name the server, since several may be stopping at once.
+            if self.m.autostop_server is not None:
+                request["server"] = self.m.autostop_server
+            self._send(request)
         else:
             self.press_back(now)
 

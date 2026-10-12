@@ -263,3 +263,12 @@ def test_focus_mode_holds_visitor_alerts():
     s.handle("region.visitor", {"region": "Base", "visitors": ["Steve"], "count": 1}, 2.0)
     assert s.frame(2.0)[1] == "focus"
     assert len(s.held) == 1
+
+
+def test_ok_names_the_stopping_server_behind_a_proxy():
+    s, sent, _ = make(permissions=("action.autostop_abort",))
+    s.handle("autostop.scheduled", {"remaining_s": 30, "server": "survival"}, 0.0)
+    s.frame(0.0)
+    s.frame(10.0)
+    s.press_ok(10.0)
+    assert sent == [{"type": "action.invoke", "action": "autostop.abort", "server": "survival"}]

@@ -21,6 +21,7 @@ dependencies {
     dokka(project(":vane-annotations"))
     dokka(project(":vane-bedtime"))
     dokka(project(":vane-busybar"))
+    dokka(project(":vane-busybar-common"))
     dokka(project(":vane-core"))
     dokka(project(":vane-enchantments"))
     dokka(project(":vane-permissions"))
@@ -176,10 +177,11 @@ subprojects {
 // Paper dev bundle (and its per-module remapping cache) there is pure overhead:
 //   - vane-geyser-extension targets the Geyser API only,
 //   - vane-velocity / vane-proxy-core are proxy-side,
+//   - vane-busybar-common is shared by vane-busybar and the proxy, so it must not touch Paper,
 //   - vane-annotations only names `org.bukkit.Material` in annotation members, which the
 //     plain `paper-api` artifact provides just as well (see its own build script).
 configure(subprojects.filter {
-    !listOf("vane-velocity", "vane-proxy-core", "vane-geyser-extension", "vane-annotations")
+    !listOf("vane-velocity", "vane-proxy-core", "vane-busybar-common", "vane-geyser-extension", "vane-annotations")
         .contains(it.name)
 }) {
     pluginManager.apply("io.papermc.paperweight.userdev")
@@ -222,9 +224,10 @@ configure(subprojects.filter {
 }
 
 
-// All Projects except proxies, annotations and Geyser extension.
+// All Projects except proxies, annotations, shared libraries and Geyser extension.
 val vanePlugins = subprojects.filter {
-    !listOf("vane-annotations", "vane-velocity", "vane-proxy-core", "vane-geyser-extension").contains(it.name)
+    !listOf("vane-annotations", "vane-velocity", "vane-proxy-core", "vane-busybar-common", "vane-geyser-extension")
+        .contains(it.name)
 }
 configure(vanePlugins) {
     tasks {
@@ -254,7 +257,7 @@ configure(vanePlugins) {
 // vane-core (and everything vane-core resolves) on this module's compile classpath and made its
 // build wait on :vane-core:shadowJar for nothing.
 configure(subprojects.filter {
-    !listOf("vane-annotations", "vane-core", "vane-velocity", "vane-proxy-core", "vane-geyser-extension")
+    !listOf("vane-annotations", "vane-core", "vane-velocity", "vane-proxy-core", "vane-busybar-common", "vane-geyser-extension")
         .contains(it.name)
 }) {
     dependencies {
@@ -295,9 +298,10 @@ configure(subprojects.filter {
     ).contains(it.name)
 }) {
     tasks.withType<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>().configureEach {
-        // Bundle none of the resolved dependencies; vane-core provides them all at runtime.
+        // Bundle none of the resolved dependencies; vane-core provides them all at runtime. The one
+        // exception is vane-busybar-common, which vane-busybar shares with the proxy, not with vane-core.
         dependencies {
-            exclude { true }
+            exclude { it.moduleName != "vane-busybar-common" }
         }
         relocate("kotlin", "org.oddlama.vane.external.kotlin")
         relocate("org.json", "org.oddlama.vane.external.json")

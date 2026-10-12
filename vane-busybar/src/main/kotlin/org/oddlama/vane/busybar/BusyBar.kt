@@ -1,5 +1,6 @@
 package org.oddlama.vane.busybar
 
+import org.bukkit.entity.Player
 import org.bukkit.event.HandlerList
 import org.bukkit.event.Listener
 import org.bukkit.permissions.Permission
@@ -11,20 +12,21 @@ import org.oddlama.vane.annotation.config.ConfigString
 import org.oddlama.vane.annotation.config.ConfigStringList
 import org.oddlama.vane.annotation.persistent.Persistent
 import org.oddlama.vane.busybar.commands.Busybar
+import org.oddlama.vane.busybar.common.BridgeLog
+import org.oddlama.vane.busybar.common.BridgeTls
+import org.oddlama.vane.busybar.common.Heads
+import org.oddlama.vane.busybar.common.Pairing
 import org.oddlama.vane.busybar.hooks.AdminHook
 import org.oddlama.vane.busybar.hooks.BedtimeHook
 import org.oddlama.vane.busybar.hooks.PermissionsHook
 import org.oddlama.vane.busybar.hooks.PortalsHook
 import org.oddlama.vane.busybar.hooks.RegionsHook
+import org.oddlama.vane.busybar.link.ProxyLink
 import org.oddlama.vane.core.module.Module
-import java.net.URI
-import java.net.URISyntaxException
-import java.security.MessageDigest
-import java.security.SecureRandom
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
-@VaneModule(name = "busybar", configVersion = 1, langVersion = 6, storageVersion = 1)
+@VaneModule(name = "busybar", configVersion = 1, langVersion = 7, storageVersion = 1)
 /**
  * Streams server and vane events to BUSY Bar devices through a small bridge running next to each device.
  *
@@ -89,6 +91,27 @@ class BusyBar : Module<BusyBar?>() {
     )
     var configAllowedActions: MutableList<String?>? = null
 
+    /** Address of the proxy's BUSY Bar backend link, see [ProxyLink]. */
+    @ConfigString(
+        def = "",
+        desc = "Behind a Velocity proxy running vane-velocity with BUSY Bar support: the address of its BusyBar.Link, as host or host:port (default port 9124). This server then reports its events to the proxy, which serves the bridges and /busybar for the whole network, so this server's own event stream stays off and the stream settings above are ignored. Leave empty when this server is not behind such a proxy."
+    )
+    var configProxyLinkAddress: String? = null
+
+    /** This server's name as the proxy knows it. */
+    @ConfigString(
+        def = "",
+        desc = "This server's name in the proxy's velocity.toml, for example survival. Required with ProxyLinkAddress."
+    )
+    var configProxyLinkServerName: String? = null
+
+    /** Secret shared with the proxy's `BusyBarLink.Secret`. */
+    @ConfigString(
+        def = "",
+        desc = "Same value as BusyBar.Link.Secret in the proxy's vane-velocity config.toml, at least 16 characters. Required with ProxyLinkAddress. It is never sent over the network."
+    )
+    var configProxyLinkSecret: String? = null
+
     /** SHA-256 hashes of the bridge token issued to each player. */
     @Persistent
     var storageTokenHashes: MutableMap<UUID?, String?> = mutableMapOf()
@@ -96,11 +119,17 @@ class BusyBar : Module<BusyBar?>() {
     /** Token hash to player lookup, read from HTTP threads. */
     private val tokenIndex = ConcurrentHashMap<String, UUID>()
 
+    /** [log] for the shared BUSY Bar code. */
+    val bridgeLog = BridgeLog { level, message, error -> log.log(level, message, error) }
+
     /** Permissions deciding what each bridge receives and may request. */
     val access = BridgeAccess(this)
 
     /** TLS mode, certificate, and key fingerprint of the event stream. */
     val tls = Tls(this)
+
+    /** Link reporting this server to the proxy, when configured. */
+    val proxyLink = ProxyLink(this)
 
     /** Event stream HTTP server and connected bridges. */
     val stream = EventStream(this)
@@ -147,15 +176,18 @@ class BusyBar : Module<BusyBar?>() {
     override fun onModuleEnable() {
         tokenIndex.clear()
         storageTokenHashes.forEach { (player, hash) -> if (player != null && hash != null) tokenIndex[hash] = player }
-        tls.checkConfiguration()
-        if (publicUrl() == null) {
-            val problem = if (configPublicUrl.isNullOrBlank()) "Neither PublicUrl nor server-ip is set"
-            else "PublicUrl '$configPublicUrl' is not a valid address"
-            log.warning(
-                "$problem, so /busybar link cannot tell players where to connect. Set PublicUrl in the " +
-                    "vane-busybar config to the address bridges reach this server at, for example " +
-                    "mc.example.com or 203.0.113.7."
-            )
+        // Behind a proxy, the proxy serves bridges and checks its own TLS and address.
+        if (!proxied()) {
+            tls.checkConfiguration()
+            if (publicUrl() == null) {
+                val problem = if (configPublicUrl.isNullOrBlank()) "Neither PublicUrl nor server-ip is set"
+                else "PublicUrl '$configPublicUrl' is not a valid address"
+                log.warning(
+                    "$problem, so /busybar link cannot tell players where to connect. Set PublicUrl in the " +
+                        "vane-busybar config to the address bridges reach this server at, for example " +
+                        "mc.example.com or 203.0.113.7."
+                )
+            }
         }
 
         val plugins = server.pluginManager
@@ -182,9 +214,8 @@ class BusyBar : Module<BusyBar?>() {
     /** Issues a new bridge token for [player], replacing and disconnecting any previous one. */
     fun issueToken(player: UUID): String {
         revokeToken(player)
-        val bytes = ByteArray(TOKEN_BYTES).also(SecureRandom()::nextBytes)
-        val token = Base64.getUrlEncoder().withoutPadding().encodeToString(bytes)
-        val hash = sha256(token)
+        val token = Pairing.newToken()
+        val hash = Pairing.hash(token)
         storageTokenHashes[player] = hash
         tokenIndex[hash] = player
         markPersistentStorageDirty()
@@ -207,15 +238,25 @@ class BusyBar : Module<BusyBar?>() {
     fun isLinked(player: UUID): Boolean = storageTokenHashes.containsKey(player)
 
     /** Resolves a bearer token to its player. Safe to call from any thread. */
-    fun playerForToken(token: String): UUID? = tokenIndex[sha256(token)]
+    fun playerForToken(token: String): UUID? = tokenIndex[Pairing.hash(token)]
+
+    /** Whether a proxy serves the bridges, see [ProxyLink]. */
+    fun proxied(): Boolean = !configProxyLinkAddress.isNullOrBlank()
+
+    /** Whether [player] has a bridge connected, here or, behind a proxy, there. */
+    fun hasBridge(player: UUID): Boolean =
+        if (proxied()) proxyLink.hasBridge(player) else stream.connectedCount(player) > 0
+
+    /** Remembers [player]'s skin for `/head` and returns its id, or null without a skin. */
+    fun headOf(player: Player): String? = heads.remember(player.playerProfile.textures.skin)
 
     /**
-     * URL players should point their bridge at, see [resolvePublicUrl]. Uses plain HTTP only when TLS
+     * URL players should point their bridge at, see [Pairing.resolvePublicUrl]. Uses plain HTTP only when TLS
      * is off. Null when the address is unknown or [configPublicUrl] is invalid.
      */
     fun publicUrl(): String? {
-        val direct = tls.mode != Tls.Mode.OFF
-        return resolvePublicUrl(configPublicUrl, server.ip, configPort, if (direct) "https" else "http", direct)
+        val direct = tls.mode != BridgeTls.Mode.OFF
+        return Pairing.resolvePublicUrl(configPublicUrl, server.ip, configPort, if (direct) "https" else "http", direct)
     }
 
     /**
@@ -224,7 +265,7 @@ class BusyBar : Module<BusyBar?>() {
      * Bridges assume https, so only plain HTTP keeps its prefix, which a bridge must never
      * fall back to on its own. Null while [publicUrl] is unknown.
      */
-    fun pairingString(token: String): String? = publicUrl()?.let { pairingString(token, it, tls.pin) }
+    fun pairingString(token: String): String? = publicUrl()?.let { Pairing.pairingString(token, it, tls.pin) }
 
     /**
      * Replaces the auto TLS key and restarts the event stream, which disconnects every bridge. Bridges
@@ -233,7 +274,7 @@ class BusyBar : Module<BusyBar?>() {
      * @return false when TLS is not in auto mode, so there is no key to replace.
      */
     fun rotateTlsKey(): Boolean {
-        if (tls.mode != Tls.Mode.AUTO) return false
+        if (tls.mode != BridgeTls.Mode.AUTO) return false
         tls.deleteAutoIdentity()
         stream.restart()
         return true
@@ -291,76 +332,5 @@ class BusyBar : Module<BusyBar?>() {
                 }
             }
         }
-    }
-
-    companion object {
-        /** Random bytes per token; 24 bytes encode to 32 URL-safe characters. */
-        private const val TOKEN_BYTES = 24
-
-        /** Formats a pairing string from [token], the stream [url] and the optional key fingerprint [pin]. */
-        fun pairingString(token: String, url: String, pin: String?): String {
-            val line = if (url.startsWith("https://")) "$token@${url.removePrefix("https://")}"
-            else url.replaceFirst("://", "://$token@")
-            return if (pin == null) line else "$line#sha256=$pin"
-        }
-
-        /** A host with an explicit port: `host:1234` or `[2001:db8::1]:1234`. */
-        private val HOST_WITH_PORT = Regex("""^(\[[^]]+]|[^:\[\]/]+):\d+$""")
-
-        /**
-         * The stream URL for bridges, or null when unknown or invalid.
-         *
-         * @param configured `PublicUrl`: a full http(s) URL is used as is; a bare host, optionally with
-         *   a port or path, gets [scheme] and, without a port, [port].
-         * @param serverIp `server-ip` from server.properties, used with [port] when [configured] is empty.
-         * @param direct whether bridges connect to this plugin's port itself rather than to a reverse
-         *   proxy, so that a full URL without a port also gets [port].
-         */
-        fun resolvePublicUrl(configured: String?, serverIp: String, port: Int, scheme: String, direct: Boolean = true): String? {
-            val value = configured?.trim()?.trimEnd('/').orEmpty()
-            val url = when {
-                "://" in value -> if (direct) withPort(value, port) else value
-                value.isNotEmpty() -> {
-                    val host = value.substringBefore('/')
-                    val path = value.substring(host.length)
-                    val authority = when {
-                        HOST_WITH_PORT.matches(host) -> host
-                        ':' in host -> "[$host]:$port" // bare IPv6
-                        else -> "$host:$port"
-                    }
-                    "$scheme://$authority$path"
-                }
-                serverIp.isNotBlank() && serverIp != "0.0.0.0" ->
-                    if (':' in serverIp) "$scheme://[$serverIp]:$port" else "$scheme://$serverIp:$port"
-                else -> return null
-            }
-            return url.takeIf(::isStreamUrl)
-        }
-
-        /** [url] with [port] when it names none; unparsable URLs are returned unchanged for [isStreamUrl] to reject. */
-        private fun withPort(url: String, port: Int): String {
-            val uri = try {
-                URI(url)
-            } catch (_: URISyntaxException) {
-                return url
-            }
-            if (uri.port != -1 || uri.host == null) return url
-            return URI(uri.scheme, uri.rawUserInfo, uri.host, port, uri.rawPath, uri.rawQuery, uri.rawFragment).toString()
-        }
-
-        /** Whether [url] is an http(s) URL with a host and nothing, a pairing string adds itself. */
-        private fun isStreamUrl(url: String): Boolean {
-            val uri = try {
-                URI(url)
-            } catch (_: URISyntaxException) {
-                return false
-            }
-            return uri.scheme in listOf("http", "https") && !uri.host.isNullOrEmpty() &&
-                uri.rawUserInfo == null && uri.rawQuery == null && uri.rawFragment == null
-        }
-
-        /** Returns the lowercase hex SHA-256 of [value]. */
-        private fun sha256(value: String): String =
-            MessageDigest.getInstance("SHA-256").digest(value.toByteArray()).joinToString("") { "%02x".format(it) }
     }
 }

@@ -1,4 +1,4 @@
-package org.oddlama.vane.busybar
+package org.oddlama.vane.busybar.common
 
 import java.awt.image.BufferedImage
 import java.io.ByteArrayInputStream
@@ -40,5 +40,22 @@ class HeadsTest {
     @Test
     fun `ignores an opaque hat on legacy 64x32 skins`() {
         assertEquals(face, render(skin(32, fullHat = true)).getRGB(4, 4))
+    }
+
+    @Test
+    fun `reads the skin URL from a game profile's textures`() {
+        val url = "http://textures.minecraft.net/texture/1a2b3c4d5e6f7a8b9c0d"
+        val textures = java.util.Base64.getEncoder().encodeToString(
+            """{"profileName":"Alex","textures":{"SKIN":{"url":"$url"}}}""".toByteArray()
+        )
+        assertEquals(url, Heads.skinUrl(textures).toString())
+        assertEquals("1a2b3c4d5e6f7a8b9c0d", Heads().remember(Heads.skinUrl(textures)))
+    }
+
+    @Test
+    fun `ignores missing or malformed textures`() {
+        kotlin.test.assertNull(Heads.skinUrl(null))
+        kotlin.test.assertNull(Heads.skinUrl("not base64!"))
+        kotlin.test.assertNull(Heads.skinUrl(java.util.Base64.getEncoder().encodeToString("{}".toByteArray())))
     }
 }
