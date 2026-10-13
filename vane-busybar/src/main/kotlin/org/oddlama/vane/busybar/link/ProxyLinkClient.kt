@@ -19,7 +19,7 @@ import java.util.logging.Logger
  * Knows nothing about Bukkit; [ProxyLink] adapts it to the module.
  *
  * Outgoing frames go through a bounded queue drained by a writer thread, so [send] never blocks the
- * caller. While unlinked, frames are dropped: they describe current state, and [Handler.onLinked]
+ * caller. While unlinked, frames are dropped: they describe the current state, and [Handler.onLinked]
  * is where a fresh link catches up.
  *
  * @param address the proxy's link address, possibly unresolved.
@@ -79,7 +79,7 @@ class ProxyLinkClient(
 
     private var thread: Thread? = null
 
-    /** Last problem logged, so a proxy that stays down is reported once rather than every retry. */
+    /** The last problem logged, so a proxy that stays down is reported once rather than every retry. */
     private var lastProblem: String? = null
 
     /** Whether the link is established. */
@@ -111,8 +111,8 @@ class ProxyLinkClient(
     }
 
     /**
-     * Queues [frame] for the proxy, or drops it while unlinked. A proxy that stops reading is
-     * disconnected instead of buffering without bound. Safe to call from any thread.
+     * Queues [frame] for the proxy or drops it while unlinked. A proxy that stops reading is
+     * disconnected instead of buffering without a bound. Safe to call from any thread.
      */
     fun send(frame: JSONObject) {
         val current = session ?: return
@@ -207,7 +207,7 @@ class ProxyLinkClient(
         return welcome
     }
 
-    /** Writes queued frames until the close marker, interruption, or a write error. */
+    /** Writes queued frames until the close marker, interruption, or a writing error. */
     private fun write(current: Session, output: BufferedOutputStream) {
         try {
             while (true) {
@@ -255,7 +255,7 @@ class ProxyLinkClient(
     }
 
     companion object {
-        /** Frames buffered before the proxy counts as stuck. */
+        /** Frames buffered before the proxy count as stuck. */
         private const val QUEUE_CAPACITY = 4096
 
         private const val MIN_BACKOFF_MS = 1_000L

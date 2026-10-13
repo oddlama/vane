@@ -58,7 +58,7 @@ class EventStream(context: Context<BusyBar?>) : ModuleComponent<BusyBar?>(contex
         startServer()
     }
 
-    /** Binds the server, with TLS unless it is off. Logs and stays stopped on failure. */
+    /** Binds the server with TLS unless it is off. Logs and stays stopped on failure. */
     private fun startServer() {
         val current = server ?: return
         val address = InetSocketAddress(busybar.configBindAddress, busybar.configPort)

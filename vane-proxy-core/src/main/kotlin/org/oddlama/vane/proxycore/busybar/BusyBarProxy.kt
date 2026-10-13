@@ -26,7 +26,7 @@ import java.util.logging.Level
  *
  * Players link a bridge with `/busybar link` on the proxy. The bridge connects to the proxy's
  * [BridgeServer], so it keeps working while its owner moves between servers. The proxy reports
- * players joining and leaving the network itself; everything about worlds, regions or autostop
+ * players joining and leaving the network itself; everything about worlds, regions, or autostop
  * comes from the vane-busybar backends through [BackendLinkServer], and is delivered to the bridges
  * whose owners should see it, judged by the grants backends report.
  *
@@ -98,7 +98,7 @@ class BusyBarProxy(private val plugin: VaneProxyPlugin) : BackendLinkHandler, Br
         val server = BridgeServer(this, heads, log)
         server.setIcon(plugin.proxy.favicon?.let(::decodeDataUrl))
         // Bridges show the icon of the server their owner is on, as the server list does.
-        plugin.config.managedServers.orEmpty().forEach { (name, managed) ->
+        plugin.config.managedServers.forEach { (name, managed) ->
             val icon = managed?.favicon(ManagedServer.ConfigItemSource.ONLINE) ?: return@forEach
             server.setIcon(name ?: return@forEach, decodeDataUrl(icon))
         }
@@ -198,7 +198,7 @@ class BusyBarProxy(private val plugin: VaneProxyPlugin) : BackendLinkHandler, Br
 
     /**
      * Records that [player] is now on [server] and, once the backend has settled the player in,
-     * sends their bridges a fresh snapshot with that backend's world, region and time.
+     * sends their bridges a fresh snapshot with that backend's world, region, and time.
      */
     fun onServerSwitch(player: UUID, server: String) {
         val storage = storage ?: return
@@ -210,7 +210,7 @@ class BusyBarProxy(private val plugin: VaneProxyPlugin) : BackendLinkHandler, Br
             } catch (_: InterruptedException) {
                 return@start
             }
-            val snapshot = snapshot(player) ?: return@start
+            val snapshot = snapshot(player)
             bridges?.emit("snapshot", snapshot) { it == player }
         }
     }
@@ -302,10 +302,10 @@ class BusyBarProxy(private val plugin: VaneProxyPlugin) : BackendLinkHandler, Br
     override fun playerForToken(token: String): UUID? = tokenIndex[Pairing.hash(token)]
 
     /**
-     * Builds a bridge's snapshot: network-wide counts and focus mode from the proxy, world, region
+     * Builds a bridge's snapshot: network-wide counts and focus mode from the proxy, world, region,
      * and autostop from the backend [player] is on, or was last on, when it is linked.
      */
-    override fun snapshot(player: UUID): JSONObject? {
+    override fun snapshot(player: UUID): JSONObject {
         val json = JSONObject()
         val server = serverOf(player)
         val link = server?.let { links?.link(it) }

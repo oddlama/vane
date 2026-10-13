@@ -14,10 +14,10 @@ import org.oddlama.vane.regions.region.RoleSetting
 import java.util.*
 
 /**
- * Tells players which vane-regions region they are in, and region owners who visits theirs.
+ * Tells players which vane-regions region they are in, and region owners who visit theirs.
  *
  * vane-regions has no enter or leave events, so every online player's region is looked up once
- * per second. The lookup is indexed by chunk, so this stays cheap on busy servers.
+ * per second. Chunk indexes the lookup, so this stays cheap on busy servers.
  *
  * @param busybar owning module.
  * @param regions the vane-regions module.
@@ -26,7 +26,7 @@ class RegionsHook private constructor(private val busybar: BusyBar, private val 
     /** Repeating the poll task. */
     private var task: BukkitTask? = null
 
-    /** The region each online player was in at the last poll. */
+    /** The region each online player was in the last poll. */
     private val current = mutableMapOf<UUID, Region>()
 
     /** Whether [current] was filled once, so players already inside are not reported as entering. */

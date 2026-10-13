@@ -43,7 +43,7 @@ class Tls(private val busybar: BusyBar) {
      *
      * @return the context, or null to serve plain HTTP.
      * @throws IOException if a key or keystore file cannot be read or written.
-     * @throws GeneralSecurityException if a key, certificate or keystore is invalid.
+     * @throws GeneralSecurityException if a key, certificate, or keystore is invalid.
      */
     fun load(): SSLContext? = identity.load(configuredMode(), busybar.configTlsKeystore, busybar.configTlsKeystorePassword)
 

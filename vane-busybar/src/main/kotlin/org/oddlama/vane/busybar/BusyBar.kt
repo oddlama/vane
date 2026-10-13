@@ -141,6 +141,7 @@ class BusyBar : Module<BusyBar?>() {
     val presence = Presence(this)
 
     /** Advancements, batched per player. */
+    @Suppress("unused") // Registers itself as a listener; nothing needs to reach it.
     val advancements = Advancements(this)
 
     /** Slime chunk reports for players carrying a slime bucket. */

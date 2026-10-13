@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.logging.Level
 
 /**
- * Reports this backend to the proxy's BUSY Bar backend link, when `ProxyLinkAddress` is set. The
+ * Reports this backend to the proxy's BUSY Bar backend link when `ProxyLinkAddress` is set. The
  * proxy then serves the bridges, so this server's own event stream stays off.
  *
  * Every event the module emits is forwarded with who should receive it, and the grants recorded by

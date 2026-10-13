@@ -139,7 +139,7 @@ class ProxiedBridgeTest {
 
     private fun freePort() = ServerSocket(0).use { it.localPort }
 
-    private fun <T> LinkedBlockingQueue<T>.next(): T? = poll(5, TimeUnit.SECONDS)
+    private fun <T> LinkedBlockingQueue<T & Any>.next(): T? = poll(5, TimeUnit.SECONDS)
 
     /** Joins [player] to the network on [server]. */
     private fun join(player: UUID, server: String) {
@@ -149,6 +149,7 @@ class ProxiedBridgeTest {
     }
 
     /** Links [player] and returns the token from the pairing string. */
+    @Suppress("HttpUrlsUsage") // The proxy runs with Tls off, so pairing strings are plain HTTP.
     private fun token(player: UUID): String {
         val pairing = assertNotNull(plugin.busyBar.link(player))
         assertTrue(pairing.startsWith("http://"), pairing)
