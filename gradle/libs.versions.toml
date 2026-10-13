@@ -32,7 +32,7 @@ velocity = { group = "com.velocitypowered", name = "velocity-api", version.ref =
 packetEvents = { group = "com.github.retrooper", name = "packetevents-spigot", version = "2.14.0" }
 
 # spotbugs / findbugs annotations (avoids missing annotation warnings)
-spotbugsAnnotations = { group = "com.github.spotbugs", name = "spotbugs-annotations", version = "4.10.4" }
+spotbugsAnnotations = { group = "com.github.spotbugs", name = "spotbugs-annotations", version = "4.10.5" }
 
 # maps
 dynmap = { group = "us.dynmap", name = "DynmapCoreAPI", version = "3.8" }
