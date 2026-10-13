@@ -1,7 +1,7 @@
 [project]
 name = "barmc"
 # Matches vane's version in build.gradle.kts; the release workflow sets it from the tag.
-version = "1.23.0b2"
+version = "1.23.0"
 description = "Bridge between the vane-busybar Minecraft plugin and a BUSY Bar"
 readme = "README.md"
 requires-python = ">=3.10"

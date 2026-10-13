@@ -97,7 +97,7 @@ subprojects {
     pluginManager.apply("org.jetbrains.kotlin.jvm")
 
     group = "org.oddlama.vane"
-    version = "1.23.0-beta.3"
+    version = "1.23.0"
 
     repositories {
         mavenLocal()
