@@ -289,8 +289,7 @@ class Portals : Module<Portals?>() {
                     else -> throw RuntimeException("Invalid active state, must be either 'Active' or 'Inactive'")
                 }
                 v2!!.forEach { (portalBlockType: String?, material: Material?) ->
-                    val type = PortalBlock.Type.entries.firstOrNull { LegacyKeys.matches(portalBlockType!!, it.name) }
-                        ?: throw RuntimeException("Invalid portal block type '$portalBlockType'")
+                    val type = PortalBlock.Type.fromSerialized(portalBlockType!!)
                     style.setMaterial(active, type, material!!)
                 }
             }
@@ -1182,7 +1181,7 @@ class Portals : Module<Portals?>() {
             PersistentSerializer.serializers[PortalBlock.Type::class.java] =
                 PersistentSerializer.Function { x: Any? -> (x as PortalBlock.Type).name }
             PersistentSerializer.deserializers[PortalBlock.Type::class.java] =
-                PersistentSerializer.Function { x: Any? -> PortalBlock.Type.valueOf((x as String?)!!) }
+                PersistentSerializer.Function { x: Any? -> PortalBlock.Type.fromSerialized((x as String?)!!) }
             PersistentSerializer.serializers[PortalBlockLookup::class.java] =
                 PersistentSerializer.Function { obj: Any? -> PortalBlockLookup.serialize(obj!!) }
             PersistentSerializer.deserializers[PortalBlockLookup::class.java] =

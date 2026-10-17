@@ -4,6 +4,7 @@ import org.bukkit.block.Block
 import org.json.JSONObject
 import org.oddlama.vane.core.persistent.PersistentSerializer
 import org.oddlama.vane.util.LazyBlock
+import org.oddlama.vane.util.LegacyKeys
 import java.io.IOException
 import java.util.*
 
@@ -46,6 +47,20 @@ class PortalBlock(private val block: LazyBlock, private val type: Type?) {
         BOUNDARY4,
         BOUNDARY5,
         PORTAL,
+        ;
+
+        companion object {
+            /**
+             * Returns the type serialized as [name]. Releases before v1.22.0 wrote the boundary
+             * types as `BOUNDARY_1` .. `BOUNDARY_5`, which are still found in portal records and
+             * style maps.
+             */
+            @JvmStatic
+            fun fromSerialized(name: String): Type =
+                entries.firstOrNull { it.name == name }
+                    ?: entries.firstOrNull { LegacyKeys.matches(name, it.name) }
+                    ?: throw IllegalArgumentException("Invalid portal block type '$name'")
+        }
     }
 
     /** JSON serializer helpers for [PortalBlock]. */
