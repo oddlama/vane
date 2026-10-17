@@ -35,12 +35,13 @@ class DurabilityManager(context: Context<Core?>?) : Listener<Core?>(context) {
      */
     companion object {
         /**
-         * Persistent-data key for maximum durability.
+         * Legacy persistent-data key for maximum durability. Only read to migrate old items;
+         * durability lives in the native damage components.
          */
         val ITEM_DURABILITY_MAX: NamespacedKey = namespacedKey("vane", "durability.max")
 
         /**
-         * Persistent-data key for current durability damage.
+         * Legacy persistent-data key for current durability damage. Only read to migrate old items.
          */
         val ITEM_DURABILITY_DAMAGE: NamespacedKey = namespacedKey("vane", "durability.damage")
 
@@ -72,11 +73,13 @@ class DurabilityManager(context: Context<Core?>?) : Listener<Core?>(context) {
         }
 
         /**
-         * Initializes or recalculates max durability state on an item.
+         * Initializes or recalculates max durability state on an item. Damage stored in the
+         * legacy persistent-data fields is moved to the native components and the fields removed.
          */
         fun initializeOrUpdateMax(customItem: CustomItem, itemStack: ItemStack): Boolean {
             val pdc = itemStack.itemMeta?.persistentDataContainer ?: return false
-            val oldDamage = pdc.getOrDefault(ITEM_DURABILITY_DAMAGE, PersistentDataType.INTEGER, -1)
+            val legacyDamage = pdc.get(ITEM_DURABILITY_DAMAGE, PersistentDataType.INTEGER)
+            val legacyMax = pdc.get(ITEM_DURABILITY_MAX, PersistentDataType.INTEGER)
 
             itemStack.editMeta { meta ->
                 meta.persistentDataContainer.remove(ITEM_DURABILITY_DAMAGE)
@@ -89,12 +92,15 @@ class DurabilityManager(context: Context<Core?>?) : Listener<Core?>(context) {
             }
 
             val actualDamage = when {
-                oldDamage != -1 -> oldDamage
+                legacyDamage != null ->
+                    scaleDamage(legacyDamage, legacyMax ?: customItem.durability(), customItem.durability())
+
                 itemStack.itemMeta is Damageable -> {
+                    // Keep the damage proportional to whatever max the item currently has.
                     val damageMeta = itemStack.itemMeta as Damageable
-                    val visualMax = itemStack.type.maxDurability.toInt()
-                    val pct = if (visualMax > 0) damageMeta.damage.toDouble() / visualMax else 0.0
-                    (customItem.durability() * pct).toInt()
+                    val currentMax = if (damageMeta.hasMaxDamage()) damageMeta.maxDamage
+                    else itemStack.type.maxDurability.toInt()
+                    scaleDamage(damageMeta.damage, currentMax, customItem.durability())
                 }
 
                 else -> 0
@@ -136,20 +142,22 @@ class DurabilityManager(context: Context<Core?>?) : Listener<Core?>(context) {
         /**
          * Scales damage from one max-durability domain to another.
          */
-        fun scaleDamage(oldDamage: Int, oldMaxDamage: Int, newMaxDamage: Int): Int =
-            if (oldMaxDamage == newMaxDamage) oldDamage
-            else (newMaxDamage * (oldDamage.toFloat() / oldMaxDamage.toFloat())).toInt()
+        fun scaleDamage(oldDamage: Int, oldMaxDamage: Int, newMaxDamage: Int): Int = when {
+            oldMaxDamage == newMaxDamage -> oldDamage
+            oldMaxDamage <= 0 -> 0
+            else -> (newMaxDamage * (oldDamage.toFloat() / oldMaxDamage.toFloat())).toInt()
+        }
 
         /**
-         * Writes max damage and current damage to item meta.
+         * Writes max damage and current damage to the item's native damage components.
          */
         fun setDamageAndMaxDamage(customItem: CustomItem, item: ItemStack, damage: Int): Boolean {
             val newMaxDamage =
                 if (customItem.durability() != 0) customItem.durability() else item.type.maxDurability.toInt()
             return item.editMeta(Damageable::class.java) { meta ->
-                // Store durability metadata in persistent data for custom tracking
-                meta.persistentDataContainer.set(ITEM_DURABILITY_MAX, PersistentDataType.INTEGER, newMaxDamage)
-                meta.persistentDataContainer.set(ITEM_DURABILITY_DAMAGE, PersistentDataType.INTEGER, damage)
+                // A max_damage component must be positive; items without durability get none.
+                meta.setMaxDamage(newMaxDamage.takeIf { it > 0 })
+                meta.damage = damage
             }
         }
     }
