@@ -63,7 +63,9 @@ class SlimeBucket(context: Context<Trifles?>) : org.oddlama.vane.core.item.Custo
                 CUSTOM_MODEL_DATA_JUMPY
             else
                 CUSTOM_MODEL_DATA_QUIET
-            // The getter returns a copy, so the edited component has to be set back.
+            // The getter returns a copy, so the edited component has to be set back. The setter takes a
+            // nullable component while the getter is non-null, so Kotlin offers no writable property here.
+            @Suppress("UsePropertyAccessSyntax")
             meta.setCustomModelDataComponent(meta.customModelDataComponent.apply { floats = listOf(correctModelData) })
 
             val correctItemModel = if (player.chunk.isSlimeChunk)
@@ -148,7 +150,9 @@ class SlimeBucket(context: Context<Trifles?>) : org.oddlama.vane.core.item.Custo
                 if (customItem is SlimeBucket && customItem.enabled()) {
                     // Refresh custom model data on matching inventory items.
                     item?.editMeta { meta: ItemMeta ->
-                        // The getter returns a copy, so the edited component has to be set back.
+                        // The getter returns a copy, so the edited component has to be set back. The setter takes a
+                        // nullable component while the getter is non-null, so Kotlin offers no writable property here.
+                        @Suppress("UsePropertyAccessSyntax")
                         meta.setCustomModelDataComponent(meta.customModelDataComponent.apply { floats = listOf(correctModelData) })
 
                         val correctItemModel = if (inSlimeChunk)

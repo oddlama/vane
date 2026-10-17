@@ -35,7 +35,9 @@ object CustomItemHelper {
             val data = meta.persistentDataContainer
             data.set(CUSTOM_ITEM_IDENTIFIER, PersistentDataType.STRING, customItem.key().toString())
             data.set(CUSTOM_ITEM_VERSION, PersistentDataType.INTEGER, customItem.version())
-            // The getter returns a copy, so the edited component has to be set back.
+            // The getter returns a copy, so the edited component has to be set back. The setter takes a
+            // nullable component while the getter is non-null, so Kotlin offers no writable property here.
+            @Suppress("UsePropertyAccessSyntax")
             meta.setCustomModelDataComponent(
                 meta.customModelDataComponent.apply { floats = listOf(customItem.customModelData().toFloat()) }
             )
