@@ -3,6 +3,7 @@ package org.oddlama.vane.core.item
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.TranslatableComponent
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
+import org.bukkit.NamespacedKey
 import org.bukkit.block.ShulkerBox
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Item
@@ -39,17 +40,8 @@ class ExistingItemConverter(context: Context<Core?>) : Listener<Core?>(context.n
     private fun fromOldItem(itemStack: ItemStack): CustomItem? {
         val modelDataInt = itemStack.itemMeta.customModelDataComponent.floats.firstOrNull()?.toInt()
             ?: return null
-
-        // Newer mappings (1.21.4+) changed how custom-model-data float values map
-        // to integer representations. Instead of maintaining a hardcoded list of
-        // legacy integers, resolve the target custom item dynamically by
-        // comparing the legacy float->int representation of registered items.
-        val registry = module!!.itemRegistry() ?: return null
-        for (ci in registry.all()) {
-            if (ci.customModelData().toFloat().toInt() == modelDataInt) return ci
-        }
-
-        return null
+        val key = legacyItemKey(modelDataInt) ?: return null
+        return module!!.itemRegistry()?.get(key)
     }
 
     /**
@@ -230,4 +222,41 @@ class ExistingItemConverter(context: Context<Core?>) : Listener<Core?>(context.n
      */
     @EventHandler(priority = EventPriority.MONITOR)
     fun onEntitiesLoad(event: EntitiesLoadEvent) = event.entities.forEach(::processEntity)
+
+    companion object {
+        /**
+         * Custom model data of items from before vane had persistent item identifiers, and the
+         * items they became. These ids were never reused, so they cannot be derived from the
+         * model data that items are registered with today.
+         */
+        private val LEGACY_MODEL_DATA: Map<Int, String> = buildMap {
+            put(7758190, "vane_trifles:wooden_sickle")
+            put(7758191, "vane_trifles:stone_sickle")
+            put(7758192, "vane_trifles:iron_sickle")
+            put(7758193, "vane_trifles:golden_sickle")
+            put(7758194, "vane_trifles:diamond_sickle")
+            put(7758195, "vane_trifles:netherite_sickle")
+            for (id in 7758254..7758259) put(id, "vane_trifles:file")
+            put(7758318, "vane_trifles:empty_xp_bottle")
+            put(7758382, "vane_trifles:small_xp_bottle")
+            put(7758383, "vane_trifles:medium_xp_bottle")
+            put(7758384, "vane_trifles:large_xp_bottle")
+            put(7758446, "vane_trifles:home_scroll")
+            put(7758510, "vane_trifles:unstable_scroll")
+            put(7758574, "vane_trifles:reinforced_elytra")
+            put(7823726, "vane_enchantments:ancient_tome")
+            put(7823727, "vane_enchantments:enchanted_ancient_tome")
+            put(7823790, "vane_enchantments:ancient_tome_of_knowledge")
+            put(7823791, "vane_enchantments:enchanted_ancient_tome_of_knowledge")
+            put(7823854, "vane_enchantments:ancient_tome_of_the_gods")
+            put(7823855, "vane_enchantments:enchanted_ancient_tome_of_the_gods")
+        }
+
+        /**
+         * Returns the key of the item that legacy custom model data [modelData] became, or `null`
+         * if it is not a legacy id.
+         */
+        fun legacyItemKey(modelData: Int): NamespacedKey? =
+            LEGACY_MODEL_DATA[modelData]?.let(NamespacedKey::fromString)
+    }
 }
