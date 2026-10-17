@@ -233,28 +233,19 @@ object PersistentSerializer {
 
         val typeArgs = type.actualTypeArguments
         return when (type.rawType) {
+            // Null members are written as JSONObject.NULL, which fromJson reads back as null.
             MutableMap::class.java -> JSONObject().also { json ->
                 for ((k, v) in value as Map<*, *>) {
-                    json.put(toJson(typeArgs[0] as Class<*>?, k) as String?, toJson(typeArgs[1], v!!))
+                    json.put(toJson(typeArgs[0] as Class<*>?, k) as String?, toJson(typeArgs[1], v))
                 }
             }
 
             MutableSet::class.java -> JSONArray().also { json ->
-                for (t in value as Set<*>) json.put(
-                    toJson(
-                        typeArgs[0],
-                        t!!
-                    )
-                )
+                for (t in value as Set<*>) json.put(toJson(typeArgs[0], t))
             }
 
             MutableList::class.java -> JSONArray().also { json ->
-                for (t in value as List<*>) json.put(
-                    toJson(
-                        typeArgs[0],
-                        t!!
-                    )
-                )
+                for (t in value as List<*>) json.put(toJson(typeArgs[0], t))
             }
 
             else -> throw IOException("Cannot serialize $type. This is a bug.")
