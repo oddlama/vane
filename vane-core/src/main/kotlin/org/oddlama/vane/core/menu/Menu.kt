@@ -155,11 +155,7 @@ open class Menu {
      * Called by the manager when this menu is closed.
      */
     fun closed(player: Player, reason: InventoryCloseEvent.Reason?) {
-        if (reason == InventoryCloseEvent.Reason.PLAYER) {
-            onNaturalClose?.apply(player)
-        } else {
-            onClose?.apply(player, reason)
-        }
+        dispatchClose(player, reason, onNaturalClose, onClose)
         inventory!!.clear()
         manager.remove(player, this)
     }
@@ -234,5 +230,22 @@ open class Menu {
                 /** Returns whether the event is a left click. */
         fun isLeftClick(event: InventoryClickEvent?): Boolean =
             event?.click == ClickType.LEFT
+
+        /**
+         * Runs the close callback for [reason]. A player closing the menu runs [onNaturalClose]
+         * if there is one; every other close, and a player close without it, runs [onClose].
+         */
+        internal fun dispatchClose(
+            player: Player?,
+            reason: InventoryCloseEvent.Reason?,
+            onNaturalClose: Consumer1<Player?>?,
+            onClose: Consumer2<Player?, InventoryCloseEvent.Reason?>?,
+        ) {
+            if (reason == InventoryCloseEvent.Reason.PLAYER && onNaturalClose != null) {
+                onNaturalClose.apply(player)
+            } else {
+                onClose?.apply(player, reason)
+            }
+        }
     }
 }
