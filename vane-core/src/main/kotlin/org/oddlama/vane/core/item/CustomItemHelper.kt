@@ -35,7 +35,10 @@ object CustomItemHelper {
             val data = meta.persistentDataContainer
             data.set(CUSTOM_ITEM_IDENTIFIER, PersistentDataType.STRING, customItem.key().toString())
             data.set(CUSTOM_ITEM_VERSION, PersistentDataType.INTEGER, customItem.version())
-            meta.customModelDataComponent.floats = listOf(customItem.customModelData().toFloat())
+            // The getter returns a copy, so the edited component has to be set back.
+            meta.setCustomModelDataComponent(
+                meta.customModelDataComponent.apply { floats = listOf(customItem.customModelData().toFloat()) }
+            )
             meta.itemModel = customItem.itemModel()
             // Refresh the item name so stacks pick up changed translation keys.
             meta.itemName(customItem.displayName())

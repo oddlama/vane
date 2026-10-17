@@ -63,7 +63,8 @@ class SlimeBucket(context: Context<Trifles?>) : org.oddlama.vane.core.item.Custo
                 CUSTOM_MODEL_DATA_JUMPY
             else
                 CUSTOM_MODEL_DATA_QUIET
-            meta.customModelDataComponent.setFloats(listOf(correctModelData))
+            // The getter returns a copy, so the edited component has to be set back.
+            meta.setCustomModelDataComponent(meta.customModelDataComponent.apply { floats = listOf(correctModelData) })
 
             val correctItemModel = if (player.chunk.isSlimeChunk)
                 org.bukkit.NamespacedKey("vane_trifles", "slime_bucket_excited")
@@ -147,7 +148,8 @@ class SlimeBucket(context: Context<Trifles?>) : org.oddlama.vane.core.item.Custo
                 if (customItem is SlimeBucket && customItem.enabled()) {
                     // Refresh custom model data on matching inventory items.
                     item?.editMeta { meta: ItemMeta ->
-                        meta.customModelDataComponent.setFloats(listOf(correctModelData))
+                        // The getter returns a copy, so the edited component has to be set back.
+                        meta.setCustomModelDataComponent(meta.customModelDataComponent.apply { floats = listOf(correctModelData) })
 
                         val correctItemModel = if (inSlimeChunk)
                             org.bukkit.NamespacedKey("vane_trifles", "slime_bucket_excited")
