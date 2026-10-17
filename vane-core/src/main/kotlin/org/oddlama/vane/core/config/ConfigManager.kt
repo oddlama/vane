@@ -305,7 +305,14 @@ class ConfigManager(var module: Module<*>) {
         if (!verifyVersion(file, version)) return false
 
         val tmpFile = File(module.dataFolder, "config.yml.tmp")
-        if (!generateFile(tmpFile, yaml)) return false
+        try {
+            // Regenerating loads every field, so invalid entries are reported here, before the
+            // file on disk is replaced.
+            if (!generateFile(tmpFile, yaml)) return false
+        } catch (e: YamlLoadException) {
+            module.log.log(Level.SEVERE, "error while loading '${file.name}'", e)
+            return false
+        }
 
         try {
             Files.move(
