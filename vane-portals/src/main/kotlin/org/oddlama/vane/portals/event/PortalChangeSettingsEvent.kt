@@ -17,6 +17,10 @@ class PortalChangeSettingsEvent(
     private val checkOnly: Boolean
 ) :
     PortalEvent() {
+    // Java accessors from before v1.22.0. The public fields stay for plugins built against later releases.
+    fun getPlayer(): Player = player
+    fun getPortal(): Portal = portal
+
     /** Controls whether non-owners are automatically denied. */
     private var cancelIfNotOwner = true
 

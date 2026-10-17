@@ -17,6 +17,11 @@ class PortalOpenConsoleEvent(
     @JvmField val console: Block?,
     @JvmField val portal: Portal?
 ) : PortalEvent() {
+    // Java accessors from before v1.22.0. The public fields stay for plugins built against later releases.
+    fun getPlayer(): Player? = player
+    fun getConsole(): Block? = console
+    fun getPortal(): Portal? = portal
+
     /** Returns Bukkit handlers for this event. */
     override fun getHandlers() = handlerList
 

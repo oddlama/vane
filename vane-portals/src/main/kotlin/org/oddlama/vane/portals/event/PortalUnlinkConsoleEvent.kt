@@ -19,6 +19,11 @@ class PortalUnlinkConsoleEvent(
     @JvmField val portal: Portal,
     private val checkOnly: Boolean
 ) : PortalEvent() {
+    // Java accessors from before v1.22.0. The public fields stay for plugins built against later releases.
+    fun getPlayer(): Player = player
+    fun getConsole(): Block? = console
+    fun getPortal(): Portal = portal
+
     /** Controls whether non-owners are automatically denied. */
     private var cancelIfNotOwner = true
 

@@ -18,6 +18,11 @@ class PortalSelectTargetEvent(
     @JvmField val target: Portal?,
     private val checkOnly: Boolean
 ) : PortalEvent() {
+    // Java accessors from before v1.22.0. The public fields stay for plugins built against later releases.
+    fun getPlayer(): Player? = player
+    fun getPortal(): Portal? = portal
+    fun getTarget(): Portal? = target
+
     /** Returns whether this event is in validation-only mode. */
     fun checkOnly() = checkOnly
 

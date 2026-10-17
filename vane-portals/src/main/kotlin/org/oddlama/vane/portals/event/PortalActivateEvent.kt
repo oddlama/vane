@@ -13,6 +13,10 @@ import org.oddlama.vane.portals.portal.Portal
  */
 class PortalActivateEvent(@JvmField val player: Player?, @JvmField val portal: Portal?, val target: Portal?) :
     PortalEvent() {
+    // Java accessors from before v1.22.0. The public fields stay for plugins built against later releases.
+    fun getPlayer(): Player? = player
+    fun getPortal(): Portal? = portal
+
     /** Returns Bukkit handlers for this event. */
     override fun getHandlers() = handlerList
 

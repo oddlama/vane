@@ -14,6 +14,11 @@ import org.bukkit.event.HandlerList
  */
 class EntityMoveEvent(@JvmField val entity: Entity?, @JvmField val from: Location?, @JvmField val to: Location?) :
     Event() {
+    // Java accessors from before v1.22.0. The public fields stay for plugins built against later releases.
+    fun getEntity(): Entity? = entity
+    fun getFrom(): Location? = from
+    fun getTo(): Location? = to
+
     /** Returns Bukkit handlers for this event. */
     override fun getHandlers() = handlerList
 
