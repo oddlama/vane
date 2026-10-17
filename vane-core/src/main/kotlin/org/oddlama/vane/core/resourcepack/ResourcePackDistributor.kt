@@ -20,8 +20,6 @@ import org.oddlama.vane.core.module.ModuleGroup
 import org.oddlama.vane.util.Nms.serverHandle
 import java.io.File
 import java.io.IOException
-import java.net.URI
-import java.net.URISyntaxException
 import java.security.MessageDigest
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
@@ -158,6 +156,14 @@ class ResourcePackDistributor(context: Context<Core?>) :
             packUrl = ""
         }
 
+        // Clients can only download from an absolute http(s) URL; refuse anything else up front.
+        val url = requireNotNull(packUrl)
+        if (url.isNotEmpty() && ResourcePackUrl.parse(url) == null) {
+            mod.log.warning("Invalid resource pack URL '$url', must be an absolute http or https URL")
+            mod.log.warning("Disabling resource pack serving and message delaying")
+            packUrl = ""
+        }
+
         // Enable listeners only after the active distribution mode has been resolved.
         super.onEnable()
 
@@ -202,13 +208,16 @@ class ResourcePackDistributor(context: Context<Core?>) :
         val latch = CountDownLatch(1)
         latches.put(profileUuid, latch)?.countDown()
 
-        sendResourcePackDuringConfiguration(event.connection)
-
-        try {
-            latch.await()
-        } catch (_: InterruptedException) {
-            Thread.currentThread().interrupt()
-            module?.log?.warning("Resource pack wait interrupted for player $profileUuid")
+        // Only wait for an answer if a request was actually sent.
+        if (sendResourcePackDuringConfiguration(event.connection)) {
+            try {
+                latch.await()
+            } catch (_: InterruptedException) {
+                Thread.currentThread().interrupt()
+                module?.log?.warning("Resource pack wait interrupted for player $profileUuid")
+            }
+        } else {
+            latches.remove(profileUuid, latch)
         }
 
         event.connection.completeReconfiguration()
@@ -235,13 +244,25 @@ class ResourcePackDistributor(context: Context<Core?>) :
     }
 
     /**
+     * Returns the pack info for [url], or `null` (with a warning) if no pack can be sent from it.
+     */
+    private fun packInfo(url: String?): ResourcePackInfo? {
+        if (url.isNullOrEmpty()) return null
+        val uri = ResourcePackUrl.parse(url) ?: run {
+            module?.log?.warning("The provided resource pack URL is incorrect: $url")
+            return null
+        }
+        return ResourcePackInfo.resourcePackInfo(packUuid, uri, requireNotNull(packSha1))
+    }
+
+    /**
      * Sends the resource pack request on the configuration connection.
      *
      * @param connection the player configuration connection.
+     * @return whether a request was sent.
      */
-    fun sendResourcePackDuringConfiguration(connection: PlayerConfigurationConnection) {
-        val info =
-            ResourcePackInfo.resourcePackInfo(packUuid, URI.create(requireNotNull(packUrl)), requireNotNull(packSha1))
+    fun sendResourcePackDuringConfiguration(connection: PlayerConfigurationConnection): Boolean {
+        val info = packInfo(packUrl) ?: return false
         val promptLang = requireNotNull(if (configForce) langPackRequired else langPackSuggested)
         val prompt: Component? = if (promptLang.str().isEmpty()) null else promptLang.strComponent()
         val request = ResourcePackRequest.resourcePackRequest()
@@ -256,6 +277,7 @@ class ResourcePackDistributor(context: Context<Core?>) :
             .build()
 
         connection.audience.sendResourcePacks(request)
+        return true
     }
 
     /**
@@ -269,13 +291,8 @@ class ResourcePackDistributor(context: Context<Core?>) :
             url = "$packUrl?$counter"
             audience.sendMessage(Component.text("$url $packSha1"))
         }
-        try {
-            val info =
-                ResourcePackInfo.resourcePackInfo(packUuid, URI.create(requireNotNull(url)), requireNotNull(packSha1))
-            audience.sendResourcePacks(ResourcePackRequest.resourcePackRequest().packs(info).asResourcePackRequest())
-        } catch (_: URISyntaxException) {
-            module?.log?.warning("The provided resource pack URL is incorrect: $url")
-        }
+        val info = packInfo(url) ?: return
+        audience.sendResourcePacks(ResourcePackRequest.resourcePackRequest().packs(info).asResourcePackRequest())
     }
 
     /**
