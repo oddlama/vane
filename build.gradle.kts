@@ -145,11 +145,16 @@ subprojects {
         // `compileOnly` is constrained next to `implementation` because it does not extend it, and
         // the Paper artifact arrives through it in every module (plain `paper-api` in
         // vane-annotations, the paperweight dev bundle everywhere else).
+        //
+        // paper-api itself depends on log4j-api 2.26.0 (CVE-2026-49844, fixed in 2.26.1). It is
+        // compile-only as well, as the server provides its own log4j at runtime.
         constraints {
             implementation(rootProject.libs.commonsLang3)
             implementation(rootProject.libs.plexusUtils)
+            implementation(rootProject.libs.log4jApi)
             compileOnly(rootProject.libs.commonsLang3)
             compileOnly(rootProject.libs.plexusUtils)
+            compileOnly(rootProject.libs.log4jApi)
         }
     }
 

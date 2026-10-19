@@ -14,6 +14,8 @@ slf4j = { group = "org.slf4j", name = "slf4j-api", version = "2.0.20" }
 # maven-resolver-provider chain; see the constraints in the root build script.
 commonsLang3 = { group = "org.apache.commons", name = "commons-lang3", version = "3.21.0" }
 plexusUtils = { group = "org.codehaus.plexus", name = "plexus-utils", version = "4.1.0" }
+# Pulled in by paper-api directly; see the same constraints block.
+log4jApi = { group = "org.apache.logging.log4j", name = "log4j-api", version = "2.26.1" }
 
 nightConfig = { group = "com.electronwill.night-config", name = "toml", version = "3.9.0" }
 
