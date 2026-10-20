@@ -225,12 +225,12 @@ class Core : Module<Core?>() {
         }
 
         try {
-            val json = readJsonFromUrl("https://api.github.com/repos/0xSoul24/vane/releases/latest")
+            val json = readJsonFromUrl("https://api.github.com/repos/oddlama/vane/releases/latest")
             latestVersion = json.getString("tag_name")
             if (isUpdateAvailable()) {
                 log.warning("A newer version of vane is available online! (current=$currentVersion, new=$latestVersion)")
                 log.warning("Please update as soon as possible to get the latest features and fixes.")
-                log.warning("Get the latest release here: https://github.com/0xSoul24/vane/releases/latest")
+                log.warning("Get the latest release here: https://github.com/oddlama/vane/releases/latest")
             }
         } catch (e: Exception) {
             when (e) {
@@ -268,7 +268,7 @@ class Core : Module<Core?>() {
             player.sendMessage(Component.text("Please update soon to get the latest features.", NamedTextColor.GREEN))
             player.sendMessage(
                 Component.text("Click here to go to the download page", NamedTextColor.AQUA)
-                    .clickEvent(ClickEvent.openUrl("https://github.com/0xSoul24/vane/releases/latest"))
+                    .clickEvent(ClickEvent.openUrl("https://github.com/oddlama/vane/releases/latest"))
             )
         }
     }

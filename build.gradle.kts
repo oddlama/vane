@@ -170,7 +170,7 @@ subprojects {
 
             sourceLink {
                 localDirectory.set(file("src/main/kotlin"))
-                remoteUrl("https://github.com/0xSoul24/vane/blob/Kotlin/${project.name}/src/main/kotlin")
+                remoteUrl("https://github.com/oddlama/vane/blob/Kotlin/${project.name}/src/main/kotlin")
                 remoteLineSuffix.set("#L")
             }
         }
