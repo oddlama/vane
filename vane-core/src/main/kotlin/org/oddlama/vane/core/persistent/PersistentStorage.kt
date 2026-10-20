@@ -40,6 +40,8 @@ internal class PersistentStorage(
     /** Whether persistent data has been loaded successfully. */
     var isLoaded: Boolean = false
 
+    private var loadAttempted = false
+
     /** Returns whether a field has a persistent annotation. */
     private fun hasPersistentAnnotation(field: Field): Boolean =
         field.annotations.any {
@@ -83,10 +85,12 @@ internal class PersistentStorage(
 
     /** Loads persistent data from disk and applies pending migrations. */
     fun load(file: File): Boolean {
-        val wasLoaded = isLoaded
-        // A failed reload must also revoke permission to overwrite the file.
+        val firstLoad = !loadAttempted
+        loadAttempted = true
+        // A failed reload must also revoke permission to overwrite the file. It must not make
+        // a later missing-file retry look like initial creation of a new store.
         isLoaded = false
-        if (!file.exists() && wasLoaded) {
+        if (!file.exists() && !firstLoad) {
             log.severe("Cannot reload persistent storage from nonexistent file '${file.name}'")
             return false
         }

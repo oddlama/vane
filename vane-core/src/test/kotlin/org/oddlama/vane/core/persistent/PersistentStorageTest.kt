@@ -95,9 +95,43 @@ class PersistentStorageTest {
         val store = storage()
         assertTrue(store.load(file))
         assertTrue(file.delete())
+        repeat(3) {
+            assertFalse(store.load(file))
+            store.save(file)
+            assertFalse(file.exists())
+        }
+    }
+
+    @Test
+    fun `rejected initial storage cannot become fresh defaults on a missing-file retry`() {
+        val file = temporary.newFile()
+        file.writeText("""{"Version":"99","Value":"future"}""")
+        val store = storage()
         assertFalse(store.load(file))
-        store.save(file)
-        assertFalse(file.exists())
+        assertTrue(file.delete())
+        repeat(3) {
+            assertFalse(store.load(file))
+            assertFalse(store.trySave(file))
+            assertFalse(file.exists())
+        }
+        file.writeText("""{"Version":"1","Value":"recovered"}""")
+        assertTrue(store.load(file))
+        assertTrue(store.trySave(file))
+        assertEquals("recovered", fields.storageValue)
+    }
+
+    @Test
+    fun `malformed JSON and invalid field values block subsequent saves`() {
+        for (invalid in listOf("{", """{"Version":"1","Value":{}}""")) {
+            val file = temporary.newFile()
+            file.writeText("""{"Version":"1","Value":"before"}""")
+            val store = storage()
+            assertTrue(store.load(file))
+            file.writeText(invalid)
+            assertFalse(store.load(file))
+            assertFalse(store.trySave(file))
+            assertEquals(invalid, file.readText())
+        }
     }
 
     @Test
