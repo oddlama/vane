@@ -127,7 +127,14 @@ class ResourcePackDistributor(context: Context<Core?>) :
                 mod.log.info("Serving custom resource pack")
                 packUrl = customResourcePackConfig.configUrl
                 packSha1 = customResourcePackConfig.configSha1
-                packUuid = UUID.fromString(customResourcePackConfig.configUuid)
+                // The UUID defaults to empty, so a missing or malformed one must not fail enabling.
+                val configUuid = customResourcePackConfig.configUuid
+                packUuid = ResourcePackUuid.parse(configUuid)
+                    ?: ResourcePackUuid.fromUrl(customResourcePackConfig.configUrl).also {
+                        if (configUuid.isNotBlank()) {
+                            mod.log.warning("Invalid resource pack UUID '$configUuid', using $it derived from the URL")
+                        }
+                    }
             }
 
             else -> {

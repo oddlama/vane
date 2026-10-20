@@ -36,7 +36,7 @@ class CustomResourcePackConfig(context: Context<Core?>) : ModuleComponent<Core?>
     /**
      * UUID of the custom resource pack.
      */
-    @ConfigString(def = "", desc = "Resource pack UUID.")
+    @ConfigString(def = "", desc = "Resource pack UUID. Leave empty to derive one from the URL.")
     lateinit var configUuid: String
 
     /**
