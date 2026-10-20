@@ -1,6 +1,6 @@
 [versions]
 paper = "26.3.build.+"
-velocity = "4.2.0"
+velocity = "4.3.0"
 bstats = "3.2.1"
 dokka = "2.2.0"
 geyser = "2.11.3-SNAPSHOT"
