@@ -1089,10 +1089,16 @@ class Portals : Module<Portals?>() {
             }
         }
 
+        // A portal whose PDC write failed exists only in memory; keep it so the next save retries it.
+        val unsaved = portals.values.filter {
+            it.spawnWorld() == world.uid && it.invalidated && it.id() !in pdcPortals && it.id() !in legacy
+        }
+
         // Rebuild this world's indices on reload, rather than retaining stale entries.
         portals.entries.removeIf { it.value.spawnWorld() == world.uid }
         portalBlocksInChunkInWorld.remove(world.uid)
         decoded.values.forEach(::indexPortal)
+        unsaved.forEach(::indexPortal)
 
         // Only records actually read from this world's PDC supersede their legacy copies.
         val removeFromLegacyStorage = legacy.keys.filter { it in pdcPortals }

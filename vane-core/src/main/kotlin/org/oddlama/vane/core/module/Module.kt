@@ -238,9 +238,13 @@ abstract class Module<T : Module<T?>?> : JavaPlugin(), Context<T?>, Listener {
 
     /** Bukkit plugin disable entrypoint. */
     override fun onDisable() {
-        disable()
-        savePersistentStorage()
-        core!!.unregisterModule(this)
+        try {
+            disable()
+        } finally {
+            // A failing component or world write must not also discard pending module storage.
+            savePersistentStorage()
+            core!!.unregisterModule(this)
+        }
     }
 
     /** Enables module internals and component tree. */

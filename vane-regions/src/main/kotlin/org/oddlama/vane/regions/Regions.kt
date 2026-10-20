@@ -819,9 +819,15 @@ class Regions : Module<Regions?>() {
         }
 
         // Region chunk lookups contain lists: re-indexing without clearing duplicates protection.
+        // A region whose PDC write failed exists only in memory; keep it so the next save retries it.
+        val unsaved = regions.values.filterNotNull().filter {
+            it.extent()?.world() == world.uid && it.invalidated && it.id() !in pdcRegions && it.id() !in legacy
+        }
+
         regions.entries.removeIf { it.value?.extent()?.world() == world.uid }
         regionsInChunkInWorld.remove(world.uid)
         decoded.values.forEach(::indexRegion)
+        unsaved.forEach(::indexRegion)
 
         val removeFromLegacyStorage = legacy.keys.filter { it in pdcRegions }
         var converted = false

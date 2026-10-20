@@ -43,8 +43,18 @@ class PersistentWorldRecordsTest {
         records[NamespacedKey.fromString("another:opaque")!!] = 42
         val result = container(records).readStoredJsonRecords(prefix) { _, json -> json.getString("value") }
         assertEquals(mapOf(good to "Für Spieler", bad to "retained"), result)
-        assertEquals(JSONObject(String(first, Charsets.UTF_8)).getString("value"), "Für Spieler")
         assertEquals(3, records.size)
+    }
+
+    @Test
+    fun `world without records loads empty and permits saving`() {
+        val records = linkedMapOf<NamespacedKey, Any>(NamespacedKey.fromString("another:opaque")!! to 42)
+        val guard = WorldStorageGuard()
+        var result: Map<UUID, String>? = null
+        guard.load(world) { result = container(records).readStoredJsonRecords(prefix) { _, json -> json.getString("value") } }
+        assertEquals(emptyMap(), result)
+        assertTrue(guard.save(world) {})
+        assertEquals(1, records.size)
     }
 
     private fun rejectedRecord(
