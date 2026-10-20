@@ -222,6 +222,8 @@ abstract class Module<T : Module<T?>?> : JavaPlugin(), Context<T?>, Listener {
 
         core!!.registerModule(this)
         loadPersistentStorage()
+        // shutdown() is deferred; do not enable components with rejected/default storage meanwhile.
+        if (!persistentStorageManager.isLoaded) return
         reloadConfiguration()
 
         scheduleTaskTimer(
