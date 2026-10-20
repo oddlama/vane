@@ -17,6 +17,7 @@ class ResourcePackUrlTest {
         )) {
             assertEquals(URI(url), ResourcePackUrl.parse(url), url)
         }
+        @Suppress("MisorderedAssertEqualsArguments") // false positive: expected is first
         assertEquals(URI("https://example.com/pack.zip"), ResourcePackUrl.parse("  https://example.com/pack.zip \n"))
     }
 
