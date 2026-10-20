@@ -8,6 +8,7 @@ import org.bukkit.*
 import org.bukkit.block.Block
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
+import org.bukkit.event.EventPriority
 import org.bukkit.event.world.*
 import org.bukkit.inventory.ItemStack
 import org.bukkit.permissions.Permission
@@ -25,6 +26,8 @@ import org.oddlama.vane.core.material.ExtendedMaterial
 import org.oddlama.vane.core.menu.Menu
 import org.oddlama.vane.core.module.Module
 import org.oddlama.vane.core.persistent.PersistentSerializer
+import org.oddlama.vane.core.persistent.WorldStorageGuard
+import org.oddlama.vane.core.persistent.readStoredJsonRecords
 import org.oddlama.vane.core.persistent.storedUuidsByPrefix
 import org.oddlama.vane.portals.entity.FloatingItem
 import org.oddlama.vane.portals.menu.PortalMenuGroup
@@ -212,6 +215,8 @@ class Portals : Module<Portals?>() {
 
     /** Runtime portal map containing all currently indexed portals. */
     private val portals: MutableMap<UUID?, Portal> = HashMap<UUID?, Portal>()
+
+    private val worldStorage = WorldStorageGuard()
 
     // Index for all portal blocks (worldId → chunk key → block key → portal block)
     /** Runtime index mapping world/chunk/block to portal-block metadata. */
@@ -755,27 +760,31 @@ class Portals : Module<Portals?>() {
 
     /** Module shutdown hook: disconnects portals, clears visuals/tickets, and persists state. */
     override fun onModuleDisable() {
-        // Disable all portals now
-        for (id in ArrayList(connectedPortals.keys)) {
-            disconnectPortals(portalFor(id))
-        }
-
-        // Remove all console items, and all chunk tickets
-        chunkTicketCount.clear()
-        for (world in server.worlds) {
-            for (chunk in world.loadedChunks) {
-                // Remove console item
-                forEachConsoleBlockInChunk(
-                    chunk
-                ) { block: Block?, console: PortalBlockLookup? -> removeConsoleItem(block) }
-                // Allow chunk unloading
-                chunk.removePluginChunkTicket(this)
+        try {
+            // Disable all portals now
+            for (id in ArrayList(connectedPortals.keys)) {
+                disconnectPortals(portalFor(id))
             }
-        }
 
-        // Save data
-        updatePersistentData()
-        super.onModuleDisable()
+            // Remove all console items, and all chunk tickets
+            chunkTicketCount.clear()
+            for (world in server.worlds) {
+                for (chunk in world.loadedChunks) {
+                    // Remove console item
+                    forEachConsoleBlockInChunk(
+                        chunk
+                    ) { block: Block?, console: PortalBlockLookup? -> removeConsoleItem(block) }
+                    // Allow chunk unloading
+                    chunk.removePluginChunkTicket(this)
+                }
+            }
+
+            // Save data
+            updatePersistentData()
+            super.onModuleDisable()
+        } finally {
+            worldStorage.clear()
+        }
     }
 
     /** Returns true when the portal currently has an active connection. */
@@ -974,10 +983,14 @@ class Portals : Module<Portals?>() {
 
     /** Handle world unload to persist/cleanup portal state. */
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     fun onUnloadWorld(event: WorldUnloadEvent) {
-        // Save data before unloading a world (not called on stop)
-        updatePersistentData(event.getWorld())
+        // Save data before unloading a world (not called on stop).
+        try {
+            updatePersistentData(event.world)
+        } finally {
+            worldStorage.forget(event.world.uid)
+        }
     }
 
     /** Update persistent storage for portals across all worlds. */
@@ -1024,6 +1037,7 @@ class Portals : Module<Portals?>() {
         // Schedule on next tick to avoid running during plugin enable timing where
         // some services/world state might not yet be fully available.
         scheduleNextTick {
+            if (!enabled()) return@scheduleNextTick
             for (world in server.worlds) {
                 loadPersistentData(world)
             }
@@ -1033,86 +1047,77 @@ class Portals : Module<Portals?>() {
     /** Load portals from world storage and perform legacy-storage migration for the given world. */
 
     fun loadPersistentData(world: World) {
-        val data = world.persistentDataContainer
-        val storagePortalPrefix = "$STORAGE_PORTALS."
-
-        // Load all currently stored portals.
-        val pdcPortals = getStoredPortalIds(data, storagePortalPrefix)
-
-        for (portalId in pdcPortals) {
-            val key = NamespacedKey.fromString(storagePortalPrefix + portalId.toString()) ?: continue
-            val jsonBytes = data.get(
-                key,
-                PersistentDataType.BYTE_ARRAY
-            )
-            try {
-                val portal = PersistentSerializer.fromJson(Portal::class.java, org.json.JSONObject(String(jsonBytes!!)))
-                indexPortal(portal!!)
-            } catch (e: IOException) {
-                logger.log(java.util.logging.Level.SEVERE, "error while serializing persistent data!", e)
-            }
-        }
-        logger.log(
-            java.util.logging.Level.INFO,
-            "Loaded " + pdcPortals.size + " portals for world " + world.name + "(" + world.uid + ")"
-        )
-
-        if (pdcPortals.isEmpty()) {
-            // Helpful debug info: log the keys present in the world's persistent data container
-            try {
-                val keys = data.keys.joinToString(", ") { it.toString() }
-                logger.log(
-                    java.util.logging.Level.INFO,
-                    "No stored portals found for world ${world.name}(${world.uid}). PersistentDataContainer keys: $keys"
-                )
-            } catch (e: Exception) {
-                // Ignore any issues while trying to log debug info
-            }
+        if (!persistentStorageManager.isLoaded || worldStorage.canSave(world.uid)) return
+        var converted = false
+        try {
+            worldStorage.load(world.uid) { converted = readPersistentData(world) }
+        } catch (e: Exception) {
+            logger.log(java.util.logging.Level.SEVERE,
+                "Cannot load portals for world ${world.name} (${world.uid}); keeping its stored data and shutting down", e)
+            server.shutdown()
+            return
         }
 
-        // Convert portals from legacy storage
-        val removeFromLegacyStorage: MutableSet<UUID?> = HashSet()
-        var converted = 0
-        for (portal in storagePortals.values) {
-            if (portal.spawnWorld() != world.uid) {
-                continue
-            }
-
-            if (portals.containsKey(portal.id())) {
-                removeFromLegacyStorage.add(portal.id())
-                continue
-            }
-
-            indexPortal(portal)
-            portal.invalidated = true
-            converted += 1
-        }
-
-        // Remove any portal that was successfully loaded from the new storage.
-        removeFromLegacyStorage.forEach { key -> storagePortals.remove(key) }
-        if (removeFromLegacyStorage.isNotEmpty()) {
-            markPersistentStorageDirty()
-        }
-
-        // Update all consoles in the loaded world. These
-        // might be missed by chunk load event as it runs asynchronous
-        // to this function, and it can't be synchronized without annoying the server.
+        // Visual initialization is not part of deciding whether stored records were read safely.
         for (chunk in world.loadedChunks) {
             forEachConsoleBlockInChunk(chunk) { block: Block?, console: PortalBlockLookup? ->
-                val portal = portalFor(console!!.portalId())
-                updateConsoleItem(portal!!, block!!)
+                updateConsoleItem(portalFor(console!!.portalId())!!, block!!)
+            }
+        }
+        if (converted) updatePersistentData(world)
+    }
+
+    private fun readPersistentData(world: World): Boolean {
+        val data = world.persistentDataContainer
+        val storagePortalPrefix = "$STORAGE_PORTALS."
+        // Decode and validate the entire PDC snapshot before adding anything to the live index.
+        val decoded = data.readStoredJsonRecords(storagePortalPrefix) { portalId, json ->
+            val portal = requireNotNull(PersistentSerializer.fromJson(Portal::class.java, json))
+            require(portal.id() == portalId) { "Portal ID does not match storage key $portalId" }
+            require(portal.spawnWorld() == world.uid) { "Portal $portalId belongs to another world" }
+            portal
+        }
+        val pdcPortals = decoded.keys
+        val legacy = storagePortals.filterValues { it.spawnWorld() == world.uid }
+        legacy.forEach { (id, portal) ->
+            require(id == portal.id()) { "Legacy portal ID does not match storage key $id" }
+        }
+        for (portal in decoded.values + legacy.values) {
+            val previous = portals[portal.id()]
+            require(previous == null || previous.spawnWorld() == world.uid) {
+                "Portal ID ${portal.id()} is already indexed in another world"
             }
         }
 
-        // Save if we had any conversions
-        if (converted > 0) {
-            updatePersistentData()
+        // Rebuild this world's indices on reload, rather than retaining stale entries.
+        portals.entries.removeIf { it.value.spawnWorld() == world.uid }
+        portalBlocksInChunkInWorld.remove(world.uid)
+        decoded.values.forEach(::indexPortal)
+
+        // Only records actually read from this world's PDC supersede their legacy copies.
+        val removeFromLegacyStorage = legacy.keys.filter { it in pdcPortals }
+        var converted = false
+        for ((id, portal) in legacy) {
+            if (id in pdcPortals) continue
+            indexPortal(portal)
+            portal.invalidated = true
+            converted = true
         }
+
+        // No legacy entry is retired until all records have been decoded and indexed.
+        removeFromLegacyStorage.forEach { storagePortals.remove(it) }
+        if (removeFromLegacyStorage.isNotEmpty()) markPersistentStorageDirty()
+        logger.info("Loaded ${pdcPortals.size} portals for world ${world.name} (${world.uid})")
+        return converted
     }
 
-    /** Persist invalidated portals and remove stale entries for the given world. */
-
+    /** A partial or skipped load must never be interpreted as deletion or permit overwrites. */
     fun updatePersistentData(world: World) {
+        if (!persistentStorageManager.isLoaded) return
+        worldStorage.save(world.uid) { writePersistentData(world) }
+    }
+
+    private fun writePersistentData(world: World) {
         val data = world.persistentDataContainer
         val storagePortalPrefix = "$STORAGE_PORTALS."
 

@@ -17,7 +17,6 @@ import org.bukkit.permissions.Permission
 import org.bukkit.permissions.PermissionDefault
 import org.bukkit.persistence.PersistentDataType
 import org.bukkit.plugin.Plugin
-import org.json.JSONObject
 import org.oddlama.vane.annotation.VaneModule
 import org.oddlama.vane.annotation.config.ConfigBoolean
 import org.oddlama.vane.annotation.config.ConfigDouble
@@ -29,6 +28,8 @@ import org.oddlama.vane.core.lang.TranslatedMessage
 import org.oddlama.vane.core.menu.Menu
 import org.oddlama.vane.core.module.Module
 import org.oddlama.vane.core.persistent.PersistentSerializer
+import org.oddlama.vane.core.persistent.WorldStorageGuard
+import org.oddlama.vane.core.persistent.readStoredJsonRecords
 import org.oddlama.vane.core.persistent.storedUuidsByPrefix
 import org.oddlama.vane.regions.event.RegionEnvironmentSettingEnforcer
 import org.oddlama.vane.regions.event.RegionRoleSettingEnforcer
@@ -154,6 +155,8 @@ class Regions : Module<Regions?>() {
      */
     private val regions: MutableMap<UUID?, Region?> = HashMap()
 
+    private val worldStorage = WorldStorageGuard()
+
     // Primary persistent storage for all region groups (`regionGroup.id -> regionGroup`).
     @Persistent
     /**
@@ -259,7 +262,12 @@ class Regions : Module<Regions?>() {
             vanePortalsAvailable = true
         }
 
-        scheduleNextTick { this.delayedOnEnable() }
+        scheduleNextTick {
+            if (!enabled()) return@scheduleNextTick
+            // WorldLoadEvent may already have fired before this module was enabled.
+            for (world in server.worlds) loadPersistentData(world)
+            this.delayedOnEnable()
+        }
         // Refresh region-selection visualization once per second.
         scheduleTaskTimer({ this.visualizeSelections() }, 1L, 20L)
     }
@@ -732,13 +740,14 @@ class Regions : Module<Regions?>() {
         loadPersistentData(event.getWorld())
     }
 
-    @EventHandler
-            /**
-             * Persists world region data before world unload.
-             */
+    /** Persists world region data before a non-cancelled world unload. */
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     fun onUnloadWorld(event: WorldUnloadEvent) {
-        // Save data before unloading a world (not called on stop)
-        updatePersistentData(event.getWorld())
+        try {
+            updatePersistentData(event.world)
+        } finally {
+            worldStorage.forget(event.world.uid)
+        }
     }
 
     init {
@@ -773,72 +782,76 @@ class Regions : Module<Regions?>() {
      * Loads region state for a specific world and migrates legacy entries when needed.
      */
     fun loadPersistentData(world: World) {
-        val data = world.persistentDataContainer
-        val storageRegionPrefix = "$STORAGE_REGIONS."
-
-        // Load all currently stored regions.
-        val pdcRegions = storedRegionIds(data, storageRegionPrefix)
-
-        for (regionId in pdcRegions) {
-            val key = NamespacedKey.fromString(storageRegionPrefix + regionId.toString()) ?: continue
-            val jsonBytes: ByteArray? = data.get(key, PersistentDataType.BYTE_ARRAY)
-            try {
-                val regionJsonBytes = jsonBytes ?: continue
-                val region: Region? =
-                    PersistentSerializer.fromJson(Region::class.java, JSONObject(String(regionJsonBytes)))
-                indexRegion(requireNotNull(region))
-            } catch (e: IOException) {
-                log.log(Level.SEVERE, "error while serializing persistent data!", e)
-            }
+        if (!persistentStorageManager.isLoaded || worldStorage.canSave(world.uid)) return
+        var converted = false
+        try {
+            worldStorage.load(world.uid) { converted = readPersistentData(world) }
+        } catch (e: Exception) {
+            log.log(Level.SEVERE,
+                "Cannot load regions for world ${world.name} (${world.uid}); keeping its stored data and shutting down", e)
+            // Continuing with a partial protection index would fail open.
+            server.shutdown()
+            return
         }
-        log.log(
-            Level.INFO,
-            "Loaded " + pdcRegions.size + " regions for world " + world.name + "(" + world.uid + ")"
-        )
-
-        // Convert regions from legacy storage
-        val removeFromLegacyStorage: MutableSet<UUID?> = HashSet()
-        var converted = 0
-        for (region in storageRegions.values) {
-            if (region.extent()!!.world() != world.uid) {
-                continue
-            }
-
-            if (regions.containsKey(region.id())) {
-                removeFromLegacyStorage.add(region.id())
-                continue
-            }
-
-            indexRegion(region)
-            region.invalidated = true
-            converted += 1
-        }
-
-        // Remove any region that was successfully loaded from the new storage.
-        removeFromLegacyStorage.forEach { key -> storageRegions.remove(key) }
-        if (removeFromLegacyStorage.isNotEmpty()) {
-            markPersistentStorageDirty()
-        }
-
-        // Save if we had any conversions
-        if (converted > 0) {
-            updatePersistentData()
-        }
+        if (converted) updatePersistentData(world)
     }
 
-    /**
-     * Persists region state for all loaded worlds.
-     */
+    private fun readPersistentData(world: World): Boolean {
+        val data = world.persistentDataContainer
+        val storageRegionPrefix = "$STORAGE_REGIONS."
+        // Decode the complete PDC snapshot before indexing; never skip wrong-typed values.
+        val decoded = data.readStoredJsonRecords(storageRegionPrefix) { regionId, json ->
+            val region = requireNotNull(PersistentSerializer.fromJson(Region::class.java, json))
+            require(region.id() == regionId) { "Region ID does not match storage key $regionId" }
+            require(region.extent()?.world() == world.uid) { "Region $regionId belongs to another world" }
+            region
+        }
+        val pdcRegions = decoded.keys
+        val legacy = storageRegions.filterValues { requireNotNull(it.extent()).world() == world.uid }
+        legacy.forEach { (id, region) ->
+            require(id == region.id()) { "Legacy region ID does not match storage key $id" }
+        }
+        for (region in decoded.values + legacy.values) {
+            val previous = regions[region.id()]
+            require(previous == null || previous.extent()?.world() == world.uid) {
+                "Region ID ${region.id()} is already indexed in another world"
+            }
+        }
+
+        // Region chunk lookups contain lists: re-indexing without clearing duplicates protection.
+        regions.entries.removeIf { it.value?.extent()?.world() == world.uid }
+        regionsInChunkInWorld.remove(world.uid)
+        decoded.values.forEach(::indexRegion)
+
+        val removeFromLegacyStorage = legacy.keys.filter { it in pdcRegions }
+        var converted = false
+        for ((id, region) in legacy) {
+            if (id in pdcRegions) continue
+            indexRegion(region)
+            region.invalidated = true
+            converted = true
+        }
+
+        removeFromLegacyStorage.forEach { storageRegions.remove(it) }
+        if (removeFromLegacyStorage.isNotEmpty()) markPersistentStorageDirty()
+        log.info("Loaded ${pdcRegions.size} regions for world ${world.name} (${world.uid})")
+        return converted
+    }
+
+    /** Persists region state for all loaded worlds. */
     fun updatePersistentData() {
         for (world in server.worlds) {
             updatePersistentData(world)
         }
     }
 
-    /**
-     * Persists region state for a specific world.
-     */
+    /** A partial or skipped load must never be interpreted as deletion or permit overwrites. */
     fun updatePersistentData(world: World) {
+        if (!persistentStorageManager.isLoaded) return
+        worldStorage.save(world.uid) { writePersistentData(world) }
+    }
+
+    private fun writePersistentData(world: World) {
         val data = world.persistentDataContainer
         val storageRegionPrefix = "$STORAGE_REGIONS."
 
@@ -879,9 +892,12 @@ class Regions : Module<Regions?>() {
      * Flushes region data before module shutdown.
      */
     override fun onModuleDisable() {
-        // Save data
-        updatePersistentData()
-        super.onModuleDisable()
+        try {
+            updatePersistentData()
+            super.onModuleDisable()
+        } finally {
+            worldStorage.clear()
+        }
     }
 
     companion object {
