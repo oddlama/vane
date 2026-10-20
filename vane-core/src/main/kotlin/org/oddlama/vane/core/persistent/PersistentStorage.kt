@@ -5,6 +5,7 @@ import java.io.IOException
 import java.lang.reflect.Field
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
+import java.nio.file.Path
 import java.nio.file.StandardCopyOption
 import java.util.function.Consumer
 import java.util.logging.Level
@@ -24,6 +25,9 @@ internal class PersistentStorage(
     private val currentVersion: () -> Long,
     private val versionPath: () -> String?,
     private val logger: () -> Logger,
+    private val replaceFile: (Path, Path) -> Unit = { source, target ->
+        Files.move(source, target, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE)
+    },
 ) {
     private val log: Logger get() = logger()
 
@@ -183,7 +187,12 @@ internal class PersistentStorage(
 
     /** Saves current persistent data to disk atomically. */
     fun save(file: File) {
-        if (!isLoaded) return
+        trySave(file)
+    }
+
+    /** True only after every field was serialized and the replacement was published. */
+    fun trySave(file: File): Boolean {
+        if (!isLoaded) return false
 
         val json = JSONObject()
         val versionPath = requireNotNull(versionPath())
@@ -192,9 +201,9 @@ internal class PersistentStorage(
         // Skip the whole save if any field fails: writing the rest would drop that field's data from disk.
         try {
             persistentFields.forEach { it.save(json) }
-        } catch (e: IOException) {
+        } catch (e: Exception) {
             log.log(Level.SEVERE, "error while serializing persistent data, keeping the previous '${file.name}'", e)
-            return
+            return false
         }
 
         val tmpFile = File("${file.absolutePath}.tmp")
@@ -202,21 +211,18 @@ internal class PersistentStorage(
             Files.writeString(tmpFile.toPath(), json.toString())
         } catch (e: IOException) {
             log.log(Level.SEVERE, "error while saving persistent data to temporary file!", e)
-            return
+            return false
         }
 
-        try {
-            Files.move(
-                tmpFile.toPath(),
-                file.toPath(),
-                StandardCopyOption.REPLACE_EXISTING,
-                StandardCopyOption.ATOMIC_MOVE
-            )
+        return try {
+            replaceFile(tmpFile.toPath(), file.toPath())
+            true
         } catch (e: IOException) {
             log.log(
                 Level.SEVERE,
                 "error while atomically replacing '$file' with temporary file (very recent changes might be lost)!", e
             )
+            false
         }
     }
 }

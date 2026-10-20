@@ -34,6 +34,7 @@ import org.oddlama.vane.core.command.Command
 import org.oddlama.vane.core.config.ConfigManager
 import org.oddlama.vane.core.functional.Consumer1
 import org.oddlama.vane.core.lang.LangManager
+import org.oddlama.vane.core.persistent.PersistentStorageDirtyState
 import org.oddlama.vane.core.persistent.PersistentStorageManager
 import org.oddlama.vane.core.resourcepack.ResourcePackGenerator
 import org.oddlama.vane.util.ResourceList
@@ -83,7 +84,7 @@ abstract class Module<T : Module<T?>?> : JavaPlugin(), Context<T?>, Listener {
     var persistentStorageManager: PersistentStorageManager = PersistentStorageManager(this)
 
     /** Whether persistent storage should be saved at next flush interval. */
-    private var persistentStorageDirty = false
+    private val persistentStorageState = PersistentStorageDirtyState()
 
     /** Per-module catch-all command permission. */
     var permissionCommandCatchallModule: Permission?
@@ -228,9 +229,7 @@ abstract class Module<T : Module<T?>?> : JavaPlugin(), Context<T?>, Listener {
 
         scheduleTaskTimer(
             {
-                if (persistentStorageDirty) {
-                    savePersistentStorage(); persistentStorageDirty = false
-                }
+                if (persistentStorageState.isDirty) savePersistentStorage()
             },
             (60 * 20).toLong(),
             (60 * 20).toLong()
@@ -408,13 +407,13 @@ abstract class Module<T : Module<T?>?> : JavaPlugin(), Context<T?>, Listener {
 
     /** Marks persistent storage as dirty for deferred save. */
     override fun markPersistentStorageDirty() {
-        persistentStorageDirty = true
+        persistentStorageState.markDirty()
     }
 
     /** Saves persistent storage to disk. */
     fun savePersistentStorage() {
         val file: File = this.persistentStorageFile
-        persistentStorageManager.save(file)
+        persistentStorageState.save { persistentStorageManager.trySave(file) }
     }
 
     /** Registers a Bukkit listener with this module plugin instance. */

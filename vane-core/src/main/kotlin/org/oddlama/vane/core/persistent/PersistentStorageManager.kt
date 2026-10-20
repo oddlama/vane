@@ -31,4 +31,7 @@ class PersistentStorageManager(var module: Module<*>) {
 
     /** Keeps the existing JVM void signature for callers that do not need an outcome. */
     fun save(file: File) = storage.save(file)
+
+    /** Reports publication failure so callers can retain pending changes for retry. */
+    fun trySave(file: File): Boolean = storage.trySave(file)
 }
