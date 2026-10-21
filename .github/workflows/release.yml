@@ -1,88 +1,44 @@
 name: Release
-
 on:
   push:
-    tags: [ 'v*' ]
+    tags: ["v*"]
   workflow_dispatch:
     inputs:
       tag:
-        description: 'Existing tag to (re)build and upload, e.g. v1.22.0'
+        description: "Existing release tag, e.g. v1.24.0"
         required: true
-
+      modrinth:
+        description: "Publish to Modrinth instead (GitHub release must already be published)"
+        type: boolean
+        default: false
 permissions:
   contents: write
-
-# Never run two releases for the same tag at once; a re-pushed tag waits for the previous run.
 concurrency:
   group: release-${{ inputs.tag || github.ref_name }}
   cancel-in-progress: false
-
 jobs:
   release:
     runs-on: ubuntu-latest
+    environment: release
     env:
       TAG: ${{ inputs.tag || github.ref_name }}
-      GH_TOKEN: ${{ github.token }}
-
     steps:
       - uses: actions/checkout@v7
         with:
           ref: refs/tags/${{ env.TAG }}
-
-      # The jars carry the project version (and vane-core the matching resource pack URL),
-      # so a tag that disagrees with build.gradle.kts would publish mislabeled artifacts.
-      - name: Check tag matches project version
+      - uses: cachix/install-nix-action@448cde739abec1eaf0646249e3d25bb8d9bc7702 # v31.11.2
+      - name: Validate and build
         run: |
-          version=$(sed -n 's/^ *version = "\(.*\)"$/\1/p' build.gradle.kts)
-          if [ "v$version" != "$TAG" ]; then
-            echo "::error::Tag $TAG does not match project version $version in build.gradle.kts"
-            exit 1
-          fi
-          echo "VERSION=$version" >> "$GITHUB_ENV"
-
-      - name: Set up JDK 25
-        uses: actions/setup-java@v6
-        with:
-          java-version: 25
-          distribution: 'corretto'
-
-      - name: Set up Gradle
-        uses: gradle/actions/setup-gradle@v6
-        with:
-          cache-read-only: true
-
-      - name: Gradle build
-        run: ./gradlew build
-
-      # Same layout as upstream: only the Paper server plugins, flat. vane-velocity goes on the
-      # proxy and vane-geyser-extension into Geyser, so both are uploaded separately only.
-      - name: Create all-plugins.zip
-        run: |
-          cd target
-          zip -X all-plugins.zip vane-{admin,bedtime,busybar,core,enchantments,permissions,portals,regions,trifles}-"$VERSION".jar
-
-      - name: Set up Python
-        uses: actions/setup-python@v7
-        with:
-          python-version: '3.15'
-
-      # The BUSY Bar bridge carries the same version; PEP 440 normalizes 1.23.0-beta.2 to 1.23.0b2.
-      - name: Build BUSY Bar bridge
-        working-directory: vane-busybar/bridge
-        run: |
-          sed -i "s/^version = .*/version = \"$VERSION\"/" pyproject.toml
-          pip install build
-          python -m build --outdir ../../target/bridge
-
-      # A new tag gets a draft with generated notes to edit before publishing by hand. If a
-      # release already exists (draft or published), only its assets are replaced.
-      # Tags with a semver pre-release suffix (v1.23.0-beta.1) are marked as pre-releases, which
-      # also keeps them out of `releases/latest` and therefore out of vane's update notices.
-      - name: Upload to GitHub release
-        run: |
-          if ! gh release view "$TAG" > /dev/null 2>&1; then
-            prerelease=()
-            [[ "$TAG" == *-* ]] && prerelease=(--prerelease)
-            gh release create "$TAG" --draft --verify-tag --generate-notes --title "$TAG" "${prerelease[@]}"
-          fi
-          gh release upload "$TAG" --clobber target/vane-*-"$VERSION".jar target/all-plugins.zip target/barmc-"$VERSION".zip target/bridge/*
+          nix flake check -L --keep-going
+          nix build .#release -L
+      - name: Create GitHub draft and upload assets (never overwrite published assets)
+        if: ${{ !inputs.modrinth }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: nix run .#publish-github -- --tag "$TAG" --confirm
+      - name: Publish reviewed release to Modrinth
+        if: ${{ inputs.modrinth }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+        run: nix run .#publish-modrinth -- --tag "$TAG" --confirm

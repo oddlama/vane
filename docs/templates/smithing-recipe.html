@@ -1,0 +1,27 @@
+<div class="relative h-auto w-full">
+    <img class="object-cover is-pixelated w-full" src="assets/crafting/smithing.png" alt="Smithing background" />
+    <img
+        class="absolute mctooltip left-[4.545455%] top-[57.142857%] w-[9.090909%] h-[19.047619%] is-pixelated"
+        src="assets/minecraft_special/netherite_upgrade_smithing_template.png"
+        data-mctooltip="minecraft:netherite_upgrade_smithing_template"
+        alt=""
+    />
+    <img
+        class="absolute mctooltip left-[14.772727%] top-[57.142857%] w-[9.090909%] h-[19.047619%] is-pixelated"
+        src="{{ recipe.base }}"
+        data-mctooltip="{{ recipe.base.name }}"
+        alt=""
+    />
+    <img
+        class="absolute mctooltip left-[25%] top-[57.142857%] w-[9.090909%] h-[19.047619%] is-pixelated"
+        src="{{ recipe.addition }}"
+        data-mctooltip="{{ recipe.addition.name }}"
+        alt=""
+    />
+    <img
+        class="absolute mctooltip left-[55.681818%] top-[57.142857%] w-[9.090909%] h-[19.047619%] is-pixelated"
+        src="{{ recipe.result }}"
+        data-mctooltip="{{ recipe.result.name }}"
+        alt=""
+    />
+</div>

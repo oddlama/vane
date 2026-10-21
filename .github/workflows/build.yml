@@ -1,74 +1,31 @@
 name: Build
-
 on:
   push:
   pull_request:
   workflow_dispatch:
-
+permissions:
+  contents: read
+concurrency:
+  group: build-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        project: [ 'admin', 'bedtime', 'busybar', 'core', 'enchantments', 'permissions', 'portals', 'regions', 'trifles', 'velocity', 'geyser-extension' ]
-
-    steps:
-      - uses: actions/checkout@v7
-
-      # The Gradle toolchain requires JDK 25; the previous "set up JDK 21" step was
-      # immediately overridden by this one and only cost time.
-      - name: Set up JDK 25
-        uses: actions/setup-java@v6
-        with:
-          java-version: 25
-          distribution: 'corretto'
-
-      # Caches ~/.gradle/caches and the Gradle daemon state across runs. Without this every
-      # matrix job re-downloaded the Paper dev bundle and recompiled vane-core from scratch.
-      - name: Set up Gradle
-        uses: gradle/actions/setup-gradle@v6
-        with:
-          cache-read-only: ${{ github.ref != format('refs/heads/{0}', github.event.repository.default_branch) }}
-
-      - name: Gradle build
-        run: |
-          cd vane-${{ matrix.project }}
-          ../gradlew build
-          # Get the Git hash
-          git_hash=$(git rev-parse --short "$GITHUB_SHA")
-          echo "git_hash=$git_hash" >> $GITHUB_ENV
-
-      - name: Upload JAR
-        if: ${{ github.event_name != 'pull_request'}}
-        uses: actions/upload-artifact@v7
-        with:
-          name: vane-${{ matrix.project }}-${{ env.git_hash }}.jar
-          path: target/vane-${{ matrix.project }}-*.jar
-          archive: false
-
-  # The BUSY Bar bridge players run next to their device; Python, outside the Gradle build. Tested
-  # on every OS players use; Windows in particular lacks termios and asyncio signal handlers.
-  bridge:
-    runs-on: ${{ matrix.os }}
+  check:
     strategy:
       fail-fast: false
       matrix:
-        os: [ ubuntu-latest, macos-latest, windows-latest ]
-    defaults:
-      run:
-        shell: bash
-        working-directory: vane-busybar/bridge
-
+        os: [ubuntu-latest, macos-15] # Apple Silicon macOS; pinned nixpkgs no longer supports Intel Macs
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v7
-
-      - name: Set up Python
-        uses: actions/setup-python@v7
+      - uses: cachix/install-nix-action@448cde739abec1eaf0646249e3d25bb8d9bc7702 # v31.11.2
+      - name: Format, JVM, bridge, tooling and documentation checks
+        run: nix flake check -L --keep-going
+      - name: Build release artifacts
+        if: runner.os == 'Linux'
+        run: nix build .#release -L --out-link release
+      - uses: actions/upload-artifact@v7
+        if: runner.os == 'Linux' && github.event_name != 'pull_request'
         with:
-          python-version: '3.15'
-
-      - name: Install
-        run: pip install -e '.[test]'
-
-      - name: Test
-        run: python -m pytest
+          name: vane-${{ github.sha }}
+          path: release/*
+          if-no-files-found: error
