@@ -1,5 +1,6 @@
 package org.oddlama.vane.trifles
 
+import java.util.*
 import org.bukkit.plugin.Plugin
 import org.oddlama.vane.annotation.VaneModule
 import org.oddlama.vane.core.module.Module
@@ -9,12 +10,9 @@ import org.oddlama.vane.trifles.commands.Setspawn
 import org.oddlama.vane.trifles.items.*
 import org.oddlama.vane.trifles.items.storage.Backpack
 import org.oddlama.vane.trifles.items.storage.Pouch
-import java.util.*
 
 @VaneModule(name = "trifles", bstats = 8644, configVersion = 4, langVersion = 4, storageVersion = 1)
-/**
- * Main entry point for the `vane-trifles` module.
- */
+/** Main entry point for the `vane-trifles` module. */
 class Trifles : Module<Trifles?>() {
     /** Tracks the latest XP bottle consume timestamp per player UUID. */
     val lastXpBottleConsumeTime: MutableMap<UUID, Long> = mutableMapOf()
@@ -63,9 +61,7 @@ class Trifles : Module<Trifles?>() {
         Backpack(storageContext)
     }
 
-    /**
-     * Enables optional integrations after the server has fully initialized plugins.
-     */
+    /** Enables optional integrations after the server has fully initialized plugins. */
     override fun onModuleEnable() {
         val module = module ?: return
         module.scheduleNextTick {

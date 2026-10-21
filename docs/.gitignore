@@ -1,0 +1,10 @@
+/build/
+/__pycache__/
+/.pytest_cache/
+
+# Legacy local inputs may contain private server configuration; never stage them.
+/plugins/
+/node_modules/
+/minecraft-client.jar
+/package-lock.json
+/bun.lockb

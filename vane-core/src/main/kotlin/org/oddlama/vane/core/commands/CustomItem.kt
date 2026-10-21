@@ -19,9 +19,7 @@ import org.oddlama.vane.util.PlayerUtil.giveItem
  */
 @Name("customitem")
 class CustomItem(context: Context<Core?>) : org.oddlama.vane.core.command.Command<Core?>(context) {
-    /**
-     * Builds the brigadier command tree for `/customitem`.
-     */
+    /** Builds the brigadier command tree for `/customitem`. */
     override fun getCommandBase(): LiteralArgumentBuilder<CommandSourceStack> =
         super.getCommandBase()
             .executes { stack ->
@@ -33,7 +31,10 @@ class CustomItem(context: Context<Core?>) : org.oddlama.vane.core.command.Comman
                 Commands.literal("give")
                     .requires { it.sender is Player }
                     .then(
-                        Commands.argument("custom_item", CustomItemArgumentType.customItem(module!!))
+                        Commands.argument(
+                                "custom_item",
+                                CustomItemArgumentType.customItem(module!!),
+                            )
                             .executes { ctx ->
                                 val item = ctx.getArgument("custom_item", CustomItem::class.java)
                                 giveItem(ctx.source.sender as Player, item.newStack())
@@ -42,4 +43,3 @@ class CustomItem(context: Context<Core?>) : org.oddlama.vane.core.command.Comman
                     )
             )
 }
-

@@ -14,7 +14,8 @@ import java.util.concurrent.CompletableFuture
  *
  * @property permissionGroups available groups used for command suggestions.
  */
-class PermissionGroupArgumentType private constructor(private val permissionGroups: Map<String, Set<String>>) :
+class PermissionGroupArgumentType
+private constructor(private val permissionGroups: Map<String, Set<String>>) :
     CustomArgumentType.Converted<String, String> {
     /** Returns the parsed permission group name unchanged. */
     @Throws(CommandSyntaxException::class)
@@ -28,7 +29,7 @@ class PermissionGroupArgumentType private constructor(private val permissionGrou
     /** Suggests known group names that contain the currently typed input. */
     override fun <S : Any> listSuggestions(
         context: CommandContext<S>,
-        builder: SuggestionsBuilder
+        builder: SuggestionsBuilder,
     ): CompletableFuture<Suggestions> {
         val remaining = builder.remaining
         permissionGroups.keys
@@ -40,8 +41,11 @@ class PermissionGroupArgumentType private constructor(private val permissionGrou
 
     /** Static factories for permission group argument creation. */
     companion object {
-        /** Factory for creating a permission group argument backed by current group configuration. */
-        fun permissionGroup(permissionGroups: MutableMap<String, MutableSet<String>>): PermissionGroupArgumentType =
-            PermissionGroupArgumentType(permissionGroups)
+        /**
+         * Factory for creating a permission group argument backed by current group configuration.
+         */
+        fun permissionGroup(
+            permissionGroups: MutableMap<String, MutableSet<String>>
+        ): PermissionGroupArgumentType = PermissionGroupArgumentType(permissionGroups)
     }
 }

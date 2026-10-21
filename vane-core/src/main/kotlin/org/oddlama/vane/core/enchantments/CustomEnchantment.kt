@@ -29,9 +29,11 @@ import org.oddlama.vane.util.snakeCaseToPascalCase
  * @param context enchantment context.
  * @param defaultEnabled default enabled state of this enchantment group.
  */
-open class CustomEnchantment<T : Module<T?>?> @JvmOverloads constructor(
+open class CustomEnchantment<T : Module<T?>?>
+@JvmOverloads
+constructor(
     context: Context<T?>,
-    defaultEnabled: Boolean = true
+    defaultEnabled: Boolean = true,
 ) : Listener<T?>(null) {
     /** Resolved enchantment annotation metadata. */
     private val annotation: VaneEnchantment = javaClass.getAnnotation(VaneEnchantment::class.java)
@@ -49,20 +51,26 @@ open class CustomEnchantment<T : Module<T?>?> @JvmOverloads constructor(
     var lootTables: LootTables<T?>?
 
     /** Localized enchantment display name. */
-    @LangMessage
-    var langName: TranslatedMessage? = null
+    @LangMessage var langName: TranslatedMessage? = null
 
     init {
         var context = context
         // Make namespace
         name = annotation.name
-        context = context.group("Enchantment${snakeCaseToPascalCase(name)}", "Enable enchantment $name", defaultEnabled)
+        context =
+            context.group(
+                "Enchantment${snakeCaseToPascalCase(name)}",
+                "Enable enchantment $name",
+                defaultEnabled,
+            )
         setContext(context)
 
         // Create a namespaced key
         key = namespacedKey(module!!.namespace(), name)
 
-        check(instances[javaClass] == null) { "Cannot create two instances of a custom enchantment!" }
+        check(instances[javaClass] == null) {
+            "Cannot create two instances of a custom enchantment!"
+        }
         instances[javaClass] = this
 
         // Automatic recipes and loot table config and registration
@@ -71,7 +79,8 @@ open class CustomEnchantment<T : Module<T?>?> @JvmOverloads constructor(
     }
 
     /** Returns the Bukkit enchantment instance for this custom enchantment key. */
-    fun bukkit(): Enchantment? = RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT)[key]
+    fun bukkit(): Enchantment? =
+        RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT)[key]
 
     /** Returns the namespaced key of this enchantment. */
     fun key(): NamespacedKey = key
@@ -80,23 +89,29 @@ open class CustomEnchantment<T : Module<T?>?> @JvmOverloads constructor(
      * Returns the display format for the display name. By default, the color is dependent on the
      * rarity. COMMON: gray UNCOMMON: dark blue RARE: gold VERY_RARE: bold dark purple
      */
-    open fun applyDisplayFormat(component: Component): Component = when (annotation.rarity) {
-        Rarity.COMMON, Rarity.UNCOMMON -> component.color(NamedTextColor.DARK_AQUA)
-        Rarity.RARE -> component.color(NamedTextColor.GOLD)
-        Rarity.VERY_RARE -> component.color(NamedTextColor.DARK_PURPLE).decorate(TextDecoration.BOLD)
-    }
+    open fun applyDisplayFormat(component: Component): Component =
+        when (annotation.rarity) {
+            Rarity.COMMON,
+            Rarity.UNCOMMON -> component.color(NamedTextColor.DARK_AQUA)
+            Rarity.RARE -> component.color(NamedTextColor.GOLD)
+            Rarity.VERY_RARE ->
+                component.color(NamedTextColor.DARK_PURPLE).decorate(TextDecoration.BOLD)
+        }
 
     /**
      * Determines the display name of the enchantment. Usually you don't need to override this
      * method, as it already uses clientside translation keys and supports chat formatting.
      */
     fun displayName(level: Int): Component {
-        var displayName = applyDisplayFormat(langName!!.format().decoration(TextDecoration.ITALIC, false))
+        var displayName =
+            applyDisplayFormat(langName!!.format().decoration(TextDecoration.ITALIC, false))
 
         if (level != 1 || maxLevel() != 1) {
-            val chatLevel = applyDisplayFormat(
-                Component.translatable("enchantment.level.$level").decoration(TextDecoration.ITALIC, false)
-            )
+            val chatLevel =
+                applyDisplayFormat(
+                    Component.translatable("enchantment.level.$level")
+                        .decoration(TextDecoration.ITALIC, false)
+                )
             displayName = displayName.append(Component.text(" ")).append(chatLevel)
         }
 
@@ -107,7 +122,8 @@ open class CustomEnchantment<T : Module<T?>?> @JvmOverloads constructor(
     fun minLevel(): Int = 1
 
     /**
-     * The maximum level this enchantment can have. Always reflects the annotation value [ ][VaneEnchantment.maxLevel].
+     * The maximum level this enchantment can have. Always reflects the annotation value
+     * [ ][VaneEnchantment.maxLevel].
      */
     fun maxLevel(): Int = annotation.maxLevel
 
@@ -126,23 +142,24 @@ open class CustomEnchantment<T : Module<T?>?> @JvmOverloads constructor(
     /** Whether this enchantment is marked as treasure-only. */
     val isTreasure: Boolean
         /**
-         * Determines if this enchantment can be obtained with the enchanting table. Always reflects the
-         * annotation value [VaneEnchantment.treasure].
+         * Determines if this enchantment can be obtained with the enchanting table. Always reflects
+         * the annotation value [VaneEnchantment.treasure].
          */
         get() = annotation.treasure
 
     /** Whether this enchantment can be offered in villager trades. */
     val isTradeable: Boolean
         /**
-         * Determines if this enchantment is tradeable with villagers. Always reflects the annotation
-         * value [VaneEnchantment.tradeable].
+         * Determines if this enchantment is tradeable with villagers. Always reflects the
+         * annotation value [VaneEnchantment.tradeable].
          */
         get() = annotation.tradeable
 
     /** Whether this enchantment is marked as a curse. */
     val isCurse: Boolean
         /**
-         * Determines if this enchantment is a curse. Always reflects the annotation value [ ][VaneEnchantment.curse].
+         * Determines if this enchantment is a curse. Always reflects the annotation value
+         * [ ][VaneEnchantment.curse].
          */
         get() = annotation.curse
 
@@ -153,7 +170,8 @@ open class CustomEnchantment<T : Module<T?>?> @JvmOverloads constructor(
     fun generateInTreasure(): Boolean = annotation.generateInTreasure
 
     /**
-     * Determines the enchantment rarity. Always reflects the annotation value [ ][VaneEnchantment.rarity].
+     * Determines the enchantment rarity. Always reflects the annotation value
+     * [ ][VaneEnchantment.rarity].
      */
     fun rarity(): Rarity = annotation.rarity
 
@@ -168,8 +186,8 @@ open class CustomEnchantment<T : Module<T?>?> @JvmOverloads constructor(
 
     /**
      * Determines if this enchantment can be applied to the given item. By default, this returns
-     * true for all items. Item compatibility is now primarily managed by tags in the registry system.
-     * This method can still be used for additional custom validation if needed.
+     * true for all items. Item compatibility is now primarily managed by tags in the registry
+     * system. This method can still be used for additional custom validation if needed.
      */
     fun canEnchant(itemStack: ItemStack): Boolean = true
 
@@ -181,11 +199,10 @@ open class CustomEnchantment<T : Module<T?>?> @JvmOverloads constructor(
 
     /** Appends this enchantment descriptor to an item definition string. */
     @JvmOverloads
-    protected fun on(itemDefinition: String?, level: Int = 1): String = "$itemDefinition#enchants{$key*$level}"
+    protected fun on(itemDefinition: String?, level: Int = 1): String =
+        "$itemDefinition#enchants{$key*$level}"
 
-    /**
-     * Static instance tracking for custom enchantments.
-     */
+    /** Static instance tracking for custom enchantments. */
     companion object {
         /** Created custom enchantment instances keyed by class. */
         private val instances = mutableMapOf<Class<*>, CustomEnchantment<*>>()

@@ -14,11 +14,12 @@ import org.oddlama.vane.portals.portal.PortalBoundary
 class PortalConstructEvent(
     @JvmField val player: Player?,
     @JvmField val boundary: PortalBoundary?,
-    private val checkOnly: Boolean
-) :
-    PortalEvent() {
-    // Java accessors from before v1.22.0. The public fields stay for plugins built against later releases.
+    private val checkOnly: Boolean,
+) : PortalEvent() {
+    // Java accessors from before v1.22.0. The public fields stay for plugins built against later
+    // releases.
     fun getPlayer(): Player? = player
+
     fun getBoundary(): PortalBoundary? = boundary
 
     /** Returns whether this event is in validation-only mode. */
@@ -30,7 +31,6 @@ class PortalConstructEvent(
     /** Static Bukkit handler list for this event type. */
     companion object {
         /** Shared handler list used by Bukkit's event system. */
-        @JvmStatic
-        val handlerList: HandlerList = HandlerList()
+        @JvmStatic val handlerList: HandlerList = HandlerList()
     }
 }

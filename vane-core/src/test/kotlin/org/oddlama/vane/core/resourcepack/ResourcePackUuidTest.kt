@@ -26,6 +26,9 @@ class ResourcePackUuidTest {
     fun `derives a stable uuid from the url`() {
         val url = "https://example.com/pack.zip"
         assertEquals(ResourcePackUuid.fromUrl(url), ResourcePackUuid.fromUrl(url))
-        assertNotEquals(ResourcePackUuid.fromUrl(url), ResourcePackUuid.fromUrl("https://example.com/other.zip"))
+        assertNotEquals(
+            ResourcePackUuid.fromUrl(url),
+            ResourcePackUuid.fromUrl("https://example.com/other.zip"),
+        )
     }
 }

@@ -33,20 +33,19 @@ import org.oddlama.vane.core.module.Context
  *
  * @param context listener context.
  */
-class ExistingItemConverter(context: Context<Core?>) : Listener<Core?>(context.namespace("existing_item_converter")) {
-    /**
-     * Resolves legacy model data ids to currently registered custom items.
-     */
+class ExistingItemConverter(context: Context<Core?>) :
+    Listener<Core?>(context.namespace("existing_item_converter")) {
+    /** Resolves legacy model data ids to currently registered custom items. */
     private fun fromOldItem(itemStack: ItemStack): CustomItem? {
-        val modelDataInt = itemStack.itemMeta.customModelDataComponent.floats.firstOrNull()?.toInt()
-            ?: return null
+        val modelDataInt =
+            itemStack.itemMeta.customModelDataComponent.floats.firstOrNull()?.toInt() ?: return null
         val key = legacyItemKey(modelDataInt) ?: return null
         return module!!.itemRegistry()?.get(key)
     }
 
     /**
-     * Compares item names by translation key or plain text, since components read back from a
-     * stack may not be structurally equal to the ones written to it.
+     * Compares item names by translation key or plain text, since components read back from a stack
+     * may not be structurally equal to the ones written to it.
      */
     private fun sameName(a: Component?, b: Component?): Boolean {
         if (a is TranslatableComponent || b is TranslatableComponent) {
@@ -60,8 +59,8 @@ class ExistingItemConverter(context: Context<Core?>) : Listener<Core?>(context.n
     private class Converted(val stack: ItemStack?)
 
     /**
-     * Migrates a single item stack and any items stored inside it (shulker boxes, bundles).
-     * Returns null if the stack is already up to date.
+     * Migrates a single item stack and any items stored inside it (shulker boxes, bundles). Returns
+     * null if the stack is already up to date.
      */
     private fun convertStack(item: ItemStack): Converted? {
         val converted = convertSelf(item)
@@ -85,11 +84,12 @@ class ExistingItemConverter(context: Context<Core?>) : Listener<Core?>(context.n
             }
             is BundleMeta -> {
                 var changed = false
-                val items = meta.items.mapNotNull { stack ->
-                    val converted = convertStack(stack) ?: return@mapNotNull stack
-                    changed = true
-                    converted.stack
-                }
+                val items =
+                    meta.items.mapNotNull { stack ->
+                        val converted = convertStack(stack) ?: return@mapNotNull stack
+                        changed = true
+                        converted.stack
+                    }
                 if (!changed) return null
                 meta.setItems(items)
                 return item.clone().apply { itemMeta = meta }
@@ -98,9 +98,7 @@ class ExistingItemConverter(context: Context<Core?>) : Listener<Core?>(context.n
         }
     }
 
-    /**
-     * Migrates a single item stack, ignoring its contents.
-     */
+    /** Migrates a single item stack, ignoring its contents. */
     private fun convertSelf(item: ItemStack): Converted? {
         if (!item.hasItemMeta()) return null
 
@@ -123,25 +121,29 @@ class ExistingItemConverter(context: Context<Core?>) : Listener<Core?>(context.n
         val meta = item.itemMeta
         val modelDataInt = meta.customModelDataComponent.floats.firstOrNull()?.toInt()
 
-        if (modelDataInt == null ||
-            modelDataInt != customItem.customModelData() ||
-            meta.itemModel != customItem.itemModel() ||
-            !sameName(meta.itemName(), customItem.displayName()) ||
-            item.type != customItem.baseMaterial() ||
-            keyAndVersion?.second != customItem.version()
+        if (
+            modelDataInt == null ||
+                modelDataInt != customItem.customModelData() ||
+                meta.itemModel != customItem.itemModel() ||
+                !sameName(meta.itemName(), customItem.displayName()) ||
+                item.type != customItem.baseMaterial() ||
+                keyAndVersion?.second != customItem.version()
         ) {
             module!!.log.info("Updated item ${customItem.key()}")
             return Converted(customItem.convertExistingStack(item))
         }
 
         val damageableMeta = meta as Damageable
-        val maxDamage = if (damageableMeta.hasMaxDamage()) damageableMeta.maxDamage
-        else item.type.maxDurability.toInt()
-        val correctMaxDamage = if (customItem.durability() == 0) item.type.maxDurability.toInt()
-        else customItem.durability()
+        val maxDamage =
+            if (damageableMeta.hasMaxDamage()) damageableMeta.maxDamage
+            else item.type.maxDurability.toInt()
+        val correctMaxDamage =
+            if (customItem.durability() == 0) item.type.maxDurability.toInt()
+            else customItem.durability()
 
-        if (maxDamage != correctMaxDamage ||
-            meta.persistentDataContainer.has(DurabilityManager.ITEM_DURABILITY_DAMAGE)
+        if (
+            maxDamage != correctMaxDamage ||
+                meta.persistentDataContainer.has(DurabilityManager.ITEM_DURABILITY_DAMAGE)
         ) {
             module!!.log.info("Updated item durability ${customItem.key()}")
             val updated = item.clone()
@@ -152,9 +154,7 @@ class ExistingItemConverter(context: Context<Core?>) : Listener<Core?>(context.n
         return null
     }
 
-    /**
-     * Processes and migrates all item stacks in an inventory. Returns whether anything changed.
-     */
+    /** Processes and migrates all item stacks in an inventory. Returns whether anything changed. */
     private fun processInventory(inventory: Inventory): Boolean {
         val contents = inventory.contents
         var changed = 0
@@ -170,9 +170,7 @@ class ExistingItemConverter(context: Context<Core?>) : Listener<Core?>(context.n
         return changed > 0
     }
 
-    /**
-     * Migrates dropped items, item frame contents and entity equipment.
-     */
+    /** Migrates dropped items, item frame contents and entity equipment. */
     private fun processEntity(entity: Entity) {
         when (entity) {
             is Item -> {
@@ -189,9 +187,7 @@ class ExistingItemConverter(context: Context<Core?>) : Listener<Core?>(context.n
         }
     }
 
-    /**
-     * Migrates the equipment of mobs and armor stands.
-     */
+    /** Migrates the equipment of mobs and armor stands. */
     private fun processEquipment(entity: LivingEntity) {
         val equipment = entity.equipment ?: return
         for (slot in EquipmentSlot.entries) {
@@ -201,33 +197,27 @@ class ExistingItemConverter(context: Context<Core?>) : Listener<Core?>(context.n
         }
     }
 
-    /**
-     * Converts items in the player inventory on join.
-     */
+    /** Converts items in the player inventory on join. */
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     fun onPlayerJoin(event: PlayerJoinEvent) {
         processInventory(event.player.inventory)
     }
 
-    /**
-     * Converts items in opened inventories.
-     */
+    /** Converts items in opened inventories. */
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     fun onInventoryOpen(event: InventoryOpenEvent) {
         processInventory(event.inventory)
     }
 
-    /**
-     * Converts dropped items, item frame contents and entity equipment when their chunk loads.
-     */
+    /** Converts dropped items, item frame contents and entity equipment when their chunk loads. */
     @EventHandler(priority = EventPriority.MONITOR)
     fun onEntitiesLoad(event: EntitiesLoadEvent) = event.entities.forEach(::processEntity)
 
     companion object {
         /**
          * Custom model data of items from before vane had persistent item identifiers, and the
-         * items they became. These ids were never reused, so they cannot be derived from the
-         * model data that items are registered with today.
+         * items they became. These ids were never reused, so they cannot be derived from the model
+         * data that items are registered with today.
          */
         private val LEGACY_MODEL_DATA: Map<Int, String> = buildMap {
             put(7758190, "vane_trifles:wooden_sickle")

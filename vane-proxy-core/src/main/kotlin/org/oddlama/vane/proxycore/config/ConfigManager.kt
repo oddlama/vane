@@ -1,10 +1,10 @@
 package org.oddlama.vane.proxycore.config
 
-import org.oddlama.vane.proxycore.VaneProxyPlugin
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 import java.util.logging.Level
+import org.oddlama.vane.proxycore.VaneProxyPlugin
 
 /**
  * Loads, validates, and provides access to proxy-core configuration.
@@ -14,13 +14,11 @@ import java.util.logging.Level
 class ConfigManager(private val plugin: VaneProxyPlugin) {
     // name → managed server
     /** Managed server definitions keyed by backend name. */
-    @JvmField
-    val managedServers: MutableMap<String?, ManagedServer?> = HashMap()
+    @JvmField val managedServers: MutableMap<String?, ManagedServer?> = HashMap()
 
     // port → alias id (starts at 1)
     /** Multiplexer definitions keyed by configured multiplexer id. */
-    @JvmField
-    val multiplexerById: MutableMap<Int?, AuthMultiplex?> = HashMap()
+    @JvmField val multiplexerById: MutableMap<Int?, AuthMultiplex?> = HashMap()
 
     /** BUSY Bar settings, or `null` when not configured. */
     var busyBar: BusyBarConfig? = null
@@ -45,26 +43,35 @@ class ConfigManager(private val plugin: VaneProxyPlugin) {
             return false
         }
 
-        val parsedConfig = try {
-            Config(file)
-        } catch (e: Exception) {
-            plugin.getLogger().log(Level.SEVERE, "Error while loading config file '$file'", e)
-            return false
-        }
+        val parsedConfig =
+            try {
+                Config(file)
+            } catch (e: Exception) {
+                plugin.getLogger().log(Level.SEVERE, "Error while loading config file '$file'", e)
+                return false
+            }
         parsedConfig.legacyBackup?.let {
-            plugin.getLogger().log(Level.INFO, "Migrated legacy keys in '${file.name}' (backup: '${it.name}')")
+            plugin
+                .getLogger()
+                .log(Level.INFO, "Migrated legacy keys in '${file.name}' (backup: '${it.name}')")
         }
 
-        val authMultiplex = parsedConfig.authMultiplex
-            ?: run {
-                plugin.getLogger().log(Level.SEVERE, "Config did not contain auth multiplexer definitions")
-                return false
-            }
-        val managedServers = parsedConfig.managedServers
-            ?: run {
-                plugin.getLogger().log(Level.SEVERE, "Config did not contain managed server definitions")
-                return false
-            }
+        val authMultiplex =
+            parsedConfig.authMultiplex
+                ?: run {
+                    plugin
+                        .getLogger()
+                        .log(Level.SEVERE, "Config did not contain auth multiplexer definitions")
+                    return false
+                }
+        val managedServers =
+            parsedConfig.managedServers
+                ?: run {
+                    plugin
+                        .getLogger()
+                        .log(Level.SEVERE, "Config did not contain managed server definitions")
+                    return false
+                }
 
         if (authMultiplex.containsKey(0)) {
             plugin.getLogger().log(Level.SEVERE, "Attempted to register a multiplexer with id 0!")
@@ -78,7 +85,9 @@ class ConfigManager(private val plugin: VaneProxyPlugin) {
         }
 
         if (authMultiplex.size != registeredPorts.size) {
-            plugin.getLogger().log(Level.SEVERE, "Attempted to register multiple multiplexers on the same port!")
+            plugin
+                .getLogger()
+                .log(Level.SEVERE, "Attempted to register multiple multiplexers on the same port!")
             return false
         }
 
@@ -103,7 +112,7 @@ class ConfigManager(private val plugin: VaneProxyPlugin) {
                     "Missing bundled default config.toml"
                 },
                 file.toPath(),
-                StandardCopyOption.REPLACE_EXISTING
+                StandardCopyOption.REPLACE_EXISTING,
             )
             return true
         } catch (e: Exception) {

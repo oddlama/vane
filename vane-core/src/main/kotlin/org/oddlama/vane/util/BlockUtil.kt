@@ -12,22 +12,29 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.util.BlockVector
 import org.bukkit.util.Vector
 
-/**
- * Block and raytrace utility helpers.
- */
+/** Block and raytrace utility helpers. */
 object BlockUtil {
     /** All six cardinal block faces. */
     @JvmField
-    val BLOCK_FACES: List<BlockFace?> = listOf(
-        BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH,
-        BlockFace.WEST, BlockFace.UP, BlockFace.DOWN
-    )
+    val BLOCK_FACES: List<BlockFace?> =
+        listOf(
+            BlockFace.NORTH,
+            BlockFace.EAST,
+            BlockFace.SOUTH,
+            BlockFace.WEST,
+            BlockFace.UP,
+            BlockFace.DOWN,
+        )
 
     /** Horizontal block faces on the XZ plane. */
     @JvmField
-    val XZ_FACES: List<BlockFace> = listOf(
-        BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST
-    )
+    val XZ_FACES: List<BlockFace> =
+        listOf(
+            BlockFace.NORTH,
+            BlockFace.EAST,
+            BlockFace.SOUTH,
+            BlockFace.WEST,
+        )
 
     /** Maximum supported radius for precomputed nearest-block lookup. */
     const val NEAREST_RELATIVE_BLOCKS_FOR_RADIUS_MAX: Int = 6
@@ -38,8 +45,7 @@ object BlockUtil {
         (0..NEAREST_RELATIVE_BLOCKS_FOR_RADIUS_MAX).map { nearestBlocksForRadius(it) }
 
     /** Returns whether two blocks share the same coordinates. */
-    fun equalsPos(b1: Block, b2: Block): Boolean =
-        b1.x == b2.x && b1.y == b2.y && b1.z == b2.z
+    fun equalsPos(b1: Block, b2: Block): Boolean = b1.x == b2.x && b1.y == b2.y && b1.z == b2.z
 
     /** Drops an item naturally at a block center. */
     @JvmStatic
@@ -49,23 +55,25 @@ object BlockUtil {
     /** Drops an item naturally at a location with random position and velocity offsets. */
     @JvmStatic
     fun dropNaturally(loc: Location, drop: ItemStack) {
-        loc.world.dropItem(
-            loc.add(Vector.getRandom().subtract(Vector(.5, .5, .5)).multiply(0.5)), drop
-        ).velocity = Vector.getRandom().add(Vector(-.5, +.5, -.5)).normalize().multiply(.15)
+        loc.world
+            .dropItem(
+                loc.add(Vector.getRandom().subtract(Vector(.5, .5, .5)).multiply(0.5)),
+                drop,
+            )
+            .velocity = Vector.getRandom().add(Vector(-.5, +.5, -.5)).normalize().multiply(.15)
     }
 
     /** Returns nearby relative blocks in a radius, sorted by distance. */
-    fun nearestBlocksForRadius(radius: Int): List<BlockVector> =
-        buildList {
-            for (x in -radius..radius) {
-                for (z in -radius..radius) {
-                    if (x * x + z * z <= radius * radius + 0.5) {
-                        add(BlockVector(x, 0, z))
-                    }
+    fun nearestBlocksForRadius(radius: Int): List<BlockVector> = buildList {
+        for (x in -radius..radius) {
+            for (z in -radius..radius) {
+                if (x * x + z * z <= radius * radius + 0.5) {
+                    add(BlockVector(x, 0, z))
                 }
             }
-            sortWith(BlockVectorRadiusComparator())
         }
+        sortWith(BlockVectorRadiusComparator())
+    }
 
     /** Resolves a relative block from a root block and vector offset. */
     @JvmStatic
@@ -92,24 +100,38 @@ object BlockUtil {
 
     /** Returns direct, edge, and corner adjacent blocks around a root block. */
     @JvmStatic
-    fun adjacentBlocks3D(root: Block): Array<Block?> = arrayOf(
-        // Direct adjacent
-        root.getRelative(1, 0, 0), root.getRelative(-1, 0, 0),
-        root.getRelative(0, 0, 1), root.getRelative(0, 0, -1),
-        root.getRelative(0, 1, 0), root.getRelative(0, -1, 0),
-        // Edge adjacent
-        root.getRelative(0, -1, -1), root.getRelative(0, -1, 1),
-        root.getRelative(0, 1, -1), root.getRelative(0, 1, 1),
-        root.getRelative(-1, 0, -1), root.getRelative(-1, 0, 1),
-        root.getRelative(1, 0, -1), root.getRelative(1, 0, 1),
-        root.getRelative(-1, -1, 0), root.getRelative(-1, 1, 0),
-        root.getRelative(1, -1, 0), root.getRelative(1, 1, 0),
-        // Corner adjacent
-        root.getRelative(-1, -1, -1), root.getRelative(-1, -1, 1),
-        root.getRelative(-1, 1, -1), root.getRelative(-1, 1, 1),
-        root.getRelative(1, -1, -1), root.getRelative(1, -1, 1),
-        root.getRelative(1, 1, -1), root.getRelative(1, 1, 1),
-    )
+    fun adjacentBlocks3D(root: Block): Array<Block?> =
+        arrayOf(
+            // Direct adjacent
+            root.getRelative(1, 0, 0),
+            root.getRelative(-1, 0, 0),
+            root.getRelative(0, 0, 1),
+            root.getRelative(0, 0, -1),
+            root.getRelative(0, 1, 0),
+            root.getRelative(0, -1, 0),
+            // Edge adjacent
+            root.getRelative(0, -1, -1),
+            root.getRelative(0, -1, 1),
+            root.getRelative(0, 1, -1),
+            root.getRelative(0, 1, 1),
+            root.getRelative(-1, 0, -1),
+            root.getRelative(-1, 0, 1),
+            root.getRelative(1, 0, -1),
+            root.getRelative(1, 0, 1),
+            root.getRelative(-1, -1, 0),
+            root.getRelative(-1, 1, 0),
+            root.getRelative(1, -1, 0),
+            root.getRelative(1, 1, 0),
+            // Corner adjacent
+            root.getRelative(-1, -1, -1),
+            root.getRelative(-1, -1, 1),
+            root.getRelative(-1, 1, -1),
+            root.getRelative(-1, 1, 1),
+            root.getRelative(1, -1, -1),
+            root.getRelative(1, -1, 1),
+            root.getRelative(1, 1, -1),
+            root.getRelative(1, 1, 1),
+        )
 
     /** Finds the nearest air block above matching farmland around a root block. */
     @JvmStatic
@@ -141,9 +163,10 @@ object BlockUtil {
         if (block == null || block != result.hitBlock) return null
 
         val blockMiddle = block.location.toVector().add(Vector(0.5, 0.5, 0.5))
-        val hit = result.hitPosition
-            .subtract(blockMiddle)
-            .subtract(result.hitBlockFace!!.direction.multiply(0.25))
+        val hit =
+            result.hitPosition
+                .subtract(blockMiddle)
+                .subtract(result.hitBlockFace!!.direction.multiply(0.25))
         return Oct(hit, result.hitBlockFace)
     }
 
@@ -170,23 +193,26 @@ object BlockUtil {
     /** Extracts a base64 texture payload from a skull profile. */
     @JvmStatic
     fun textureFromSkull(skull: Skull): String? =
-        skull.profile?.properties()
-            ?.firstOrNull { it.name == "textures" }
-            ?.value
+        skull.profile?.properties()?.firstOrNull { it.name == "textures" }?.value
 
-    /**
-     * Encodes one of eight block-space corners.
-     */
-    class Corner private constructor(
+    /** Encodes one of eight block-space corners. */
+    class Corner
+    private constructor(
         private val x: Boolean,
         private val y: Boolean,
         private val z: Boolean,
-        private val id: Int
+        private val id: Int,
     ) {
         /** Creates a corner from explicit axis signs. */
-        constructor(x: Boolean, y: Boolean, z: Boolean) : this(
-            x, y, z,
-            ((if (x) 1 else 0) shl 2) or ((if (y) 1 else 0) shl 1) or (if (z) 1 else 0)
+        constructor(
+            x: Boolean,
+            y: Boolean,
+            z: Boolean,
+        ) : this(
+            x,
+            y,
+            z,
+            ((if (x) 1 else 0) shl 2) or ((if (y) 1 else 0) shl 1) or (if (z) 1 else 0),
         )
 
         /** Creates a corner from a hit vector relative to block center. */
@@ -211,29 +237,33 @@ object BlockUtil {
         fun south(south: Boolean): Corner = Corner(x, y, south)
 
         /** Rotates this corner into north-facing reference orientation. */
-        fun rotateToNorthReference(rotation: BlockFace): Corner = when (rotation) {
-            BlockFace.NORTH -> Corner(x, y, z)
-            BlockFace.EAST -> Corner(z, y, !x)
-            BlockFace.SOUTH -> Corner(!x, y, !z)
-            BlockFace.WEST -> Corner(!z, y, x)
-            else -> throw IllegalArgumentException("rotation must be one of NORTH, EAST, SOUTH, WEST")
-        }
+        fun rotateToNorthReference(rotation: BlockFace): Corner =
+            when (rotation) {
+                BlockFace.NORTH -> Corner(x, y, z)
+                BlockFace.EAST -> Corner(z, y, !x)
+                BlockFace.SOUTH -> Corner(!x, y, !z)
+                BlockFace.WEST -> Corner(!z, y, x)
+                else ->
+                    throw IllegalArgumentException(
+                        "rotation must be one of NORTH, EAST, SOUTH, WEST"
+                    )
+            }
 
         /** Returns the diagonal horizontal face represented by this corner. */
-        fun xzFace(): BlockFace = when {
-            x && z -> BlockFace.SOUTH_EAST
-            x && !z -> BlockFace.NORTH_EAST
-            !x && z -> BlockFace.SOUTH_WEST
-            else -> BlockFace.NORTH_WEST
-        }
+        fun xzFace(): BlockFace =
+            when {
+                x && z -> BlockFace.SOUTH_EAST
+                x && !z -> BlockFace.NORTH_EAST
+                !x && z -> BlockFace.SOUTH_WEST
+                else -> BlockFace.NORTH_WEST
+            }
 
         override fun hashCode(): Int = id
+
         override fun equals(other: Any?): Boolean = other is Corner && other.id == id
     }
 
-    /**
-     * Raytrace octant result.
-     */
+    /** Raytrace octant result. */
     class Oct(private val hitPos: Vector, private val face: BlockFace?) {
         /** Corner represented by this hit position. */
         val corner: Corner = Corner(hitPos)
@@ -248,26 +278,20 @@ object BlockUtil {
         fun face(): BlockFace? = face
     }
 
-    /**
-     * Result holder for dominant horizontal raytrace face checks.
-     */
+    /** Result holder for dominant horizontal raytrace face checks. */
     class RaytraceDominantFaceResult {
         /** Dominant face candidate. */
-        @JvmField
-        var face: BlockFace? = null
+        @JvmField var face: BlockFace? = null
 
         /** Dominance score for [face]. */
-        @JvmField
-        var dominance: Double = 0.0
+        @JvmField var dominance: Double = 0.0
     }
 
-    /**
-     * Comparator sorting block vectors by squared distance to origin.
-     */
+    /** Comparator sorting block vectors by squared distance to origin. */
     class BlockVectorRadiusComparator : Comparator<BlockVector> {
         /** Compares vectors by squared Euclidean distance. */
         override fun compare(a: BlockVector, b: BlockVector): Int =
             (a.blockX * a.blockX + a.blockY * a.blockY + a.blockZ * a.blockZ) -
-                    (b.blockX * b.blockX + b.blockY * b.blockY + b.blockZ * b.blockZ)
+                (b.blockX * b.blockX + b.blockY * b.blockY + b.blockZ * b.blockZ)
     }
 }

@@ -1,12 +1,12 @@
 package org.oddlama.vane.core.resourcepack
 
+import java.io.File
+import java.io.IOException
+import java.nio.file.*
 import org.bukkit.Bukkit
 import org.bukkit.plugin.Plugin
 import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.scheduler.BukkitTask
-import java.io.File
-import java.io.IOException
-import java.nio.file.*
 
 /**
  * Watches vane module language files and refreshes the resource pack when they change.
@@ -14,15 +14,14 @@ import java.nio.file.*
  * @param resourcePackDistributor distributor used to regenerate and broadcast the pack.
  * @param file the generated resource pack zip file.
  */
-class ResourcePackFileWatcher(private val resourcePackDistributor: ResourcePackDistributor, private val file: File) {
-    /**
-     * Active watch service used to receive filesystem events.
-     */
+class ResourcePackFileWatcher(
+    private val resourcePackDistributor: ResourcePackDistributor,
+    private val file: File,
+) {
+    /** Active watch service used to receive filesystem events. */
     private var eyes: WatchService? = null
 
-    /**
-     * Background Bukkit task polling filesystem events.
-     */
+    /** Background Bukkit task polling filesystem events. */
     private var watchTask: BukkitTask? = null
 
     /**
@@ -37,26 +36,22 @@ class ResourcePackFileWatcher(private val resourcePackDistributor: ResourcePackD
         eyes = watcher
         val langFileMatch = FileSystems.getDefault().getPathMatcher("glob:**/lang-*.yml")
         registerDirectories(Paths.get("plugins"), watcher, ::isVaneModuleFolder)
-        watchTask = watchAsync(watcher, langFileMatch) { updateAndSendResourcePack() }
-            .runTaskAsynchronously(plugin)
+        watchTask =
+            watchAsync(watcher, langFileMatch) { updateAndSendResourcePack() }
+                .runTaskAsynchronously(plugin)
     }
 
-    /**
-     * Stops background watching and releases resources.
-     */
+    /** Stops background watching and releases resources. */
     fun stop() {
         watchTask?.cancel()
         watchTask = null
         try {
             eyes?.close()
-        } catch (_: IOException) {
-        }
+        } catch (_: IOException) {}
         eyes = null
     }
 
-    /**
-     * Regenerates the resource pack and redistributes it to online players.
-     */
+    /** Regenerates the resource pack and redistributes it to online players. */
     private fun updateAndSendResourcePack() {
         val mod = resourcePackDistributor.module ?: return
         resourcePackDistributor.counter++
@@ -65,9 +60,7 @@ class ResourcePackFileWatcher(private val resourcePackDistributor: ResourcePackD
         Bukkit.getOnlinePlayers().forEach { resourcePackDistributor.sendResourcePack(it) }
     }
 
-    /**
-     * Returns whether the path belongs to a vane module directory.
-     */
+    /** Returns whether the path belongs to a vane module directory. */
     private fun isVaneModuleFolder(p: Path): Boolean = p.fileName.toString().startsWith("vane-")
 
     /**
@@ -76,19 +69,13 @@ class ResourcePackFileWatcher(private val resourcePackDistributor: ResourcePackD
      * @param r the wrapped runnable.
      */
     private class TrackRunned(val r: Runnable) : BukkitRunnable() {
-        /**
-         * Indicates whether the runnable has completed.
-         */
+        /** Indicates whether the runnable has completed. */
         var hasRun = false
 
-        /**
-         * Indicates whether the runnable has started.
-         */
+        /** Indicates whether the runnable has started. */
         var hasStarted = false
 
-        /**
-         * Executes the wrapped runnable and updates state flags.
-         */
+        /** Executes the wrapped runnable and updates state flags. */
         override fun run() {
             hasStarted = true
             r.run()
@@ -104,21 +91,26 @@ class ResourcePackFileWatcher(private val resourcePackDistributor: ResourcePackD
      * @param onHit action to run when matching changes are detected.
      * @return a Bukkit runnable that polls watch events.
      */
-    private fun watchAsync(eyes: WatchService, matchLang: PathMatcher, onHit: Runnable): BukkitRunnable {
+    private fun watchAsync(
+        eyes: WatchService,
+        matchLang: PathMatcher,
+        onHit: Runnable,
+    ): BukkitRunnable {
         val plugin = resourcePackDistributor.module as? Plugin
         return object : BukkitRunnable() {
             override fun run() {
                 var shouldSchedule = false
                 var runner: TrackRunned? = null
                 while (true) {
-                    val key = try {
-                        eyes.take()
-                    } catch (_: ClosedWatchServiceException) {
-                        return
-                    } catch (_: InterruptedException) {
-                        Thread.currentThread().interrupt()
-                        return
-                    }
+                    val key =
+                        try {
+                            eyes.take()
+                        } catch (_: ClosedWatchServiceException) {
+                            return
+                        } catch (_: InterruptedException) {
+                            Thread.currentThread().interrupt()
+                            return
+                        }
                     key.pollEvents()
                         .filterIsInstance<WatchEvent<*>>()
                         .filter { it.kind() !== StandardWatchEventKinds.OVERFLOW }
@@ -129,9 +121,10 @@ class ResourcePackFileWatcher(private val resourcePackDistributor: ResourcePackD
                         }
                     if (shouldSchedule) {
                         if (runner?.hasStarted == false) runner.cancel()
-                        runner = TrackRunned(onHit).also {
-                            if (plugin != null) it.runTaskLater(plugin, 20L)
-                        }
+                        runner =
+                            TrackRunned(onHit).also {
+                                if (plugin != null) it.runTaskLater(plugin, 20L)
+                            }
                         shouldSchedule = false
                     }
                     if (!key.reset()) return
@@ -149,7 +142,11 @@ class ResourcePackFileWatcher(private val resourcePackDistributor: ResourcePackD
      * @throws IOException if directory traversal fails.
      */
     @Throws(IOException::class)
-    private fun registerDirectories(root: Path, watcher: WatchService, pathMatch: (Path) -> Boolean) {
+    private fun registerDirectories(
+        root: Path,
+        watcher: WatchService,
+        pathMatch: (Path) -> Boolean,
+    ) {
         Files.walk(root)
             .filter { Files.isDirectory(it) && pathMatch(it) }
             .forEach { p ->
@@ -157,7 +154,7 @@ class ResourcePackFileWatcher(private val resourcePackDistributor: ResourcePackD
                     watcher,
                     StandardWatchEventKinds.ENTRY_CREATE,
                     StandardWatchEventKinds.ENTRY_DELETE,
-                    StandardWatchEventKinds.ENTRY_MODIFY
+                    StandardWatchEventKinds.ENTRY_MODIFY,
                 )
             }
     }

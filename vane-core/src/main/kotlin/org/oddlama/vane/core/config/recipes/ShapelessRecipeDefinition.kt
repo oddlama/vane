@@ -53,9 +53,10 @@ class ShapelessRecipeDefinition(name: String?) : RecipeDefinition(name) {
 
     /** Loads this recipe definition from dictionary form. */
     override fun fromDict(dict: Any?): RecipeDefinition {
-        require(dict is MutableMap<*, *>) { "Invalid shapeless recipe dictionary: Argument must be a Map<String, Object>!" }
-        val ingredientsObj =
-            LegacyKeys.lookup(dict, "Ingredients")
+        require(dict is MutableMap<*, *>) {
+            "Invalid shapeless recipe dictionary: Argument must be a Map<String, Object>!"
+        }
+        val ingredientsObj = LegacyKeys.lookup(dict, "Ingredients")
         if (ingredientsObj is MutableList<*>) {
             this.ingredients = ingredientsObj.filterIsInstance<String>().toMutableList()
         } else {
@@ -68,7 +69,9 @@ class ShapelessRecipeDefinition(name: String?) : RecipeDefinition(name) {
         if (resultObj is String) {
             this.result = resultObj
         } else {
-            throw IllegalArgumentException("Invalid shapeless recipe dictionary: result must be a string")
+            throw IllegalArgumentException(
+                "Invalid shapeless recipe dictionary: result must be a string"
+            )
         }
 
         return this

@@ -1,25 +1,29 @@
 package org.oddlama.vane.core.persistent
 
-import org.json.JSONObject
-import org.oddlama.vane.core.module.Module
 import java.io.File
 import java.util.function.Consumer
+import org.json.JSONObject
+import org.oddlama.vane.core.module.Module
 
 /** Plugin-facing bindings for the filesystem storage engine. */
 class PersistentStorageManager(var module: Module<*>) {
     /** A migration that upgrades storage to [to]. */
     class Migration(val to: Long, val name: String?, val migrator: Consumer<JSONObject?>)
 
-    private val storage = PersistentStorage(
-        { module.annotation.storageVersion },
-        { module.storagePathOf("storageVersion") },
-        { module.log },
-    ).also { it.compile(module) { name -> name } }
+    private val storage =
+        PersistentStorage(
+                { module.annotation.storageVersion },
+                { module.storagePathOf("storageVersion") },
+                { module.log },
+            )
+            .also { it.compile(module) { name -> name } }
 
     /** Whether persistent data has been loaded successfully. */
     var isLoaded: Boolean
         get() = storage.isLoaded
-        set(value) { storage.isLoaded = value }
+        set(value) {
+            storage.isLoaded = value
+        }
 
     /** Discovers persistent fields on a module or component. */
     fun compile(owner: Any, mapName: (String?) -> String?) = storage.compile(owner, mapName)

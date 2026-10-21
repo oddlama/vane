@@ -15,9 +15,7 @@ import org.oddlama.velocity.compat.VelocityCompatProxyPlayer
  * @param plugin active Velocity plugin instance.
  */
 class BusyBar(plugin: Velocity) : SimpleCommand {
-    /**
-     * Backing proxy-core command implementation.
-     */
+    /** Backing proxy-core command implementation. */
     private val cmd = ProxyBusyBarCommand(plugin)
 
     /**
@@ -43,5 +41,6 @@ class BusyBar(plugin: Velocity) : SimpleCommand {
 
     /** Players need their identity, everyone else only receives messages. */
     private fun wrap(source: CommandSource): ProxyCommandSender =
-        if (source is Player) VelocityCompatProxyPlayer(source) else VelocityCompatProxyCommandSender(source)
+        if (source is Player) VelocityCompatProxyPlayer(source)
+        else VelocityCompatProxyCommandSender(source)
 }

@@ -13,9 +13,7 @@ import org.oddlama.velocity.compat.VelocityCompatProxyPlayer
  * @param plugin active Velocity plugin instance.
  */
 class Ping(plugin: Velocity) : SimpleCommand {
-    /**
-     * Backing proxy-core command implementation.
-     */
+    /** Backing proxy-core command implementation. */
     private val cmd = ProxyPingCommand("vane_proxy.commands.ping", plugin)
 
     /**
@@ -25,11 +23,12 @@ class Ping(plugin: Velocity) : SimpleCommand {
      */
     override fun execute(invocation: SimpleCommand.Invocation) {
         val sender = invocation.source()
-        val compatSender = if (sender is Player) {
-            VelocityCompatProxyPlayer(sender)
-        } else {
-            VelocityCompatProxyCommandSender(sender)
-        }
+        val compatSender =
+            if (sender is Player) {
+                VelocityCompatProxyPlayer(sender)
+            } else {
+                VelocityCompatProxyCommandSender(sender)
+            }
         cmd.execute(compatSender, invocation.arguments())
     }
 }

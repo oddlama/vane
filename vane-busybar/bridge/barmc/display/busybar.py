@@ -92,7 +92,14 @@ class BusyBarDisplay:
     async def show(self, card: Card, elapsed: float) -> None:
         # Progress bars are left to the countdown text on the device: redrawing them would
         # mean a request per pixel of progress.
-        key = (card.icon, card.line1, card.line2, card.color1, card.color2, self._library.version)
+        key = (
+            card.icon,
+            card.line1,
+            card.line2,
+            card.color1,
+            card.color2,
+            self._library.version,
+        )
         if key == self._last or time.monotonic() - self._last_draw < MIN_REDRAW_SECONDS:
             return
         icon = self._library.resolve(card.icon)

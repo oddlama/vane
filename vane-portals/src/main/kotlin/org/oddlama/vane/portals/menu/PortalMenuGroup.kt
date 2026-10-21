@@ -12,25 +12,22 @@ import org.oddlama.vane.portals.Portals
  * @property settingsMenu menu used to edit portal settings.
  * @property styleMenu menu used to configure portal styles.
  */
-class PortalMenuGroup(context: Context<Portals?>) : ModuleComponent<Portals?>(context.namespace("Menus")) {
+class PortalMenuGroup(context: Context<Portals?>) :
+    ModuleComponent<Portals?>(context.namespace("Menus")) {
     /** Context scoped to this menu group. */
     private val ctx = getContext()!!
 
     /** Menu used to enter a portal name. */
-    @JvmField
-    var enterNameMenu: EnterNameMenu? = EnterNameMenu(ctx)
+    @JvmField var enterNameMenu: EnterNameMenu? = EnterNameMenu(ctx)
 
     /** Menu shown when opening a portal console. */
-    @JvmField
-    var consoleMenu: ConsoleMenu? = ConsoleMenu(ctx)
+    @JvmField var consoleMenu: ConsoleMenu? = ConsoleMenu(ctx)
 
     /** Menu used to edit portal settings. */
-    @JvmField
-    var settingsMenu: SettingsMenu? = SettingsMenu(ctx)
+    @JvmField var settingsMenu: SettingsMenu? = SettingsMenu(ctx)
 
     /** Menu used to configure portal styles. */
-    @JvmField
-    var styleMenu: StyleMenu? = StyleMenu(ctx)
+    @JvmField var styleMenu: StyleMenu? = StyleMenu(ctx)
 
     /** Enables this menu group component. */
     public override fun onEnable() {}

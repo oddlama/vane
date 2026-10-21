@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>Vane – Minecraft Plugin Suite</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="description" content="" />
+        <meta name="author" content="oddlama" />
+        <link rel="stylesheet" href="css/style.css" />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css"
+            integrity="sha512-QeR2VH+lsBE5LSAe1Q5EnTBbe7XTBubt8dG93Y7gidSgdMCr8nVqKcfKAMyN96SV8KDbZVTDXChatu5G2KQGzg=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+        />
+        <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+        <link rel="icon" href="favicon.ico" />
+        <script>
+            if (
+                localStorage.getItem("color-theme") === "dark" ||
+                (!("color-theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches)
+            ) {
+                document.documentElement.classList.add("dark");
+            } else {
+                document.documentElement.classList.remove("dark");
+            }
+        </script>
+    </head>
+    <body class="bg-white dark:bg-gray-900">
+        <nav class="px-2 sm:px-4 py-2.5 rounded">
+            <div class="container flex flex-wrap justify-between items-center mx-auto">
+                <div class="flex items-center"></div>
+                <div class="flex md:order-2">
+                    <button
+                        id="theme-toggle"
+                        type="button"
+                        class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5"
+                    >
+                        <svg
+                            id="theme-toggle-dark-icon"
+                            class="hidden w-5 h-5"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                        </svg>
+                        <svg
+                            id="theme-toggle-light-icon"
+                            class="hidden w-5 h-5"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                                d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+                                fill-rule="evenodd"
+                                clip-rule="evenodd"
+                            ></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </nav>
+        <div class="mx-auto max-w-5xl px-3">
+            <section class="my-8 pb-3">
+                <div class="px-4 text-center lg:px-12">
+                    <div class="mb-4 inline-flex justify-center items-center">
+                        <img
+                            class="h-24 w-24 min-w-24 min-h-24 lg:h-32 lg:w-32 lg:min-w-32 lg:min-h-32 is-pixelated"
+                            src="vane.png"
+                            alt="Vane logo"
+                        />
+                        <h1
+                            class="px-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white"
+                        >
+                            Vane
+                        </h1>
+                    </div>
+                    <p class="mb-8 text-lg font-normal text-gray-500 lg:text-xl lg:px-24 dark:text-gray-400">
+                        Vane is a plugin-suite that provides many immersive and lore-friendly additions to vanilla
+                        minecraft. It will run on any PaperMC-based minecraft server. Check out our
+                        <a
+                            class="text-sky-600 hover:text-gray-800 dark:text-sky-300 dark:hover:text-gray-300"
+                            href="https://oddlama.github.io/minecraft-server"
+                            >Server Installer</a
+                        >
+                        for an easy way to set up vane together with auto-start, 3D online map, and more awesome
+                        features.
+                    </p>
+                    <div class="flex flex-col mb-4 space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4">
+                        <div class="inline-flex justify-center rounded-lr shadow-sm" role="group">
+                            <a
+                                href="https://github.com/oddlama/vane"
+                                class="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-gray-900 rounded-l-lg border-l border-t border-b border-gray-300 hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 dark:text-white dark:border-gray-700 dark:hover:bg-gray-700 dark:focus:ring-gray-800"
+                            >
+                                <div class="-ml-1 mr-2 w-5 h-5 fa-brands fa-github text-lg"></div>
+                                GitHub
+                            </a>
+                            <button
+                                disabled
+                                class="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-gray-900 rounded-r-lg border border-gray-300 bg-gray-50 focus:ring-4 focus:ring-gray-100 dark:text-white dark:border-gray-700 dark:bg-gray-800 dark:focus:ring-gray-800"
+                            >
+                                <span id="starcount">?</span>
+                                <div
+                                    class="ml-2 w-5 h-5 fa-regular fa-star text-lg text-yellow-400 dark:text-yellow-400"
+                                ></div>
+                            </button>
+                        </div>
+                        <a
+                            href="https://github.com/oddlama/vane/releases/latest"
+                            class="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900"
+                        >
+                            <div class="-ml-1 mr-2 w-5 h-5 fa-solid fa-download text-lg"></div>
+                            Download
+                        </a>
+                        <a
+                            href="https://discord.gg/RueJ6A59x2"
+                            class="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-indigo-500 hover:bg-indigo-600 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900"
+                        >
+                            <div class="-ml-1 mr-2 w-5 h-5 fa-brands fa-discord text-lg"></div>
+                            Discord
+                        </a>
+                    </div>
+                </div>
+            </section>
+            <section class="my-16">
+                <h1
+                    class="py-6 text-center text-4xl font-bold tracking-tight leading-none text-gray-900 dark:text-gray-50"
+                >
+                    Features
+                </h1>
+                <p class="mb-4 text-center text-lg font-normal text-gray-500 lg:text-xl lg:px-24 dark:text-gray-400">
+                    Almost everything in vane is fully configurable—no matter whether it's a feature, recipe, or
+                    loot-table. Dislike anything? Disable it. Below, you will find an overview of the most important
+                    features in vane.
+                </p>
+                <div class="mb-8 flex flex-col sm:flex-row sm:justify-center">
+                    <button
+                        id="expand-collapse-all"
+                        class="py-2 px-4 uppercase text-xs font-bold text-center text-gray-900 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 dark:text-white dark:hover:bg-gray-700 dark:focus:ring-gray-800"
+                    >
+                        Expand All
+                    </button>
+                </div>
+            </section>
+            {{ each_category_content }}
+            <div class="my-16"></div>
+        </div>
+        <div id="the-mctooltip"></div>
+    </body>
+    <script>
+        const themeToggleDarkIcon = document.getElementById("theme-toggle-dark-icon");
+        const themeToggleLightIcon = document.getElementById("theme-toggle-light-icon");
+
+        // Change the icons inside the button based on previous settings
+        if (
+            localStorage.getItem("color-theme") === "dark" ||
+            (!("color-theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches)
+        ) {
+            themeToggleLightIcon.classList.remove("hidden");
+        } else {
+            themeToggleDarkIcon.classList.remove("hidden");
+        }
+
+        const themeToggleBtn = document.getElementById("theme-toggle");
+
+        themeToggleBtn.addEventListener("click", function () {
+            // toggle icons inside button
+            themeToggleDarkIcon.classList.toggle("hidden");
+            themeToggleLightIcon.classList.toggle("hidden");
+
+            // if set via local storage previously
+            if (localStorage.getItem("color-theme")) {
+                if (localStorage.getItem("color-theme") === "light") {
+                    document.documentElement.classList.add("dark");
+                    localStorage.setItem("color-theme", "dark");
+                } else {
+                    document.documentElement.classList.remove("dark");
+                    localStorage.setItem("color-theme", "light");
+                }
+
+                // if NOT set via local storage previously
+            } else {
+                if (document.documentElement.classList.contains("dark")) {
+                    document.documentElement.classList.remove("dark");
+                    localStorage.setItem("color-theme", "light");
+                } else {
+                    document.documentElement.classList.add("dark");
+                    localStorage.setItem("color-theme", "dark");
+                }
+            }
+        });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            fetch("https://api.github.com/repos/oddlama/vane").then((response) =>
+                response
+                    .json()
+                    .then((json) => (document.getElementById("starcount").innerText = json["stargazers_count"])),
+            );
+        });
+    </script>
+    <script>
+        function accordionSetState(el, state) {
+            el.setAttribute("aria-expanded", state ? "true" : "false");
+            const target = document.getElementById(el.getAttribute("aria-controls"));
+            const iconEl = el.querySelector("[data-accordion-icon]");
+            if (state) {
+                target.classList.remove("hidden");
+                if (iconEl) {
+                    iconEl.classList.add("rotate-180");
+                }
+            } else {
+                target.classList.add("hidden");
+                if (iconEl) {
+                    iconEl.classList.remove("rotate-180");
+                }
+            }
+        }
+
+        let state = false;
+        const expand_collapse_btn = document.getElementById("expand-collapse-all");
+        expand_collapse_btn.addEventListener("click", function () {
+            state = !state;
+            Array.prototype.forEach.call(document.getElementsByClassName("feature-toggle"), (el) =>
+                accordionSetState(el, state),
+            );
+            expand_collapse_btn.innerText = state ? "Collapse All" : "Expand All";
+        });
+
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll("[aria-controls]").forEach((el) => {
+                el.addEventListener("click", function () {
+                    const active = el.getAttribute("aria-expanded") === "true";
+                    accordionSetState(el, !active);
+                });
+            });
+        });
+    </script>
+    <script>
+        const minecraft_tooltip = document.getElementById("the-mctooltip");
+
+        const pos = function (o, x, y, event) {
+            const posX = event.pageX;
+            const posY = event.pageY;
+            o.style.position = "absolute";
+            o.style.top = posY + y + "px";
+            if (event.clientX <= document.documentElement.clientWidth / 2) {
+                o.style.left = posX + x + "px";
+                o.style.removeProperty("right");
+                o.style.maxWidth = document.documentElement.clientWidth - (event.clientX + x) - 16 + "px";
+            } else {
+                o.style.removeProperty("left");
+                o.style.right =
+                    document.documentElement.scrollLeft + document.documentElement.clientWidth - (posX - x) + "px";
+                o.style.maxWidth = event.clientX - x - 16 + "px";
+            }
+        };
+        Array.prototype.forEach.call(document.getElementsByClassName("mctooltip"), (el) => {
+            el.onmouseover = function (event) {
+                minecraft_tooltip.innerHTML = event.target.dataset.mctooltip;
+                minecraft_tooltip.style.display = "block";
+            };
+
+            el.onmouseout = function () {
+                minecraft_tooltip.style.display = "none";
+            };
+
+            el.onmousemove = function (event) {
+                pos(minecraft_tooltip, 5, -30, event);
+            };
+        });
+
+        minecraft_tooltip.style.display = "none";
+    </script>
+</html>

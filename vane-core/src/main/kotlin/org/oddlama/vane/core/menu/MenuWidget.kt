@@ -4,9 +4,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.inventory.ItemStack
 
-/**
- * Contract for widgets rendered and interacted with inside a [Menu].
- */
+/** Contract for widgets rendered and interacted with inside a [Menu]. */
 interface MenuWidget {
     /**
      * Updates this widget's visual state for the given menu.
@@ -15,9 +13,7 @@ interface MenuWidget {
      */
     fun update(menu: Menu?): Boolean
 
-    /**
-     * Handles a click routed through the parent menu.
-     */
+    /** Handles a click routed through the parent menu. */
     fun click(
         player: Player?,
         menu: Menu?,

@@ -12,13 +12,10 @@ import org.oddlama.vane.regions.Regions
 
 @Name("region")
 @Aliases("regions", "rg")
-/**
- * Root command opening the regions management menu.
- */
-class Region(context: Context<Regions?>) : org.oddlama.vane.core.command.Command<Regions?>(context) {
-    /**
-     * Builds the `/region` command tree.
-     */
+/** Root command opening the regions management menu. */
+class Region(context: Context<Regions?>) :
+    org.oddlama.vane.core.command.Command<Regions?>(context) {
+    /** Builds the `/region` command tree. */
     override fun getCommandBase(): LiteralArgumentBuilder<CommandSourceStack> {
         return super.getCommandBase()
             .then(help())
@@ -29,9 +26,7 @@ class Region(context: Context<Regions?>) : org.oddlama.vane.core.command.Command
             }
     }
 
-    /**
-     * Opens the main regions menu for the given player.
-     */
+    /** Opens the main regions menu for the given player. */
     private fun openMenu(player: Player) {
         module?.menus?.mainMenu?.create(player)?.open(player)
     }

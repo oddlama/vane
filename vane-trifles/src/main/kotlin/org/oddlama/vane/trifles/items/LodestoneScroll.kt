@@ -27,23 +27,18 @@ import org.oddlama.vane.util.StorageUtil
     base = Material.WARPED_FUNGUS_ON_A_STICK,
     durability = 15,
     modelData = 0x760011,
-    version = 1
+    version = 1,
 )
-/**
- * Scroll variant that can be bound to a lodestone and teleport to that anchor.
- */
+/** Scroll variant that can be bound to a lodestone and teleport to that anchor. */
 class LodestoneScroll(context: Context<Trifles?>) : Scroll(context, 6000) {
     /** Action-bar message shown when the scroll has no lodestone binding. */
-    @LangMessage
-    var langTeleportNoBoundLodestone: TranslatedMessage? = null
+    @LangMessage var langTeleportNoBoundLodestone: TranslatedMessage? = null
 
     /** Action-bar message shown when the bound lodestone no longer exists. */
-    @LangMessage
-    var langTeleportMissingLodestone: TranslatedMessage? = null
+    @LangMessage var langTeleportMissingLodestone: TranslatedMessage? = null
 
     /** Lore template used after binding to a lodestone. */
-    @LangMessage
-    var langBoundLore: TranslatedMessage? = null
+    @LangMessage var langBoundLore: TranslatedMessage? = null
 
     /** Defines the lodestone scroll crafting recipe. */
     override fun defaultRecipes(): RecipeList {
@@ -67,12 +62,16 @@ class LodestoneScroll(context: Context<Trifles?>) : Scroll(context, 6000) {
         return StorageUtil.storageGetLocation(
             meta.persistentDataContainer,
             LODESTONE_LOCATION,
-            null
+            null,
         )
     }
 
     /** Resolves the bound lodestone destination, or reports binding errors. */
-    override fun teleportLocation(scroll: ItemStack?, player: Player?, imminentTeleport: Boolean): Location? {
+    override fun teleportLocation(
+        scroll: ItemStack?,
+        player: Player?,
+        imminentTeleport: Boolean,
+    ): Location? {
         val p = player ?: return null
         // This scroll cannot be used while sneaking to allow re-binding
         if (p.isSneaking) {
@@ -98,7 +97,10 @@ class LodestoneScroll(context: Context<Trifles?>) : Scroll(context, 6000) {
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     fun onPlayerInteract(event: PlayerInteractEvent) {
         // Skip if no block was clicked or vanilla item use is currently allowed.
-        if (!event.hasBlock() || event.action != Action.RIGHT_CLICK_BLOCK || event.useItemInHand() == Event.Result.ALLOW
+        if (
+            !event.hasBlock() ||
+                event.action != Action.RIGHT_CLICK_BLOCK ||
+                event.useItemInHand() == Event.Result.ALLOW
         ) {
             return
         }
@@ -129,7 +131,7 @@ class LodestoneScroll(context: Context<Trifles?>) : Scroll(context, 6000) {
             StorageUtil.storageSetLocation(
                 meta.persistentDataContainer,
                 LODESTONE_LOCATION,
-                block.location.add(0.5, 0.5, 0.5)
+                block.location.add(0.5, 0.5, 0.5),
             )
             meta.lore(
                 listOf(
@@ -138,7 +140,7 @@ class LodestoneScroll(context: Context<Trifles?>) : Scroll(context, 6000) {
                             "§a" + block.world.name,
                             "§b" + block.x,
                             "§b" + block.y,
-                            "§b" + block.z
+                            "§b" + block.z,
                         )
                         .decoration(TextDecoration.ITALIC, false)
                 )
@@ -147,12 +149,22 @@ class LodestoneScroll(context: Context<Trifles?>) : Scroll(context, 6000) {
 
         // Play feedback particles and sound.
         PlayerUtil.swingArm(player, hand)
-        block
-            .world
-            .spawnParticle(Particle.ENCHANT, block.location.add(0.5, 2.0, 0.5), 100, 0.1, 0.3, 0.1, 2.0)
-        block
-            .world
-            .playSound(block.location, Sound.BLOCK_RESPAWN_ANCHOR_CHARGE, SoundCategory.BLOCKS, 1.0f, 3.0f)
+        block.world.spawnParticle(
+            Particle.ENCHANT,
+            block.location.add(0.5, 2.0, 0.5),
+            100,
+            0.1,
+            0.3,
+            0.1,
+            2.0,
+        )
+        block.world.playSound(
+            block.location,
+            Sound.BLOCK_RESPAWN_ANCHOR_CHARGE,
+            SoundCategory.BLOCKS,
+            1.0f,
+            3.0f,
+        )
 
         // Prevent secondary item usage from firing on the same click.
         event.setUseInteractedBlock(Event.Result.DENY)
@@ -161,6 +173,7 @@ class LodestoneScroll(context: Context<Trifles?>) : Scroll(context, 6000) {
 
     companion object {
         /** Persistent metadata key storing the lodestone target location. */
-        val LODESTONE_LOCATION: NamespacedKey = StorageUtil.namespacedKey("vane", "lodestone_location")
+        val LODESTONE_LOCATION: NamespacedKey =
+            StorageUtil.namespacedKey("vane", "lodestone_location")
     }
 }

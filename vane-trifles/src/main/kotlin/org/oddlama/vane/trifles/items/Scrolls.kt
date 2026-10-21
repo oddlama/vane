@@ -20,15 +20,14 @@ import org.oddlama.vane.util.PlayerUtil
 import org.oddlama.vane.util.StorageUtil
 import org.oddlama.vane.util.msToTicks
 
-/**
- * Registers concrete scroll items and handles shared scroll interaction behavior.
- */
-class Scrolls(context: Context<Trifles?>) : Listener<Trifles?>(
-    context.group(
-        "Scrolls",
-        "Several scrolls that allow player teleportation, and related behavior."
-    )
-) {
+/** Registers concrete scroll items and handles shared scroll interaction behavior. */
+class Scrolls(context: Context<Trifles?>) :
+    Listener<Trifles?>(
+        context.group(
+            "Scrolls",
+            "Several scrolls that allow player teleportation, and related behavior.",
+        )
+    ) {
     /** Active scroll item implementations managed by this listener. */
     private val scrolls: MutableSet<Scroll> = HashSet()
 
@@ -39,7 +38,8 @@ class Scrolls(context: Context<Trifles?>) : Listener<Trifles?>(
     @ConfigInt(
         def = 15000,
         min = 0,
-        desc = "A cooldown in milliseconds that is applied when the player takes damage (prevents combat logging). Set to 0 to allow combat logging."
+        desc =
+            "A cooldown in milliseconds that is applied when the player takes damage (prevents combat logging). Set to 0 to allow combat logging.",
     )
     /** Cooldown applied after taking damage to discourage combat logging. */
     private val configDamageCooldown = 0
@@ -59,9 +59,9 @@ class Scrolls(context: Context<Trifles?>) : Listener<Trifles?>(
 
     @EventHandler(
         priority = EventPriority.LOW,
-        ignoreCancelled = false
+        ignoreCancelled = false,
     ) // Keep disabled-cancel filtering to include right-click-air handling.
-            /** Handles right-click scroll usage and executes teleport flow when valid. */
+    /** Handles right-click scroll usage and executes teleport flow when valid. */
     fun onPlayerRightClick(event: PlayerInteractEvent) {
         if (event.action != Action.RIGHT_CLICK_BLOCK && event.action != Action.RIGHT_CLICK_AIR) {
             return
@@ -134,18 +134,46 @@ class Scrolls(context: Context<Trifles?>) : Listener<Trifles?>(
         StorageUtil.storageSetLocation(
             player.persistentDataContainer,
             UnstableScroll.LAST_SCROLL_TELEPORT_LOCATION,
-            from.clone()
+            from.clone(),
         )
 
         // Play source and destination teleport sounds.
-        from.world.playSound(from, Sound.ITEM_CHORUS_FRUIT_TELEPORT, SoundCategory.PLAYERS, 1.0f, 1.1f)
+        from.world.playSound(
+            from,
+            Sound.ITEM_CHORUS_FRUIT_TELEPORT,
+            SoundCategory.PLAYERS,
+            1.0f,
+            1.1f,
+        )
         to.world.playSound(to, Sound.ITEM_CHORUS_FRUIT_TELEPORT, SoundCategory.PLAYERS, 1.0f, 1.1f)
-        from.world.playSound(from, Sound.BLOCK_END_PORTAL_FRAME_FILL, SoundCategory.PLAYERS, 1.0f, 1.0f)
+        from.world.playSound(
+            from,
+            Sound.BLOCK_END_PORTAL_FRAME_FILL,
+            SoundCategory.PLAYERS,
+            1.0f,
+            1.0f,
+        )
         to.world.playSound(to, Sound.BLOCK_END_PORTAL_FRAME_FILL, SoundCategory.PLAYERS, 1.0f, 1.0f)
 
         // Spawn source and destination particles.
-        from.world.spawnParticle(Particle.PORTAL, from.clone().add(0.0, 1.0, 0.0), 200, 1.0, 2.0, 1.0, 1.0)
-        to.world.spawnParticle(Particle.END_ROD, to.clone().add(0.0, 1.0, 0.0), 100, 1.0, 2.0, 1.0, 1.0)
+        from.world.spawnParticle(
+            Particle.PORTAL,
+            from.clone().add(0.0, 1.0, 0.0),
+            200,
+            1.0,
+            2.0,
+            1.0,
+            1.0,
+        )
+        to.world.spawnParticle(
+            Particle.END_ROD,
+            to.clone().add(0.0, 1.0, 0.0),
+            100,
+            1.0,
+            2.0,
+            1.0,
+            1.0,
+        )
         return true
     }
 

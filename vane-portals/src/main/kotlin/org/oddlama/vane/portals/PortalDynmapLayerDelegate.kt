@@ -1,6 +1,7 @@
 package org.oddlama.vane.portals
 
 // ...existing imports...
+import java.util.*
 import org.dynmap.DynmapCommonAPI
 import org.dynmap.markers.Marker
 import org.dynmap.markers.MarkerAPI
@@ -8,7 +9,6 @@ import org.dynmap.markers.MarkerIcon
 import org.dynmap.markers.MarkerSet
 import org.oddlama.vane.core.dynmap.DynmapIntegration
 import org.oddlama.vane.portals.portal.Portal
-import java.util.*
 
 // ...existing imports...
 
@@ -40,15 +40,18 @@ class PortalDynmapLayerDelegate(private val parent: PortalDynmapLayer) {
     }
 
     /**
-     * Helper that registers the Dynmap listener and initializes the integration.
-     * Returns true when dynmap integration was successfully enabled and initialization
-     * (including marker API presence) completed.
+     * Helper that registers the Dynmap listener and initializes the integration. Returns true when
+     * dynmap integration was successfully enabled and initialization (including marker API
+     * presence) completed.
      */
     private fun registerAndInitDynmap(module: Portals): Boolean {
-        return DynmapIntegration.initialize(module.log, { d, m ->
-            dynmapApi = d
-            markerApi = m
-        }) {
+        return DynmapIntegration.initialize(
+            module.log,
+            { d, m ->
+                dynmapApi = d
+                markerApi = m
+            },
+        ) {
             dynmapEnabled = true
             createOrLoadLayer()
         }
@@ -71,13 +74,14 @@ class PortalDynmapLayerDelegate(private val parent: PortalDynmapLayer) {
         val markerApi = markerApi ?: return
 
         // Create or retrieve layer
-        markerSet = markerApi.getMarkerSet(PortalDynmapLayer.LAYER_ID)
-            ?: markerApi.createMarkerSet(
-                PortalDynmapLayer.LAYER_ID,
-                parent.langLayerLabel!!.str(),
-                null,
-                false
-            )
+        markerSet =
+            markerApi.getMarkerSet(PortalDynmapLayer.LAYER_ID)
+                ?: markerApi.createMarkerSet(
+                    PortalDynmapLayer.LAYER_ID,
+                    parent.langLayerLabel!!.str(),
+                    null,
+                    false,
+                )
 
         if (markerSet == null) {
             module?.log?.severe("Failed to create dynmap portal marker set!")
@@ -131,7 +135,7 @@ class PortalDynmapLayerDelegate(private val parent: PortalDynmapLayer) {
             loc.y,
             loc.z,
             markerIcon,
-            false
+            false,
         )
     }
 

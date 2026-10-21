@@ -75,12 +75,12 @@ clean build. This is not a new dependency lock or sandboxed Nix build.
 
 **129 JVM tests passed**, including these **38 new tests** in `vane-core`:
 
-| Test class | Tests | Scope |
-| --- | ---: | --- |
-| `PersistentStorageTest` | 12 | Real files: schema rejection, alias conflicts, repeated failed reloads, malformed input, supported migration/backup, new stores and fresh-engine reads |
-| `PersistentSaveTest` | 8 | Real files: serializer/write/replacement failures and retry; dirty acknowledgement, changes during save, throwing callbacks and JVM save signatures |
-| `WorldStorageGuardTest` | 11 | Production guard: skipped/partial loads, deletion, independent worlds, reload, unload/disable and late completion |
-| `PersistentWorldRecordsTest` | 7 | Production snapshot reader with a read-only PDC double: nonempty and empty snapshots, UTF-8 records, unrelated keys and rejected record cases |
+| Test class                   | Tests | Scope                                                                                                                                                  |
+| ---------------------------- | ----: | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `PersistentStorageTest`      |    12 | Real files: schema rejection, alias conflicts, repeated failed reloads, malformed input, supported migration/backup, new stores and fresh-engine reads |
+| `PersistentSaveTest`         |     8 | Real files: serializer/write/replacement failures and retry; dirty acknowledgement, changes during save, throwing callbacks and JVM save signatures    |
+| `WorldStorageGuardTest`      |    11 | Production guard: skipped/partial loads, deletion, independent worlds, reload, unload/disable and late completion                                      |
+| `PersistentWorldRecordsTest` |     7 | Production snapshot reader with a read-only PDC double: nonempty and empty snapshots, UTF-8 records, unrelated keys and rejected record cases          |
 
 The existing **10 external compatibility probes** also passed. They remain
 external review evidence, not ten additional maintained tests in this branch.

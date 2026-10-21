@@ -4,6 +4,7 @@ import com.mojang.brigadier.Command
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import io.papermc.paper.command.brigadier.CommandSourceStack
 import io.papermc.paper.command.brigadier.Commands
+import java.util.*
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.loot.LootContext
@@ -15,7 +16,6 @@ import org.oddlama.vane.core.command.argumentType.ModuleArgumentType
 import org.oddlama.vane.core.lang.TranslatedMessage
 import org.oddlama.vane.core.module.Context
 import org.oddlama.vane.core.module.Module
-import java.util.*
 
 /**
  * Core administrative command for vane reload and resource-pack operations.
@@ -25,24 +25,18 @@ import java.util.*
 @Name("vane")
 class Vane(context: Context<Core?>) : org.oddlama.vane.core.command.Command<Core?>(context) {
     /** Message shown when module reload succeeds. */
-    @LangMessage
-    private val langReloadSuccess: TranslatedMessage? = null
+    @LangMessage private val langReloadSuccess: TranslatedMessage? = null
 
     /** Message shown when module reload fails. */
-    @LangMessage
-    private val langReloadFail: TranslatedMessage? = null
+    @LangMessage private val langReloadFail: TranslatedMessage? = null
 
     /** Message shown when resource-pack generation succeeds. */
-    @LangMessage
-    private val langResourcePackGenerateSuccess: TranslatedMessage? = null
+    @LangMessage private val langResourcePackGenerateSuccess: TranslatedMessage? = null
 
     /** Message shown when resource-pack generation fails. */
-    @LangMessage
-    private val langResourcePackGenerateFail: TranslatedMessage? = null
+    @LangMessage private val langResourcePackGenerateFail: TranslatedMessage? = null
 
-    /**
-     * Builds the brigadier command tree for `/vane`.
-     */
+    /** Builds the brigadier command tree for `/vane`. */
     override fun getCommandBase(): LiteralArgumentBuilder<CommandSourceStack> =
         super.getCommandBase()
             .then(help())
@@ -57,45 +51,37 @@ class Vane(context: Context<Core?>) : org.oddlama.vane.core.command.Command<Core
                             .executes { ctx ->
                                 reloadModule(
                                     ctx.source.sender,
-                                    ctx.getArgument("module", Module::class.java) as Module<*>
+                                    ctx.getArgument("module", Module::class.java) as Module<*>,
                                 )
                                 Command.SINGLE_SUCCESS
                             }
                     )
             )
             .then(
-                Commands.literal("generate_resource_pack")
-                    .executes { ctx ->
-                        generateResourcePack(ctx.source.sender)
-                        Command.SINGLE_SUCCESS
-                    }
+                Commands.literal("generate_resource_pack").executes { ctx ->
+                    generateResourcePack(ctx.source.sender)
+                    Command.SINGLE_SUCCESS
+                }
             )
             .then(
-                Commands.literal("test_do_not_use_if_you_are_not_a_dev")
-                    .executes { ctx ->
-                        test(ctx.source.sender)
-                        Command.SINGLE_SUCCESS
-                    }
+                Commands.literal("test_do_not_use_if_you_are_not_a_dev").executes { ctx ->
+                    test(ctx.source.sender)
+                    Command.SINGLE_SUCCESS
+                }
             )
 
-    /**
-     * Reloads configuration for a single module and reports the result.
-     */
+    /** Reloads configuration for a single module and reports the result. */
     private fun reloadModule(sender: CommandSender?, module: Module<*>) {
         val msg = if (module.reloadConfiguration()) langReloadSuccess else langReloadFail
         msg!!.send(sender, "§bvane-${module.annotationName}")
     }
 
-    /**
-     * Reloads configuration for all loaded modules.
-     */
+    /** Reloads configuration for all loaded modules. */
     private fun reloadAll(sender: CommandSender?) {
         module!!.core?.modules?.filterNotNull()?.forEach { reloadModule(sender, it) }
     }
 
-    /**
-     * Generates and optionally redistributes the resource pack.
-     */
+    /** Generates and optionally redistributes the resource pack. */
     private fun generateResourcePack(sender: CommandSender?) {
         val file = module!!.generateResourcePack()
         if (file != null) {
@@ -110,15 +96,12 @@ class Vane(context: Context<Core?>) : org.oddlama.vane.core.command.Command<Core
         }
     }
 
-    /**
-     * Developer-only simulation used to test ancient tome generation frequency.
-     */
+    /** Developer-only simulation used to test ancient tome generation frequency. */
     private fun testTomeGeneration() {
         val lootTable = LootTables.ABANDONED_MINESHAFT.lootTable
         val inventory = module!!.server.createInventory(null, 3 * 9)
-        val context = LootContext.Builder(
-            module!!.server.worlds[0].getBlockAt(0, 0, 0).location
-        ).build()
+        val context =
+            LootContext.Builder(module!!.server.worlds[0].getBlockAt(0, 0, 0).location).build()
         val random = Random()
 
         val simulationCount = 10000
@@ -140,20 +123,18 @@ class Vane(context: Context<Core?>) : org.oddlama.vane.core.command.Command<Core
         }
 
         val percentage = (100.0 * tomes.toDouble() / simulationCount) / gtPercentage
-        val msg = "$tomes tomes were generated in $simulationCount chests. This is $percentage% of the expected value."
+        val msg =
+            "$tomes tomes were generated in $simulationCount chests. This is $percentage% of the expected value."
 
         when {
             tomes == 0 -> module!!.log.severe("0 tomes were generated in $simulationCount chests.")
             tomes > gtPercentage * simulationCount * tolerance &&
-                    tomes < (gtPercentage * simulationCount) / tolerance ->
-                module!!.log.warning(msg)
+                tomes < (gtPercentage * simulationCount) / tolerance -> module!!.log.warning(msg)
 
             else -> module!!.log.info(msg)
         }
     }
 
-    /**
-     * Entry point for developer test subcommand.
-     */
+    /** Entry point for developer test subcommand. */
     private fun test(sender: CommandSender?) = testTomeGeneration()
 }

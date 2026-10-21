@@ -35,76 +35,75 @@ class TranslatedItemStack<T : Module<T?>?>(
     private val defMaterial: ExtendedMaterial?,
     /** Default amount used by config override hook. */
     private val defAmount: Int,
-    desc: String?
+    desc: String?,
 ) : ModuleComponent<T?>(context.namespace(configNamespace, desc)) {
     /** Configured item amount. */
-    @ConfigInt(def = 1, min = 0, desc = "The item stack amount.")
-    var configAmount: Int = 0
+    @ConfigInt(def = 1, min = 0, desc = "The item stack amount.") var configAmount: Int = 0
 
     /** Configured base material for this translated item stack. */
     @ConfigExtendedMaterial(
         def = "minecraft:barrier",
-        desc = "The item stack material. Also accepts heads from the head library or from defined custom items."
+        desc =
+            "The item stack material. Also accepts heads from the head library or from defined custom items.",
     )
-            /** Configured material for generated stacks. */
+    /** Configured material for generated stacks. */
     var configMaterial: ExtendedMaterial? = null
 
     /** Localized item display name. */
-    @JvmField
-    @LangMessage
-    var langName: TranslatedMessage? = null
+    @JvmField @LangMessage var langName: TranslatedMessage? = null
 
     /** Localized item lore lines. */
-    @JvmField
-    @LangMessageArray
-    var langLore: TranslatedMessageArray? = null
+    @JvmField @LangMessageArray var langLore: TranslatedMessageArray? = null
 
-    /**
-     * Creates a translated item stack from a namespaced-key material default.
-     */
+    /** Creates a translated item stack from a namespaced-key material default. */
     constructor(
         context: Context<T?>,
         configNamespace: String?,
         defMaterial: NamespacedKey,
         defAmount: Int,
-        desc: String?
+        desc: String?,
     ) : this(context, configNamespace, from(defMaterial), defAmount, desc)
 
-    /**
-     * Creates a translated item stack from a Bukkit material default.
-     */
+    /** Creates a translated item stack from a Bukkit material default. */
     constructor(
         context: Context<T?>,
         configNamespace: String?,
         defMaterial: Material,
         defAmount: Int,
-        desc: String?
+        desc: String?,
     ) : this(context, configNamespace, from(defMaterial), defAmount, desc)
 
-    /**
-     * Builds a localized item stack using configured material and amount.
-     */
+    /** Builds a localized item stack using configured material and amount. */
     fun item(vararg args: Any?): ItemStack =
-        ItemUtil.nameItem(configMaterial!!.item(configAmount)!!, langName!!.format(*args), langLore!!.format(*args))
+        ItemUtil.nameItem(
+            configMaterial!!.item(configAmount)!!,
+            langName!!.format(*args),
+            langLore!!.format(*args),
+        )
 
-    /**
-     * Builds a localized item stack and applies a lore transformation callback.
-     */
-    fun itemTransformLore(fLore: Consumer1<MutableList<Component?>?>, vararg args: Any?): ItemStack {
+    /** Builds a localized item stack and applies a lore transformation callback. */
+    fun itemTransformLore(
+        fLore: Consumer1<MutableList<Component?>?>,
+        vararg args: Any?,
+    ): ItemStack {
         val lore = langLore!!.format(*args)
         fLore.apply(lore)
-        return ItemUtil.nameItem(configMaterial!!.item(configAmount)!!, langName!!.format(*args), lore)
+        return ItemUtil.nameItem(
+            configMaterial!!.item(configAmount)!!,
+            langName!!.format(*args),
+            lore,
+        )
     }
 
-    /**
-     * Builds a localized item stack with an explicit amount override.
-     */
+    /** Builds a localized item stack with an explicit amount override. */
     fun itemAmount(amount: Int, vararg args: Any?): ItemStack =
-        ItemUtil.nameItem(configMaterial!!.item(amount)!!, langName!!.format(*args), langLore!!.format(*args))
+        ItemUtil.nameItem(
+            configMaterial!!.item(amount)!!,
+            langName!!.format(*args),
+            langLore!!.format(*args),
+        )
 
-    /**
-     * Applies this translation metadata to an alternative base item stack.
-     */
+    /** Applies this translation metadata to an alternative base item stack. */
     fun alternative(alternative: ItemStack, vararg args: Any?): ItemStack =
         ItemUtil.nameItem(alternative, langName!!.format(*args), langLore!!.format(*args))
 

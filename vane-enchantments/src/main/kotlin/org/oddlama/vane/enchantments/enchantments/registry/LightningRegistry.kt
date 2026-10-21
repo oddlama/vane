@@ -9,11 +9,12 @@ import org.oddlama.vane.enchantments.CustomEnchantmentRegistry
 /**
  * Registry for the Lightning enchantment, extending the CustomEnchantmentRegistry.
  *
- * @constructor Creates a new LightningRegistry instance.
  * @param composeEvent The registry compose event to register the enchantment.
+ * @constructor Creates a new LightningRegistry instance.
  */
-class LightningRegistry(composeEvent: RegistryComposeEvent<Enchantment, EnchantmentRegistryEntry.Builder>) :
-    CustomEnchantmentRegistry("lightning", ItemTypeTagKeys.SWORDS, 1) {
+class LightningRegistry(
+    composeEvent: RegistryComposeEvent<Enchantment, EnchantmentRegistryEntry.Builder>
+) : CustomEnchantmentRegistry("lightning", ItemTypeTagKeys.SWORDS, 1) {
     init {
         register(composeEvent)
     }

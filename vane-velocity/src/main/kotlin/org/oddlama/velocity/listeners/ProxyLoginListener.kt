@@ -31,12 +31,13 @@ class ProxyLoginListener @Inject constructor(private val velocity: Velocity) {
         val server = getServerForHost(proxy, virtualHost)
 
         val serverInfo = VelocityCompatServerInfo(server)
-        val proxyEvent = VelocityCompatLoginEvent(
-            event,
-            velocity,
-            serverInfo,
-            VelocityCompatPendingConnection(event.player)
-        )
+        val proxyEvent =
+            VelocityCompatLoginEvent(
+                event,
+                velocity,
+                serverInfo,
+                VelocityCompatPendingConnection(event.player),
+            )
         proxyEvent.fire()
     }
 }

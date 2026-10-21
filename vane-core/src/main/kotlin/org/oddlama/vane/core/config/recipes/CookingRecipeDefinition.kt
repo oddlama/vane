@@ -28,8 +28,14 @@ class CookingRecipeDefinition(name: String?, private val type: String) : RecipeD
 
     init {
         when (this.type) {
-            "blasting", "furnace", "campfire", "smoking" -> {}
-            else -> throw IllegalArgumentException("Invalid cooking recipe: Unknown type '" + this.type + "'")
+            "blasting",
+            "furnace",
+            "campfire",
+            "smoking" -> {}
+            else ->
+                throw IllegalArgumentException(
+                    "Invalid cooking recipe: Unknown type '" + this.type + "'"
+                )
         }
     }
 
@@ -68,35 +74,43 @@ class CookingRecipeDefinition(name: String?, private val type: String) : RecipeD
 
     /** Loads this recipe definition from dictionary form. */
     override fun fromDict(dict: Any?): RecipeDefinition {
-        require(dict is MutableMap<*, *>) { "Invalid $type recipe dictionary: Argument must be a Map<String, Object>!" }
+        require(dict is MutableMap<*, *>) {
+            "Invalid $type recipe dictionary: Argument must be a Map<String, Object>!"
+        }
         val inputObj = LegacyKeys.lookup(dict, "Input")
         if (inputObj is String) {
             this.input = inputObj
         } else {
-            throw IllegalArgumentException("Invalid $type recipe dictionary: input must be a string")
+            throw IllegalArgumentException(
+                "Invalid $type recipe dictionary: input must be a string"
+            )
         }
 
         val resultObj = LegacyKeys.lookup(dict, "Result")
         if (resultObj is String) {
             this.result = resultObj
         } else {
-            throw IllegalArgumentException("Invalid $type recipe dictionary: result must be a string")
+            throw IllegalArgumentException(
+                "Invalid $type recipe dictionary: result must be a string"
+            )
         }
 
-        val experienceObj =
-            LegacyKeys.lookup(dict, "Experience")
+        val experienceObj = LegacyKeys.lookup(dict, "Experience")
         if (experienceObj is Float) {
             this.experience = experienceObj
         } else {
-            throw IllegalArgumentException("Invalid $type recipe dictionary: experience must be a float")
+            throw IllegalArgumentException(
+                "Invalid $type recipe dictionary: experience must be a float"
+            )
         }
 
-        val cookingTimeObj =
-            LegacyKeys.lookup(dict, "CookingTime")
+        val cookingTimeObj = LegacyKeys.lookup(dict, "CookingTime")
         if (cookingTimeObj is Int) {
             this.cookingTime = cookingTimeObj
         } else {
-            throw IllegalArgumentException("Invalid $type recipe dictionary: cookingTime must be a int")
+            throw IllegalArgumentException(
+                "Invalid $type recipe dictionary: cookingTime must be a int"
+            )
         }
 
         return this
@@ -112,7 +126,10 @@ class CookingRecipeDefinition(name: String?, private val type: String) : RecipeD
             "furnace" -> FurnaceRecipe(key(bk), out, `in`, experience, cookingTime)
             "campfire" -> CampfireRecipe(key(bk), out, `in`, experience, cookingTime)
             "smoking" -> SmokingRecipe(key(bk), out, `in`, experience, cookingTime)
-            else -> throw IllegalArgumentException("Invalid cooking recipe: Unknown type '" + this.type + "'")
+            else ->
+                throw IllegalArgumentException(
+                    "Invalid cooking recipe: Unknown type '" + this.type + "'"
+                )
         }
     }
 }

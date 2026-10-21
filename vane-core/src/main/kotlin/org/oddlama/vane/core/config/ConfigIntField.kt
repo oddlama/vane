@@ -1,9 +1,9 @@
 package org.oddlama.vane.core.config
 
+import java.lang.reflect.Field
 import org.bukkit.configuration.file.YamlConfiguration
 import org.oddlama.vane.annotation.config.ConfigInt
 import org.oddlama.vane.core.YamlLoadException
-import java.lang.reflect.Field
 
 /**
  * Config field handler for integer values.
@@ -13,8 +13,12 @@ import java.lang.reflect.Field
  * @param mapName maps Java field names to YAML paths.
  * @param annotation source annotation metadata.
  */
-class ConfigIntField(owner: Any?, field: Field, mapName: (String?) -> String?, var annotation: ConfigInt) :
-    ConfigField<Int?>(owner, field, mapName, "int", annotation.desc) {
+class ConfigIntField(
+    owner: Any?,
+    field: Field,
+    mapName: (String?) -> String?,
+    var annotation: ConfigInt,
+) : ConfigField<Int?>(owner, field, mapName, "int", annotation.desc) {
 
     /** Returns the default value for this config field. */
     override fun def(): Int = overriddenDef() ?: annotation.def
@@ -23,12 +27,25 @@ class ConfigIntField(owner: Any?, field: Field, mapName: (String?) -> String?, v
     override fun metrics(): Boolean = overriddenMetrics() ?: annotation.metrics
 
     /** Generates YAML for this field. */
-    override fun generateYaml(builder: StringBuilder, indent: String, existingCompatibleConfig: YamlConfiguration?) {
+    override fun generateYaml(
+        builder: StringBuilder,
+        indent: String,
+        existingCompatibleConfig: YamlConfiguration?,
+    ) {
         appendDescription(builder, indent)
-        appendValueRange(builder, indent, annotation.min, annotation.max, Int.MIN_VALUE, Int.MAX_VALUE)
+        appendValueRange(
+            builder,
+            indent,
+            annotation.min,
+            annotation.max,
+            Int.MIN_VALUE,
+            Int.MAX_VALUE,
+        )
         appendDefaultValue(builder, indent, def())
-        val def = if (existingCompatibleConfig != null && existingCompatibleConfig.contains(yamlPath()))
-            loadFromYaml(existingCompatibleConfig) else def()
+        val def =
+            if (existingCompatibleConfig != null && existingCompatibleConfig.contains(yamlPath()))
+                loadFromYaml(existingCompatibleConfig)
+            else def()
         appendFieldDefinition(builder, indent, def)
     }
 

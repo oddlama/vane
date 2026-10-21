@@ -10,19 +10,21 @@ import org.oddlama.vane.core.module.Context
 import org.oddlama.vane.util.MaterialUtil
 import org.oddlama.vane.util.PlayerUtil
 
-/**
- * Harvests and replants mature crops when players right-click with an empty hand.
- */
-class HarvestListener(context: Context<Trifles?>) : Listener<Trifles?>(
-    context.group(
-        "BetterHarvesting",
-        "Enables better harvesting. Right clicking on grown crops with bare hands will then harvest the plant and also replant it."
-    )
-) {
+/** Harvests and replants mature crops when players right-click with an empty hand. */
+class HarvestListener(context: Context<Trifles?>) :
+    Listener<Trifles?>(
+        context.group(
+            "BetterHarvesting",
+            "Enables better harvesting. Right clicking on grown crops with bare hands will then harvest the plant and also replant it.",
+        )
+    ) {
     /** Handles right-click crop harvesting for supported seeded plants. */
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     fun onPlayerHarvest(event: PlayerInteractEvent) {
-        if (!event.hasBlock() || event.hand != EquipmentSlot.HAND || event.action != Action.RIGHT_CLICK_BLOCK
+        if (
+            !event.hasBlock() ||
+                event.hand != EquipmentSlot.HAND ||
+                event.action != Action.RIGHT_CLICK_BLOCK
         ) {
             return
         }

@@ -28,52 +28,44 @@ import org.oddlama.vane.enchantments.Enchantments
 import org.oddlama.vane.util.StorageUtil
 
 /**
- * Soulbound is a rare enchantment that prevents items from being dropped
- * unless certain conditions are met. It has a cooldown period after an item
- * is dropped, during which no other soulbound items can be dropped.
+ * Soulbound is a rare enchantment that prevents items from being dropped unless certain conditions
+ * are met. It has a cooldown period after an item is dropped, during which no other soulbound items
+ * can be dropped.
  */
 @VaneEnchantment(name = "soulbound", rarity = Rarity.RARE, treasure = true, allowCustom = true)
 class Soulbound(context: Context<Enchantments?>) : CustomEnchantment<Enchantments?>(context) {
     /**
-     * The cooldown period (in milliseconds) that prevents dropping soulbound
-     * items immediately after another drop.
+     * The cooldown period (in milliseconds) that prevents dropping soulbound items immediately
+     * after another drop.
      */
     @ConfigLong(
         def = 2000,
         min = 0,
-        desc = "Window to allow Soulbound item drop immediately after a previous drop in milliseconds"
+        desc =
+            "Window to allow Soulbound item drop immediately after a previous drop in milliseconds",
     )
     var configCooldown: Long = 0
 
-    /**
-     * Tracks drop cooldown state for soulbound item interactions.
-     */
+    /** Tracks drop cooldown state for soulbound item interactions. */
     private var dropCooldown = CooldownData(IGNORE_SOULBOUND_DROP, configCooldown)
 
     /**
-     * Warning message shown when a player attempts to drop a soulbound item
-     * before the cooldown period has expired.
+     * Warning message shown when a player attempts to drop a soulbound item before the cooldown
+     * period has expired.
      */
-    @LangMessage
-    var langDropLockWarning: TranslatedMessage? = null
+    @LangMessage var langDropLockWarning: TranslatedMessage? = null
+
+    /** Notification message sent to a player when a soulbound item is dropped successfully. */
+    @LangMessage var langDroppedNotification: TranslatedMessage? = null
 
     /**
-     * Notification message sent to a player when a soulbound item is dropped
-     * successfully.
+     * Message indicating the remaining cooldown time before a soulbound item can be dropped again.
      */
-    @LangMessage
-    var langDroppedNotification: TranslatedMessage? = null
+    @LangMessage var langDropCooldown: TranslatedMessage? = null
 
     /**
-     * Message indicating the remaining cooldown time before a soulbound item can
-     * be dropped again.
-     */
-    @LangMessage
-    var langDropCooldown: TranslatedMessage? = null
-
-    /**
-     * Called when the configuration is changed. Updates the cooldown data
-     * for dropping soulbound items.
+     * Called when the configuration is changed. Updates the cooldown data for dropping soulbound
+     * items.
      */
     public override fun onConfigChange() {
         super.onConfigChange()
@@ -81,8 +73,8 @@ class Soulbound(context: Context<Enchantments?>) : CustomEnchantment<Enchantment
     }
 
     /**
-     * Defines the default recipes involving the soulbound enchantment, including
-     * the ingredients and the resulting item.
+     * Defines the default recipes involving the soulbound enchantment, including the ingredients
+     * and the resulting item.
      */
     override fun defaultRecipes(): RecipeList {
         return RecipeList.of(
@@ -101,8 +93,8 @@ class Soulbound(context: Context<Enchantments?>) : CustomEnchantment<Enchantment
     }
 
     /**
-     * Defines the default loot tables for the soulbound enchantment, specifying
-     * where soulbound items can be found in the game world.
+     * Defines the default loot tables for the soulbound enchantment, specifying where soulbound
+     * items can be found in the game world.
      */
     override fun defaultLootTables(): LootTableList {
         return LootTableList.of(
@@ -113,16 +105,16 @@ class Soulbound(context: Context<Enchantments?>) : CustomEnchantment<Enchantment
     }
 
     /**
-     * Applies a custom display format to soulbound items, changing their color
-     * in the user interface.
+     * Applies a custom display format to soulbound items, changing their color in the user
+     * interface.
      */
     override fun applyDisplayFormat(component: Component): Component {
         return component.color(NamedTextColor.DARK_GRAY)
     }
 
     /**
-     * Event handler that prevents players from dropping soulbound items on death,
-     * instead keeping these items in their inventory.
+     * Event handler that prevents players from dropping soulbound items on death, instead keeping
+     * these items in their inventory.
      */
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     fun onPlayerDeath(event: PlayerDeathEvent) {
@@ -140,14 +132,15 @@ class Soulbound(context: Context<Enchantments?>) : CustomEnchantment<Enchantment
     }
 
     /**
-     * Event handler that manages the interaction between the player's inventory
-     * and soulbound items, specifically preventing dropping soulbound items
-     * through inventory actions.
+     * Event handler that manages the interaction between the player's inventory and soulbound
+     * items, specifically preventing dropping soulbound items through inventory actions.
      */
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     fun onPlayerInventoryCheck(event: InventoryClickEvent) {
         if (!isSoulbound(event.cursor)) return
-        if (event.action == InventoryAction.DROP_ALL_CURSOR || event.action == InventoryAction.DROP_ONE_CURSOR
+        if (
+            event.action == InventoryAction.DROP_ALL_CURSOR ||
+                event.action == InventoryAction.DROP_ONE_CURSOR
         ) {
             val tooSlow = dropCooldown.peekCooldown(event.cursor.itemMeta)
             if (tooSlow) {
@@ -164,9 +157,8 @@ class Soulbound(context: Context<Enchantments?>) : CustomEnchantment<Enchantment
     }
 
     /**
-     * Event handler that prevents players from dropping soulbound items from
-     * their inventory, with specific behavior depending on the player's
-     * inventory state.
+     * Event handler that prevents players from dropping soulbound items from their inventory, with
+     * specific behavior depending on the player's inventory state.
      */
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     fun onPlayerDropItem(event: PlayerDropItemEvent) {
@@ -189,7 +181,7 @@ class Soulbound(context: Context<Enchantments?>) : CustomEnchantment<Enchantment
                 event.isCancelled = true
                 langDropLockWarning?.sendActionBar(
                     event.player,
-                    event.itemDrop.itemStack.displayName()
+                    event.itemDrop.itemStack.displayName(),
                 )
             } else {
                 // Inventory is full (e.g., when exiting crafting table with soulbound item in it)
@@ -225,6 +217,7 @@ class Soulbound(context: Context<Enchantments?>) : CustomEnchantment<Enchantment
 
     /**
      * Checks if an item is soulbound by examining its enchantment level.
+     *
      * @param droppedItem The item to check.
      * @return True if the item is soulbound, false otherwise.
      */
@@ -232,17 +225,13 @@ class Soulbound(context: Context<Enchantments?>) : CustomEnchantment<Enchantment
         return droppedItem.getEnchantmentLevel(requireNotNull(bukkit())) > 0
     }
 
-    /**
-     * Constants used by Soulbound metadata handling.
-     */
+    /** Constants used by Soulbound metadata handling. */
     companion object {
-        /**
-         * Key used to identify the cooldown data for ignoring soulbound drop
-         * restrictions.
-         */
-        private val IGNORE_SOULBOUND_DROP = StorageUtil.namespacedKey(
-            "vane_enchantments",
-            "ignore_soulbound_drop"
-        )
+        /** Key used to identify the cooldown data for ignoring soulbound drop restrictions. */
+        private val IGNORE_SOULBOUND_DROP =
+            StorageUtil.namespacedKey(
+                "vane_enchantments",
+                "ignore_soulbound_drop",
+            )
     }
 }

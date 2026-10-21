@@ -20,29 +20,25 @@ import org.oddlama.vane.enchantments.Enchantments
 /**
  * The [Lightning] class represents a lightning enchantment that can be applied to weapons.
  *
- * @constructor Creates a new instance of the [Lightning] enchantment.
  * @param context The context in which this enchantment is used.
+ * @constructor Creates a new instance of the [Lightning] enchantment.
  */
 @VaneEnchantment(name = "lightning", maxLevel = 1, rarity = Rarity.RARE, treasure = true)
-class Lightning(context: Context<Enchantments?>) : CustomEnchantment<Enchantments?>(context, false) {
-    /**
-     * Configurable option to toggle lightning protection.
-     */
+class Lightning(context: Context<Enchantments?>) :
+    CustomEnchantment<Enchantments?>(context, false) {
+    /** Configurable option to toggle lightning protection. */
     @ConfigBoolean(
         def = true,
-        desc = "Toggle lightning enchantment to cancel lightning damage for wielders of the enchant"
+        desc =
+            "Toggle lightning enchantment to cancel lightning damage for wielders of the enchant",
     )
     private val configLightningProtection = false
 
-    /**
-     * Configurable damage modifier for the lightning enchantment.
-     */
+    /** Configurable damage modifier for the lightning enchantment. */
     @ConfigInt(def = 4, min = 0, max = 20, desc = "Damage modifier for the lightning enchant")
     private val configLightningDamage = 0
 
-    /**
-     * Configurable option to enable lightning to work in rainstorms.
-     */
+    /** Configurable option to enable lightning to work in rainstorms. */
     @ConfigBoolean(def = true, desc = "Enable lightning to work in rainstorms as well")
     private val configLightningRain = false
 
@@ -90,7 +86,8 @@ class Lightning(context: Context<Enchantments?>) : CustomEnchantment<Enchantment
     }
 
     /**
-     * Event handler for when a player attacks another entity with a weapon imbued with the lightning enchantment.
+     * Event handler for when a player attacks another entity with a weapon imbued with the
+     * lightning enchantment.
      *
      * @param event The [EntityDamageByEntityEvent] containing the event details.
      */

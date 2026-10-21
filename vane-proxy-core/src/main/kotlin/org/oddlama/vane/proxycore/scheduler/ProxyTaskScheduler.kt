@@ -1,11 +1,9 @@
 package org.oddlama.vane.proxycore.scheduler
 
-import org.oddlama.vane.proxycore.VaneProxyPlugin
 import java.util.concurrent.TimeUnit
+import org.oddlama.vane.proxycore.VaneProxyPlugin
 
-/**
- * Scheduler abstraction used by proxy-core for asynchronous and delayed execution.
- */
+/** Scheduler abstraction used by proxy-core for asynchronous and delayed execution. */
 interface ProxyTaskScheduler {
     /**
      * Runs [task] asynchronously.
@@ -25,7 +23,12 @@ interface ProxyTaskScheduler {
      * @param unit unit for [delay].
      * @return scheduled task handle.
      */
-    fun schedule(owner: VaneProxyPlugin?, task: Runnable?, delay: Long, unit: TimeUnit?): ProxyScheduledTask?
+    fun schedule(
+        owner: VaneProxyPlugin?,
+        task: Runnable?,
+        delay: Long,
+        unit: TimeUnit?,
+    ): ProxyScheduledTask?
 
     /**
      * Schedules a repeating task.
@@ -42,6 +45,6 @@ interface ProxyTaskScheduler {
         task: Runnable?,
         delay: Long,
         period: Long,
-        unit: TimeUnit?
+        unit: TimeUnit?,
     ): ProxyScheduledTask?
 }

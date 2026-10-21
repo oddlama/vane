@@ -20,17 +20,18 @@ class ManagedServer(
     displayName: String,
     onlineConfigSection: CommentedConfig?,
     offlineConfigSection: CommentedConfig?,
-    start: CommentedConfig?
+    start: CommentedConfig?,
 ) {
     /** Start behavior configuration for this server. */
-    @JvmField
-    var start: ServerStart = ServerStart(id, displayName, start)
+    @JvmField var start: ServerStart = ServerStart(id, displayName, start)
 
     /** Presentation config used while backend is online. */
-    private val onlineConfig: StatefulConfiguration = StatefulConfiguration(id, displayName, onlineConfigSection)
+    private val onlineConfig: StatefulConfiguration =
+        StatefulConfiguration(id, displayName, onlineConfigSection)
 
     /** Presentation config used while backend is offline. */
-    private val offlineConfig: StatefulConfiguration = StatefulConfiguration(id, displayName, offlineConfigSection)
+    private val offlineConfig: StatefulConfiguration =
+        StatefulConfiguration(id, displayName, offlineConfigSection)
 
     /**
      * Returns the server identifier.
@@ -54,7 +55,6 @@ class ManagedServer(
             ConfigItemSource.OFFLINE -> {
                 offlineConfig.encodedFavicon
             }
-
         }
     }
 
@@ -79,10 +79,11 @@ class ManagedServer(
      * @return selected quote or an empty string when none are available.
      */
     private fun randomQuote(source: ConfigItemSource): String? {
-        val quoteSet = when (source) {
-            ConfigItemSource.ONLINE -> onlineConfig.quotes
-            ConfigItemSource.OFFLINE -> offlineConfig.quotes
-        }
+        val quoteSet =
+            when (source) {
+                ConfigItemSource.ONLINE -> onlineConfig.quotes
+                ConfigItemSource.OFFLINE -> offlineConfig.quotes
+            }
 
         if (quoteSet.isNullOrEmpty()) {
             return ""
@@ -97,10 +98,11 @@ class ManagedServer(
      * @return formatted MOTD or an empty string.
      */
     fun motd(source: ConfigItemSource): String {
-        val (sourcedMotd, quoteSource) = when (source) {
-            ConfigItemSource.ONLINE -> onlineConfig.motd to ConfigItemSource.ONLINE
-            ConfigItemSource.OFFLINE -> offlineConfig.motd to ConfigItemSource.OFFLINE
-        }
+        val (sourcedMotd, quoteSource) =
+            when (source) {
+                ConfigItemSource.ONLINE -> onlineConfig.motd to ConfigItemSource.ONLINE
+                ConfigItemSource.OFFLINE -> offlineConfig.motd to ConfigItemSource.OFFLINE
+            }
 
         return sourcedMotd?.replace("{QUOTE}", randomQuote(quoteSource).orEmpty()) ?: ""
     }
@@ -112,9 +114,7 @@ class ManagedServer(
      */
     fun commandTimeout(): Int? = start.timeout
 
-    /**
-     * Selects which state-specific configuration should be used.
-     */
+    /** Selects which state-specific configuration should be used. */
     enum class ConfigItemSource {
         /** Use presentation values for online backend state. */
         ONLINE,
@@ -145,31 +145,43 @@ class ManagedServer(
                 val quotesList = config.get<MutableList<String?>?>("Quotes")
 
                 if (quotesList != null) {
-                    quotes = quotesList
-                        .mapNotNull { s -> s?.takeUnless { it.isBlank() } }
-                        .map { s -> s.replace("{SERVER}", id).replace("{SERVER_DISPLAY_NAME}", displayName) }
-                        .toTypedArray()
+                    quotes =
+                        quotesList
+                            .mapNotNull { s -> s?.takeUnless { it.isBlank() } }
+                            .map { s ->
+                                s.replace("{SERVER}", id)
+                                    .replace("{SERVER_DISPLAY_NAME}", displayName)
+                            }
+                            .toTypedArray()
                 }
 
                 // motd = "..."
                 val motdVal = config.get<Any?>("MOTD")
 
-                require(motdVal == null || motdVal is String) { "Managed server '$id' has a non-string MOTD!" }
+                require(motdVal == null || motdVal is String) {
+                    "Managed server '$id' has a non-string MOTD!"
+                }
 
-                if (motdVal is String && motdVal.isNotEmpty()) motd = motdVal.replace(
-                    "{SERVER_DISPLAY_NAME}",
-                    displayName
-                )
+                if (motdVal is String && motdVal.isNotEmpty())
+                    motd =
+                        motdVal.replace(
+                            "{SERVER_DISPLAY_NAME}",
+                            displayName,
+                        )
 
                 // favicon = "..."
                 val faviconPath = config.get<Any?>("Favicon")
 
-                require(faviconPath == null || faviconPath is String) { "Managed server '$id' has a non-string favicon path!" }
+                require(faviconPath == null || faviconPath is String) {
+                    "Managed server '$id' has a non-string favicon path!"
+                }
 
-                if (faviconPath is String && faviconPath.isNotEmpty()) encodedFavicon = encodeFavicon(
-                    id,
-                    faviconPath
-                )
+                if (faviconPath is String && faviconPath.isNotEmpty())
+                    encodedFavicon =
+                        encodeFavicon(
+                            id,
+                            faviconPath,
+                        )
             }
         }
 
@@ -192,15 +204,20 @@ class ManagedServer(
                     throw IOException("Failed to read favicon file: " + e.message)
                 }
 
-                require(!(image.width != 64 || image.height != 64)) { "Favicon has invalid dimensions (must be 64x64)" }
+                require(!(image.width != 64 || image.height != 64)) {
+                    "Favicon has invalid dimensions (must be 64x64)"
+                }
 
                 val stream = ByteArrayOutputStream()
                 ImageIO.write(image, "PNG", stream)
                 val faviconBytes = stream.toByteArray()
 
-                val encodedFavicon = "data:image/png;base64,${Base64.getEncoder().encodeToString(faviconBytes)}"
+                val encodedFavicon =
+                    "data:image/png;base64,${Base64.getEncoder().encodeToString(faviconBytes)}"
 
-                require(encodedFavicon.length <= Short.MAX_VALUE) { "Favicon file too large for server to process" }
+                require(encodedFavicon.length <= Short.MAX_VALUE) {
+                    "Favicon file too large for server to process"
+                }
 
                 return encodedFavicon
             }
@@ -223,8 +240,7 @@ class ManagedServer(
         var kickMsg: String? = null
 
         /** Whether any player may trigger startup even without dedicated permissions. */
-        @JvmField
-        var allowAnyone: Boolean = false
+        @JvmField var allowAnyone: Boolean = false
 
         init {
             val cmdList = config?.get<MutableList<String?>?>("CMD")
@@ -234,20 +250,28 @@ class ManagedServer(
 
             cmd = cmdList?.map { it?.replace("{SERVER}", id) }?.toTypedArray()
 
-            require(kickMsgVal == null || kickMsgVal is String) { "Managed server '$id' has an invalid kick message!" }
+            require(kickMsgVal == null || kickMsgVal is String) {
+                "Managed server '$id' has an invalid kick message!"
+            }
 
-            kickMsg = if (kickMsgVal is String) kickMsgVal.replace("{SERVER}", id).replace(
-                "{SERVER_DISPLAY_NAME}",
-                displayName
-            )
-            else null
+            kickMsg =
+                if (kickMsgVal is String)
+                    kickMsgVal
+                        .replace("{SERVER}", id)
+                        .replace(
+                            "{SERVER_DISPLAY_NAME}",
+                            displayName,
+                        )
+                else null
 
             allowAnyone = allowAnyoneVal as? Boolean ?: false
 
             if (timeoutVal == null) {
                 timeout = DEFAULT_TIMEOUT_SECONDS
             } else {
-                require(timeoutVal is Int) { "Managed server '$id' has an invalid command timeout!" }
+                require(timeoutVal is Int) {
+                    "Managed server '$id' has an invalid command timeout!"
+                }
 
                 timeout = timeoutVal
             }

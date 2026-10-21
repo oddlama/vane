@@ -1,8 +1,6 @@
 package org.oddlama.vane.core.item.api
 
-/**
- * Enumerates vanilla behaviors that can be disabled for custom items.
- */
+/** Enumerates vanilla behaviors that can be disabled for custom items. */
 enum class InhibitBehavior {
     /**
      * Prevents the item from being used as an ingredient in any (recognized) vanilla crafting
@@ -19,10 +17,10 @@ enum class InhibitBehavior {
     /** Prevents the item from burning. */
     ITEM_BURN,
 
-    /** Prevents hoes from creating farmland.  */
+    /** Prevents hoes from creating farmland. */
     HOE_TILL,
 
-    /** Prevents players from using the offhand item when holding this in the main hand.  */
+    /** Prevents players from using the offhand item when holding this in the main hand. */
     USE_OFFHAND,
 
     /**

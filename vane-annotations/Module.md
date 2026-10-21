@@ -19,7 +19,7 @@ The annotations here are pure metadata; none of them generate code. They are rea
 points in a plugin's life:
 
 1. **At compile time** — historically, by the processors in `org.oddlama.vane.annotation.processor`.
-   These only *validate* — they check that an annotation is on the right kind of element, that the
+   These only _validate_ — they check that an annotation is on the right kind of element, that the
    annotated class inherits from the framework base type it claims to extend, and that an annotated
    field has exactly the Java type the corresponding runtime field reader expects. See the note
    above: they are currently dormant, so these rules are conventions rather than enforced checks.
@@ -74,7 +74,7 @@ they are nested inside the `def` of a map-valued annotation to express a default
 is the only way to write nested defaults given Java's annotation constant rules. They declare an
 empty `@Target()` to say exactly that: nesting a Kotlin annotation inside another is never target
 checked, but an empty target list makes applying one to a field a compile error. That matters
-because their names begin with `Config`, and `ConfigManager` builds a `ConfigField` for *every*
+because their names begin with `Config`, and `ConfigManager` builds a `ConfigField` for _every_
 field annotation under `org.oddlama.vane.annotation.config.Config*` — without the restriction a
 misplaced `@ConfigMaterialMapEntry` would only surface as a "Missing ConfigField handler" crash
 when the plugin enables.
@@ -122,7 +122,7 @@ not currently run by the build — see the note at the top of this module.
 
 `ProcessorUtils` holds the two checks every processor needs: that an annotation landed on a class,
 and that the class inherits — at any depth — from a required framework base type. The inheritance
-check matches on a *prefix* of the erased supertype name (for example
+check matches on a _prefix_ of the erased supertype name (for example
 `org.oddlama.vane.core.module.Module<`) so that it works against the generic base classes vane uses
 throughout.
 

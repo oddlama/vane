@@ -1,10 +1,5 @@
 package org.oddlama.vane.proxycore.busybar
 
-import org.json.JSONArray
-import org.json.JSONObject
-import org.oddlama.vane.busybar.common.LinkProtocol
-import org.oddlama.vane.proxycore.busybar.BackendLink.Companion.toUuidOrNull
-import org.oddlama.vane.proxycore.log.IVaneLogger
 import java.io.BufferedInputStream
 import java.io.BufferedOutputStream
 import java.io.IOException
@@ -19,6 +14,11 @@ import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.TimeUnit
 import java.util.logging.Level
+import org.json.JSONArray
+import org.json.JSONObject
+import org.oddlama.vane.busybar.common.LinkProtocol
+import org.oddlama.vane.proxycore.busybar.BackendLink.Companion.toUuidOrNull
+import org.oddlama.vane.proxycore.log.IVaneLogger
 
 /**
  * Accepts connections from vane-busybar backends, so that the proxy can serve BUSY Bar bridges for
@@ -26,7 +26,6 @@ import java.util.logging.Level
  *
  * Each backend opens one TCP connection carrying [LinkProtocol] frames. The handshake proves to
  * both sides that the other knows [secret], without sending it:
- *
  * ```
  * proxy   → {"t":"challenge","proto":1,"nonce":"…"}
  * backend → {"t":"hello","proto":1,"server":"survival","version":"…","caps":[…],"nonce":"…","mac":"…"}
@@ -39,7 +38,8 @@ import java.util.logging.Level
  * `presence`, `bridge` and `ping`. See [BackendLink] for the requests.
  *
  * @param logger proxy logger.
- * @param secret shared with every backend's `ProxyLinkSecret`, at least [LinkProtocol.MIN_SECRET_LENGTH] long.
+ * @param secret shared with every backend's `ProxyLinkSecret`, at least
+ *   [LinkProtocol.MIN_SECRET_LENGTH] long.
  * @param isKnownServer whether a backend name is registered with the proxy.
  * @param handler receives what backends report.
  */
@@ -47,13 +47,12 @@ class BackendLinkServer(
     private val logger: IVaneLogger,
     private val secret: String,
     private val isKnownServer: (String) -> Boolean,
-    private val handler: BackendLinkHandler
+    private val handler: BackendLinkHandler,
 ) {
     /** Linked backends by server name. */
     private val links = ConcurrentHashMap<String, BackendLink>()
 
-    @Volatile
-    private var serverSocket: ServerSocket? = null
+    @Volatile private var serverSocket: ServerSocket? = null
     private var connections: ExecutorService? = null
     private var pinger: ScheduledExecutorService? = null
 
@@ -73,12 +72,16 @@ class BackendLinkServer(
         val exec = Executors.newVirtualThreadPerTaskExecutor()
         serverSocket = socket
         connections = exec
-        pinger = Executors.newSingleThreadScheduledExecutor { Thread.ofVirtual().unstarted(it) }.apply {
-            scheduleAtFixedRate(
-                { links.values.forEach { it.send(JSONObject().put("t", "ping")) } },
-                LinkProtocol.PING_INTERVAL_MS, LinkProtocol.PING_INTERVAL_MS, TimeUnit.MILLISECONDS
-            )
-        }
+        pinger =
+            Executors.newSingleThreadScheduledExecutor { Thread.ofVirtual().unstarted(it) }
+                .apply {
+                    scheduleAtFixedRate(
+                        { links.values.forEach { it.send(JSONObject().put("t", "ping")) } },
+                        LinkProtocol.PING_INTERVAL_MS,
+                        LinkProtocol.PING_INTERVAL_MS,
+                        TimeUnit.MILLISECONDS,
+                    )
+                }
         exec.execute { accept(socket, exec) }
         logger.log(Level.INFO, "BUSY Bar backend link listening on $address")
     }
@@ -87,8 +90,7 @@ class BackendLinkServer(
     fun stop() {
         try {
             serverSocket?.close()
-        } catch (_: IOException) {
-        }
+        } catch (_: IOException) {}
         serverSocket = null
         pinger?.shutdownNow()
         pinger = null
@@ -100,11 +102,12 @@ class BackendLinkServer(
     /** Accepts connections until [socket] closes. */
     private fun accept(socket: ServerSocket, exec: ExecutorService) {
         while (!socket.isClosed) {
-            val connection = try {
-                socket.accept()
-            } catch (_: IOException) {
-                return
-            }
+            val connection =
+                try {
+                    socket.accept()
+                } catch (_: IOException) {
+                    return
+                }
             exec.execute { serve(connection) }
         }
     }
@@ -141,15 +144,15 @@ class BackendLinkServer(
         } finally {
             try {
                 socket.close()
-            } catch (_: IOException) {
-            }
+            } catch (_: IOException) {}
             if (link != null) {
                 link.close()
-                reason = when {
-                    !links.remove(link.server, link) -> "replaced"
-                    serverSocket == null -> "proxy stopping"
-                    else -> reason
-                }
+                reason =
+                    when {
+                        !links.remove(link.server, link) -> "replaced"
+                        serverSocket == null -> "proxy stopping"
+                        else -> reason
+                    }
                 logger.log(Level.INFO, "BUSY Bar backend '${link.server}' unlinked ($reason)")
                 handler.onDisconnect(link, reason)
             }
@@ -160,30 +163,58 @@ class BackendLinkServer(
      * Authenticates a new connection. Answers with an `error` frame and returns null when the
      * backend fails.
      */
-    private fun handshake(socket: Socket, input: InputStream, output: BufferedOutputStream): BackendLink? {
+    private fun handshake(
+        socket: Socket,
+        input: InputStream,
+        output: BufferedOutputStream,
+    ): BackendLink? {
         val nonce = LinkProtocol.nonce()
-        LinkProtocol.write(output, JSONObject().put("t", "challenge").put("proto", LinkProtocol.VERSION).put("nonce", nonce))
+        LinkProtocol.write(
+            output,
+            JSONObject()
+                .put("t", "challenge")
+                .put("proto", LinkProtocol.VERSION)
+                .put("nonce", nonce),
+        )
 
         val hello = LinkProtocol.read(input) ?: return null
         val server = hello.optString("server")
         fun reject(reason: String): BackendLink? {
-            logger.log(Level.WARNING, "Rejected BUSY Bar backend link from ${socket.remoteSocketAddress}: $reason")
+            logger.log(
+                Level.WARNING,
+                "Rejected BUSY Bar backend link from ${socket.remoteSocketAddress}: $reason",
+            )
             LinkProtocol.write(output, JSONObject().put("t", "error").put("reason", reason))
             return null
         }
         if (hello.optString("t") != "hello") return reject("expected hello")
         if (hello.optInt("proto") != LinkProtocol.VERSION) {
-            return reject("protocol ${hello.optInt("proto")} is not supported, this proxy speaks ${LinkProtocol.VERSION}")
+            return reject(
+                "protocol ${hello.optInt("proto")} is not supported, this proxy speaks ${LinkProtocol.VERSION}"
+            )
         }
         // Checked before the name, so a wrong secret never reveals which names exist.
-        if (!LinkProtocol.macMatches(LinkProtocol.mac(secret, "backend", nonce, server), hello.optString("mac", null))) {
+        if (
+            !LinkProtocol.macMatches(
+                LinkProtocol.mac(secret, "backend", nonce, server),
+                hello.optString("mac", null),
+            )
+        ) {
             return reject("wrong secret")
         }
-        if (!isKnownServer(server)) return reject("'$server' is not a server registered with the proxy")
-        val backendNonce = hello.optString("nonce").takeIf { it.isNotEmpty() } ?: return reject("missing nonce")
+        if (!isKnownServer(server))
+            return reject("'$server' is not a server registered with the proxy")
+        val backendNonce =
+            hello.optString("nonce").takeIf { it.isNotEmpty() } ?: return reject("missing nonce")
 
         val caps = hello.optJSONArray("caps") ?: JSONArray()
-        val link = BackendLink(server, (0 until caps.length()).map(caps::optString).toSet(), socket, output)
+        val link =
+            BackendLink(
+                server,
+                (0 until caps.length()).map(caps::optString).toSet(),
+                socket,
+                output,
+            )
         link.send(
             JSONObject()
                 .put("t", "welcome")
@@ -198,10 +229,16 @@ class BackendLinkServer(
     private fun dispatch(link: BackendLink, frame: JSONObject) {
         when (frame.optString("t")) {
             "event" -> parseEvent(link, frame)?.let { handler.onEvent(link, it) }
-            "grants", "grants.bulk" -> handler.onGrants(link, BackendLink.parseGrants(frame))
-            "snapshot.res", "action.res" -> link.answer(frame)
+            "grants",
+            "grants.bulk" -> handler.onGrants(link, BackendLink.parseGrants(frame))
+            "snapshot.res",
+            "action.res" -> link.answer(frame)
             "pong" -> {}
-            else -> logger.log(Level.FINE, "Ignoring unknown frame '${frame.optString("t")}' from '${link.server}'")
+            else ->
+                logger.log(
+                    Level.FINE,
+                    "Ignoring unknown frame '${frame.optString("t")}' from '${link.server}'",
+                )
         }
     }
 
@@ -209,15 +246,22 @@ class BackendLinkServer(
     private fun parseEvent(link: BackendLink, frame: JSONObject): BackendLinkHandler.Event? {
         val type = frame.optString("type").takeIf { it.isNotEmpty() } ?: return null
         val to = frame.optJSONObject("to") ?: return null
-        val scope = when (to.optString("scope")) {
-            "all" -> BackendLinkHandler.Scope.ALL
-            "server" -> BackendLinkHandler.Scope.SERVER
-            "player" -> BackendLinkHandler.Scope.PLAYER
-            else -> return null
-        }
+        val scope =
+            when (to.optString("scope")) {
+                "all" -> BackendLinkHandler.Scope.ALL
+                "server" -> BackendLinkHandler.Scope.SERVER
+                "player" -> BackendLinkHandler.Scope.PLAYER
+                else -> return null
+            }
         val player = to.optString("player").toUuidOrNull()
         if (scope == BackendLinkHandler.Scope.PLAYER && player == null) return null
         val data = (frame.optJSONObject("data") ?: JSONObject()).put("server", link.server)
-        return BackendLinkHandler.Event(type, data, scope, player, frame.optString("perm").takeIf { it.isNotEmpty() })
+        return BackendLinkHandler.Event(
+            type,
+            data,
+            scope,
+            player,
+            frame.optString("perm").takeIf { it.isNotEmpty() },
+        )
     }
 }

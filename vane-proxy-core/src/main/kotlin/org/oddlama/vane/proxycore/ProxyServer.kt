@@ -1,11 +1,9 @@
 package org.oddlama.vane.proxycore
 
-import org.oddlama.vane.proxycore.scheduler.ProxyTaskScheduler
 import java.util.*
+import org.oddlama.vane.proxycore.scheduler.ProxyTaskScheduler
 
-/**
- * Abstraction of a proxy runtime used by [VaneProxyPlugin].
- */
+/** Abstraction of a proxy runtime used by [VaneProxyPlugin]. */
 interface ProxyServer {
     /** Scheduler used for asynchronous and delayed tasks. */
     val scheduler: ProxyTaskScheduler?
@@ -21,7 +19,8 @@ interface ProxyServer {
     val players: MutableCollection<ProxyPlayer?>?
 
     /**
-     * Checks whether the subject represented by [uuid] has at least one of the provided permissions.
+     * Checks whether the subject represented by [uuid] has at least one of the provided
+     * permissions.
      *
      * @param uuid player UUID to check.
      * @param permission permissions to test.

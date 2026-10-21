@@ -1,21 +1,20 @@
 package org.oddlama.velocity.compat
 
 import com.velocitypowered.api.proxy.ProxyServer
+import java.util.*
 import net.kyori.adventure.text.Component
 import org.oddlama.vane.proxycore.ProxyPlayer
 import org.oddlama.vane.proxycore.scheduler.ProxyTaskScheduler
 import org.oddlama.velocity.compat.scheduler.VelocityCompatProxyTaskScheduler
-import java.util.*
 
 /**
  * Velocity implementation of the proxy-core server abstraction.
  *
  * @property proxy wrapped Velocity proxy server.
  */
-class VelocityCompatProxyServer(private val proxy: ProxyServer) : org.oddlama.vane.proxycore.ProxyServer {
-    /**
-     * Scheduler adapter exposing Velocity scheduling through proxy-core interfaces.
-     */
+class VelocityCompatProxyServer(private val proxy: ProxyServer) :
+    org.oddlama.vane.proxycore.ProxyServer {
+    /** Scheduler adapter exposing Velocity scheduling through proxy-core interfaces. */
     override val scheduler: ProxyTaskScheduler
         get() = VelocityCompatProxyTaskScheduler(proxy.scheduler)
 
@@ -28,11 +27,12 @@ class VelocityCompatProxyServer(private val proxy: ProxyServer) : org.oddlama.va
         proxy.sendMessage(Component.text(message.orEmpty()))
     }
 
-    /**
-     * Snapshot of currently connected players wrapped as proxy-core players.
-     */
+    /** Snapshot of currently connected players wrapped as proxy-core players. */
     override val players: MutableCollection<ProxyPlayer?>
-        get() = proxy.allPlayers.mapTo(mutableListOf()) { VelocityCompatProxyPlayer(it) as ProxyPlayer? }
+        get() =
+            proxy.allPlayers.mapTo(mutableListOf()) {
+                VelocityCompatProxyPlayer(it) as ProxyPlayer?
+            }
 
     /**
      * Checks whether a specific player has any of the given permissions.
@@ -43,7 +43,8 @@ class VelocityCompatProxyServer(private val proxy: ProxyServer) : org.oddlama.va
      */
     override fun hasPermission(uuid: UUID?, vararg permission: String?): Boolean {
         if (uuid == null) return false
-        return proxy.getPlayer(uuid)
+        return proxy
+            .getPlayer(uuid)
             .map { player -> permission.filterNotNull().any(player::hasPermission) }
             .orElse(false)
     }

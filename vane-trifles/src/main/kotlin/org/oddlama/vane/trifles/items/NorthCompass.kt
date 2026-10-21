@@ -1,5 +1,6 @@
 package org.oddlama.vane.trifles.items
 
+import java.util.*
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.World
@@ -15,13 +16,11 @@ import org.oddlama.vane.core.item.api.CustomItem
 import org.oddlama.vane.core.item.api.InhibitBehavior
 import org.oddlama.vane.core.module.Context
 import org.oddlama.vane.trifles.Trifles
-import java.util.*
 
 @VaneItem(name = "north_compass", base = Material.COMPASS, modelData = 0x760013, version = 1)
-/**
- * Compass variant that consistently points north through a synthetic lodestone target.
- */
-class NorthCompass(context: Context<Trifles?>) : org.oddlama.vane.core.item.CustomItem<Trifles?>(context) {
+/** Compass variant that consistently points north through a synthetic lodestone target. */
+class NorthCompass(context: Context<Trifles?>) :
+    org.oddlama.vane.core.item.CustomItem<Trifles?>(context) {
     /** Defines the north compass crafting recipe. */
     override fun defaultRecipes(): RecipeList {
         return RecipeList.of(

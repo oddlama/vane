@@ -14,26 +14,21 @@ import org.oddlama.vane.core.Listener
 import org.oddlama.vane.core.lang.TranslatedMessage
 import org.oddlama.vane.core.module.Context
 
-/**
- * Formats chat, join, and quit related messages.
- */
-class ChatMessageFormatter(context: Context<Admin?>) : Listener<Admin?>(
-    context.group(
-        "ChatMessageFormatter",
-        "Enables custom formatting of chat messages like player chats and join / quit messages."
-    )
-) {
-    @LangMessage
-    private val langPlayerChatFormat: TranslatedMessage? = null
+/** Formats chat, join, and quit related messages. */
+class ChatMessageFormatter(context: Context<Admin?>) :
+    Listener<Admin?>(
+        context.group(
+            "ChatMessageFormatter",
+            "Enables custom formatting of chat messages like player chats and join / quit messages.",
+        )
+    ) {
+    @LangMessage private val langPlayerChatFormat: TranslatedMessage? = null
 
-    @LangMessage
-    private val langPlayerJoin: TranslatedMessage? = null
+    @LangMessage private val langPlayerJoin: TranslatedMessage? = null
 
-    @LangMessage
-    private val langPlayerKick: TranslatedMessage? = null
+    @LangMessage private val langPlayerKick: TranslatedMessage? = null
 
-    @LangMessage
-    private val langPlayerQuit: TranslatedMessage? = null
+    @LangMessage private val langPlayerQuit: TranslatedMessage? = null
 
     /** Renderer used for chat message formatting. */
     private val chatRenderer = ChatRenderer { _, sourceDisplayName, message, _ ->
@@ -69,9 +64,13 @@ class ChatMessageFormatter(context: Context<Admin?>) : Listener<Admin?>(
     fun onPlayerQuit(event: PlayerQuitEvent) {
         event.quitMessage(null)
         if (event.reason == PlayerQuitEvent.QuitReason.KICKED) {
-            langPlayerKick!!.broadcastServer(event.player.playerListName().color(NamedTextColor.GOLD))
+            langPlayerKick!!.broadcastServer(
+                event.player.playerListName().color(NamedTextColor.GOLD)
+            )
         } else {
-            langPlayerQuit!!.broadcastServer(event.player.playerListName().color(NamedTextColor.GOLD))
+            langPlayerQuit!!.broadcastServer(
+                event.player.playerListName().color(NamedTextColor.GOLD)
+            )
         }
     }
 }

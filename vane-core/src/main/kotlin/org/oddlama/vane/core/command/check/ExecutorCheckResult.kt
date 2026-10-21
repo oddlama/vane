@@ -11,9 +11,7 @@ import org.oddlama.vane.core.command.Executor
  * @param executor command executor callback.
  */
 class ExecutorCheckResult(private val depth: Int, private val executor: Executor) : CheckResult {
-    /**
-     * Parsed arguments collected while prepending match results.
-     */
+    /** Parsed arguments collected while prepending match results. */
     private val parsedArgs = mutableListOf<Any?>()
 
     /** Returns the parse depth for this result. */

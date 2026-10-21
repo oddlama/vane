@@ -122,7 +122,12 @@ def region_card(d: dict[str, Any]) -> Card:
         status, color = "BY " + d["owner"], GREY
     else:
         status, color = "REGION", GREY
-    return Card("shield" if d.get("may_build") else "shield-denied", d["region"], status, color2=color)
+    return Card(
+        "shield" if d.get("may_build") else "shield-denied",
+        d["region"],
+        status,
+        color2=color,
+    )
 
 
 class BarState:
@@ -188,19 +193,38 @@ class BarState:
         self.m.permissions = set(d.get("granted", []))
 
     def _on_player_join(self, d: dict[str, Any], now: float) -> None:
-        self.m.online, self.m.players, self.m.max_players = True, d.get("online"), d.get("max")
-        self.alert("player.join", Card(head_icon(d["player"], d.get("head")), d["player"], "JOINED", color2=GREEN))
+        self.m.online, self.m.players, self.m.max_players = (
+            True,
+            d.get("online"),
+            d.get("max"),
+        )
+        self.alert(
+            "player.join",
+            Card(
+                head_icon(d["player"], d.get("head")),
+                d["player"],
+                "JOINED",
+                color2=GREEN,
+            ),
+        )
 
     def _on_player_quit(self, d: dict[str, Any], now: float) -> None:
         self.m.players = d.get("online")
-        self.alert("player.quit", Card(head_icon(d["player"], d.get("head")), d["player"], "LEFT", color2=GREY))
+        self.alert(
+            "player.quit",
+            Card(head_icon(d["player"], d.get("head")), d["player"], "LEFT", color2=GREY),
+        )
 
     def _on_world_time(self, d: dict[str, Any], now: float) -> None:
         self.m.ticks, self.m.ticks_at = d["ticks"], now
 
     def _on_bedtime_enter(self, d: dict[str, Any], now: float) -> None:
         self.m.sleeping, self.m.sleep_needed = d["sleeping"], d["needed"]
-        self.alert("bedtime.enter", Card("bed", d["player"], f"SLEEPS {d['sleeping']}/{d['needed']}", color2=CYAN), 2)
+        self.alert(
+            "bedtime.enter",
+            Card("bed", d["player"], f"SLEEPS {d['sleeping']}/{d['needed']}", color2=CYAN),
+            2,
+        )
 
     def _on_bedtime_leave(self, d: dict[str, Any], now: float) -> None:
         self.m.sleeping, self.m.sleep_needed = d["sleeping"], d["needed"]
@@ -209,7 +233,11 @@ class BarState:
         self.m.sleeping = 0
         if "ticks" in d:
             self.m.ticks, self.m.ticks_at = d["ticks"], now
-        self.alert("bedtime.skip", Card("sun", "GOOD MORNING", "NIGHT SKIPPED", color1=AMBER), 3)
+        self.alert(
+            "bedtime.skip",
+            Card("sun", "GOOD MORNING", "NIGHT SKIPPED", color1=AMBER),
+            3,
+        )
 
     def _on_presence_updated(self, d: dict[str, Any], now: float) -> None:
         busy = bool(d.get("busy"))
@@ -217,22 +245,38 @@ class BarState:
             self._apply_focus(busy, now)
 
     def _on_portal_activate(self, d: dict[str, Any], now: float) -> None:
-        self.alert("portal.activate", Card("portal", "> " + d["to"], d["player"], color1=PURPLE), 2)
+        self.alert(
+            "portal.activate",
+            Card("portal", "> " + d["to"], d["player"], color1=PURPLE),
+            2,
+        )
 
     def _on_portal_destroy(self, d: dict[str, Any], now: float) -> None:
-        self.alert("portal.destroy", Card("portal-broken", d["portal"], "BROKEN BY " + d["by"], color1=RED), 3)
+        self.alert(
+            "portal.destroy",
+            Card("portal-broken", d["portal"], "BROKEN BY " + d["by"], color1=RED),
+            3,
+        )
 
     def _on_advancement(self, d: dict[str, Any], now: float) -> None:
         frame = d.get("frame", "task")
         color, priority = {"goal": (CYAN, 2), "challenge": (PURPLE, 3)}.get(frame, (GREEN, 1))
         count = int(d.get("count", 1))
         title = d["title"] if count == 1 else f"{count} ADVANCEMENTS"
-        self.alert("advancement", Card(head_icon(d["player"], d.get("head")), title, d["player"], color1=color),
-                   priority, count=count)
+        self.alert(
+            "advancement",
+            Card(head_icon(d["player"], d.get("head")), title, d["player"], color1=color),
+            priority,
+            count=count,
+        )
 
     def _on_slimechunk_enter(self, d: dict[str, Any], now: float) -> None:
         self.m.slime_chunk = True
-        self.alert("slimechunk.enter", Card("slime", "SLIME CHUNK", "SLIMES SPAWN HERE", color1=GREEN), 2)
+        self.alert(
+            "slimechunk.enter",
+            Card("slime", "SLIME CHUNK", "SLIMES SPAWN HERE", color1=GREEN),
+            2,
+        )
 
     def _on_slimechunk_leave(self, d: dict[str, Any], now: float) -> None:
         self.m.slime_chunk = False
@@ -245,11 +289,20 @@ class BarState:
         self.m.region = None
 
     def _on_region_visitor(self, d: dict[str, Any], now: float) -> None:
-        names, count, where = d.get("visitors") or ["?"], int(d.get("count", 1)), "IN " + d["region"]
+        names, count, where = (
+            d.get("visitors") or ["?"],
+            int(d.get("count", 1)),
+            "IN " + d["region"],
+        )
         if count == 1:
             card = Card(head_icon(names[0], d.get("head")), names[0], where, color2=AMBER)
         elif count <= 3:
-            card = Card(head_icon(names[0], d.get("head")), f"{names[0]} +{count - 1}", where, color2=AMBER)
+            card = Card(
+                head_icon(names[0], d.get("head")),
+                f"{names[0]} +{count - 1}",
+                where,
+                color2=AMBER,
+            )
         else:
             card = Card("shield-denied", f"{count} VISITORS", where, color1=AMBER)
         self.alert("region.visitor", card, 2, count=count)
@@ -257,13 +310,32 @@ class BarState:
     def _on_server_tps(self, d: dict[str, Any], now: float) -> None:
         self.m.tps, self.m.mspt = d["tps"], d["mspt"]
         if d["tps"] < 17:
-            self.alert("server.tps", Card("warn", f"LAG {d['tps']:.1f} TPS", f"{round(d['mspt'])} MSPT", color1=AMBER), 3)
+            self.alert(
+                "server.tps",
+                Card(
+                    "warn",
+                    f"LAG {d['tps']:.1f} TPS",
+                    f"{round(d['mspt'])} MSPT",
+                    color1=AMBER,
+                ),
+                3,
+            )
 
     def _on_autostop_scheduled(self, d: dict[str, Any], now: float) -> None:
         self.m.autostop_end = now + d["remaining_s"]
         self.m.autostop_total = max(1.0, float(d["remaining_s"]))
         self.m.autostop_server = d.get("server")
-        self.alert("autostop.scheduled", Card("clock-red", "SERVER EMPTY", f"STOP IN {mmss(d['remaining_s'])}", color1=RED), CRITICAL, 3.5)
+        self.alert(
+            "autostop.scheduled",
+            Card(
+                "clock-red",
+                "SERVER EMPTY",
+                f"STOP IN {mmss(d['remaining_s'])}",
+                color1=RED,
+            ),
+            CRITICAL,
+            3.5,
+        )
 
     def _on_autostop_aborted(self, d: dict[str, Any], now: float) -> None:
         self.m.autostop_end = None
@@ -278,19 +350,36 @@ class BarState:
         self.dropped = 0
         if self.current is not None and self.current.priority < CRITICAL:
             self.current = None
-        self.alert("server.stop", Card("server-grey", "SERVER", "STOPPED", color2=RED), CRITICAL)
+        self.alert(
+            "server.stop",
+            Card("server-grey", "SERVER", "STOPPED", color2=RED),
+            CRITICAL,
+        )
 
     # ------------------------------------------------------------------ alerts
 
-    def alert(self, kind: str, card: Card, priority: int = 1, duration: float | None = None, count: int = 1) -> None:
+    def alert(
+        self,
+        kind: str,
+        card: Card,
+        priority: int = 1,
+        duration: float | None = None,
+        count: int = 1,
+    ) -> None:
         """
         Queue a card, or hold it while focus mode is on and it is not critical. More than
         BURST_THRESHOLD non-critical alerts of one kind within BURST_WINDOW fold into a single
         card that counts up while the burst lasts.
         """
         now = self._now
-        a = Alert(kind, card, priority, duration or (5.0 if priority >= CRITICAL else ALERT_SECONDS),
-                  count=count, created_at=now)
+        a = Alert(
+            kind,
+            card,
+            priority,
+            duration or (5.0 if priority >= CRITICAL else ALERT_SECONDS),
+            count=count,
+            created_at=now,
+        )
         if self.m.busy and priority < CRITICAL:
             self.held.append(a)
             return
@@ -315,7 +404,13 @@ class BarState:
             self.queue = [q for q in self.queue if q.kind != a.kind]
             if self.current is not None and self.current.kind == a.kind:
                 self.current = None
-            summary = Alert(burst, a.card, a.priority, count=sum(n for _, n in recent), created_at=now)
+            summary = Alert(
+                burst,
+                a.card,
+                a.priority,
+                count=sum(n for _, n in recent),
+                created_at=now,
+            )
             self._enqueue(summary)
         summary.card = self._summary_card(a.kind, summary.count, a.card)
         if summary.shown_at is not None:
@@ -332,12 +427,23 @@ class BarState:
         if kind == "player.quit":
             return Card("server", f"{count} LEFT", online, color1=GREY)
         if kind == "advancement":
-            return Card("server", f"{count} ADVANCEMENTS", "LAST " + last.line2, color1=last.color1)
+            return Card(
+                "server",
+                f"{count} ADVANCEMENTS",
+                "LAST " + last.line2,
+                color1=last.color1,
+            )
         if kind == "bedtime.enter":
             return Card("bed", f"{count} IN BED", last.line2, color2=CYAN)
         if kind == "region.visitor":
             return Card("shield-denied", f"{count} VISITORS", last.line2, color1=AMBER)
-        return Card(last.icon, f"{count}X {last.line1}", last.line2, color1=last.color1, color2=last.color2)
+        return Card(
+            last.icon,
+            f"{count}X {last.line1}",
+            last.line2,
+            color1=last.color1,
+            color2=last.color2,
+        )
 
     def _enqueue(self, a: Alert) -> None:
         priority = a.priority
@@ -347,7 +453,10 @@ class BarState:
                 self.queue.insert(0, self.current)
             self.current = a
         else:
-            index = next((i for i, q in enumerate(self.queue) if q.priority < priority), len(self.queue))
+            index = next(
+                (i for i, q in enumerate(self.queue) if q.priority < priority),
+                len(self.queue),
+            )
             self.queue.insert(index, a)
         # The queue is sorted by priority, so the tail holds the least important, newest alerts.
         while len(self.queue) > MAX_QUEUE:
@@ -358,7 +467,11 @@ class BarState:
             self.dropped += victim.count
 
     def _current_alert(self, now: float) -> Alert | None:
-        if self.current is not None and self.current.shown_at is not None and now - self.current.shown_at > self.current.duration:
+        if (
+            self.current is not None
+            and self.current.shown_at is not None
+            and now - self.current.shown_at > self.current.duration
+        ):
             self.current = None
             self.ambient_since = now
         while self.current is None and self.queue:
@@ -369,7 +482,11 @@ class BarState:
             self.current = candidate
         if self.current is None and self.dropped and not self.m.busy:
             skipped, self.dropped = self.dropped, 0
-            self.current = Alert("overflow", Card("warn", f"+{skipped} MORE", "ALERTS SKIPPED", color1=AMBER), created_at=now)
+            self.current = Alert(
+                "overflow",
+                Card("warn", f"+{skipped} MORE", "ALERTS SKIPPED", color1=AMBER),
+                created_at=now,
+            )
         if self.current is not None and self.current.shown_at is None:
             self.current.shown_at = now
         return self.current
@@ -421,12 +538,22 @@ class BarState:
             t = self._ticks(now)
             night = is_night(t)
             # Ten-minute steps: an in-game minute is under a second, too often to redraw the Bar.
-            return Card("moon" if night else "sun", f"TIME {clock_of(t, step=10)}", "NIGHT" if night else "DAY",
-                        color2=CYAN if night else AMBER)
+            return Card(
+                "moon" if night else "sun",
+                f"TIME {clock_of(t, step=10)}",
+                "NIGHT" if night else "DAY",
+                color2=CYAN if night else AMBER,
+            )
         if screen == "bedtime":
             left = m.sleep_needed - m.sleeping
-            return Card("bed", f"ZZZ {m.sleeping}/{m.sleep_needed}", "SKIPPING..." if left <= 0 else f"NEED {left} MORE",
-                        color1=CYAN, bar=m.sleeping / max(1, m.sleep_needed), bar_color=CYAN)
+            return Card(
+                "bed",
+                f"ZZZ {m.sleeping}/{m.sleep_needed}",
+                "SKIPPING..." if left <= 0 else f"NEED {left} MORE",
+                color1=CYAN,
+                bar=m.sleeping / max(1, m.sleep_needed),
+                bar_color=CYAN,
+            )
         if screen == "slime":
             return Card("slime", "SLIME CHUNK", "YOU'RE IN ONE", color1=GREEN, color2=GREY)
         if screen == "region" and m.region is not None:
@@ -434,12 +561,23 @@ class BarState:
         if screen == "autostop":
             remaining = (m.autostop_end or now) - now
             can_abort = "action.autostop_abort" in m.permissions
-            return Card("clock-red", f"STOP IN {mmss(remaining)}", "OK = ABORT" if can_abort else "SERVER EMPTY",
-                        color1=RED, bar=remaining / m.autostop_total, bar_color=RED)
+            return Card(
+                "clock-red",
+                f"STOP IN {mmss(remaining)}",
+                "OK = ABORT" if can_abort else "SERVER EMPTY",
+                color1=RED,
+                bar=remaining / m.autostop_total,
+                bar_color=RED,
+            )
         if screen == "focus":
             left = FOCUS_SECONDS - (now - self.focus_since)
-            return Card("busy", f"FOCUS {mmss(left)}" if left > 0 else "BREAK TIME",
-                        f"{len(self.held)} HELD" if self.held else "MC MUTED", color1=RED, color2=GREY)
+            return Card(
+                "busy",
+                f"FOCUS {mmss(left)}" if left > 0 else "BREAK TIME",
+                f"{len(self.held)} HELD" if self.held else "MC MUTED",
+                color1=RED,
+                color2=GREY,
+            )
         return Card("server-grey", "SERVER OFF", "WAITING...", color1=GREY, color2=GREY)
 
     def frame(self, now: float) -> tuple[Card, str]:
@@ -503,4 +641,14 @@ class BarState:
         elif self.held:
             count, last = len(self.held), self.held[-1]
             self.held = []
-            self.alert("focus.digest", Card("busy", f"{count} WHILE BUSY", f"LAST {last.card.line1}", color1=AMBER), 2, 5.0)
+            self.alert(
+                "focus.digest",
+                Card(
+                    "busy",
+                    f"{count} WHILE BUSY",
+                    f"LAST {last.card.line1}",
+                    color1=AMBER,
+                ),
+                2,
+                5.0,
+            )

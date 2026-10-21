@@ -8,7 +8,8 @@ import org.oddlama.vane.proxycore.VaneProxyPlugin
  *
  * @constructor Creates the ping command.
  */
-class ProxyPingCommand(permission: String?, plugin: VaneProxyPlugin) : ProxyCommand(permission, plugin) {
+class ProxyPingCommand(permission: String?, plugin: VaneProxyPlugin) :
+    ProxyCommand(permission, plugin) {
     /**
      * Executes the ping command and sends latency to the invoking player.
      *

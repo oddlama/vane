@@ -1,12 +1,12 @@
 package org.oddlama.vane.portals.portal
 
-import org.json.JSONObject
-import org.oddlama.vane.core.persistent.PersistentSerializer
 import java.util.*
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
+import org.json.JSONObject
+import org.oddlama.vane.core.persistent.PersistentSerializer
 
 class PortalBlockTypeTest {
     /** Same shape as the material maps of [Style], keyed by portal block type. */
@@ -21,13 +21,21 @@ class PortalBlockTypeTest {
     fun registerSerializers() {
         // Mirrors the registration in the Portals companion, which needs a running plugin.
         PersistentSerializer.serializers[PortalBlock.Type::class.java] =
-            PersistentSerializer.Function { x: Any? -> (x as PortalBlock.Type).name }
+            PersistentSerializer.Function { x: Any? ->
+                (x as PortalBlock.Type).name
+            }
         PersistentSerializer.deserializers[PortalBlock.Type::class.java] =
-            PersistentSerializer.Function { x: Any? -> PortalBlock.Type.fromSerialized((x as String?)!!) }
+            PersistentSerializer.Function { x: Any? ->
+                PortalBlock.Type.fromSerialized((x as String?)!!)
+            }
         PersistentSerializer.serializers[PortalBlock::class.java] =
-            PersistentSerializer.Function { obj: Any? -> PortalBlock.serialize(obj!!) }
+            PersistentSerializer.Function { obj: Any? ->
+                PortalBlock.serialize(obj!!)
+            }
         PersistentSerializer.deserializers[PortalBlock::class.java] =
-            PersistentSerializer.Function { obj: Any? -> PortalBlock.deserialize(obj!!) }
+            PersistentSerializer.Function { obj: Any? ->
+                PortalBlock.deserialize(obj!!)
+            }
     }
 
     @Test
@@ -36,7 +44,10 @@ class PortalBlockTypeTest {
             assertEquals(type, PortalBlock.Type.fromSerialized(type.name))
         }
         for (i in 1..5) {
-            assertEquals(PortalBlock.Type.valueOf("BOUNDARY$i"), PortalBlock.Type.fromSerialized("BOUNDARY_$i"))
+            assertEquals(
+                PortalBlock.Type.valueOf("BOUNDARY$i"),
+                PortalBlock.Type.fromSerialized("BOUNDARY_$i"),
+            )
         }
         // Style configs from before v1.22.0 spell them in lower case.
         assertEquals(PortalBlock.Type.BOUNDARY3, PortalBlock.Type.fromSerialized("boundary_3"))
@@ -46,9 +57,17 @@ class PortalBlockTypeTest {
     @Test
     fun `loads legacy portal blocks across repeated saves`() {
         val worldId = UUID.randomUUID()
-        var json: Any = JSONObject()
-            .put("block", JSONObject().put("worldId", worldId.toString()).put("x", "1").put("y", "64").put("z", "-3"))
-            .put("type", "BOUNDARY_2")
+        var json: Any =
+            JSONObject()
+                .put(
+                    "block",
+                    JSONObject()
+                        .put("worldId", worldId.toString())
+                        .put("x", "1")
+                        .put("y", "64")
+                        .put("z", "-3"),
+                )
+                .put("type", "BOUNDARY_2")
 
         // Each iteration is one server restart: load what the previous one saved, then save it.
         repeat(3) {
@@ -61,22 +80,27 @@ class PortalBlockTypeTest {
 
     @Test
     fun `loads legacy style maps across repeated saves`() {
-        var json: Any = JSONObject().apply {
-            put("ORIGIN", "obsidian")
-            put("CONSOLE", "enchanting_table")
-            for (i in 1..5) put("BOUNDARY_$i", "boundary$i")
-            put("PORTAL", "air")
-        }
+        var json: Any =
+            JSONObject().apply {
+                put("ORIGIN", "obsidian")
+                put("CONSOLE", "enchanting_table")
+                for (i in 1..5) put("BOUNDARY_$i", "boundary$i")
+                put("PORTAL", "air")
+            }
 
         repeat(3) {
             @Suppress("UNCHECKED_CAST")
-            val materials = PersistentSerializer.fromJson(materialsField, json) as Map<PortalBlock.Type, String>
+            val materials =
+                PersistentSerializer.fromJson(materialsField, json) as Map<PortalBlock.Type, String>
             assertEquals(PortalBlock.Type.entries.toSet(), materials.keys)
             for (i in 1..5) {
                 assertEquals("boundary$i", materials[PortalBlock.Type.valueOf("BOUNDARY$i")])
             }
             json = PersistentSerializer.toJson(materialsField, materials)!!
         }
-        assertEquals(PortalBlock.Type.entries.map { it.name }.toSet(), (json as JSONObject).keySet())
+        assertEquals(
+            PortalBlock.Type.entries.map { it.name }.toSet(),
+            (json as JSONObject).keySet(),
+        )
     }
 }

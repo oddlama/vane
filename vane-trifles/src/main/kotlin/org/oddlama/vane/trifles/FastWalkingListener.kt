@@ -11,12 +11,14 @@ import org.bukkit.event.player.PlayerMoveEvent
 import org.oddlama.vane.annotation.config.ConfigBoolean
 import org.oddlama.vane.core.Listener
 
-/**
- * Applies configured speed effects to players and optionally other moving entities.
- */
-class FastWalkingListener(private val fastWalking: FastWalkingGroup) : Listener<Trifles?>(fastWalking) {
+/** Applies configured speed effects to players and optionally other moving entities. */
+class FastWalkingListener(private val fastWalking: FastWalkingGroup) :
+    Listener<Trifles?>(fastWalking) {
     /** Whether hostile mobs are eligible for path speed effects. */
-    @ConfigBoolean(def = false, desc = "Whether hostile mobs should be allowed to fast walk on paths.")
+    @ConfigBoolean(
+        def = false,
+        desc = "Whether hostile mobs should be allowed to fast walk on paths.",
+    )
     var configHostileSpeedwalk: Boolean = false
 
     /** Whether villagers are eligible for path speed effects. */
@@ -26,9 +28,10 @@ class FastWalkingListener(private val fastWalking: FastWalkingGroup) : Listener<
     /** Whether non-player entities should always be excluded from speedwalking. */
     @ConfigBoolean(
         def = false,
-        desc = "Whether players should be the only entities allowed to fast walk on paths (will override other path walk settings)."
+        desc =
+            "Whether players should be the only entities allowed to fast walk on paths (will override other path walk settings).",
     )
-            /** Whether non-player entities should always be excluded from speedwalking. */
+    /** Whether non-player entities should always be excluded from speedwalking. */
     var configPlayersOnlySpeedwalk: Boolean = false
 
     /** Applies the fast-walk effect to players (or their ridden living entity). */
@@ -50,11 +53,14 @@ class FastWalkingListener(private val fastWalking: FastWalkingGroup) : Listener<
     }
 
     /**
-     * Samples the block slightly below the given location and applies the configured
-     * walk-speed potion effect to the provided entity if the block's material matches
-     * the configured path materials.
+     * Samples the block slightly below the given location and applies the configured walk-speed
+     * potion effect to the provided entity if the block's material matches the configured path
+     * materials.
      */
-    private fun applyWalkSpeedIfOnMaterial(entity: org.bukkit.entity.Entity, sampleLocation: Location) {
+    private fun applyWalkSpeedIfOnMaterial(
+        entity: org.bukkit.entity.Entity,
+        sampleLocation: Location,
+    ) {
         if (entity !is LivingEntity) return
 
         val block = sampleLocation.clone().subtract(0.0, 0.1, 0.0).block

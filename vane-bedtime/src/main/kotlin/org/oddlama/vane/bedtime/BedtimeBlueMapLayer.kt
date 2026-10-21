@@ -1,36 +1,35 @@
 package org.oddlama.vane.bedtime
 
+import java.util.*
 import org.bukkit.OfflinePlayer
 import org.oddlama.vane.annotation.config.ConfigBoolean
 import org.oddlama.vane.annotation.lang.LangMessage
 import org.oddlama.vane.core.lang.TranslatedMessage
 import org.oddlama.vane.core.module.Context
 import org.oddlama.vane.core.module.ModuleComponent
-import java.util.*
 
 /**
  * Configurable BlueMap layer for bedtime spawn markers.
  *
- * @constructor Creates the BlueMap layer component.
  * @param context component context used to register config and lifecycle hooks.
+ * @constructor Creates the BlueMap layer component.
  */
-class BedtimeBlueMapLayer(context: Context<Bedtime?>) : ModuleComponent<Bedtime?>(
-    context.group(
-        "BlueMap",
-        "Enable BlueMap integration to show player spawnpoints (beds)."
-    )
-) {
+class BedtimeBlueMapLayer(context: Context<Bedtime?>) :
+    ModuleComponent<Bedtime?>(
+        context.group(
+            "BlueMap",
+            "Enable BlueMap integration to show player spawnpoints (beds).",
+        )
+    ) {
     /** Whether the marker set starts hidden in the BlueMap UI. */
     @ConfigBoolean(def = false, desc = "If the marker set should be hidden by default.")
     var configHideByDefault: Boolean = false
 
     /** Display label shown for this layer in the BlueMap UI. */
-    @LangMessage
-    var langLayerLabel: TranslatedMessage? = null
+    @LangMessage var langLayerLabel: TranslatedMessage? = null
 
     /** Label rendered inside each individual bed marker popup. */
-    @LangMessage
-    var langMarkerLabel: TranslatedMessage? = null
+    @LangMessage var langMarkerLabel: TranslatedMessage? = null
 
     /** Active delegate; `null` when BlueMap is unavailable. */
     private var delegate: BedtimeBlueMapLayerDelegate? = null

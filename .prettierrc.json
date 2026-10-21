@@ -1,0 +1,7 @@
+{
+  "useTabs": false,
+  "tabWidth": 4,
+  "printWidth": 120,
+  "proseWrap": "preserve",
+  "overrides": [{ "files": ["*.yml", "*.yaml", "*.json"], "options": { "tabWidth": 2 } }]
+}

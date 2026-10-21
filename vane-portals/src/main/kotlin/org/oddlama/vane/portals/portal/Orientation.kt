@@ -28,21 +28,21 @@ enum class Orientation(private val plane: Plane, private val vector: Vector) {
     fun componentMask() = vector().multiply(vector)
 
     /** Returns the opposite orientation. */
-    fun flip() = when (this) {
-        NEGATIVE_X -> POSITIVE_X
-        POSITIVE_X -> NEGATIVE_X
-        NEGATIVE_Z -> POSITIVE_Z
-        POSITIVE_Z -> NEGATIVE_Z
-        NEGATIVE_Y -> POSITIVE_Y
-        POSITIVE_Y -> NEGATIVE_Y
-    }
-
+    fun flip() =
+        when (this) {
+            NEGATIVE_X -> POSITIVE_X
+            POSITIVE_X -> NEGATIVE_X
+            NEGATIVE_Z -> POSITIVE_Z
+            POSITIVE_Z -> NEGATIVE_Z
+            NEGATIVE_Y -> POSITIVE_Y
+            POSITIVE_Y -> NEGATIVE_Y
+        }
 
     /** Applies this orientation transform to [location] relative to [reference]. */
     fun apply(
         reference: Orientation,
         location: Location,
-        flipSourceIfNotOpposing: Boolean
+        flipSourceIfNotOpposing: Boolean,
     ): Location {
         val l = location.clone()
         l.direction = apply(reference, location.direction, flipSourceIfNotOpposing)
@@ -63,59 +63,65 @@ enum class Orientation(private val plane: Plane, private val vector: Vector) {
         }
 
         when (effectiveSource) {
-            NEGATIVE_X -> return when (reference) {
-                NEGATIVE_X -> Vector(-x, y, -z)
-                POSITIVE_X -> Vector(x, y, z)
-                NEGATIVE_Z -> Vector(z, y, -x)
-                POSITIVE_Z -> Vector(-z, y, x)
-                NEGATIVE_Y -> Vector(y, -x, z)
-                POSITIVE_Y -> Vector(-y, x, z)
-            }
+            NEGATIVE_X ->
+                return when (reference) {
+                    NEGATIVE_X -> Vector(-x, y, -z)
+                    POSITIVE_X -> Vector(x, y, z)
+                    NEGATIVE_Z -> Vector(z, y, -x)
+                    POSITIVE_Z -> Vector(-z, y, x)
+                    NEGATIVE_Y -> Vector(y, -x, z)
+                    POSITIVE_Y -> Vector(-y, x, z)
+                }
 
-            POSITIVE_X -> return when (reference) {
-                NEGATIVE_X -> Vector(x, y, z)
-                POSITIVE_X -> Vector(-x, y, -z)
-                NEGATIVE_Z -> Vector(-z, y, x)
-                POSITIVE_Z -> Vector(z, y, -x)
-                NEGATIVE_Y -> Vector(-y, x, z)
-                POSITIVE_Y -> Vector(y, -x, z)
-            }
+            POSITIVE_X ->
+                return when (reference) {
+                    NEGATIVE_X -> Vector(x, y, z)
+                    POSITIVE_X -> Vector(-x, y, -z)
+                    NEGATIVE_Z -> Vector(-z, y, x)
+                    POSITIVE_Z -> Vector(z, y, -x)
+                    NEGATIVE_Y -> Vector(-y, x, z)
+                    POSITIVE_Y -> Vector(y, -x, z)
+                }
 
-            NEGATIVE_Z -> return when (reference) {
-                NEGATIVE_X -> Vector(-z, y, x)
-                POSITIVE_X -> Vector(z, y, -x)
-                NEGATIVE_Z -> Vector(-x, y, -z)
-                POSITIVE_Z -> Vector(x, y, z)
-                NEGATIVE_Y -> Vector(x, -z, y)
-                POSITIVE_Y -> Vector(-x, z, y)
-            }
+            NEGATIVE_Z ->
+                return when (reference) {
+                    NEGATIVE_X -> Vector(-z, y, x)
+                    POSITIVE_X -> Vector(z, y, -x)
+                    NEGATIVE_Z -> Vector(-x, y, -z)
+                    POSITIVE_Z -> Vector(x, y, z)
+                    NEGATIVE_Y -> Vector(x, -z, y)
+                    POSITIVE_Y -> Vector(-x, z, y)
+                }
 
-            POSITIVE_Z -> return when (reference) {
-                NEGATIVE_X -> Vector(z, y, -x)
-                POSITIVE_X -> Vector(-z, y, x)
-                NEGATIVE_Z -> Vector(x, y, z)
-                POSITIVE_Z -> Vector(-x, y, -z)
-                NEGATIVE_Y -> Vector(-x, z, y)
-                POSITIVE_Y -> Vector(x, -z, y)
-            }
+            POSITIVE_Z ->
+                return when (reference) {
+                    NEGATIVE_X -> Vector(z, y, -x)
+                    POSITIVE_X -> Vector(-z, y, x)
+                    NEGATIVE_Z -> Vector(x, y, z)
+                    POSITIVE_Z -> Vector(-x, y, -z)
+                    NEGATIVE_Y -> Vector(-x, z, y)
+                    POSITIVE_Y -> Vector(x, -z, y)
+                }
 
-            NEGATIVE_Y -> return when (reference) {
-                NEGATIVE_X -> Vector(-y, 0.0, 0.0)
-                POSITIVE_X -> Vector(y, 0.0, 0.0)
-                NEGATIVE_Z -> Vector(0.0, 0.0, -y)
-                POSITIVE_Z -> Vector(0.0, 0.0, y)
-                NEGATIVE_Y -> Vector(x, -y, z)
-                POSITIVE_Y -> Vector(x, y, z)
-            }
+            NEGATIVE_Y ->
+                return when (reference) {
+                    NEGATIVE_X -> Vector(-y, 0.0, 0.0)
+                    POSITIVE_X -> Vector(y, 0.0, 0.0)
+                    NEGATIVE_Z -> Vector(0.0, 0.0, -y)
+                    POSITIVE_Z -> Vector(0.0, 0.0, y)
+                    NEGATIVE_Y -> Vector(x, -y, z)
+                    POSITIVE_Y -> Vector(x, y, z)
+                }
 
-            POSITIVE_Y -> return when (reference) {
-                NEGATIVE_X -> Vector(y, 0.0, 0.0)
-                POSITIVE_X -> Vector(-y, 0.0, 0.0)
-                NEGATIVE_Z -> Vector(0.0, 0.0, y)
-                POSITIVE_Z -> Vector(0.0, 0.0, -y)
-                NEGATIVE_Y -> Vector(x, y, z)
-                POSITIVE_Y -> Vector(-x, -y, -z)
-            }
+            POSITIVE_Y ->
+                return when (reference) {
+                    NEGATIVE_X -> Vector(y, 0.0, 0.0)
+                    POSITIVE_X -> Vector(-y, 0.0, 0.0)
+                    NEGATIVE_Z -> Vector(0.0, 0.0, y)
+                    POSITIVE_Z -> Vector(0.0, 0.0, -y)
+                    NEGATIVE_Y -> Vector(x, y, z)
+                    POSITIVE_Y -> Vector(-x, -y, -z)
+                }
         }
     }
 
@@ -127,7 +133,7 @@ enum class Orientation(private val plane: Plane, private val vector: Vector) {
             plane: Plane,
             origin: Block,
             console: Block,
-            entityLocation: Location
+            entityLocation: Location,
         ): Orientation {
             when (plane) {
                 Plane.XY -> {

@@ -1,52 +1,19 @@
 name: Lint commit messages
-
 on: pull_request
-
 permissions:
   contents: read
-
 jobs:
-  lint_commits:
+  lint:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v7.0.1
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
           persist-credentials: false
           ref: ${{ github.event.pull_request.head.sha }}
-
-      - uses: oven-sh/setup-bun@v2.2.0
-
-      - name: Setup commitlint
-        run: |
-          bun add --no-save @commitlint/cli@21 @commitlint/config-conventional@21
-          echo "module.exports = {extends: ['@commitlint/config-conventional'], rules: {'body-max-line-length': [0]}}" > commitlint.config.js
-
+      - uses: cachix/install-nix-action@448cde739abec1eaf0646249e3d25bb8d9bc7702 # v31.11.2
       - name: Lint PR commits
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
-        run: |
-          errors=()
-          while IFS= read -r sha; do
-            subject=$(git log -1 --format=%s "$sha")
-            if ! git log -1 --format=%B "$sha" | bun x --bun commitlint; then
-              errors+=("$subject")
-            fi
-          done < <(git rev-list --no-merges --reverse "$BASE_SHA..$HEAD_SHA")
-
-          if (( ${#errors[@]} )); then
-            {
-              echo "### Commit messages don't follow Conventional Commits"
-              echo
-              echo "These commits need rewording (see <https://www.conventionalcommits.org/en/v1.0.0/>):"
-              echo
-              for subject in "${errors[@]}"; do
-                echo "- \`$subject\`"
-              done
-              echo
-              echo "Fix them with \`git commit --amend\` or \`git rebase -i\`, then force push to update this PR."
-            } | tee -a "$GITHUB_STEP_SUMMARY"
-            exit 1
-          fi
+        run: nix run .#lint-commits -- "$BASE_SHA" "$HEAD_SHA"

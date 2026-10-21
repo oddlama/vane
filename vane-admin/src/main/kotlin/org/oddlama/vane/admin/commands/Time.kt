@@ -10,11 +10,11 @@ import org.bukkit.World
 import org.bukkit.entity.Player
 import org.oddlama.vane.admin.Admin
 import org.oddlama.vane.annotation.command.Name
+import org.oddlama.vane.core.command.Command as VaneCommand
 import org.oddlama.vane.core.command.argumentType.TimeValueArgumentType
 import org.oddlama.vane.core.command.enums.TimeValue
 import org.oddlama.vane.core.module.Context
 import org.oddlama.vane.util.WorldUtil
-import org.oddlama.vane.core.command.Command as VaneCommand
 
 /**
  * Command for changing the world time smoothly.
@@ -40,16 +40,17 @@ class Time(context: Context<Admin?>) : VaneCommand<Admin?>(context) {
                             Command.SINGLE_SUCCESS
                         } else {
                             // Console or non-player senders must specify a world explicitly.
-                            sender.sendMessage("This command must be run by a player or you must specify a world.")
+                            sender.sendMessage(
+                                "This command must be run by a player or you must specify a world."
+                            )
                             0
                         }
                     }
                     .then(
-                        Commands.argument("world", ArgumentTypes.world())
-                            .executes { ctx ->
-                                setTime(timeValue(ctx), ctx.getArgument("world", World::class.java))
-                                Command.SINGLE_SUCCESS
-                            }
+                        Commands.argument("world", ArgumentTypes.world()).executes { ctx ->
+                            setTime(timeValue(ctx), ctx.getArgument("world", World::class.java))
+                            Command.SINGLE_SUCCESS
+                        }
                     )
             )
 

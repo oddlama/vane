@@ -84,33 +84,43 @@ class SmithingRecipeDefinition(name: String?) : RecipeDefinition(name) {
 
     /** Loads this recipe definition from dictionary form. */
     override fun fromDict(dict: Any?): RecipeDefinition {
-        require(dict is MutableMap<*, *>) { "Invalid smithing recipe dictionary: Argument must be a Map<String, Object>!" }
+        require(dict is MutableMap<*, *>) {
+            "Invalid smithing recipe dictionary: Argument must be a Map<String, Object>!"
+        }
         val baseObj = LegacyKeys.lookup(dict, "Base")
         if (baseObj is String) {
             this.base = baseObj
         } else {
-            throw IllegalArgumentException("Invalid smithing recipe dictionary: base must be a string")
+            throw IllegalArgumentException(
+                "Invalid smithing recipe dictionary: base must be a string"
+            )
         }
 
         val additionObj = LegacyKeys.lookup(dict, "Addition")
         if (additionObj is String) {
             this.addition = additionObj
         } else {
-            throw IllegalArgumentException("Invalid smithing recipe dictionary: addition must be a string")
+            throw IllegalArgumentException(
+                "Invalid smithing recipe dictionary: addition must be a string"
+            )
         }
 
         val copyNbtObj = LegacyKeys.lookup(dict, "CopyNbt")
         if (copyNbtObj is Boolean) {
             this.copyNbt = copyNbtObj
         } else {
-            throw IllegalArgumentException("Invalid smithing recipe dictionary: copyNbt must be a bool")
+            throw IllegalArgumentException(
+                "Invalid smithing recipe dictionary: copyNbt must be a bool"
+            )
         }
 
         val resultObj = LegacyKeys.lookup(dict, "Result")
         if (resultObj is String) {
             this.result = resultObj
         } else {
-            throw IllegalArgumentException("Invalid smithing recipe dictionary: result must be a string")
+            throw IllegalArgumentException(
+                "Invalid smithing recipe dictionary: result must be a string"
+            )
         }
 
         return this
@@ -119,9 +129,13 @@ class SmithingRecipeDefinition(name: String?) : RecipeDefinition(name) {
     /** Converts this definition into a Bukkit [SmithingTransformRecipe]. */
     override fun toRecipe(baseKey: NamespacedKey?): Recipe {
         val bk = baseKey ?: throw IllegalArgumentException("baseKey cannot be null")
-        val baseDef = base ?: throw IllegalArgumentException("Invalid smithing recipe: base must be set")
-        val additionDef = addition ?: throw IllegalArgumentException("Invalid smithing recipe: addition must be set")
-        val resultDef = result ?: throw IllegalArgumentException("Invalid smithing recipe: result must be set")
+        val baseDef =
+            base ?: throw IllegalArgumentException("Invalid smithing recipe: base must be set")
+        val additionDef =
+            addition
+                ?: throw IllegalArgumentException("Invalid smithing recipe: addition must be set")
+        val resultDef =
+            result ?: throw IllegalArgumentException("Invalid smithing recipe: result must be set")
 
         return SmithingTransformRecipe(
             key(bk),
@@ -129,7 +143,7 @@ class SmithingRecipeDefinition(name: String?) : RecipeDefinition(name) {
             MaterialChoice(Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
             recipeChoice(baseDef),
             recipeChoice(additionDef),
-            copyNbt
+            copyNbt,
         )
     }
 }

@@ -4,9 +4,7 @@ import org.bukkit.NamespacedKey
 import org.json.JSONArray
 import org.oddlama.vane.core.material.HeadMaterial.Companion.from
 
-/**
- * Registry of known custom head materials loaded from JSON data.
- */
+/** Registry of known custom head materials loaded from JSON data. */
 object HeadMaterialLibrary {
     /** Head registry by namespaced key. */
     private val registry = mutableMapOf<NamespacedKey, HeadMaterial>()
@@ -39,14 +37,11 @@ object HeadMaterialLibrary {
     }
 
     /** Resolves a head material by key. */
-    @JvmStatic
-    fun from(key: NamespacedKey?): HeadMaterial? = registry[key]
+    @JvmStatic fun from(key: NamespacedKey?): HeadMaterial? = registry[key]
 
     /** Resolves a head material by texture payload. */
-    @JvmStatic
-    fun fromTexture(base64Texture: String?): HeadMaterial? = byTexture[base64Texture]
+    @JvmStatic fun fromTexture(base64Texture: String?): HeadMaterial? = byTexture[base64Texture]
 
     /** Returns all loaded head materials. */
-    @JvmStatic
-    fun all(): Collection<HeadMaterial> = registry.values
+    @JvmStatic fun all(): Collection<HeadMaterial> = registry.values
 }

@@ -1,38 +1,30 @@
 name: Pages
-
 on:
   push:
-    branches: [ Kotlin ]
-    paths: [ 'docs/**' ]
+    branches: [main]
+    paths: ["docs/**", "nix/**", "flake.*", "version.txt", ".github/workflows/pages.yml"]
   workflow_dispatch:
-
 permissions:
   contents: read
   pages: write
   id-token: write
-
-# Only one deployment at a time; don't cancel one that is already publishing.
 concurrency:
   group: pages
   cancel-in-progress: false
-
 jobs:
   deploy:
+    if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-
     steps:
       - uses: actions/checkout@v7
-
-      # Publishes docs/ as-is, including docs/resourcepacks/v<version>.zip, which vane-core
-      # hands to clients as its official resource pack URL (see vane-core.properties).
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v5
+      - uses: cachix/install-nix-action@448cde739abec1eaf0646249e3d25bb8d9bc7702 # v31.11.2
+      - name: Build website and include historical resource packs
+        run: nix build .#website -L --out-link public
+      - uses: actions/upload-pages-artifact@v5
         with:
-          path: docs
-
-      - name: Deploy to GitHub Pages
+          path: public
+      - uses: actions/deploy-pages@v5
         id: deployment
-        uses: actions/deploy-pages@v5

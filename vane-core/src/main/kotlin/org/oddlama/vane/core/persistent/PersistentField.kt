@@ -1,8 +1,8 @@
 package org.oddlama.vane.core.persistent
 
-import org.json.JSONObject
 import java.io.IOException
 import java.lang.reflect.Field
+import org.json.JSONObject
 
 /**
  * Reflection-backed persistent storage binding for a single field.
@@ -11,7 +11,11 @@ import java.lang.reflect.Field
  * @param field reflected persistent field.
  * @param mapName maps Java field names to storage keys.
  */
-class PersistentField(private val owner: Any?, private val field: Field, mapName: (String?) -> String?) {
+class PersistentField(
+    private val owner: Any?,
+    private val field: Field,
+    mapName: (String?) -> String?,
+) {
     /** Persistent storage path for this field. */
     private val path: String? = mapName(field.name.substring("storage".length))
 

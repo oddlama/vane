@@ -1,10 +1,10 @@
 package org.oddlama.velocity.compat.event
 
 import com.velocitypowered.api.event.connection.PreLoginEvent
+import java.util.logging.Level
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 import org.oddlama.vane.proxycore.ProxyPendingConnection
 import org.oddlama.vane.proxycore.VaneProxyPlugin
-import java.util.logging.Level
 
 /**
  * Velocity-backed implementation of proxy-core pre-login event abstraction.
@@ -14,11 +14,9 @@ import java.util.logging.Level
  */
 class VelocityCompatPreLoginEvent(
     plugin: VaneProxyPlugin,
-    val event: PreLoginEvent
+    val event: PreLoginEvent,
 ) : org.oddlama.vane.proxycore.listeners.PreLoginEvent(plugin) {
-    /**
-     * Cancels with a default deny reason.
-     */
+    /** Cancels with a default deny reason. */
     override fun cancel() {
         cancel(null)
     }
@@ -36,20 +34,21 @@ class VelocityCompatPreLoginEvent(
             .log(
                 Level.WARNING,
                 "Denying multiplexer connection from " +
-                        event.connection.remoteAddress +
-                        ": " +
-                        resolvedReason.ifEmpty { "No reason provided" }
+                    event.connection.remoteAddress +
+                    ": " +
+                    resolvedReason.ifEmpty { "No reason provided" },
             )
 
-        event.result = PreLoginEvent.PreLoginComponentResult.denied(
-            LegacyComponentSerializer.legacySection()
-                .deserialize(resolvedReason.ifEmpty { "Failed to authorize multiplexer connection" })
-        )
+        event.result =
+            PreLoginEvent.PreLoginComponentResult.denied(
+                LegacyComponentSerializer.legacySection()
+                    .deserialize(
+                        resolvedReason.ifEmpty { "Failed to authorize multiplexer connection" }
+                    )
+            )
     }
 
-    /**
-     * Wrapped pending connection for proxy-core logic.
-     */
+    /** Wrapped pending connection for proxy-core logic. */
     override val connection: ProxyPendingConnection
         get() = VelocityCompatPendingConnection(event.connection, event.username)
 

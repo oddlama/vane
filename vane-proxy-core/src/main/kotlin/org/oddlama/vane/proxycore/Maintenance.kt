@@ -1,10 +1,10 @@
 package org.oddlama.vane.proxycore
 
-import org.oddlama.vane.proxycore.scheduler.ProxyScheduledTask
-import org.oddlama.vane.proxycore.util.formatTime
 import java.io.*
 import java.util.concurrent.TimeUnit
 import java.util.logging.Level
+import org.oddlama.vane.proxycore.scheduler.ProxyScheduledTask
+import org.oddlama.vane.proxycore.util.formatTime
 
 @Suppress("unused")
 /**
@@ -65,9 +65,7 @@ class Maintenance(private val plugin: VaneProxyPlugin) {
         plugin.getLogger().log(Level.INFO, "Maintenance enabled!")
     }
 
-    /**
-     * Resets maintenance state and cancels all scheduled maintenance tasks.
-     */
+    /** Resets maintenance state and cancels all scheduled maintenance tasks. */
     fun disable() {
         start = 0
         duration = 0L
@@ -80,9 +78,7 @@ class Maintenance(private val plugin: VaneProxyPlugin) {
         file.delete()
     }
 
-    /**
-     * Aborts scheduled or active maintenance and emits cancellation broadcasts when applicable.
-     */
+    /** Aborts scheduled or active maintenance and emits cancellation broadcasts when applicable. */
     fun abort() {
         if (start == 0L) {
             return
@@ -127,9 +123,7 @@ class Maintenance(private val plugin: VaneProxyPlugin) {
         }
     }
 
-    /**
-     * Loads persisted maintenance state from disk and restores scheduling or active mode.
-     */
+    /** Loads persisted maintenance state from disk and restores scheduling or active mode. */
     fun load() {
         if (file.exists()) {
             // Recover maintenance times
@@ -194,7 +188,8 @@ class Maintenance(private val plugin: VaneProxyPlugin) {
     /**
      * Expands placeholders in a maintenance message template.
      *
-     * @param message template containing `%MOTD%`, `%time%`, `%duration%`, and `%remaining%` placeholders.
+     * @param message template containing `%MOTD%`, `%time%`, `%duration%`, and `%remaining%`
+     *   placeholders.
      * @return formatted message.
      */
     fun formatMessage(message: String): String {
@@ -235,9 +230,7 @@ class Maintenance(private val plugin: VaneProxyPlugin) {
             .replace("%remaining%", remainingString)
     }
 
-    /**
-     * Task that broadcasts periodic countdown updates before maintenance starts.
-     */
+    /** Task that broadcasts periodic countdown updates before maintenance starts. */
     inner class TaskNotify : Runnable {
         /** Currently scheduled proxy task, if any. */
         private var task: ProxyScheduledTask? = null
@@ -249,9 +242,11 @@ class Maintenance(private val plugin: VaneProxyPlugin) {
         @Synchronized
         override fun run() {
             // Broadcast message
-            plugin
-                .proxy
-                .broadcast(formatMessage(if (notifyTime <= SHUTDOWN_THRESHOLD) MESSAGE_SHUTDOWN else MESSAGE_SCHEDULED))
+            plugin.proxy.broadcast(
+                formatMessage(
+                    if (notifyTime <= SHUTDOWN_THRESHOLD) MESSAGE_SHUTDOWN else MESSAGE_SCHEDULED
+                )
+            )
 
             // Schedule next time
             schedule()
@@ -288,7 +283,12 @@ class Maintenance(private val plugin: VaneProxyPlugin) {
             // Schedule for next time
             val scheduler = plugin.proxy.scheduler
             if (scheduler == null) {
-                plugin.getLogger().log(Level.SEVERE, "No scheduler available to schedule maintenance notifications")
+                plugin
+                    .getLogger()
+                    .log(
+                        Level.SEVERE,
+                        "No scheduler available to schedule maintenance notifications",
+                    )
                 return
             }
 
@@ -315,9 +315,7 @@ class Maintenance(private val plugin: VaneProxyPlugin) {
         }
     }
 
-    /**
-     * Task that enables maintenance mode once the scheduled start time is reached.
-     */
+    /** Task that enables maintenance mode once the scheduled start time is reached. */
     inner class TaskEnable : Runnable {
         /** Currently scheduled enable task, if any. */
         private var task: ProxyScheduledTask? = null
@@ -350,7 +348,9 @@ class Maintenance(private val plugin: VaneProxyPlugin) {
 
             val scheduler = plugin.proxy.scheduler
             if (scheduler == null) {
-                plugin.getLogger().log(Level.SEVERE, "No scheduler available to schedule maintenance enable task")
+                plugin
+                    .getLogger()
+                    .log(Level.SEVERE, "No scheduler available to schedule maintenance enable task")
                 return
             }
 
@@ -360,27 +360,28 @@ class Maintenance(private val plugin: VaneProxyPlugin) {
 
     companion object {
         /** Countdown points (in milliseconds) at which notifications are emitted. */
-        val NOTIFY_TIMES: LongArray = longArrayOf(
-            240 * 60000L,
-            180 * 60000L,
-            120 * 60000L,
-            60 * 60000L,
-            30 * 60000L,
-            15 * 60000L,
-            10 * 60000L,
-            5 * 60000L,
-            4 * 60000L,
-            3 * 60000L,
-            2 * 60000L,
-            60000L,
-            30000L,
-            10000L,
-            5000L,
-            4000L,
-            3000L,
-            2000L,
-            1000L,
-        )
+        val NOTIFY_TIMES: LongArray =
+            longArrayOf(
+                240 * 60000L,
+                180 * 60000L,
+                120 * 60000L,
+                60 * 60000L,
+                30 * 60000L,
+                15 * 60000L,
+                10 * 60000L,
+                5 * 60000L,
+                4 * 60000L,
+                3 * 60000L,
+                2 * 60000L,
+                60000L,
+                30000L,
+                10000L,
+                5000L,
+                4000L,
+                3000L,
+                2000L,
+                1000L,
+            )
 
         /** Threshold in milliseconds for switching to the shutdown warning message. */
         var SHUTDOWN_THRESHOLD: Long = 10000L // MESSAGE_SHUTDOWN if <= 10 seconds
@@ -389,13 +390,15 @@ class Maintenance(private val plugin: VaneProxyPlugin) {
         var MESSAGE_ABORTED: String = "§7> §cServer maintenance §l§6CANCELLED§r§c!"
 
         /** Informational template used by maintenance status queries. */
-        var MESSAGE_INFO: String = "§7>" +
+        var MESSAGE_INFO: String =
+            "§7>" +
                 "\n§7> §cScheduled maintenance in: §6%time%" +
                 "\n§7> §cExpected time remaining: §6%remaining%" +
                 "\n§7>"
 
         /** Broadcast template used while maintenance is scheduled but not yet active. */
-        var MESSAGE_SCHEDULED: String = "§7>" +
+        var MESSAGE_SCHEDULED: String =
+            "§7>" +
                 "\n§7> §e\u21af§r §6§lMaintenance active§r §e\u21af§r" +
                 "\n§7>" +
                 "\n§7> §cScheduled maintenance in: §6%time%" +
@@ -412,7 +415,8 @@ class Maintenance(private val plugin: VaneProxyPlugin) {
         /** MOTD template exposed during active maintenance. */
         @JvmField
         var MOTD: String =
-            "§e\u21af§r §6§lMaintenance active§r §e\u21af§r" + "\n§cExpected time remaining: §6%remaining%"
+            "§e\u21af§r §6§lMaintenance active§r §e\u21af§r" +
+                "\n§cExpected time remaining: §6%remaining%"
 
         /** Message shown when users attempt to connect during maintenance. */
         var MESSAGE_CONNECT: String = "%MOTD%" + "\n" + "\n§7Please try again later."

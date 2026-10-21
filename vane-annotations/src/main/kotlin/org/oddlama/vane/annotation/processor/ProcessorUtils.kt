@@ -10,8 +10,8 @@ import javax.tools.Diagnostic
 // Shared validation helpers used by the annotation processors in this package.
 
 /**
- * Verifies that the provided element is a class. Prints a compiler error message
- * via the processing environment if it is not.
+ * Verifies that the provided element is a class. Prints a compiler error message via the processing
+ * environment if it is not.
  *
  * @param processingEnv The annotation processing environment used to report errors.
  * @param element The element annotated with the annotation being validated.
@@ -21,14 +21,14 @@ fun verifyIsClass(processingEnv: ProcessingEnvironment, element: Element, annota
     if (element.kind != ElementKind.CLASS) {
         processingEnv.messager.printMessage(
             Diagnostic.Kind.ERROR,
-            "${element.asType()}: @$annotationName must be applied to a class"
+            "${element.asType()}: @$annotationName must be applied to a class",
         )
     }
 }
 
 /**
- * Verifies that the provided element (class) extends or inherits from a type
- * that starts with the given prefix. If it does not, an error is emitted.
+ * Verifies that the provided element (class) extends or inherits from a type that starts with the
+ * given prefix. If it does not, an error is emitted.
  *
  * @param processingEnv Processing environment used for error reporting.
  * @param element The element to check (expected to be a class).
@@ -41,22 +41,26 @@ fun verifyExtendsType(
     element: Element,
     requiredSuperPrefix: String,
     annotationName: String,
-    requiredFullName: String
+    requiredFullName: String,
 ) {
-    val start = element as? TypeElement ?: return processingEnv.messager.printMessage(
-        Diagnostic.Kind.ERROR,
-        "${element.asType()}: @$annotationName must be applied to a class"
-    )
+    val start =
+        element as? TypeElement
+            ?: return processingEnv.messager.printMessage(
+                Diagnostic.Kind.ERROR,
+                "${element.asType()}: @$annotationName must be applied to a class",
+            )
 
-    val found = generateSequence(start) { current ->
-        val sc = current.superclass
-        if (sc is DeclaredType) sc.asElement() as? TypeElement else null
-    }.any { it.asType().toString().startsWith(requiredSuperPrefix) }
+    val found =
+        generateSequence(start) { current ->
+                val sc = current.superclass
+                if (sc is DeclaredType) sc.asElement() as? TypeElement else null
+            }
+            .any { it.asType().toString().startsWith(requiredSuperPrefix) }
 
     if (!found) {
         processingEnv.messager.printMessage(
             Diagnostic.Kind.ERROR,
-            "${start.asType()}: @$annotationName must be applied to a class inheriting from $requiredFullName"
+            "${start.asType()}: @$annotationName must be applied to a class inheriting from $requiredFullName",
         )
     }
 }

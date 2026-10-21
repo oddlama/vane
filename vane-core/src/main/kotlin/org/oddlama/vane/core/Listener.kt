@@ -11,7 +11,8 @@ import org.oddlama.vane.core.module.ModuleComponent
  * @param T owning module type.
  * @param context listener context.
  */
-open class Listener<T : Module<T?>?>(context: Context<T?>?) : ModuleComponent<T?>(context), Listener {
+open class Listener<T : Module<T?>?>(context: Context<T?>?) :
+    ModuleComponent<T?>(context), Listener {
     /** Registers this listener with the module. */
     override fun onEnable() {
         module?.registerListener(this)

@@ -1,5 +1,6 @@
 package org.oddlama.vane.trifles.items
 
+import java.util.*
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.SoundCategory
@@ -21,13 +22,11 @@ import org.oddlama.vane.core.item.api.CustomItem
 import org.oddlama.vane.core.module.Context
 import org.oddlama.vane.trifles.Trifles
 import org.oddlama.vane.util.PlayerUtil
-import java.util.*
 
 @VaneItem(name = "slime_bucket", base = Material.SLIME_BALL, modelData = 0x760014, version = 1)
-/**
- * Captures tiny slimes into an item and updates model state based on slime chunk presence.
- */
-class SlimeBucket(context: Context<Trifles?>) : org.oddlama.vane.core.item.CustomItem<Trifles?>(context) {
+/** Captures tiny slimes into an item and updates model state based on slime chunk presence. */
+class SlimeBucket(context: Context<Trifles?>) :
+    org.oddlama.vane.core.item.CustomItem<Trifles?>(context) {
     /** Tracks players currently standing in slime chunks to detect transitions. */
     private val playersInSlimeChunks = HashSet<UUID>()
 
@@ -59,19 +58,21 @@ class SlimeBucket(context: Context<Trifles?>) : org.oddlama.vane.core.item.Custo
         // Set model data according to current chunk slime status.
         val newStack = newStack() ?: return
         newStack.editMeta { meta: ItemMeta ->
-            val correctModelData: Float = if (player.chunk.isSlimeChunk)
-                CUSTOM_MODEL_DATA_JUMPY
-            else
-                CUSTOM_MODEL_DATA_QUIET
-            // The getter returns a copy, so the edited component has to be set back. The setter takes a
-            // nullable component while the getter is non-null, so Kotlin offers no writable property here.
+            val correctModelData: Float =
+                if (player.chunk.isSlimeChunk) CUSTOM_MODEL_DATA_JUMPY else CUSTOM_MODEL_DATA_QUIET
+            // The getter returns a copy, so the edited component has to be set back. The setter
+            // takes a
+            // nullable component while the getter is non-null, so Kotlin offers no writable
+            // property here.
             @Suppress("UsePropertyAccessSyntax")
-            meta.setCustomModelDataComponent(meta.customModelDataComponent.apply { floats = listOf(correctModelData) })
+            meta.setCustomModelDataComponent(
+                meta.customModelDataComponent.apply { floats = listOf(correctModelData) }
+            )
 
-            val correctItemModel = if (player.chunk.isSlimeChunk)
-                org.bukkit.NamespacedKey("vane_trifles", "slime_bucket_excited")
-            else
-                org.bukkit.NamespacedKey("vane_trifles", "slime_bucket")
+            val correctItemModel =
+                if (player.chunk.isSlimeChunk)
+                    org.bukkit.NamespacedKey("vane_trifles", "slime_bucket_excited")
+                else org.bukkit.NamespacedKey("vane_trifles", "slime_bucket")
             meta.itemModel = correctItemModel
         }
 
@@ -108,13 +109,12 @@ class SlimeBucket(context: Context<Trifles?>) : org.oddlama.vane.core.item.Custo
 
         // Spawn back a tiny slime at interaction position.
         val loc = event.interactionPoint ?: return
-        loc
-            .getWorld()
-            .spawnEntity(loc, EntityType.SLIME, CreatureSpawnEvent.SpawnReason.CUSTOM) { entity: Entity ->
-                if (entity is Slime) {
-                    entity.size = 1
-                }
+        loc.getWorld().spawnEntity(loc, EntityType.SLIME, CreatureSpawnEvent.SpawnReason.CUSTOM) {
+            entity: Entity ->
+            if (entity is Slime) {
+                entity.size = 1
             }
+        }
 
         player.playSound(player, Sound.ENTITY_SLIME_JUMP, SoundCategory.MASTER, 1.0f, 2.0f)
         PlayerUtil.swingArm(player, hand)
@@ -143,22 +143,29 @@ class SlimeBucket(context: Context<Trifles?>) : org.oddlama.vane.core.item.Custo
                 playersInSlimeChunks.remove(player.uniqueId)
             }
 
-            val correctModelData: Float = if (inSlimeChunk) CUSTOM_MODEL_DATA_JUMPY else CUSTOM_MODEL_DATA_QUIET
+            val correctModelData: Float =
+                if (inSlimeChunk) CUSTOM_MODEL_DATA_JUMPY else CUSTOM_MODEL_DATA_QUIET
             val itemRegistry = module.core?.itemRegistry()
             for (item in player.inventory.contents) {
                 val customItem: CustomItem? = itemRegistry?.get(item)
                 if (customItem is SlimeBucket && customItem.enabled()) {
                     // Refresh custom model data on matching inventory items.
                     item?.editMeta { meta: ItemMeta ->
-                        // The getter returns a copy, so the edited component has to be set back. The setter takes a
-                        // nullable component while the getter is non-null, so Kotlin offers no writable property here.
+                        // The getter returns a copy, so the edited component has to be set back.
+                        // The setter takes a
+                        // nullable component while the getter is non-null, so Kotlin offers no
+                        // writable property here.
                         @Suppress("UsePropertyAccessSyntax")
-                        meta.setCustomModelDataComponent(meta.customModelDataComponent.apply { floats = listOf(correctModelData) })
+                        meta.setCustomModelDataComponent(
+                            meta.customModelDataComponent.apply {
+                                floats = listOf(correctModelData)
+                            }
+                        )
 
-                        val correctItemModel = if (inSlimeChunk)
-                            org.bukkit.NamespacedKey("vane_trifles", "slime_bucket_excited")
-                        else
-                            org.bukkit.NamespacedKey("vane_trifles", "slime_bucket")
+                        val correctItemModel =
+                            if (inSlimeChunk)
+                                org.bukkit.NamespacedKey("vane_trifles", "slime_bucket_excited")
+                            else org.bukkit.NamespacedKey("vane_trifles", "slime_bucket")
                         meta.itemModel = correctItemModel
                     }
                 }

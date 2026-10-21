@@ -14,22 +14,22 @@ import org.oddlama.velocity.compat.VelocityCompatProxyServerPing
  * @property event wrapped Velocity ping event.
  * @param server target server information for ping processing.
  */
-class VelocityCompatPingEvent(plugin: VaneProxyPlugin, val event: ProxyPingEvent, server: IVaneProxyServerInfo) :
+class VelocityCompatPingEvent(
+    plugin: VaneProxyPlugin,
+    val event: ProxyPingEvent,
+    server: IVaneProxyServerInfo,
+) :
     PingEvent(
         plugin,
         VelocityCompatProxyServerPing(event.ping),
-        server
+        server,
     ) {
-    /**
-     * Writes the mutated ping response back into the wrapped Velocity event.
-     */
+    /** Writes the mutated ping response back into the wrapped Velocity event. */
     override fun sendResponse() {
         event.ping = (ping as VelocityCompatProxyServerPing).builder.build()
     }
 
-    /**
-     * Ping requests do not expose a proxy-core pending connection in Velocity.
-     */
+    /** Ping requests do not expose a proxy-core pending connection in Velocity. */
     override val connection: ProxyPendingConnection?
         get() = null
 }

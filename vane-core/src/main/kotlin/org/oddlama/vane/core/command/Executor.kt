@@ -2,9 +2,7 @@ package org.oddlama.vane.core.command
 
 import org.bukkit.command.CommandSender
 
-/**
- * Represents a parsed command executor callback.
- */
+/** Represents a parsed command executor callback. */
 interface Executor {
     /**
      * Executes a parsed command.
@@ -14,5 +12,9 @@ interface Executor {
      * @param parsedArgs parsed argument list.
      * @return `true` when execution succeeded.
      */
-    fun execute(command: Command<*>?, sender: CommandSender?, parsedArgs: MutableList<Any?>): Boolean
+    fun execute(
+        command: Command<*>?,
+        sender: CommandSender?,
+        parsedArgs: MutableList<Any?>,
+    ): Boolean
 }

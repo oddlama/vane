@@ -2,9 +2,7 @@ package org.oddlama.vane.proxycore.log
 
 import java.util.logging.Level
 
-/**
- * Minimal logger abstraction for proxy-core across logging backends.
- */
+/** Minimal logger abstraction for proxy-core across logging backends. */
 interface IVaneLogger {
     /**
      * Logs a message at [level].

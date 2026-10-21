@@ -7,6 +7,8 @@ plugins {
     kotlin("jvm")
 }
 
+version = file("version.txt").readText().trim()
+
 repositories {
     mavenCentral()
     maven("https://repo.papermc.io/repository/maven-public/")
@@ -49,7 +51,6 @@ tasks.withType<Jar> {
     enabled = false
 }
 
-
 tasks {
     runServer {
         pluginJars(vanePlugins.map { it.tasks.findByName("copyJar")?.inputs?.files })
@@ -76,7 +77,6 @@ tasks {
             "-XX:SurvivorRatio=32",
             "-Dusing.aikars.flags=https://mcflags.emc.gs",
             "-Daikars.new.flags=true",
-            "-Dcom.mojang.eula.agree=true"
         )
     }
 
@@ -97,10 +97,9 @@ subprojects {
     pluginManager.apply("org.jetbrains.kotlin.jvm")
 
     group = "org.oddlama.vane"
-    version = "1.23.0"
+    version = rootProject.version
 
     repositories {
-        mavenLocal()
         mavenCentral()
         maven("https://repo.opencollab.dev/main/")
         maven("https://repo.papermc.io/repository/maven-public/")
@@ -170,7 +169,9 @@ subprojects {
 
             sourceLink {
                 localDirectory.set(file("src/main/kotlin"))
-                remoteUrl("https://github.com/oddlama/vane/blob/Kotlin/${project.name}/src/main/kotlin")
+                remoteUrl(
+                    "https://github.com/oddlama/vane/blob/main/${project.name}/src/main/kotlin"
+                )
                 remoteLineSuffix.set("#L")
             }
         }
@@ -185,10 +186,18 @@ subprojects {
 //   - vane-busybar-common is shared by vane-busybar and the proxy, so it must not touch Paper,
 //   - vane-annotations only names `org.bukkit.Material` in annotation members, which the
 //     plain `paper-api` artifact provides just as well (see its own build script).
-configure(subprojects.filter {
-    !listOf("vane-velocity", "vane-proxy-core", "vane-busybar-common", "vane-geyser-extension", "vane-annotations")
-        .contains(it.name)
-}) {
+configure(
+    subprojects.filter {
+        !listOf(
+                "vane-velocity",
+                "vane-proxy-core",
+                "vane-busybar-common",
+                "vane-geyser-extension",
+                "vane-annotations",
+            )
+            .contains(it.name)
+    }
+) {
     pluginManager.apply("io.papermc.paperweight.userdev")
 
     tasks.withType<JavaCompile> {
@@ -206,19 +215,22 @@ configure(subprojects.filter {
 }
 
 // All Projects with jar shadow
-configure(subprojects.filter {
-    listOf(
-        "vane-admin",
-        "vane-bedtime",
-        "vane-busybar",
-        "vane-core",
-        "vane-enchantments",
-        "vane-permissions",
-        "vane-portals",
-        "vane-regions",
-        "vane-trifles"
-    ).contains(it.name)
-}) {
+configure(
+    subprojects.filter {
+        listOf(
+                "vane-admin",
+                "vane-bedtime",
+                "vane-busybar",
+                "vane-core",
+                "vane-enchantments",
+                "vane-permissions",
+                "vane-portals",
+                "vane-regions",
+                "vane-trifles",
+            )
+            .contains(it.name)
+    }
+) {
     tasks.register<Copy>("copyJar") {
         description = "Copies the shadow jar to the target directory"
         evaluationDependsOn(project.path)
@@ -228,12 +240,18 @@ configure(subprojects.filter {
     }
 }
 
-
 // All Projects except proxies, annotations, shared libraries and Geyser extension.
 val vanePlugins = subprojects.filter {
-    !listOf("vane-annotations", "vane-velocity", "vane-proxy-core", "vane-busybar-common", "vane-geyser-extension")
+    !listOf(
+            "vane-annotations",
+            "vane-velocity",
+            "vane-proxy-core",
+            "vane-busybar-common",
+            "vane-geyser-extension",
+        )
         .contains(it.name)
 }
+
 configure(vanePlugins) {
     tasks {
         named("build") {
@@ -261,14 +279,25 @@ configure(vanePlugins) {
 // targets the Geyser API only and imports nothing from vane-core, so depending on it just put
 // vane-core (and everything vane-core resolves) on this module's compile classpath and made its
 // build wait on :vane-core:shadowJar for nothing.
-configure(subprojects.filter {
-    !listOf("vane-annotations", "vane-core", "vane-velocity", "vane-proxy-core", "vane-busybar-common", "vane-geyser-extension")
-        .contains(it.name)
-}) {
+configure(
+    subprojects.filter {
+        !listOf(
+                "vane-annotations",
+                "vane-core",
+                "vane-velocity",
+                "vane-proxy-core",
+                "vane-busybar-common",
+                "vane-geyser-extension",
+            )
+            .contains(it.name)
+    }
+) {
     dependencies {
         // https://imperceptiblethoughts.com/shadow/multi-project/#depending-on-the-shadow-jar-from-another-project
-        // In a multi-project build, there may be one project that applies Shadow and another that requires the shadowed
-        // JAR as a dependency. In this case, use Gradle's normal dependency declaration mechanism to depend on the
+        // In a multi-project build, there may be one project that applies Shadow and another that
+        // requires the shadowed
+        // JAR as a dependency. In this case, use Gradle's normal dependency declaration mechanism
+        // to depend on the
         // shadow configuration of the shadowed project.
         implementation(project(path = ":vane-core", configuration = "shadow"))
         // But also depend on core itself.
@@ -291,20 +320,24 @@ configure(subprojects.filter {
 // bootstrapper runs inside `Bootstrap.bootStrap` before any plugin is loaded, so its class loader
 // has no dependency group yet and can only see its own jar. Sharing there fails with
 // NoClassDefFoundError on kotlin.jvm.internal.Intrinsics, so it keeps its own copy.
-configure(subprojects.filter {
-    listOf(
-        "vane-admin",
-        "vane-bedtime",
-        "vane-busybar",
-        "vane-permissions",
-        "vane-portals",
-        "vane-regions",
-        "vane-trifles"
-    ).contains(it.name)
-}) {
+configure(
+    subprojects.filter {
+        listOf(
+                "vane-admin",
+                "vane-bedtime",
+                "vane-busybar",
+                "vane-permissions",
+                "vane-portals",
+                "vane-regions",
+                "vane-trifles",
+            )
+            .contains(it.name)
+    }
+) {
     tasks.withType<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>().configureEach {
         // Bundle none of the resolved dependencies; vane-core provides them all at runtime. The one
-        // exception is vane-busybar-common, which vane-busybar shares with the proxy, not with vane-core.
+        // exception is vane-busybar-common, which vane-busybar shares with the proxy, not with
+        // vane-core.
         dependencies {
             exclude { it.moduleName != "vane-busybar-common" }
         }
@@ -314,9 +347,11 @@ configure(subprojects.filter {
 }
 
 // All plugins with map integration
-configure(subprojects.filter {
-    listOf("vane-core", "vane-bedtime", "vane-portals", "vane-regions").contains(it.name)
-}) {
+configure(
+    subprojects.filter {
+        listOf("vane-core", "vane-bedtime", "vane-portals", "vane-regions").contains(it.name)
+    }
+) {
     dependencies {
         implementation(rootProject.libs.dynmap)
         implementation(rootProject.libs.bluemap)
@@ -327,46 +362,59 @@ runPaper {
     disablePluginJarDetection()
 }
 
+// Nix consumes distributable jars and the exact Gradle test runtime classpaths.
+apply(from = "gradle/nix.gradle.kts")
+
 tasks.register<Delete>("cleanVaneRuntimeTranslations") {
     group = "run paper"
     description = "Deletes generated runtime translation files"
-    delete(fileTree("run").matching {
-        include("plugins/vane-*/lang-*.yml")
-    })
+    delete(
+        fileTree("run").matching {
+            include("plugins/vane-*/lang-*.yml")
+        }
+    )
 }
 
 tasks.register<Delete>("cleanVaneConfigurations") {
     group = "run paper"
     description = "Deletes generated configuration files"
-    delete(fileTree("run").matching {
-        include("plugins/vane-*/config.yml")
-    })
+    delete(
+        fileTree("run").matching {
+            include("plugins/vane-*/config.yml")
+        }
+    )
 }
 
 tasks.register<Delete>("cleanVaneStorage") {
     group = "run paper"
     description = "Deletes runtime storage files"
-    delete(fileTree("run").matching {
-        include("plugins/vane-*/storage.json")
-    })
+    delete(
+        fileTree("run").matching {
+            include("plugins/vane-*/storage.json")
+        }
+    )
 }
 
 tasks.register<Delete>("cleanVane") {
     group = "run paper"
     description = "Deletes all runtime plugin files"
-    delete(fileTree("run").matching {
-        include("plugins/vane-*/")
-    })
+    delete(
+        fileTree("run").matching {
+            include("plugins/vane-*/")
+        }
+    )
 }
 
 tasks.register<Delete>("cleanWorld") {
     group = "run paper"
     description = "Deletes generated world folders"
-    delete(fileTree("run").matching {
-        include(
-            "world",
-            "world_nether",
-            "world_the_end"
-        )
-    })
+    delete(
+        fileTree("run").matching {
+            include(
+                "world",
+                "world_nether",
+                "world_the_end",
+            )
+        }
+    )
 }

@@ -18,21 +18,15 @@ class TranslatedMessageArray(
     /** Base translation key. */
     private val key: String?,
     /** Fallback translation entries. */
-    private val defaultTranslation: MutableList<String>
+    private val defaultTranslation: MutableList<String>,
 ) {
-    /**
-     * Returns the number of message entries.
-     */
+    /** Returns the number of message entries. */
     fun size(): Int = defaultTranslation.size
 
-    /**
-     * Returns the base translation key.
-     */
+    /** Returns the base translation key. */
     fun key(): String? = key
 
-    /**
-     * Formats all entries as plain strings using fallback translations.
-     */
+    /** Formats all entries as plain strings using fallback translations. */
     fun str(vararg args: Any?): MutableList<String?> =
         try {
             val argsAsStrings = stringifyArgsForStr(key, args)
@@ -41,9 +35,7 @@ class TranslatedMessageArray(
             throw RuntimeException("Error while formatting message '${key()}'", e)
         }
 
-    /**
-     * Formats all entries as components, preferring client-side translations when enabled.
-     */
+    /** Formats all entries as components, preferring client-side translations when enabled. */
     fun format(vararg args: Any?): MutableList<Component?> {
         if (module.core?.configClientSideTranslations != true) {
             return str(*args).mapTo(mutableListOf()) { s ->
@@ -56,7 +48,10 @@ class TranslatedMessageArray(
                 when (o) {
                     is ComponentLike -> o
                     is String -> LegacyComponentSerializer.legacySection().deserialize(o)
-                    else -> throw RuntimeException("Error while formatting message '${key()}', got invalid argument $o")
+                    else ->
+                        throw RuntimeException(
+                            "Error while formatting message '${key()}', got invalid argument $o"
+                        )
                 }
             }
             Component.translatable("$key.$i", list)

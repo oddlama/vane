@@ -10,13 +10,13 @@ import java.util.*
  */
 class AuthMultiplex(@JvmField var port: Int?, allowedUuids: MutableList<String?>?) {
     /** Parsed allowlist UUIDs. Empty means unrestricted access. */
-    private val allowedUuids: MutableList<UUID?> = allowedUuids
-        ?.asSequence()
-        ?.filterNotNull()
-        ?.filter { it.isNotEmpty() }
-        ?.map { UUID.fromString(it) }
-        ?.toMutableList()
-        ?: mutableListOf()
+    private val allowedUuids: MutableList<UUID?> =
+        allowedUuids
+            ?.asSequence()
+            ?.filterNotNull()
+            ?.filter { it.isNotEmpty() }
+            ?.map { UUID.fromString(it) }
+            ?.toMutableList() ?: mutableListOf()
 
     /**
      * Checks whether [uuid] is allowed to use this multiplexer.

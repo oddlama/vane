@@ -9,11 +9,12 @@ import org.oddlama.vane.enchantments.CustomEnchantmentRegistry
 /**
  * Registry for the Rake enchantment, which is applicable to hoes.
  *
- * @constructor Creates a new RakeRegistry instance.
  * @param composeEvent The registry compose event to register the enchantment.
+ * @constructor Creates a new RakeRegistry instance.
  */
-class RakeRegistry(composeEvent: RegistryComposeEvent<Enchantment, EnchantmentRegistryEntry.Builder>) :
-    CustomEnchantmentRegistry("rake", ItemTypeTagKeys.HOES, 4) {
+class RakeRegistry(
+    composeEvent: RegistryComposeEvent<Enchantment, EnchantmentRegistryEntry.Builder>
+) : CustomEnchantmentRegistry("rake", ItemTypeTagKeys.HOES, 4) {
     init {
         register(composeEvent)
     }

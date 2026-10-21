@@ -23,19 +23,17 @@ plugins {
  * `locales/overrides` directory. The `assets/<ns>/lang/<locale>.json` files of all modules are
  * merged per locale into `bedrock/locales.json`, which the extension deploys there on startup.
  *
- * The output is deterministic (sorted entries, fixed timestamps), so it only changes when the
- * Java pack or the version does.
+ * The output is deterministic (sorted entries, fixed timestamps), so it only changes when the Java
+ * pack or the version does.
  */
 abstract class GenerateBedrockPack : DefaultTask() {
     @get:InputFile
     @get:PathSensitive(PathSensitivity.NONE)
     abstract val javaPack: RegularFileProperty
 
-    @get:Input
-    abstract val packVersion: Property<String>
+    @get:Input abstract val packVersion: Property<String>
 
-    @get:OutputDirectory
-    abstract val outputDir: DirectoryProperty
+    @get:OutputDirectory abstract val outputDir: DirectoryProperty
 
     @TaskAction
     fun generate() {
@@ -51,10 +49,13 @@ abstract class GenerateBedrockPack : DefaultTask() {
                 TEXTURE.matchEntire(name)?.let { m ->
                     val (ns, item) = m.destructured
                     textures.put(item, ns)?.let { other ->
-                        throw GradleException("Bedrock texture name collision: '$item' exists in both $other and $ns")
+                        throw GradleException(
+                            "Bedrock texture name collision: '$item' exists in both $other and $ns"
+                        )
                     }
                     val png = read(name)
-                    files["textures/items/$item.png"] = if ("$name.mcmeta" in names) firstFrame(png) else png
+                    files["textures/items/$item.png"] =
+                        if ("$name.mcmeta" in names) firstFrame(png) else png
                 }
                 LANG.matchEntire(name)?.let { m ->
                     @Suppress("UNCHECKED_CAST")
@@ -65,12 +66,18 @@ abstract class GenerateBedrockPack : DefaultTask() {
             files["pack_icon.png"] = read("pack.png")
         }
 
-        files["textures/item_texture.json"] = json(mapOf(
-            "resource_pack_name" to "vane",
-            "texture_data" to textures.map { (item, ns) ->
-                "$ns.item_$item" to mapOf("textures" to "textures/items/$item")
-            }.toMap(sortedMapOf()),
-        ))
+        files["textures/item_texture.json"] =
+            json(
+                mapOf(
+                    "resource_pack_name" to "vane",
+                    "texture_data" to
+                        textures
+                            .map { (item, ns) ->
+                                "$ns.item_$item" to mapOf("textures" to "textures/items/$item")
+                            }
+                            .toMap(sortedMapOf()),
+                )
+            )
         files["manifest.json"] = manifest(packVersion.get())
 
         val bedrockDir = outputDir.get().asFile.resolve("bedrock")
@@ -99,26 +106,35 @@ abstract class GenerateBedrockPack : DefaultTask() {
      * keeps pre-releases unique and ordered before their release.
      */
     private fun manifest(version: String): ByteArray {
-        val m = VERSION.matchEntire(version) ?: throw GradleException("Unsupported version for the Bedrock pack: $version")
+        val m =
+            VERSION.matchEntire(version)
+                ?: throw GradleException("Unsupported version for the Bedrock pack: $version")
         val (major, minor, patch, pre) = m.destructured
-        val preNumber = if (pre.isEmpty()) 999 else pre.takeLastWhile { it.isDigit() }.ifEmpty { "0" }.toInt()
+        val preNumber =
+            if (pre.isEmpty()) 999 else pre.takeLastWhile { it.isDigit() }.ifEmpty { "0" }.toInt()
         val packVersion = listOf(major.toInt(), minor.toInt(), patch.toInt() * 1000 + preNumber)
-        return json(mapOf(
-            "format_version" to 2,
-            "header" to mapOf(
-                "name" to "Vane",
-                "description" to "Vane plugin resource pack ($version)",
-                "uuid" to HEADER_UUID,
-                "version" to packVersion,
-                "min_engine_version" to listOf(1, 16, 0),
-            ),
-            "modules" to listOf(mapOf(
-                "type" to "resources",
-                "description" to "Vane plugin resource pack",
-                "uuid" to MODULE_UUID,
-                "version" to packVersion,
-            )),
-        ))
+        return json(
+            mapOf(
+                "format_version" to 2,
+                "header" to
+                    mapOf(
+                        "name" to "Vane",
+                        "description" to "Vane plugin resource pack ($version)",
+                        "uuid" to HEADER_UUID,
+                        "version" to packVersion,
+                        "min_engine_version" to listOf(1, 16, 0),
+                    ),
+                "modules" to
+                    listOf(
+                        mapOf(
+                            "type" to "resources",
+                            "description" to "Vane plugin resource pack",
+                            "uuid" to MODULE_UUID,
+                            "version" to packVersion,
+                        )
+                    ),
+            )
+        )
     }
 
     private fun json(value: Any) =
@@ -138,6 +154,7 @@ abstract class GenerateBedrockPack : DefaultTask() {
         const val FIXED_TIME = 318211200000L
     }
 }
+
 val id = project.property("id") as String
 val extensionName = project.property("name") as String
 val author = project.property("author") as String
@@ -161,12 +178,14 @@ dependencies {
 
 // The Bedrock pack is generated from the same Java pack vane-core distributed and bundled into the
 // jar, where VaneGeyser registers it with Geyser.
-val generateBedrockPack = tasks.register<GenerateBedrockPack>("generateBedrockPack") {
-    description = "Converts the Java resource pack into the Bedrock pack bundled with the extension"
-    javaPack.set(rootProject.layout.projectDirectory.file("docs/resourcepacks/v$version.zip"))
-    packVersion.set(version)
-    outputDir.set(layout.buildDirectory.dir("generated/bedrock-pack"))
-}
+val generateBedrockPack =
+    tasks.register<GenerateBedrockPack>("generateBedrockPack") {
+        description =
+            "Converts the Java resource pack into the Bedrock pack bundled with the extension"
+        javaPack.set(rootProject.layout.projectDirectory.file("docs/resourcepacks/v$version.zip"))
+        packVersion.set(version)
+        outputDir.set(layout.buildDirectory.dir("generated/bedrock-pack"))
+    }
 
 sourceSets.main {
     resources.srcDir(generateBedrockPack)
@@ -177,6 +196,7 @@ sourceSets.main {
 require(Regex("[a-z][a-z0-9-_]{0,63}").matches(id)) {
     "Invalid extension id $id! Must only contain lowercase letters, and cannot start with a number."
 }
+
 require(Regex("^[A-Za-z_.-]+$").matches(extensionName)) {
     "Invalid extension name $extensionName! Must only contain letters, dots, dashes and underscores."
 }
@@ -203,7 +223,7 @@ tasks {
                 "name" to displayName,
                 "api" to apiVersion,
                 "version" to extensionVersion,
-                "author" to extensionAuthor
+                "author" to extensionAuthor,
             )
         }
     }
@@ -242,6 +262,7 @@ tasks {
     // Copy produced shadow jar to the repository target directory like other modules
     // (registered at top-level below to avoid task container receiver issues)
 }
+
 // Register copyJar at top-level so we can reference the shadowJar task provider
 tasks.register<Copy>("copyJar") {
     description = "Copy the produced shadow jar to the repository target directory"

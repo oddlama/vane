@@ -1,6 +1,7 @@
 package org.oddlama.vane.annotation.config
 
-/** String configuration field.
+/**
+ * String configuration field.
  *
  * @property def Default value.
  * @property desc Description used in generated docs/config.

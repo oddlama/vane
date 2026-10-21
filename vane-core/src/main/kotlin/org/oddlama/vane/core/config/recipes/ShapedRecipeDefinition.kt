@@ -63,21 +63,27 @@ class ShapedRecipeDefinition(name: String?) : RecipeDefinition(name) {
 
     /** Loads this recipe definition from dictionary form. */
     override fun fromDict(dict: Any?): RecipeDefinition {
-        require(dict is MutableMap<*, *>) { "Invalid shaped recipe dictionary: Argument must be a Map<String, Object>!" }
+        require(dict is MutableMap<*, *>) {
+            "Invalid shaped recipe dictionary: Argument must be a Map<String, Object>!"
+        }
         val shapeObj = LegacyKeys.lookup(dict, "Shape")
         if (shapeObj is MutableList<*>) {
             this.shape = shapeObj.filterIsInstance<String>().toMutableList()
-            require(this.shape.size in 1..3) { "Invalid shaped recipe dictionary: shape must be a list of 1 to 3 strings" }
+            require(this.shape.size in 1..3) {
+                "Invalid shaped recipe dictionary: shape must be a list of 1 to 3 strings"
+            }
         } else {
-            throw IllegalArgumentException("Invalid shaped recipe dictionary: shape must be a list of strings")
+            throw IllegalArgumentException(
+                "Invalid shaped recipe dictionary: shape must be a list of strings"
+            )
         }
 
-        val ingredientsObj =
-            LegacyKeys.lookup(dict, "Ingredients")
+        val ingredientsObj = LegacyKeys.lookup(dict, "Ingredients")
         if (ingredientsObj is MutableMap<*, *>) {
-            this.ingredients = ingredientsObj.entries
-                .associate { e -> (e.key as String?) to (e.value as String?) }
-                .toMutableMap()
+            this.ingredients =
+                ingredientsObj.entries
+                    .associate { e -> (e.key as String?) to (e.value as String?) }
+                    .toMutableMap()
         } else {
             throw IllegalArgumentException(
                 "Invalid shaped recipe dictionary: ingredients must be a mapping of string to string"
@@ -88,7 +94,9 @@ class ShapedRecipeDefinition(name: String?) : RecipeDefinition(name) {
         if (resultObj is String) {
             this.result = resultObj
         } else {
-            throw IllegalArgumentException("Invalid shaped recipe dictionary: result must be a string")
+            throw IllegalArgumentException(
+                "Invalid shaped recipe dictionary: result must be a string"
+            )
         }
 
         return this

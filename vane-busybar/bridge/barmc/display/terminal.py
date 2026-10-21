@@ -35,10 +35,17 @@ KEY_POLL_SECONDS = 0.05
 
 # What the keys do, by the text a Unix terminal sends for them.
 KEYS = {
-    "o": "ok", "\n": "ok", "\r": "ok",
-    "x": "back", "\x7f": "back", "\x08": "back", "\x1b": "back",
-    "[": "left", "\x1b[D": "left",
-    "]": "right", "\x1b[C": "right",
+    "o": "ok",
+    "\n": "ok",
+    "\r": "ok",
+    "x": "back",
+    "\x7f": "back",
+    "\x08": "back",
+    "\x1b": "back",
+    "[": "left",
+    "\x1b[D": "left",
+    "]": "right",
+    "\x1b[C": "right",
     "b": "busy",
 }
 
@@ -89,6 +96,7 @@ CUBE_LEVELS = (0, 95, 135, 175, 215, 255)
 
 def to_256(rgb: tuple[int, int, int]) -> int:
     """The nearest of the 240 palette colours every 256-colour terminal draws the same way."""
+
     def nearest_level(c: int) -> int:
         return min(range(6), key=lambda i: abs(CUBE_LEVELS[i] - c))
 
@@ -245,4 +253,3 @@ class TerminalDisplay:
         if self._tty_out:
             sys.stdout.write("\x1b[?25h\n")
             sys.stdout.flush()
-

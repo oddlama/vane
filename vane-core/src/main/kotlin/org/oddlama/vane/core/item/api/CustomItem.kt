@@ -1,5 +1,6 @@
 package org.oddlama.vane.core.item.api
 
+import java.util.*
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.TranslatableComponent
 import net.kyori.adventure.text.format.NamedTextColor
@@ -10,7 +11,6 @@ import org.bukkit.inventory.ItemStack
 import org.oddlama.vane.core.item.CustomItemHelper.convertExistingStack
 import org.oddlama.vane.core.item.CustomItemHelper.newStack
 import org.oddlama.vane.core.item.api.CustomItemRegistry.Companion.instance
-import java.util.*
 
 /**
  * This is the CustomItem specification that all custom items must implement to be registered with
@@ -20,11 +20,11 @@ interface CustomItem {
     /**
      * The unique identifier for this custom item. This is the only value that can never be changed
      * after initial item registration. If you want to deprecate an item, you can force your
-     * subclass to always return false in [enabled]. This will cause existing items to
-     * behave as their base items. To completely remove a custom item from encountered inventories,
-     * you can queue it for removal using [CustomItemRegistry.removePermanently]. The key is
-     * the primary identifier of an item and must never change after initial registration. All other
-     * properties can be safely changed between restarts and even on configuration reloads.
+     * subclass to always return false in [enabled]. This will cause existing items to behave as
+     * their base items. To completely remove a custom item from encountered inventories, you can
+     * queue it for removal using [CustomItemRegistry.removePermanently]. The key is the primary
+     * identifier of an item and must never change after initial registration. All other properties
+     * can be safely changed between restarts and even on configuration reloads.
      */
     fun key(): NamespacedKey
 
@@ -37,9 +37,9 @@ interface CustomItem {
 
     /**
      * Returns a version number of this item. Increasing this value will cause
-     * [convertExistingStack] to be called on any encountered itemstack of this custom item.
-     * Useful to force an update of existing items when you, for example, change the
-     * [updateItemStack] function to add custom properties to your custom item.
+     * [convertExistingStack] to be called on any encountered itemstack of this custom item. Useful
+     * to force an update of existing items when you, for example, change the [updateItemStack]
+     * function to add custom properties to your custom item.
      */
     fun version(): Int
 
@@ -52,10 +52,10 @@ interface CustomItem {
      * using an item that has no other use than in crafting. Generally, it is a good idea to pick
      * materials that have an item with similar properties.
      *
-     * By default, no attempts will be made to remove the vanilla behavior of the base items,
-     * except for inhibiting use in crafting recipes that require the base material. See
-     * [inhibitedBehaviors] for more information. If you require other behaviors to be
-     * inhibited, you need to write your own event listeners.
+     * By default, no attempts will be made to remove the vanilla behavior of the base items, except
+     * for inhibiting use in crafting recipes that require the base material. See
+     * [inhibitedBehaviors] for more information. If you require other behaviors to be inhibited,
+     * you need to write your own event listeners.
      */
     fun baseMaterial(): Material
 
@@ -68,8 +68,8 @@ interface CustomItem {
     /**
      * Returns the display name for newly created items of this type. This will only NOT be updated
      * on existing items. If you want that behavior, you can easily implement it by overriding
-     * [updateItemStack]. By using translatable components, there's no need to update this
-     * except when changing the translation key.
+     * [updateItemStack]. By using translatable components, there's no need to update this except
+     * when changing the translation key.
      */
     fun displayName(): Component?
 
@@ -108,8 +108,8 @@ interface CustomItem {
      * converted to a vanilla netherite hoe in the smithing table.
      *
      * If you require a hoe that doesn't till blocks or a carrot/fungus on a stick that doesn't
-     * attract certain entities, you can override [inhibitedBehaviors] to specify what should
-     * be prohibited. The user must handle anything else.
+     * attract certain entities, you can override [inhibitedBehaviors] to specify what should be
+     * prohibited. The user must handle anything else.
      */
     fun inhibitedBehaviors(): EnumSet<InhibitBehavior> =
         EnumSet.of(InhibitBehavior.USE_IN_VANILLA_RECIPE)
@@ -121,10 +121,9 @@ interface CustomItem {
      */
     fun updateItemStack(itemStack: ItemStack): ItemStack = itemStack
 
-    /** Returns true if the given itemstack is an "instance" of this custom item.  */
+    /** Returns true if the given itemstack is an "instance" of this custom item. */
     /** Returns whether this item stack belongs to this custom item definition. */
-    fun isInstance(itemStack: ItemStack?): Boolean =
-        instance()?.get(itemStack) === this
+    fun isInstance(itemStack: ItemStack?): Boolean = instance()?.get(itemStack) === this
 
     /** Creates a new stack of this custom item with amount 1. */
     fun newStack(): ItemStack? = newStack(this)
@@ -133,5 +132,6 @@ interface CustomItem {
     fun newStack(amount: Int): ItemStack? = newStack(this, amount)
 
     /** Converts an existing stack to this custom item while preserving compatible metadata. */
-    fun convertExistingStack(itemStack: ItemStack): ItemStack? = convertExistingStack(this, itemStack)
+    fun convertExistingStack(itemStack: ItemStack): ItemStack? =
+        convertExistingStack(this, itemStack)
 }

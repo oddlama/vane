@@ -16,24 +16,20 @@ import java.util.logging.Level
  * @param resourcePackDistributor the distributor whose URL and SHA-1 are kept in sync.
  * @param file the resource pack zip file to serve.
  */
-class ResourcePackDevServer(private val resourcePackDistributor: ResourcePackDistributor, private val file: File) :
-    HttpHandler {
-    /**
-     * The running HTTP server instance, if active.
-     */
+class ResourcePackDevServer(
+    private val resourcePackDistributor: ResourcePackDistributor,
+    private val file: File,
+) : HttpHandler {
+    /** The running HTTP server instance, if active. */
     private var httpServer: HttpServer? = null
 
-    /**
-     * Stops the HTTP server if it is running.
-     */
+    /** Stops the HTTP server if it is running. */
     fun stop() {
         httpServer?.stop(0)
         httpServer = null
     }
 
-    /**
-     * Starts the HTTP server and updates the distributor URL and SHA-1 hash.
-     */
+    /** Starts the HTTP server and updates the distributor URL and SHA-1 hash. */
     fun serve() {
         try {
             val server = HttpServer.create(InetSocketAddress(9000), 0)
@@ -48,11 +44,13 @@ class ResourcePackDevServer(private val resourcePackDistributor: ResourcePackDis
             }
             httpServer = server
         } catch (e: IOException) {
-            resourcePackDistributor.module?.log?.log(
-                Level.SEVERE,
-                "Failed to start resource pack dev server",
-                e
-            )
+            resourcePackDistributor.module
+                ?.log
+                ?.log(
+                    Level.SEVERE,
+                    "Failed to start resource pack dev server",
+                    e,
+                )
         }
     }
 
@@ -72,12 +70,13 @@ class ResourcePackDevServer(private val resourcePackDistributor: ResourcePackDis
             return
         }
 
-        val fis = try {
-            file.inputStream()
-        } catch (_: FileNotFoundException) {
-            he.sendResponseHeaders(404, -1)
-            return
-        }
+        val fis =
+            try {
+                file.inputStream()
+            } catch (_: FileNotFoundException) {
+                he.sendResponseHeaders(404, -1)
+                return
+            }
 
         he.responseHeaders.set("Content-Type", "application/zip")
         fis.use {

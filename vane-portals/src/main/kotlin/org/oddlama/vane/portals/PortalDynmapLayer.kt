@@ -1,5 +1,6 @@
 package org.oddlama.vane.portals
 
+import java.util.*
 import org.oddlama.vane.annotation.config.ConfigBoolean
 import org.oddlama.vane.annotation.config.ConfigInt
 import org.oddlama.vane.annotation.config.ConfigString
@@ -8,7 +9,6 @@ import org.oddlama.vane.core.lang.TranslatedMessage
 import org.oddlama.vane.core.module.Context
 import org.oddlama.vane.core.module.ModuleComponent
 import org.oddlama.vane.portals.portal.Portal
-import java.util.*
 
 /**
  * Module component that integrates public portal markers with Dynmap.
@@ -19,13 +19,13 @@ import java.util.*
  * @property langLayerLabel localized layer label.
  * @property langMarkerLabel localized marker label template.
  */
-
-class PortalDynmapLayer(context: Context<Portals?>) : ModuleComponent<Portals?>(
-    context.group(
-        "Dynmap",
-        "Enable Dynmap integration. Public portals will then be shown on a separate Dynmap layer."
-    )
-) {
+class PortalDynmapLayer(context: Context<Portals?>) :
+    ModuleComponent<Portals?>(
+        context.group(
+            "Dynmap",
+            "Enable Dynmap integration. Public portals will then be shown on a separate Dynmap layer.",
+        )
+    ) {
     /** Display priority for the Dynmap layer. */
     @JvmField
     @ConfigInt(def = 29, min = 0, desc = "Layer ordering priority.")
@@ -42,14 +42,10 @@ class PortalDynmapLayer(context: Context<Portals?>) : ModuleComponent<Portals?>(
     var configMarkerIcon: String? = null
 
     /** Localized Dynmap layer label. */
-    @JvmField
-    @LangMessage
-    var langLayerLabel: TranslatedMessage? = null
+    @JvmField @LangMessage var langLayerLabel: TranslatedMessage? = null
 
     /** Localized marker label template. */
-    @JvmField
-    @LangMessage
-    var langMarkerLabel: TranslatedMessage? = null
+    @JvmField @LangMessage var langMarkerLabel: TranslatedMessage? = null
 
     /** Delegate that performs Dynmap API operations. */
     private var delegate: PortalDynmapLayerDelegate? = null

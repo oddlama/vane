@@ -35,7 +35,7 @@ tasks {
             "-XX:+UnlockExperimentalVMOptions",
             "-XX:+ParallelRefProcEnabled",
             "-XX:+AlwaysPreTouch",
-            "-XX:MaxInlineLevel=15"
+            "-XX:MaxInlineLevel=15",
         )
     }
 

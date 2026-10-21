@@ -1,16 +1,15 @@
 package org.oddlama.vane.util
 
-/**
- * Maps supported time suffixes to their multiplier in milliseconds.
- */
-private val timeMultiplier: Map<Char, Long> = mapOf(
-    's' to 1_000L,
-    'm' to 60_000L,
-    'h' to 3_600_000L,
-    'd' to 86_400_000L,
-    'w' to 604_800_000L,
-    'y' to 31_536_000_000L
-)
+/** Maps supported time suffixes to their multiplier in milliseconds. */
+private val timeMultiplier: Map<Char, Long> =
+    mapOf(
+        's' to 1_000L,
+        'm' to 60_000L,
+        'h' to 3_600_000L,
+        'd' to 86_400_000L,
+        'w' to 604_800_000L,
+        'y' to 31_536_000_000L,
+    )
 
 /** Boundary between a unit and the digits of the next segment, e.g. `1h|30m`. */
 private val SEGMENT_BOUNDARY = Regex("(?<=[^0-9])(?=[0-9])")
@@ -43,7 +42,9 @@ fun parseTime(input: String): Long {
         val numberPart = content[0]
         val unitPart = content[1].replace("and", "").replace(UNIT_NOISE, "")
         if (unitPart.isEmpty()) throw NumberFormatException("missing multiplier")
-        val mult = timeMultiplier[unitPart[0]] ?: throw NumberFormatException("unknown multiplier: ${unitPart[0]}")
+        val mult =
+            timeMultiplier[unitPart[0]]
+                ?: throw NumberFormatException("unknown multiplier: ${unitPart[0]}")
         ret += numberPart.toLong() * mult
     }
     return ret

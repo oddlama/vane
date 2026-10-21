@@ -1,8 +1,5 @@
 package org.oddlama.vane.proxycore.busybar
 
-import org.json.JSONArray
-import org.json.JSONObject
-import org.oddlama.vane.busybar.common.LinkProtocol
 import java.io.IOException
 import java.io.OutputStream
 import java.net.Socket
@@ -11,6 +8,9 @@ import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicLong
+import org.json.JSONArray
+import org.json.JSONObject
+import org.oddlama.vane.busybar.common.LinkProtocol
 
 /**
  * One authenticated vane-busybar backend, see [BackendLinkServer].
@@ -18,11 +18,12 @@ import java.util.concurrent.atomic.AtomicLong
  * @property server the backend's name as registered with the proxy.
  * @property capabilities optional integrations the backend has, such as `regions`.
  */
-class BackendLink internal constructor(
+class BackendLink
+internal constructor(
     val server: String,
     val capabilities: Set<String>,
     private val socket: Socket,
-    private val output: OutputStream
+    private val output: OutputStream,
 ) {
     /** Requests waiting for their answer, by id. */
     private val pending = ConcurrentHashMap<Long, CompletableFuture<JSONObject>>()
@@ -39,17 +40,23 @@ class BackendLink internal constructor(
      * [REQUEST_TIMEOUT_MS], when the backend reports an error, or when the link closes.
      */
     fun requestSnapshot(player: UUID): CompletableFuture<JSONObject> =
-        request(JSONObject().put("t", "snapshot.req").put("player", player.toString()))
-            .thenApply { it.getJSONObject("data") }
+        request(JSONObject().put("t", "snapshot.req").put("player", player.toString())).thenApply {
+            it.getJSONObject("data")
+        }
 
     /**
-     * Asks the backend to run [action], for example `autostop.abort`, on behalf of [player]. [by] is
-     * shown in the backend's logs. Completes with whether the backend ran it.
+     * Asks the backend to run [action], for example `autostop.abort`, on behalf of [player]. [by]
+     * is shown in the backend's logs. Completes with whether the backend ran it.
      */
     fun invokeAction(player: UUID, action: String, by: String): CompletableFuture<Boolean> =
         request(
-            JSONObject().put("t", "action").put("player", player.toString()).put("action", action).put("by", by)
-        ).thenApply { it.optBoolean("ok") }
+                JSONObject()
+                    .put("t", "action")
+                    .put("player", player.toString())
+                    .put("action", action)
+                    .put("by", by)
+            )
+            .thenApply { it.optBoolean("ok") }
 
     /** Tells the backend [player]'s focus mode changed. */
     fun sendPresence(player: UUID, busy: Boolean) =
@@ -57,7 +64,12 @@ class BackendLink internal constructor(
 
     /** Tells the backend [player] connected their first bridge, or disconnected their last one. */
     fun sendBridge(player: UUID, connected: Boolean) =
-        send(JSONObject().put("t", "bridge").put("player", player.toString()).put("connected", connected))
+        send(
+            JSONObject()
+                .put("t", "bridge")
+                .put("player", player.toString())
+                .put("connected", connected)
+        )
 
     /** Sends one frame; closes the link when that fails. Safe to call from any thread. */
     fun send(frame: JSONObject) {
@@ -72,7 +84,8 @@ class BackendLink internal constructor(
     /** Sends a request carrying a fresh id and returns the matching answer. */
     private fun request(frame: JSONObject): CompletableFuture<JSONObject> {
         val id = nextId.incrementAndGet()
-        val future = CompletableFuture<JSONObject>().orTimeout(REQUEST_TIMEOUT_MS, TimeUnit.MILLISECONDS)
+        val future =
+            CompletableFuture<JSONObject>().orTimeout(REQUEST_TIMEOUT_MS, TimeUnit.MILLISECONDS)
         future.whenComplete { _, _ -> pending.remove(id) }
         pending[id] = future
         send(frame.put("id", id))
@@ -92,8 +105,7 @@ class BackendLink internal constructor(
         open = false
         try {
             socket.close()
-        } catch (_: IOException) {
-        }
+        } catch (_: IOException) {}
         val failure = IOException("Link to $server closed")
         pending.values.forEach { it.completeExceptionally(failure) }
     }
@@ -110,20 +122,30 @@ class BackendLink internal constructor(
 
         /** Reads a `grants` or `grants.bulk` frame. */
         internal fun parseGrants(frame: JSONObject): List<Grants> {
-            val entries = if (frame.optString("t") == "grants") listOf(frame)
-            else frame.optJSONArray("grants")?.let { a -> (0 until a.length()).mapNotNull(a::optJSONObject) }.orEmpty()
+            val entries =
+                if (frame.optString("t") == "grants") listOf(frame)
+                else
+                    frame
+                        .optJSONArray("grants")
+                        ?.let { a -> (0 until a.length()).mapNotNull(a::optJSONObject) }
+                        .orEmpty()
             return entries.mapNotNull { entry ->
                 val player = entry.optString("player").toUuidOrNull() ?: return@mapNotNull null
                 val granted = entry.optJSONArray("granted") ?: JSONArray()
-                Grants(player, (0 until granted.length()).map(granted::optString), entry.optBoolean("online"))
+                Grants(
+                    player,
+                    (0 until granted.length()).map(granted::optString),
+                    entry.optBoolean("online"),
+                )
             }
         }
 
         /** Parses a UUID, or returns null. */
-        internal fun String.toUuidOrNull(): UUID? = try {
-            UUID.fromString(this)
-        } catch (_: IllegalArgumentException) {
-            null
-        }
+        internal fun String.toUuidOrNull(): UUID? =
+            try {
+                UUID.fromString(this)
+            } catch (_: IllegalArgumentException) {
+                null
+            }
     }
 }

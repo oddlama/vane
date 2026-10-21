@@ -11,9 +11,7 @@ import org.oddlama.velocity.compat.VelocityCompatProxyCommandSender
  * @param plugin active Velocity plugin instance.
  */
 class Maintenance(plugin: Velocity) : SimpleCommand {
-    /**
-     * Backing proxy-core command implementation.
-     */
+    /** Backing proxy-core command implementation. */
     private val cmd = ProxyMaintenanceCommand("vane_proxy.commands.maintenance", plugin)
 
     /**

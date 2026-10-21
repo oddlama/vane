@@ -1,5 +1,11 @@
 package org.oddlama.vane.core.persistent
 
+import java.io.IOException
+import java.lang.reflect.Field
+import java.lang.reflect.ParameterizedType
+import java.lang.reflect.Type
+import java.nio.charset.StandardCharsets
+import java.util.*
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.inventory.ItemStack
@@ -10,20 +16,10 @@ import org.oddlama.vane.util.LazyLocation
 import org.oddlama.vane.util.LegacyKeys
 import org.oddlama.vane.util.MaterialUtil.materialFrom
 import org.oddlama.vane.util.StorageUtil.namespacedKey
-import java.io.IOException
-import java.lang.reflect.Field
-import java.lang.reflect.ParameterizedType
-import java.lang.reflect.Type
-import java.nio.charset.StandardCharsets
-import java.util.*
 
-/**
- * Serializes and deserializes persistent field values to and from JSON-compatible data.
- */
+/** Serializes and deserializes persistent field values to and from JSON-compatible data. */
 object PersistentSerializer {
-    /**
-     * Serializes a [NamespacedKey] to a string.
-     */
+    /** Serializes a [NamespacedKey] to a string. */
     private fun serializeNamespacedKey(o: Any): Any = (o as NamespacedKey).toString()
 
     /**
@@ -38,9 +34,7 @@ object PersistentSerializer {
         return namespacedKey(parts[0], parts[1])
     }
 
-    /**
-     * Serializes a [LazyLocation] to a JSON object.
-     */
+    /** Serializes a [LazyLocation] to a JSON object. */
     @Throws(IOException::class)
     private fun serializeLazyLocation(o: Any): Any {
         val ll = o as LazyLocation
@@ -55,9 +49,7 @@ object PersistentSerializer {
         }
     }
 
-    /**
-     * Deserializes a [LazyLocation] from a JSON object.
-     */
+    /** Deserializes a [LazyLocation] from a JSON object. */
     @Throws(IOException::class)
     private fun deserializeLazyLocation(o: Any): LazyLocation {
         val json = o as JSONObject
@@ -70,9 +62,7 @@ object PersistentSerializer {
         return LazyLocation(worldId, x, y, z, yaw, pitch)
     }
 
-    /**
-     * Serializes a [LazyBlock] to a JSON object.
-     */
+    /** Serializes a [LazyBlock] to a JSON object. */
     @Throws(IOException::class)
     private fun serializeLazyBlock(o: Any): Any {
         val lb = o as LazyBlock
@@ -84,9 +74,7 @@ object PersistentSerializer {
         }
     }
 
-    /**
-     * Deserializes a [LazyBlock] from a JSON object.
-     */
+    /** Deserializes a [LazyBlock] from a JSON object. */
     @Throws(IOException::class)
     private fun deserializeLazyBlock(o: Any): LazyBlock {
         val json = o as JSONObject
@@ -97,63 +85,64 @@ object PersistentSerializer {
         return LazyBlock(worldId, x, y, z)
     }
 
-    /**
-     * Serializes a [Material] via its [NamespacedKey].
-     */
+    /** Serializes a [Material] via its [NamespacedKey]. */
     @Throws(IOException::class)
     private fun serializeMaterial(o: Any): Any? =
         toJson(NamespacedKey::class.java, (o as Material).key)
 
-    /**
-     * Deserializes a [Material] from its serialized [NamespacedKey].
-     */
+    /** Deserializes a [Material] from its serialized [NamespacedKey]. */
     @Throws(IOException::class)
     private fun deserializeMaterial(o: Any): Material? =
         materialFrom(fromJson(NamespacedKey::class.java, o) as NamespacedKey)
 
-    /**
-     * Serializes an [ItemStack] to Base64-encoded bytes.
-     */
+    /** Serializes an [ItemStack] to Base64-encoded bytes. */
     private fun serializeItemStack(o: Any): Any =
-        Base64.getEncoder().encode((o as ItemStack).serializeAsBytes()).toString(StandardCharsets.UTF_8)
+        Base64.getEncoder()
+            .encode((o as ItemStack).serializeAsBytes())
+            .toString(StandardCharsets.UTF_8)
 
-    /**
-     * Deserializes an [ItemStack] from Base64-encoded bytes.
-     */
+    /** Deserializes an [ItemStack] from Base64-encoded bytes. */
     private fun deserializeItemStack(o: Any): ItemStack =
-        ItemStack.deserializeBytes(Base64.getDecoder().decode((o as String).toByteArray(StandardCharsets.UTF_8)))
+        ItemStack.deserializeBytes(
+            Base64.getDecoder().decode((o as String).toByteArray(StandardCharsets.UTF_8))
+        )
 
-    /**
-     * Returns whether a value should be treated as JSON null.
-     */
+    /** Returns whether a value should be treated as JSON null. */
     private fun isNull(o: Any?): Boolean = o == null || o === JSONObject.NULL
 
-    /**
-     * Serializer registry keyed by target class.
-     */
-    @JvmField
-    val serializers: MutableMap<Class<*>?, Function<Any?, Any?>> = HashMap()
+    /** Serializer registry keyed by target class. */
+    @JvmField val serializers: MutableMap<Class<*>?, Function<Any?, Any?>> = HashMap()
 
-    /**
-     * Deserializer registry keyed by source class.
-     */
-    @JvmField
-    val deserializers: MutableMap<Class<*>?, Function<Any?, Any?>> = HashMap()
+    /** Deserializer registry keyed by source class. */
+    @JvmField val deserializers: MutableMap<Class<*>?, Function<Any?, Any?>> = HashMap()
 
     init {
-        /**
-         * Registers serializers for primitive and boxed primitive types.
-         */
-        for (cls in listOf(
-            Boolean::class.javaPrimitiveType, Boolean::class.java, Boolean::class.javaObjectType,
-            Char::class.javaPrimitiveType, Char::class.java, Char::class.javaObjectType,
-            Double::class.javaPrimitiveType, Double::class.java, Double::class.javaObjectType,
-            Float::class.javaPrimitiveType, Float::class.java, Float::class.javaObjectType,
-            Int::class.javaPrimitiveType, Int::class.java, Int::class.javaObjectType,
-            Long::class.javaPrimitiveType, Long::class.java, Long::class.javaObjectType,
-        )) {
+        /** Registers serializers for primitive and boxed primitive types. */
+        for (cls in
+            listOf(
+                Boolean::class.javaPrimitiveType,
+                Boolean::class.java,
+                Boolean::class.javaObjectType,
+                Char::class.javaPrimitiveType,
+                Char::class.java,
+                Char::class.javaObjectType,
+                Double::class.javaPrimitiveType,
+                Double::class.java,
+                Double::class.javaObjectType,
+                Float::class.javaPrimitiveType,
+                Float::class.java,
+                Float::class.javaObjectType,
+                Int::class.javaPrimitiveType,
+                Int::class.java,
+                Int::class.javaObjectType,
+                Long::class.javaPrimitiveType,
+                Long::class.java,
+                Long::class.javaObjectType,
+            )) {
             @Suppress("UNCHECKED_CAST")
-            serializers[cls] = Function { it.toString() }
+            serializers[cls] = Function {
+                it.toString()
+            }
         }
 
         deserializers[Boolean::class.javaPrimitiveType] = Function { (it as String?).toBoolean() }
@@ -175,17 +164,13 @@ object PersistentSerializer {
         deserializers[Long::class.java] = Function { (it as String).toLong() }
         deserializers[Long::class.javaObjectType] = Function { (it as String).toLong() }
 
-        /**
-         * Registers serializers for standard library value types.
-         */
+        /** Registers serializers for standard library value types. */
         serializers[String::class.java] = Function { it }
         deserializers[String::class.java] = Function { it }
         serializers[UUID::class.java] = Function { it.toString() }
         deserializers[UUID::class.java] = Function { UUID.fromString(it as String?) }
 
-        /**
-         * Registers serializers for Bukkit and vane-specific types.
-         */
+        /** Registers serializers for Bukkit and vane-specific types. */
         serializers[NamespacedKey::class.java] = Function { serializeNamespacedKey(it!!) }
         deserializers[NamespacedKey::class.java] = Function { deserializeNamespacedKey(it!!) }
         serializers[LazyLocation::class.java] = Function { serializeLazyLocation(it!!) }
@@ -198,9 +183,7 @@ object PersistentSerializer {
         deserializers[ItemStack::class.java] = Function { deserializeItemStack(it!!) }
     }
 
-    /**
-     * Serializes a field value using the field's generic type.
-     */
+    /** Serializes a field value using the field's generic type. */
     @JvmStatic
     @Throws(IOException::class)
     fun toJson(field: Field, value: Any?): Any? = toJson(field.genericType, value)
@@ -214,9 +197,10 @@ object PersistentSerializer {
     @Throws(IOException::class)
     fun toJson(cls: Class<*>?, value: Any?): Any? {
         if (isNull(value)) return JSONObject.NULL
-        val serializer: Function<Any?, Any?> = serializers[cls]
-            ?: if (cls != null && cls.isEnum) Function { (it as Enum<*>).name }
-            else throw IOException("No serializer registered for type $cls. This is a bug.")
+        val serializer: Function<Any?, Any?> =
+            serializers[cls]
+                ?: if (cls != null && cls.isEnum) Function { (it as Enum<*>).name }
+                else throw IOException("No serializer registered for type $cls. This is a bug.")
         return serializer.apply(value)
     }
 
@@ -234,27 +218,31 @@ object PersistentSerializer {
         val typeArgs = type.actualTypeArguments
         return when (type.rawType) {
             // Null members are written as JSONObject.NULL, which fromJson reads back as null.
-            MutableMap::class.java -> JSONObject().also { json ->
-                for ((k, v) in value as Map<*, *>) {
-                    json.put(toJson(typeArgs[0] as Class<*>?, k) as String?, toJson(typeArgs[1], v))
+            MutableMap::class.java ->
+                JSONObject().also { json ->
+                    for ((k, v) in value as Map<*, *>) {
+                        json.put(
+                            toJson(typeArgs[0] as Class<*>?, k) as String?,
+                            toJson(typeArgs[1], v),
+                        )
+                    }
                 }
-            }
 
-            MutableSet::class.java -> JSONArray().also { json ->
-                for (t in value as Set<*>) json.put(toJson(typeArgs[0], t))
-            }
+            MutableSet::class.java ->
+                JSONArray().also { json ->
+                    for (t in value as Set<*>) json.put(toJson(typeArgs[0], t))
+                }
 
-            MutableList::class.java -> JSONArray().also { json ->
-                for (t in value as List<*>) json.put(toJson(typeArgs[0], t))
-            }
+            MutableList::class.java ->
+                JSONArray().also { json ->
+                    for (t in value as List<*>) json.put(toJson(typeArgs[0], t))
+                }
 
             else -> throw IOException("Cannot serialize $type. This is a bug.")
         }
     }
 
-    /**
-     * Deserializes a field value using the field's generic type.
-     */
+    /** Deserializes a field value using the field's generic type. */
     @JvmStatic
     @Throws(IOException::class)
     fun fromJson(field: Field, value: Any?): Any? = fromJson(field.genericType, value)
@@ -271,11 +259,12 @@ object PersistentSerializer {
         // Every serialized object passes through here, so data saved before v1.22.0 is upgraded
         // on load and written back with the new keys on the next save.
         if (value is JSONObject) LegacyKeys.upgradeJsonObject(value)
-        val deserializer: Function<Any?, Any?> = deserializers[cls]
-            ?: if (cls != null && cls.isEnum) {
-                @Suppress("UNCHECKED_CAST")
-                Function { java.lang.Enum.valueOf(cls as Class<out Enum<*>>, it as String) }
-            } else throw IOException("No deserializer registered for type $cls. This is a bug.")
+        val deserializer: Function<Any?, Any?> =
+            deserializers[cls]
+                ?: if (cls != null && cls.isEnum) {
+                    @Suppress("UNCHECKED_CAST")
+                    Function { java.lang.Enum.valueOf(cls as Class<out Enum<*>>, it as String) }
+                } else throw IOException("No deserializer registered for type $cls. This is a bug.")
         @Suppress("UNCHECKED_CAST")
         return deserializer.apply(value) as U?
     }
@@ -293,21 +282,25 @@ object PersistentSerializer {
 
         val typeArgs = type.actualTypeArguments
         return when (type.rawType) {
-            MutableMap::class.java -> buildMap {
-                for (key in (json as JSONObject).keySet()) {
-                    put(fromJson(typeArgs[0] as Class<*>?, key), fromJson(typeArgs[1], json[key]))
-                }
-            }.toMutableMap()
+            MutableMap::class.java ->
+                buildMap {
+                        for (key in (json as JSONObject).keySet()) {
+                            put(
+                                fromJson(typeArgs[0] as Class<*>?, key),
+                                fromJson(typeArgs[1], json[key]),
+                            )
+                        }
+                    }
+                    .toMutableMap()
 
-            MutableSet::class.java -> (json as JSONArray).mapTo(HashSet()) { fromJson(typeArgs[0], it) }
+            MutableSet::class.java ->
+                (json as JSONArray).mapTo(HashSet()) { fromJson(typeArgs[0], it) }
             MutableList::class.java -> (json as JSONArray).map { fromJson(typeArgs[0], it) }
             else -> throw IOException("Cannot deserialize $type. This is a bug.")
         }
     }
 
-    /**
-     * Functional abstraction used by serializer and deserializer registries.
-     */
+    /** Functional abstraction used by serializer and deserializer registries. */
     fun interface Function<T1, R> {
         /**
          * Applies the transformation.
@@ -316,7 +309,6 @@ object PersistentSerializer {
          * @return the transformed value.
          * @throws IOException if transformation fails.
          */
-        @Throws(IOException::class)
-        fun apply(t1: T1?): R?
+        @Throws(IOException::class) fun apply(t1: T1?): R?
     }
 }

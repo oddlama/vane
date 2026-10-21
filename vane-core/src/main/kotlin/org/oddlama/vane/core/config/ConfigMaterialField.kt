@@ -1,12 +1,12 @@
 package org.oddlama.vane.core.config
 
+import java.lang.reflect.Field
 import org.bukkit.Material
 import org.bukkit.configuration.file.YamlConfiguration
 import org.oddlama.vane.annotation.config.ConfigMaterial
 import org.oddlama.vane.core.YamlLoadException
 import org.oddlama.vane.util.MaterialUtil.materialFrom
 import org.oddlama.vane.util.StorageUtil.namespacedKey
-import java.lang.reflect.Field
 
 /**
  * Config field handler for material values.
@@ -21,7 +21,7 @@ class ConfigMaterialField(
     field: Field,
     mapName: (String?) -> String?,
     /** Annotation metadata for this field. */
-    var annotation: ConfigMaterial
+    var annotation: ConfigMaterial,
 ) : ConfigField<Material?>(owner, field, mapName, "material", annotation.desc) {
 
     /** Returns the default value for this config field. */
@@ -34,11 +34,17 @@ class ConfigMaterialField(
     private fun Material.keyString() = "\"${escapeYaml(key.namespace)}:${escapeYaml(key.key)}\""
 
     /** Generates YAML for this field. */
-    override fun generateYaml(builder: StringBuilder, indent: String, existingCompatibleConfig: YamlConfiguration?) {
+    override fun generateYaml(
+        builder: StringBuilder,
+        indent: String,
+        existingCompatibleConfig: YamlConfiguration?,
+    ) {
         appendDescription(builder, indent)
         appendDefaultValue(builder, indent, def().keyString())
-        val def = if (existingCompatibleConfig != null && existingCompatibleConfig.contains(yamlPath()))
-            loadFromYaml(existingCompatibleConfig) else def()
+        val def =
+            if (existingCompatibleConfig != null && existingCompatibleConfig.contains(yamlPath()))
+                loadFromYaml(existingCompatibleConfig)
+            else def()
         appendFieldDefinition(builder, indent, def.keyString())
     }
 
@@ -51,7 +57,9 @@ class ConfigMaterialField(
         val str = yaml.getString(yamlPath())
         val (ns, key) = requireNamespacedKeyParts(yamlPath(), str, "material")
         materialFrom(namespacedKey(ns, key))
-            ?: throw YamlLoadException("Invalid material entry in list '${yamlPath()}': '$str' does not exist")
+            ?: throw YamlLoadException(
+                "Invalid material entry in list '${yamlPath()}': '$str' does not exist"
+            )
     }
 
     /** Loads this field value from YAML. */

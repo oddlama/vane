@@ -1,14 +1,14 @@
 package org.oddlama.vane.busybar
 
-import io.papermc.paper.adventure.PaperAdventure
 import io.papermc.paper.advancement.AdvancementDisplay
+import io.papermc.paper.adventure.PaperAdventure
+import java.util.*
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.player.PlayerAdvancementDoneEvent
 import org.json.JSONObject
 import org.oddlama.vane.core.Listener
 import org.oddlama.vane.core.module.Context
-import java.util.*
 
 /**
  * Forwards advancements that the game announces in chat, so recipes and hidden ones stay quiet.
@@ -44,10 +44,11 @@ class Advancements(context: Context<BusyBar?>) : Listener<BusyBar?>(context) {
         val display = event.advancement.display ?: return
         if (!display.doesAnnounceToChat()) return
         val player = event.player
-        val batch = batches.getOrPut(player.uniqueId) {
-            scheduleTask({ flush(player.uniqueId) }, BATCH_TICKS)
-            Batch(player.name, busybar.headOf(player))
-        }
+        val batch =
+            batches.getOrPut(player.uniqueId) {
+                scheduleTask({ flush(player.uniqueId) }, BATCH_TICKS)
+                Batch(player.name, busybar.headOf(player))
+            }
         batch.count++
         // Show the rarest one: challenges outrank goals, which outrank tasks.
         if (batch.count == 1 || rank(display.frame()) >= rank(batch.frame)) {
@@ -66,7 +67,7 @@ class Advancements(context: Context<BusyBar?>) : Listener<BusyBar?>(context) {
                 .put("title", batch.title)
                 .put("frame", batch.frame.name.lowercase())
                 .put("count", batch.count),
-            permission = busybar.access.receiveAdvancements
+            permission = busybar.access.receiveAdvancements,
         )
     }
 
@@ -75,10 +76,11 @@ class Advancements(context: Context<BusyBar?>) : Listener<BusyBar?>(context) {
         private const val BATCH_TICKS = 20L
 
         /** Rarity of a frame. Explicit, because the enum declares CHALLENGE first. */
-        private fun rank(frame: AdvancementDisplay.Frame): Int = when (frame) {
-            AdvancementDisplay.Frame.TASK -> 0
-            AdvancementDisplay.Frame.GOAL -> 1
-            AdvancementDisplay.Frame.CHALLENGE -> 2
-        }
+        private fun rank(frame: AdvancementDisplay.Frame): Int =
+            when (frame) {
+                AdvancementDisplay.Frame.TASK -> 0
+                AdvancementDisplay.Frame.GOAL -> 1
+                AdvancementDisplay.Frame.CHALLENGE -> 2
+            }
     }
 }

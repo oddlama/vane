@@ -2,10 +2,10 @@ package org.oddlama.velocity.compat.event
 
 import com.velocitypowered.api.proxy.InboundConnection
 import com.velocitypowered.api.proxy.Player
-import org.oddlama.vane.proxycore.ProxyPendingConnection
-import org.oddlama.vane.proxycore.ProxyServer
 import java.net.SocketAddress
 import java.util.*
+import org.oddlama.vane.proxycore.ProxyPendingConnection
+import org.oddlama.vane.proxycore.ProxyServer
 
 /**
  * Velocity implementation of proxy-core pending connection abstraction.
@@ -14,10 +14,11 @@ import java.util.*
  * @property name pending username, when available.
  * @property uniqueId player UUID, when available.
  */
-class VelocityCompatPendingConnection private constructor(
+class VelocityCompatPendingConnection
+private constructor(
     private val connection: InboundConnection,
     override val name: String?,
-    override val uniqueId: UUID?
+    override val uniqueId: UUID?,
 ) : ProxyPendingConnection {
     /**
      * Creates a pending connection wrapper from a generic inbound connection.
@@ -34,15 +35,11 @@ class VelocityCompatPendingConnection private constructor(
      */
     constructor(player: Player) : this(player, player.username, player.uniqueId)
 
-    /**
-     * Virtual host port used by the inbound connection.
-     */
+    /** Virtual host port used by the inbound connection. */
     override val port: Int
         get() = connection.virtualHost.orElseThrow().port
 
-    /**
-     * Virtual host socket address used by the inbound connection.
-     */
+    /** Virtual host socket address used by the inbound connection. */
     override val socketAddress: SocketAddress
         get() = connection.virtualHost.orElseThrow()
 

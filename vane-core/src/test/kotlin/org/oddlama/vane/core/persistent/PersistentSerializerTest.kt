@@ -1,11 +1,11 @@
 package org.oddlama.vane.core.persistent
 
-import org.json.JSONArray
-import org.json.JSONObject
 import java.util.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
+import org.json.JSONArray
+import org.json.JSONObject
 
 class PersistentSerializerTest {
     @Suppress("unused")
@@ -21,11 +21,12 @@ class PersistentSerializerTest {
     /** Saves [value] into [fieldName] and loads it back, as one restart does. */
     private fun roundTrip(fieldName: String, value: Any): Any? {
         // Through text, as storage.json is written and read.
-        val reparsed = when (val json = PersistentSerializer.toJson(field(fieldName), value)) {
-            is JSONObject -> JSONObject(json.toString())
-            is JSONArray -> JSONArray(json.toString())
-            else -> json
-        }
+        val reparsed =
+            when (val json = PersistentSerializer.toJson(field(fieldName), value)) {
+                is JSONObject -> JSONObject(json.toString())
+                is JSONArray -> JSONArray(json.toString())
+                else -> json
+            }
         return PersistentSerializer.fromJson(field(fieldName), reparsed)
     }
 

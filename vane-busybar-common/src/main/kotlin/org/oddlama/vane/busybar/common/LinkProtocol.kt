@@ -1,7 +1,5 @@
 package org.oddlama.vane.busybar.common
 
-import org.json.JSONException
-import org.json.JSONObject
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.io.InputStream
@@ -11,6 +9,8 @@ import java.security.SecureRandom
 import java.util.*
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
+import org.json.JSONException
+import org.json.JSONObject
 
 /**
  * Wire format of the link between vane-busybar backends and the proxy: one JSON object per line,
@@ -42,7 +42,9 @@ object LinkProtocol {
 
     /** A fresh base64url nonce. */
     fun nonce(): String =
-        Base64.getUrlEncoder().withoutPadding().encodeToString(ByteArray(NONCE_BYTES).also(random::nextBytes))
+        Base64.getUrlEncoder()
+            .withoutPadding()
+            .encodeToString(ByteArray(NONCE_BYTES).also(random::nextBytes))
 
     /**
      * Proof that the sender knows [secret], bound to the other side's [nonce] and the backend's
@@ -73,7 +75,8 @@ object LinkProtocol {
                 throw IOException("Link closed in the middle of a frame")
             }
             if (b == '\n'.code) break
-            if (line.size() >= MAX_FRAME_BYTES) throw IOException("Frame exceeds $MAX_FRAME_BYTES bytes")
+            if (line.size() >= MAX_FRAME_BYTES)
+                throw IOException("Frame exceeds $MAX_FRAME_BYTES bytes")
             line.write(b)
         }
         return try {

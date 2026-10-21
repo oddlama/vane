@@ -13,10 +13,9 @@ import org.oddlama.vane.trifles.Trifles
 import org.oddlama.vane.util.StorageUtil
 
 @Name("setspawn")
-/**
- * Command for setting the current world spawn and tagging the active spawn world.
- */
-class Setspawn(context: Context<Trifles?>) : org.oddlama.vane.core.command.Command<Trifles?>(context) {
+/** Command for setting the current world spawn and tagging the active spawn world. */
+class Setspawn(context: Context<Trifles?>) :
+    org.oddlama.vane.core.command.Command<Trifles?>(context) {
     /** Builds the `/setspawn` command tree. */
     override fun getCommandBase(): LiteralArgumentBuilder<CommandSourceStack> {
         return super.getCommandBase()
@@ -47,7 +46,7 @@ class Setspawn(context: Context<Trifles?>) : org.oddlama.vane.core.command.Comma
 
     companion object {
         @JvmField
-                /** Metadata key identifying which world acts as global spawn target. */
+        /** Metadata key identifying which world acts as global spawn target. */
         val IS_SPAWN_WORLD: NamespacedKey = StorageUtil.namespacedKey("vane", "is_spawn_world")
     }
 }

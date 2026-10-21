@@ -12,21 +12,24 @@ import org.oddlama.vane.enchantments.CustomEnchantmentRegistry
 /**
  * Registry for the Angel enchantment, which is exclusive with the Wings enchantment.
  *
- * @constructor Creates an AngelRegistry instance.
  * @param composeEvent The registry compose event to register the enchantment.
+ * @constructor Creates an AngelRegistry instance.
  */
-class AngelRegistry(composeEvent: RegistryComposeEvent<Enchantment, EnchantmentRegistryEntry.Builder>) :
-    CustomEnchantmentRegistry("angel", listOf(ItemTypeKeys.ELYTRA), 5) {
+class AngelRegistry(
+    composeEvent: RegistryComposeEvent<Enchantment, EnchantmentRegistryEntry.Builder>
+) : CustomEnchantmentRegistry("angel", listOf(ItemTypeKeys.ELYTRA), 5) {
     init {
         exclusiveWith(
-            listOf(
-                TypedKey.create(
-                    RegistryKey.ENCHANTMENT,
-                    Key.key(
-                        NAMESPACE, "wings"
+                listOf(
+                    TypedKey.create(
+                        RegistryKey.ENCHANTMENT,
+                        Key.key(
+                            NAMESPACE,
+                            "wings",
+                        ),
                     )
                 )
             )
-        ).register(composeEvent)
+            .register(composeEvent)
     }
 }

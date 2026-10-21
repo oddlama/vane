@@ -1,10 +1,10 @@
 package org.oddlama.velocity.compat.scheduler
 
 import com.velocitypowered.api.scheduler.Scheduler
+import java.util.concurrent.TimeUnit
 import org.oddlama.vane.proxycore.VaneProxyPlugin
 import org.oddlama.vane.proxycore.scheduler.ProxyScheduledTask
 import org.oddlama.vane.proxycore.scheduler.ProxyTaskScheduler
-import java.util.concurrent.TimeUnit
 
 /**
  * Velocity implementation of proxy-core task scheduling.
@@ -25,7 +25,7 @@ class VelocityCompatProxyTaskScheduler(val scheduler: Scheduler) : ProxyTaskSche
         owner: VaneProxyPlugin?,
         task: Runnable?,
         unit: TimeUnit?,
-        build: (VaneProxyPlugin, Runnable, TimeUnit) -> ProxyScheduledTask
+        build: (VaneProxyPlugin, Runnable, TimeUnit) -> ProxyScheduledTask,
     ): ProxyScheduledTask? {
         if (owner == null || task == null || unit == null) return null
         return build(owner, task, unit)
@@ -57,7 +57,12 @@ class VelocityCompatProxyTaskScheduler(val scheduler: Scheduler) : ProxyTaskSche
      * @param unit unit for the delay.
      * @return scheduled task wrapper or `null` when inputs are invalid.
      */
-    override fun schedule(owner: VaneProxyPlugin?, task: Runnable?, delay: Long, unit: TimeUnit?): ProxyScheduledTask? {
+    override fun schedule(
+        owner: VaneProxyPlugin?,
+        task: Runnable?,
+        delay: Long,
+        unit: TimeUnit?,
+    ): ProxyScheduledTask? {
         return scheduleIfValid(owner, task, unit) { validOwner, validTask, validUnit ->
             VelocityCompatScheduledTask(
                 scheduler.buildTask(validOwner, validTask).delay(delay, validUnit).schedule()
@@ -80,7 +85,7 @@ class VelocityCompatProxyTaskScheduler(val scheduler: Scheduler) : ProxyTaskSche
         task: Runnable?,
         delay: Long,
         period: Long,
-        unit: TimeUnit?
+        unit: TimeUnit?,
     ): ProxyScheduledTask? {
         return scheduleIfValid(owner, task, unit) { validOwner, validTask, validUnit ->
             VelocityCompatScheduledTask(

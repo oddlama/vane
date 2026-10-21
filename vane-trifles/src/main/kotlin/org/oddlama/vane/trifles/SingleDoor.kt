@@ -10,7 +10,8 @@ import org.bukkit.block.data.type.Door
  * An abstract short-lived container to manage door states. All states are assumed from the bottom
  * half, rely on Minecraft to restore bad block states.
  */
-class SingleDoor private constructor(
+class SingleDoor
+private constructor(
     /** Lower (bottom-half) block of the door pair. */
     private val lowerBlock: Block
 ) {
@@ -20,9 +21,7 @@ class SingleDoor private constructor(
     /** Cached upper-half door data. */
     private var upper: Door?
 
-    /**
-     * Assumes valid door location already.
-     */
+    /** Assumes valid door location already. */
     init {
         this.lower = asDoorState(lowerBlock)
         this.upper = asDoorState(lowerBlock.getRelative(BlockFace.UP))
@@ -46,13 +45,11 @@ class SingleDoor private constructor(
         return lower != null && upper != null
     }
 
-    /**
-     * Resolves the partner door if this door is part of a compatible double-door setup.
-     */
+    /** Resolves the partner door if this door is part of a compatible double-door setup. */
     val secondDoor: SingleDoor?
         /**
          * Gets the SingleDoor instance representing the other half of this double door.
-         * 
+         *
          * @return null, if no matching door was found.
          */
         get() {
@@ -66,7 +63,8 @@ class SingleDoor private constructor(
             //
             // # Single Doors
             //
-            // the following is a picture of a door block from above. (built by a player facing south)
+            // the following is a picture of a door block from above. (built by a player facing
+            // south)
             // OXXXXX // X = door hitbox
             // |    | // o = door hinge.
             // |    | // (the rest is empty)
@@ -152,7 +150,8 @@ class SingleDoor private constructor(
             // Because of this, it is possible to construct a set of double doors, and a door can
             // simultaneously
             // belong to 2 different door sets, a 'hacked' door-set, and a normal door-set.
-            // Trying to account for this would end up with a cellular automata of updates, so instead
+            // Trying to account for this would end up with a cellular automata of updates, so
+            // instead
             // we prioritize
             // opening over closing.
 
@@ -201,7 +200,9 @@ class SingleDoor private constructor(
         val shouldBeUs = potentialOtherDoor.getRelative(otherPointing)
 
         val isUs =
-            shouldBeUs.x == lowerBlock.x && shouldBeUs.y == lowerBlock.y && shouldBeUs.z == lowerBlock.z
+            shouldBeUs.x == lowerBlock.x &&
+                shouldBeUs.y == lowerBlock.y &&
+                shouldBeUs.z == lowerBlock.z
 
         return if (isUs) createDoorFromBlock(potentialOtherDoor) else null
     }
@@ -234,10 +235,10 @@ class SingleDoor private constructor(
 
     companion object {
         /**
-         * Factory method for creating SingleDoors. Validates that the block is a door, and has a 2nd
-         * half. Accepts either top or bottom blocks, generally from an interaction event. Will fail and
-         * return null if block is not a door, or not a complete door.
-         * 
+         * Factory method for creating SingleDoors. Validates that the block is a door, and has a
+         * 2nd half. Accepts either top or bottom blocks, generally from an interaction event. Will
+         * fail and return null if block is not a door, or not a complete door.
+         *
          * @param originBlock any block to create a SingleDoor instance from.
          * @return the SingleDoor instance representing the door structure.
          */
@@ -283,9 +284,7 @@ class SingleDoor private constructor(
             return blockData is Door
         }
 
-        /**
-         * @param block Must be a door.
-         */
+        /** @param block Must be a door. */
         private fun otherVerticalHalf(block: Block): Block {
             val door: Door = requireNotNull(asDoorState(block))
             return when (door.half) {

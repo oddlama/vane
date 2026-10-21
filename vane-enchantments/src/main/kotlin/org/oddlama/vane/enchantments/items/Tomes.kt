@@ -20,15 +20,16 @@ import org.oddlama.vane.enchantments.Enchantments
 import org.oddlama.vane.util.StorageUtil
 
 /**
- * The Tomes class is a module group that manages the different types of tomes
- * used for crafting custom enchantments. Disabling these tomes requires
- * corresponding adjustments to the enchantment recipes.
+ * The Tomes class is a module group that manages the different types of tomes used for crafting
+ * custom enchantments. Disabling these tomes requires corresponding adjustments to the enchantment
+ * recipes.
  */
-class Tomes(context: Context<Enchantments?>) : ModuleGroup<Enchantments?>(
-    context,
-    "Tomes",
-    "These tomes are needed to craft custom enchantments. If you disable them here, you will need to adjust the recipes for the enchantments accordingly."
-) {
+class Tomes(context: Context<Enchantments?>) :
+    ModuleGroup<Enchantments?>(
+        context,
+        "Tomes",
+        "These tomes are needed to craft custom enchantments. If you disable them here, you will need to adjust the recipes for the enchantments accordingly.",
+    ) {
     init {
         GrindstoneListener(context)
         AncientTome(context)
@@ -39,14 +40,12 @@ class Tomes(context: Context<Enchantments?>) : ModuleGroup<Enchantments?>(
         EnchantedAncientTomeOfTheGods(context)
     }
 
-    /**
-     * Represents the basic ancient tome item used for crafting and enchanting.
-     */
+    /** Represents the basic ancient tome item used for crafting and enchanting. */
     @VaneItem(name = "ancient_tome", base = Material.BOOK, modelData = 0x770000, version = 1)
     class AncientTome(context: Context<Enchantments?>) : CustomItem<Enchantments?>(context) {
         /**
-         * Provides the default loot tables for the ancient tome, defining where
-         * it can be found or how it can be obtained in the game.
+         * Provides the default loot tables for the ancient tome, defining where it can be found or
+         * how it can be obtained in the game.
          */
         override fun defaultLootTables(): LootTableList {
             return LootTableList.of(
@@ -72,18 +71,25 @@ class Tomes(context: Context<Enchantments?>) : ModuleGroup<Enchantments?>(
                     .`in`(LootTables.VILLAGE_TEMPLE)
                     .`in`(LootTables.WOODLAND_MANSION)
                     .add(1.0 / 5, 0, 2, key().toString()),
-                LootDefinition("ancientcity").`in`(LootTables.ANCIENT_CITY).add(1.0 / 20, 0, 2, key().toString()),
+                LootDefinition("ancientcity")
+                    .`in`(LootTables.ANCIENT_CITY)
+                    .add(1.0 / 20, 0, 2, key().toString()),
                 LootDefinition("terralith_generic") // terralith low
                     .`in`(StorageUtil.namespacedKey("terralith", "spire/common"))
                     .`in`(StorageUtil.namespacedKey("terralith", "village/desert/generic_low"))
                     .`in`(StorageUtil.namespacedKey("terralith", "village/fortified/generic_low"))
                     .`in`(StorageUtil.namespacedKey("terralith", "village/fortified/smith/novice"))
                     .`in`(StorageUtil.namespacedKey("terralith", "village/desert/smith/novice"))
-                    .`in`(StorageUtil.namespacedKey("terralith", "village/fortified/tavern_downstairs"))
                     .`in`(
                         StorageUtil.namespacedKey(
                             "terralith",
-                            "village/fortified/tavern_upstairs"
+                            "village/fortified/tavern_downstairs",
+                        )
+                    )
+                    .`in`(
+                        StorageUtil.namespacedKey(
+                            "terralith",
+                            "village/fortified/tavern_upstairs",
                         )
                     ) // terralith normal
                     .`in`(StorageUtil.namespacedKey("terralith", "ruin/glacial/main_cs"))
@@ -117,26 +123,35 @@ class Tomes(context: Context<Enchantments?>) : ModuleGroup<Enchantments?>(
                     .`in`(StorageUtil.namespacedKey("terralith", "village/desert/smith/expert"))
                     .`in`(StorageUtil.namespacedKey("terralith", "village/fortified/smith/expert"))
                     .`in`(StorageUtil.namespacedKey("terralith", "spire/rare"))
-                    .add(1.0 / 20, 0, 2, key().toString())
+                    .add(1.0 / 20, 0, 2, key().toString()),
             )
         }
     }
 
-    /**
-     * Represents the enchanted variant of the ancient tome item.
-     */
-    @VaneItem(name = "enchanted_ancient_tome", base = Material.ENCHANTED_BOOK, modelData = 0x770001, version = 1)
+    /** Represents the enchanted variant of the ancient tome item. */
+    @VaneItem(
+        name = "enchanted_ancient_tome",
+        base = Material.ENCHANTED_BOOK,
+        modelData = 0x770001,
+        version = 1,
+    )
     class EnchantedAncientTome(context: Context<Enchantments?>) : CustomItem<Enchantments?>(context)
 
     /**
-     * Represents the ancient tome of knowledge item, used for crafting
-     * and enchanting with a focus on knowledge-related enchantments.
+     * Represents the ancient tome of knowledge item, used for crafting and enchanting with a focus
+     * on knowledge-related enchantments.
      */
-    @VaneItem(name = "ancient_tome_of_knowledge", base = Material.BOOK, modelData = 0x770002, version = 1)
-    class AncientTomeOfKnowledge(context: Context<Enchantments?>) : CustomItem<Enchantments?>(context) {
+    @VaneItem(
+        name = "ancient_tome_of_knowledge",
+        base = Material.BOOK,
+        modelData = 0x770002,
+        version = 1,
+    )
+    class AncientTomeOfKnowledge(context: Context<Enchantments?>) :
+        CustomItem<Enchantments?>(context) {
         /**
-         * Provides the default recipes for crafting the ancient tome of knowledge,
-         * using various magical and knowledge-related ingredients.
+         * Provides the default recipes for crafting the ancient tome of knowledge, using various
+         * magical and knowledge-related ingredients.
          */
         override fun defaultRecipes(): RecipeList {
             return RecipeList.of(
@@ -150,8 +165,8 @@ class Tomes(context: Context<Enchantments?>) : ModuleGroup<Enchantments?>(
         }
 
         /**
-         * Provides the default loot tables for the ancient tome of knowledge,
-         * defining where it can be found or how it can be obtained in the game.
+         * Provides the default loot tables for the ancient tome of knowledge, defining where it can
+         * be found or how it can be obtained in the game.
          */
         override fun defaultLootTables(): LootTableList {
             return LootTableList.of(
@@ -205,31 +220,36 @@ class Tomes(context: Context<Enchantments?>) : ModuleGroup<Enchantments?>(
                     .`in`(StorageUtil.namespacedKey("terralith", "village/fortified/smith/expert"))
                     .`in`(StorageUtil.namespacedKey("terralith", "spire/rare"))
                     .add(1.0 / 30, 1, 1, key().toString()) // duplicate for more consistent spawn
-                    .add(1.0 / 30, 1, 1, key().toString())
+                    .add(1.0 / 30, 1, 1, key().toString()),
             )
         }
     }
 
-    /**
-     * Represents the enchanted variant of the ancient tome of knowledge item.
-     */
+    /** Represents the enchanted variant of the ancient tome of knowledge item. */
     @VaneItem(
         name = "enchanted_ancient_tome_of_knowledge",
         base = Material.ENCHANTED_BOOK,
         modelData = 0x770003,
-        version = 1
+        version = 1,
     )
-    class EnchantedAncientTomeOfKnowledge(context: Context<Enchantments?>) : CustomItem<Enchantments?>(context)
+    class EnchantedAncientTomeOfKnowledge(context: Context<Enchantments?>) :
+        CustomItem<Enchantments?>(context)
 
     /**
-     * Represents the ancient tome of the gods item, a powerful tome used for
-     * crafting and enchanting with divine-related enchantments.
+     * Represents the ancient tome of the gods item, a powerful tome used for crafting and
+     * enchanting with divine-related enchantments.
      */
-    @VaneItem(name = "ancient_tome_of_the_gods", base = Material.BOOK, modelData = 0x770004, version = 1)
-    class AncientTomeOfTheGods(context: Context<Enchantments?>) : CustomItem<Enchantments?>(context) {
+    @VaneItem(
+        name = "ancient_tome_of_the_gods",
+        base = Material.BOOK,
+        modelData = 0x770004,
+        version = 1,
+    )
+    class AncientTomeOfTheGods(context: Context<Enchantments?>) :
+        CustomItem<Enchantments?>(context) {
         /**
-         * Provides the default recipes for crafting the ancient tome of the gods,
-         * using various divine and magical ingredients.
+         * Provides the default recipes for crafting the ancient tome of the gods, using various
+         * divine and magical ingredients.
          */
         override fun defaultRecipes(): RecipeList {
             return RecipeList.of(
@@ -244,8 +264,8 @@ class Tomes(context: Context<Enchantments?>) : ModuleGroup<Enchantments?>(
         }
 
         /**
-         * Provides the default loot tables for the ancient tome of the gods,
-         * defining where it can be found or how it can be obtained in the game.
+         * Provides the default loot tables for the ancient tome of the gods, defining where it can
+         * be found or how it can be obtained in the game.
          */
         override fun defaultLootTables(): LootTableList {
             return LootTableList.of(
@@ -255,45 +275,44 @@ class Tomes(context: Context<Enchantments?>) : ModuleGroup<Enchantments?>(
                     .`in`(LootTables.SHIPWRECK_TREASURE)
                     .`in`(LootTables.UNDERWATER_RUIN_BIG)
                     .add(1.0 / 200, 1, 1, key().toString()),
-                LootDefinition("ancientcity").`in`(LootTables.ANCIENT_CITY).add(1.0 / 150, 1, 1, key().toString()),
+                LootDefinition("ancientcity")
+                    .`in`(LootTables.ANCIENT_CITY)
+                    .add(1.0 / 150, 1, 1, key().toString()),
                 LootDefinition("terralith_generic") // terralith normal
                     .`in`(StorageUtil.namespacedKey("terralith", "spire/treasure"))
                     .`in`(StorageUtil.namespacedKey("terralith", "underground/chest"))
                     .add(1.0 / 200, 1, 1, key().toString()),
                 LootDefinition("terralith_rare") // terralith rare
                     .`in`(StorageUtil.namespacedKey("terralith", "spire/rare"))
-                    .add(1.0 / 150, 1, 1, key().toString())
+                    .add(1.0 / 150, 1, 1, key().toString()),
             )
         }
     }
 
-    /**
-     * Represents the enchanted variant of the ancient tome of the gods item.
-     */
+    /** Represents the enchanted variant of the ancient tome of the gods item. */
     @VaneItem(
         name = "enchanted_ancient_tome_of_the_gods",
         base = Material.ENCHANTED_BOOK,
         modelData = 0x770005,
-        version = 1
+        version = 1,
     )
-    class EnchantedAncientTomeOfTheGods(context: Context<Enchantments?>) : CustomItem<Enchantments?>(context)
+    class EnchantedAncientTomeOfTheGods(context: Context<Enchantments?>) :
+        CustomItem<Enchantments?>(context)
 
     /**
-     * The GrindstoneListener class handles the grinding and disenchanting
-     * behavior for the ancient tomes, ensuring that the correct item variants
-     * are used and produced during the process.
+     * The GrindstoneListener class handles the grinding and disenchanting behavior for the ancient
+     * tomes, ensuring that the correct item variants are used and produced during the process.
      */
     @VaneItem(
         name = "enchanted_ancient_tome_of_the_gods",
         base = Material.ENCHANTED_BOOK,
         modelData = 0x770005,
-        version = 1
+        version = 1,
     )
     class GrindstoneListener(context: Context<Enchantments?>?) : Listener<Enchantments?>(context) {
         /**
-         * Listens to the PrepareGrindstoneEvent and modifies the result item
-         * if it is an enchanted tome, replacing it with the corresponding
-         * normal tome.
+         * Listens to the PrepareGrindstoneEvent and modifies the result item if it is an enchanted
+         * tome, replacing it with the corresponding normal tome.
          */
         @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
         fun onPrepareGrindstone(event: PrepareGrindstoneEvent) {
@@ -306,21 +325,20 @@ class Tomes(context: Context<Enchantments?>) : ModuleGroup<Enchantments?>(
                 return
             }
 
-            val customItem = module
-                ?.core
-                ?.itemRegistry()
-                ?.get(res)
+            val customItem = module?.core?.itemRegistry()?.get(res)
             when (customItem) {
                 is EnchantedAncientTome -> {
                     event.result = CustomItemHelper.newStack("vane_enchantments:ancient_tome")
                 }
 
                 is EnchantedAncientTomeOfKnowledge -> {
-                    event.result = CustomItemHelper.newStack("vane_enchantments:ancient_tome_of_knowledge")
+                    event.result =
+                        CustomItemHelper.newStack("vane_enchantments:ancient_tome_of_knowledge")
                 }
 
                 is EnchantedAncientTomeOfTheGods -> {
-                    event.result = CustomItemHelper.newStack("vane_enchantments:ancient_tome_of_the_gods")
+                    event.result =
+                        CustomItemHelper.newStack("vane_enchantments:ancient_tome_of_the_gods")
                 }
             }
         }

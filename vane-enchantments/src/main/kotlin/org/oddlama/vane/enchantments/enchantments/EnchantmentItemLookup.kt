@@ -16,7 +16,8 @@ internal data class EnchantedItem(val item: ItemStack, val level: Int)
  * Extension function for [Player] to get the enchanted chestplate item.
  *
  * @param enchantment The [Enchantment] to look for.
- * @return An instance of [EnchantedItem] representing the enchanted chestplate, or null if none is found.
+ * @return An instance of [EnchantedItem] representing the enchanted chestplate, or null if none is
+ *   found.
  */
 internal fun Player.chestplateEnchantment(enchantment: Enchantment?): EnchantedItem? {
     val bukkitEnchantment = enchantment ?: return null

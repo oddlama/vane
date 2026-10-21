@@ -19,11 +19,9 @@ class VelocityCompatLoginEvent(
     val event: LoginEvent,
     plugin: VaneProxyPlugin,
     serverInfo: IVaneProxyServerInfo,
-    override var connection: ProxyPendingConnection
+    override var connection: ProxyPendingConnection,
 ) : org.oddlama.vane.proxycore.listeners.LoginEvent(plugin, serverInfo, connection) {
-    /**
-     * Cancels with an empty reason.
-     */
+    /** Cancels with an empty reason. */
     override fun cancel() {
         cancel(null)
     }

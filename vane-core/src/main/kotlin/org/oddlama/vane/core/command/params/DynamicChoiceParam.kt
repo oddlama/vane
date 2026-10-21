@@ -27,26 +27,31 @@ class DynamicChoiceParam<T>(
     /** Converts choices to display strings. */
     private val toString: Function2<CommandSender?, T?, String?>,
     /** Parses raw strings to choices in sender context. */
-    private val fromString: Function2<CommandSender?, String?, out T?>
+    private val fromString: Function2<CommandSender?, String?, out T?>,
 ) : BaseParam(command) {
 
-    /**
-     * Parses this argument using the dynamic parser function.
-     */
-    override fun checkParse(sender: CommandSender?, args: Array<String?>?, offset: Int): CheckResult {
+    /** Parses this argument using the dynamic parser function. */
+    override fun checkParse(
+        sender: CommandSender?,
+        args: Array<String?>?,
+        offset: Int,
+    ): CheckResult {
         if (args == null || args.size <= offset)
             return ErrorCheckResult(offset, "§6missing argument: §3$argumentType§r")
-        return fromString.apply(sender, args[offset])
-            ?.let { ParseCheckResult(offset, argumentType, it, true) }
-            ?: ErrorCheckResult(offset, "§6invalid §3$argumentType§6: §b${args[offset]}§r")
+        return fromString.apply(sender, args[offset])?.let {
+            ParseCheckResult(offset, argumentType, it, true)
+        } ?: ErrorCheckResult(offset, "§6invalid §3$argumentType§6: §b${args[offset]}§r")
     }
 
-    /**
-     * Returns sender-specific completions filtered by the current query.
-     */
-    override fun completionsFor(sender: CommandSender?, args: Array<String?>?, offset: Int): MutableList<String?> {
+    /** Returns sender-specific completions filtered by the current query. */
+    override fun completionsFor(
+        sender: CommandSender?,
+        args: Array<String?>?,
+        offset: Int,
+    ): MutableList<String?> {
         val current = args?.getOrNull(offset)?.lowercase() ?: return mutableListOf()
-        return choices.apply(sender)
+        return choices
+            .apply(sender)
             .orEmpty()
             .asSequence()
             .mapNotNull { toString.apply(sender, it) }

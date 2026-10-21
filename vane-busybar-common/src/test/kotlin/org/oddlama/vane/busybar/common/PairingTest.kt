@@ -5,8 +5,12 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
 class PairingTest {
-    private fun resolve(configured: String?, serverIp: String = "", scheme: String = "https", direct: Boolean = true) =
-        Pairing.resolvePublicUrl(configured, serverIp, 9123, scheme, direct)
+    private fun resolve(
+        configured: String?,
+        serverIp: String = "",
+        scheme: String = "https",
+        direct: Boolean = true,
+    ) = Pairing.resolvePublicUrl(configured, serverIp, 9123, scheme, direct)
 
     @Test
     @Suppress("HttpUrlsUsage") // plain HTTP is under test
@@ -26,14 +30,20 @@ class PairingTest {
     @Test
     fun `adds the port to a full URL without one when bridges connect directly`() {
         assertEquals("https://localhost:9123", resolve("https://localhost"))
-        assertEquals("https://mc.example.com:9123/busybar", resolve("https://mc.example.com/busybar/"))
+        assertEquals(
+            "https://mc.example.com:9123/busybar",
+            resolve("https://mc.example.com/busybar/"),
+        )
         assertEquals("https://[2001:db8::1]:9123", resolve("https://[2001:db8::1]"))
         assertEquals("https://mc.example.com:443", resolve("https://mc.example.com:443"))
     }
 
     @Test
     fun `uses a full URL as is behind a reverse proxy`() {
-        assertEquals("https://mc.example.com/busybar", resolve("https://mc.example.com/busybar/", direct = false))
+        assertEquals(
+            "https://mc.example.com/busybar",
+            resolve("https://mc.example.com/busybar/", direct = false),
+        )
         assertEquals("http://10.0.0.5:9123", resolve("http://10.0.0.5:9123", direct = false))
     }
 
@@ -61,12 +71,21 @@ class PairingTest {
 
     @Test
     fun `leaves https implied in pairing strings`() {
-        assertEquals("tok@localhost:9123#sha256=PIN", Pairing.pairingString("tok", "https://localhost:9123", "PIN"))
-        assertEquals("tok@mc.example.com/busybar", Pairing.pairingString("tok", "https://mc.example.com/busybar", null))
+        assertEquals(
+            "tok@localhost:9123#sha256=PIN",
+            Pairing.pairingString("tok", "https://localhost:9123", "PIN"),
+        )
+        assertEquals(
+            "tok@mc.example.com/busybar",
+            Pairing.pairingString("tok", "https://mc.example.com/busybar", null),
+        )
     }
 
     @Test
     fun `keeps plain http explicit in pairing strings`() {
-        assertEquals("http://tok@10.0.0.5:9123", Pairing.pairingString("tok", "http://10.0.0.5:9123", null))
+        assertEquals(
+            "http://tok@10.0.0.5:9123",
+            Pairing.pairingString("tok", "http://10.0.0.5:9123", null),
+        )
     }
 }

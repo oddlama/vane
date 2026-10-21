@@ -1,15 +1,15 @@
 package org.oddlama.vane.core.persistent
 
-import org.json.JSONObject
-import org.junit.Rule
-import org.junit.rules.TemporaryFolder
-import org.oddlama.vane.annotation.persistent.Persistent
 import java.util.logging.Level
 import java.util.logging.Logger
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
+import org.json.JSONObject
+import org.junit.Rule
+import org.junit.rules.TemporaryFolder
+import org.oddlama.vane.annotation.persistent.Persistent
 
 class PersistentStorageTest {
     @get:Rule val temporary = TemporaryFolder()
@@ -21,9 +21,11 @@ class PersistentStorageTest {
 
     private val fields = Fields()
     private val log = Logger.getAnonymousLogger().apply { level = Level.OFF }
-    private fun storage(version: Long = 1) = PersistentStorage({ version }, { "Version" }, { log }).also {
-        it.compile(fields) { name -> name }
-    }
+
+    private fun storage(version: Long = 1) =
+        PersistentStorage({ version }, { "Version" }, { log }).also {
+            it.compile(fields) { name -> name }
+        }
 
     @Test
     fun `future schemas are rejected before field mutation migration or any write`() {
@@ -64,7 +66,8 @@ class PersistentStorageTest {
     fun `invalid versions do not fall back to fresh defaults`() {
         for (version in listOf("-1", "1.5", "oops", "9223372036854775808", "null")) {
             val file = temporary.newFile()
-            val original = JSONObject().put("Version", version).put("Value", "must not load").toString()
+            val original =
+                JSONObject().put("Version", version).put("Value", "must not load").toString()
             file.writeText(original)
             val store = storage()
             assertFalse(store.load(file), version)
@@ -138,7 +141,14 @@ class PersistentStorageTest {
     fun `current storage survives a load save and fresh engine load`() {
         val file = temporary.newFile()
         file.writeText("""{"Version":"1","Value":"nonempty"}""")
-        assertTrue(storage().also { assertTrue(it.load(file)); it.save(file) }.isLoaded)
+        assertTrue(
+            storage()
+                .also {
+                    assertTrue(it.load(file))
+                    it.save(file)
+                }
+                .isLoaded
+        )
         fields.storageValue = "reset"
         assertTrue(storage().load(file))
         assertEquals("nonempty", fields.storageValue)

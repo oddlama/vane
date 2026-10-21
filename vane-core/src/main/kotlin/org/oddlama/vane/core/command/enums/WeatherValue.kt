@@ -12,8 +12,7 @@ enum class WeatherValue(val storm: Boolean, val thunder: Boolean) {
     Rain(true, false),
     Thunder(true, true);
 
-    /**
-     * Lowercase identifier used for command parsing and completions.
-     */
-    val displayName: String get() = name.lowercase()
+    /** Lowercase identifier used for command parsing and completions. */
+    val displayName: String
+        get() = name.lowercase()
 }

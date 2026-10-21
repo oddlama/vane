@@ -25,7 +25,7 @@ class PortalsHook(private val busybar: BusyBar) : Listener {
                 .put("from", event.portal?.name() ?: UNNAMED)
                 .put("to", event.target?.name() ?: UNNAMED),
             player.uniqueId,
-            busybar.access.receivePortals
+            busybar.access.receivePortals,
         )
     }
 
@@ -38,7 +38,7 @@ class PortalsHook(private val busybar: BusyBar) : Listener {
             "portal.destroy",
             JSONObject().put("portal", event.portal.name() ?: UNNAMED).put("by", event.player.name),
             owner,
-            busybar.access.receivePortals
+            busybar.access.receivePortals,
         )
     }
 

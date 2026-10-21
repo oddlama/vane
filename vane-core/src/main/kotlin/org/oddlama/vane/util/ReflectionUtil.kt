@@ -2,9 +2,7 @@ package org.oddlama.vane.util
 
 import java.lang.reflect.Field
 
-/**
- * Reflection helpers for the annotation-driven managers in vane-core.
- */
+/** Reflection helpers for the annotation-driven managers in vane-core. */
 object ReflectionUtil {
     /**
      * Returns every field declared by [cls] and by each of its superclasses, most-derived first.
@@ -24,7 +22,5 @@ object ReflectionUtil {
      */
     @JvmStatic
     fun allFields(cls: Class<*>): List<Field> =
-        generateSequence(cls) { it.superclass }
-            .flatMap { it.declaredFields.asSequence() }
-            .toList()
+        generateSequence(cls) { it.superclass }.flatMap { it.declaredFields.asSequence() }.toList()
 }

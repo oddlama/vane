@@ -11,11 +11,10 @@ import org.oddlama.vane.admin.AutostopGroup
 import org.oddlama.vane.annotation.command.Name
 import org.oddlama.vane.util.ticksToMs
 
-/**
- * Command interface for autostop status, scheduling, and abortion.
- */
+/** Command interface for autostop status, scheduling, and abortion. */
 @Name("autostop")
-class Autostop(private val autostop: AutostopGroup) : org.oddlama.vane.core.command.Command<Admin?>(autostop) {
+class Autostop(private val autostop: AutostopGroup) :
+    org.oddlama.vane.core.command.Command<Admin?>(autostop) {
     /** Builds the command tree for autostop control operations. */
     override fun getCommandBase(): LiteralArgumentBuilder<CommandSourceStack> {
         return super.getCommandBase()
@@ -43,14 +42,13 @@ class Autostop(private val autostop: AutostopGroup) : org.oddlama.vane.core.comm
                         Command.SINGLE_SUCCESS
                     }
                     .then(
-                        Commands.argument("time", ArgumentTypes.time())
-                            .executes { ctx ->
-                                scheduleDelay(
-                                    ctx.source.sender,
-                                    ctx.getArgument("time", Int::class.java)
-                                )
-                                Command.SINGLE_SUCCESS
-                            }
+                        Commands.argument("time", ArgumentTypes.time()).executes { ctx ->
+                            scheduleDelay(
+                                ctx.source.sender,
+                                ctx.getArgument("time", Int::class.java),
+                            )
+                            Command.SINGLE_SUCCESS
+                        }
                     )
             )
     }

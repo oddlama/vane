@@ -1,8 +1,6 @@
 package org.oddlama.vane.proxycore.listeners
 
-/**
- * Mutable ping response abstraction.
- */
+/** Mutable ping response abstraction. */
 interface ProxyServerPing {
     /**
      * Sets the server list ping description text.

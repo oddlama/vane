@@ -1,5 +1,7 @@
 package org.oddlama.vane.trifles.items
 
+import java.util.*
+import kotlin.math.roundToInt
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.SoundCategory
@@ -20,22 +22,19 @@ import org.oddlama.vane.trifles.Trifles
 import org.oddlama.vane.trifles.items.XpBottles.XpBottle
 import org.oddlama.vane.util.PlayerUtil
 import org.oddlama.vane.util.expForLevel
-import java.util.*
-import kotlin.math.roundToInt
 
 @VaneItem(name = "empty_xp_bottle", base = Material.GLASS_BOTTLE, modelData = 0x76000a, version = 1)
-/**
- * Consumes player experience to create the largest possible filled XP bottle variant.
- */
+/** Consumes player experience to create the largest possible filled XP bottle variant. */
 class EmptyXpBottle(context: Context<Trifles?>) : CustomItem<Trifles?>(context) {
     /** Percentage of XP lost while converting to a filled bottle. */
     @ConfigDouble(
         def = 0.3,
         min = 0.0,
         max = 0.999,
-        desc = "Percentage of experience lost when bottling. For 10% loss, bottling 30 levels will require 30 * (1 / (1 - 0.1)) = 33.33 levels"
+        desc =
+            "Percentage of experience lost when bottling. For 10% loss, bottling 30 levels will require 30 * (1 / (1 - 0.1)) = 33.33 levels",
     )
-            /** Percentage of XP lost while converting to a filled bottle. */
+    /** Percentage of XP lost while converting to a filled bottle. */
     var configLossPercentage: Double = 0.0
 
     /** Defines the empty XP bottle crafting recipe. */
@@ -54,15 +53,15 @@ class EmptyXpBottle(context: Context<Trifles?>) : CustomItem<Trifles?>(context) 
         return EnumSet.of(
             InhibitBehavior.USE_IN_VANILLA_RECIPE,
             InhibitBehavior.TEMPT,
-            InhibitBehavior.USE_OFFHAND
+            InhibitBehavior.USE_OFFHAND,
         )
     }
 
     @EventHandler(
         priority = EventPriority.NORMAL,
-        ignoreCancelled = false
+        ignoreCancelled = false,
     ) // Keep disabled-cancel filtering to include right-click-air usage.
-            /** Converts player experience into a matching filled XP bottle item. */
+    /** Converts player experience into a matching filled XP bottle item. */
     fun onPlayerRightClick(event: PlayerInteractEvent) {
         if (event.action != Action.RIGHT_CLICK_BLOCK && event.action != Action.RIGHT_CLICK_AIR) {
             return
@@ -103,7 +102,8 @@ class EmptyXpBottle(context: Context<Trifles?>) : CustomItem<Trifles?>(context) 
         var exp = 0
         val xpBottles = module.xpBottles ?: return
         for (bottle in xpBottles.bottles) {
-            val curExp = ((1.0 / (1.0 - configLossPercentage)) * expForLevel(bottle.configCapacity)).toInt()
+            val curExp =
+                ((1.0 / (1.0 - configLossPercentage)) * expForLevel(bottle.configCapacity)).toInt()
 
             // Prefer highest-capacity affordable variant.
             if (getTotalExp(player) >= curExp && curExp > exp) {
@@ -121,9 +121,13 @@ class EmptyXpBottle(context: Context<Trifles?>) : CustomItem<Trifles?>(context) 
         player.giveExp(-exp, false)
         PlayerUtil.removeOneItemFromHand(player, hand)
         PlayerUtil.giveItem(player, xpBottle.newStack())
-        player
-            .world
-            .playSound(player.location, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1.0f, 4.0f)
+        player.world.playSound(
+            player.location,
+            Sound.ENTITY_EXPERIENCE_ORB_PICKUP,
+            SoundCategory.PLAYERS,
+            1.0f,
+            4.0f,
+        )
         PlayerUtil.swingArm(player, hand)
     }
 

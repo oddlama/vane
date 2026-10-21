@@ -1,9 +1,9 @@
 package org.oddlama.vane.core.config
 
+import java.lang.reflect.Field
 import org.bukkit.configuration.file.YamlConfiguration
 import org.oddlama.vane.annotation.config.ConfigDoubleList
 import org.oddlama.vane.core.YamlLoadException
-import java.lang.reflect.Field
 
 /**
  * Config field handler for double list values.
@@ -18,7 +18,7 @@ class ConfigDoubleListField(
     field: Field,
     mapName: (String?) -> String?,
     /** Annotation metadata for this field. */
-    var annotation: ConfigDoubleList
+    var annotation: ConfigDoubleList,
 ) : ConfigField<MutableList<Double?>?>(owner, field, mapName, "double list", annotation.desc) {
 
     /** Appends a double list definition block. */
@@ -26,26 +26,33 @@ class ConfigDoubleListField(
         builder: StringBuilder?,
         indent: String?,
         prefix: String?,
-        def: MutableList<Double?>
+        def: MutableList<Double?>,
     ) {
         appendListDefinition<Double?>(builder, indent, prefix, def) { b, d -> b!!.append(d!!) }
     }
 
     /** Returns the default value for this config field. */
-    override fun def(): MutableList<Double?> = overriddenDef() ?: annotation.def.mapTo(mutableListOf()) { it }
+    override fun def(): MutableList<Double?> =
+        overriddenDef() ?: annotation.def.mapTo(mutableListOf()) { it }
 
     /** Returns whether metrics collection is enabled for this field. */
     override fun metrics(): Boolean = overriddenMetrics() ?: annotation.metrics
 
     /** Generates YAML for this field. */
-    override fun generateYaml(builder: StringBuilder, indent: String, existingCompatibleConfig: YamlConfiguration?) {
+    override fun generateYaml(
+        builder: StringBuilder,
+        indent: String,
+        existingCompatibleConfig: YamlConfiguration?,
+    ) {
         appendDescription(builder, indent)
         appendValueRange(builder, indent, annotation.min, annotation.max, Double.NaN, Double.NaN)
         builder.append("$indent# Default:\n")
         appendDoubleListDefinition(builder, indent, "# ", def())
         builder.append("$indent${basename()}:\n")
-        val def = if (existingCompatibleConfig != null && existingCompatibleConfig.contains(yamlPath()))
-            loadFromYaml(existingCompatibleConfig) else def()
+        val def =
+            if (existingCompatibleConfig != null && existingCompatibleConfig.contains(yamlPath()))
+                loadFromYaml(existingCompatibleConfig)
+            else def()
         appendDoubleListDefinition(builder, indent, "", def)
     }
 
@@ -57,7 +64,9 @@ class ConfigDoubleListField(
             throw YamlLoadException("Invalid type for yaml path '${yamlPath()}', expected list")
         for (obj in yaml.getList(yamlPath())!!) {
             if (obj !is Number)
-                throw YamlLoadException("Invalid type for yaml path '${yamlPath()}', expected double")
+                throw YamlLoadException(
+                    "Invalid type for yaml path '${yamlPath()}', expected double"
+                )
             validateDoubleRange(yamlPath(), obj.toDouble(), annotation.min, annotation.max)
         }
     }

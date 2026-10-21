@@ -20,5 +20,5 @@ annotation class VaneItem(
     val modelData: Int,
     val version: Int,
     val durability: Int = 0,
-    val enabled: Boolean = true
+    val enabled: Boolean = true,
 )

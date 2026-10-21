@@ -21,30 +21,35 @@ import org.oddlama.vane.enchantments.Enchantments
 /**
  * The Angel class represents an enchantment that allows players to have enhanced flying abilities.
  *
- * @constructor Creates an instance of the Angel enchantment.
  * @param context The context in which this enchantment is used.
+ * @constructor Creates an instance of the Angel enchantment.
  */
-@VaneEnchantment(name = "angel", maxLevel = 5, rarity = Rarity.VERY_RARE, treasure = true, allowCustom = true)
+@VaneEnchantment(
+    name = "angel",
+    maxLevel = 5,
+    rarity = Rarity.VERY_RARE,
+    treasure = true,
+    allowCustom = true,
+)
 class Angel(context: Context<Enchantments?>) : CustomEnchantment<Enchantments?>(context) {
     /**
-     * The acceleration percentage configures how much the player's flying speed is increased
-     * each tick towards the target speed.
+     * The acceleration percentage configures how much the player's flying speed is increased each
+     * tick towards the target speed.
      */
     @ConfigDouble(
         def = 0.1,
         min = 0.0,
         max = 1.0,
-        desc = "Acceleration percentage. Each tick, the current flying speed is increased X percent towards the target speed. Low values (~0.1) typically result in a smooth acceleration curve and a natural feeling."
+        desc =
+            "Acceleration percentage. Each tick, the current flying speed is increased X percent towards the target speed. Low values (~0.1) typically result in a smooth acceleration curve and a natural feeling.",
     )
     private val configAccelerationPercentage = 0.0
 
-    /**
-     * The flying speed for each enchantment level.
-     */
+    /** The flying speed for each enchantment level. */
     @ConfigDoubleList(
         def = [0.7, 1.1, 1.4, 1.7, 2.0],
         min = 0.0,
-        desc = "Flying speed in blocks per second for each enchantment level."
+        desc = "Flying speed in blocks per second for each enchantment level.",
     )
     private val configSpeed: MutableList<Double?>? = null
 
@@ -97,8 +102,8 @@ class Angel(context: Context<Enchantments?>) : CustomEnchantment<Enchantments?>(
     }
 
     /**
-     * Event handler for player movement. Adjusts the player's velocity and spawns particles
-     * to create the effect of enhanced flying.
+     * Event handler for player movement. Adjusts the player's velocity and spawns particles to
+     * create the effect of enhanced flying.
      *
      * @param event The PlayerMoveEvent that contains information about the player's movement.
      */

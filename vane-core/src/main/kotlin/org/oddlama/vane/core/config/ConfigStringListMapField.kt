@@ -1,10 +1,10 @@
 package org.oddlama.vane.core.config
 
+import java.lang.reflect.Field
+import java.util.*
 import org.bukkit.configuration.file.YamlConfiguration
 import org.oddlama.vane.annotation.config.ConfigStringListMap
 import org.oddlama.vane.core.YamlLoadException
-import java.lang.reflect.Field
-import java.util.*
 
 /**
  * Config field handler for mappings of string keys to string lists.
@@ -19,16 +19,21 @@ class ConfigStringListMapField(
     field: Field,
     mapName: (String?) -> String?,
     /** Annotation metadata for this field. */
-    var annotation: ConfigStringListMap
-) : ConfigField<MutableMap<String?, MutableList<String?>?>?>(
-    owner, field, mapName, "map of string to string list", annotation.desc
-) {
+    var annotation: ConfigStringListMap,
+) :
+    ConfigField<MutableMap<String?, MutableList<String?>?>?>(
+        owner,
+        field,
+        mapName,
+        "map of string to string list",
+        annotation.desc,
+    ) {
     /** Appends the string-list-map definition block to YAML output. */
     private fun appendStringListMapDefinition(
         builder: StringBuilder,
         indent: String?,
         prefix: String?,
-        def: MutableMap<String?, MutableList<String?>?>
+        def: MutableMap<String?, MutableList<String?>?>,
     ) {
         def.forEach { (k, list) ->
             builder.append("$indent$prefix  ${escapeYaml(toPascalCase(k))}:\n")
@@ -38,19 +43,28 @@ class ConfigStringListMapField(
 
     /** Returns the default value for this config field. */
     override fun def(): MutableMap<String?, MutableList<String?>?> =
-        overriddenDef() ?: annotation.def.associate { e -> e.key to e.list.toMutableList<String?>() }.toMutableMap()
+        overriddenDef()
+            ?: annotation.def
+                .associate { e -> e.key to e.list.toMutableList<String?>() }
+                .toMutableMap()
 
     /** Returns whether metrics collection is enabled for this field. */
     override fun metrics(): Boolean = overriddenMetrics() ?: annotation.metrics
 
     /** Generates YAML for this field. */
-    override fun generateYaml(builder: StringBuilder, indent: String, existingCompatibleConfig: YamlConfiguration?) {
+    override fun generateYaml(
+        builder: StringBuilder,
+        indent: String,
+        existingCompatibleConfig: YamlConfiguration?,
+    ) {
         appendDescription(builder, indent)
         builder.append("$indent# Default:\n")
         appendStringListMapDefinition(builder, indent, "# ", def())
         builder.append("$indent${basename()}:\n")
-        val def = if (existingCompatibleConfig != null && existingCompatibleConfig.contains(yamlPath()))
-            loadFromYaml(existingCompatibleConfig) else def()
+        val def =
+            if (existingCompatibleConfig != null && existingCompatibleConfig.contains(yamlPath()))
+                loadFromYaml(existingCompatibleConfig)
+            else def()
         appendStringListMapDefinition(builder, indent, "", def)
     }
 
@@ -66,14 +80,17 @@ class ConfigStringListMapField(
                 throw YamlLoadException("Invalid type for yaml path '$listPath', expected list")
             for (obj in yaml.getList(listPath)!!) {
                 if (obj !is String)
-                    throw YamlLoadException("Invalid type for yaml path '$listPath', expected string")
+                    throw YamlLoadException(
+                        "Invalid type for yaml path '$listPath', expected string"
+                    )
             }
         }
     }
 
     /** Loads this field value from YAML. */
     fun loadFromYaml(yaml: YamlConfiguration): MutableMap<String?, MutableList<String?>?> =
-        yaml.getConfigurationSection(yamlPath())!!.getKeys(false).associateTo(mutableMapOf()) { listKey ->
+        yaml.getConfigurationSection(yamlPath())!!.getKeys(false).associateTo(mutableMapOf()) {
+            listKey ->
             val listPath = "${yamlPath()}.$listKey"
             normalizeKey(listKey) to yaml.getList(listPath)!!.map { it as String? }.toMutableList()
         }

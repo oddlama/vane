@@ -1,10 +1,10 @@
 package org.oddlama.vane.core.config
 
+import java.lang.reflect.Field
 import org.bukkit.configuration.file.YamlConfiguration
 import org.oddlama.vane.annotation.config.ConfigVersion
 import org.oddlama.vane.core.YamlLoadException
 import org.oddlama.vane.core.module.Module
-import java.lang.reflect.Field
 
 /**
  * Config field handler for the configuration version entry.
@@ -19,18 +19,17 @@ class ConfigVersionField(
     field: Field,
     mapName: (String?) -> String?,
     /** Annotation metadata for this field. */
-    var annotation: ConfigVersion?
-) : ConfigField<Long?>(
-    owner,
-    field,
-    mapName,
-    "version id",
-    "DO NOT CHANGE! The version of this config file. Used to determine if the config needs to be updated."
-) {
+    var annotation: ConfigVersion?,
+) :
+    ConfigField<Long?>(
+        owner,
+        field,
+        mapName,
+        "version id",
+        "DO NOT CHANGE! The version of this config file. Used to determine if the config needs to be updated.",
+    ) {
     init {
-        /**
-         * Keeps the version field at the bottom of generated YAML output.
-         */
+        /** Keeps the version field at the bottom of generated YAML output. */
         this.sortPriority = 100
     }
 
@@ -41,7 +40,11 @@ class ConfigVersionField(
     override fun metrics(): Boolean = true
 
     /** Generates YAML for the current module config version. */
-    override fun generateYaml(builder: StringBuilder, indent: String, existingCompatibleConfig: YamlConfiguration?) {
+    override fun generateYaml(
+        builder: StringBuilder,
+        indent: String,
+        existingCompatibleConfig: YamlConfiguration?,
+    ) {
         appendDescription(builder, indent)
         appendFieldDefinition(builder, indent, (owner as Module<*>).annotation.configVersion)
     }
@@ -55,7 +58,9 @@ class ConfigVersionField(
         }
         val value = yaml.getLong(yamlPath())
         if (value < 1) {
-            throw YamlLoadException("Configuration '${yamlPath()}' has an invalid value: Value must be >= 1")
+            throw YamlLoadException(
+                "Configuration '${yamlPath()}' has an invalid value: Value must be >= 1"
+            )
         }
     }
 

@@ -19,6 +19,7 @@ import net.minecraft.world.entity.EntityType
 import net.minecraft.world.item.CreativeModeTab
 import net.minecraft.world.item.CreativeModeTabs
 import net.minecraft.world.item.crafting.RecipeHolder
+import net.minecraft.world.level.block.Block as NmsBlock
 import net.minecraft.world.level.block.Blocks
 import org.bukkit.Bukkit
 import org.bukkit.NamespacedKey
@@ -31,15 +32,11 @@ import org.bukkit.craftbukkit.entity.CraftPlayer
 import org.bukkit.craftbukkit.inventory.CraftItemStack
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
-import net.minecraft.world.level.block.Block as NmsBlock
 
-/**
- * Bridges Bukkit/Paper APIs to internal NMS handles.
- */
+/** Bridges Bukkit/Paper APIs to internal NMS handles. */
 object Nms {
     /** Returns the NMS handle for a player. */
-    @JvmStatic
-    fun getPlayer(player: Player): ServerPlayer = (player as CraftPlayer).handle
+    @JvmStatic fun getPlayer(player: Player): ServerPlayer = (player as CraftPlayer).handle
 
     /** Returns the NMS handle for a Bukkit entity. */
     @JvmStatic
@@ -47,43 +44,40 @@ object Nms {
 
     /** Returns or creates the NMS handle for a Bukkit item stack. */
     @JvmStatic
-    fun itemHandle(itemStack: ItemStack?): net.minecraft.world.item.ItemStack? = when (itemStack) {
-        null -> null
-        is CraftItemStack -> itemStack.handle
-        else -> CraftItemStack.asNMSCopy(itemStack)
-    }
+    fun itemHandle(itemStack: ItemStack?): net.minecraft.world.item.ItemStack? =
+        when (itemStack) {
+            null -> null
+            is CraftItemStack -> itemStack.handle
+            else -> CraftItemStack.asNMSCopy(itemStack)
+        }
 
     /** Returns the NMS handle for a player, or null when incompatible. */
-    @JvmStatic
-    fun playerHandle(player: Player?): ServerPlayer? = (player as? CraftPlayer)?.handle
+    @JvmStatic fun playerHandle(player: Player?): ServerPlayer? = (player as? CraftPlayer)?.handle
 
     /** Returns the NMS handle for a world. */
-    @JvmStatic
-    fun worldHandle(world: World): ServerLevel = (world as CraftWorld).handle
+    @JvmStatic fun worldHandle(world: World): ServerLevel = (world as CraftWorld).handle
 
     /** Returns the dedicated server handle. */
-    @JvmStatic
-    fun serverHandle(): DedicatedServer = (Bukkit.getServer() as CraftServer).server
+    @JvmStatic fun serverHandle(): DedicatedServer = (Bukkit.getServer() as CraftServer).server
 
-    /**
-     * Registers a custom entity type by cloning datafixer mappings from a base entity.
-     */
+    /** Registers a custom entity type by cloning datafixer mappings from a base entity. */
     @JvmStatic
     fun registerEntity(
         baseEntityType: NamespacedKey,
         pseudoNamespace: String?,
         key: String?,
-        builder: EntityType.Builder<*>
+        builder: EntityType.Builder<*>,
     ) {
         val id = "${pseudoNamespace}_$key"
         val worldVersion = SharedConstants.getCurrentVersion().dataVersion().version()
         val worldVersionKey = DataFixUtils.makeKey(worldVersion)
 
         @Suppress("UNCHECKED_CAST")
-        val dataTypesMap = DataFixers.getDataFixer()
-            .getSchema(worldVersionKey)
-            .findChoiceType(References.ENTITY)
-            .types() as MutableMap<Any, Type<*>?>
+        val dataTypesMap =
+            DataFixers.getDataFixer()
+                .getSchema(worldVersionKey)
+                .findChoiceType(References.ENTITY)
+                .types() as MutableMap<Any, Type<*>?>
         dataTypesMap["minecraft:$id"] = dataTypesMap[baseEntityType.toString()]
         val rk: ResourceKey<EntityType<*>> =
             ResourceKey.create(Registries.ENTITY_TYPE, Identifier.withDefaultNamespace(id))
@@ -91,8 +85,7 @@ object Nms {
     }
 
     /** Spawns an NMS entity into a Bukkit world. */
-    @JvmStatic
-    fun spawn(world: World, entity: Entity) = worldHandle(world).addFreshEntity(entity)
+    @JvmStatic fun spawn(world: World, entity: Entity) = worldHandle(world).addFreshEntity(entity)
 
     /** Unlocks all known recipes for a player. */
     @JvmStatic
@@ -112,7 +105,11 @@ object Nms {
     @JvmStatic
     fun creativeTabId(itemStack: net.minecraft.world.item.ItemStack): Int {
         val server = serverHandle()
-        CreativeModeTabs.tryRebuildTabContents(server.worldData.enabledFeatures(), true, server.registryAccess())
+        CreativeModeTabs.tryRebuildTabContents(
+            server.worldData.enabledFeatures(),
+            true,
+            server.registryAccess(),
+        )
         val defaultInstance = itemStack.item.defaultInstance
         return CreativeModeTabs.allTabs()
             .filter { it.type == CreativeModeTab.Type.CATEGORY }
@@ -126,10 +123,11 @@ object Nms {
      */
     @JvmStatic
     fun setAirNoDrops(block: Block) {
-        worldHandle(block.world).setBlock(
-            BlockPos(block.x, block.y, block.z),
-            Blocks.AIR.defaultBlockState(),
-            NmsBlock.UPDATE_CLIENTS or NmsBlock.UPDATE_SKIP_ALL_SIDEEFFECTS
-        )
+        worldHandle(block.world)
+            .setBlock(
+                BlockPos(block.x, block.y, block.z),
+                Blocks.AIR.defaultBlockState(),
+                NmsBlock.UPDATE_CLIENTS or NmsBlock.UPDATE_SKIP_ALL_SIDEEFFECTS,
+            )
     }
 }

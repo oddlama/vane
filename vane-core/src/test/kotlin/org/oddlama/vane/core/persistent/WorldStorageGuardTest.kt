@@ -1,6 +1,5 @@
 package org.oddlama.vane.core.persistent
 
-import org.json.JSONException
 import java.io.IOException
 import java.util.UUID
 import kotlin.test.Test
@@ -8,6 +7,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
+import org.json.JSONException
 
 /** Tests the production write barrier with opaque stored records; not a running world/PDC test. */
 class WorldStorageGuardTest {
@@ -19,7 +19,12 @@ class WorldStorageGuardTest {
     fun `unseen world never publishes or deletes records`() {
         val stored = mutableMapOf("valid" to "old bytes", "unknown" to "opaque bytes")
         val before = stored.toMap()
-        assertFalse(guard.save(world) { stored.clear(); stored["valid"] = "replacement" })
+        assertFalse(
+            guard.save(world) {
+                stored.clear()
+                stored["valid"] = "replacement"
+            }
+        )
         assertEquals(before, stored)
     }
 
@@ -36,7 +41,12 @@ class WorldStorageGuardTest {
 
     @Test
     fun `partial load errors retain all stored records including the failed one`() {
-        for (failure in listOf(IOException("read"), JSONException("bad JSON"), IllegalArgumentException("bad enum"))) {
+        for (failure in
+            listOf(
+                IOException("read"),
+                JSONException("bad JSON"),
+                IllegalArgumentException("bad enum"),
+            )) {
             val stored = linkedMapOf("good" to "old good bytes", "failed" to "unknown raw bytes")
             val before = stored.toMap()
             val index = mutableMapOf<String, String>()
@@ -46,10 +56,12 @@ class WorldStorageGuardTest {
                     throw failure
                 }
             }
-            assertFalse(guard.save(world) {
-                stored["good"] = "changed good bytes"
-                stored.keys.retainAll(index.keys)
-            })
+            assertFalse(
+                guard.save(world) {
+                    stored["good"] = "changed good bytes"
+                    stored.keys.retainAll(index.keys)
+                }
+            )
             assertEquals(before, stored)
         }
     }

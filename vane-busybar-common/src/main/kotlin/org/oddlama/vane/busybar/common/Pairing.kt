@@ -21,16 +21,20 @@ object Pairing {
 
     /** Returns the lowercase hex SHA-256 of [token], the form tokens are stored in. */
     fun hash(token: String): String =
-        MessageDigest.getInstance("SHA-256").digest(token.toByteArray()).joinToString("") { "%02x".format(it) }
+        MessageDigest.getInstance("SHA-256").digest(token.toByteArray()).joinToString("") {
+            "%02x".format(it)
+        }
 
     /**
-     * Everything a bridge needs in one line: [token], the stream [url] and, in auto TLS mode, the key
-     * fingerprint [pin], for example `<token>@203.0.113.7:9123#sha256=<base64url>`. Bridges assume
-     * https, so only plain HTTP keeps its prefix, which a bridge must never fall back to on its own.
+     * Everything a bridge needs in one line: [token], the stream [url] and, in auto TLS mode, the
+     * key fingerprint [pin], for example `<token>@203.0.113.7:9123#sha256=<base64url>`. Bridges
+     * assume https, so only plain HTTP keeps its prefix, which a bridge must never fall back to on
+     * its own.
      */
     fun pairingString(token: String, url: String, pin: String?): String {
-        val line = if (url.startsWith("https://")) "$token@${url.removePrefix("https://")}"
-        else url.replaceFirst("://", "://$token@")
+        val line =
+            if (url.startsWith("https://")) "$token@${url.removePrefix("https://")}"
+            else url.replaceFirst("://", "://$token@")
         return if (pin == null) line else "$line#sha256=$pin"
     }
 
@@ -47,46 +51,72 @@ object Pairing {
      * @param direct whether bridges connect to the stream's port itself rather than to a reverse
      *   proxy, so that a full URL without a port also gets [port].
      */
-    fun resolvePublicUrl(configured: String?, fallbackIp: String, port: Int, scheme: String, direct: Boolean = true): String? {
+    fun resolvePublicUrl(
+        configured: String?,
+        fallbackIp: String,
+        port: Int,
+        scheme: String,
+        direct: Boolean = true,
+    ): String? {
         val value = configured?.trim()?.trimEnd('/').orEmpty()
-        val url = when {
-            "://" in value -> if (direct) withPort(value, port) else value
-            value.isNotEmpty() -> {
-                val host = value.substringBefore('/')
-                val path = value.substring(host.length)
-                val authority = when {
-                    HOST_WITH_PORT.matches(host) -> host
-                    ':' in host -> "[$host]:$port" // bare IPv6
-                    else -> "$host:$port"
+        val url =
+            when {
+                "://" in value -> if (direct) withPort(value, port) else value
+                value.isNotEmpty() -> {
+                    val host = value.substringBefore('/')
+                    val path = value.substring(host.length)
+                    val authority =
+                        when {
+                            HOST_WITH_PORT.matches(host) -> host
+                            ':' in host -> "[$host]:$port" // bare IPv6
+                            else -> "$host:$port"
+                        }
+                    "$scheme://$authority$path"
                 }
-                "$scheme://$authority$path"
+                fallbackIp.isNotBlank() && fallbackIp != "0.0.0.0" ->
+                    if (':' in fallbackIp) "$scheme://[$fallbackIp]:$port"
+                    else "$scheme://$fallbackIp:$port"
+                else -> return null
             }
-            fallbackIp.isNotBlank() && fallbackIp != "0.0.0.0" ->
-                if (':' in fallbackIp) "$scheme://[$fallbackIp]:$port" else "$scheme://$fallbackIp:$port"
-            else -> return null
-        }
         return url.takeIf(::isStreamUrl)
     }
 
-    /** [url] with [port] when it names none; unparsable URLs are returned unchanged for [isStreamUrl] to reject. */
+    /**
+     * [url] with [port] when it names none; unparsable URLs are returned unchanged for
+     * [isStreamUrl] to reject.
+     */
     private fun withPort(url: String, port: Int): String {
-        val uri = try {
-            URI(url)
-        } catch (_: URISyntaxException) {
-            return url
-        }
+        val uri =
+            try {
+                URI(url)
+            } catch (_: URISyntaxException) {
+                return url
+            }
         if (uri.port != -1 || uri.host == null) return url
-        return URI(uri.scheme, uri.rawUserInfo, uri.host, port, uri.rawPath, uri.rawQuery, uri.rawFragment).toString()
+        return URI(
+                uri.scheme,
+                uri.rawUserInfo,
+                uri.host,
+                port,
+                uri.rawPath,
+                uri.rawQuery,
+                uri.rawFragment,
+            )
+            .toString()
     }
 
     /** Whether [url] is an http(s) URL with a host and nothing a pairing string adds itself. */
     private fun isStreamUrl(url: String): Boolean {
-        val uri = try {
-            URI(url)
-        } catch (_: URISyntaxException) {
-            return false
-        }
-        return uri.scheme in listOf("http", "https") && !uri.host.isNullOrEmpty() &&
-            uri.rawUserInfo == null && uri.rawQuery == null && uri.rawFragment == null
+        val uri =
+            try {
+                URI(url)
+            } catch (_: URISyntaxException) {
+                return false
+            }
+        return uri.scheme in listOf("http", "https") &&
+            !uri.host.isNullOrEmpty() &&
+            uri.rawUserInfo == null &&
+            uri.rawQuery == null &&
+            uri.rawFragment == null
     }
 }

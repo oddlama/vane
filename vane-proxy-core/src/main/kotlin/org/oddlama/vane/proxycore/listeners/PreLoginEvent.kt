@@ -1,11 +1,5 @@
 package org.oddlama.vane.proxycore.listeners
 
-import org.oddlama.vane.proxycore.Maintenance
-import org.oddlama.vane.proxycore.Util
-import org.oddlama.vane.proxycore.VaneProxyPlugin
-import org.oddlama.vane.proxycore.config.AuthMultiplex
-import org.oddlama.vane.proxycore.config.IVaneProxyServerInfo
-import org.oddlama.vane.proxycore.util.Resolve.resolveUuid
 import java.io.ByteArrayOutputStream
 import java.io.DataOutputStream
 import java.io.IOException
@@ -13,16 +7,21 @@ import java.net.URISyntaxException
 import java.util.*
 import java.util.logging.Level
 import java.util.logging.Logger
+import org.oddlama.vane.proxycore.Maintenance
+import org.oddlama.vane.proxycore.Util
+import org.oddlama.vane.proxycore.VaneProxyPlugin
+import org.oddlama.vane.proxycore.config.AuthMultiplex
+import org.oddlama.vane.proxycore.config.IVaneProxyServerInfo
+import org.oddlama.vane.proxycore.util.Resolve.resolveUuid
 
 /**
  * Handles pre-login authentication multiplexing for configured ports.
  *
  * @property plugin owning plugin instance.
  */
-abstract class PreLoginEvent(@JvmField var plugin: VaneProxyPlugin) : ProxyEvent, ProxyCancellableEvent {
-    /**
-     * Unused default fire entry point. Use [fire] with [PreLoginDestination] instead.
-     */
+abstract class PreLoginEvent(@JvmField var plugin: VaneProxyPlugin) :
+    ProxyEvent, ProxyCancellableEvent {
+    /** Unused default fire entry point. Use [fire] with [PreLoginDestination] instead. */
     override fun fire() {
         // Not applicable
         assert(false)
@@ -50,10 +49,14 @@ abstract class PreLoginEvent(@JvmField var plugin: VaneProxyPlugin) : ProxyEvent
         try {
             uuid = resolveUuid(playerName)
         } catch (e: IOException) {
-            plugin.getLogger().log(Level.WARNING, "Failed to resolve UUID for player '$playerName'", e)
+            plugin
+                .getLogger()
+                .log(Level.WARNING, "Failed to resolve UUID for player '$playerName'", e)
             return
         } catch (e: URISyntaxException) {
-            plugin.getLogger().log(Level.WARNING, "Failed to resolve UUID for player '$playerName'", e)
+            plugin
+                .getLogger()
+                .log(Level.WARNING, "Failed to resolve UUID for player '$playerName'", e)
             return
         }
 
@@ -77,7 +80,7 @@ abstract class PreLoginEvent(@JvmField var plugin: VaneProxyPlugin) : ProxyEvent
             .getLogger()
             .log(
                 Level.INFO,
-                "auth multiplex request from player $name connecting from ${connection.socketAddress}"
+                "auth multiplex request from player $name connecting from ${connection.socketAddress}",
             )
 
         val multiplexedPlayer = MultiplexedPlayer(multiplexerId, name, newName, uuid, newUuid)
@@ -102,10 +105,8 @@ abstract class PreLoginEvent(@JvmField var plugin: VaneProxyPlugin) : ProxyEvent
      */
     abstract fun implementationSpecificAuth(multiplexedPlayer: MultiplexedPlayer?): Boolean
 
-    /** Where to send the details of a PreLoginEvent  */
-    /**
-     * Defines where generated multiplex login state should be stored.
-     */
+    /** Where to send the details of a PreLoginEvent */
+    /** Defines where generated multiplex login state should be stored. */
     enum class PreLoginDestination {
         /** Store mappings in [VaneProxyPlugin.multiplexedUuids]. */
         MULTIPLEXED_UUIDS,
@@ -128,7 +129,7 @@ abstract class PreLoginEvent(@JvmField var plugin: VaneProxyPlugin) : ProxyEvent
         @JvmField var name: String,
         @JvmField var newName: String,
         @JvmField var originalUuid: UUID,
-        @JvmField var newUuid: UUID
+        @JvmField var newUuid: UUID,
     )
 
     companion object {
@@ -145,7 +146,7 @@ abstract class PreLoginEvent(@JvmField var plugin: VaneProxyPlugin) : ProxyEvent
         @JvmStatic
         fun registerAuthMultiplexPlayer(
             server: IVaneProxyServerInfo,
-            multiplexedPlayer: MultiplexedPlayer
+            multiplexedPlayer: MultiplexedPlayer,
         ) {
             val stream = ByteArrayOutputStream()
             val out = DataOutputStream(stream)

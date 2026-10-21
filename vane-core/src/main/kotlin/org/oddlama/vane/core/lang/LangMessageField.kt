@@ -1,11 +1,11 @@
 package org.oddlama.vane.core.lang
 
+import java.lang.reflect.Field
 import org.bukkit.configuration.file.YamlConfiguration
 import org.oddlama.vane.annotation.lang.LangMessage
 import org.oddlama.vane.core.YamlLoadException
 import org.oddlama.vane.core.module.Module
 import org.oddlama.vane.core.resourcepack.ResourcePackGenerator
-import java.lang.reflect.Field
 
 /**
  * Handles loading and exporting a single [TranslatedMessage].
@@ -22,30 +22,27 @@ class LangMessageField(
     field: Field,
     mapName: (String?) -> String,
     /** Annotation metadata for this field. */
-    var annotation: LangMessage?
+    var annotation: LangMessage?,
 ) : LangField<TranslatedMessage?>(module, owner, field, mapName) {
 
-    /**
-     * Validates this message entry in YAML.
-     */
+    /** Validates this message entry in YAML. */
     @Throws(YamlLoadException::class)
     override fun checkLoadable(yaml: YamlConfiguration?) {
         if (yaml == null) throw YamlLoadException.Lang("yaml is null", this)
         checkYamlPath(yaml)
 
         if (!yaml.isString(yamlPath())) {
-            throw YamlLoadException.Lang("Invalid type for yaml path '${yamlPath()}', expected string", this)
+            throw YamlLoadException.Lang(
+                "Invalid type for yaml path '${yamlPath()}', expected string",
+                this,
+            )
         }
     }
 
-    /**
-     * Reads the message string from YAML.
-     */
+    /** Reads the message string from YAML. */
     private fun fromYaml(yaml: YamlConfiguration): String = yaml.getString(yamlPath()) ?: ""
 
-    /**
-     * Loads the translated message into the reflected field.
-     */
+    /** Loads the translated message into the reflected field. */
     override fun load(namespace: String?, yaml: YamlConfiguration?) {
         if (yaml == null) throw YamlLoadException.Lang("yaml is null", this)
         try {
@@ -55,11 +52,13 @@ class LangMessageField(
         }
     }
 
-    /**
-     * Exports this message to the generated resource pack translations.
-     */
+    /** Exports this message to the generated resource pack translations. */
     @Throws(YamlLoadException::class)
-    override fun addTranslations(pack: ResourcePackGenerator?, yaml: YamlConfiguration?, langCode: String?) {
+    override fun addTranslations(
+        pack: ResourcePackGenerator?,
+        yaml: YamlConfiguration?,
+        langCode: String?,
+    ) {
         if (pack == null || yaml == null || langCode == null) return
         checkLoadable(yaml)
         pack.translations(namespace(), langCode).put(key(), fromYaml(yaml))

@@ -1,0 +1,831 @@
+{
+  "vane-enchantments:enchantment_angel": {
+    "icon": "assets/vane-enchantments/items/enchanted_ancient_tome_of_the_gods.png",
+    "loot": {
+      "0": {
+        "items": [
+          {
+            "amount_max": 1,
+            "amount_min": 1,
+            "chance": 0.004,
+            "item": "vane_enchantments:enchanted_ancient_tome_of_the_gods#enchants{vane_enchantments:angel*1}"
+          }
+        ],
+        "tables": [
+          "minecraft:chests/buried_treasure",
+          "minecraft:chests/pillager_outpost",
+          "minecraft:chests/ruined_portal",
+          "minecraft:chests/stronghold_library",
+          "minecraft:chests/underwater_ruin_big",
+          "minecraft:chests/village/village_temple"
+        ]
+      }
+    },
+    "recipes": {
+      "0": {
+        "ingredients": {
+          "A": "minecraft:pufferfish_bucket",
+          "B": "minecraft:firework_rocket",
+          "C": "minecraft:phantom_membrane",
+          "D": "vane_enchantments:ancient_tome_of_the_gods",
+          "E": "minecraft:dragon_breath"
+        },
+        "result": "vane_enchantments:enchanted_ancient_tome_of_the_gods#enchants{vane_enchantments:angel*1}",
+        "shape": ["ABA", "CDC", "CEC"],
+        "type": "shaped"
+      }
+    }
+  },
+  "vane-enchantments:enchantment_grappling_hook": {
+    "icon": "assets/vane-enchantments/items/enchanted_ancient_tome_of_knowledge.png",
+    "loot": {},
+    "recipes": {
+      "0": {
+        "ingredients": {
+          "A": "minecraft:tripwire_hook",
+          "B": "minecraft:lead",
+          "C": "vane_enchantments:ancient_tome_of_knowledge"
+        },
+        "result": "vane_enchantments:enchanted_ancient_tome_of_knowledge#enchants{vane_enchantments:grappling_hook*1}",
+        "shape": ["A  ", "B  ", "C  "],
+        "type": "shaped"
+      }
+    }
+  },
+  "vane-enchantments:enchantment_hell_bent": {
+    "icon": "assets/vane-enchantments/items/enchanted_ancient_tome_of_knowledge.png",
+    "loot": {
+      "0": {
+        "items": [
+          {
+            "amount_max": 1,
+            "amount_min": 1,
+            "chance": 0.02,
+            "item": "vane_enchantments:enchanted_ancient_tome_of_knowledge#enchants{vane_enchantments:hell_bent*1}"
+          }
+        ],
+        "tables": [
+          "minecraft:chests/bastion_bridge",
+          "minecraft:chests/bastion_hoglin_stable",
+          "minecraft:chests/bastion_other",
+          "minecraft:chests/bastion_treasure"
+        ]
+      }
+    },
+    "recipes": {
+      "0": {
+        "ingredients": {
+          "A": "minecraft:music_disc_pigstep",
+          "B": "vane_enchantments:ancient_tome_of_knowledge",
+          "C": "minecraft:turtle_helmet"
+        },
+        "result": "vane_enchantments:enchanted_ancient_tome_of_knowledge#enchants{vane_enchantments:hell_bent*1}",
+        "shape": ["A  ", "B  ", "C  "],
+        "type": "shaped"
+      }
+    }
+  },
+  "vane-enchantments:enchantment_leafchopper": {
+    "icon": "assets/vane-enchantments/items/enchanted_ancient_tome_of_knowledge.png",
+    "loot": {},
+    "recipes": {
+      "0": {
+        "ingredients": {
+          "A": "minecraft:shears",
+          "B": "vane_enchantments:ancient_tome_of_knowledge"
+        },
+        "result": "vane_enchantments:enchanted_ancient_tome_of_knowledge#enchants{vane_enchantments:leafchopper*1}",
+        "shape": [" A ", "ABA", " A "],
+        "type": "shaped"
+      }
+    }
+  },
+  "vane-enchantments:enchantment_lightning": {
+    "icon": "assets/vane-enchantments/items/enchanted_ancient_tome_of_knowledge.png",
+    "loot": {},
+    "recipes": {
+      "0": {
+        "ingredients": {
+          "A": "minecraft:lightning_rod",
+          "B": "minecraft:totem_of_undying",
+          "C": "vane_enchantments:ancient_tome_of_knowledge",
+          "D": "minecraft:beacon"
+        },
+        "result": "vane_enchantments:enchanted_ancient_tome_of_knowledge#enchants{vane_enchantments:lightning*1}",
+        "shape": ["A A", "BCB", " D "],
+        "type": "shaped"
+      }
+    }
+  },
+  "vane-enchantments:enchantment_rake": {
+    "icon": "assets/vane-enchantments/items/enchanted_ancient_tome_of_knowledge.png",
+    "loot": {},
+    "recipes": {
+      "0": {
+        "ingredients": {
+          "A": "minecraft:golden_hoe",
+          "B": "vane_enchantments:ancient_tome_of_knowledge"
+        },
+        "result": "vane_enchantments:enchanted_ancient_tome_of_knowledge#enchants{vane_enchantments:rake*1}",
+        "shape": [" A ", "ABA", " A "],
+        "type": "shaped"
+      }
+    }
+  },
+  "vane-enchantments:enchantment_seeding": {
+    "icon": "assets/vane-enchantments/items/enchanted_ancient_tome_of_knowledge.png",
+    "loot": {},
+    "recipes": {
+      "0": {
+        "ingredients": {
+          "A": "minecraft:pumpkin_seeds",
+          "B": "minecraft:melon_seeds",
+          "C": "minecraft:carrot",
+          "D": "vane_enchantments:ancient_tome_of_knowledge",
+          "E": "minecraft:potato",
+          "F": "minecraft:wheat_seeds",
+          "G": "minecraft:nether_wart",
+          "H": "minecraft:beetroot_seeds"
+        },
+        "result": "vane_enchantments:enchanted_ancient_tome_of_knowledge#enchants{vane_enchantments:seeding*1}",
+        "shape": ["A B", "CDE", "FGH"],
+        "type": "shaped"
+      }
+    }
+  },
+  "vane-enchantments:enchantment_soulbound": {
+    "icon": "assets/vane-enchantments/items/enchanted_ancient_tome_of_the_gods.png",
+    "loot": {
+      "0": {
+        "items": [
+          {
+            "amount_max": 1,
+            "amount_min": 1,
+            "chance": 0.0667,
+            "item": "vane_enchantments:enchanted_ancient_tome_of_the_gods#enchants{vane_enchantments:soulbound*1}"
+          }
+        ],
+        "tables": ["minecraft:chests/bastion_treasure"]
+      }
+    },
+    "recipes": {
+      "0": {
+        "ingredients": {
+          "A": "minecraft:chain",
+          "B": "minecraft:writable_book",
+          "C": "minecraft:bone",
+          "D": "vane_enchantments:ancient_tome_of_the_gods",
+          "E": "minecraft:ender_eye",
+          "F": "minecraft:enchanted_book#enchants{minecraft:binding_curse*1}",
+          "G": "minecraft:ghast_tear",
+          "H": "minecraft:totem_of_undying"
+        },
+        "result": "vane_enchantments:enchanted_ancient_tome_of_the_gods#enchants{vane_enchantments:soulbound*1}",
+        "shape": ["ABA", "CDE", "FGH"],
+        "type": "shaped"
+      }
+    }
+  },
+  "vane-enchantments:enchantment_take_off": {
+    "icon": "assets/vane-enchantments/items/enchanted_ancient_tome_of_the_gods.png",
+    "loot": {
+      "0": {
+        "items": [
+          {
+            "amount_max": 1,
+            "amount_min": 1,
+            "chance": 0.0067,
+            "item": "vane_enchantments:enchanted_ancient_tome_of_the_gods#enchants{vane_enchantments:take_off*1}"
+          }
+        ],
+        "tables": [
+          "minecraft:chests/buried_treasure",
+          "minecraft:chests/pillager_outpost",
+          "minecraft:chests/ruined_portal",
+          "minecraft:chests/shipwreck_treasure",
+          "minecraft:chests/stronghold_library",
+          "minecraft:chests/underwater_ruin_big",
+          "minecraft:chests/underwater_ruin_small",
+          "minecraft:chests/village/village_temple",
+          "minecraft:chests/woodland_mansion"
+        ]
+      }
+    },
+    "recipes": {
+      "0": {
+        "ingredients": {
+          "A": "minecraft:phantom_membrane",
+          "B": "vane_enchantments:ancient_tome_of_the_gods",
+          "C": "minecraft:piston",
+          "D": "minecraft:slime_block"
+        },
+        "result": "vane_enchantments:enchanted_ancient_tome_of_the_gods#enchants{vane_enchantments:take_off*1}",
+        "shape": ["ABA", "CDC", "   "],
+        "type": "shaped"
+      }
+    }
+  },
+  "vane-enchantments:enchantment_unbreakable": {
+    "icon": "assets/vane-enchantments/items/enchanted_ancient_tome_of_the_gods.png",
+    "loot": {
+      "0": {
+        "items": [
+          {
+            "amount_max": 1,
+            "amount_min": 1,
+            "chance": 0.0333,
+            "item": "vane_enchantments:enchanted_ancient_tome_of_the_gods#enchants{vane_enchantments:unbreakable*1}"
+          }
+        ],
+        "tables": ["minecraft:chests/bastion_treasure"]
+      },
+      "1": {
+        "items": [
+          {
+            "amount_max": 1,
+            "amount_min": 1,
+            "chance": 0.0083,
+            "item": "vane_enchantments:enchanted_ancient_tome_of_the_gods#enchants{vane_enchantments:unbreakable*1}"
+          }
+        ],
+        "tables": ["minecraft:chests/abandoned_mineshaft"]
+      }
+    },
+    "recipes": {
+      "0": {
+        "ingredients": {
+          "A": "minecraft:wither_rose",
+          "B": "minecraft:enchanted_golden_apple",
+          "C": "minecraft:netherite_ingot",
+          "D": "vane_enchantments:ancient_tome_of_the_gods",
+          "E": "minecraft:totem_of_undying",
+          "F": "minecraft:nether_star"
+        },
+        "result": "vane_enchantments:enchanted_ancient_tome_of_the_gods#enchants{vane_enchantments:unbreakable*1}",
+        "shape": ["ABA", "CDC", "EFE"],
+        "type": "shaped"
+      }
+    }
+  },
+  "vane-enchantments:enchantment_wings": {
+    "icon": "assets/vane-enchantments/items/enchanted_ancient_tome_of_knowledge.png",
+    "loot": {
+      "0": {
+        "items": [
+          {
+            "amount_max": 1,
+            "amount_min": 1,
+            "chance": 0.1,
+            "item": "vane_enchantments:enchanted_ancient_tome_of_knowledge#enchants{vane_enchantments:wings*1}"
+          }
+        ],
+        "tables": ["minecraft:chests/bastion_treasure"]
+      },
+      "1": {
+        "items": [
+          {
+            "amount_max": 1,
+            "amount_min": 1,
+            "chance": 0.0091,
+            "item": "vane_enchantments:enchanted_ancient_tome_of_knowledge#enchants{vane_enchantments:wings*1}"
+          }
+        ],
+        "tables": [
+          "minecraft:chests/buried_treasure",
+          "minecraft:chests/pillager_outpost",
+          "minecraft:chests/ruined_portal",
+          "minecraft:chests/shipwreck_treasure",
+          "minecraft:chests/stronghold_library",
+          "minecraft:chests/underwater_ruin_big",
+          "minecraft:chests/underwater_ruin_small",
+          "minecraft:chests/village/village_temple",
+          "minecraft:chests/woodland_mansion"
+        ]
+      }
+    },
+    "recipes": {
+      "0": {
+        "ingredients": {
+          "A": "minecraft:phantom_membrane",
+          "B": "minecraft:dispenser",
+          "C": "vane_enchantments:ancient_tome_of_knowledge",
+          "D": "minecraft:firework_rocket"
+        },
+        "result": "vane_enchantments:enchanted_ancient_tome_of_knowledge#enchants{vane_enchantments:wings*1}",
+        "shape": ["A A", "BCB", "D D"],
+        "type": "shaped"
+      }
+    }
+  },
+  "vane-enchantments:item_ancient_tome": {
+    "icon": "assets/vane-enchantments/items/ancient_tome.png",
+    "loot": {
+      "0": {
+        "items": [
+          {
+            "amount_max": 2,
+            "amount_min": 0,
+            "chance": 0.05,
+            "item": "vane_enchantments:ancient_tome"
+          }
+        ],
+        "tables": ["minecraft:chests/ancient_city"]
+      },
+      "1": {
+        "items": [
+          {
+            "amount_max": 2,
+            "amount_min": 0,
+            "chance": 0.2,
+            "item": "vane_enchantments:ancient_tome"
+          }
+        ],
+        "tables": [
+          "minecraft:chests/abandoned_mineshaft",
+          "minecraft:chests/bastion_bridge",
+          "minecraft:chests/bastion_hoglin_stable",
+          "minecraft:chests/bastion_other",
+          "minecraft:chests/bastion_treasure",
+          "minecraft:chests/buried_treasure",
+          "minecraft:chests/desert_pyramid",
+          "minecraft:chests/end_city_treasure",
+          "minecraft:chests/minecraft:gameplay/fishing/treasure",
+          "minecraft:chests/igloo_chest",
+          "minecraft:chests/jungle_temple",
+          "minecraft:chests/nether_bridge",
+          "minecraft:chests/pillager_outpost",
+          "minecraft:chests/ruined_portal",
+          "minecraft:chests/shipwreck_treasure",
+          "minecraft:chests/stronghold_library",
+          "minecraft:chests/underwater_ruin_big",
+          "minecraft:chests/underwater_ruin_small",
+          "minecraft:chests/village/village_temple",
+          "minecraft:chests/woodland_mansion"
+        ]
+      },
+      "2": {
+        "items": [
+          {
+            "amount_max": 2,
+            "amount_min": 0,
+            "chance": 0.2,
+            "item": "vane_enchantments:ancient_tome"
+          }
+        ],
+        "tables": [
+          "minecraft:chests/terralith:spire/common",
+          "minecraft:chests/terralith:village/desert/generic_low",
+          "minecraft:chests/terralith:village/fortified/generic_low",
+          "minecraft:chests/terralith:village/fortified/smith/novice",
+          "minecraft:chests/terralith:village/desert/smith/novice",
+          "minecraft:chests/terralith:village/fortified/tavern_downstairs",
+          "minecraft:chests/terralith:village/fortified/tavern_upstairs",
+          "minecraft:chests/terralith:ruin/glacial/main_cs",
+          "minecraft:chests/terralith:spire/treasure",
+          "minecraft:chests/terralith:underground/chest",
+          "minecraft:chests/terralith:village/desert/archer",
+          "minecraft:chests/terralith:village/desert/attic",
+          "minecraft:chests/terralith:village/desert/butcher",
+          "minecraft:chests/terralith:village/desert/cartographer",
+          "minecraft:chests/terralith:village/desert/generic",
+          "minecraft:chests/terralith:village/desert/library",
+          "minecraft:chests/terralith:village/desert/mason",
+          "minecraft:chests/terralith:village/desert/smith",
+          "minecraft:chests/terralith:village/desert/treasure",
+          "minecraft:chests/terralith:village/fortified/archer",
+          "minecraft:chests/terralith:village/fortified/attic",
+          "minecraft:chests/terralith:village/fortified/butcher",
+          "minecraft:chests/terralith:village/fortified/cartographer",
+          "minecraft:chests/terralith:village/fortified/fisherman",
+          "minecraft:chests/terralith:village/fortified/food",
+          "minecraft:chests/terralith:village/fortified/generic",
+          "minecraft:chests/terralith:village/fortified/library",
+          "minecraft:chests/terralith:village/fortified/mason",
+          "minecraft:chests/terralith:village/fortified/smith",
+          "minecraft:chests/terralith:village/fortified/treasure",
+          "minecraft:chests/terralith:village/treasure/diamond",
+          "minecraft:chests/terralith:village/treasure/emerald",
+          "minecraft:chests/terralith:village/treasure/golem"
+        ]
+      },
+      "3": {
+        "items": [
+          {
+            "amount_max": 2,
+            "amount_min": 0,
+            "chance": 0.05,
+            "item": "vane_enchantments:ancient_tome"
+          }
+        ],
+        "tables": [
+          "minecraft:chests/terralith:village/desert/smith/expert",
+          "minecraft:chests/terralith:village/fortified/smith/expert",
+          "minecraft:chests/terralith:spire/rare"
+        ]
+      }
+    },
+    "recipes": {}
+  },
+  "vane-enchantments:item_ancient_tome_of_knowledge": {
+    "icon": "assets/vane-enchantments/items/ancient_tome_of_knowledge.png",
+    "loot": {
+      "0": {
+        "items": [
+          {
+            "amount_max": 1,
+            "amount_min": 1,
+            "chance": 0.0333,
+            "item": "vane_enchantments:ancient_tome_of_knowledge"
+          },
+          {
+            "amount_max": 1,
+            "amount_min": 1,
+            "chance": 0.0333,
+            "item": "vane_enchantments:ancient_tome_of_knowledge"
+          }
+        ],
+        "tables": ["minecraft:chests/ancient_city"]
+      },
+      "1": {
+        "items": [
+          {
+            "amount_max": 1,
+            "amount_min": 1,
+            "chance": 0.025,
+            "item": "vane_enchantments:ancient_tome_of_knowledge"
+          }
+        ],
+        "tables": [
+          "minecraft:chests/abandoned_mineshaft",
+          "minecraft:chests/bastion_treasure",
+          "minecraft:chests/buried_treasure",
+          "minecraft:chests/desert_pyramid",
+          "minecraft:chests/nether_bridge",
+          "minecraft:chests/ruined_portal",
+          "minecraft:chests/shipwreck_treasure",
+          "minecraft:chests/stronghold_library",
+          "minecraft:chests/underwater_ruin_big",
+          "minecraft:chests/village/village_temple",
+          "minecraft:chests/woodland_mansion"
+        ]
+      },
+      "2": {
+        "items": [
+          {
+            "amount_max": 1,
+            "amount_min": 1,
+            "chance": 0.025,
+            "item": "vane_enchantments:ancient_tome_of_knowledge"
+          }
+        ],
+        "tables": [
+          "minecraft:chests/terralith:ruin/glacial/main_cs",
+          "minecraft:chests/terralith:spire/treasure",
+          "minecraft:chests/terralith:underground/chest",
+          "minecraft:chests/terralith:village/desert/archer",
+          "minecraft:chests/terralith:village/desert/attic",
+          "minecraft:chests/terralith:village/desert/butcher",
+          "minecraft:chests/terralith:village/desert/cartographer",
+          "minecraft:chests/terralith:village/desert/generic",
+          "minecraft:chests/terralith:village/desert/library",
+          "minecraft:chests/terralith:village/desert/mason",
+          "minecraft:chests/terralith:village/desert/smith",
+          "minecraft:chests/terralith:village/desert/treasure",
+          "minecraft:chests/terralith:village/fortified/archer",
+          "minecraft:chests/terralith:village/fortified/attic",
+          "minecraft:chests/terralith:village/fortified/butcher",
+          "minecraft:chests/terralith:village/fortified/cartographer",
+          "minecraft:chests/terralith:village/fortified/fisherman",
+          "minecraft:chests/terralith:village/fortified/food",
+          "minecraft:chests/terralith:village/fortified/generic",
+          "minecraft:chests/terralith:village/fortified/library",
+          "minecraft:chests/terralith:village/fortified/mason",
+          "minecraft:chests/terralith:village/fortified/smith",
+          "minecraft:chests/terralith:village/fortified/treasure",
+          "minecraft:chests/terralith:village/treasure/diamond",
+          "minecraft:chests/terralith:village/treasure/emerald",
+          "minecraft:chests/terralith:village/treasure/golem"
+        ]
+      },
+      "3": {
+        "items": [
+          {
+            "amount_max": 1,
+            "amount_min": 1,
+            "chance": 0.0333,
+            "item": "vane_enchantments:ancient_tome_of_knowledge"
+          },
+          {
+            "amount_max": 1,
+            "amount_min": 1,
+            "chance": 0.0333,
+            "item": "vane_enchantments:ancient_tome_of_knowledge"
+          }
+        ],
+        "tables": [
+          "minecraft:chests/terralith:village/desert/smith/expert",
+          "minecraft:chests/terralith:village/fortified/smith/expert",
+          "minecraft:chests/terralith:spire/rare"
+        ]
+      }
+    },
+    "recipes": {
+      "0": {
+        "ingredients": {
+          "A": "vane_enchantments:ancient_tome",
+          "B": "minecraft:feather",
+          "C": "minecraft:blaze_rod",
+          "D": "minecraft:ghast_tear"
+        },
+        "result": "vane_enchantments:ancient_tome_of_knowledge",
+        "shape": ["ABC", "D  ", "   "],
+        "type": "shaped"
+      }
+    }
+  },
+  "vane-enchantments:item_ancient_tome_of_the_gods": {
+    "icon": "assets/vane-enchantments/items/ancient_tome_of_the_gods.png",
+    "loot": {
+      "0": {
+        "items": [
+          {
+            "amount_max": 1,
+            "amount_min": 1,
+            "chance": 0.0067,
+            "item": "vane_enchantments:ancient_tome_of_the_gods"
+          }
+        ],
+        "tables": ["minecraft:chests/ancient_city"]
+      },
+      "1": {
+        "items": [
+          {
+            "amount_max": 1,
+            "amount_min": 1,
+            "chance": 0.005,
+            "item": "vane_enchantments:ancient_tome_of_the_gods"
+          }
+        ],
+        "tables": [
+          "minecraft:chests/bastion_treasure",
+          "minecraft:chests/buried_treasure",
+          "minecraft:chests/shipwreck_treasure",
+          "minecraft:chests/underwater_ruin_big"
+        ]
+      },
+      "2": {
+        "items": [
+          {
+            "amount_max": 1,
+            "amount_min": 1,
+            "chance": 0.005,
+            "item": "vane_enchantments:ancient_tome_of_the_gods"
+          }
+        ],
+        "tables": ["minecraft:chests/terralith:spire/treasure", "minecraft:chests/terralith:underground/chest"]
+      },
+      "3": {
+        "items": [
+          {
+            "amount_max": 1,
+            "amount_min": 1,
+            "chance": 0.0067,
+            "item": "vane_enchantments:ancient_tome_of_the_gods"
+          }
+        ],
+        "tables": ["minecraft:chests/terralith:spire/rare"]
+      }
+    },
+    "recipes": {
+      "0": {
+        "ingredients": {
+          "A": "minecraft:nether_star",
+          "B": "minecraft:enchanted_book",
+          "C": "vane_enchantments:ancient_tome_of_knowledge",
+          "D": "minecraft:nautilus_shell"
+        },
+        "result": "vane_enchantments:ancient_tome_of_the_gods",
+        "shape": [" A ", "BCB", " D "],
+        "type": "shaped"
+      }
+    }
+  },
+  "vane-trifles:item_empty_xp_bottle": {
+    "icon": "assets/vane-trifles/items/medium_xp_bottle.png",
+    "loot": {},
+    "recipes": {
+      "0": {
+        "ingredients": {
+          "A": "minecraft:experience_bottle",
+          "B": "minecraft:glass_bottle",
+          "C": "minecraft:gold_nugget"
+        },
+        "result": "vane_trifles:empty_xp_bottle",
+        "shape": ["ABC", "   ", "   "],
+        "type": "shaped"
+      }
+    }
+  },
+  "vane-trifles:item_file": {
+    "icon": "assets/vane-trifles/items/file.png",
+    "loot": {},
+    "recipes": {
+      "0": {
+        "ingredients": {
+          "A": "minecraft:iron_ingot",
+          "B": "minecraft:stick"
+        },
+        "result": "vane_trifles:file",
+        "shape": [" A ", "B  ", "   "],
+        "type": "shaped"
+      }
+    }
+  },
+  "vane-trifles:item_north_compass": {
+    "icon": "assets/vane-trifles/items/north_compass_16.png",
+    "loot": {},
+    "recipes": {
+      "0": {
+        "ingredients": {
+          "A": "minecraft:copper_ingot",
+          "B": "minecraft:redstone"
+        },
+        "result": "vane_trifles:north_compass",
+        "shape": [" A ", "ABA", " A "],
+        "type": "shaped"
+      }
+    }
+  },
+  "vane-trifles:item_papyrus_scroll": {
+    "icon": "assets/vane-trifles/items/papyrus_scroll.png",
+    "loot": {},
+    "recipes": {
+      "0": {
+        "ingredients": {
+          "A": "minecraft:rabbit_hide",
+          "B": "minecraft:paper",
+          "C": "minecraft:echo_shard",
+          "D": "minecraft:gold_nugget"
+        },
+        "result": "vane_trifles:papyrus_scroll",
+        "shape": ["ABB", "BCB", "BBD"],
+        "type": "shaped"
+      }
+    }
+  },
+  "vane-trifles:item_reinforced_elytra": {
+    "icon": "assets/vane-trifles/items/reinforced_elytra.png",
+    "loot": {},
+    "recipes": {
+      "0": {
+        "addition": "minecraft:netherite_ingot",
+        "base": "minecraft:elytra",
+        "result": "vane_trifles:reinforced_elytra",
+        "type": "smithing"
+      }
+    }
+  },
+  "vane-trifles:item_trowel": {
+    "icon": "assets/vane-trifles/items/trowel.png",
+    "loot": {},
+    "recipes": {
+      "0": {
+        "ingredients": {
+          "A": "minecraft:stick",
+          "B": "minecraft:iron_ingot"
+        },
+        "result": "vane_trifles:trowel",
+        "shape": ["  A", "BB ", "   "],
+        "type": "shaped"
+      }
+    }
+  },
+  "vane-trifles:scrolls.item_death_scroll": {
+    "icon": "assets/vane-trifles/items/death_scroll.png",
+    "loot": {},
+    "recipes": {
+      "0": {
+        "ingredients": {
+          "A": "minecraft:bone",
+          "B": "minecraft:recovery_compass",
+          "C": "minecraft:ender_pearl",
+          "D": "vane_trifles:papyrus_scroll"
+        },
+        "result": "vane_trifles:death_scroll",
+        "shape": ["ABA", "CDC", "   "],
+        "type": "shaped"
+      }
+    }
+  },
+  "vane-trifles:scrolls.item_home_scroll": {
+    "icon": "assets/vane-trifles/items/home_scroll.png",
+    "loot": {},
+    "recipes": {
+      "0": {
+        "ingredients": {
+          "A": "minecraft:campfire",
+          "B": "minecraft:goat_horn",
+          "C": "#minecraft:beds",
+          "D": "minecraft:ender_pearl",
+          "E": "vane_trifles:papyrus_scroll"
+        },
+        "result": "vane_trifles:home_scroll",
+        "shape": ["ABC", "DED", "   "],
+        "type": "shaped"
+      }
+    }
+  },
+  "vane-trifles:scrolls.item_lodestone_scroll": {
+    "icon": "assets/vane-trifles/items/lodestone_scroll.png",
+    "loot": {},
+    "recipes": {
+      "0": {
+        "ingredients": {
+          "A": "minecraft:amethyst_shard",
+          "B": "minecraft:netherite_ingot",
+          "C": "minecraft:ender_pearl",
+          "D": "vane_trifles:papyrus_scroll"
+        },
+        "result": "vane_trifles:lodestone_scroll",
+        "shape": ["ABA", "CDC", "   "],
+        "type": "shaped"
+      }
+    }
+  },
+  "vane-trifles:scrolls.item_spawn_scroll": {
+    "icon": "assets/vane-trifles/items/spawn_scroll.png",
+    "loot": {},
+    "recipes": {
+      "0": {
+        "ingredients": {
+          "A": "minecraft:wheat_seeds",
+          "B": "#minecraft:saplings",
+          "C": "minecraft:ender_pearl",
+          "D": "vane_trifles:papyrus_scroll"
+        },
+        "result": "vane_trifles:spawn_scroll",
+        "shape": ["ABA", "CDC", "   "],
+        "type": "shaped"
+      }
+    }
+  },
+  "vane-trifles:scrolls.item_unstable_scroll": {
+    "icon": "assets/vane-trifles/items/unstable_scroll.png",
+    "loot": {},
+    "recipes": {
+      "0": {
+        "ingredients": {
+          "A": "minecraft:amethyst_shard",
+          "B": "minecraft:compass",
+          "C": "minecraft:chorus_fruit",
+          "D": "vane_trifles:papyrus_scroll"
+        },
+        "result": "vane_trifles:unstable_scroll",
+        "shape": ["ABA", "CDC", "   "],
+        "type": "shaped"
+      }
+    }
+  },
+  "vane-trifles:sickles.item_golden_sickle": {
+    "icon": "assets/vane-trifles/items/golden_sickle.png",
+    "loot": {},
+    "recipes": {
+      "0": {
+        "ingredients": {
+          "A": "minecraft:gold_ingot",
+          "B": "minecraft:stick"
+        },
+        "result": "vane_trifles:golden_sickle",
+        "shape": [" AA", "  A", " B "],
+        "type": "shaped"
+      }
+    }
+  },
+  "vane-trifles:storage.item_backpack": {
+    "icon": "assets/vane-trifles/items/backpack.png",
+    "loot": {},
+    "recipes": {
+      "0": {
+        "addition": "minecraft:leather_chestplate",
+        "base": "#minecraft:shulker_boxes",
+        "result": "vane_trifles:backpack",
+        "type": "smithing"
+      }
+    }
+  },
+  "vane-trifles:storage.item_pouch": {
+    "icon": "assets/vane-trifles/items/pouch.png",
+    "loot": {},
+    "recipes": {
+      "0": {
+        "ingredients": {
+          "A": "minecraft:string",
+          "B": "minecraft:rabbit_hide"
+        },
+        "result": "vane_trifles:pouch",
+        "shape": ["ABA", "B B", "BBB"],
+        "type": "shaped"
+      }
+    }
+  }
+}

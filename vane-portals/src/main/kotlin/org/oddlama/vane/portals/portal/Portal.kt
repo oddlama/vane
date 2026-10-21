@@ -1,5 +1,7 @@
 package org.oddlama.vane.portals.portal
 
+import java.io.IOException
+import java.util.*
 import org.bukkit.*
 import org.bukkit.block.Block
 import org.bukkit.block.BlockFace
@@ -18,12 +20,8 @@ import org.oddlama.vane.portals.event.PortalOpenConsoleEvent
 import org.oddlama.vane.portals.portal.Style.Companion.defaultStyleKey
 import org.oddlama.vane.util.BlockUtil
 import org.oddlama.vane.util.LazyLocation
-import java.io.IOException
-import java.util.*
 
-/**
- * Persistent portal model containing ownership, geometry, style, and targeting state.
- */
+/** Persistent portal model containing ownership, geometry, style, and targeting state. */
 class Portal {
     /** Unique portal id. */
     private var id: UUID? = null
@@ -70,8 +68,7 @@ class Portal {
      * Set by every mutating setter and cleared once the portal has been persisted. This flag is
      * itself transient and is never serialized.
      */
-    @JvmField
-    var invalidated: Boolean = true
+    @JvmField var invalidated: Boolean = true
 
     /** Constructor used by deserialization. */
     private constructor()
@@ -86,49 +83,56 @@ class Portal {
 
     /**
      * Unique identifier for this portal.
+     *
      * @return UUID of the portal or null when not assigned
      */
-
     fun id() = id
 
     /**
      * Returns the owner UUID of this portal.
+     *
      * @return owner UUID or null
      */
     fun owner() = owner
 
     /**
      * Returns the portal orientation.
+     *
      * @return Orientation or null
      */
     fun orientation() = orientation
 
     /**
      * Returns the world id of the portal's spawn location.
+     *
      * @return UUID of the world
      */
     fun spawnWorld() = spawn!!.worldId
 
     /**
      * Return a clone of the portal's spawn Location.
+     *
      * @return Location clone
      */
     fun spawn() = spawn!!.location().clone()
 
     /**
      * Return all PortalBlock entries that make up this portal.
+     *
      * @return mutable list of PortalBlock instances
      */
     fun blocks() = blocks
 
     /**
      * Return the display name used for menus and markers.
+     *
      * @return portal name or null
      */
     fun name() = name
 
     /**
      * Set the display name for this portal and mark it as needing persistence.
+     *
      * @param name new display name (nullable)
      */
     fun name(name: String?) {
@@ -137,14 +141,17 @@ class Portal {
     }
 
     /**
-     * Returns the persistent style key when a key-based style is active, or null when a runtime override is used.
+     * Returns the persistent style key when a key-based style is active, or null when a runtime
+     * override is used.
+     *
      * @return NamespacedKey of the style or null
      */
     fun style() = if (styleOverride == null) style else null
 
     /**
-     * Apply a style to this portal. If the style has a key it will be used as the persistent style key,
-     * otherwise the style is stored as a runtime override.
+     * Apply a style to this portal. If the style has a key it will be used as the persistent style
+     * key, otherwise the style is stored as a runtime override.
+     *
      * @param style the style to apply
      */
     fun style(style: Style) {
@@ -158,12 +165,14 @@ class Portal {
 
     /**
      * Return a clone of the icon ItemStack if present.
+     *
      * @return cloned ItemStack or null
      */
     fun icon() = icon?.clone()
 
     /**
      * Set a custom icon for the portal and mark it for persistence.
+     *
      * @param icon ItemStack to use as icon (nullable)
      */
     fun icon(icon: ItemStack?) {
@@ -173,12 +182,14 @@ class Portal {
 
     /**
      * Returns the visibility mode controlling who can target this portal.
+     *
      * @return Visibility enum value
      */
     fun visibility() = visibility
 
     /**
      * Set the portal visibility mode and mark for persistence.
+     *
      * @param visibility new visibility mode
      */
     fun visibility(visibility: Visibility?) {
@@ -191,6 +202,7 @@ class Portal {
 
     /**
      * Enable or disable exit orientation locking and mark for persistence.
+     *
      * @param exitOrientationLocked whether orientation locking should be enabled
      */
     fun exitOrientationLocked(exitOrientationLocked: Boolean) {
@@ -203,6 +215,7 @@ class Portal {
 
     /**
      * Set a fixed target portal id and mark portal for persistence.
+     *
      * @param targetId UUID of the fixed target portal (nullable)
      */
     fun targetId(targetId: UUID?) {
@@ -215,6 +228,7 @@ class Portal {
 
     /**
      * Set the target-locked state and mark for persistence.
+     *
      * @param targetLocked whether the target should be locked
      */
     fun targetLocked(targetLocked: Boolean) {
@@ -233,9 +247,12 @@ class Portal {
         val controllingBlocks = HashSet<Block>()
         for (pb in blocks().orEmpty()) {
             when (pb.type()) {
-                PortalBlock.Type.ORIGIN, PortalBlock.Type.BOUNDARY1, PortalBlock.Type.BOUNDARY2, PortalBlock.Type.BOUNDARY3, PortalBlock.Type.BOUNDARY4, PortalBlock.Type.BOUNDARY5 -> controllingBlocks.add(
-                    pb.block()!!
-                )
+                PortalBlock.Type.ORIGIN,
+                PortalBlock.Type.BOUNDARY1,
+                PortalBlock.Type.BOUNDARY2,
+                PortalBlock.Type.BOUNDARY3,
+                PortalBlock.Type.BOUNDARY4,
+                PortalBlock.Type.BOUNDARY5 -> controllingBlocks.add(pb.block()!!)
 
                 PortalBlock.Type.CONSOLE -> {
                     controllingBlocks.add(pb.block()!!)
@@ -263,11 +280,12 @@ class Portal {
                 }
 
                 val lever = l.blockData as Switch
-                val attachedFace: BlockFace = when (lever.attachedFace) {
-                    AttachedFace.WALL -> lever.facing.oppositeFace
-                    AttachedFace.CEILING -> BlockFace.UP
-                    AttachedFace.FLOOR -> BlockFace.DOWN
-                }
+                val attachedFace: BlockFace =
+                    when (lever.attachedFace) {
+                        AttachedFace.WALL -> lever.facing.oppositeFace
+                        AttachedFace.CEILING -> BlockFace.UP
+                        AttachedFace.FLOOR -> BlockFace.DOWN
+                    }
 
                 // Only when attached to a controlling block
                 if (!controllingBlocks.contains(l.getRelative(attachedFace))) {
@@ -288,6 +306,7 @@ class Portal {
 
     /**
      * Attempt to activate this portal, dispatching a PortalActivateEvent.
+     *
      * @param portals module instance used for activation
      * @param player optional player causing activation
      * @return true when activation succeeded
@@ -312,6 +331,7 @@ class Portal {
 
     /**
      * Attempt to deactivate this portal, dispatching a PortalDeactivateEvent.
+     *
      * @param portals module instance used for deactivation
      * @param player optional player causing deactivation
      * @return true when deactivation succeeded
@@ -345,7 +365,13 @@ class Portal {
             // Play sound
             spawn()
                 .world
-                .playSound(spawn(), Sound.BLOCK_END_PORTAL_SPAWN, SoundCategory.BLOCKS, soundVolume, 0.8f)
+                .playSound(
+                    spawn(),
+                    Sound.BLOCK_END_PORTAL_SPAWN,
+                    SoundCategory.BLOCKS,
+                    soundVolume,
+                    0.8f,
+                )
         }
     }
 
@@ -362,17 +388,24 @@ class Portal {
             // Play sound
             spawn()
                 .world
-                .playSound(spawn(), Sound.BLOCK_END_PORTAL_FRAME_FILL, SoundCategory.BLOCKS, soundVolume, 0.5f)
+                .playSound(
+                    spawn(),
+                    Sound.BLOCK_END_PORTAL_FRAME_FILL,
+                    SoundCategory.BLOCKS,
+                    soundVolume,
+                    0.5f,
+                )
         }
     }
 
     /** Update all portal block materials according to the current activation and style state. */
     fun updateBlocks(portals: Portals) {
-        val curStyle: Style? = if (styleOverride == null) {
-            portals.style(style)
-        } else {
-            styleOverride
-        }
+        val curStyle: Style? =
+            if (styleOverride == null) {
+                portals.style(style)
+            } else {
+                styleOverride
+            }
 
         val active = portals.isActivated(this)
         for (portalBlock in blocks!!) {
@@ -400,7 +433,9 @@ class Portal {
     }
 
     /**
-     * Open this portal's console menu for the specified player, dispatching a PortalOpenConsoleEvent.
+     * Open this portal's console menu for the specified player, dispatching a
+     * PortalOpenConsoleEvent.
+     *
      * @return true when a menu was opened
      */
     fun openConsole(portals: Portals, player: Player, console: Block?): Boolean {
@@ -423,8 +458,10 @@ class Portal {
     /** Return a copy of the active style using the provided new key. */
     fun copyStyle(portals: Portals, newKey: NamespacedKey?): Style {
         if (styleOverride == null) {
-            val base = portals.style(style) ?: portals.style(defaultStyleKey())
-            ?: throw RuntimeException("No base style available to copy")
+            val base =
+                portals.style(style)
+                    ?: portals.style(defaultStyleKey())
+                    ?: throw RuntimeException("No base style available to copy")
             return base.copy(newKey)
         }
         return styleOverride!!.copy(newKey)
@@ -444,11 +481,12 @@ class Portal {
 
         /** Returns the previous visibility enum value with wrap-around. */
         fun prev(): Visibility {
-            val prev: Int = if (ordinal == 0) {
-                entries.size - 1
-            } else {
-                ordinal - 1
-            }
+            val prev: Int =
+                if (ordinal == 0) {
+                    entries.size - 1
+                } else {
+                    ordinal - 1
+                }
             return entries[prev]
         }
 
@@ -513,12 +551,18 @@ class Portal {
             val json = JSONObject()
             json.put("id", PersistentSerializer.toJson(UUID::class.java, portal.id))
             json.put("owner", PersistentSerializer.toJson(UUID::class.java, portal.owner))
-            json.put("orientation", PersistentSerializer.toJson(Orientation::class.java, portal.orientation))
+            json.put(
+                "orientation",
+                PersistentSerializer.toJson(Orientation::class.java, portal.orientation),
+            )
             json.put("spawn", PersistentSerializer.toJson(LazyLocation::class.java, portal.spawn))
             try {
                 json.put(
                     "blocks",
-                    PersistentSerializer.toJson(Portal::class.java.getDeclaredField("blocks"), portal.blocks)
+                    PersistentSerializer.toJson(
+                        Portal::class.java.getDeclaredField("blocks"),
+                        portal.blocks,
+                    ),
                 )
             } catch (e: NoSuchFieldException) {
                 throw RuntimeException("Invalid field. This is a bug.", e)
@@ -526,16 +570,28 @@ class Portal {
 
             json.put("name", PersistentSerializer.toJson(String::class.java, portal.name))
             json.put("style", PersistentSerializer.toJson(NamespacedKey::class.java, portal.style))
-            json.put("styleOverride", PersistentSerializer.toJson(Style::class.java, portal.styleOverride))
+            json.put(
+                "styleOverride",
+                PersistentSerializer.toJson(Style::class.java, portal.styleOverride),
+            )
             json.put("icon", PersistentSerializer.toJson(ItemStack::class.java, portal.icon))
-            json.put("visibility", PersistentSerializer.toJson(Visibility::class.java, portal.visibility))
+            json.put(
+                "visibility",
+                PersistentSerializer.toJson(Visibility::class.java, portal.visibility),
+            )
 
             json.put(
                 "exitOrientationLocked",
-                PersistentSerializer.toJson(Boolean::class.javaPrimitiveType, portal.exitOrientationLocked)
+                PersistentSerializer.toJson(
+                    Boolean::class.javaPrimitiveType,
+                    portal.exitOrientationLocked,
+                ),
             )
             json.put("targetId", PersistentSerializer.toJson(UUID::class.java, portal.targetId))
-            json.put("targetLocked", PersistentSerializer.toJson(Boolean::class.javaPrimitiveType, portal.targetLocked))
+            json.put(
+                "targetLocked",
+                PersistentSerializer.toJson(Boolean::class.javaPrimitiveType, portal.targetLocked),
+            )
             return json
         }
 
@@ -547,21 +603,26 @@ class Portal {
             val portal = Portal()
             portal.id = PersistentSerializer.fromJson(UUID::class.java, json.get("id"))
             portal.owner = PersistentSerializer.fromJson(UUID::class.java, json.get("owner"))
-            portal.orientation = PersistentSerializer.fromJson(Orientation::class.java, json.get("orientation"))
-            portal.spawn = PersistentSerializer.fromJson(LazyLocation::class.java, json.get("spawn"))
+            portal.orientation =
+                PersistentSerializer.fromJson(Orientation::class.java, json.get("orientation"))
+            portal.spawn =
+                PersistentSerializer.fromJson(LazyLocation::class.java, json.get("spawn"))
             try {
                 @Suppress("UNCHECKED_CAST")
-                portal.blocks = PersistentSerializer.fromJson(
-                    Portal::class.java.getDeclaredField("blocks"),
-                    json.get("blocks")
-                ) as MutableList<PortalBlock>?
+                portal.blocks =
+                    PersistentSerializer.fromJson(
+                        Portal::class.java.getDeclaredField("blocks"),
+                        json.get("blocks"),
+                    ) as MutableList<PortalBlock>?
             } catch (e: NoSuchFieldException) {
                 throw RuntimeException("Invalid field. This is a bug.", e)
             }
 
             portal.name = PersistentSerializer.fromJson(String::class.java, json.get("name"))
-            portal.style = PersistentSerializer.fromJson(NamespacedKey::class.java, json.get("style"))
-            portal.styleOverride = PersistentSerializer.fromJson(Style::class.java, json.get("styleOverride"))
+            portal.style =
+                PersistentSerializer.fromJson(NamespacedKey::class.java, json.get("style"))
+            portal.styleOverride =
+                PersistentSerializer.fromJson(Style::class.java, json.get("styleOverride"))
             if (portal.styleOverride != null) {
                 try {
                     portal.styleOverride!!.checkValid()
@@ -570,17 +631,20 @@ class Portal {
                 }
             }
             portal.icon = PersistentSerializer.fromJson(ItemStack::class.java, json.get("icon"))
-            portal.visibility = PersistentSerializer.fromJson(Visibility::class.java, json.get("visibility"))
+            portal.visibility =
+                PersistentSerializer.fromJson(Visibility::class.java, json.get("visibility"))
 
-            portal.exitOrientationLocked = PersistentSerializer.fromJson(
-                Boolean::class.javaPrimitiveType,
-                json.optString("exitOrientationLocked", "false")
-            )
-                ?: false
+            portal.exitOrientationLocked =
+                PersistentSerializer.fromJson(
+                    Boolean::class.javaPrimitiveType,
+                    json.optString("exitOrientationLocked", "false"),
+                ) ?: false
             portal.targetId = PersistentSerializer.fromJson(UUID::class.java, json.get("targetId"))
             portal.targetLocked =
-                PersistentSerializer.fromJson(Boolean::class.javaPrimitiveType, json.get("targetLocked"))
-                    ?: false
+                PersistentSerializer.fromJson(
+                    Boolean::class.javaPrimitiveType,
+                    json.get("targetLocked"),
+                ) ?: false
             return portal
         }
     }

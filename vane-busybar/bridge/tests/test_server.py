@@ -11,6 +11,7 @@ async def _lines(text):
 def events(text):
     async def collect():
         return [e async for e in parse_sse(_lines(text))]
+
     return asyncio.run(collect())
 
 
@@ -20,7 +21,10 @@ def test_parses_events_and_skips_heartbeats():
         ": ping\n\n"
         'id: 2\nevent: player.join\ndata: {"player":"Mira"}\n\n'
     )
-    assert [(e.kind, e.data) for e in got] == [("snapshot", {"online": True}), ("player.join", {"player": "Mira"})]
+    assert [(e.kind, e.data) for e in got] == [
+        ("snapshot", {"online": True}),
+        ("player.join", {"player": "Mira"}),
+    ]
 
 
 def test_joins_multiline_data_and_ignores_bad_json():

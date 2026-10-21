@@ -1,5 +1,7 @@
 package org.oddlama.vane.portals
 
+import java.util.*
+import kotlin.math.abs
 import org.bukkit.Material
 import org.bukkit.block.Block
 import org.bukkit.entity.Player
@@ -23,52 +25,67 @@ import org.oddlama.vane.portals.portal.*
 import org.oddlama.vane.portals.portal.PortalBoundary.Companion.searchAt
 import org.oddlama.vane.portals.portal.PortalBoundary.ErrorState
 import org.oddlama.vane.util.PlayerUtil
-import java.util.*
-import kotlin.math.abs
 
 /**
  * Component responsible for detecting portal boundaries and constructing portals from blocks.
  *
  * Handles player interactions during portal construction and links consoles to portals.
  */
-
 class PortalConstructor(context: Context<Portals?>?) : Listener<Portals?>(context) {
     /** Material used for portal console blocks. */
     @JvmField
-    @ConfigMaterial(def = Material.ENCHANTING_TABLE, desc = "The block used to build portal consoles.")
+    @ConfigMaterial(
+        def = Material.ENCHANTING_TABLE,
+        desc = "The block used to build portal consoles.",
+    )
     var configMaterialConsole: Material? = null
 
     /** Boundary material variant 1. */
     @JvmField
-    @ConfigMaterial(def = Material.OBSIDIAN, desc = "The block used to build the portal boundary. Variation 1.")
+    @ConfigMaterial(
+        def = Material.OBSIDIAN,
+        desc = "The block used to build the portal boundary. Variation 1.",
+    )
     var configMaterialBoundary1: Material? = null
 
     /** Boundary material variant 2. */
     @JvmField
-    @ConfigMaterial(def = Material.CRYING_OBSIDIAN, desc = "The block used to build the portal boundary. Variation 2.")
+    @ConfigMaterial(
+        def = Material.CRYING_OBSIDIAN,
+        desc = "The block used to build the portal boundary. Variation 2.",
+    )
     var configMaterialBoundary2: Material? = null
 
     /** Boundary material variant 3. */
     @JvmField
-    @ConfigMaterial(def = Material.GOLD_BLOCK, desc = "The block used to build the portal boundary. Variation 3.")
+    @ConfigMaterial(
+        def = Material.GOLD_BLOCK,
+        desc = "The block used to build the portal boundary. Variation 3.",
+    )
     var configMaterialBoundary3: Material? = null
 
     /** Boundary material variant 4. */
     @JvmField
     @ConfigMaterial(
         def = Material.GILDED_BLACKSTONE,
-        desc = "The block used to build the portal boundary. Variation 4."
+        desc = "The block used to build the portal boundary. Variation 4.",
     )
     var configMaterialBoundary4: Material? = null
 
     /** Boundary material variant 5. */
     @JvmField
-    @ConfigMaterial(def = Material.EMERALD_BLOCK, desc = "The block used to build the portal boundary. Variation 5.")
+    @ConfigMaterial(
+        def = Material.EMERALD_BLOCK,
+        desc = "The block used to build the portal boundary. Variation 5.",
+    )
     var configMaterialBoundary5: Material? = null
 
     /** Material used for the unique portal origin marker. */
     @JvmField
-    @ConfigMaterial(def = Material.NETHERITE_BLOCK, desc = "The block used to build the portal origin.")
+    @ConfigMaterial(
+        def = Material.NETHERITE_BLOCK,
+        desc = "The block used to build the portal origin.",
+    )
     var configMaterialOrigin: Material? = null
 
     /** Material used for portal interior area blocks. */
@@ -77,27 +94,44 @@ class PortalConstructor(context: Context<Portals?>?) : Listener<Portals?>(contex
     var configMaterialPortalArea: Material? = null
 
     /** Maximum horizontal console-to-boundary distance. */
-    @ConfigInt(def = 12, min = 1, desc = "Maximum horizontal distance between a console block and the portal.")
+    @ConfigInt(
+        def = 12,
+        min = 1,
+        desc = "Maximum horizontal distance between a console block and the portal.",
+    )
     var configConsoleMaxDistanceXz: Int = 0
 
     /** Maximum vertical console-to-boundary distance. */
-    @ConfigInt(def = 12, min = 1, desc = "Maximum vertical distance between a console block and the portal.")
+    @ConfigInt(
+        def = 12,
+        min = 1,
+        desc = "Maximum vertical distance between a console block and the portal.",
+    )
     var configConsoleMaxDistanceY: Int = 0
 
     /** Maximum flood-fill steps used by boundary detection. */
     @ConfigInt(
         def = 1024,
         min = 256,
-        desc = "Maximum steps for the floodfill algorithm. This should only be increased if you want really big portals. It's recommended to keep this as low as possible."
+        desc =
+            "Maximum steps for the floodfill algorithm. This should only be increased if you want really big portals. It's recommended to keep this as low as possible.",
     )
     var configAreaFloodfillMaxSteps: Int = 1024
 
     /** Maximum portal area width in its bounding box. */
-    @ConfigInt(def = 24, min = 8, desc = "Maximum portal area width (bounding box will be measured).")
+    @ConfigInt(
+        def = 24,
+        min = 8,
+        desc = "Maximum portal area width (bounding box will be measured).",
+    )
     var configAreaMaxWidth: Int = 0
 
     /** Maximum portal area height in its bounding box. */
-    @ConfigInt(def = 24, min = 8, desc = "Maximum portal area height (bounding box will be measured).")
+    @ConfigInt(
+        def = 24,
+        min = 8,
+        desc = "Maximum portal area height (bounding box will be measured).",
+    )
     var configAreaMaxHeight: Int = 24
 
     /** Maximum amount of blocks in the detected portal area. */
@@ -105,84 +139,64 @@ class PortalConstructor(context: Context<Portals?>?) : Listener<Portals?>(contex
     var configAreaMaxBlocks: Int = 128
 
     /** Prompt shown after selecting a console and waiting for boundary selection. */
-    @LangMessage
-    var langSelectBoundaryNow: TranslatedMessage? = null
+    @LangMessage var langSelectBoundaryNow: TranslatedMessage? = null
 
     /** Error shown when selected console block uses wrong material. */
-    @LangMessage
-    var langConsoleInvalidType: TranslatedMessage? = null
+    @LangMessage var langConsoleInvalidType: TranslatedMessage? = null
 
     /** Error shown when console and boundary are in different worlds. */
-    @LangMessage
-    var langConsoleDifferentWorld: TranslatedMessage? = null
+    @LangMessage var langConsoleDifferentWorld: TranslatedMessage? = null
 
     /** Error shown when selected console is too far from boundary blocks. */
-    @LangMessage
-    var langConsoleTooFarAway: TranslatedMessage? = null
+    @LangMessage var langConsoleTooFarAway: TranslatedMessage? = null
 
     /** Info shown when a console is already linked. */
-    @LangMessage
-    var langConsoleLinked: TranslatedMessage? = null
+    @LangMessage var langConsoleLinked: TranslatedMessage? = null
 
     /** Error shown when no valid boundary could be found. */
-    @LangMessage
-    var langNoBoundaryFound: TranslatedMessage? = null
+    @LangMessage var langNoBoundaryFound: TranslatedMessage? = null
 
     /** Error shown when no origin block exists in the boundary. */
-    @LangMessage
-    var langNoOrigin: TranslatedMessage? = null
+    @LangMessage var langNoOrigin: TranslatedMessage? = null
 
     /** Error shown when multiple origin blocks are found. */
-    @LangMessage
-    var langMultipleOrigins: TranslatedMessage? = null
+    @LangMessage var langMultipleOrigins: TranslatedMessage? = null
 
     /** Error shown when the first portal-area block above origin is missing. */
-    @LangMessage
-    var langNoPortalBlockAboveOrigin: TranslatedMessage? = null
+    @LangMessage var langNoPortalBlockAboveOrigin: TranslatedMessage? = null
 
     /** Error shown when portal area above origin is not tall enough. */
-    @LangMessage
-    var langNotEnoughPortalBlocksAboveOrigin: TranslatedMessage? = null
+    @LangMessage var langNotEnoughPortalBlocksAboveOrigin: TranslatedMessage? = null
 
     /** Error shown when boundary dimensions exceed configured limits. */
-    @LangMessage
-    var langTooLarge: TranslatedMessage? = null
+    @LangMessage var langTooLarge: TranslatedMessage? = null
 
     /** Error shown when spawn space is too small/invalid. */
-    @LangMessage
-    var langTooSmallSpawn: TranslatedMessage? = null
+    @LangMessage var langTooSmallSpawn: TranslatedMessage? = null
 
     /** Error shown when portal area block count exceeds configured limit. */
-    @LangMessage
-    var langTooManyPortalAreaBlocks: TranslatedMessage? = null
+    @LangMessage var langTooManyPortalAreaBlocks: TranslatedMessage? = null
 
     /** Error shown when portal area is obstructed. */
-    @LangMessage
-    var langPortalAreaObstructed: TranslatedMessage? = null
+    @LangMessage var langPortalAreaObstructed: TranslatedMessage? = null
 
     /** Error shown when detected boundary intersects existing portals. */
-    @LangMessage
-    var langIntersectsExistingPortal: TranslatedMessage? = null
+    @LangMessage var langIntersectsExistingPortal: TranslatedMessage? = null
 
     /** Error shown when construction is denied by integration hooks. */
-    @LangMessage
-    var langBuildRestricted: TranslatedMessage? = null
+    @LangMessage var langBuildRestricted: TranslatedMessage? = null
 
     /** Error shown when console linking is denied by integration hooks. */
-    @LangMessage
-    var langLinkRestricted: TranslatedMessage? = null
+    @LangMessage var langLinkRestricted: TranslatedMessage? = null
 
     /** Error shown when selecting a target that is already connected elsewhere. */
-    @LangMessage
-    var langTargetAlreadyConnected: TranslatedMessage? = null
+    @LangMessage var langTargetAlreadyConnected: TranslatedMessage? = null
 
     /** Error shown when source portal usage is denied. */
-    @LangMessage
-    var langSourceUseRestricted: TranslatedMessage? = null
+    @LangMessage var langSourceUseRestricted: TranslatedMessage? = null
 
     /** Error shown when target portal usage is denied. */
-    @LangMessage
-    var langTargetUseRestricted: TranslatedMessage? = null
+    @LangMessage var langTargetUseRestricted: TranslatedMessage? = null
 
     /** All materials accepted as boundary/origin during detection. */
     private val portalBoundaryBuildMaterials: MutableSet<Material?> = HashSet()
@@ -223,7 +237,11 @@ class PortalConstructor(context: Context<Portals?>?) : Listener<Portals?>(contex
 
     /** Validates whether [console] can be linked to the detected [boundary]. */
     // Wrapper that performs an existence/permission check (checkOnly = true)
-    private fun canLinkConsoleCheck(player: Player, boundary: PortalBoundary, console: Block): Boolean {
+    private fun canLinkConsoleCheck(
+        player: Player,
+        boundary: PortalBoundary,
+        console: Block,
+    ): Boolean {
         return canLinkConsole(player, boundary.allBlocks(), console, null, true)
     }
 
@@ -231,11 +249,12 @@ class PortalConstructor(context: Context<Portals?>?) : Listener<Portals?>(contex
     // Wrapper that links an existing portal (checkOnly = false)
     private fun canLinkConsoleLink(player: Player, portal: Portal, console: Block): Boolean {
         // Gather all portal blocks that aren't consoles
-        val blocks = portal
-            .blocks()
-            .orEmpty()
-            .filter { pb -> pb.type() != PortalBlock.Type.CONSOLE }
-            .mapTo(ArrayList()) { pb -> pb.block()!! }
+        val blocks =
+            portal
+                .blocks()
+                .orEmpty()
+                .filter { pb -> pb.type() != PortalBlock.Type.CONSOLE }
+                .mapTo(ArrayList()) { pb -> pb.block()!! }
         return canLinkConsole(player, blocks, console, portal, false)
     }
 
@@ -245,7 +264,7 @@ class PortalConstructor(context: Context<Portals?>?) : Listener<Portals?>(contex
         blocks: MutableList<Block>,
         console: Block,
         existingPortal: Portal?,
-        checkOnly: Boolean
+        checkOnly: Boolean,
     ): Boolean {
         // Check a console block type
         if (console.type != configMaterialConsole) {
@@ -262,9 +281,10 @@ class PortalConstructor(context: Context<Portals?>?) : Listener<Portals?>(contex
         // Check distance
         var foundValidBlock = false
         for (block in blocks) {
-            if (abs(console.x - block.x) <= configConsoleMaxDistanceXz && abs(console.y - block.y) <= configConsoleMaxDistanceY && abs(
-                    console.z - block.z
-                ) <= configConsoleMaxDistanceXz
+            if (
+                abs(console.x - block.x) <= configConsoleMaxDistanceXz &&
+                    abs(console.y - block.y) <= configConsoleMaxDistanceY &&
+                    abs(console.z - block.z) <= configConsoleMaxDistanceXz
             ) {
                 foundValidBlock = true
                 break
@@ -276,7 +296,8 @@ class PortalConstructor(context: Context<Portals?>?) : Listener<Portals?>(contex
             return false
         }
 
-        // Call event: PortalLinkConsoleEvent expects MutableList<Block?>?, so create a nullable list copy
+        // Call event: PortalLinkConsoleEvent expects MutableList<Block?>?, so create a nullable
+        // list copy
         val eventBlocks = blocks.mapTo(ArrayList<Block?>()) { it }
         val event = PortalLinkConsoleEvent(player, console, eventBlocks, checkOnly, existingPortal)
         module!!.server.pluginManager.callEvent(event)
@@ -372,7 +393,7 @@ class PortalConstructor(context: Context<Portals?>?) : Listener<Portals?>(contex
                 langTooManyPortalAreaBlocks!!.send(
                     player,
                     "§6" + boundary.portalAreaBlocks()!!.size,
-                    "§6$configAreaMaxBlocks"
+                    "§6$configAreaMaxBlocks",
                 )
                 return null
             }
@@ -388,7 +409,11 @@ class PortalConstructor(context: Context<Portals?>?) : Listener<Portals?>(contex
 
     /** Returns whether [material] matches any configured boundary material variant. */
     fun isTypePartOfBoundary(material: Material?) =
-        material == configMaterialBoundary1 || material == configMaterialBoundary2 || material == configMaterialBoundary3 || material == configMaterialBoundary4 || material == configMaterialBoundary5
+        material == configMaterialBoundary1 ||
+            material == configMaterialBoundary2 ||
+            material == configMaterialBoundary3 ||
+            material == configMaterialBoundary4 ||
+            material == configMaterialBoundary5
 
     /** Returns whether [material] is part of boundary or origin definitions. */
     fun isTypePartOfBoundaryOrOrigin(material: Material?): Boolean {
@@ -400,12 +425,14 @@ class PortalConstructor(context: Context<Portals?>?) : Listener<Portals?>(contex
         player: Player,
         console: Block,
         boundaryBlock: Block,
-        checkOnly: Boolean
+        checkOnly: Boolean,
     ): PortalBoundary? {
         if (module!!.isPortalBlock(boundaryBlock)) {
-            module!!.log.severe(
-                "constructPortal() was called on a boundary that already belongs to a portal! This is a bug."
-            )
+            module!!
+                .log
+                .severe(
+                    "constructPortal() was called on a boundary that already belongs to a portal! This is a bug."
+                )
             return null
         }
 
@@ -470,11 +497,13 @@ class PortalConstructor(context: Context<Portals?>?) : Listener<Portals?>(contex
             }
 
             else -> {
-                module!!.log.warning(
-                    "Invalid block type '" +
+                module!!
+                    .log
+                    .warning(
+                        "Invalid block type '" +
                             mat +
                             "' encountered in portal block creation. Assuming boundary variant 1."
-                )
+                    )
                 type = PortalBlock.Type.BOUNDARY1
             }
         }
@@ -493,40 +522,46 @@ class PortalConstructor(context: Context<Portals?>?) : Listener<Portals?>(contex
             module!!.log.warning("EnterNameMenu is not available")
             return false
         }
-        enterNameMenu.create(player, Function2 { p: Player?, name: String? ->
-            // Re-check conditions, as someone could have changed blocks. This
-            // prevents this race condition.
-            val boundary = checkConstructionConditions(p!!, console, boundaryBlock, false)
-                ?: return@Function2 Menu.ClickResult.ERROR
+        enterNameMenu
+            .create(
+                player,
+                Function2 { p: Player?, name: String? ->
+                    // Re-check conditions, as someone could have changed blocks. This
+                    // prevents this race condition.
+                    val boundary =
+                        checkConstructionConditions(p!!, console, boundaryBlock, false)
+                            ?: return@Function2 Menu.ClickResult.ERROR
 
-            // Determine orientation
-            val orientation = Orientation.from(
-                boundary.plane()!!,
-                boundary.originBlock()!!,
-                console,
-                player.location
+                    // Determine orientation
+                    val orientation =
+                        Orientation.from(
+                            boundary.plane()!!,
+                            boundary.originBlock()!!,
+                            console,
+                            player.location,
+                        )
+
+                    // Construct portal
+                    val portal = Portal(p.uniqueId, orientation, boundary.spawn()!!)
+                    portal.name(name)
+                    module!!.addNewPortal(portal)
+
+                    // Add portal blocks
+                    for (block in boundary.allBlocks()) {
+                        module!!.addNewPortalBlock(portal, createPortalBlock(block))
+                    }
+
+                    // Link console
+                    linkConsole(p, console, portal)
+
+                    // Force update storage now, as a precaution.
+                    module!!.updatePersistentData()
+
+                    // Update portal blocks once
+                    portal.updateBlocks(module!!)
+                    Menu.ClickResult.SUCCESS
+                },
             )
-
-            // Construct portal
-            val portal = Portal(p.uniqueId, orientation, boundary.spawn()!!)
-            portal.name(name)
-            module!!.addNewPortal(portal)
-
-            // Add portal blocks
-            for (block in boundary.allBlocks()) {
-                module!!.addNewPortalBlock(portal, createPortalBlock(block))
-            }
-
-            // Link console
-            linkConsole(p, console, portal)
-
-            // Force update storage now, as a precaution.
-            module!!.updatePersistentData()
-
-            // Update portal blocks once
-            portal.updateBlocks(module!!)
-            Menu.ClickResult.SUCCESS
-        })
             .open(player)
 
         return true

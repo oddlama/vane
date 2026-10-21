@@ -5,7 +5,14 @@ from PIL import Image
 
 from barmc.display.busybar import build_elements
 from barmc.display.terminal import render
-from barmc.icons import Library, face_grid, head_icon, resolve, shrink_server_icon, to_png
+from barmc.icons import (
+    Library,
+    face_grid,
+    head_icon,
+    resolve,
+    shrink_server_icon,
+    to_png,
+)
 from barmc.state import Card
 
 
@@ -13,8 +20,16 @@ def test_busybar_elements_validate_and_long_lines_scroll():
     elements = build_elements(Card("bed", "MIRA", "BROKEN BY A CREEPER"), "abc.png")
     payload = types.DisplayElements(application_name="barmc", elements=elements).model_dump(exclude_none=True)
     icon, top, bottom = payload["elements"]
-    assert icon == {"id": "icon", "type": "image", "path": "abc.png", "x": 1, "y": 8, "align": "mid_left",
-                    "display": "front", "opacity": 100}
+    assert icon == {
+        "id": "icon",
+        "type": "image",
+        "path": "abc.png",
+        "x": 1,
+        "y": 8,
+        "align": "mid_left",
+        "display": "front",
+        "opacity": 100,
+    }
     assert top["y"] == 0 and top["align"] == "top_left" and "scroll_rate" not in top
     assert bottom["y"] == 16 and bottom["scroll_rate"] == 1200 and bottom["width"] == 57
     assert top["color"] == "#F3EFE4FF"

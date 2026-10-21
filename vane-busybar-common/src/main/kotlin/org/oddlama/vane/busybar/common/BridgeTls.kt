@@ -19,8 +19,8 @@ import javax.net.ssl.SSLContext
 /**
  * TLS identity of a bridge server, in one of three modes:
  *
- * - `auto`: a self-signed certificate generated on first start and kept in the data folder.
- *   Pairing strings carry the SHA-256 of its public key, which bridges pin instead of trusting a
+ * - `auto`: a self-signed certificate generated on first start and kept in the data folder. Pairing
+ *   strings carry the SHA-256 of its public key, which bridges pin instead of trusting a
  *   certificate authority. Needs no domain, no open ports besides the stream's, and no renewal.
  * - `keystore`: a PKCS#12 keystore the admin provides, for example converted from Let's Encrypt.
  * - `off`: plain HTTP, for a TLS reverse proxy in front of the port.
@@ -30,14 +30,20 @@ import javax.net.ssl.SSLContext
  */
 class BridgeTls(private val dataFolder: File, private val log: BridgeLog) {
     /** How the event stream is secured. */
-    enum class Mode { AUTO, KEYSTORE, OFF }
+    enum class Mode {
+        AUTO,
+        KEYSTORE,
+        OFF,
+    }
 
     /** Mode the event stream was last started with. */
     @Volatile
     var mode: Mode = Mode.OFF
         private set
 
-    /** Base64url SHA-256 of the auto certificate's public key while in [Mode.AUTO], otherwise null. */
+    /**
+     * Base64url SHA-256 of the auto certificate's public key while in [Mode.AUTO], otherwise null.
+     */
     @Volatile
     var pin: String? = null
         private set
@@ -61,10 +67,11 @@ class BridgeTls(private val dataFolder: File, private val log: BridgeLog) {
                 val (key, certificate) = autoIdentity()
                 pin = pinOf(certificate)
                 val password = CharArray(0)
-                val keyStore = KeyStore.getInstance("PKCS12").apply {
-                    load(null, null)
-                    setKeyEntry("busybar", key, password, arrayOf(certificate))
-                }
+                val keyStore =
+                    KeyStore.getInstance("PKCS12").apply {
+                        load(null, null)
+                        setKeyEntry("busybar", key, password, arrayOf(certificate))
+                    }
                 contextFor(keyStore, password)
             }
         }
@@ -78,8 +85,9 @@ class BridgeTls(private val dataFolder: File, private val log: BridgeLog) {
 
     /** Loads the admin's PKCS#12 keystore. */
     private fun loadKeystore(keystore: String?, keystorePassword: String?): SSLContext {
-        val path = keystore?.takeIf { it.isNotBlank() }
-            ?: throw GeneralSecurityException("Tls is 'keystore' but TlsKeystore is empty")
+        val path =
+            keystore?.takeIf { it.isNotBlank() }
+                ?: throw GeneralSecurityException("Tls is 'keystore' but TlsKeystore is empty")
         val password = keystorePassword.orEmpty().toCharArray()
         val keyStore = KeyStore.getInstance("PKCS12")
         File(path).inputStream().use { keyStore.load(it, password) }
@@ -91,10 +99,13 @@ class BridgeTls(private val dataFolder: File, private val log: BridgeLog) {
         val keyFile = autoKeyFile()
         val certificateFile = autoCertificateFile()
         if (keyFile.isFile && certificateFile.isFile) {
-            val key = KeyFactory.getInstance("EC").generatePrivate(PKCS8EncodedKeySpec(readPem(keyFile)))
-            val certificate = certificateFile.inputStream().use {
-                CertificateFactory.getInstance("X.509").generateCertificate(it) as X509Certificate
-            }
+            val key =
+                KeyFactory.getInstance("EC").generatePrivate(PKCS8EncodedKeySpec(readPem(keyFile)))
+            val certificate =
+                certificateFile.inputStream().use {
+                    CertificateFactory.getInstance("X.509").generateCertificate(it)
+                        as X509Certificate
+                }
             return key to certificate
         }
 
@@ -102,7 +113,9 @@ class BridgeTls(private val dataFolder: File, private val log: BridgeLog) {
         dataFolder.mkdirs()
         writePem(keyFile, "PRIVATE KEY", keys.private.encoded, private = true)
         writePem(certificateFile, "CERTIFICATE", certificate.encoded, private = false)
-        log.info("Generated the BUSY Bar TLS certificate, key fingerprint sha256=${pinOf(certificate)}")
+        log.info(
+            "Generated the BUSY Bar TLS certificate, key fingerprint sha256=${pinOf(certificate)}"
+        )
         return keys.private to certificate
     }
 
@@ -121,12 +134,15 @@ class BridgeTls(private val dataFolder: File, private val log: BridgeLog) {
         private const val COMMON_NAME = "vane-busybar"
 
         /** The mode named [value], blank meaning [Mode.AUTO], or null for unknown names. */
-        fun parseMode(value: String?): Mode? = when (value?.trim()?.lowercase()) {
-            "auto", null, "" -> Mode.AUTO
-            "keystore" -> Mode.KEYSTORE
-            "off" -> Mode.OFF
-            else -> null
-        }
+        fun parseMode(value: String?): Mode? =
+            when (value?.trim()?.lowercase()) {
+                "auto",
+                null,
+                "" -> Mode.AUTO
+                "keystore" -> Mode.KEYSTORE
+                "off" -> Mode.OFF
+                else -> null
+            }
 
         /** Base64url SHA-256 of [certificate]'s SubjectPublicKeyInfo, the value bridges pin. */
         fun pinOf(certificate: X509Certificate): String {
@@ -135,9 +151,10 @@ class BridgeTls(private val dataFolder: File, private val log: BridgeLog) {
         }
 
         private fun contextFor(keyStore: KeyStore, password: CharArray): SSLContext {
-            val keyManagers = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm())
-                .apply { init(keyStore, password) }
-                .keyManagers
+            val keyManagers =
+                KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm())
+                    .apply { init(keyStore, password) }
+                    .keyManagers
             return SSLContext.getInstance("TLS").apply { init(keyManagers, null, null) }
         }
 
@@ -150,14 +167,22 @@ class BridgeTls(private val dataFolder: File, private val log: BridgeLog) {
             }
         }
 
-        /** Writes [der] as PEM; [private] files get owner-only permissions where the filesystem supports them. */
+        /**
+         * Writes [der] as PEM; [private] files get owner-only permissions where the filesystem
+         * supports them.
+         */
         private fun writePem(file: File, label: String, der: ByteArray, private: Boolean) {
             val body = Base64.getMimeEncoder(64, "\n".toByteArray()).encodeToString(der)
             val pem = "-----BEGIN $label-----\n$body\n-----END $label-----\n"
             file.delete()
             val path = file.toPath()
             if (private && path.fileSystem.supportedFileAttributeViews().contains("posix")) {
-                Files.createFile(path, PosixFilePermissions.asFileAttribute(PosixFilePermissions.fromString("rw-------")))
+                Files.createFile(
+                    path,
+                    PosixFilePermissions.asFileAttribute(
+                        PosixFilePermissions.fromString("rw-------")
+                    ),
+                )
             }
             Files.writeString(path, pem)
         }

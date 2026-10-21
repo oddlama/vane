@@ -5,9 +5,23 @@ def make(permissions=("receive.players", "action.presence")):
     sent = []
     icons = []
     s = BarState(send=sent.append, on_icon_changed=icons.append)
-    s.handle("snapshot", {"online": True, "players": 3, "max": 20, "tps": 19.9, "mspt": 21.0, "ticks": 6000,
-                          "sleeping": 0, "sleep_needed": 2, "busy": False, "permissions": list(permissions),
-                          "icon": '"abc"'}, 0.0)
+    s.handle(
+        "snapshot",
+        {
+            "online": True,
+            "players": 3,
+            "max": 20,
+            "tps": 19.9,
+            "mspt": 21.0,
+            "ticks": 6000,
+            "sleeping": 0,
+            "sleep_needed": 2,
+            "busy": False,
+            "permissions": list(permissions),
+            "icon": '"abc"',
+        },
+        0.0,
+    )
     return s, sent, icons
 
 
@@ -81,6 +95,7 @@ def test_players_screen_without_tps_permission_and_before_snapshot():
 
 def test_world_clock_moves_in_ten_minute_steps():
     from barmc.state import clock_of
+
     assert clock_of(15116) == "21:06" and clock_of(15116, step=10) == "21:00"
 
 
@@ -117,7 +132,11 @@ def test_wheel_flips_idle_screens():
 
 
 def _quit(s, name, online, now):
-    s.handle("player.quit", {"player": name, "online": online, "max": 20, "head": "skin" + name}, now)
+    s.handle(
+        "player.quit",
+        {"player": name, "online": online, "max": 20, "head": "skin" + name},
+        now,
+    )
 
 
 def test_mass_disconnect_becomes_one_counting_card():
@@ -163,24 +182,48 @@ def test_server_stop_drops_stale_alerts():
 
 def test_advancement_shows_title_player_and_frame_colour():
     from barmc.sprites import PURPLE
+
     s, _, _ = make()
-    s.handle("advancement", {"player": "Mira", "head": "abc", "title": "Sweet Dreams", "frame": "challenge", "count": 1}, 0.0)
+    s.handle(
+        "advancement",
+        {
+            "player": "Mira",
+            "head": "abc",
+            "title": "Sweet Dreams",
+            "frame": "challenge",
+            "count": 1,
+        },
+        0.0,
+    )
     card, label = s.frame(0.0)
     assert label == "alert advancement"
-    assert (card.icon, card.line1, card.line2, card.color1) == ("head:Mira:abc", "Sweet Dreams", "Mira", PURPLE)
+    assert (card.icon, card.line1, card.line2, card.color1) == (
+        "head:Mira:abc",
+        "Sweet Dreams",
+        "Mira",
+        PURPLE,
+    )
     assert s.current.priority == 3
 
 
 def test_advancement_batch_from_the_server_shows_its_count():
     s, _, _ = make()
-    s.handle("advancement", {"player": "Mira", "title": "Stone Age", "frame": "task", "count": 120}, 0.0)
+    s.handle(
+        "advancement",
+        {"player": "Mira", "title": "Stone Age", "frame": "task", "count": 120},
+        0.0,
+    )
     assert s.frame(0.0)[0].line1 == "120 ADVANCEMENTS"
 
 
 def test_any_kind_bursts_and_counts_items():
     s, _, _ = make()
     for i in range(5):
-        s.handle("advancement", {"player": f"P{i}", "title": "Stone Age", "frame": "task", "count": 2}, 0.1 * i)
+        s.handle(
+            "advancement",
+            {"player": f"P{i}", "title": "Stone Age", "frame": "task", "count": 2},
+            0.1 * i,
+        )
     card, label = s.frame(1.0)
     assert label == "alert advancement.burst" and card.line1 == "10 ADVANCEMENTS" and card.line2 == "LAST P4"
     for i in range(4):
@@ -192,6 +235,7 @@ def test_any_kind_bursts_and_counts_items():
 
 def test_queue_is_capped_and_skipped_alerts_are_reported():
     from barmc.state import MAX_QUEUE
+
     s, _, _ = make()
     # Distinct kinds so nothing merges: 1 showing + MAX_QUEUE queued, the rest dropped.
     for i in range(MAX_QUEUE + 4):
@@ -212,10 +256,24 @@ def test_stale_alerts_are_skipped_then_summarised():
 
 def test_region_enter_alerts_and_adds_an_idle_screen_until_leaving():
     s, _, _ = make()
-    s.handle("region.enter", {"region": "Spawn", "owner": "Mira", "own": False, "pvp": False, "may_build": False}, 1.0)
+    s.handle(
+        "region.enter",
+        {
+            "region": "Spawn",
+            "owner": "Mira",
+            "own": False,
+            "pvp": False,
+            "may_build": False,
+        },
+        1.0,
+    )
     card, label = s.frame(1.0)
     assert label == "alert region.enter"
-    assert (card.icon, card.line1, card.line2) == ("shield-denied", "Spawn", "SAFE ZONE")
+    assert (card.icon, card.line1, card.line2) == (
+        "shield-denied",
+        "Spawn",
+        "SAFE ZONE",
+    )
     assert "region" in s.ambient_ids(10.0)
     s.handle("region.leave", {"region": "Spawn"}, 11.0)
     assert "region" not in s.ambient_ids(11.0)
@@ -223,35 +281,69 @@ def test_region_enter_alerts_and_adds_an_idle_screen_until_leaving():
 
 def test_region_card_says_whose_land_it_is():
     from barmc.state import region_card
+
     assert region_card({"region": "Base", "own": True, "pvp": True, "may_build": True}).line2 == "YOUR LAND"
-    card = region_card({"region": "Farm", "owner": "Otto", "own": False, "pvp": True, "may_build": True})
+    card = region_card(
+        {
+            "region": "Farm",
+            "owner": "Otto",
+            "own": False,
+            "pvp": True,
+            "may_build": True,
+        }
+    )
     assert (card.icon, card.line2) == ("shield", "BY Otto")
 
 
 def test_snapshot_restores_the_current_region():
     s, _, _ = make()
-    s.handle("snapshot", {"online": True, "players": 1, "max": 20, "permissions": [],
-                          "region": {"region": "Base", "own": True, "pvp": True, "may_build": True}}, 0.0)
+    s.handle(
+        "snapshot",
+        {
+            "online": True,
+            "players": 1,
+            "max": 20,
+            "permissions": [],
+            "region": {"region": "Base", "own": True, "pvp": True, "may_build": True},
+        },
+        0.0,
+    )
     assert s.ambient_card("region", 0.0).line1 == "Base"
 
 
 def test_visitor_cards_name_one_to_three_and_count_more():
     s, _, _ = make()
-    s.handle("region.visitor", {"region": "Base", "visitors": ["Steve"], "count": 1, "head": "abc"}, 1.0)
+    s.handle(
+        "region.visitor",
+        {"region": "Base", "visitors": ["Steve"], "count": 1, "head": "abc"},
+        1.0,
+    )
     card = s.frame(1.0)[0]
     assert (card.icon, card.line1, card.line2) == ("head:Steve:abc", "Steve", "IN Base")
     s.press_back(2.0)
-    s.handle("region.visitor", {"region": "Base", "visitors": ["Alex", "Sam"], "count": 2, "head": None}, 70.0)
+    s.handle(
+        "region.visitor",
+        {"region": "Base", "visitors": ["Alex", "Sam"], "count": 2, "head": None},
+        70.0,
+    )
     assert s.frame(70.0)[0].line1 == "Alex +1"
     s.press_back(71.0)
-    s.handle("region.visitor", {"region": "Base", "visitors": ["A", "B", "C", "D", "E"], "count": 7}, 140.0)
+    s.handle(
+        "region.visitor",
+        {"region": "Base", "visitors": ["A", "B", "C", "D", "E"], "count": 7},
+        140.0,
+    )
     assert s.frame(140.0)[0].line1 == "7 VISITORS"
 
 
 def test_visitor_bursts_across_regions_fold_into_one_count():
     s, _, _ = make()
     for i, region in enumerate(["Base", "Farm", "Mine", "Tower"]):
-        s.handle("region.visitor", {"region": region, "visitors": [f"P{i}"], "count": 1}, 1.0 + i * 0.1)
+        s.handle(
+            "region.visitor",
+            {"region": region, "visitors": [f"P{i}"], "count": 1},
+            1.0 + i * 0.1,
+        )
     card, label = s.frame(2.0)
     assert label == "alert region.visitor.burst"
     assert card.line1 == "4 VISITORS"

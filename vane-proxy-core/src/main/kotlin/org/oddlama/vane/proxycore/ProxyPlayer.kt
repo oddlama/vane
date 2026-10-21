@@ -1,11 +1,9 @@
 package org.oddlama.vane.proxycore
 
-import org.oddlama.vane.proxycore.commands.ProxyCommandSender
 import java.util.*
+import org.oddlama.vane.proxycore.commands.ProxyCommandSender
 
-/**
- * Represents a connected player on the proxy.
- */
+/** Represents a connected player on the proxy. */
 interface ProxyPlayer : ProxyCommandSender {
     /**
      * Disconnects the player with a reason message.

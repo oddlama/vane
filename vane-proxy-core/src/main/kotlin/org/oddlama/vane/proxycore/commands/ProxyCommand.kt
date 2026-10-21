@@ -1,12 +1,13 @@
 package org.oddlama.vane.proxycore.commands
 
-import org.oddlama.vane.proxycore.VaneProxyPlugin
 import java.util.*
+import org.oddlama.vane.proxycore.VaneProxyPlugin
 
 /**
  * Base abstraction for proxy commands.
  *
- * @property permission permission node required to execute this command, or `null` for unrestricted access.
+ * @property permission permission node required to execute this command, or `null` for unrestricted
+ *   access.
  * @property plugin owning plugin context.
  */
 abstract class ProxyCommand(val permission: String?, @JvmField val plugin: VaneProxyPlugin) {
@@ -24,5 +25,6 @@ abstract class ProxyCommand(val permission: String?, @JvmField val plugin: VaneP
      * @param uuid player UUID.
      * @return `true` when unrestricted or permission check succeeds.
      */
-    fun hasPermission(uuid: UUID?): Boolean = permission == null || plugin.proxy.hasPermission(uuid, permission)
+    fun hasPermission(uuid: UUID?): Boolean =
+        permission == null || plugin.proxy.hasPermission(uuid, permission)
 }

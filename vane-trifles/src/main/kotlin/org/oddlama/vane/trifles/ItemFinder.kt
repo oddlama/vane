@@ -17,15 +17,14 @@ import org.oddlama.vane.annotation.config.ConfigInt
 import org.oddlama.vane.core.Listener
 import org.oddlama.vane.core.module.Context
 
-/**
- * Finds nearby containers/entities that contain a requested material and highlights matches.
- */
-class ItemFinder(context: Context<Trifles?>) : Listener<Trifles?>(
-    context.group(
-        "ItemFinder",
-        "Enables players to search for items in nearby containers by either shift-right-clicking a similar item in their inventory or by using the `/finditem <item>` command."
-    )
-) {
+/** Finds nearby containers/entities that contain a requested material and highlights matches. */
+class ItemFinder(context: Context<Trifles?>) :
+    Listener<Trifles?>(
+        context.group(
+            "ItemFinder",
+            "Enables players to search for items in nearby containers by either shift-right-clicking a similar item in their inventory or by using the `/finditem <item>` command.",
+        )
+    ) {
     /** Strong reference to the owning module used for registration and scheduling. */
     private val moduleRef = requireNotNull(module)
 
@@ -34,9 +33,10 @@ class ItemFinder(context: Context<Trifles?>) : Listener<Trifles?>(
         def = 2,
         min = 1,
         max = 10,
-        desc = "The radius of chunks in which containers (and possibly entities) are checked for matching items."
+        desc =
+            "The radius of chunks in which containers (and possibly entities) are checked for matching items.",
     )
-            /** Radius in chunks around the player to scan for matching inventories. */
+    /** Radius in chunks around the player to scan for matching inventories. */
     var configRadius: Int = 0
 
     /** Whether inventory-bearing entities are included in the search. */
@@ -46,17 +46,19 @@ class ItemFinder(context: Context<Trifles?>) : Listener<Trifles?>(
     /** Whether shift-right-click shortcut usage requires an explicit permission. */
     @ConfigBoolean(
         def = false,
-        desc = "Only allow players to use the shift+rightclick shortcut when they have the shortcut permission `vane.trifles.use_item_find_shortcut`."
+        desc =
+            "Only allow players to use the shift+rightclick shortcut when they have the shortcut permission `vane.trifles.use_item_find_shortcut`.",
     )
-            /** Whether shift-right-click shortcut usage requires an explicit permission. */
+    /** Whether shift-right-click shortcut usage requires an explicit permission. */
     var configRequirePermission: Boolean = false
 
     /** Permission checked when shortcut usage is configured to require it. */
-    val useItemFindShortcutPermission: Permission = Permission(
-        "vane.${moduleRef.annotationName}.use_item_find_shortcut",
-        "Allows a player to use shfit+rightclick to search for items if the require_permission config is set",
-        PermissionDefault.FALSE
-    )
+    val useItemFindShortcutPermission: Permission =
+        Permission(
+            "vane.${moduleRef.annotationName}.use_item_find_shortcut",
+            "Allows a player to use shfit+rightclick to search for items if the require_permission config is set",
+            PermissionDefault.FALSE,
+        )
 
     /** Registers the shortcut permission in Bukkit's permission manager. */
     init {
@@ -82,7 +84,9 @@ class ItemFinder(context: Context<Trifles?>) : Listener<Trifles?>(
         }
 
         // Trigger only for shift-right-click quick moves.
-        if (!(event.action == InventoryAction.MOVE_TO_OTHER_INVENTORY && event.click == ClickType.SHIFT_RIGHT)
+        if (
+            !(event.action == InventoryAction.MOVE_TO_OTHER_INVENTORY &&
+                event.click == ClickType.SHIFT_RIGHT)
         ) {
             return
         }
@@ -131,13 +135,23 @@ class ItemFinder(context: Context<Trifles?>) : Listener<Trifles?>(
                             if (packetEventsEnabled) {
                                 ItemFinderPacketUtils.indicateChestMatch(module, player, tileEntity)
                             } else {
-                                fallbackIndicateMatch(player, tileEntity.location.add(0.5, 0.5, 0.5))
+                                fallbackIndicateMatch(
+                                    player,
+                                    tileEntity.location.add(0.5, 0.5, 0.5),
+                                )
                             }
                         } else {
                             if (packetEventsEnabled) {
-                                ItemFinderPacketUtils.indicateContainerMatch(module, player, tileEntity)
+                                ItemFinderPacketUtils.indicateContainerMatch(
+                                    module,
+                                    player,
+                                    tileEntity,
+                                )
                             } else {
-                                fallbackIndicateMatch(player, tileEntity.location.add(0.5, 0.5, 0.5))
+                                fallbackIndicateMatch(
+                                    player,
+                                    tileEntity.location.add(0.5, 0.5, 0.5),
+                                )
                             }
                         }
                         anyFound = true
@@ -153,7 +167,11 @@ class ItemFinder(context: Context<Trifles?>) : Listener<Trifles?>(
                         if (entity is InventoryHolder) {
                             if (entity.inventory.contains(material)) {
                                 if (packetEventsEnabled) {
-                                    ItemFinderPacketUtils.indicateEntityMatch(module, player, entity)
+                                    ItemFinderPacketUtils.indicateEntityMatch(
+                                        module,
+                                        player,
+                                        entity,
+                                    )
                                 } else {
                                     fallbackIndicateMatch(player, entity.location)
                                 }
@@ -166,12 +184,17 @@ class ItemFinder(context: Context<Trifles?>) : Listener<Trifles?>(
         }
 
         if (anyFound) {
-            player.playSound(player, Sound.BLOCK_AMETHYST_BLOCK_HIT, SoundCategory.MASTER, 1.0f, 1.3f)
+            player.playSound(
+                player,
+                Sound.BLOCK_AMETHYST_BLOCK_HIT,
+                SoundCategory.MASTER,
+                1.0f,
+                1.3f,
+            )
         } else {
             player.playSound(player, Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 1.0f, 5.0f)
         }
 
         return anyFound
     }
-
 }

@@ -17,9 +17,7 @@ class CombinedErrorCheckResult(private val errors: List<ErrorCheckResult>) :
         }
     }
 
-    /**
-     * Sends the group header and each nested sub-error.
-     */
+    /** Sends the group header and each nested sub-error. */
     override fun apply(command: Command<*>?, sender: CommandSender?, indent: String): Boolean {
         super.apply(command, sender, indent)
         errors.forEach { it.apply(command, sender, "$indent  ") }

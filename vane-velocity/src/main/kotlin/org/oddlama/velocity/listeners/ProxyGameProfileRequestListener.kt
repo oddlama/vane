@@ -3,11 +3,11 @@ package org.oddlama.velocity.listeners
 import com.velocitypowered.api.event.Subscribe
 import com.velocitypowered.api.event.player.GameProfileRequestEvent
 import com.velocitypowered.api.util.GameProfile
+import java.util.logging.Level
 import org.oddlama.vane.proxycore.listeners.PreLoginEvent.Companion.registerAuthMultiplexPlayer
 import org.oddlama.velocity.Util.getServerForHost
 import org.oddlama.velocity.Velocity
 import org.oddlama.velocity.compat.VelocityCompatServerInfo
-import java.util.logging.Level
 
 /**
  * Finalizes multiplexed authentication by rewriting game profiles after pre-login.
@@ -40,7 +40,9 @@ class ProxyGameProfileRequestListener(private val velocity: Velocity) {
             // We somehow have a multiplexer connection, but it wasn't registered in
             // `pendingMultiplexerLogins`
             // Not much to do here; the event isn't cancellable
-            velocity.getLogger().log(Level.WARNING, "Unregistered multiplexer connection managed to get through!")
+            velocity
+                .getLogger()
+                .log(Level.WARNING, "Unregistered multiplexer connection managed to get through!")
             return
         }
 

@@ -1,9 +1,9 @@
 [versions]
-paper = "26.3.build.+"
+paper = "26.3.build.207-stable"
 velocity = "4.3.0"
 bstats = "3.2.1"
 dokka = "2.2.0"
-geyser = "2.12.0-SNAPSHOT"
+geyser = "2.12.0-20261020.150735-13"
 
 [libraries]
 annotations = { group = "org.jetbrains", name = "annotations", version = "26.1.0" }
@@ -41,7 +41,7 @@ dynmap = { group = "us.dynmap", name = "DynmapCoreAPI", version = "3.8" }
 bluemap = { group = "de.bluecolored", name = "bluemap-api", version = "2.8.2" }
 
 [plugins]
-paperweightUserdev = { id = "io.papermc.paperweight.userdev", version = "2.0.0-beta.+" }
+paperweightUserdev = { id = "io.papermc.paperweight.userdev", version = "2.0.0-beta.24" }
 runPaper = { id = "xyz.jpenilla.run-paper", version = "3.1.0" }
 shadow = { id = "com.gradleup.shadow", version = "9.6.1" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }

@@ -19,21 +19,38 @@ object BridgePermissions {
     const val ACTION_AUTOSTOP_ABORT = "action.autostop_abort"
 
     /** Every permission, in the order bridges receive them. */
-    val ALL = listOf(
-        RECEIVE_PLAYERS, RECEIVE_BEDTIME, RECEIVE_PORTALS, RECEIVE_ADVANCEMENTS, RECEIVE_SLIMECHUNK, RECEIVE_REGIONS,
-        RECEIVE_REGION_VISITORS, RECEIVE_SERVER, RECEIVE_AUTOSTOP, ACTION_PRESENCE, ACTION_AUTOSTOP_ABORT
-    )
+    val ALL =
+        listOf(
+            RECEIVE_PLAYERS,
+            RECEIVE_BEDTIME,
+            RECEIVE_PORTALS,
+            RECEIVE_ADVANCEMENTS,
+            RECEIVE_SLIMECHUNK,
+            RECEIVE_REGIONS,
+            RECEIVE_REGION_VISITORS,
+            RECEIVE_SERVER,
+            RECEIVE_AUTOSTOP,
+            ACTION_PRESENCE,
+            ACTION_AUTOSTOP_ABORT,
+        )
 
     /** Granted to everyone by default; the rest default to operators. */
-    val EVERYONE = setOf(
-        RECEIVE_PLAYERS, RECEIVE_BEDTIME, RECEIVE_PORTALS, RECEIVE_ADVANCEMENTS, RECEIVE_SLIMECHUNK, RECEIVE_REGIONS,
-        ACTION_PRESENCE
-    )
+    val EVERYONE =
+        setOf(
+            RECEIVE_PLAYERS,
+            RECEIVE_BEDTIME,
+            RECEIVE_PORTALS,
+            RECEIVE_ADVANCEMENTS,
+            RECEIVE_SLIMECHUNK,
+            RECEIVE_REGIONS,
+            ACTION_PRESENCE,
+        )
 
     /** The permission a bridge request needs, or null for unknown requests. */
-    fun forAction(action: String): String? = when (action) {
-        "presence.set" -> ACTION_PRESENCE
-        "autostop.abort" -> ACTION_AUTOSTOP_ABORT
-        else -> null
-    }
+    fun forAction(action: String): String? =
+        when (action) {
+            "presence.set" -> ACTION_PRESENCE
+            "autostop.abort" -> ACTION_AUTOSTOP_ABORT
+            else -> null
+        }
 }

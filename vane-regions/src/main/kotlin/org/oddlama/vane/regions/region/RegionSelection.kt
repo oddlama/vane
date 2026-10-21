@@ -1,45 +1,35 @@
 package org.oddlama.vane.regions.region
 
+import java.math.BigDecimal
+import java.math.RoundingMode
+import kotlin.math.abs
+import kotlin.math.ceil
+import kotlin.math.pow
 import org.bukkit.Material
 import org.bukkit.block.Block
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.oddlama.vane.regions.Regions
 import org.oddlama.vane.util.PlayerUtil
-import java.math.BigDecimal
-import java.math.RoundingMode
-import kotlin.math.abs
-import kotlin.math.ceil
-import kotlin.math.pow
 
-/**
- * Mutable two-corner selection used while creating new regions.
- */
+/** Mutable two-corner selection used while creating new regions. */
 class RegionSelection(private val regions: Regions) {
     @JvmField
-            /**
-             * Primary selected corner block.
-             */
+    /** Primary selected corner block. */
     var primary: Block? = null
 
     @JvmField
-            /**
-             * Secondary selected corner block.
-             */
+    /** Secondary selected corner block. */
     var secondary: Block? = null
 
-    /**
-     * Returns selected corners when both points are set.
-     */
+    /** Returns selected corners when both points are set. */
     private fun selectedBlocksOrNull(): Pair<Block, Block>? {
         val primaryBlock = primary ?: return null
         val secondaryBlock = secondary ?: return null
         return primaryBlock to secondaryBlock
     }
 
-    /**
-     * Returns whether current selection intersects any existing region.
-     */
+    /** Returns whether current selection intersects any existing region. */
     fun intersectsExisting(): Boolean {
         val (primaryBlock, _) = selectedBlocksOrNull() ?: return false
         val extent = extent()
@@ -59,9 +49,7 @@ class RegionSelection(private val regions: Regions) {
         return false
     }
 
-    /**
-     * Computes current selection price using configured pricing rules.
-     */
+    /** Computes current selection price using configured pricing rules. */
     fun price(): Double {
         val (primaryBlock, secondaryBlock) = requireNotNull(selectedBlocksOrNull())
         val dx = 1 + abs(primaryBlock.x - secondaryBlock.x)
@@ -69,8 +57,8 @@ class RegionSelection(private val regions: Regions) {
         val dz = 1 + abs(primaryBlock.z - secondaryBlock.z)
         val cost =
             ((regions.configCostYMultiplicator.pow(dy / 16.0) * regions.configCostXzBase) / 256.0) *
-                    dx *
-                    dz
+                dx *
+                dz
         return if (regions.configEconomyAsCurrency) {
             var decimalPlaces = regions.configEconomyDecimalPlaces
             if (decimalPlaces == -1) {
@@ -87,9 +75,7 @@ class RegionSelection(private val regions: Regions) {
         }
     }
 
-    /**
-     * Returns whether the player can currently afford this selection.
-     */
+    /** Returns whether the player can currently afford this selection. */
     fun canAfford(player: Player): Boolean {
         val price = price()
         if (price <= 0) {
@@ -106,9 +92,7 @@ class RegionSelection(private val regions: Regions) {
         }
     }
 
-    /**
-     * Returns whether the selection is complete, valid, non-overlapping, and affordable.
-     */
+    /** Returns whether the selection is complete, valid, non-overlapping, and affordable. */
     fun isValid(player: Player): Boolean {
         val (primaryBlock, secondaryBlock) = selectedBlocksOrNull() ?: return false
 
@@ -122,7 +106,13 @@ class RegionSelection(private val regions: Regions) {
         val dz = 1 + abs(primaryBlock.z - secondaryBlock.z)
 
         // min <= extent <= max
-        if (dx < regions.configMinRegionExtentX || dy < regions.configMinRegionExtentY || dz < regions.configMinRegionExtentZ || dx > regions.configMaxRegionExtentX || dy > regions.configMaxRegionExtentY || dz > regions.configMaxRegionExtentZ
+        if (
+            dx < regions.configMinRegionExtentX ||
+                dy < regions.configMinRegionExtentY ||
+                dz < regions.configMinRegionExtentZ ||
+                dx > regions.configMaxRegionExtentX ||
+                dy > regions.configMaxRegionExtentY ||
+                dz > regions.configMaxRegionExtentZ
         ) {
             return false
         }
@@ -136,9 +126,7 @@ class RegionSelection(private val regions: Regions) {
         return canAfford(player)
     }
 
-    /**
-     * Builds a normalized extent from current selected corners.
-     */
+    /** Builds a normalized extent from current selected corners. */
     fun extent(): RegionExtent {
         val (primaryBlock, secondaryBlock) = requireNotNull(selectedBlocksOrNull())
         return RegionExtent(primaryBlock, secondaryBlock)

@@ -1,5 +1,6 @@
 package org.oddlama.vane.admin
 
+import kotlin.math.sqrt
 import org.bukkit.Location
 import org.bukkit.World
 import org.bukkit.block.Block
@@ -19,45 +20,43 @@ import org.oddlama.vane.annotation.config.ConfigInt
 import org.oddlama.vane.annotation.config.ConfigString
 import org.oddlama.vane.core.Listener
 import org.oddlama.vane.core.module.Context
-import kotlin.math.sqrt
 
-/**
- * Protects a configurable spawn area from block and entity interactions.
- */
-class SpawnProtection(context: Context<Admin?>) : Listener<Admin?>(
-    context.groupDefaultDisabled(
-        "SpawnProtection",
-        "Enable spawn protection. Slightly more sophisticated than the vanilla spawn protection, if you need even more control, use regions. This will prevent anyone from modifying the spawn of the world if they don't have the permission '" +
+/** Protects a configurable spawn area from block and entity interactions. */
+class SpawnProtection(context: Context<Admin?>) :
+    Listener<Admin?>(
+        context.groupDefaultDisabled(
+            "SpawnProtection",
+            "Enable spawn protection. Slightly more sophisticated than the vanilla spawn protection, if you need even more control, use regions. This will prevent anyone from modifying the spawn of the world if they don't have the permission '" +
                 PERMISSION_NAME +
-                "'."
-    )
-) {
+                "'.",
+        )
+    ) {
     private val admin: Admin
         get() = requireNotNull(module)
 
-    private val permission = Permission(
-        PERMISSION_NAME,
-        "Allow player to bypass spawn protection",
-        PermissionDefault.OP
-    )
+    private val permission =
+        Permission(
+            PERMISSION_NAME,
+            "Allow player to bypass spawn protection",
+            PermissionDefault.OP,
+        )
 
     @ConfigBoolean(def = true, desc = "Allow interaction events at spawn (buttons, levers, etc.).")
     private val configAllowInteraction = false
 
-    @ConfigInt(def = 64, min = 0, desc = "Radius to protect.")
-    private val configRadius = 0
+    @ConfigInt(def = 64, min = 0, desc = "Radius to protect.") private val configRadius = 0
 
-    @ConfigString(def = "world", desc = "The spawn world.")
-    private val configWorld: String? = null
+    @ConfigString(def = "world", desc = "The spawn world.") private val configWorld: String? = null
 
-    @ConfigBoolean(def = true, desc = "Use world's spawn location instead of the specified center coordinates.")
+    @ConfigBoolean(
+        def = true,
+        desc = "Use world's spawn location instead of the specified center coordinates.",
+    )
     private val configUseSpawnLocation = false
 
-    @ConfigInt(def = 0, desc = "Center X coordinate.")
-    private val configX = 0
+    @ConfigInt(def = 0, desc = "Center X coordinate.") private val configX = 0
 
-    @ConfigInt(def = 0, desc = "Center Z coordinate.")
-    private val configZ = 0
+    @ConfigInt(def = 0, desc = "Center Z coordinate.") private val configZ = 0
 
     private var spawnCenter: Location? = null
 
@@ -65,9 +64,7 @@ class SpawnProtection(context: Context<Admin?>) : Listener<Admin?>(
         admin.registerPermission(permission)
     }
 
-    /**
-     * Recomputes the protected spawn center after config updates.
-     */
+    /** Recomputes the protected spawn center after config updates. */
     public override fun onConfigChange() {
         spawnCenter = null
         scheduleNextTick {
@@ -84,25 +81,22 @@ class SpawnProtection(context: Context<Admin?>) : Listener<Admin?>(
                 }
                 spawnCenter = null
             } else {
-                spawnCenter = if (configUseSpawnLocation) {
-                    world.spawnLocation.apply { y = 0.0 }
-                } else {
-                    Location(world, configX.toDouble(), 0.0, configZ.toDouble())
-                }
+                spawnCenter =
+                    if (configUseSpawnLocation) {
+                        world.spawnLocation.apply { y = 0.0 }
+                    } else {
+                        Location(world, configX.toDouble(), 0.0, configZ.toDouble())
+                    }
             }
         }
     }
 
-    /**
-     * Convenience overload for block-based checks.
-     */
+    /** Convenience overload for block-based checks. */
     fun denyModifySpawn(block: Block, entity: Entity?): Boolean {
         return denyModifySpawn(block.location, entity)
     }
 
-    /**
-     * Returns true when a player attempts to modify a protected spawn location.
-     */
+    /** Returns true when a player attempts to modify a protected spawn location. */
     fun denyModifySpawn(location: Location, entity: Entity?): Boolean {
         val center = spawnCenter ?: return false
         val player = entity as? Player ?: return false

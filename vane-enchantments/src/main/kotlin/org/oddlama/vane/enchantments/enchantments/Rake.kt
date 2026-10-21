@@ -17,23 +17,20 @@ import org.oddlama.vane.util.ItemUtil
 import org.oddlama.vane.util.PlayerUtil
 
 /**
- * Rake is an enchantment that allows players to till additional farmland blocks
- * in a 3x3 area when they right-click on a farmland block with a golden hoe
- * enchanted with this enchantment.
+ * Rake is an enchantment that allows players to till additional farmland blocks in a 3x3 area when
+ * they right-click on a farmland block with a golden hoe enchanted with this enchantment.
  *
+ * @param context The context of the enchantment, providing access to various utility methods and
+ *   configurations.
  * @constructor Creates a new Rake enchantment instance.
- * @param context The context of the enchantment, providing access to
- * various utility methods and configurations.
  */
 @VaneEnchantment(name = "rake", maxLevel = 4, rarity = Rarity.COMMON, treasure = true)
 class Rake(context: Context<Enchantments?>) : CustomEnchantment<Enchantments?>(context) {
     /**
-     * Defines the default recipes for the Rake enchantment, allowing players
-     * to craft the enchanted item using an ancient tome of knowledge and a
-     * golden hoe.
+     * Defines the default recipes for the Rake enchantment, allowing players to craft the enchanted
+     * item using an ancient tome of knowledge and a golden hoe.
      *
-     * @return A RecipeList containing the default crafting recipe for the
-     * Rake enchantment.
+     * @return A RecipeList containing the default crafting recipe for the Rake enchantment.
      */
     override fun defaultRecipes(): RecipeList {
         return RecipeList.of(
@@ -46,15 +43,13 @@ class Rake(context: Context<Enchantments?>) : CustomEnchantment<Enchantments?>(c
     }
 
     /**
-     * Event handler for the PlayerInteractEvent, triggered when a player
-     * right-clicks on a block. This method checks if the clicked block is
-     * farmland and, if so, tills additional farmland blocks in a 3x3 area
-     * around the clicked block, consuming durability from the enchanted
-     * golden hoe.
+     * Event handler for the PlayerInteractEvent, triggered when a player right-clicks on a block.
+     * This method checks if the clicked block is farmland and, if so, tills additional farmland
+     * blocks in a 3x3 area around the clicked block, consuming durability from the enchanted golden
+     * hoe.
      *
-     * @param event The PlayerInteractEvent instance containing information
-     * about the event, such as the clicked block, the player, and the
-     * action performed.
+     * @param event The PlayerInteractEvent instance containing information about the event, such as
+     *   the clicked block, the player, and the action performed.
      */
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     fun onPlayerTillFarmland(event: PlayerInteractEvent) {

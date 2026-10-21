@@ -49,34 +49,43 @@ object SelfSignedCertificate {
      * @param commonName subject and issuer common name.
      */
     fun generate(commonName: String): Pair<KeyPair, X509Certificate> {
-        val keys = KeyPairGenerator.getInstance("EC")
-            .apply { initialize(ECGenParameterSpec("secp256r1")) }
-            .generateKeyPair()
+        val keys =
+            KeyPairGenerator.getInstance("EC")
+                .apply { initialize(ECGenParameterSpec("secp256r1")) }
+                .generateKeyPair()
 
         val algorithm = sequence(ECDSA_WITH_SHA256)
-        val name = sequence(set(sequence(COMMON_NAME, tlv(TAG_UTF8_STRING, commonName.toByteArray()))))
+        val name =
+            sequence(set(sequence(COMMON_NAME, tlv(TAG_UTF8_STRING, commonName.toByteArray()))))
         // Positive and without a leading zero byte, as DER requires.
         val serial = ByteArray(SERIAL_BYTES).also(SecureRandom()::nextBytes)
         serial[0] = ((serial[0].toInt() and 0x3f) or 0x40).toByte()
         val notBefore = UTC_TIME.format(Instant.now().minus(1, ChronoUnit.DAYS))
 
-        val tbs = sequence(
-            tlv(TAG_EXPLICIT_0, tlv(TAG_INTEGER, byteArrayOf(2))), // v3
-            tlv(TAG_INTEGER, serial),
-            algorithm,
-            name,
-            sequence(tlv(TAG_UTC_TIME, notBefore.toByteArray()), tlv(TAG_GENERALIZED_TIME, NO_EXPIRY.toByteArray())),
-            name,
-            keys.public.encoded, // already a DER SubjectPublicKeyInfo
-        )
-        val signature = Signature.getInstance("SHA256withECDSA").run {
-            initSign(keys.private)
-            update(tbs)
-            sign()
-        }
+        val tbs =
+            sequence(
+                tlv(TAG_EXPLICIT_0, tlv(TAG_INTEGER, byteArrayOf(2))), // v3
+                tlv(TAG_INTEGER, serial),
+                algorithm,
+                name,
+                sequence(
+                    tlv(TAG_UTC_TIME, notBefore.toByteArray()),
+                    tlv(TAG_GENERALIZED_TIME, NO_EXPIRY.toByteArray()),
+                ),
+                name,
+                keys.public.encoded, // already a DER SubjectPublicKeyInfo
+            )
+        val signature =
+            Signature.getInstance("SHA256withECDSA").run {
+                initSign(keys.private)
+                update(tbs)
+                sign()
+            }
         val der = sequence(tbs, algorithm, tlv(TAG_BIT_STRING, byteArrayOf(0) + signature))
 
-        val certificate = CertificateFactory.getInstance("X.509").generateCertificate(der.inputStream()) as X509Certificate
+        val certificate =
+            CertificateFactory.getInstance("X.509").generateCertificate(der.inputStream())
+                as X509Certificate
         certificate.verify(keys.public)
         return keys to certificate
     }
@@ -94,7 +103,12 @@ object SelfSignedCertificate {
         if (length < 0x80) {
             out.write(length)
         } else {
-            val bytes = generateSequence(length) { it ushr 8 }.takeWhile { it > 0 }.map { it.toByte() }.toList().reversed()
+            val bytes =
+                generateSequence(length) { it ushr 8 }
+                    .takeWhile { it > 0 }
+                    .map { it.toByte() }
+                    .toList()
+                    .reversed()
             out.write(0x80 or bytes.size)
             out.write(bytes.toByteArray())
         }
@@ -107,10 +121,17 @@ object SelfSignedCertificate {
         val out = ByteArrayOutputStream()
         out.write(arcs[0] * 40 + arcs[1])
         for (arc in arcs.drop(2)) {
-            val groups = generateSequence(arc) { it ushr 7 }.takeWhile { it > 0 }.map { it and 0x7f }.toList().reversed()
-            groups.ifEmpty { listOf(0) }.forEachIndexed { i, group ->
-                out.write(if (i < groups.size - 1) group or 0x80 else group)
-            }
+            val groups =
+                generateSequence(arc) { it ushr 7 }
+                    .takeWhile { it > 0 }
+                    .map { it and 0x7f }
+                    .toList()
+                    .reversed()
+            groups
+                .ifEmpty { listOf(0) }
+                .forEachIndexed { i, group ->
+                    out.write(if (i < groups.size - 1) group or 0x80 else group)
+                }
         }
         return tlv(TAG_OID, out.toByteArray())
     }

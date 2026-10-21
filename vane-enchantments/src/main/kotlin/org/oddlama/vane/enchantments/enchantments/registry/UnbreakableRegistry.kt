@@ -10,11 +10,12 @@ import org.oddlama.vane.enchantments.CustomEnchantmentRegistry
 /**
  * Registry for the Unbreakable enchantment.
  *
- * @constructor Creates an instance of [UnbreakableRegistry].
  * @param composeEvent The registry compose event.
+ * @constructor Creates an instance of [UnbreakableRegistry].
  */
-class UnbreakableRegistry(composeEvent: RegistryComposeEvent<Enchantment, EnchantmentRegistryEntry.Builder>) :
-    CustomEnchantmentRegistry("unbreakable", ItemTypeTagKeys.ENCHANTABLE_DURABILITY, 1) {
+class UnbreakableRegistry(
+    composeEvent: RegistryComposeEvent<Enchantment, EnchantmentRegistryEntry.Builder>
+) : CustomEnchantmentRegistry("unbreakable", ItemTypeTagKeys.ENCHANTABLE_DURABILITY, 1) {
 
     init {
         exclusiveWith(listOf(EnchantmentKeys.UNBREAKING, EnchantmentKeys.MENDING))

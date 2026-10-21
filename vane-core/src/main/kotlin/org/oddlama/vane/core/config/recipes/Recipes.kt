@@ -16,25 +16,28 @@ import org.oddlama.vane.core.module.ModuleComponent
  * @param defRecipes supplier for default recipes.
  * @param desc optional config description for the recipes' dictionary.
  */
-class Recipes<T : Module<T?>?> @JvmOverloads constructor(
+class Recipes<T : Module<T?>?>
+@JvmOverloads
+constructor(
     context: Context<T?>?,
     /** Base key prefix for all registered recipes. */
     private val baseRecipeKey: NamespacedKey,
     /** Supplier of default recipe definitions. */
     private val defRecipes: () -> RecipeList?,
     /** Optional config description for recipe dictionary. */
-    private val desc: String? = "The associated recipes. This is a map of recipe name to recipe definitions."
+    private val desc: String? =
+        "The associated recipes. This is a map of recipe name to recipe definitions.",
 ) : ModuleComponent<T?>(context) {
     /** Whether recipe registration is enabled. */
     @ConfigBoolean(
         def = true,
-        desc = "Whether these recipes should be registered at all. Set to false to quickly disable all associated recipes."
+        desc =
+            "Whether these recipes should be registered at all. Set to false to quickly disable all associated recipes.",
     )
     var configRegisterRecipes: Boolean = false
 
     /** Recipe configuration dictionary. */
-    @ConfigDict(cls = RecipeList::class, desc = "")
-    private var configRecipes: RecipeList? = null
+    @ConfigDict(cls = RecipeList::class, desc = "") private var configRecipes: RecipeList? = null
 
     /** Returns default recipe definitions for config generation. */
     fun configRecipesDef(): RecipeList? = defRecipes()

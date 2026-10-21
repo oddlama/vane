@@ -38,7 +38,7 @@ too — together about 2.4 MB and 663 classes — for four call shapes in total,
 small local equivalents:
 
 | Was                                  | Now                                              | Why it was replaceable                                                          |
-|--------------------------------------|--------------------------------------------------|---------------------------------------------------------------------------------|
+| ------------------------------------ | ------------------------------------------------ | ------------------------------------------------------------------------------- |
 | `ReflectionUtils.getAllFields`       | [org.oddlama.vane.util.ReflectionUtil.allFields] | A superclass walk; verified to agree on every annotated field in the project.   |
 | `WordUtils.wrap`                     | [org.oddlama.vane.util.TextUtil.wordWrap]        | Greedy wrap; verified byte-identical on every `desc` in the project.            |
 | `StringEscapeUtils.escapeHtml4`      | [org.oddlama.vane.util.TextUtil.escapeHtml]      | Only the five markup-significant characters have to be escaped in a UTF-8 page. |
@@ -69,7 +69,7 @@ by instantiating components in their `init` block and never referring to them ag
 
 `ConfigManager` and `LangManager` reflect over a module's fields looking for the annotations
 declared in `vane-annotations`, wrap each in a `ConfigField` / `LangField`, and use those both to
-*load* values and to *generate* the annotated default `config.yml` and lang files. The `desc` on a
+_load_ values and to _generate_ the annotated default `config.yml` and lang files. The `desc` on a
 config annotation becomes the YAML comment. `org.oddlama.vane.core.persistent` does the equivalent
 for `@Persistent` fields against `storage.json`.
 
@@ -111,7 +111,7 @@ The commands `vane-core` itself provides.
 Runtime half of the config annotations. One `ConfigField` subclass per `Config*` annotation, plus
 `ConfigManager`, which discovers them reflectively by annotation package name.
 
-Adding a config type means adding a field class here *and* a branch in `ConfigManager.compileField`.
+Adding a config type means adding a field class here _and_ a branch in `ConfigManager.compileField`.
 
 # Package org.oddlama.vane.core.config.loot
 

@@ -8,9 +8,7 @@ import org.bukkit.event.player.PlayerKickEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.oddlama.vane.core.Listener
 
-/**
- * Starts and aborts autostop scheduling based on player join/leave events.
- */
+/** Starts and aborts autostop scheduling based on player join/leave events. */
 class AutostopListener(private val autostop: AutostopGroup) : Listener<Admin?>(autostop) {
     private val admin: Admin
         get() = requireNotNull(module)
@@ -33,9 +31,7 @@ class AutostopListener(private val autostop: AutostopGroup) : Listener<Admin?>(a
         playerLeave(event.player)
     }
 
-    /**
-     * Schedules autostop when the leaving player was the last online player.
-     */
+    /** Schedules autostop when the leaving player was the last online player. */
     private fun playerLeave(player: Player) {
         val players = admin.server.onlinePlayers
         if (players.none { it != player }) {

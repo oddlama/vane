@@ -10,15 +10,27 @@ class VisitorAlertsTest {
     private val farm = UUID.randomUUID()
     private val players = generateSequence { UUID.randomUUID() }.take(10).toList()
     private val sent = mutableListOf<VisitorAlerts.Alert>()
-    private val alerts = VisitorAlerts(windowMillis = 60_000, cooldownMillis = 600_000) { sent += it }
+    private val alerts =
+        VisitorAlerts(windowMillis = 60_000, cooldownMillis = 600_000) { sent += it }
 
     private fun visit(seconds: Int, player: Int, region: UUID = base) =
-        alerts.visit(seconds * 1000L, region, if (region == base) "Base" else "Farm", owner, players[player], "P$player", "skin$player")
+        alerts.visit(
+            seconds * 1000L,
+            region,
+            if (region == base) "Base" else "Farm",
+            owner,
+            players[player],
+            "P$player",
+            "skin$player",
+        )
 
     @Test
     fun `reports the first visitor right away`() {
         visit(0, 0)
-        assertEquals(listOf(VisitorAlerts.Alert(owner, base, "Base", listOf("P0"), "skin0", 1)), sent)
+        assertEquals(
+            listOf(VisitorAlerts.Alert(owner, base, "Base", listOf("P0"), "skin0", 1)),
+            sent,
+        )
     }
 
     @Test
@@ -29,7 +41,10 @@ class VisitorAlertsTest {
         visit(40, 3)
         assertEquals(1, sent.size)
         alerts.flush(60_000)
-        assertEquals(VisitorAlerts.Alert(owner, base, "Base", listOf("P1", "P2", "P3"), "skin1", 3), sent[1])
+        assertEquals(
+            VisitorAlerts.Alert(owner, base, "Base", listOf("P1", "P2", "P3"), "skin1", 3),
+            sent[1],
+        )
     }
 
     @Test

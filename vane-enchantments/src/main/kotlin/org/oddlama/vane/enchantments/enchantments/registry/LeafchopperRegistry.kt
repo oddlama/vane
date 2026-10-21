@@ -9,11 +9,12 @@ import org.oddlama.vane.enchantments.CustomEnchantmentRegistry
 /**
  * Registry for the Leafchopper enchantment, which is applicable to axes.
  *
- * @constructor Creates a new LeafchopperRegistry instance.
  * @param composeEvent The registry compose event to register the enchantment.
+ * @constructor Creates a new LeafchopperRegistry instance.
  */
-class LeafchopperRegistry(composeEvent: RegistryComposeEvent<Enchantment, EnchantmentRegistryEntry.Builder>) :
-    CustomEnchantmentRegistry("leafchopper", ItemTypeTagKeys.AXES, 1) {
+class LeafchopperRegistry(
+    composeEvent: RegistryComposeEvent<Enchantment, EnchantmentRegistryEntry.Builder>
+) : CustomEnchantmentRegistry("leafchopper", ItemTypeTagKeys.AXES, 1) {
     init {
         register(composeEvent)
     }

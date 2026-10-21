@@ -1,5 +1,6 @@
 package org.oddlama.vane.trifles.items
 
+import java.util.*
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
@@ -18,22 +19,18 @@ import org.oddlama.vane.core.lang.TranslatedMessage
 import org.oddlama.vane.core.module.Context
 import org.oddlama.vane.trifles.Trifles
 import org.oddlama.vane.util.StorageUtil
-import java.util.*
 
 @VaneItem(
     name = "death_scroll",
     base = Material.WARPED_FUNGUS_ON_A_STICK,
     durability = 2,
     modelData = 0x760012,
-    version = 1
+    version = 1,
 )
-/**
- * Teleports a player to their most recent death location within a time window.
- */
+/** Teleports a player to their most recent death location within a time window. */
 class DeathScroll(context: Context<Trifles?>) : Scroll(context, 6000) {
     /** Action-bar message shown when no valid recent death location is available. */
-    @LangMessage
-    var langTeleportNoRecentDeath: TranslatedMessage? = null
+    @LangMessage var langTeleportNoRecentDeath: TranslatedMessage? = null
 
     /** Defines the death scroll crafting recipe. */
     override fun defaultRecipes(): RecipeList {
@@ -57,11 +54,20 @@ class DeathScroll(context: Context<Trifles?>) : Scroll(context, 6000) {
     }
 
     /** Resolves and validates the recent death teleport location. */
-    override fun teleportLocation(scroll: ItemStack?, player: Player?, imminentTeleport: Boolean): Location? {
+    override fun teleportLocation(
+        scroll: ItemStack?,
+        player: Player?,
+        imminentTeleport: Boolean,
+    ): Location? {
         val p = player ?: return null
         val pdc = p.persistentDataContainer
         val time = pdc.getOrDefault(RECENT_DEATH_TIME, PersistentDataType.LONG, 0L)
-        var loc = StorageUtil.storageGetLocation(player.persistentDataContainer, RECENT_DEATH_LOCATION, null)
+        var loc =
+            StorageUtil.storageGetLocation(
+                player.persistentDataContainer,
+                RECENT_DEATH_LOCATION,
+                null,
+            )
 
         // Only keep death locations for 20 minutes.
         if (System.currentTimeMillis() - time > 20 * 60 * 1000L) {
@@ -92,12 +98,14 @@ class DeathScroll(context: Context<Trifles?>) : Scroll(context, 6000) {
 
     companion object {
         /** Persistent key storing the recent death location. */
-        val RECENT_DEATH_LOCATION: NamespacedKey = StorageUtil.namespacedKey(
-            "vane",
-            "recent_death_location"
-        )
+        val RECENT_DEATH_LOCATION: NamespacedKey =
+            StorageUtil.namespacedKey(
+                "vane",
+                "recent_death_location",
+            )
 
         /** Persistent key storing the timestamp of the recent death. */
-        val RECENT_DEATH_TIME: NamespacedKey = StorageUtil.namespacedKey("vane", "recent_death_time")
+        val RECENT_DEATH_TIME: NamespacedKey =
+            StorageUtil.namespacedKey("vane", "recent_death_time")
     }
 }

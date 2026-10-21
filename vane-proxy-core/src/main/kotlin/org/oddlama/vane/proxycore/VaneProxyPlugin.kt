@@ -1,12 +1,5 @@
 package org.oddlama.vane.proxycore
 
-import org.oddlama.vane.proxycore.busybar.BusyBarProxy
-import org.oddlama.vane.proxycore.config.ConfigManager
-import org.oddlama.vane.proxycore.config.IVaneProxyServerInfo
-import org.oddlama.vane.proxycore.config.ManagedServer
-import org.oddlama.vane.proxycore.config.ManagedServer.ConfigItemSource
-import org.oddlama.vane.proxycore.listeners.PreLoginEvent.MultiplexedPlayer
-import org.oddlama.vane.proxycore.log.IVaneLogger
 import java.io.File
 import java.io.IOException
 import java.net.InetSocketAddress
@@ -14,34 +7,33 @@ import java.net.Socket
 import java.util.*
 import java.util.concurrent.TimeUnit
 import java.util.logging.Level
+import org.oddlama.vane.proxycore.busybar.BusyBarProxy
+import org.oddlama.vane.proxycore.config.ConfigManager
+import org.oddlama.vane.proxycore.config.IVaneProxyServerInfo
+import org.oddlama.vane.proxycore.config.ManagedServer
+import org.oddlama.vane.proxycore.config.ManagedServer.ConfigItemSource
+import org.oddlama.vane.proxycore.listeners.PreLoginEvent.MultiplexedPlayer
+import org.oddlama.vane.proxycore.log.IVaneLogger
 
-/**
- * Base plugin abstraction shared by proxy platform implementations.
- */
+/** Base plugin abstraction shared by proxy platform implementations. */
 abstract class VaneProxyPlugin {
     /** Parsed configuration manager for proxy-core features. */
-    @JvmField
-    var config: ConfigManager = ConfigManager(this)
+    @JvmField var config: ConfigManager = ConfigManager(this)
 
     /** Maintenance state controller. */
-    @JvmField
-    var maintenance: Maintenance = Maintenance(this)
+    @JvmField var maintenance: Maintenance = Maintenance(this)
 
     /** vane-busybar backend links. */
-    @JvmField
-    var busyBar: BusyBarProxy = BusyBarProxy(this)
+    @JvmField var busyBar: BusyBarProxy = BusyBarProxy(this)
 
     /** Logger adapter bound by the concrete proxy implementation. */
-    @JvmField
-    var logger: IVaneLogger? = null
+    @JvmField var logger: IVaneLogger? = null
 
     /** Runtime proxy server abstraction. */
-    @JvmField
-    var server: ProxyServer? = null
+    @JvmField var server: ProxyServer? = null
 
     /** Data folder used for configuration and persistence. */
-    @JvmField
-    var dataFolder: File? = null
+    @JvmField var dataFolder: File? = null
 
     /** Mapping of generated multiplexed UUIDs back to original UUIDs. */
     val multiplexedUuids: LinkedHashMap<UUID?, UUID?> = LinkedHashMap()
@@ -142,16 +134,18 @@ abstract class VaneProxyPlugin {
         val rawCmd: Array<String?>? = server.startCmd()
         val cmd: Array<String>
         if (rawCmd == null) {
-            getLogger().log(Level.SEVERE, "Start command for server '${server.id()}' is not configured.")
+            getLogger()
+                .log(Level.SEVERE, "Start command for server '${server.id()}' is not configured.")
             return
         } else {
             // Filter out any null elements; if after filtering there are no args, abort
             val filtered = rawCmd.filterNotNull()
             if (filtered.isEmpty()) {
-                getLogger().log(
-                    Level.SEVERE,
-                    "Start command for server '${server.id()}' is empty after filtering nulls."
-                )
+                getLogger()
+                    .log(
+                        Level.SEVERE,
+                        "Start command for server '${server.id()}' is empty after filtering nulls.",
+                    )
                 return
             }
             cmd = filtered.toTypedArray()
@@ -163,7 +157,7 @@ abstract class VaneProxyPlugin {
                 getLogger()
                     .log(
                         Level.INFO,
-                        "Running start command for server '${server.id()}': ${cmd.contentToString()}"
+                        "Running start command for server '${server.id()}': ${cmd.contentToString()}",
                     )
                 val processBuilder = ProcessBuilder(*cmd)
                 processBuilder.redirectOutput(ProcessBuilder.Redirect.INHERIT)
@@ -172,14 +166,15 @@ abstract class VaneProxyPlugin {
 
                 val commandTimeout = server.commandTimeout()?.toLong() ?: 10L
                 if (!process.waitFor(commandTimeout, TimeUnit.SECONDS)) {
-                    getLogger().log(Level.SEVERE, "Server '${server.id()}'s start command timed out!")
+                    getLogger()
+                        .log(Level.SEVERE, "Server '${server.id()}'s start command timed out!")
                 }
 
                 if (process.exitValue() != 0) {
                     getLogger()
                         .log(
                             Level.SEVERE,
-                            "Server '${server.id()}'s start command returned a nonzero exit code!"
+                            "Server '${server.id()}'s start command returned a nonzero exit code!",
                         )
                 }
             } catch (e: Exception) {
@@ -206,6 +201,7 @@ abstract class VaneProxyPlugin {
         const val CHANNEL_AUTH_MULTIPLEX_NAME: String = "auth_multiplex"
 
         /** Full auth multiplex plugin message channel identifier. */
-        const val CHANNEL_AUTH_MULTIPLEX: String = "$CHANNEL_AUTH_MULTIPLEX_NAMESPACE:$CHANNEL_AUTH_MULTIPLEX_NAME"
+        const val CHANNEL_AUTH_MULTIPLEX: String =
+            "$CHANNEL_AUTH_MULTIPLEX_NAMESPACE:$CHANNEL_AUTH_MULTIPLEX_NAME"
     }
 }

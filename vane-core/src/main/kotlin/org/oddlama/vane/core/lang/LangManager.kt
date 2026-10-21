@@ -18,92 +18,112 @@ import org.oddlama.vane.util.ReflectionUtil
  * @param module the module whose language entries are managed.
  */
 class LangManager(var module: Module<*>) {
-    /**
-     * All compiled language field handlers.
-     */
+    /** All compiled language field handlers. */
     private val langFields: MutableList<LangField<*>> = mutableListOf()
 
-    /**
-     * The compiled `@LangVersion` field, if discovered.
-     */
+    /** The compiled `@LangVersion` field, if discovered. */
     var fieldVersion: LangVersionField? = null
 
     init {
         compile(module) { it ?: "" }
     }
 
-    /**
-     * Returns the expected language file version from module metadata.
-     */
+    /** Returns the expected language file version from module metadata. */
     fun expectedVersion(): Long = module.annotation.langVersion
 
-    /**
-     * Returns whether a field has any supported language annotation.
-     */
+    /** Returns whether a field has any supported language annotation. */
     private fun hasLangAnnotation(field: Field): Boolean =
-        field.annotations.any { it.annotationClass.java.name.startsWith("org.oddlama.vane.annotation.lang.Lang") }
+        field.annotations.any {
+            it.annotationClass.java.name.startsWith("org.oddlama.vane.annotation.lang.Lang")
+        }
 
-    /**
-     * Ensures language fields follow the required `lang` prefix convention.
-     */
+    /** Ensures language fields follow the required `lang` prefix convention. */
     private fun assertFieldPrefix(field: Field) {
         if (!field.name.startsWith("lang"))
             throw RuntimeException("Language fields must be prefixed lang. This is a bug.")
     }
 
-    /**
-     * Compiles a reflected language field into a concrete [LangField] handler.
-     */
-    private fun compileField(owner: Any?, field: Field, mapName: (String?) -> String): LangField<*> {
+    /** Compiles a reflected language field into a concrete [LangField] handler. */
+    private fun compileField(
+        owner: Any?,
+        field: Field,
+        mapName: (String?) -> String,
+    ): LangField<*> {
         assertFieldPrefix(field)
 
-        val annotation = field.annotations
-            .filter { it.annotationClass.java.name.startsWith("org.oddlama.vane.annotation.lang.Lang") }
-            .also { require(it.size <= 1) { "Language fields must have exactly one @Lang annotation." } }
-            .firstOrNull() ?: error("No @Lang annotation found on field ${field.name}")
+        val annotation =
+            field.annotations
+                .filter {
+                    it.annotationClass.java.name.startsWith("org.oddlama.vane.annotation.lang.Lang")
+                }
+                .also {
+                    require(it.size <= 1) {
+                        "Language fields must have exactly one @Lang annotation."
+                    }
+                }
+                .firstOrNull() ?: error("No @Lang annotation found on field ${field.name}")
 
         return when (val atype = annotation.annotationClass.java) {
-            LangMessage::class.java -> LangMessageField(module, owner, field, mapName, annotation as LangMessage)
-            LangMessageArray::class.java -> LangMessageArrayField(
-                module,
-                owner,
-                field,
-                mapName,
-                annotation as LangMessageArray
-            )
+            LangMessage::class.java ->
+                LangMessageField(module, owner, field, mapName, annotation as LangMessage)
+            LangMessageArray::class.java ->
+                LangMessageArrayField(
+                    module,
+                    owner,
+                    field,
+                    mapName,
+                    annotation as LangMessageArray,
+                )
 
             LangVersion::class.java -> {
-                require(owner === module) { "@LangVersion can only be used inside the main module. This is a bug." }
-                require(fieldVersion == null) { "There must be exactly one @LangVersion field! (found multiple). This is a bug." }
-                LangVersionField(module, owner, field, mapName, annotation as LangVersion).also { fieldVersion = it }
+                require(owner === module) {
+                    "@LangVersion can only be used inside the main module. This is a bug."
+                }
+                require(fieldVersion == null) {
+                    "There must be exactly one @LangVersion field! (found multiple). This is a bug."
+                }
+                LangVersionField(module, owner, field, mapName, annotation as LangVersion).also {
+                    fieldVersion = it
+                }
             }
 
-            else -> throw RuntimeException("Missing LangField handler for @${atype.name}. This is a bug.")
+            else ->
+                throw RuntimeException(
+                    "Missing LangField handler for @${atype.name}. This is a bug."
+                )
         }
     }
 
-    /**
-     * Verifies a language file version against the expected module version.
-     */
+    /** Verifies a language file version against the expected module version. */
     private fun verifyVersion(file: File, version: Long): Boolean {
         if (version == expectedVersion()) return true
 
         module.log.severe("${file.name}: expected version ${expectedVersion()}, but got $version")
         when {
             version == 0L -> {
-                module.log.severe("Something went wrong while generating or loading the configuration.")
-                module.log.severe("If you are sure your configuration is correct and this isn't a file")
-                module.log.severe("system permission issue, please report this to https://github.com/oddlama/vane/issues")
+                module.log.severe(
+                    "Something went wrong while generating or loading the configuration."
+                )
+                module.log.severe(
+                    "If you are sure your configuration is correct and this isn't a file"
+                )
+                module.log.severe(
+                    "system permission issue, please report this to https://github.com/oddlama/vane/issues"
+                )
             }
 
             version < expectedVersion() -> {
                 module.log.severe("This language file is for an older version of ${module.name}.")
-                module.log.severe("Please update your file or use an officially supported language file.")
+                module.log.severe(
+                    "Please update your file or use an officially supported language file."
+                )
             }
 
             else -> {
                 module.log.severe("This language file is for a future version of ${module.name}.")
-                module.log.severe("Please use the correct file for this version, or use an officially")
+                module.log.severe(
+                    "Please use the correct file for this version, or use an officially"
+                )
                 module.log.severe("supported language file.")
             }
         }
@@ -123,12 +143,12 @@ class LangManager(var module: Module<*>) {
                 .map { compileField(owner, it, mapName) }
         )
         if (owner === module && fieldVersion == null)
-            throw RuntimeException("There must be exactly one @LangVersion field! (found none). This is a bug.")
+            throw RuntimeException(
+                "There must be exactly one @LangVersion field! (found none). This is a bug."
+            )
     }
 
-    /**
-     * Returns a compiled language field by mapped name.
-     */
+    /** Returns a compiled language field by mapped name. */
     fun getField(name: String?): LangField<*> =
         langFields.firstOrNull { it.name == name }
             ?: throw RuntimeException("Missing lang field lang$name")
@@ -161,9 +181,14 @@ class LangManager(var module: Module<*>) {
      * @param yaml the loaded language configuration.
      * @param langFile the source language file.
      */
-    fun generateResourcePack(pack: ResourcePackGenerator?, yaml: YamlConfiguration, langFile: File) {
-        val langCode = yaml.getString("ResourcePackLangCode")
-            ?: throw RuntimeException("Missing yaml key: ResourcePackLangCode")
+    fun generateResourcePack(
+        pack: ResourcePackGenerator?,
+        yaml: YamlConfiguration,
+        langFile: File,
+    ) {
+        val langCode =
+            yaml.getString("ResourcePackLangCode")
+                ?: throw RuntimeException("Missing yaml key: ResourcePackLangCode")
 
         val errors = mutableListOf<YamlLoadException.Lang>()
         for (f in langFields) {
@@ -179,7 +204,7 @@ class LangManager(var module: Module<*>) {
             val erroredLangNodes = errors.joinToString("\n\t\t") { it.message }
             module.log.log(
                 Level.SEVERE,
-                "The following errors were identified while adding translations from \n\t${langFile.absolutePath} \n\t\t$erroredLangNodes"
+                "The following errors were identified while adding translations from \n\t${langFile.absolutePath} \n\t\t$erroredLangNodes",
             )
         }
     }

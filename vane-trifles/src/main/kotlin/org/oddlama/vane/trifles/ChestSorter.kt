@@ -1,5 +1,6 @@
 package org.oddlama.vane.trifles
 
+import java.util.*
 import org.bukkit.NamespacedKey
 import org.bukkit.Tag
 import org.bukkit.block.Barrel
@@ -24,13 +25,12 @@ import org.oddlama.vane.core.data.CooldownData
 import org.oddlama.vane.core.module.Context
 import org.oddlama.vane.util.ItemUtil
 import org.oddlama.vane.util.StorageUtil
-import java.util.*
 
-/**
- * Sorts nearby chest and barrel inventories when a configured button is pressed.
- */
+/** Sorts nearby chest and barrel inventories when a configured button is pressed. */
 class ChestSorter(context: Context<Trifles?>) :
-    Listener<Trifles?>(context.group("ChestSorting", "Enables chest sorting when a nearby button is pressed.")) {
+    Listener<Trifles?>(
+        context.group("ChestSorting", "Enables chest sorting when a nearby button is pressed.")
+    ) {
     /** Cooldown in milliseconds before a container can be sorted again. */
     @ConfigLong(def = 1000, min = 0, desc = "Chest sorting cooldown in milliseconds.")
     var configCooldown: Long = 0
@@ -43,9 +43,10 @@ class ChestSorter(context: Context<Trifles?>) :
         def = 1,
         min = 0,
         max = 16,
-        desc = "Chest sorting radius in X-direction from the button (left-right when looking at the button). A radius of 0 means a column of the block including the button. It is advised to NEVER set the three radius values to more than THREE (3), as sorting a huge area of chests can lead to SEVERE lag! Ideally always keep the Z-radius set to 0 or 1, while only adjusting X and Y. You've been warned."
+        desc =
+            "Chest sorting radius in X-direction from the button (left-right when looking at the button). A radius of 0 means a column of the block including the button. It is advised to NEVER set the three radius values to more than THREE (3), as sorting a huge area of chests can lead to SEVERE lag! Ideally always keep the Z-radius set to 0 or 1, while only adjusting X and Y. You've been warned.",
     )
-            /** Search radius on the local X axis relative to the activated button. */
+    /** Search radius on the local X axis relative to the activated button. */
     var configRadiusX: Int = 0
 
     /** Search radius on the local Y axis relative to the activated button. */
@@ -53,9 +54,10 @@ class ChestSorter(context: Context<Trifles?>) :
         def = 1,
         min = 0,
         max = 16,
-        desc = "Chest sorting radius in Y-direction from the button (up-down when looking at the button - this can be a horizontal direction if the button is on the ground). A radius of 0 means a column of the block including the button. It is advised to NEVER set the three radius values to more than THREE (3), as sorting a huge area of chests can lead to SEVERE lag! Ideally always keep the Z-radius set to 0 or 1, while only adjusting X and Y. You've been warned."
+        desc =
+            "Chest sorting radius in Y-direction from the button (up-down when looking at the button - this can be a horizontal direction if the button is on the ground). A radius of 0 means a column of the block including the button. It is advised to NEVER set the three radius values to more than THREE (3), as sorting a huge area of chests can lead to SEVERE lag! Ideally always keep the Z-radius set to 0 or 1, while only adjusting X and Y. You've been warned.",
     )
-            /** Search radius on the local Y axis relative to the activated button. */
+    /** Search radius on the local Y axis relative to the activated button. */
     var configRadiusY: Int = 0
 
     /** Search radius on the local Z axis relative to the activated button. */
@@ -63,9 +65,10 @@ class ChestSorter(context: Context<Trifles?>) :
         def = 1,
         min = 0,
         max = 16,
-        desc = "Chest sorting radius in Z-direction from the button (into/out-of the attached block). A radius of 0 means a column of the block including the button. It is advised to NEVER set the three radius values to more than THREE (3), as sorting a huge area of chests can lead to SEVERE lag! Ideally always keep the Z-radius set to 0 or 1, while only adjusting X and Y. You've been warned."
+        desc =
+            "Chest sorting radius in Z-direction from the button (into/out-of the attached block). A radius of 0 means a column of the block including the button. It is advised to NEVER set the three radius values to more than THREE (3), as sorting a huge area of chests can lead to SEVERE lag! Ideally always keep the Z-radius set to 0 or 1, while only adjusting X and Y. You've been warned.",
     )
-            /** Search radius on the local Z axis relative to the activated button. */
+    /** Search radius on the local Z axis relative to the activated button. */
     var configRadiusZ: Int = 0
 
     /** Rebuilds cooldown state whenever relevant configuration changes. */
@@ -74,9 +77,7 @@ class ChestSorter(context: Context<Trifles?>) :
         this.cooldownData = CooldownData(LAST_SORT_TIME, configCooldown)
     }
 
-    /**
-     * Condenses, restacks, and then sorts a single inventory by item comparator.
-     */
+    /** Condenses, restacks, and then sorts a single inventory by item comparator. */
     private fun sortInventory(inventory: Inventory) {
         // Count non-null stacks to size the condensed list once.
         val savedContents = inventory.storageContents
@@ -158,11 +159,9 @@ class ChestSorter(context: Context<Trifles?>) :
 
     @EventHandler(
         priority = EventPriority.MONITOR,
-        ignoreCancelled = false
+        ignoreCancelled = false,
     ) // Keep disabled-cancel filtering to observe all block-use outcomes.
-            /**
-             * Handles button interaction and sorts nearby storage containers in configured bounds.
-             */
+    /** Handles button interaction and sorts nearby storage containers in configured bounds. */
     fun onPlayerRightClick(event: PlayerInteractEvent) {
         if (!event.hasBlock() || event.action != Action.RIGHT_CLICK_BLOCK) {
             return
@@ -191,12 +190,14 @@ class ChestSorter(context: Context<Trifles?>) :
         if (face == AttachedFace.WALL) {
             ry = configRadiusY
             when (facing) {
-                BlockFace.NORTH, BlockFace.SOUTH -> {
+                BlockFace.NORTH,
+                BlockFace.SOUTH -> {
                     rx = configRadiusX
                     rz = configRadiusZ
                 }
 
-                BlockFace.EAST, BlockFace.WEST -> {
+                BlockFace.EAST,
+                BlockFace.WEST -> {
                     rx = configRadiusZ
                     rz = configRadiusX
                 }
@@ -206,12 +207,14 @@ class ChestSorter(context: Context<Trifles?>) :
         } else {
             ry = configRadiusZ
             when (facing) {
-                BlockFace.NORTH, BlockFace.SOUTH -> {
+                BlockFace.NORTH,
+                BlockFace.SOUTH -> {
                     rx = configRadiusX
                     rz = configRadiusY
                 }
 
-                BlockFace.EAST, BlockFace.WEST -> {
+                BlockFace.EAST,
+                BlockFace.WEST -> {
                     rx = configRadiusY
                     rz = configRadiusX
                 }
@@ -238,6 +241,7 @@ class ChestSorter(context: Context<Trifles?>) :
 
     companion object {
         /** Key storing the timestamp of the last successful sort for a container. */
-        val LAST_SORT_TIME: NamespacedKey = StorageUtil.namespacedKey("vane_trifles", "last_sort_time")
+        val LAST_SORT_TIME: NamespacedKey =
+            StorageUtil.namespacedKey("vane_trifles", "last_sort_time")
     }
 }

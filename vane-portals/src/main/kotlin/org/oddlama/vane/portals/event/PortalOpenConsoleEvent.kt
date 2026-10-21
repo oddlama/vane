@@ -15,11 +15,14 @@ import org.oddlama.vane.portals.portal.Portal
 class PortalOpenConsoleEvent(
     @JvmField val player: Player?,
     @JvmField val console: Block?,
-    @JvmField val portal: Portal?
+    @JvmField val portal: Portal?,
 ) : PortalEvent() {
-    // Java accessors from before v1.22.0. The public fields stay for plugins built against later releases.
+    // Java accessors from before v1.22.0. The public fields stay for plugins built against later
+    // releases.
     fun getPlayer(): Player? = player
+
     fun getConsole(): Block? = console
+
     fun getPortal(): Portal? = portal
 
     /** Returns Bukkit handlers for this event. */
@@ -28,7 +31,6 @@ class PortalOpenConsoleEvent(
     /** Static Bukkit handler list for this event type. */
     companion object {
         /** Shared handler list used by Bukkit's event system. */
-        @JvmStatic
-        val handlerList: HandlerList = HandlerList()
+        @JvmStatic val handlerList: HandlerList = HandlerList()
     }
 }

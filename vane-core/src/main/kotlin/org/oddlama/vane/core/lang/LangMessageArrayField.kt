@@ -1,11 +1,11 @@
 package org.oddlama.vane.core.lang
 
+import java.lang.reflect.Field
 import org.bukkit.configuration.file.YamlConfiguration
 import org.oddlama.vane.annotation.lang.LangMessageArray
 import org.oddlama.vane.core.YamlLoadException
 import org.oddlama.vane.core.module.Module
 import org.oddlama.vane.core.resourcepack.ResourcePackGenerator
-import java.lang.reflect.Field
 
 /**
  * Handles loading and exporting a [TranslatedMessageArray].
@@ -22,33 +22,33 @@ class LangMessageArrayField(
     field: Field,
     mapName: (String?) -> String,
     /** Annotation metadata for this field. */
-    var annotation: LangMessageArray?
+    var annotation: LangMessageArray?,
 ) : LangField<TranslatedMessageArray?>(module, owner, field, mapName) {
 
-    /**
-     * Validates this message array entry in YAML.
-     */
+    /** Validates this message array entry in YAML. */
     @Throws(YamlLoadException::class)
     override fun checkLoadable(yaml: YamlConfiguration?) {
         if (yaml == null) throw YamlLoadException.Lang("yaml is null", this)
         checkYamlPath(yaml)
         if (!yaml.isList(yamlPath()))
-            throw YamlLoadException.Lang("Invalid type for yaml path '${yamlPath()}', expected list", this)
+            throw YamlLoadException.Lang(
+                "Invalid type for yaml path '${yamlPath()}', expected list",
+                this,
+            )
         for (obj in yaml.getList(yamlPath())!!) {
             if (obj !is String)
-                throw YamlLoadException.Lang("Invalid type for yaml path '${yamlPath()}', expected string", this)
+                throw YamlLoadException.Lang(
+                    "Invalid type for yaml path '${yamlPath()}', expected string",
+                    this,
+                )
         }
     }
 
-    /**
-     * Reads the message list from YAML.
-     */
+    /** Reads the message list from YAML. */
     private fun fromYaml(yaml: YamlConfiguration): MutableList<String> =
         yaml.getList(yamlPath())!!.map { it as String }.toMutableList()
 
-    /**
-     * Loads the translated message array into the reflected field.
-     */
+    /** Loads the translated message array into the reflected field. */
     override fun load(namespace: String?, yaml: YamlConfiguration?) {
         if (yaml == null) throw YamlLoadException.Lang("yaml is null", this)
         try {
@@ -58,11 +58,13 @@ class LangMessageArrayField(
         }
     }
 
-    /**
-     * Exports this message array to the generated resource pack translations.
-     */
+    /** Exports this message array to the generated resource pack translations. */
     @Throws(YamlLoadException::class)
-    override fun addTranslations(pack: ResourcePackGenerator?, yaml: YamlConfiguration?, langCode: String?) {
+    override fun addTranslations(
+        pack: ResourcePackGenerator?,
+        yaml: YamlConfiguration?,
+        langCode: String?,
+    ) {
         if (pack == null || yaml == null || langCode == null) return
         checkLoadable(yaml)
         val list = fromYaml(yaml)
@@ -70,8 +72,8 @@ class LangMessageArrayField(
         if (list.size != loadedSize) {
             throw YamlLoadException.Lang(
                 "All translation lists for message arrays must have the exact same size. " +
-                        "The loaded language file has $loadedSize entries, while the currently processed file has ${list.size}",
-                this
+                    "The loaded language file has $loadedSize entries, while the currently processed file has ${list.size}",
+                this,
             )
         }
         list.forEachIndexed { i, entry ->

@@ -53,19 +53,21 @@ class PortalBlueMapLayerDelegate(private val parent: PortalBlueMapLayer) {
             return
         }
 
-        val markerSet = MarkerSet.builder()
-            .label(parent.langLayerLabel!!.str())
-            .toggleable(true)
-            .defaultHidden(parent.configHideByDefault)
-            .build()
+        val markerSet =
+            MarkerSet.builder()
+                .label(parent.langLayerLabel!!.str())
+                .toggleable(true)
+                .defaultHidden(parent.configHideByDefault)
+                .build()
 
-        api
-            .getWorld(world)
-            .ifPresent(Consumer { bmWorld: BlueMapWorld? ->
-                bmWorld?.maps?.forEach { map ->
-                    map.markerSets[MARKER_SET_ID] = markerSet
+        api.getWorld(world)
+            .ifPresent(
+                Consumer { bmWorld: BlueMapWorld? ->
+                    bmWorld?.maps?.forEach { map ->
+                        map.markerSets[MARKER_SET_ID] = markerSet
+                    }
                 }
-            })
+            )
 
         markerSets[world.uid] = markerSet
     }
@@ -80,11 +82,12 @@ class PortalBlueMapLayerDelegate(private val parent: PortalBlueMapLayer) {
         }
 
         val loc = portal.spawn()
-        val marker = HtmlMarker.builder()
-            .position(loc.x, loc.y, loc.z)
-            .label("Portal " + portal.name())
-            .html(parent.langMarkerLabel!!.str(TextUtil.escapeHtml(portal.name())))
-            .build()
+        val marker =
+            HtmlMarker.builder()
+                .position(loc.x, loc.y, loc.z)
+                .label("Portal " + portal.name())
+                .html(parent.langMarkerLabel!!.str(TextUtil.escapeHtml(portal.name())))
+                .build()
 
         // Existing markers will be overwritten.
         val pid = portal.id()?.toString() ?: return

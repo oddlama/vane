@@ -19,11 +19,10 @@ coding. Below, I've written a short checklist of things that you can check:
 
 ## Building vane and submitting a PR
 
-1. Get a recent version of the Java Development Kit (at least version 17). If your system doesn't provide the required
-   JDK, you can get it from [here (adoptium.net)](https://adoptium.net/).
-2. Fork the repository on GitHub.
-3. Clone your fork and switch to the `develop` branch.
-4. Begin working on whatever you want to do.
+1. Fork and clone the repository; base your changes on its current default branch.
+2. Install Nix with flakes enabled, then run `nix develop` for the pinned toolchain.
+   Alternatively, install JDK 25 and use the Gradle wrapper.
+3. Read [the build/development guide](nix/README.md), then begin working.
 
 See [Building from source](https://github.com/oddlama/vane#building-from-source) for instruction on how to build vane.
 You can open a draft PR while you are working on your changes to allow us to provide early feedback on your
@@ -31,7 +30,8 @@ implementation.
 
 #### Before submitting your final PR
 
-1. Make sure everything compiles
+1. Run `nix fmt` and `nix flake check -L --keep-going`. New files must be tracked for flake builds.
+   These checks include each JVM suite, the Python bridge and website generation; they do not start a game server.
 2. Make sure that your commits have meaningful messages and follow
    the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) style. Look into the commit history to see
    examples of good messages.
