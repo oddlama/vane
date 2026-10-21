@@ -64,6 +64,28 @@ class WorldStorageGuardTest {
     }
 
     @Test
+    fun `failed load is not retried until unload or disable`() {
+        assertTrue(guard.shouldLoad(world))
+        assertFailsWith<IOException> { guard.load(world) { throw IOException("bad record") } }
+        assertFalse(guard.shouldLoad(world))
+        assertTrue(guard.shouldLoad(other))
+        guard.forget(world)
+        assertTrue(guard.shouldLoad(world))
+        assertFailsWith<IOException> { guard.load(world) { throw IOException("bad record") } }
+        guard.clear()
+        assertTrue(guard.shouldLoad(world))
+        guard.load(world) {}
+        assertFalse(guard.shouldLoad(world))
+        assertTrue(guard.canSave(world))
+    }
+
+    @Test
+    fun `failure after unload during loading is not recorded`() {
+        assertFailsWith<IOException> { guard.load(world) { guard.forget(world); throw IOException("late") } }
+        assertTrue(guard.shouldLoad(world))
+    }
+
+    @Test
     fun `successful load permits intentional deletion`() {
         val stored = mutableMapOf("keep" to "one", "delete" to "two")
         val index = mutableSetOf<String>()

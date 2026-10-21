@@ -1047,7 +1047,7 @@ class Portals : Module<Portals?>() {
     /** Load portals from world storage and perform legacy-storage migration for the given world. */
 
     fun loadPersistentData(world: World) {
-        if (!persistentStorageManager.isLoaded || worldStorage.canSave(world.uid)) return
+        if (!persistentStorageManager.isLoaded || !worldStorage.shouldLoad(world.uid)) return
         var converted = false
         try {
             worldStorage.load(world.uid) { converted = readPersistentData(world) }

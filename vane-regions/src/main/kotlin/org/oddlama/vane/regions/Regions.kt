@@ -782,7 +782,7 @@ class Regions : Module<Regions?>() {
      * Loads region state for a specific world and migrates legacy entries when needed.
      */
     fun loadPersistentData(world: World) {
-        if (!persistentStorageManager.isLoaded || worldStorage.canSave(world.uid)) return
+        if (!persistentStorageManager.isLoaded || !worldStorage.shouldLoad(world.uid)) return
         var converted = false
         try {
             worldStorage.load(world.uid) { converted = readPersistentData(world) }
