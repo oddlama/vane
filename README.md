@@ -10,11 +10,6 @@
 
 </div>
 
-> [!NOTE]
-> This is a community fork of [**vane**](https://github.com/oddlama/vane), created and maintained by
-> [**oddlama**](https://github.com/oddlama). All credit for the original design, code, and assets goes to oddlama and the
-> upstream contributors. The project is distributed under the original [MIT License](./LICENSE).
-
 # About vane
 
 Vane is a plugin-suite that provides many immersive and lore-friendly additions to vanilla minecraft. It will run on
