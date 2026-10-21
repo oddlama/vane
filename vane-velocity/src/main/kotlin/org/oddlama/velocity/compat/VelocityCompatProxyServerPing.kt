@@ -13,9 +13,7 @@ import org.oddlama.vane.proxycore.listeners.ProxyServerPing
  * @param ping source ping snapshot to mutate.
  */
 class VelocityCompatProxyServerPing(ping: ServerPing) : ProxyServerPing {
-    /**
-     * Velocity builder used to assemble the outgoing ping response.
-     */
+    /** Velocity builder used to assemble the outgoing ping response. */
     val builder: ServerPing.Builder = ping.asBuilder()
 
     /**
@@ -31,19 +29,20 @@ class VelocityCompatProxyServerPing(ping: ServerPing) : ProxyServerPing {
         s = s.replace("\\u00A7", "\u00A7").replace("\\u00a7", "\u00A7")
 
         // Prefer MiniMessage when it looks like MiniMessage, otherwise try legacy parsing.
-        val component = when {
-            s.contains('<') && s.contains('>') -> {
-                try {
-                    MiniMessage.miniMessage().deserialize(s)
-                } catch (e: Exception) {
-                    LegacyComponentSerializer.legacySection().deserialize(s)
+        val component =
+            when {
+                s.contains('<') && s.contains('>') -> {
+                    try {
+                        MiniMessage.miniMessage().deserialize(s)
+                    } catch (e: Exception) {
+                        LegacyComponentSerializer.legacySection().deserialize(s)
+                    }
                 }
-            }
 
-            s.contains('\u00A7') -> LegacyComponentSerializer.legacySection().deserialize(s)
-            s.contains('&') -> LegacyComponentSerializer.legacyAmpersand().deserialize(s)
-            else -> Component.text(s)
-        }
+                s.contains('\u00A7') -> LegacyComponentSerializer.legacySection().deserialize(s)
+                s.contains('&') -> LegacyComponentSerializer.legacyAmpersand().deserialize(s)
+                else -> Component.text(s)
+            }
 
         builder.description(component)
     }

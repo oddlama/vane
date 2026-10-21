@@ -1,25 +1,19 @@
 package org.oddlama.vane.core.resourcepack
 
-import org.json.JSONObject
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStream
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
+import org.json.JSONObject
 
-/**
- * Builds a distributable resource pack zip from collected language JSON and additional files.
- */
+/** Builds a distributable resource pack zip from collected language JSON and additional files. */
 class ResourcePackGenerator {
-    /**
-     * Collected translation files grouped by namespace and language code.
-     */
+    /** Collected translation files grouped by namespace and language code. */
     private val translations: MutableMap<String, MutableMap<String, JSONObject>> = mutableMapOf()
 
-    /**
-     * Additional raw files to include in the generated zip, keyed by zip path.
-     */
+    /** Additional raw files to include in the generated zip, keyed by zip path. */
     private val files: MutableMap<String, ByteArray> = mutableMapOf()
 
     /**

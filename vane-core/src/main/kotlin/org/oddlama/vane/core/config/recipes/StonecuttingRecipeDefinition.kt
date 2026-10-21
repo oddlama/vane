@@ -53,19 +53,25 @@ class StonecuttingRecipeDefinition(name: String?) : RecipeDefinition(name) {
 
     /** Loads this recipe definition from dictionary form. */
     override fun fromDict(dict: Any?): RecipeDefinition {
-        require(dict is MutableMap<*, *>) { "Invalid stonecutting recipe dictionary: Argument must be a Map<String, Object>!" }
+        require(dict is MutableMap<*, *>) {
+            "Invalid stonecutting recipe dictionary: Argument must be a Map<String, Object>!"
+        }
         val inputObj = LegacyKeys.lookup(dict, "Input")
         if (inputObj is String) {
             this.input = inputObj
         } else {
-            throw IllegalArgumentException("Invalid stonecutting recipe dictionary: input must be a string")
+            throw IllegalArgumentException(
+                "Invalid stonecutting recipe dictionary: input must be a string"
+            )
         }
 
         val resultObj = LegacyKeys.lookup(dict, "Result")
         if (resultObj is String) {
             this.result = resultObj
         } else {
-            throw IllegalArgumentException("Invalid stonecutting recipe dictionary: result must be a string")
+            throw IllegalArgumentException(
+                "Invalid stonecutting recipe dictionary: result must be a string"
+            )
         }
 
         return this
@@ -74,8 +80,12 @@ class StonecuttingRecipeDefinition(name: String?) : RecipeDefinition(name) {
     /** Converts this definition into a Bukkit [StonecuttingRecipe]. */
     override fun toRecipe(baseKey: NamespacedKey?): Recipe {
         val bk = baseKey ?: throw IllegalArgumentException("baseKey cannot be null")
-        val inputDef = input ?: throw IllegalArgumentException("Invalid stonecutting recipe: input must be set")
-        val resultDef = result ?: throw IllegalArgumentException("Invalid stonecutting recipe: result must be set")
+        val inputDef =
+            input
+                ?: throw IllegalArgumentException("Invalid stonecutting recipe: input must be set")
+        val resultDef =
+            result
+                ?: throw IllegalArgumentException("Invalid stonecutting recipe: result must be set")
         val out = ItemUtil.itemstackFromString(resultDef).first!!
         val `in` = recipeChoice(inputDef)
         return StonecuttingRecipe(key(bk), out, `in`)

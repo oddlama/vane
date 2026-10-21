@@ -16,17 +16,20 @@ class MenuItemClickListener(
     /** Slot to listen for clicks on. */
     private val slot: Int,
     /** Callback invoked when the configured slot is clicked. */
-    private val onClick: Function4<Player?, Menu?, ItemStack?, InventoryClickEvent?, Menu.ClickResult?>?
+    private val onClick:
+        Function4<Player?, Menu?, ItemStack?, InventoryClickEvent?, Menu.ClickResult?>?,
 ) : MenuWidget {
-    /**
-     * Convenience constructor with a left-click-only callback.
-     */
-    constructor(slot: Int, onClick: Function3<Player?, Menu?, ItemStack?, Menu.ClickResult?>) : this(
+    /** Convenience constructor with a left-click-only callback. */
+    constructor(
+        slot: Int,
+        onClick: Function3<Player?, Menu?, ItemStack?, Menu.ClickResult?>,
+    ) : this(
         slot,
         Function4 { player, menu, item, event ->
             if (!Menu.isLeftClick(event)) Menu.ClickResult.INVALID_CLICK
             else onClick.apply(player, menu, item)
-        })
+        },
+    )
 
     /** Returns the listened slot. */
     fun slot(): Int = slot
@@ -40,7 +43,7 @@ class MenuItemClickListener(
         menu: Menu?,
         item: ItemStack?,
         slot: Int,
-        event: InventoryClickEvent?
+        event: InventoryClickEvent?,
     ): Menu.ClickResult {
         if (this.slot != slot) return Menu.ClickResult.IGNORE
         return onClick?.apply(player, menu, item, event) ?: Menu.ClickResult.IGNORE

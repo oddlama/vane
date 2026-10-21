@@ -2,9 +2,7 @@ package org.oddlama.vane.proxycore.config
 
 import java.net.SocketAddress
 
-/**
- * Describes a backend server target known by the proxy implementation.
- */
+/** Describes a backend server target known by the proxy implementation. */
 interface IVaneProxyServerInfo {
     /** Backend server identifier used in configuration lookups. */
     val name: String?

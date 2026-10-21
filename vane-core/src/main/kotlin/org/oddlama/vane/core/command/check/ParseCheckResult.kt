@@ -19,7 +19,7 @@ class ParseCheckResult(
     /** Parsed argument value. */
     val parsed: Any?,
     /** Whether parsed value should be included for execution arguments. */
-    val includeParam: Boolean
+    val includeParam: Boolean,
 ) : CheckResult {
     /** Returns the parse depth for this result. */
     override fun depth(): Int = depth

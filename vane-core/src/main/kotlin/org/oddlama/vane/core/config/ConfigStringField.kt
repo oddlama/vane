@@ -1,9 +1,9 @@
 package org.oddlama.vane.core.config
 
+import java.lang.reflect.Field
 import org.bukkit.configuration.file.YamlConfiguration
 import org.oddlama.vane.annotation.config.ConfigString
 import org.oddlama.vane.core.YamlLoadException
-import java.lang.reflect.Field
 
 /**
  * Config field handler for string values.
@@ -13,8 +13,12 @@ import java.lang.reflect.Field
  * @param mapName maps Java field names to YAML paths.
  * @param annotation source annotation metadata.
  */
-class ConfigStringField(owner: Any?, field: Field, mapName: (String?) -> String?, var annotation: ConfigString) :
-    ConfigField<String?>(owner, field, mapName, "string", annotation.desc) {
+class ConfigStringField(
+    owner: Any?,
+    field: Field,
+    mapName: (String?) -> String?,
+    var annotation: ConfigString,
+) : ConfigField<String?>(owner, field, mapName, "string", annotation.desc) {
 
     /** Returns the default value for this config field. */
     override fun def(): String = overriddenDef() ?: annotation.def
@@ -23,11 +27,17 @@ class ConfigStringField(owner: Any?, field: Field, mapName: (String?) -> String?
     override fun metrics(): Boolean = overriddenMetrics() ?: annotation.metrics
 
     /** Generates YAML for this field. */
-    override fun generateYaml(builder: StringBuilder, indent: String, existingCompatibleConfig: YamlConfiguration?) {
+    override fun generateYaml(
+        builder: StringBuilder,
+        indent: String,
+        existingCompatibleConfig: YamlConfiguration?,
+    ) {
         appendDescription(builder, indent)
         appendDefaultValue(builder, indent, "\"${escapeYaml(def())}\"")
-        val def = if (existingCompatibleConfig != null && existingCompatibleConfig.contains(yamlPath()))
-            loadFromYaml(existingCompatibleConfig) else def()
+        val def =
+            if (existingCompatibleConfig != null && existingCompatibleConfig.contains(yamlPath()))
+                loadFromYaml(existingCompatibleConfig)
+            else def()
         appendFieldDefinition(builder, indent, "\"${escapeYaml(def)}\"")
     }
 

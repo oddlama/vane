@@ -20,14 +20,11 @@ import org.oddlama.vane.annotation.lang.LangMessage
 import org.oddlama.vane.core.lang.TranslatedMessage
 import org.oddlama.vane.core.module.Context
 
-/**
- * Command for toggling or explicitly setting player game mode.
- */
+/** Command for toggling or explicitly setting player game mode. */
 @Name("gamemode")
 @Aliases("gm")
 class Gamemode(context: Context<Admin?>) : org.oddlama.vane.core.command.Command<Admin?>(context) {
-    @LangMessage
-    private val langSet: TranslatedMessage? = null
+    @LangMessage private val langSet: TranslatedMessage? = null
 
     /** Builds the command tree for toggling and setting game mode. */
     override fun getCommandBase(): LiteralArgumentBuilder<CommandSourceStack> {
@@ -42,28 +39,28 @@ class Gamemode(context: Context<Admin?>) : org.oddlama.vane.core.command.Command
                     .executes { ctx: CommandContext<CommandSourceStack> ->
                         setGamemodeSelf(
                             ctx.source.sender as Player,
-                            ctx.getArgument("game_mode", GameMode::class.java)
+                            ctx.getArgument("game_mode", GameMode::class.java),
                         )
                         Command.SINGLE_SUCCESS
                     }
                     .then(
-                        Commands.argument("player", ArgumentTypes.player())
-                            .executes { ctx: CommandContext<CommandSourceStack> ->
-                                setGamemode(
-                                    ctx.source.sender,
-                                    ctx.getArgument("game_mode", GameMode::class.java),
-                                    player(ctx)
-                                )
-                                Command.SINGLE_SUCCESS
-                            }
+                        Commands.argument("player", ArgumentTypes.player()).executes {
+                            ctx: CommandContext<CommandSourceStack> ->
+                            setGamemode(
+                                ctx.source.sender,
+                                ctx.getArgument("game_mode", GameMode::class.java),
+                                player(ctx),
+                            )
+                            Command.SINGLE_SUCCESS
+                        }
                     )
             )
             .then(
-                Commands.argument("player", ArgumentTypes.player())
-                    .executes { ctx: CommandContext<CommandSourceStack> ->
-                        toggleGamemodePlayer(ctx.source.sender, player(ctx))
-                        Command.SINGLE_SUCCESS
-                    }
+                Commands.argument("player", ArgumentTypes.player()).executes {
+                    ctx: CommandContext<CommandSourceStack> ->
+                    toggleGamemodePlayer(ctx.source.sender, player(ctx))
+                    Command.SINGLE_SUCCESS
+                }
             )
     }
 
@@ -85,7 +82,7 @@ class Gamemode(context: Context<Admin?>) : org.oddlama.vane.core.command.Command
         setGamemode(
             sender,
             if (player.gameMode == GameMode.CREATIVE) GameMode.SURVIVAL else GameMode.CREATIVE,
-            player
+            player,
         )
     }
 
@@ -100,7 +97,7 @@ class Gamemode(context: Context<Admin?>) : org.oddlama.vane.core.command.Command
         langSet!!.send(
             sender,
             player.displayName().color(NamedTextColor.AQUA),
-            Component.text(mode.name, NamedTextColor.GREEN)
+            Component.text(mode.name, NamedTextColor.GREEN),
         )
     }
 }

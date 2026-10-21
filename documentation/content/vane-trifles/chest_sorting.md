@@ -5,6 +5,7 @@ module = "vane-trifles"
 ```
 
 ---
+
 ![](assets/gifs/chest-sorting.gif)
 
 When a button is pressed, all chest-like containers within a 1-block radius of the button are automatically sorted. This

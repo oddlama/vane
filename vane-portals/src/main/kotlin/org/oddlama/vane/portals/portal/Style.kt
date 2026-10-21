@@ -1,12 +1,12 @@
 package org.oddlama.vane.portals.portal
 
+import java.io.IOException
+import java.util.*
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.json.JSONObject
 import org.oddlama.vane.core.persistent.PersistentSerializer
 import org.oddlama.vane.util.StorageUtil
-import java.io.IOException
-import java.util.*
 
 /**
  * Portal style definition mapping block types to active and inactive materials.
@@ -15,10 +15,12 @@ import java.util.*
  */
 class Style(private var key: NamespacedKey?) {
     /** Active-state material mapping per portal block type. */
-    private var activeMaterials: MutableMap<PortalBlock.Type, Material> = EnumMap(PortalBlock.Type::class.java)
+    private var activeMaterials: MutableMap<PortalBlock.Type, Material> =
+        EnumMap(PortalBlock.Type::class.java)
 
     /** Inactive-state material mapping per portal block type. */
-    private var inactiveMaterials: MutableMap<PortalBlock.Type, Material> = EnumMap(PortalBlock.Type::class.java)
+    private var inactiveMaterials: MutableMap<PortalBlock.Type, Material> =
+        EnumMap(PortalBlock.Type::class.java)
 
     /** Returns this style key. */
     fun key() = key
@@ -33,7 +35,12 @@ class Style(private var key: NamespacedKey?) {
     }
 
     /** Sets a material mapping with optional overwrite behavior. */
-    fun setMaterial(active: Boolean, type: PortalBlock.Type, material: Material, overwrite: Boolean) {
+    fun setMaterial(
+        active: Boolean,
+        type: PortalBlock.Type,
+        material: Material,
+        overwrite: Boolean,
+    ) {
         val map = if (active) activeMaterials else inactiveMaterials
 
         if (!overwrite && map.containsKey(type)) {
@@ -83,15 +90,15 @@ class Style(private var key: NamespacedKey?) {
                     "activeMaterials",
                     PersistentSerializer.toJson(
                         Style::class.java.getDeclaredField("activeMaterials"),
-                        style.activeMaterials
-                    )
+                        style.activeMaterials,
+                    ),
                 )
                 json.put(
                     "inactiveMaterials",
                     PersistentSerializer.toJson(
                         Style::class.java.getDeclaredField("inactiveMaterials"),
-                        style.inactiveMaterials
-                    )
+                        style.inactiveMaterials,
+                    ),
                 )
             } catch (e: NoSuchFieldException) {
                 throw RuntimeException("Invalid field. This is a bug.", e)
@@ -108,15 +115,17 @@ class Style(private var key: NamespacedKey?) {
             style.key = PersistentSerializer.fromJson(NamespacedKey::class.java, json.get("key"))
             try {
                 @Suppress("UNCHECKED_CAST")
-                style.activeMaterials = PersistentSerializer.fromJson(
-                    Style::class.java.getDeclaredField("activeMaterials"),
-                    json.get("activeMaterials")
-                ) as MutableMap<PortalBlock.Type, Material>
+                style.activeMaterials =
+                    PersistentSerializer.fromJson(
+                        Style::class.java.getDeclaredField("activeMaterials"),
+                        json.get("activeMaterials"),
+                    ) as MutableMap<PortalBlock.Type, Material>
                 @Suppress("UNCHECKED_CAST")
-                style.inactiveMaterials = PersistentSerializer.fromJson(
-                    Style::class.java.getDeclaredField("inactiveMaterials"),
-                    json.get("inactiveMaterials")
-                ) as MutableMap<PortalBlock.Type, Material>
+                style.inactiveMaterials =
+                    PersistentSerializer.fromJson(
+                        Style::class.java.getDeclaredField("inactiveMaterials"),
+                        json.get("inactiveMaterials"),
+                    ) as MutableMap<PortalBlock.Type, Material>
             } catch (e: NoSuchFieldException) {
                 throw RuntimeException("Invalid field. This is a bug.", e)
             }

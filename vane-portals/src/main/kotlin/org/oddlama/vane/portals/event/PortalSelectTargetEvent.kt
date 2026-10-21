@@ -16,11 +16,14 @@ class PortalSelectTargetEvent(
     @JvmField val player: Player?,
     @JvmField val portal: Portal?,
     @JvmField val target: Portal?,
-    private val checkOnly: Boolean
+    private val checkOnly: Boolean,
 ) : PortalEvent() {
-    // Java accessors from before v1.22.0. The public fields stay for plugins built against later releases.
+    // Java accessors from before v1.22.0. The public fields stay for plugins built against later
+    // releases.
     fun getPlayer(): Player? = player
+
     fun getPortal(): Portal? = portal
+
     fun getTarget(): Portal? = target
 
     /** Returns whether this event is in validation-only mode. */
@@ -32,7 +35,6 @@ class PortalSelectTargetEvent(
     /** Static Bukkit handler list for this event type. */
     companion object {
         /** Shared handler list used by Bukkit's event system. */
-        @JvmStatic
-        val handlerList: HandlerList = HandlerList()
+        @JvmStatic val handlerList: HandlerList = HandlerList()
     }
 }

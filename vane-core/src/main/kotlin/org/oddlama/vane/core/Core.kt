@@ -1,5 +1,10 @@
 package org.oddlama.vane.core
 
+import java.io.File
+import java.io.IOException
+import java.net.URISyntaxException
+import java.util.*
+import java.util.logging.Level
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.event.ClickEvent
 import net.kyori.adventure.text.format.NamedTextColor
@@ -35,15 +40,8 @@ import org.oddlama.vane.core.resourcepack.ResourcePackGenerator
 import org.oddlama.vane.util.IOUtil.readJsonFromUrl
 import org.oddlama.vane.util.VersionUtil
 import org.oddlama.vane.util.msToTicks
-import java.io.File
-import java.io.IOException
-import java.net.URISyntaxException
-import java.util.*
-import java.util.logging.Level
 
-/**
- * Core vane module that initializes shared managers, registries, and base commands.
- */
+/** Core vane module that initializes shared managers, registries, and base commands. */
 @VaneModule(name = "core", bstats = 8637, configVersion = 6, langVersion = 5, storageVersion = 1)
 class Core : Module<Core?>() {
     /** Enchantment manager. */
@@ -58,22 +56,20 @@ class Core : Module<Core?>() {
     /** Whether player heads should render full skins in menus. */
     @ConfigBoolean(
         def = true,
-        desc = "Allow loading of player heads in relevant menus. Disabling this will show all player heads using the Steve skin, which may perform better on low-performance servers and clients."
+        desc =
+            "Allow loading of player heads in relevant menus. Disabling this will show all player heads using the Steve skin, which may perform better on low-performance servers and clients.",
     )
-            /** Whether player heads should load profile textures in menus. */
+    /** Whether player heads should load profile textures in menus. */
     var configPlayerHeadsInMenus: Boolean = false
 
     /** Message used when a command requires a player sender. */
-    @LangMessage
-    var langCommandNotAPlayer: TranslatedMessage? = null
+    @LangMessage var langCommandNotAPlayer: TranslatedMessage? = null
 
     /** Message used when command permission checks fail. */
-    @LangMessage
-    var langCommandPermissionDenied: TranslatedMessage? = null
+    @LangMessage var langCommandPermissionDenied: TranslatedMessage? = null
 
     /** Message used for invalid time format parsing. */
-    @LangMessage
-    var langInvalidTimeFormat: TranslatedMessage? = null
+    @LangMessage var langInvalidTimeFormat: TranslatedMessage? = null
 
     /** Loaded vane modules ordered by annotation name. */
     private val vaneModules: SortedSet<Module<*>> = TreeSet(compareBy { it.annotationName })
@@ -96,35 +92,37 @@ class Core : Module<Core?>() {
         get() = Collections.unmodifiableSortedSet(vaneModules)
 
     /** Global vane command catch-all permission. */
-    var permissionCommandCatchall: Permission = Permission(
-        "vane.*.commands.*",
-        "Allow access to all vane commands (ONLY FOR ADMINS!)",
-        PermissionDefault.FALSE
-    )
+    var permissionCommandCatchall: Permission =
+        Permission(
+            "vane.*.commands.*",
+            "Allow access to all vane commands (ONLY FOR ADMINS!)",
+            PermissionDefault.FALSE,
+        )
 
     /** Menu manager shared by menu systems. */
-    @JvmField
-    var menuManager: MenuManager?
+    @JvmField var menuManager: MenuManager?
 
     /** Whether client-side translation via resource pack is enabled. */
     @ConfigBoolean(
         def = true,
-        desc = "Let the client translate messages using the generated resource pack. This allows every player to select their preferred language, and all plugin messages will also be translated. Disabling this won't allow you to skip generating the resource pack, as it will be needed for custom item textures."
+        desc =
+            "Let the client translate messages using the generated resource pack. This allows every player to select their preferred language, and all plugin messages will also be translated. Disabling this won't allow you to skip generating the resource pack, as it will be needed for custom item textures.",
     )
-            /** Whether client-side translation keys should be used in outgoing messages. */
+    /** Whether client-side translation keys should be used in outgoing messages. */
     var configClientSideTranslations: Boolean = false
 
     /** Whether update notices are sent to operators. */
-    @ConfigBoolean(def = true, desc = "Send update notices to OPed player when a new version of vane is available.")
+    @ConfigBoolean(
+        def = true,
+        desc = "Send update notices to OPed player when a new version of vane is available.",
+    )
     var configUpdateNotices: Boolean = false
 
     /** Current running vane version string. */
-    @Volatile
-    var currentVersion: String? = null
+    @Volatile var currentVersion: String? = null
 
     /** Latest version string fetched from GitHub releases. */
-    @Volatile
-    var latestVersion: String? = null
+    @Volatile var latestVersion: String? = null
 
     init {
         check(INSTANCE == null) { "Cannot instanciate Core twice." }
@@ -158,27 +156,41 @@ class Core : Module<Core?>() {
     override fun onModuleEnable() {
         if (configUpdateNotices) {
             // Async: this does blocking network I/O and must never stall the main thread.
-            server.scheduler.runTaskTimerAsynchronously(this, ::checkForUpdate, 1L, msToTicks(2 * 60L * 60L * 1000L))
+            server.scheduler.runTaskTimerAsynchronously(
+                this,
+                ::checkForUpdate,
+                1L,
+                msToTicks(2 * 60L * 60L * 1000L),
+            )
         }
     }
 
     /** Unfreezes relevant registries to allow custom enchantment/entity registration. */
     fun unfreezeRegistries() {
         try {
-            val frozen = MappedRegistry::class.java.getDeclaredField("frozen" /* frozen */)
-                .also { it.isAccessible = true }
-            val intrusiveHolderCache = MappedRegistry::class.java.getDeclaredField(
-                "unregisteredIntrusiveHolders" /* unregisteredIntrusiveHolders (1.19.3+), intrusiveHolderCache (until 1.19.2) */
-            ).also { it.isAccessible = true }
+            val frozen =
+                MappedRegistry::class.java.getDeclaredField("frozen" /* frozen */).also {
+                    it.isAccessible = true
+                }
+            val intrusiveHolderCache =
+                MappedRegistry::class
+                    .java
+                    .getDeclaredField(
+                        "unregisteredIntrusiveHolders" /* unregisteredIntrusiveHolders (1.19.3+), intrusiveHolderCache (until 1.19.2) */
+                    )
+                    .also { it.isAccessible = true }
 
             frozen.set(BuiltInRegistries.ENTITY_TYPE, false)
             intrusiveHolderCache.set(
                 BuiltInRegistries.ENTITY_TYPE,
-                IdentityHashMap<EntityType<*>, Holder.Reference<EntityType<*>>>()
+                IdentityHashMap<EntityType<*>, Holder.Reference<EntityType<*>>>(),
             )
         } catch (e: Exception) {
             when (e) {
-                is NoSuchFieldException, is SecurityException, is IllegalArgumentException, is IllegalAccessException ->
+                is NoSuchFieldException,
+                is SecurityException,
+                is IllegalArgumentException,
+                is IllegalAccessException ->
                     log.log(Level.SEVERE, "Failed to unfreeze registries", e)
 
                 else -> throw e
@@ -192,13 +204,15 @@ class Core : Module<Core?>() {
     /** Generates the combined vane resource pack zip file. */
     fun generateResourcePack(): File? =
         runCatching {
-            File("VaneResourcePack.zip").also { file ->
-                ResourcePackGenerator().also { pack ->
-                    vaneModules.forEach { it.generateResourcePack(pack) }
-                    pack.write(file)
+                File("VaneResourcePack.zip").also { file ->
+                    ResourcePackGenerator().also { pack ->
+                        vaneModules.forEach { it.generateResourcePack(pack) }
+                        pack.write(file)
+                    }
                 }
             }
-        }.onFailure { log.log(Level.SEVERE, "Error while generating resourcepack", it) }.getOrNull()
+            .onFailure { log.log(Level.SEVERE, "Error while generating resourcepack", it) }
+            .getOrNull()
 
     /** Iterates over all module components across loaded modules. */
     fun forAllModuleComponents(f: Consumer1<ModuleComponent<*>?>?) {
@@ -211,13 +225,17 @@ class Core : Module<Core?>() {
     /** Returns the custom model data registry. */
     fun modelDataRegistry(): CustomModelDataRegistry? = modelDataRegistry
 
-    /** Checks GitHub for newer releases and updates cached version state. Runs off the main thread. */
+    /**
+     * Checks GitHub for newer releases and updates cached version state. Runs off the main thread.
+     */
     fun checkForUpdate() {
         if (currentVersion == null) {
             try {
-                val stream = Core::class.java.getResourceAsStream("/vane-core.properties")
-                    ?: throw IOException("vane-core.properties is missing from the plugin jar")
-                currentVersion = "v" + stream.use { Properties().apply { load(it) } }.getProperty("version")
+                val stream =
+                    Core::class.java.getResourceAsStream("/vane-core.properties")
+                        ?: throw IOException("vane-core.properties is missing from the plugin jar")
+                currentVersion =
+                    "v" + stream.use { Properties().apply { load(it) } }.getProperty("version")
             } catch (e: IOException) {
                 log.severe("Could not load current version from included properties file: $e")
                 return
@@ -228,14 +246,21 @@ class Core : Module<Core?>() {
             val json = readJsonFromUrl("https://api.github.com/repos/oddlama/vane/releases/latest")
             latestVersion = json.getString("tag_name")
             if (isUpdateAvailable()) {
-                log.warning("A newer version of vane is available online! (current=$currentVersion, new=$latestVersion)")
-                log.warning("Please update as soon as possible to get the latest features and fixes.")
-                log.warning("Get the latest release here: https://github.com/oddlama/vane/releases/latest")
+                log.warning(
+                    "A newer version of vane is available online! (current=$currentVersion, new=$latestVersion)"
+                )
+                log.warning(
+                    "Please update as soon as possible to get the latest features and fixes."
+                )
+                log.warning(
+                    "Get the latest release here: https://github.com/oddlama/vane/releases/latest"
+                )
             }
         } catch (e: Exception) {
             when (e) {
-                is IOException, is JSONException, is URISyntaxException ->
-                    log.warning("Could not check for updates: $e")
+                is IOException,
+                is JSONException,
+                is URISyntaxException -> log.warning("Could not check for updates: $e")
 
                 else -> throw e
             }
@@ -265,17 +290,22 @@ class Core : Module<Core?>() {
                     .append(Component.text("($latestVersion)", NamedTextColor.AQUA))
                     .append(Component.text(" is available!", NamedTextColor.GREEN))
             )
-            player.sendMessage(Component.text("Please update soon to get the latest features.", NamedTextColor.GREEN))
+            player.sendMessage(
+                Component.text(
+                    "Please update soon to get the latest features.",
+                    NamedTextColor.GREEN,
+                )
+            )
             player.sendMessage(
                 Component.text("Click here to go to the download page", NamedTextColor.AQUA)
-                    .clickEvent(ClickEvent.openUrl("https://github.com/oddlama/vane/releases/latest"))
+                    .clickEvent(
+                        ClickEvent.openUrl("https://github.com/oddlama/vane/releases/latest")
+                    )
             )
         }
     }
 
-    /**
-     * Static core instance access.
-     */
+    /** Static core instance access. */
     companion object {
         /** Use sparingly. */
         private var INSTANCE: Core? = null

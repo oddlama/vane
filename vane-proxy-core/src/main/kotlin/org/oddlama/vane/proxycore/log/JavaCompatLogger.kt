@@ -13,5 +13,6 @@ class JavaCompatLogger(private val logger: Logger) : IVaneLogger {
     override fun log(level: Level?, message: String?) = logger.log(level, message)
 
     /** Logs [message] and [throwable] at [level]. */
-    override fun log(level: Level?, message: String?, throwable: Throwable?) = logger.log(level, message, throwable)
+    override fun log(level: Level?, message: String?, throwable: Throwable?) =
+        logger.log(level, message, throwable)
 }

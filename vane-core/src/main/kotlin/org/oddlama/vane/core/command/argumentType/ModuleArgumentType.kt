@@ -9,10 +9,10 @@ import com.mojang.brigadier.suggestion.Suggestions
 import com.mojang.brigadier.suggestion.SuggestionsBuilder
 import io.papermc.paper.command.brigadier.MessageComponentSerializer
 import io.papermc.paper.command.brigadier.argument.CustomArgumentType
+import java.util.concurrent.CompletableFuture
 import net.kyori.adventure.text.Component
 import org.oddlama.vane.core.Core
 import org.oddlama.vane.core.module.Module
-import java.util.concurrent.CompletableFuture
 
 /**
  * Brigadier argument type that resolves loaded vane modules by annotation name.
@@ -28,20 +28,19 @@ class ModuleArgumentType private constructor(private val core: Core) :
     /** Converts a module name into a loaded module instance. */
     @Throws(CommandSyntaxException::class)
     override fun convert(nativeType: String): Module<*> =
-        core.modules
-            .asSequence()
-            .filterNotNull()
-            .firstOrNull { it.annotationName.equals(nativeType, ignoreCase = true) }
+        core.modules.asSequence().filterNotNull().firstOrNull {
+            it.annotationName.equals(nativeType, ignoreCase = true)
+        }
             ?: throw SimpleCommandExceptionType(
-                MessageComponentSerializer.message().serialize(
-                    Component.text("Unknown module: $nativeType")
+                    MessageComponentSerializer.message()
+                        .serialize(Component.text("Unknown module: $nativeType"))
                 )
-            ).create()
+                .create()
 
     /** Builds completion suggestions from loaded module names. */
     override fun <S : Any> listSuggestions(
         context: CommandContext<S>,
-        builder: SuggestionsBuilder
+        builder: SuggestionsBuilder,
     ): CompletableFuture<Suggestions> {
         val remaining = builder.remainingLowerCase
         core.modules
@@ -56,7 +55,7 @@ class ModuleArgumentType private constructor(private val core: Core) :
     /** Factory methods for [ModuleArgumentType]. */
     companion object {
         @JvmStatic
-                /** Creates a module argument type for the given core module. */
+        /** Creates a module argument type for the given core module. */
         fun module(core: Core): ModuleArgumentType = ModuleArgumentType(core)
     }
 }

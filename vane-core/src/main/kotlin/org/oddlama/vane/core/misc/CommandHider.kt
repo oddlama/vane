@@ -13,12 +13,13 @@ import org.oddlama.vane.core.module.Context
  *
  * @param context listener context.
  */
-class CommandHider(context: Context<Core?>) : Listener<Core?>(
-    context.group(
-        "HideCommands",
-        "Hide error messages for all commands for which a player has no permission, by displaying the default unknown command message instead."
-    )
-) {
+class CommandHider(context: Context<Core?>) :
+    Listener<Core?>(
+        context.group(
+            "HideCommands",
+            "Hide error messages for all commands for which a player has no permission, by displaying the default unknown command message instead.",
+        )
+    ) {
     /** Returns whether a command preprocess event should be allowed to continue. */
     private fun allowCommandEvent(message: String, player: Player): Boolean {
         val trimmed = message.trim()

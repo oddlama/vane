@@ -9,22 +9,32 @@ import kotlin.test.assertNull
 class ResourcePackUrlTest {
     @Test
     fun `accepts downloadable urls`() {
-        for (url in listOf(
-            "https://example.com/pack.zip",
-            "http://localhost:9000/vane-resource-pack.zip",
-            "http://localhost:9000/vane-resource-pack.zip?3",
-            "HTTPS://Example.com/a%20b.zip",
-        )) {
+        for (url in
+            listOf(
+                "https://example.com/pack.zip",
+                "http://localhost:9000/vane-resource-pack.zip",
+                "http://localhost:9000/vane-resource-pack.zip?3",
+                "HTTPS://Example.com/a%20b.zip",
+            )) {
             assertEquals(URI(url), ResourcePackUrl.parse(url), url)
         }
         @Suppress("MisorderedAssertEqualsArguments") // false positive: expected is first
-        assertEquals(URI("https://example.com/pack.zip"), ResourcePackUrl.parse("  https://example.com/pack.zip \n"))
+        assertEquals(
+            URI("https://example.com/pack.zip"),
+            ResourcePackUrl.parse("  https://example.com/pack.zip \n"),
+        )
     }
 
     @Test
     fun `rejects malformed urls that URI_create throws on`() {
-        for (url in listOf("https://example.com/my pack.zip", "https://example.com/pack.zip?a=|", "http://[::1")) {
-            // URI.create throws IllegalArgumentException, not URISyntaxException, which the old catch missed.
+        for (url in
+            listOf(
+                "https://example.com/my pack.zip",
+                "https://example.com/pack.zip?a=|",
+                "http://[::1",
+            )) {
+            // URI.create throws IllegalArgumentException, not URISyntaxException, which the old
+            // catch missed.
             assertFailsWith<IllegalArgumentException> { URI.create(url) }
             assertNull(ResourcePackUrl.parse(url), url)
         }
@@ -32,7 +42,18 @@ class ResourcePackUrlTest {
 
     @Test
     fun `rejects urls clients cannot download from`() {
-        for (url in listOf(null, "", "   ", "pack.zip", "/pack.zip", "file:///tmp/pack.zip", "ftp://example.com/pack.zip", "https:pack.zip", "https:///pack.zip")) {
+        for (url in
+            listOf(
+                null,
+                "",
+                "   ",
+                "pack.zip",
+                "/pack.zip",
+                "file:///tmp/pack.zip",
+                "ftp://example.com/pack.zip",
+                "https:pack.zip",
+                "https:///pack.zip",
+            )) {
             assertNull(ResourcePackUrl.parse(url), "$url")
         }
     }

@@ -1,5 +1,6 @@
 package org.oddlama.vane.trifles.items
 
+import java.util.*
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.Material
@@ -19,19 +20,16 @@ import org.oddlama.vane.core.module.Context
 import org.oddlama.vane.trifles.Trifles
 import org.oddlama.vane.util.PlayerUtil
 import org.oddlama.vane.util.expForLevel
-import java.util.*
 
-/**
- * Registers custom XP bottle items and handles their consumption behavior.
- */
+/** Registers custom XP bottle items and handles their consumption behavior. */
 class XpBottles(context: Context<Trifles?>) :
-    Listener<Trifles?>(context.group("XpBottles", "Several XP bottles storing a certain amount of experience.")) {
+    Listener<Trifles?>(
+        context.group("XpBottles", "Several XP bottles storing a certain amount of experience.")
+    ) {
     /** Base type for XP bottle variants with configurable level capacity. */
     abstract class XpBottle(context: Context<Trifles?>) : CustomItem<Trifles?>(context) {
         /** Maximum level-equivalent amount restored by this bottle. */
-        @JvmField
-        @ConfigInt(def = -1, desc = "Level capacity.")
-        var configCapacity: Int = 0
+        @JvmField @ConfigInt(def = -1, desc = "Level capacity.") var configCapacity: Int = 0
 
         /** Colors bottle display names for easier identification. */
         override fun displayName(): Component? {
@@ -44,7 +42,12 @@ class XpBottles(context: Context<Trifles?>) :
         }
     }
 
-    @VaneItem(name = "small_xp_bottle", base = Material.HONEY_BOTTLE, modelData = 0x76000b, version = 1)
+    @VaneItem(
+        name = "small_xp_bottle",
+        base = Material.HONEY_BOTTLE,
+        modelData = 0x76000b,
+        version = 1,
+    )
     /** Small XP bottle variant. */
     class SmallXpBottle(context: Context<Trifles?>) : XpBottle(context) {
         /** Default level capacity for small bottles. */
@@ -53,7 +56,12 @@ class XpBottles(context: Context<Trifles?>) :
         }
     }
 
-    @VaneItem(name = "medium_xp_bottle", base = Material.HONEY_BOTTLE, modelData = 0x76000c, version = 1)
+    @VaneItem(
+        name = "medium_xp_bottle",
+        base = Material.HONEY_BOTTLE,
+        modelData = 0x76000c,
+        version = 1,
+    )
     /** Medium XP bottle variant. */
     class MediumXpBottle(context: Context<Trifles?>) : XpBottle(context) {
         /** Default level capacity for medium bottles. */
@@ -62,7 +70,12 @@ class XpBottles(context: Context<Trifles?>) :
         }
     }
 
-    @VaneItem(name = "large_xp_bottle", base = Material.HONEY_BOTTLE, modelData = 0x76000d, version = 1)
+    @VaneItem(
+        name = "large_xp_bottle",
+        base = Material.HONEY_BOTTLE,
+        modelData = 0x76000d,
+        version = 1,
+    )
     /** Large XP bottle variant. */
     class LargeXpBottle(context: Context<Trifles?>) : XpBottle(context) {
         /** Default level capacity for large bottles. */
@@ -72,7 +85,7 @@ class XpBottles(context: Context<Trifles?>) :
     }
 
     @JvmField
-            /** All XP bottle variants managed by this listener. */
+    /** All XP bottle variants managed by this listener. */
     var bottles: MutableList<XpBottle> = ArrayList()
 
     /** Instantiates all XP bottle variants. */
@@ -88,7 +101,8 @@ class XpBottles(context: Context<Trifles?>) :
     fun onPlayerItemConsume(event: PlayerItemConsumeEvent) {
         val module = module ?: return
         val item = event.item
-        val customItem: org.oddlama.vane.core.item.api.CustomItem? = module.core?.itemRegistry()?.get(item)
+        val customItem: org.oddlama.vane.core.item.api.CustomItem? =
+            module.core?.itemRegistry()?.get(item)
         if (customItem !is XpBottle || !customItem.enabled()) {
             return
         }
@@ -96,15 +110,22 @@ class XpBottles(context: Context<Trifles?>) :
         // Replace consumed custom bottle with empty bottle item.
         val player = event.player
         val mainHand = item == player.inventory.itemInMainHand
-        PlayerUtil.removeOneItemFromHand(player, if (mainHand) EquipmentSlot.HAND else EquipmentSlot.OFF_HAND)
+        PlayerUtil.removeOneItemFromHand(
+            player,
+            if (mainHand) EquipmentSlot.HAND else EquipmentSlot.OFF_HAND,
+        )
         PlayerUtil.giveItem(player, CustomItemHelper.newStack("vane_trifles:empty_xp_bottle"))
 
         // Grant stored experience without triggering mending side effects.
         module.lastXpBottleConsumeTime[player.uniqueId] = System.currentTimeMillis()
         player.giveExp(expForLevel(customItem.configCapacity), false)
-        player
-            .world
-            .playSound(player.location, Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0f, 1.0f)
+        player.world.playSound(
+            player.location,
+            Sound.ENTITY_PLAYER_LEVELUP,
+            SoundCategory.PLAYERS,
+            1.0f,
+            1.0f,
+        )
 
         // Cancel vanilla consumption because custom logic already handled item exchange.
         event.isCancelled = true

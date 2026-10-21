@@ -14,7 +14,8 @@ import org.oddlama.vane.core.YamlLoadException
  * @param yamlNames internal name to YAML heading, for each renamed default entry.
  */
 class ConfigEntryNames(private val yamlNames: Map<String, String>) {
-    private val internalNames: Map<String, String> = yamlNames.entries.associate { (name, yaml) -> yaml to name }
+    private val internalNames: Map<String, String> =
+        yamlNames.entries.associate { (name, yaml) -> yaml to name }
 
     /** Returns the YAML key that the entry [name] is written under. */
     fun toYaml(name: String): String = yamlNames[name] ?: name
@@ -26,7 +27,7 @@ class ConfigEntryNames(private val yamlNames: Map<String, String>) {
      * Returns the internal name of each key in [keys], in order.
      *
      * @throws YamlLoadException if two keys name the same entry, such as `Generic` and `generic`.
-     * Saving would otherwise silently drop one of them.
+     *   Saving would otherwise silently drop one of them.
      */
     @Throws(YamlLoadException::class)
     fun fromYaml(keys: Iterable<String>, what: String): List<String> {
@@ -34,7 +35,9 @@ class ConfigEntryNames(private val yamlNames: Map<String, String>) {
         return keys.map { key ->
             val name = fromYaml(key)
             seen.put(name, key)?.let { other ->
-                throw YamlLoadException("The $what '$other' and '$key' are the same entry; remove one of them.")
+                throw YamlLoadException(
+                    "The $what '$other' and '$key' are the same entry; remove one of them."
+                )
             }
             name
         }

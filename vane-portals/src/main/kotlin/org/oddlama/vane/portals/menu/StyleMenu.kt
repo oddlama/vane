@@ -1,5 +1,6 @@
 package org.oddlama.vane.portals.menu
 
+import java.util.*
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
@@ -18,93 +19,73 @@ import org.oddlama.vane.portals.event.PortalChangeSettingsEvent
 import org.oddlama.vane.portals.portal.Portal
 import org.oddlama.vane.portals.portal.PortalBlock
 import org.oddlama.vane.portals.portal.Style
-import java.util.*
 
 /**
  * Menu component allowing players to configure a portal's visual style.
  *
  * Provides item selectors for each block type used in a style and actions to accept/reset changes.
  *
- * @constructor Create a StyleMenu module component using the provided module [context].
  * @param context Module context used to resolve translations, configuration and subcomponents.
+ * @constructor Create a StyleMenu module component using the provided module [context].
  */
-class StyleMenu(context: Context<Portals?>) : ModuleComponent<Portals?>(context.namespace("Style")) {
+class StyleMenu(context: Context<Portals?>) :
+    ModuleComponent<Portals?>(context.namespace("Style")) {
     /** Translated title used for the style editor menu. */
-    @LangMessage
-    var langTitle: TranslatedMessage? = null
+    @LangMessage var langTitle: TranslatedMessage? = null
 
     /** Translated title shown when selecting the active console block. */
-    @LangMessage
-    var langSelectBlockConsoleActiveTitle: TranslatedMessage? = null
+    @LangMessage var langSelectBlockConsoleActiveTitle: TranslatedMessage? = null
 
     /** Translated title shown when selecting the active origin block. */
-    @LangMessage
-    var langSelectBlockOriginActiveTitle: TranslatedMessage? = null
+    @LangMessage var langSelectBlockOriginActiveTitle: TranslatedMessage? = null
 
     /** Translated title shown when selecting the active portal-area block (unused by default). */
-    @LangMessage
-    @Suppress("unused")
-    var langSelectBlockPortalActiveTitle: TranslatedMessage? = null
+    @LangMessage @Suppress("unused") var langSelectBlockPortalActiveTitle: TranslatedMessage? = null
 
     /** Translated title shown when selecting the active boundary variant 1 block. */
-    @LangMessage
-    var langSelectBlockBoundary1ActiveTitle: TranslatedMessage? = null
+    @LangMessage var langSelectBlockBoundary1ActiveTitle: TranslatedMessage? = null
 
     /** Translated title shown when selecting the active boundary variant 2 block. */
-    @LangMessage
-    var langSelectBlockBoundary2ActiveTitle: TranslatedMessage? = null
+    @LangMessage var langSelectBlockBoundary2ActiveTitle: TranslatedMessage? = null
 
     /** Translated title shown when selecting the active boundary variant 3 block. */
-    @LangMessage
-    var langSelectBlockBoundary3ActiveTitle: TranslatedMessage? = null
+    @LangMessage var langSelectBlockBoundary3ActiveTitle: TranslatedMessage? = null
 
     /** Translated title shown when selecting the active boundary variant 4 block. */
-    @LangMessage
-    var langSelectBlockBoundary4ActiveTitle: TranslatedMessage? = null
+    @LangMessage var langSelectBlockBoundary4ActiveTitle: TranslatedMessage? = null
 
     /** Translated title shown when selecting the active boundary variant 5 block. */
-    @LangMessage
-    var langSelectBlockBoundary5ActiveTitle: TranslatedMessage? = null
+    @LangMessage var langSelectBlockBoundary5ActiveTitle: TranslatedMessage? = null
 
     /** Translated title shown when selecting the inactive console block. */
-    @LangMessage
-    var langSelectBlockConsoleInactiveTitle: TranslatedMessage? = null
+    @LangMessage var langSelectBlockConsoleInactiveTitle: TranslatedMessage? = null
 
     /** Translated title shown when selecting the inactive origin block. */
-    @LangMessage
-    var langSelectBlockOriginInactiveTitle: TranslatedMessage? = null
+    @LangMessage var langSelectBlockOriginInactiveTitle: TranslatedMessage? = null
 
     /** Translated title shown when selecting the inactive portal-area block. */
-    @LangMessage
-    var langSelectBlockPortalInactiveTitle: TranslatedMessage? = null
+    @LangMessage var langSelectBlockPortalInactiveTitle: TranslatedMessage? = null
 
     /** Translated title shown when selecting the inactive boundary variant 1 block. */
-    @LangMessage
-    var langSelectBlockBoundary1InactiveTitle: TranslatedMessage? = null
+    @LangMessage var langSelectBlockBoundary1InactiveTitle: TranslatedMessage? = null
 
     /** Translated title shown when selecting the inactive boundary variant 2 block. */
-    @LangMessage
-    var langSelectBlockBoundary2InactiveTitle: TranslatedMessage? = null
+    @LangMessage var langSelectBlockBoundary2InactiveTitle: TranslatedMessage? = null
 
     /** Translated title shown when selecting the inactive boundary variant 3 block. */
-    @LangMessage
-    var langSelectBlockBoundary3InactiveTitle: TranslatedMessage? = null
+    @LangMessage var langSelectBlockBoundary3InactiveTitle: TranslatedMessage? = null
 
     /** Translated title shown when selecting the inactive boundary variant 4 block. */
-    @LangMessage
-    var langSelectBlockBoundary4InactiveTitle: TranslatedMessage? = null
+    @LangMessage var langSelectBlockBoundary4InactiveTitle: TranslatedMessage? = null
 
     /** Translated title shown when selecting the inactive boundary variant 5 block. */
-    @LangMessage
-    var langSelectBlockBoundary5InactiveTitle: TranslatedMessage? = null
+    @LangMessage var langSelectBlockBoundary5InactiveTitle: TranslatedMessage? = null
 
     /** Translated title for the defined-style selector. */
-    @LangMessage
-    var langSelectStyleTitle: TranslatedMessage? = null
+    @LangMessage var langSelectStyleTitle: TranslatedMessage? = null
 
     /** Translated title for the styles filter input shown in the selector. */
-    @LangMessage
-    var langFilterStylesTitle: TranslatedMessage? = null
+    @LangMessage var langFilterStylesTitle: TranslatedMessage? = null
 
     /** Item representing the active console block when selecting an active block. */
     private val itemBlockConsoleActive: TranslatedItemStack<*>
@@ -171,151 +152,183 @@ class StyleMenu(context: Context<Portals?>) : ModuleComponent<Portals?>(context.
 
     init {
         val ctx = getContext()!!
-        itemBlockConsoleActive = TranslatedItemStack<Portals?>(
-            ctx,
-            "BlockConsoleActive",
-            Material.BARRIER,
-            1,
-            "Used to select active console block."
-        )
-        itemBlockOriginActive = TranslatedItemStack<Portals?>(
-            ctx,
-            "BlockOriginActive",
-            Material.BARRIER,
-            1,
-            "Used to select active origin block."
-        )
-        itemBlockPortalActive = TranslatedItemStack<Portals?>(
-            ctx,
-            "BlockPortalActive",
-            Material.BARRIER,
-            1,
-            "Used to select active portal area block. Defaults to end gateway if unset."
-        )
-        itemBlockBoundary1Active = TranslatedItemStack<Portals?>(
-            ctx,
-            "BlockBoundary1Active",
-            Material.BARRIER,
-            1,
-            "Used to select active boundary variant 1 block."
-        )
-        itemBlockBoundary2Active = TranslatedItemStack<Portals?>(
-            ctx,
-            "BlockBoundary2Active",
-            Material.BARRIER,
-            1,
-            "Used to select active boundary variant 2 block."
-        )
-        itemBlockBoundary3Active = TranslatedItemStack<Portals?>(
-            ctx,
-            "BlockBoundary3Active",
-            Material.BARRIER,
-            1,
-            "Used to select active boundary variant 3 block."
-        )
-        itemBlockBoundary4Active = TranslatedItemStack<Portals?>(
-            ctx,
-            "BlockBoundary4Active",
-            Material.BARRIER,
-            1,
-            "Used to select active boundary variant 4 block."
-        )
-        itemBlockBoundary5Active = TranslatedItemStack<Portals?>(
-            ctx,
-            "BlockBoundary5Active",
-            Material.BARRIER,
-            1,
-            "Used to select active boundary variant 5 block."
-        )
-        itemBlockConsoleInactive = TranslatedItemStack<Portals?>(
-            ctx,
-            "BlockConsoleInactive",
-            Material.BARRIER,
-            1,
-            "Used to select inactive console block."
-        )
-        itemBlockOriginInactive = TranslatedItemStack<Portals?>(
-            ctx,
-            "BlockOriginInactive",
-            Material.BARRIER,
-            1,
-            "Used to select inactive origin block."
-        )
-        itemBlockPortalInactive = TranslatedItemStack<Portals?>(
-            ctx,
-            "BlockPortalInactive",
-            Material.BARRIER,
-            1,
-            "Used to select inactive portal area block."
-        )
-        itemBlockBoundary1Inactive = TranslatedItemStack<Portals?>(
-            ctx,
-            "BlockBoundary1Inactive",
-            Material.BARRIER,
-            1,
-            "Used to select inactive boundary variant 1 block."
-        )
-        itemBlockBoundary2Inactive = TranslatedItemStack<Portals?>(
-            ctx,
-            "BlockBoundary2Inactive",
-            Material.BARRIER,
-            1,
-            "Used to select inactive boundary variant 2 block."
-        )
-        itemBlockBoundary3Inactive = TranslatedItemStack<Portals?>(
-            ctx,
-            "BlockBoundary3Inactive",
-            Material.BARRIER,
-            1,
-            "Used to select inactive boundary variant 3 block."
-        )
-        itemBlockBoundary4Inactive = TranslatedItemStack<Portals?>(
-            ctx,
-            "BlockBoundary4Inactive",
-            Material.BARRIER,
-            1,
-            "Used to select inactive boundary variant 4 block."
-        )
-        itemBlockBoundary5Inactive = TranslatedItemStack<Portals?>(
-            ctx,
-            "BlockBoundary5Inactive",
-            Material.BARRIER,
-            1,
-            "Used to select inactive boundary variant 5 block."
-        )
+        itemBlockConsoleActive =
+            TranslatedItemStack<Portals?>(
+                ctx,
+                "BlockConsoleActive",
+                Material.BARRIER,
+                1,
+                "Used to select active console block.",
+            )
+        itemBlockOriginActive =
+            TranslatedItemStack<Portals?>(
+                ctx,
+                "BlockOriginActive",
+                Material.BARRIER,
+                1,
+                "Used to select active origin block.",
+            )
+        itemBlockPortalActive =
+            TranslatedItemStack<Portals?>(
+                ctx,
+                "BlockPortalActive",
+                Material.BARRIER,
+                1,
+                "Used to select active portal area block. Defaults to end gateway if unset.",
+            )
+        itemBlockBoundary1Active =
+            TranslatedItemStack<Portals?>(
+                ctx,
+                "BlockBoundary1Active",
+                Material.BARRIER,
+                1,
+                "Used to select active boundary variant 1 block.",
+            )
+        itemBlockBoundary2Active =
+            TranslatedItemStack<Portals?>(
+                ctx,
+                "BlockBoundary2Active",
+                Material.BARRIER,
+                1,
+                "Used to select active boundary variant 2 block.",
+            )
+        itemBlockBoundary3Active =
+            TranslatedItemStack<Portals?>(
+                ctx,
+                "BlockBoundary3Active",
+                Material.BARRIER,
+                1,
+                "Used to select active boundary variant 3 block.",
+            )
+        itemBlockBoundary4Active =
+            TranslatedItemStack<Portals?>(
+                ctx,
+                "BlockBoundary4Active",
+                Material.BARRIER,
+                1,
+                "Used to select active boundary variant 4 block.",
+            )
+        itemBlockBoundary5Active =
+            TranslatedItemStack<Portals?>(
+                ctx,
+                "BlockBoundary5Active",
+                Material.BARRIER,
+                1,
+                "Used to select active boundary variant 5 block.",
+            )
+        itemBlockConsoleInactive =
+            TranslatedItemStack<Portals?>(
+                ctx,
+                "BlockConsoleInactive",
+                Material.BARRIER,
+                1,
+                "Used to select inactive console block.",
+            )
+        itemBlockOriginInactive =
+            TranslatedItemStack<Portals?>(
+                ctx,
+                "BlockOriginInactive",
+                Material.BARRIER,
+                1,
+                "Used to select inactive origin block.",
+            )
+        itemBlockPortalInactive =
+            TranslatedItemStack<Portals?>(
+                ctx,
+                "BlockPortalInactive",
+                Material.BARRIER,
+                1,
+                "Used to select inactive portal area block.",
+            )
+        itemBlockBoundary1Inactive =
+            TranslatedItemStack<Portals?>(
+                ctx,
+                "BlockBoundary1Inactive",
+                Material.BARRIER,
+                1,
+                "Used to select inactive boundary variant 1 block.",
+            )
+        itemBlockBoundary2Inactive =
+            TranslatedItemStack<Portals?>(
+                ctx,
+                "BlockBoundary2Inactive",
+                Material.BARRIER,
+                1,
+                "Used to select inactive boundary variant 2 block.",
+            )
+        itemBlockBoundary3Inactive =
+            TranslatedItemStack<Portals?>(
+                ctx,
+                "BlockBoundary3Inactive",
+                Material.BARRIER,
+                1,
+                "Used to select inactive boundary variant 3 block.",
+            )
+        itemBlockBoundary4Inactive =
+            TranslatedItemStack<Portals?>(
+                ctx,
+                "BlockBoundary4Inactive",
+                Material.BARRIER,
+                1,
+                "Used to select inactive boundary variant 4 block.",
+            )
+        itemBlockBoundary5Inactive =
+            TranslatedItemStack<Portals?>(
+                ctx,
+                "BlockBoundary5Inactive",
+                Material.BARRIER,
+                1,
+                "Used to select inactive boundary variant 5 block.",
+            )
 
         itemAccept =
-            TranslatedItemStack<Portals?>(ctx, "Accept", Material.LIME_TERRACOTTA, 1, "Used to apply the style.")
-        itemReset = TranslatedItemStack<Portals?>(ctx, "Reset", Material.MILK_BUCKET, 1, "Used to reset any changes.")
-        itemSelectDefined = TranslatedItemStack<Portals?>(
-            ctx,
-            "SelectDefined",
-            Material.ITEM_FRAME,
-            1,
-            "Used to select a defined style from the configuration."
-        )
-        itemSelectStyle = TranslatedItemStack<Portals?>(
-            ctx,
-            "SelectStyle",
-            Material.ITEM_FRAME,
-            1,
-            "Used to represent a defined style in the selector menu."
-        )
-        itemCancel = TranslatedItemStack<Portals?>(
-            ctx,
-            "Cancel",
-            Material.RED_TERRACOTTA,
-            1,
-            "Used to abort style selection."
-        )
+            TranslatedItemStack<Portals?>(
+                ctx,
+                "Accept",
+                Material.LIME_TERRACOTTA,
+                1,
+                "Used to apply the style.",
+            )
+        itemReset =
+            TranslatedItemStack<Portals?>(
+                ctx,
+                "Reset",
+                Material.MILK_BUCKET,
+                1,
+                "Used to reset any changes.",
+            )
+        itemSelectDefined =
+            TranslatedItemStack<Portals?>(
+                ctx,
+                "SelectDefined",
+                Material.ITEM_FRAME,
+                1,
+                "Used to select a defined style from the configuration.",
+            )
+        itemSelectStyle =
+            TranslatedItemStack<Portals?>(
+                ctx,
+                "SelectStyle",
+                Material.ITEM_FRAME,
+                1,
+                "Used to represent a defined style in the selector menu.",
+            )
+        itemCancel =
+            TranslatedItemStack<Portals?>(
+                ctx,
+                "Cancel",
+                Material.RED_TERRACOTTA,
+                1,
+                "Used to abort style selection.",
+            )
     }
 
     /**
      * Build and return the style selection [Menu] for the given portal and player.
      *
-     * The menu allows editing the portal's style by selecting materials for each
-     * portal block type (console, origin, portal area, boundaries) in active and
-     * inactive variants. The returned menu will return to [previous] on natural close.
+     * The menu allows editing the portal's style by selecting materials for each portal block type
+     * (console, origin, portal area, boundaries) in active and inactive variants. The returned menu
+     * will return to [previous] on natural close.
      *
      * @param portal Portal to edit.
      * @param player The player opening the menu (may be null for non-player contexts).
@@ -341,7 +354,7 @@ class StyleMenu(context: Context<Portals?>) : ModuleComponent<Portals?>(context.
                 module!!.constructor.configMaterialConsole!!,
                 langSelectBlockConsoleInactiveTitle!!.str(),
                 PortalBlock.Type.CONSOLE,
-                false
+                false,
             )
         )
         styleMenu.add(
@@ -353,7 +366,7 @@ class StyleMenu(context: Context<Portals?>) : ModuleComponent<Portals?>(context.
                 module!!.constructor.configMaterialOrigin!!,
                 langSelectBlockOriginInactiveTitle!!.str(),
                 PortalBlock.Type.ORIGIN,
-                false
+                false,
             )
         )
         styleMenu.add(
@@ -365,7 +378,7 @@ class StyleMenu(context: Context<Portals?>) : ModuleComponent<Portals?>(context.
                 module!!.constructor.configMaterialPortalArea!!,
                 langSelectBlockPortalInactiveTitle!!.str(),
                 PortalBlock.Type.PORTAL,
-                false
+                false,
             )
         )
         styleMenu.add(
@@ -377,7 +390,7 @@ class StyleMenu(context: Context<Portals?>) : ModuleComponent<Portals?>(context.
                 module!!.constructor.configMaterialBoundary1!!,
                 langSelectBlockBoundary1InactiveTitle!!.str(),
                 PortalBlock.Type.BOUNDARY1,
-                false
+                false,
             )
         )
         styleMenu.add(
@@ -389,7 +402,7 @@ class StyleMenu(context: Context<Portals?>) : ModuleComponent<Portals?>(context.
                 module!!.constructor.configMaterialBoundary2!!,
                 langSelectBlockBoundary2InactiveTitle!!.str(),
                 PortalBlock.Type.BOUNDARY2,
-                false
+                false,
             )
         )
         styleMenu.add(
@@ -401,7 +414,7 @@ class StyleMenu(context: Context<Portals?>) : ModuleComponent<Portals?>(context.
                 module!!.constructor.configMaterialBoundary3!!,
                 langSelectBlockBoundary3InactiveTitle!!.str(),
                 PortalBlock.Type.BOUNDARY3,
-                false
+                false,
             )
         )
         styleMenu.add(
@@ -413,7 +426,7 @@ class StyleMenu(context: Context<Portals?>) : ModuleComponent<Portals?>(context.
                 module!!.constructor.configMaterialBoundary4!!,
                 langSelectBlockBoundary4InactiveTitle!!.str(),
                 PortalBlock.Type.BOUNDARY4,
-                false
+                false,
             )
         )
         styleMenu.add(
@@ -425,7 +438,7 @@ class StyleMenu(context: Context<Portals?>) : ModuleComponent<Portals?>(context.
                 module!!.constructor.configMaterialBoundary5!!,
                 langSelectBlockBoundary5InactiveTitle!!.str(),
                 PortalBlock.Type.BOUNDARY5,
-                false
+                false,
             )
         )
         styleMenu.add(
@@ -437,7 +450,7 @@ class StyleMenu(context: Context<Portals?>) : ModuleComponent<Portals?>(context.
                 module!!.constructor.configMaterialConsole!!,
                 langSelectBlockConsoleActiveTitle!!.str(),
                 PortalBlock.Type.CONSOLE,
-                true
+                true,
             )
         )
         styleMenu.add(
@@ -449,7 +462,7 @@ class StyleMenu(context: Context<Portals?>) : ModuleComponent<Portals?>(context.
                 module!!.constructor.configMaterialOrigin!!,
                 langSelectBlockOriginActiveTitle!!.str(),
                 PortalBlock.Type.ORIGIN,
-                true
+                true,
             )
         )
         // styleMenu.add(menuItemBlockSelector(portal, styleContainer, 1 * COLUMNS
@@ -465,7 +478,7 @@ class StyleMenu(context: Context<Portals?>) : ModuleComponent<Portals?>(context.
                 module!!.constructor.configMaterialBoundary1!!,
                 langSelectBlockBoundary1ActiveTitle!!.str(),
                 PortalBlock.Type.BOUNDARY1,
-                true
+                true,
             )
         )
         styleMenu.add(
@@ -477,7 +490,7 @@ class StyleMenu(context: Context<Portals?>) : ModuleComponent<Portals?>(context.
                 module!!.constructor.configMaterialBoundary2!!,
                 langSelectBlockBoundary2ActiveTitle!!.str(),
                 PortalBlock.Type.BOUNDARY2,
-                true
+                true,
             )
         )
         styleMenu.add(
@@ -489,7 +502,7 @@ class StyleMenu(context: Context<Portals?>) : ModuleComponent<Portals?>(context.
                 module!!.constructor.configMaterialBoundary3!!,
                 langSelectBlockBoundary3ActiveTitle!!.str(),
                 PortalBlock.Type.BOUNDARY3,
-                true
+                true,
             )
         )
         styleMenu.add(
@@ -501,7 +514,7 @@ class StyleMenu(context: Context<Portals?>) : ModuleComponent<Portals?>(context.
                 module!!.constructor.configMaterialBoundary4!!,
                 langSelectBlockBoundary4ActiveTitle!!.str(),
                 PortalBlock.Type.BOUNDARY4,
-                true
+                true,
             )
         )
         styleMenu.add(
@@ -513,7 +526,7 @@ class StyleMenu(context: Context<Portals?>) : ModuleComponent<Portals?>(context.
                 module!!.constructor.configMaterialBoundary5!!,
                 langSelectBlockBoundary5ActiveTitle!!.str(),
                 PortalBlock.Type.BOUNDARY5,
-                true
+                true,
             )
         )
 
@@ -529,9 +542,9 @@ class StyleMenu(context: Context<Portals?>) : ModuleComponent<Portals?>(context.
     /**
      * Create a menu widget that opens an item selector for the given [type] of portal block.
      *
-     * The selector will update [styleContainer] with the chosen material (or reset to
-     * a default) and reopen the parent menu after selection. The [tItem] is used as the
-     * base item for display in the menu and [slot] determines where it will be placed.
+     * The selector will update [styleContainer] with the chosen material (or reset to a default)
+     * and reopen the parent menu after selection. The [tItem] is used as the base item for display
+     * in the menu and [slot] determines where it will be placed.
      *
      * @param portal Portal being edited.
      * @param styleContainer Container holding the currently edited style and defined-style key.
@@ -551,64 +564,89 @@ class StyleMenu(context: Context<Portals?>) : ModuleComponent<Portals?>(context.
         buildingMaterial: Material,
         title: String,
         type: PortalBlock.Type,
-        active: Boolean
+        active: Boolean,
     ): MenuWidget {
-        return object : MenuItem(slot, null, Function3 { player: Player?, menu: Menu?, _: MenuItem? ->
-            menu!!.close(player!!)
-            MenuFactory.itemSelector(
-                getContext()!!,
-                player,
-                title,
-                itemForType(styleContainer, active, type),
-                true,
-                { player2: Player?, item: ItemStack? ->
-                    styleContainer.definedStyle = null
-                    if (item == null) {
-                        if (active && type == PortalBlock.Type.PORTAL) {
-                            styleContainer.style!!.setMaterial(active, type, Material.END_GATEWAY, true)
-                        }
-                        styleContainer.style!!.setMaterial(active, type, Material.AIR, true)
-                    } else {
-                        styleContainer.style!!.setMaterial(active, type, item.type, true)
-                    }
-                    menu.open(player2!!)
+        return object :
+            MenuItem(
+                slot,
+                null,
+                Function3 { player: Player?, menu: Menu?, _: MenuItem? ->
+                    menu!!.close(player!!)
+                    MenuFactory.itemSelector(
+                            getContext()!!,
+                            player,
+                            title,
+                            itemForType(styleContainer, active, type),
+                            true,
+                            { player2: Player?, item: ItemStack? ->
+                                styleContainer.definedStyle = null
+                                if (item == null) {
+                                    if (active && type == PortalBlock.Type.PORTAL) {
+                                        styleContainer.style!!.setMaterial(
+                                            active,
+                                            type,
+                                            Material.END_GATEWAY,
+                                            true,
+                                        )
+                                    }
+                                    styleContainer.style!!.setMaterial(
+                                        active,
+                                        type,
+                                        Material.AIR,
+                                        true,
+                                    )
+                                } else {
+                                    styleContainer.style!!.setMaterial(
+                                        active,
+                                        type,
+                                        item.type,
+                                        true,
+                                    )
+                                }
+                                menu.open(player2!!)
+                                Menu.ClickResult.SUCCESS
+                            },
+                            { player2: Player? -> menu.open(player2!!) },
+                            { item: ItemStack? ->
+                                // Only allow placeable solid blocks
+                                if (item == null || !(item.type.isBlock && item.type.isSolid)) {
+                                    return@itemSelector null
+                                }
+
+                                // Nothing from the blacklist
+                                if (
+                                    module!!.configBlacklistedMaterials?.contains(item.type) == true
+                                ) {
+                                    return@itemSelector null
+                                }
+
+                                // Must be a block (should be given at this point)
+                                val block = item.type.asBlockType() ?: return@itemSelector null
+
+                                // Must be a full block with one AABB of extent (1,1,1)
+                                val blockdata = block.createBlockData()
+                                val voxelshape = blockdata.getCollisionShape(player.location)
+                                val bbs = voxelshape.boundingBoxes
+                                if (
+                                    bbs.size != 1 ||
+                                        !bbs.all { x ->
+                                            x.widthX == 1.0 && x.widthZ == 1.0 && x.height == 1.0
+                                        }
+                                ) {
+                                    return@itemSelector null
+                                }
+
+                                // Always select one
+                                item.amount = 1
+                                item
+                            },
+                        )
+                        .tag(PortalMenuTag(portal.id()))
+                        .open(player)
+                    menu.update()
                     Menu.ClickResult.SUCCESS
                 },
-                { player2: Player? -> menu.open(player2!!) },
-                { item: ItemStack? ->
-                    // Only allow placeable solid blocks
-                    if (item == null || !(item.type.isBlock && item.type.isSolid)) {
-                        return@itemSelector null
-                    }
-
-                    // Nothing from the blacklist
-                    if (module!!.configBlacklistedMaterials?.contains(item.type) == true) {
-                        return@itemSelector null
-                    }
-
-                    // Must be a block (should be given at this point)
-                    val block = item.type.asBlockType() ?: return@itemSelector null
-
-                    // Must be a full block with one AABB of extent (1,1,1)
-                    val blockdata = block.createBlockData()
-                    val voxelshape = blockdata.getCollisionShape(player.location)
-                    val bbs = voxelshape.boundingBoxes
-                    if (bbs.size != 1 ||
-                        !bbs.all { x -> x.widthX == 1.0 && x.widthZ == 1.0 && x.height == 1.0 }
-                    ) {
-                        return@itemSelector null
-                    }
-
-                    // Always select one
-                    item.amount = 1
-                    item
-                }
-            )
-                .tag(PortalMenuTag(portal.id()))
-                .open(player)
-            menu.update()
-            Menu.ClickResult.SUCCESS
-        }) {
+            ) {
             override fun item(item: ItemStack?) {
                 var stack: ItemStack = itemForType(styleContainer, active, type)
                 if (stack.type == Material.AIR) {
@@ -622,8 +660,8 @@ class StyleMenu(context: Context<Portals?>) : ModuleComponent<Portals?>(context.
     /**
      * Create the accept/apply menu widget which applies the edited style to [portal].
      *
-     * This will perform permission/event checks (fires [PortalChangeSettingsEvent]),
-     * apply the style, update portal blocks and return to [previous].
+     * This will perform permission/event checks (fires [PortalChangeSettingsEvent]), apply the
+     * style, update portal blocks and return to [previous].
      *
      * @param portal Portal to update.
      * @param styleContainer Container holding the edited style.
@@ -633,36 +671,43 @@ class StyleMenu(context: Context<Portals?>) : ModuleComponent<Portals?>(context.
     private fun menuItemAccept(
         portal: Portal,
         styleContainer: StyleContainer,
-        previous: Menu
+        previous: Menu,
     ): MenuWidget {
-        return MenuItem(3 * COLUMNS, itemAccept.item(), Function3 { player: Player?, menu: Menu?, _: MenuItem? ->
-            menu!!.close(player!!)
-            val settingsEvent = PortalChangeSettingsEvent(player, portal, false)
-            module!!.server.pluginManager.callEvent(settingsEvent)
-            if (settingsEvent.isCancelled() && !player.hasPermission(module!!.adminPermission)) {
-                return@Function3 Menu.ClickResult.ERROR
-            }
+        return MenuItem(
+            3 * COLUMNS,
+            itemAccept.item(),
+            Function3 { player: Player?, menu: Menu?, _: MenuItem? ->
+                menu!!.close(player!!)
+                val settingsEvent = PortalChangeSettingsEvent(player, portal, false)
+                module!!.server.pluginManager.callEvent(settingsEvent)
+                if (
+                    settingsEvent.isCancelled() && !player.hasPermission(module!!.adminPermission)
+                ) {
+                    return@Function3 Menu.ClickResult.ERROR
+                }
 
-            val s = styleContainer.style ?: return@Function3 Menu.ClickResult.ERROR
-            portal.style(s)
-            portal.updateBlocks(module!!)
-            previous.open(player)
-            Menu.ClickResult.SUCCESS
-        })
+                val s = styleContainer.style ?: return@Function3 Menu.ClickResult.ERROR
+                portal.style(s)
+                portal.updateBlocks(module!!)
+                previous.open(player)
+                Menu.ClickResult.SUCCESS
+            },
+        )
     }
 
     /**
      * Create the reset menu widget which reverts unsaved style changes.
      *
-     * When activated the style in [styleContainer] is reset to a copy of the portal's
-     * current style and the menu display is updated.
+     * When activated the style in [styleContainer] is reset to a copy of the portal's current style
+     * and the menu display is updated.
      *
      * @param portal Portal whose style to copy when resetting.
      * @param styleContainer Container holding the edited style to be reset.
      * @return A [MenuWidget] that resets the working style to the portal's style.
      */
     private fun menuItemReset(portal: Portal, styleContainer: StyleContainer): MenuWidget {
-        return MenuItem(3 * COLUMNS + 3, itemReset.item()) { _: Player?, menu: Menu?, _: MenuItem? ->
+        return MenuItem(3 * COLUMNS + 3, itemReset.item()) { _: Player?, menu: Menu?, _: MenuItem?
+            ->
             styleContainer.style = portal.copyStyle(module!!, null)
             menu!!.update()
             Menu.ClickResult.SUCCESS
@@ -672,8 +717,8 @@ class StyleMenu(context: Context<Portals?>) : ModuleComponent<Portals?>(context.
     /**
      * Create a menu widget that opens a selector for defined styles from configuration.
      *
-     * Selecting a defined style will set the container's `definedStyle` and replace the
-     * working `style` in the provided `styleContainer` with a copy of the selected style.
+     * Selecting a defined style will set the container's `definedStyle` and replace the working
+     * `style` in the provided `styleContainer` with a copy of the selected style.
      *
      * @param portal Portal being edited.
      * @param styleContainer Container holding the edited style and selected defined key.
@@ -691,33 +736,33 @@ class StyleMenu(context: Context<Portals?>) : ModuleComponent<Portals?>(context.
 
         return MenuItem(
             3 * COLUMNS + 4,
-            itemSelectDefined.item()
+            itemSelectDefined.item(),
         ) { player: Player?, menu: Menu?, _: MenuItem? ->
             menu!!.close(player!!)
             val allStyles: ArrayList<Style?> = ArrayList(module!!.styles.values)
-            val filter = Filter.StringFilter({ s: Style?, str: String? ->
-                s!!.key().toString().lowercase(
-                    Locale.getDefault()
-                ).contains(str!!)
-            }
-            )
+            val filter =
+                Filter.StringFilter({ s: Style?, str: String? ->
+                    s!!.key().toString().lowercase(Locale.getDefault()).contains(str!!)
+                })
             MenuFactory.genericSelector<Style?, Filter.StringFilter<Style?>?>(
-                getContext()!!,
-                player,
-                langSelectStyleTitle!!.str(),
-                langFilterStylesTitle!!.str(),
-                allStyles,
-                { s: Style? -> itemSelectStyle.alternative(itemFor.apply(s)!!, s!!.key()!!.key) },
-                filter,
-                { player2: Player?, m: Menu?, t: Style? ->
-                    m!!.close(player2!!)
-                    styleContainer.definedStyle = t!!.key()
-                    styleContainer.style = t.copy(null)
-                    menu.open(player2)
-                    Menu.ClickResult.SUCCESS
-                },
-                { player2: Player? -> menu.open(player2!!) }
-            )
+                    getContext()!!,
+                    player,
+                    langSelectStyleTitle!!.str(),
+                    langFilterStylesTitle!!.str(),
+                    allStyles,
+                    { s: Style? ->
+                        itemSelectStyle.alternative(itemFor.apply(s)!!, s!!.key()!!.key)
+                    },
+                    filter,
+                    { player2: Player?, m: Menu?, t: Style? ->
+                        m!!.close(player2!!)
+                        styleContainer.definedStyle = t!!.key()
+                        styleContainer.style = t.copy(null)
+                        menu.open(player2)
+                        Menu.ClickResult.SUCCESS
+                    },
+                    { player2: Player? -> menu.open(player2!!) },
+                )
                 .tag(PortalMenuTag(portal.id()))
                 .open(player)
             Menu.ClickResult.SUCCESS
@@ -725,13 +770,17 @@ class StyleMenu(context: Context<Portals?>) : ModuleComponent<Portals?>(context.
     }
 
     /**
-     * Create the cancel/back menu widget which returns the player to [previous] without applying changes.
+     * Create the cancel/back menu widget which returns the player to [previous] without applying
+     * changes.
      *
      * @param previous Menu to open when the cancel action is invoked.
      * @return A [MenuWidget] that cancels editing and returns to [previous].
      */
     private fun menuItemCancel(previous: Menu): MenuWidget {
-        return MenuItem(3 * COLUMNS + 8, itemCancel.item()) { player: Player?, menu: Menu?, _: MenuItem? ->
+        return MenuItem(3 * COLUMNS + 8, itemCancel.item()) {
+            player: Player?,
+            menu: Menu?,
+            _: MenuItem? ->
             menu!!.close(player!!)
             previous.open(player)
             Menu.ClickResult.SUCCESS
@@ -763,8 +812,8 @@ class StyleMenu(context: Context<Portals?>) : ModuleComponent<Portals?>(context.
         /**
          * Get an ItemStack representing the material for the given [type] in [styleContainer].
          *
-         * For the special case of an active PORTAL type this returns an AIR item stack to
-         * indicate the portal-area selection is empty.
+         * For the special case of an active PORTAL type this returns an AIR item stack to indicate
+         * the portal-area selection is empty.
          *
          * @param styleContainer Container holding the working style.
          * @param active True for active variant, false for inactive.
@@ -774,7 +823,7 @@ class StyleMenu(context: Context<Portals?>) : ModuleComponent<Portals?>(context.
         private fun itemForType(
             styleContainer: StyleContainer,
             active: Boolean,
-            type: PortalBlock.Type
+            type: PortalBlock.Type,
         ): ItemStack {
             if (active && type == PortalBlock.Type.PORTAL) {
                 return ItemStack(Material.AIR)

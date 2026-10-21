@@ -9,6 +9,13 @@ fun interface Function6<T1, T2, T3, T4, T5, T6, R> : ErasedFunctor, GenericsFind
     @Suppress("UNCHECKED_CAST")
     override fun invoke(args: List<Any?>): Any? {
         require(args.size == 6) { "Functor needs 6 arguments but got ${args.size} arguments" }
-        return apply(args[0] as T1?, args[1] as T2?, args[2] as T3?, args[3] as T4?, args[4] as T5?, args[5] as T6?)
+        return apply(
+            args[0] as T1?,
+            args[1] as T2?,
+            args[2] as T3?,
+            args[3] as T4?,
+            args[4] as T5?,
+            args[5] as T6?,
+        )
     }
 }

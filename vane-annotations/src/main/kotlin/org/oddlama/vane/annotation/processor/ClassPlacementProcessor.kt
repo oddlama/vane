@@ -7,8 +7,8 @@ import javax.lang.model.element.TypeElement
 
 /**
  * Base for the processors whose whole job is to check *placement*: every element carrying one of
- * the annotations they support must be a class, and that class must inherit — at any depth — from
- * a particular framework base type.
+ * the annotations they support must be a class, and that class must inherit — at any depth — from a
+ * particular framework base type.
  *
  * Subclasses only declare their `@SupportedAnnotationTypes` and name the base type; the round loop
  * and the diagnostics live here. See the note in the module documentation: these processors are
@@ -16,16 +16,17 @@ import javax.lang.model.element.TypeElement
  *
  * @property requiredSuperType Fully qualified name of the base type, as shown in diagnostics.
  */
-abstract class ClassPlacementProcessor(private val requiredSuperType: String) : AbstractProcessor() {
+abstract class ClassPlacementProcessor(private val requiredSuperType: String) :
+    AbstractProcessor() {
     /**
-     * Vane's base types are all generic, so the erased supertype name that
-     * [verifyExtendsType] matches against is the raw name followed by `<`.
+     * Vane's base types are all generic, so the erased supertype name that [verifyExtendsType]
+     * matches against is the raw name followed by `<`.
      */
     private val requiredSuperPrefix = "$requiredSuperType<"
 
     /**
-     * Tracks whatever the running JDK supports instead of pinning a release, so the toolchain
-     * can move forward without javac warning about an outdated `@SupportedSourceVersion`.
+     * Tracks whatever the running JDK supports instead of pinning a release, so the toolchain can
+     * move forward without javac warning about an outdated `@SupportedSourceVersion`.
      */
     override fun getSupportedSourceVersion(): SourceVersion = SourceVersion.latestSupported()
 
@@ -36,12 +37,21 @@ abstract class ClassPlacementProcessor(private val requiredSuperType: String) : 
      * @param roundEnv Information about the current processing round.
      * @return true to indicate that the annotations have been claimed.
      */
-    override fun process(annotations: MutableSet<out TypeElement>, roundEnv: RoundEnvironment): Boolean {
+    override fun process(
+        annotations: MutableSet<out TypeElement>,
+        roundEnv: RoundEnvironment,
+    ): Boolean {
         annotations.forEach { annotation ->
             val name = annotation.simpleName.toString()
             roundEnv.getElementsAnnotatedWith(annotation).forEach { element ->
                 verifyIsClass(processingEnv, element, name)
-                verifyExtendsType(processingEnv, element, requiredSuperPrefix, name, requiredSuperType)
+                verifyExtendsType(
+                    processingEnv,
+                    element,
+                    requiredSuperPrefix,
+                    name,
+                    requiredSuperType,
+                )
             }
         }
 

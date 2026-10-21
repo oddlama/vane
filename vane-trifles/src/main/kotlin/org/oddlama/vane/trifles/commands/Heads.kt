@@ -21,9 +21,7 @@ import org.oddlama.vane.trifles.Trifles
 import org.oddlama.vane.util.PlayerUtil
 
 @Name("heads")
-/**
- * Command that opens the player head library and handles optional currency payment.
- */
+/** Command that opens the player head library and handles optional currency payment. */
 class Heads(context: Context<Trifles?>) :
     org.oddlama.vane.core.command.Command<Trifles?>(context, PermissionDefault.TRUE) {
     /** Material used as payment when buying heads from the selector menu. */
@@ -49,36 +47,47 @@ class Heads(context: Context<Trifles?>) :
     private fun openHeadLibrary(player: Player) {
         val context = requireNotNull(getContext())
         MenuFactory.headSelector(
-            context,
-            player,
-            { selectedPlayer: Player?, _: Menu?, head: HeadMaterial?, event: InventoryClickEvent? ->
-                val clickedEvent = event ?: return@headSelector Menu.ClickResult.INVALID_CLICK
-                val targetPlayer = selectedPlayer ?: return@headSelector Menu.ClickResult.ERROR
-                val selectedHead = head ?: return@headSelector Menu.ClickResult.ERROR
+                context,
+                player,
+                {
+                    selectedPlayer: Player?,
+                    _: Menu?,
+                    head: HeadMaterial?,
+                    event: InventoryClickEvent? ->
+                    val clickedEvent = event ?: return@headSelector Menu.ClickResult.INVALID_CLICK
+                    val targetPlayer = selectedPlayer ?: return@headSelector Menu.ClickResult.ERROR
+                    val selectedHead = head ?: return@headSelector Menu.ClickResult.ERROR
 
-                val amount = when (clickedEvent.click) {
-                    ClickType.NUMBER_KEY -> clickedEvent.hotbarButton + 1
-                    ClickType.LEFT -> 1
-                    ClickType.RIGHT -> 32
-                    ClickType.MIDDLE, ClickType.SHIFT_LEFT -> 64
-                    ClickType.SHIFT_RIGHT -> 16
-                    else -> return@headSelector Menu.ClickResult.INVALID_CLICK
-                }
+                    val amount =
+                        when (clickedEvent.click) {
+                            ClickType.NUMBER_KEY -> clickedEvent.hotbarButton + 1
+                            ClickType.LEFT -> 1
+                            ClickType.RIGHT -> 32
+                            ClickType.MIDDLE,
+                            ClickType.SHIFT_LEFT -> 64
+                            ClickType.SHIFT_RIGHT -> 16
+                            else -> return@headSelector Menu.ClickResult.INVALID_CLICK
+                        }
 
-                // Charge configured currency before granting heads.
-                if (configPricePerHead > 0 &&
-                    !PlayerUtil.takeItems(
-                        targetPlayer,
-                        ItemStack(requireNotNull(configCurrency), configPricePerHead * amount)
-                    )
-                ) {
-                    return@headSelector Menu.ClickResult.ERROR
-                }
+                    // Charge configured currency before granting heads.
+                    if (
+                        configPricePerHead > 0 &&
+                            !PlayerUtil.takeItems(
+                                targetPlayer,
+                                ItemStack(
+                                    requireNotNull(configCurrency),
+                                    configPricePerHead * amount,
+                                ),
+                            )
+                    ) {
+                        return@headSelector Menu.ClickResult.ERROR
+                    }
 
-                PlayerUtil.giveItems(targetPlayer, selectedHead.item(), amount)
-                Menu.ClickResult.SUCCESS
-            },
-            { _: Player? -> }
-        ).open(player)
+                    PlayerUtil.giveItems(targetPlayer, selectedHead.item(), amount)
+                    Menu.ClickResult.SUCCESS
+                },
+                { _: Player? -> },
+            )
+            .open(player)
     }
 }

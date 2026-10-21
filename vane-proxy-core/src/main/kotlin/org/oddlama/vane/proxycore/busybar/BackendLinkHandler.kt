@@ -1,7 +1,7 @@
 package org.oddlama.vane.proxycore.busybar
 
-import org.json.JSONObject
 import java.util.*
+import org.json.JSONObject
 
 /**
  * Receives what linked vane-busybar backends report. Called from the link's own threads, so
@@ -9,10 +9,14 @@ import java.util.*
  */
 interface BackendLinkHandler {
     /**
-     * Who should receive an event. [PLAYER] carries the player, [SERVER] means bridges whose owner is
-     * on (or was last on) the reporting backend, [ALL] means every bridge on the network.
+     * Who should receive an event. [PLAYER] carries the player, [SERVER] means bridges whose owner
+     * is on (or was last on) the reporting backend, [ALL] means every bridge on the network.
      */
-    enum class Scope { ALL, SERVER, PLAYER }
+    enum class Scope {
+        ALL,
+        SERVER,
+        PLAYER,
+    }
 
     /**
      * One event from a backend.
@@ -28,7 +32,7 @@ interface BackendLinkHandler {
         val data: JSONObject,
         val scope: Scope,
         val player: UUID?,
-        val permission: String?
+        val permission: String?,
     )
 
     /** Players in focus mode, sent to a backend in `welcome`. */

@@ -5,6 +5,7 @@ module = "vane-trifles"
 ```
 
 ---
+
 ![](images/heads.png)
 
 With the `/heads` menu you get access to over **32.000** decorative heads. By clicking on the head, you will exchange a

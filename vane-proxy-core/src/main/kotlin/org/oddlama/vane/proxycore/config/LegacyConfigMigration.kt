@@ -16,9 +16,7 @@ class LegacyConfigMigration(private val file: File) {
     var backup: File? = null
         private set
 
-    /**
-     * Migrates [config] in place.
-     */
+    /** Migrates [config] in place. */
     fun migrate(config: CommentedConfig) {
         rename(config, "auth_multiplex", "AuthMultiplex")
         rename(config, "managed_servers", "ManagedServers")
@@ -51,15 +49,20 @@ class LegacyConfigMigration(private val file: File) {
 
     /** Returns the tables directly below the table [key], e.g. each managed server. */
     private fun subTables(config: CommentedConfig, key: String): List<CommentedConfig> =
-        (config.get<Any?>(key) as? CommentedConfig)?.entrySet()?.mapNotNull { it.getValue<Any?>() as? CommentedConfig }.orEmpty()
+        (config.get<Any?>(key) as? CommentedConfig)
+            ?.entrySet()
+            ?.mapNotNull { it.getValue<Any?>() as? CommentedConfig }
+            .orEmpty()
 
     /** Moves the value of [old] to [new], unless [new] is already set. */
     private fun rename(config: CommentedConfig, old: String, new: String) {
         if (!config.contains(listOf(old)) || config.contains(listOf(new))) return
         if (backup == null) {
-            backup = File(file.parentFile, "${file.name}.pre-1.22.bak").also {
-                if (!it.exists()) Files.copy(file.toPath(), it.toPath(), StandardCopyOption.COPY_ATTRIBUTES)
-            }
+            backup =
+                File(file.parentFile, "${file.name}.pre-1.22.bak").also {
+                    if (!it.exists())
+                        Files.copy(file.toPath(), it.toPath(), StandardCopyOption.COPY_ATTRIBUTES)
+                }
         }
         config.set<Any?>(listOf(new), config.remove<Any?>(listOf(old)))
     }

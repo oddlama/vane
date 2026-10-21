@@ -1,5 +1,6 @@
 package org.oddlama.vane.util
 
+import java.util.concurrent.ThreadLocalRandom
 import org.bukkit.*
 import org.bukkit.block.Block
 import org.bukkit.block.BlockFace
@@ -11,12 +12,8 @@ import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.ItemStack
 import org.bukkit.util.Vector
 import org.oddlama.vane.util.BlockUtil.dropNaturally
-import java.util.concurrent.ThreadLocalRandom
 
-
-/**
- * Player-oriented inventory and interaction utility helpers.
- */
+/** Player-oriented inventory and interaction utility helpers. */
 object PlayerUtil {
     /** Spawns particles used for elytra boost effects. */
     @JvmStatic
@@ -30,8 +27,10 @@ object PlayerUtil {
                 Particle.FIREWORK,
                 loc.add(rnd),
                 0,
-                dir.x, dir.y, dir.z,
-                vel * ThreadLocalRandom.current().nextDouble(0.4, 0.6)
+                dir.x,
+                dir.y,
+                dir.z,
+                vel * ThreadLocalRandom.current().nextDouble(0.4, 0.6),
             )
         }
     }
@@ -41,7 +40,13 @@ object PlayerUtil {
     fun applyElytraBoost(player: Player, factor: Double) {
         val v = player.location.direction.normalize().multiply(factor)
         player.velocity = player.velocity.add(v)
-        player.world.playSound(player.location, Sound.ENTITY_ENDER_DRAGON_FLAP, SoundCategory.PLAYERS, 0.4f, 2.0f)
+        player.world.playSound(
+            player.location,
+            Sound.ENTITY_ENDER_DRAGON_FLAP,
+            SoundCategory.PLAYERS,
+            0.4f,
+            2.0f,
+        )
     }
 
     /** Removes exactly one item from the specified hand slot. */
@@ -56,9 +61,7 @@ object PlayerUtil {
         }
     }
 
-    /**
-     * Returns whether a player owns at least the required quantities for each item key.
-     */
+    /** Returns whether a player owns at least the required quantities for each item key. */
     @JvmStatic
     fun hasItems(player: Player, items: Map<ItemStack?, Int>): Boolean {
         if (player.gameMode == GameMode.CREATIVE) return true
@@ -79,14 +82,17 @@ object PlayerUtil {
         if (player.gameMode == GameMode.CREATIVE) return true
         if (!hasItems(player, items)) return false
 
-        val stacks = items.entries.flatMap { (item, amount) -> createLawfulStacks(item!!, amount).toList() }
+        val stacks =
+            items.entries.flatMap { (item, amount) -> createLawfulStacks(item!!, amount).toList() }
         val leftovers = player.inventory.removeItem(*stacks.toTypedArray())
         if (leftovers.isNotEmpty()) {
-            Bukkit.getLogger().warning(
-                "[vane] Unexpected leftovers while removing the following items from a player's inventory: $stacks"
-            )
+            Bukkit.getLogger()
+                .warning(
+                    "[vane] Unexpected leftovers while removing the following items from a player's inventory: $stacks"
+                )
             leftovers.forEach { (_, leftover) ->
-                Bukkit.getLogger().warning("[vane] Leftover: ${leftover.type}, amount: ${leftover.amount}")
+                Bukkit.getLogger()
+                    .warning("[vane] Leftover: ${leftover.type}, amount: ${leftover.amount}")
             }
             return false
         }
@@ -135,7 +141,13 @@ object PlayerUtil {
         if (breakEvent.isCancelled) return false
 
         block.type = Material.FARMLAND
-        player.world.playSound(player.location, Sound.ITEM_HOE_TILL, SoundCategory.BLOCKS, 1.0f, 1.0f)
+        player.world.playSound(
+            player.location,
+            Sound.ITEM_HOE_TILL,
+            SoundCategory.BLOCKS,
+            1.0f,
+            1.0f,
+        )
         return true
     }
 
@@ -146,10 +158,11 @@ object PlayerUtil {
         usedItem: ItemStack,
         block: Block,
         plantType: Material,
-        seedType: Material
+        seedType: Material,
     ): Boolean {
         val below = block.getRelative(BlockFace.DOWN)
-        val placeEvent = BlockPlaceEvent(block, below.state, below, usedItem, player, true, EquipmentSlot.HAND)
+        val placeEvent =
+            BlockPlaceEvent(block, below.state, below, usedItem, player, true, EquipmentSlot.HAND)
         Bukkit.getPluginManager().callEvent(placeEvent)
         if (placeEvent.isCancelled) return false
 
@@ -165,7 +178,9 @@ object PlayerUtil {
             block.blockData = ageable
         }
 
-        val sound = if (seedType == Material.NETHER_WART) Sound.ITEM_NETHER_WART_PLANT else Sound.ITEM_CROP_PLANT
+        val sound =
+            if (seedType == Material.NETHER_WART) Sound.ITEM_NETHER_WART_PLANT
+            else Sound.ITEM_CROP_PLANT
         player.world.playSound(player.location, sound, SoundCategory.BLOCKS, 1.0f, 1.0f)
         return true
     }
@@ -173,14 +188,20 @@ object PlayerUtil {
     /** Harvests a mature plant, resets growth age, and drops produce. */
     @JvmStatic
     fun harvestPlant(player: Player, block: Block): Boolean {
-        val drops = when (block.type) {
-            Material.WHEAT -> arrayOf(ItemStack(Material.WHEAT, 1 + (Math.random() * 2.5).toInt()))
-            Material.CARROTS -> arrayOf(ItemStack(Material.CARROT, 1 + (Math.random() * 2.5).toInt()))
-            Material.POTATOES -> arrayOf(ItemStack(Material.POTATO, 1 + (Math.random() * 2.5).toInt()))
-            Material.BEETROOTS -> arrayOf(ItemStack(Material.BEETROOT, 1 + (Math.random() * 2.5).toInt()))
-            Material.NETHER_WART -> arrayOf(ItemStack(Material.NETHER_WART, 1 + (Math.random() * 2.5).toInt()))
-            else -> return false
-        }
+        val drops =
+            when (block.type) {
+                Material.WHEAT ->
+                    arrayOf(ItemStack(Material.WHEAT, 1 + (Math.random() * 2.5).toInt()))
+                Material.CARROTS ->
+                    arrayOf(ItemStack(Material.CARROT, 1 + (Math.random() * 2.5).toInt()))
+                Material.POTATOES ->
+                    arrayOf(ItemStack(Material.POTATO, 1 + (Math.random() * 2.5).toInt()))
+                Material.BEETROOTS ->
+                    arrayOf(ItemStack(Material.BEETROOT, 1 + (Math.random() * 2.5).toInt()))
+                Material.NETHER_WART ->
+                    arrayOf(ItemStack(Material.NETHER_WART, 1 + (Math.random() * 2.5).toInt()))
+                else -> return false
+            }
 
         val ageable = block.blockData as? Ageable ?: return false
         if (ageable.age != ageable.maximumAge) return false

@@ -25,20 +25,15 @@ import org.oddlama.vane.core.module.Context
 @Name("enchant")
 class Enchant(context: Context<Core?>) : org.oddlama.vane.core.command.Command<Core?>(context) {
     /** Message shown when the requested level is below the enchantment minimum. */
-    @LangMessage
-    private val langLevelTooLow: TranslatedMessage? = null
+    @LangMessage private val langLevelTooLow: TranslatedMessage? = null
 
     /** Message shown when the requested level exceeds the enchantment maximum. */
-    @LangMessage
-    private val langLevelTooHigh: TranslatedMessage? = null
+    @LangMessage private val langLevelTooHigh: TranslatedMessage? = null
 
     /** Message shown when the enchantment is invalid for the current item. */
-    @LangMessage
-    private val langInvalidEnchantment: TranslatedMessage? = null
+    @LangMessage private val langInvalidEnchantment: TranslatedMessage? = null
 
-    /**
-     * Builds the brigadier command tree for `/enchant`.
-     */
+    /** Builds the brigadier command tree for `/enchant`. */
     override fun getCommandBase(): LiteralArgumentBuilder<CommandSourceStack> =
         super.getCommandBase()
             .requires { it.sender is Player }
@@ -50,27 +45,22 @@ class Enchant(context: Context<Core?>) : org.oddlama.vane.core.command.Command<C
                         Command.SINGLE_SUCCESS
                     }
                     .then(
-                        Commands.argument("level", IntegerArgumentType.integer(1))
-                            .executes { ctx ->
-                                enchantCurrentItem(
-                                    ctx.source.sender as Player,
-                                    enchantment(ctx)!!,
-                                    ctx.getArgument("level", Int::class.java)
-                                )
-                                Command.SINGLE_SUCCESS
-                            }
+                        Commands.argument("level", IntegerArgumentType.integer(1)).executes { ctx ->
+                            enchantCurrentItem(
+                                ctx.source.sender as Player,
+                                enchantment(ctx)!!,
+                                ctx.getArgument("level", Int::class.java),
+                            )
+                            Command.SINGLE_SUCCESS
+                        }
                     )
             )
 
-    /**
-     * Resolves the parsed enchantment argument from command context.
-     */
+    /** Resolves the parsed enchantment argument from command context. */
     private fun enchantment(ctx: CommandContext<CommandSourceStack>): Enchantment? =
         ctx.getArgument("enchantment", Enchantment::class.java)
 
-    /**
-     * Applies an enchantment to the player's held item.
-     */
+    /** Applies an enchantment to the player's held item. */
     private fun enchantCurrentItem(player: Player, enchantment: Enchantment, level: Int) {
         when {
             level < enchantment.startLevel -> {

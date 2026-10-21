@@ -17,7 +17,9 @@ class WorldStorageGuard {
     fun load(worldId: UUID, readAndIndex: () -> Unit) {
         loaded.remove(worldId)
         val attempt = Any()
-        check(loading.putIfAbsent(worldId, attempt) == null) { "World storage is already loading: $worldId" }
+        check(loading.putIfAbsent(worldId, attempt) == null) {
+            "World storage is already loading: $worldId"
+        }
         try {
             readAndIndex()
             // An unload/disable during the callback must not be undone by a late completion.

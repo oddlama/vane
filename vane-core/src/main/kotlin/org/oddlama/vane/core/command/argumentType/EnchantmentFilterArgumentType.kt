@@ -10,14 +10,12 @@ import io.papermc.paper.command.brigadier.argument.ArgumentTypes
 import io.papermc.paper.command.brigadier.argument.CustomArgumentType
 import io.papermc.paper.registry.RegistryAccess
 import io.papermc.paper.registry.RegistryKey
+import java.util.concurrent.CompletableFuture
 import org.bukkit.Material
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Player
-import java.util.concurrent.CompletableFuture
 
-/**
- * Brigadier argument type for enchantments with sender-item-aware completion filtering.
- */
+/** Brigadier argument type for enchantments with sender-item-aware completion filtering. */
 class EnchantmentFilterArgumentType : CustomArgumentType.Converted<Enchantment, Enchantment> {
 
     /** Returns the native brigadier argument type. */
@@ -31,7 +29,7 @@ class EnchantmentFilterArgumentType : CustomArgumentType.Converted<Enchantment, 
     /** Suggests enchantments applicable to the sender's held item. */
     override fun <S : Any> listSuggestions(
         context: CommandContext<S>,
-        builder: SuggestionsBuilder
+        builder: SuggestionsBuilder,
     ): CompletableFuture<Suggestions> {
         val stack = context.source as CommandSourceStack
         val item = (stack.sender as Player).inventory.itemInMainHand
@@ -39,8 +37,13 @@ class EnchantmentFilterArgumentType : CustomArgumentType.Converted<Enchantment, 
         val registry = RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT)
         val remaining = builder.remainingLowerCase
 
-        registry.asSequence()
-            .filter { item.type == Material.BOOK || item.type == Material.ENCHANTED_BOOK || it.canEnchantItem(item) }
+        registry
+            .asSequence()
+            .filter {
+                item.type == Material.BOOK ||
+                    item.type == Material.ENCHANTED_BOOK ||
+                    it.canEnchantItem(item)
+            }
             .map { it.key.asString() }
             .filter { remaining.isBlank() || it.contains(remaining) }
             .forEach { builder.suggest(it) }
@@ -50,7 +53,7 @@ class EnchantmentFilterArgumentType : CustomArgumentType.Converted<Enchantment, 
     /** Factory methods for [EnchantmentFilterArgumentType]. */
     companion object {
         @JvmStatic
-                /** Creates a new enchantment filter argument type. */
+        /** Creates a new enchantment filter argument type. */
         fun enchantmentFilter(): EnchantmentFilterArgumentType = EnchantmentFilterArgumentType()
     }
 }

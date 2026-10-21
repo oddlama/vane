@@ -5,7 +5,13 @@ import ssl
 
 import pytest
 
-from barmc.pairing import PinMismatch, is_local, parse_pairing, parse_pin, subject_public_key_info
+from barmc.pairing import (
+    PinMismatch,
+    is_local,
+    parse_pairing,
+    parse_pin,
+    subject_public_key_info,
+)
 from barmc.server import PluginClient
 
 # Self-signed P-256 test certificate, like the plugin's Tls auto one. Test data only.
@@ -52,14 +58,17 @@ def test_keeps_the_path_and_bracketed_ipv6_hosts():
     assert pairing.pin is None
 
 
-@pytest.mark.parametrize("text, reason", [
-    ("203.0.113.7:9123#sha256=" + PIN, "no token"),
-    ("ftp://tok@host", "the line from /busybar link"),
-    ("http://tok@host:9123#sha256=" + PIN, "only makes sense with https"),
-    ("https://tok@host#md5=abc", "unknown key fingerprint"),
-    ("https://tok@host#sha256=" + PIN[:-4], "wrong length"),
-    ("https://tok@host#sha256=" + PIN[:-1] + "!", "damaged"),
-])
+@pytest.mark.parametrize(
+    "text, reason",
+    [
+        ("203.0.113.7:9123#sha256=" + PIN, "no token"),
+        ("ftp://tok@host", "the line from /busybar link"),
+        ("http://tok@host:9123#sha256=" + PIN, "only makes sense with https"),
+        ("https://tok@host#md5=abc", "unknown key fingerprint"),
+        ("https://tok@host#sha256=" + PIN[:-4], "wrong length"),
+        ("https://tok@host#sha256=" + PIN[:-1] + "!", "damaged"),
+    ],
+)
 def test_rejects_broken_pairing_strings(text, reason):
     with pytest.raises(ValueError, match=reason):
         parse_pairing(text)
@@ -71,14 +80,17 @@ def test_extracts_the_key_the_pin_hashes():
     assert digest == parse_pin(f"sha256={PIN}")
 
 
-@pytest.mark.parametrize("url, local", [
-    ("http://localhost:9123", True),
-    ("http://127.0.0.1:9123", True),
-    ("http://192.168.1.5:9123", True),
-    ("http://[::1]:9123", True),
-    ("http://1.1.1.1:9123", False),
-    ("http://mc.example.com:9123", False),
-])
+@pytest.mark.parametrize(
+    "url, local",
+    [
+        ("http://localhost:9123", True),
+        ("http://127.0.0.1:9123", True),
+        ("http://192.168.1.5:9123", True),
+        ("http://[::1]:9123", True),
+        ("http://1.1.1.1:9123", False),
+        ("http://mc.example.com:9123", False),
+    ],
+)
 def test_tells_local_addresses_apart(url, local):
     assert is_local(url) is local
 
@@ -93,8 +105,10 @@ async def _serve(tmp_path, received: list[bytes]):
     async def handle(reader, writer):
         try:
             received.append(await reader.readuntil(b"\r\n\r\n"))
-            writer.write(b"HTTP/1.1 200 OK\r\nContent-Type: text/event-stream\r\nConnection: close\r\n\r\n"
-                         b'event: snapshot\ndata: {"online": 1}\n\n')
+            writer.write(
+                b"HTTP/1.1 200 OK\r\nContent-Type: text/event-stream\r\nConnection: close\r\n\r\n"
+                b'event: snapshot\ndata: {"online": 1}\n\n'
+            )
             await writer.drain()
         except (asyncio.IncompleteReadError, ConnectionError, ssl.SSLError):
             pass

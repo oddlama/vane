@@ -13,32 +13,35 @@ import org.oddlama.vane.core.functional.Function4
  * @param item initial item value, or null for auto-updating items.
  * @param onClick click callback for this menu item.
  */
-open class MenuItem @JvmOverloads constructor(
+open class MenuItem
+@JvmOverloads
+constructor(
     /** Inventory slot managed by this menu item widget. */
     private val slot: Int,
     item: ItemStack?,
     /** Click callback invoked when this slot is clicked. */
-    private val onClick: Function4<Player?, Menu?, MenuItem?, InventoryClickEvent?, Menu.ClickResult?>? = null
+    private val onClick:
+        Function4<Player?, Menu?, MenuItem?, InventoryClickEvent?, Menu.ClickResult?>? =
+        null,
 ) : MenuWidget {
-    /**
-     * Current rendered item value.
-     */
+    /** Current rendered item value. */
     private var item: ItemStack? = null
 
-    /**
-     * Whether the widget should refresh its item before each update.
-     */
+    /** Whether the widget should refresh its item before each update. */
     private val autoUpdate: Boolean = item == null
 
-    /**
-     * Convenience constructor with a left-click-only callback.
-     */
-    constructor(slot: Int, item: ItemStack?, onClick: Function3<Player?, Menu?, MenuItem?, Menu.ClickResult?>) : this(
-        slot, item,
+    /** Convenience constructor with a left-click-only callback. */
+    constructor(
+        slot: Int,
+        item: ItemStack?,
+        onClick: Function3<Player?, Menu?, MenuItem?, Menu.ClickResult?>,
+    ) : this(
+        slot,
+        item,
         Function4 { player, menu, self, event ->
             if (!Menu.isLeftClick(event)) Menu.ClickResult.INVALID_CLICK
             else onClick.apply(player, menu, self)
-        }
+        },
     )
 
     init {
@@ -79,7 +82,7 @@ open class MenuItem @JvmOverloads constructor(
         menu: Menu?,
         item: ItemStack?,
         slot: Int,
-        event: InventoryClickEvent?
+        event: InventoryClickEvent?,
     ): Menu.ClickResult? {
         if (this.slot != slot) return Menu.ClickResult.IGNORE
         return onClick?.apply(player, menu, this, event) ?: Menu.ClickResult.IGNORE

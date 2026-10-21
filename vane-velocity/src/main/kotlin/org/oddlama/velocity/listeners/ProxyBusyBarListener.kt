@@ -32,8 +32,9 @@ class ProxyBusyBarListener @Inject constructor(private val velocity: Velocity) {
      */
     @Subscribe
     fun disconnect(event: DisconnectEvent) {
-        val loggedIn = event.loginStatus == DisconnectEvent.LoginStatus.SUCCESSFUL_LOGIN ||
-            event.loginStatus == DisconnectEvent.LoginStatus.PRE_SERVER_JOIN
+        val loggedIn =
+            event.loginStatus == DisconnectEvent.LoginStatus.SUCCESSFUL_LOGIN ||
+                event.loginStatus == DisconnectEvent.LoginStatus.PRE_SERVER_JOIN
         if (loggedIn) velocity.busyBar.onPlayerQuit(event.player.uniqueId, event.player.username)
     }
 

@@ -19,7 +19,8 @@ class LegacyConfigMigrationTest {
 
     @Test
     fun `migrates a pre-1_22 config and keeps a backup`() {
-        val legacy = """
+        val legacy =
+            """
             [auth_multiplex.1]
             port = 25566
             allowed_uuids = ["b4a6717f-e3ab-4348-8e18-022827ef3177"]
@@ -39,14 +40,19 @@ class LegacyConfigMigrationTest {
             timeout = 20
             kickMsg = "Starting"
             allowAnyone = true
-        """.trimIndent()
+            """
+                .trimIndent()
         file.writeText(legacy)
 
         val config = Config(file)
 
         val multiplexer = config.authMultiplex!![1]!!
         assertEquals(25566, multiplexer.port)
-        assertTrue(multiplexer.uuidIsAllowed(java.util.UUID.fromString("b4a6717f-e3ab-4348-8e18-022827ef3177")))
+        assertTrue(
+            multiplexer.uuidIsAllowed(
+                java.util.UUID.fromString("b4a6717f-e3ab-4348-8e18-022827ef3177")
+            )
+        )
 
         val server = config.managedServers!!["my_server"]!!
         assertEquals("Online", server.motd(ManagedServer.ConfigItemSource.ONLINE))
@@ -70,7 +76,8 @@ class LegacyConfigMigrationTest {
             [AuthMultiplex]
             [ManagedServers.lobby]
             DisplayName = "Lobby"
-            """.trimIndent()
+            """
+                .trimIndent()
         )
         val config = Config(file)
         assertNull(config.legacyBackup)

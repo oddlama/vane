@@ -87,7 +87,11 @@ class PluginClient:
                     if response.status_code == 401:
                         raise TokenRejected()
                     response.raise_for_status()
-                    log.info("Connected to %s%s", self.base_url, " (TLS key pinned)" if self.pinned else "")
+                    log.info(
+                        "Connected to %s%s",
+                        self.base_url,
+                        " (TLS key pinned)" if self.pinned else "",
+                    )
                     delay = 1.0
                     async for event in parse_sse(response.aiter_lines()):
                         yield event

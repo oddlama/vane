@@ -20,7 +20,8 @@ class ProxyPreLoginListener @Inject constructor(private val plugin: VaneProxyPlu
      */
     @Subscribe
     fun preLogin(event: PreLoginEvent) {
-        val proxyEvent: org.oddlama.vane.proxycore.listeners.PreLoginEvent = VelocityCompatPreLoginEvent(plugin, event)
+        val proxyEvent: org.oddlama.vane.proxycore.listeners.PreLoginEvent =
+            VelocityCompatPreLoginEvent(plugin, event)
 
         // For Velocity, our multiplexer connections need more work; they
         // later get handled in `ProxyGameProfileRequestListener`

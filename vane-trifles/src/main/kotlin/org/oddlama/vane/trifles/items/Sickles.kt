@@ -28,7 +28,9 @@ import org.oddlama.vane.util.PlayerUtil
  * @param context module context used for registration.
  */
 class Sickles(context: Context<Trifles?>) :
-    Listener<Trifles?>(context.group("Sickles", "Several sickles that allow players to harvest crops in a radius.")) {
+    Listener<Trifles?>(
+        context.group("Sickles", "Several sickles that allow players to harvest crops in a radius.")
+    ) {
     @VaneItem(name = "wooden_sickle", base = Material.WOODEN_HOE, modelData = 0x760004, version = 1)
     /** Wooden sickle tier. */
     class WoodenSickle(context: Context<Trifles?>) : Sickle(context) {
@@ -149,7 +151,12 @@ class Sickles(context: Context<Trifles?>) :
         }
     }
 
-    @VaneItem(name = "diamond_sickle", base = Material.DIAMOND_HOE, modelData = 0x760008, version = 1)
+    @VaneItem(
+        name = "diamond_sickle",
+        base = Material.DIAMOND_HOE,
+        modelData = 0x760008,
+        version = 1,
+    )
     /** Diamond sickle tier. */
     class DiamondSickle(context: Context<Trifles?>) : Sickle(context) {
         /** Default attack damage for the diamond sickle. */
@@ -179,7 +186,12 @@ class Sickles(context: Context<Trifles?>) :
         }
     }
 
-    @VaneItem(name = "netherite_sickle", base = Material.NETHERITE_HOE, modelData = 0x760009, version = 1)
+    @VaneItem(
+        name = "netherite_sickle",
+        base = Material.NETHERITE_HOE,
+        modelData = 0x760009,
+        version = 1,
+    )
     /** Netherite sickle tier. */
     class NetheriteSickle(context: Context<Trifles?>) : Sickle(context) {
         /** Default attack damage for the netherite sickle. */
@@ -249,7 +261,8 @@ class Sickles(context: Context<Trifles?>) :
 
         var totalHarvested = 0
         // Harvest nearby blocks within configured radius.
-        for (relativePos in BlockUtil.NEAREST_RELATIVE_BLOCKS_FOR_RADIUS[customItem.configHarvestRadius]) {
+        for (relativePos in
+            BlockUtil.NEAREST_RELATIVE_BLOCKS_FOR_RADIUS[customItem.configHarvestRadius]) {
             val block = BlockUtil.relative(rootBlock, relativePos)
             if (PlayerUtil.harvestPlant(player, block)) {
                 ++totalHarvested
@@ -260,9 +273,13 @@ class Sickles(context: Context<Trifles?>) :
         if (totalHarvested > 0) {
             ItemUtil.damageItem(player, item, 1 + (0.25 * totalHarvested).toInt())
             PlayerUtil.swingArm(player, hand)
-            rootBlock
-                .world
-                .playSound(rootBlock.location, Sound.ITEM_HOE_TILL, SoundCategory.BLOCKS, 1.0f, 2.0f)
+            rootBlock.world.playSound(
+                rootBlock.location,
+                Sound.ITEM_HOE_TILL,
+                SoundCategory.BLOCKS,
+                1.0f,
+                2.0f,
+            )
         }
 
         // Prevent offhand actions from triggering on the same click.

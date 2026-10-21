@@ -9,11 +9,12 @@ import org.oddlama.vane.enchantments.CustomEnchantmentRegistry
 /**
  * Registry for the Take Off enchantment, which is applicable to Elytra.
  *
- * @constructor Creates a new TakeOffRegistry instance.
  * @param composeEvent The registry compose event to register the enchantment.
+ * @constructor Creates a new TakeOffRegistry instance.
  */
-class TakeOffRegistry(composeEvent: RegistryComposeEvent<Enchantment, EnchantmentRegistryEntry.Builder>) :
-    CustomEnchantmentRegistry("take_off", listOf(ItemTypeKeys.ELYTRA), 3) {
+class TakeOffRegistry(
+    composeEvent: RegistryComposeEvent<Enchantment, EnchantmentRegistryEntry.Builder>
+) : CustomEnchantmentRegistry("take_off", listOf(ItemTypeKeys.ELYTRA), 3) {
     init {
         register(composeEvent)
     }

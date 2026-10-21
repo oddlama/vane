@@ -1,6 +1,12 @@
 package org.oddlama.vane.regions
 
 import com.google.common.collect.Sets
+import java.io.IOException
+import java.util.*
+import java.util.logging.Level
+import kotlin.math.abs
+import kotlin.math.max
+import kotlin.math.min
 import net.minecraft.core.BlockPos
 import org.bukkit.*
 import org.bukkit.Particle.DustOptions
@@ -41,189 +47,134 @@ import org.oddlama.vane.regions.region.*
 import org.oddlama.vane.regions.region.Role.RoleType
 import org.oddlama.vane.util.PlayerUtil
 import org.oddlama.vane.util.StorageUtil
-import java.io.IOException
-import java.util.*
-import java.util.logging.Level
-import kotlin.math.abs
-import kotlin.math.max
-import kotlin.math.min
 
 @VaneModule(name = "regions", bstats = 8643, configVersion = 4, langVersion = 3, storageVersion = 1)
-/**
- * Main module entry point for region ownership, permissions, pricing, and visualization.
- */
+/** Main module entry point for region ownership, permissions, pricing, and visualization. */
 class Regions : Module<Regions?>() {
     @ConfigInt(def = 4, min = 1, desc = "Minimum region extent in x direction.")
-            /**
-             * Minimum allowed region size on the X axis.
-             */
+    /** Minimum allowed region size on the X axis. */
     var configMinRegionExtentX: Int = 0
 
     @ConfigInt(def = 4, min = 1, desc = "Minimum region extent in y direction.")
-            /**
-             * Minimum allowed region size on the Y axis.
-             */
+    /** Minimum allowed region size on the Y axis. */
     var configMinRegionExtentY: Int = 0
 
     @ConfigInt(def = 4, min = 1, desc = "Minimum region extent in z direction.")
-            /**
-             * Minimum allowed region size on the Z axis.
-             */
+    /** Minimum allowed region size on the Z axis. */
     var configMinRegionExtentZ: Int = 0
 
     @ConfigInt(def = 2048, min = 1, desc = "Maximum region extent in x direction.")
-            /**
-             * Maximum allowed region size on the X axis.
-             */
+    /** Maximum allowed region size on the X axis. */
     var configMaxRegionExtentX: Int = 0
 
     @ConfigInt(def = 2048, min = 1, desc = "Maximum region extent in y direction.")
-            /**
-             * Maximum allowed region size on the Y axis.
-             */
+    /** Maximum allowed region size on the Y axis. */
     var configMaxRegionExtentY: Int = 0
 
     @ConfigInt(def = 2048, min = 1, desc = "Maximum region extent in z direction.")
-            /**
-             * Maximum allowed region size on the Z axis.
-             */
+    /** Maximum allowed region size on the Z axis. */
     var configMaxRegionExtentZ: Int = 0
 
     @ConfigBoolean(def = false, desc = "Use economy via VaultAPI as currency provider.")
-            /**
-             * Uses Vault-backed economy instead of material currency when enabled.
-             */
+    /** Uses Vault-backed economy instead of material currency when enabled. */
     var configEconomyAsCurrency: Boolean = false
 
     @ConfigBoolean(
         def = false,
-        desc = "Enable this to prevent players without the container permission from being able to view chests."
+        desc =
+            "Enable this to prevent players without the container permission from being able to view chests.",
     )
-            /**
-             * Blocks chest/container viewing for players lacking container permissions.
-             */
+    /** Blocks chest/container viewing for players lacking container permissions. */
     var configProhibitViewingContainers: Boolean = false
 
     @ConfigInt(
         def = 0,
         min = -1,
-        desc = "The amount of decimal places the costs will be rounded to. If set to -1, it will round to the amount of decimal places specified by your economy plugin. If set to 0, costs will simply be rounded up to the nearest integer."
+        desc =
+            "The amount of decimal places the costs will be rounded to. If set to -1, it will round to the amount of decimal places specified by your economy plugin. If set to 0, costs will simply be rounded up to the nearest integer.",
     )
-            /**
-             * Decimal precision used when formatting and rounding economy costs.
-             */
+    /** Decimal precision used when formatting and rounding economy costs. */
     var configEconomyDecimalPlaces: Int = 0
 
     @ConfigMaterial(
         def = Material.DIAMOND,
-        desc = "The currency material for regions. The alternative option to an economy plugin."
+        desc = "The currency material for regions. The alternative option to an economy plugin.",
     )
-            /**
-             * Material used as fallback currency when economy integration is disabled.
-             */
+    /** Material used as fallback currency when economy integration is disabled. */
     var configCurrency: Material? = null
 
     @ConfigDouble(
         def = 2.0,
         min = 0.0,
-        desc = "The base amount of currency required to buy an area equal to one chunk (256 blocks)."
+        desc =
+            "The base amount of currency required to buy an area equal to one chunk (256 blocks).",
     )
-            /**
-             * Base horizontal purchase cost for one chunk-sized area.
-             */
+    /** Base horizontal purchase cost for one chunk-sized area. */
     var configCostXzBase: Double = 0.0
 
     @ConfigDouble(
         def = 1.15,
         min = 1.0,
-        desc = "The multiplicator determines how much the cost increases for each additional 16 blocks of height. A region of height h will cost multiplicator^(h / 16.0) * base_amount. Rounding is applied at the end."
+        desc =
+            "The multiplicator determines how much the cost increases for each additional 16 blocks of height. A region of height h will cost multiplicator^(h / 16.0) * base_amount. Rounding is applied at the end.",
     )
-            /**
-             * Vertical cost multiplier applied per 16 blocks of selected height.
-             */
+    /** Vertical cost multiplier applied per 16 blocks of selected height. */
     var configCostYMultiplicator: Double = 0.0
 
     // Primary persistent storage for all regions (`region.id -> region`).
     @Persistent
-    /**
-     * Legacy/global region storage used during migration and persistence updates.
-     */
+    /** Legacy/global region storage used during migration and persistence updates. */
     private val storageRegions: MutableMap<UUID?, Region> = HashMap<UUID?, Region>()
 
-    /**
-     * Active in-memory index of loaded regions by id.
-     */
+    /** Active in-memory index of loaded regions by id. */
     private val regions: MutableMap<UUID?, Region?> = HashMap()
 
     private val worldStorage = WorldStorageGuard()
 
     // Primary persistent storage for all region groups (`regionGroup.id -> regionGroup`).
     @Persistent
-    /**
-     * Persistent storage for region groups.
-     */
+    /** Persistent storage for region groups. */
     private val storageRegionGroups: MutableMap<UUID?, RegionGroup> = HashMap<UUID?, RegionGroup>()
 
     // Maps player uuid to default region group id used for newly created regions.
     @Persistent
-    /**
-     * Persistent default region-group mapping per player.
-     */
+    /** Persistent default region-group mapping per player. */
     private val storageDefaultRegionGroup: MutableMap<UUID?, UUID?> = HashMap()
 
     // Per-chunk lookup cache (`worldId -> chunkKey -> possible regions`).
-    /**
-     * Fast spatial index for region lookups.
-     */
+    /** Fast spatial index for region lookups. */
     private val regionsInChunkInWorld: MutableMap<UUID?, MutableMap<Long?, MutableList<Region>>> =
         HashMap<UUID?, MutableMap<Long?, MutableList<Region>>>()
 
     // Current selection state per player while using region selection mode.
-    /**
-     * In-memory selection extents keyed by player UUID.
-     */
-    private val regionSelections: MutableMap<UUID, RegionSelection> = HashMap<UUID, RegionSelection>()
+    /** In-memory selection extents keyed by player UUID. */
+    private val regionSelections: MutableMap<UUID, RegionSelection> =
+        HashMap<UUID, RegionSelection>()
 
     @LangMessage
-            /**
-             * Message shown when region-selection mode starts.
-             */
+    /** Message shown when region-selection mode starts. */
     var langStartRegionSelection: TranslatedMessage? = null
 
     // Permission that bypasses normal region administration restrictions.
-    /**
-     * Administrative override permission for region management operations.
-     */
+    /** Administrative override permission for region management operations. */
     val adminPermission: Permission
 
-    /**
-     * Menu group entry point for region-related UI flows.
-     */
+    /** Menu group entry point for region-related UI flows. */
     var menus: RegionMenuGroup? = RegionMenuGroup(this)
 
-    /**
-     * Dynmap integration layer wrapper.
-     */
+    /** Dynmap integration layer wrapper. */
     var dynmapLayer: RegionDynmapLayer
 
-    /**
-     * BlueMap integration layer wrapper.
-     */
+    /** BlueMap integration layer wrapper. */
     var blueMapLayer: RegionBlueMapLayer
 
-    /**
-     * Active economy delegate when Vault integration is enabled.
-     */
+    /** Active economy delegate when Vault integration is enabled. */
     var economy: RegionEconomyDelegate? = null
 
-    /**
-     * Indicates whether `vane-portals` integration is active.
-     */
+    /** Indicates whether `vane-portals` integration is active. */
     var vanePortalsAvailable: Boolean = false
 
-    /**
-     * Performs delayed startup initialization that depends on loaded plugins.
-     */
+    /** Performs delayed startup initialization that depends on loaded plugins. */
     fun delayedOnEnable() {
         if (configEconomyAsCurrency) {
             if (!setupEconomy()) {
@@ -242,9 +193,11 @@ class Regions : Module<Regions?>() {
 
         val serviceIoPlugin: Plugin? = module!!.server.pluginManager.getPlugin("ServiceIO")
         if (serviceIoPlugin == null) {
-            module!!.log.severe(
-                "Economy was selected as the currency provider, but the ServiceIO plugin wasn't found! Falling back to material currency."
-            )
+            module!!
+                .log
+                .severe(
+                    "Economy was selected as the currency provider, but the ServiceIO plugin wasn't found! Falling back to material currency."
+                )
             return false
         }
 
@@ -252,9 +205,7 @@ class Regions : Module<Regions?>() {
         return economy!!.setup(serviceIoPlugin)
     }
 
-    /**
-     * Enables optional integrations and starts periodic selection visualization.
-     */
+    /** Enables optional integrations and starts periodic selection visualization. */
     override fun onModuleEnable() {
         val portalsPlugin: Plugin? = module!!.server.pluginManager.getPlugin("vane-portals")
         if (portalsPlugin != null) {
@@ -272,9 +223,7 @@ class Regions : Module<Regions?>() {
         scheduleTaskTimer({ this.visualizeSelections() }, 1L, 20L)
     }
 
-    /**
-     * Returns all loaded regions whose world is currently available.
-     */
+    /** Returns all loaded regions whose world is currently available. */
     fun allRegions(): MutableCollection<Region?> {
         return regions.values
             .filter { region ->
@@ -284,46 +233,34 @@ class Regions : Module<Regions?>() {
             .toMutableList()
     }
 
-    /**
-     * Returns all persisted region groups.
-     */
+    /** Returns all persisted region groups. */
     fun allRegionGroups(): MutableCollection<RegionGroup?> {
         // Call sites expect a nullable element collection, so widen element type explicitly.
         return storageRegionGroups.values.map { it as RegionGroup? }.toMutableList()
     }
 
-    /**
-     * Starts region selection mode for the given player.
-     */
+    /** Starts region selection mode for the given player. */
     fun startRegionSelection(player: Player) {
         regionSelections[player.uniqueId] = RegionSelection(this)
         requireNotNull(langStartRegionSelection).send(player)
     }
 
-    /**
-     * Cancels region selection mode for the given player.
-     */
+    /** Cancels region selection mode for the given player. */
     fun cancelRegionSelection(player: Player) {
         regionSelections.remove(player.uniqueId)
     }
 
-    /**
-     * Returns whether the player is currently in region selection mode.
-     */
+    /** Returns whether the player is currently in region selection mode. */
     fun isSelectingRegion(player: Player): Boolean {
         return regionSelections.containsKey(player.uniqueId)
     }
 
-    /**
-     * Returns the active region selection for the player.
-     */
+    /** Returns the active region selection for the player. */
     fun getRegionSelection(player: Player): RegionSelection {
         return requireNotNull(regionSelections[player.uniqueId])
     }
 
-    /**
-     * Visualizes one selection-box edge with neutral and validity-colored particles.
-     */
+    /** Visualizes one selection-box edge with neutral and validity-colored particles. */
     private fun visualizeEdge(world: World, c1: BlockPos, c2: BlockPos, valid: Boolean) {
         // Particle offsets are Gaussian distributed, so scale standard deviation empirically.
         val mx = (c1.getX() + c2.getX()) / 2.0 + 0.5
@@ -350,9 +287,9 @@ class Regions : Module<Regions?>() {
             dx,
             dy,
             dz,
-            0.0,  // speed
-            null,  // data
-            true
+            0.0, // speed
+            null, // data
+            true,
         ) // force
 
         // Spawn colored particles indicating selection validity.
@@ -365,25 +302,28 @@ class Regions : Module<Regions?>() {
             dx,
             dy,
             dz,
-            0.0,  // speed
-            if (valid) VISUALIZE_DUST_VALID else VISUALIZE_DUST_INVALID,  // data
-            true
+            0.0, // speed
+            if (valid) VISUALIZE_DUST_VALID else VISUALIZE_DUST_INVALID, // data
+            true,
         ) // force
     }
 
-    /**
-     * Visualizes a rectangular face by rendering its four edges.
-     */
-    private fun visualizeFace(world: World, c1: BlockPos, c2: BlockPos, c3: BlockPos, c4: BlockPos, valid: Boolean) {
+    /** Visualizes a rectangular face by rendering its four edges. */
+    private fun visualizeFace(
+        world: World,
+        c1: BlockPos,
+        c2: BlockPos,
+        c3: BlockPos,
+        c4: BlockPos,
+        valid: Boolean,
+    ) {
         visualizeEdge(world, c1, c2, valid)
         visualizeEdge(world, c2, c3, valid)
         visualizeEdge(world, c3, c4, valid)
         visualizeEdge(world, c4, c1, valid)
     }
 
-    /**
-     * Renders selection bounding boxes for all online players currently selecting regions.
-     */
+    /** Renders selection bounding boxes for all online players currently selecting regions. */
     private fun visualizeSelections() {
         for (selectionOwner in regionSelections.keys) {
             val selection = regionSelections[selectionOwner] ?: continue
@@ -437,17 +377,13 @@ class Regions : Module<Regions?>() {
         }
     }
 
-    /**
-     * Adds a new region group to persistent storage.
-     */
+    /** Adds a new region group to persistent storage. */
     fun addRegionGroup(group: RegionGroup) {
         storageRegionGroups[group.id()] = group
         markPersistentStorageDirty()
     }
 
-    /**
-     * Returns whether the region group can be removed safely.
-     */
+    /** Returns whether the region group can be removed safely. */
     fun canRemoveRegionGroup(group: RegionGroup): Boolean {
         // Returns true if this region group is unused and can be removed.
 
@@ -461,9 +397,7 @@ class Regions : Module<Regions?>() {
         return regions.values.none { region -> region?.regionGroupId() == group.id() }
     }
 
-    /**
-     * Removes an unused region group and closes dependent open menus.
-     */
+    /** Removes an unused region group and closes dependent open menus. */
     fun removeRegionGroup(group: RegionGroup) {
         // Assert that this region group is unused.
         if (!canRemoveRegionGroup(group)) {
@@ -480,8 +414,9 @@ class Regions : Module<Regions?>() {
 
         // Close and taint all related open menus
         module!!.core!!.menuManager!!.forEachOpen { player: Player?, menu: Menu? ->
-            if (menu!!.tag() is RegionGroupMenuTag &&
-                (menu.tag() as RegionGroupMenuTag).regionGroupId() == group.id()
+            if (
+                menu!!.tag() is RegionGroupMenuTag &&
+                    (menu.tag() as RegionGroupMenuTag).regionGroupId() == group.id()
             ) {
                 menu.taint()
                 menu.close(player!!)
@@ -489,9 +424,7 @@ class Regions : Module<Regions?>() {
         }
     }
 
-    /**
-     * Returns a region group by id.
-     */
+    /** Returns a region group by id. */
     fun getRegionGroup(regionGroup: UUID?): RegionGroup? {
         if (regionGroup == null) return null
         return storageRegionGroups[regionGroup]
@@ -516,12 +449,12 @@ class Regions : Module<Regions?>() {
                 if (!success) {
                     log.warning(
                         "Player " +
-                                player +
-                                " tried to create region '" +
-                                name +
-                                "' (cost " +
-                                price +
-                                ") but the economy plugin failed to withdraw."
+                            player +
+                            " tried to create region '" +
+                            name +
+                            "' (cost " +
+                            price +
+                            ") but the economy plugin failed to withdraw."
                     )
                     return false
                 }
@@ -541,27 +474,22 @@ class Regions : Module<Regions?>() {
         return true
     }
 
-    /**
-     * Returns the active currency label used in UI and messages.
-     */
-    fun currencyString(): String? = if (configEconomyAsCurrency) {
-        economy?.currencyNamePlural()
-    } else {
-        configCurrency.toString().lowercase(Locale.getDefault())
-    }
+    /** Returns the active currency label used in UI and messages. */
+    fun currencyString(): String? =
+        if (configEconomyAsCurrency) {
+            economy?.currencyNamePlural()
+        } else {
+            configCurrency.toString().lowercase(Locale.getDefault())
+        }
 
-    /**
-     * Adds and indexes a newly created region.
-     */
+    /** Adds and indexes a newly created region. */
     fun addNewRegion(region: Region) {
         region.invalidated = true
         // Index region for fast lookup
         indexRegion(region)
     }
 
-    /**
-     * Removes a region from storage, indexes, markers, and dependent menus.
-     */
+    /** Removes a region from storage, indexes, markers, and dependent menus. */
     fun removeRegion(region: Region) {
         // Remove region from storage
         if (regions.remove(region.id()) == null) {
@@ -574,8 +502,9 @@ class Regions : Module<Regions?>() {
 
         // Close and taint all related open menus
         module!!.core!!.menuManager!!.forEachOpen { player: Player?, menu: Menu? ->
-            if (menu!!.tag() is RegionMenuTag &&
-                (menu.tag() as RegionMenuTag).regionId() == region.id()
+            if (
+                menu!!.tag() is RegionMenuTag &&
+                    (menu.tag() as RegionMenuTag).regionId() == region.id()
             ) {
                 menu.taint()
                 menu.close(player!!)
@@ -589,25 +518,19 @@ class Regions : Module<Regions?>() {
         removeMarker(region.id()!!)
     }
 
-    /**
-     * Updates all map-provider markers for the given region.
-     */
+    /** Updates all map-provider markers for the given region. */
     fun updateMarker(region: Region) {
         dynmapLayer.updateMarker(region)
         blueMapLayer.updateMarker(region)
     }
 
-    /**
-     * Removes all map-provider markers for the given region id.
-     */
+    /** Removes all map-provider markers for the given region id. */
     fun removeMarker(regionId: UUID) {
         dynmapLayer.removeMarker(regionId)
         blueMapLayer.removeMarker(regionId)
     }
 
-    /**
-     * Indexes a region into per-chunk lookup maps and refreshes map markers.
-     */
+    /** Indexes a region into per-chunk lookup maps and refreshes map markers. */
     private fun indexRegion(region: Region) {
         regions[region.id()] = region
 
@@ -617,7 +540,9 @@ class Regions : Module<Regions?>() {
 
         val worldId = min!!.world.uid
         val regionsInChunk =
-            regionsInChunkInWorld.computeIfAbsent(worldId) { _ -> HashMap<Long?, MutableList<Region>>() }
+            regionsInChunkInWorld.computeIfAbsent(worldId) { _ ->
+                HashMap<Long?, MutableList<Region>>()
+            }
 
         val minChunk = min.chunk
         val maxChunk = max!!.chunk
@@ -626,7 +551,8 @@ class Regions : Module<Regions?>() {
         for (cx in minChunk.x..maxChunk.x) {
             for (cz in minChunk.z..maxChunk.z) {
                 val chunkKey = Chunk.getChunkKey(cx, cz)
-                val possibleRegions = regionsInChunk.computeIfAbsent(chunkKey) { _ -> ArrayList<Region>() }
+                val possibleRegions =
+                    regionsInChunk.computeIfAbsent(chunkKey) { _ -> ArrayList<Region>() }
                 possibleRegions.add(region)
             }
         }
@@ -635,9 +561,7 @@ class Regions : Module<Regions?>() {
         updateMarker(region)
     }
 
-    /**
-     * Removes a region from all intersecting per-chunk lookup entries.
-     */
+    /** Removes a region from all intersecting per-chunk lookup entries. */
     private fun indexRemoveRegion(region: Region) {
         // Removes the region from the lookup map at all intersecting chunks
         val min = region.extent()!!.min()
@@ -659,49 +583,46 @@ class Regions : Module<Regions?>() {
         }
     }
 
-    /**
-     * Finds the first region in a chunk matching the given predicate.
-     */
-    private fun findRegionInChunk(worldId: UUID, chunkKey: Long, inside: (Region) -> Boolean): Region? {
+    /** Finds the first region in a chunk matching the given predicate. */
+    private fun findRegionInChunk(
+        worldId: UUID,
+        chunkKey: Long,
+        inside: (Region) -> Boolean,
+    ): Region? {
         val regionsInChunk = regionsInChunkInWorld[worldId] ?: return null
         val possibleRegions = regionsInChunk[chunkKey] ?: return null
         return possibleRegions.firstOrNull { inside(it) }
     }
 
-    /**
-     * Returns the region containing the given location, if any.
-     */
+    /** Returns the region containing the given location, if any. */
     fun regionAt(loc: Location): Region? =
         findRegionInChunk(loc.world.uid, loc.chunk.chunkKey) { it.extent()?.isInside(loc) == true }
 
-    /**
-     * Returns the region containing the given block, if any.
-     */
+    /** Returns the region containing the given block, if any. */
     fun regionAt(block: Block): Region? =
-        findRegionInChunk(block.world.uid, block.chunk.chunkKey) { it.extent()?.isInside(block) == true }
+        findRegionInChunk(block.world.uid, block.chunk.chunkKey) {
+            it.extent()?.isInside(block) == true
+        }
 
-    /**
-     * Returns whether the player may administrate the given region group.
-     */
+    /** Returns whether the player may administrate the given region group. */
     fun mayAdministrate(player: Player, group: RegionGroup): Boolean {
-        return player.uniqueId == group.owner() || group.getRole(player.uniqueId)?.getSetting(RoleSetting.ADMIN) == true
+        return player.uniqueId == group.owner() ||
+            group.getRole(player.uniqueId)?.getSetting(RoleSetting.ADMIN) == true
     }
 
-    /**
-     * Returns whether the player may administrate the given region.
-     */
+    /** Returns whether the player may administrate the given region. */
     fun mayAdministrate(player: Player, region: Region): Boolean {
         return player.uniqueId == region.owner() || player.hasPermission(adminPermission)
     }
 
-    /**
-     * Returns the owner's default region group, creating it when missing.
-     */
+    /** Returns the owner's default region group, creating it when missing. */
     fun getOrCreateDefaultRegionGroup(owner: Player): RegionGroup {
         val ownerId = owner.uniqueId
         val regionGroupId = storageDefaultRegionGroup[ownerId]
         if (regionGroupId != null) {
-            getRegionGroup(regionGroupId)?.let { return it }
+            getRegionGroup(regionGroupId)?.let {
+                return it
+            }
         }
 
         // Create and save owner's default group
@@ -716,26 +637,20 @@ class Regions : Module<Regions?>() {
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-            /**
-             * Clears pending selection state when a player disconnects.
-             */
+    /** Clears pending selection state when a player disconnects. */
     fun onPlayerQuit(event: PlayerQuitEvent) {
         // Remove pending selection
         cancelRegionSelection(event.getPlayer())
     }
 
     @EventHandler
-            /**
-             * Persists region data for the world being saved.
-             */
+    /** Persists region data for the world being saved. */
     fun onSaveWorld(event: WorldSaveEvent) {
         updatePersistentData(event.getWorld())
     }
 
     @EventHandler
-            /**
-             * Loads region data when a world is loaded.
-             */
+    /** Loads region data when a world is loaded. */
     fun onLoadWorld(event: WorldLoadEvent) {
         loadPersistentData(event.getWorld())
     }
@@ -764,31 +679,33 @@ class Regions : Module<Regions?>() {
         blueMapLayer = RegionBlueMapLayer(this)
 
         // Register administrative override permission.
-        adminPermission = Permission(
-            "vane." + module!!.annotationName + ".admin",
-            "Allows administration of any region",
-            PermissionDefault.OP
-        )
+        adminPermission =
+            Permission(
+                "vane." + module!!.annotationName + ".admin",
+                "Allows administration of any region",
+                PermissionDefault.OP,
+            )
         module!!.registerPermission(adminPermission)
     }
 
-    /**
-     * Returns all stored region UUIDs under the provided persistent-data prefix.
-     */
-    private fun storedRegionIds(data: org.bukkit.persistence.PersistentDataContainer, prefix: String): Set<UUID> =
-        data.storedUuidsByPrefix(prefix)
+    /** Returns all stored region UUIDs under the provided persistent-data prefix. */
+    private fun storedRegionIds(
+        data: org.bukkit.persistence.PersistentDataContainer,
+        prefix: String,
+    ): Set<UUID> = data.storedUuidsByPrefix(prefix)
 
-    /**
-     * Loads region state for a specific world and migrates legacy entries when needed.
-     */
+    /** Loads region state for a specific world and migrates legacy entries when needed. */
     fun loadPersistentData(world: World) {
         if (!persistentStorageManager.isLoaded || worldStorage.canSave(world.uid)) return
         var converted = false
         try {
             worldStorage.load(world.uid) { converted = readPersistentData(world) }
         } catch (e: Exception) {
-            log.log(Level.SEVERE,
-                "Cannot load regions for world ${world.name} (${world.uid}); keeping its stored data and shutting down", e)
+            log.log(
+                Level.SEVERE,
+                "Cannot load regions for world ${world.name} (${world.uid}); keeping its stored data and shutting down",
+                e,
+            )
             // Continuing with a partial protection index would fail open.
             server.shutdown()
             return
@@ -800,14 +717,21 @@ class Regions : Module<Regions?>() {
         val data = world.persistentDataContainer
         val storageRegionPrefix = "$STORAGE_REGIONS."
         // Decode the complete PDC snapshot before indexing; never skip wrong-typed values.
-        val decoded = data.readStoredJsonRecords(storageRegionPrefix) { regionId, json ->
-            val region = requireNotNull(PersistentSerializer.fromJson(Region::class.java, json))
-            require(region.id() == regionId) { "Region ID does not match storage key $regionId" }
-            require(region.extent()?.world() == world.uid) { "Region $regionId belongs to another world" }
-            region
-        }
+        val decoded =
+            data.readStoredJsonRecords(storageRegionPrefix) { regionId, json ->
+                val region = requireNotNull(PersistentSerializer.fromJson(Region::class.java, json))
+                require(region.id() == regionId) {
+                    "Region ID does not match storage key $regionId"
+                }
+                require(region.extent()?.world() == world.uid) {
+                    "Region $regionId belongs to another world"
+                }
+                region
+            }
         val pdcRegions = decoded.keys
-        val legacy = storageRegions.filterValues { requireNotNull(it.extent()).world() == world.uid }
+        val legacy = storageRegions.filterValues {
+            requireNotNull(it.extent()).world() == world.uid
+        }
         legacy.forEach { (id, region) ->
             require(id == region.id()) { "Legacy region ID does not match storage key $id" }
         }
@@ -819,10 +743,15 @@ class Regions : Module<Regions?>() {
         }
 
         // Region chunk lookups contain lists: re-indexing without clearing duplicates protection.
-        // A region whose PDC write failed exists only in memory; keep it so the next save retries it.
-        val unsaved = regions.values.filterNotNull().filter {
-            it.extent()?.world() == world.uid && it.invalidated && it.id() !in pdcRegions && it.id() !in legacy
-        }
+        // A region whose PDC write failed exists only in memory; keep it so the next save retries
+        // it.
+        val unsaved =
+            regions.values.filterNotNull().filter {
+                it.extent()?.world() == world.uid &&
+                    it.invalidated &&
+                    it.id() !in pdcRegions &&
+                    it.id() !in legacy
+            }
 
         regions.entries.removeIf { it.value?.extent()?.world() == world.uid }
         regionsInChunkInWorld.remove(world.uid)
@@ -862,19 +791,21 @@ class Regions : Module<Regions?>() {
         val storageRegionPrefix = "$STORAGE_REGIONS."
 
         // Update invalidated regions
-        regions
-            .values
-            .filter { region -> region?.invalidated == true && region.extent()?.world() == world.uid }
+        regions.values
+            .filter { region ->
+                region?.invalidated == true && region.extent()?.world() == world.uid
+            }
             .forEach { region ->
                 val regionRef = region ?: return@forEach
                 try {
                     val json = PersistentSerializer.toJson(Region::class.java, regionRef)
                     val regionId = regionRef.id() ?: return@forEach
-                    val key = NamespacedKey.fromString(storageRegionPrefix + regionId) ?: return@forEach
+                    val key =
+                        NamespacedKey.fromString(storageRegionPrefix + regionId) ?: return@forEach
                     data.set(
                         key,
                         PersistentDataType.BYTE_ARRAY,
-                        json.toString().toByteArray()
+                        json.toString().toByteArray(),
                     )
                 } catch (e: IOException) {
                     log.log(Level.SEVERE, "error while serializing persistent data!", e)
@@ -887,16 +818,14 @@ class Regions : Module<Regions?>() {
         val storedRegions = storedRegionIds(data, storageRegionPrefix)
 
         // Remove all regions that no longer exist
-        Sets.difference<UUID?>(storedRegions, regions.keys)
-            .forEach { id ->
-                val key = NamespacedKey.fromString(storageRegionPrefix + id.toString()) ?: return@forEach
-                data.remove(key)
-            }
+        Sets.difference<UUID?>(storedRegions, regions.keys).forEach { id ->
+            val key =
+                NamespacedKey.fromString(storageRegionPrefix + id.toString()) ?: return@forEach
+            data.remove(key)
+        }
     }
 
-    /**
-     * Flushes region data before module shutdown.
-     */
+    /** Flushes region data before module shutdown. */
     override fun onModuleDisable() {
         try {
             updatePersistentData()
@@ -929,73 +858,85 @@ class Regions : Module<Regions?>() {
         // Add (de-)serializers
         init {
             PersistentSerializer.serializers[EnvironmentSetting::class.java] =
-                PersistentSerializer.Function { x: Any? -> (x as EnvironmentSetting).name }
+                PersistentSerializer.Function { x: Any? ->
+                    (x as EnvironmentSetting).name
+                }
             PersistentSerializer.deserializers[EnvironmentSetting::class.java] =
-                PersistentSerializer.Function { x: Any? -> EnvironmentSetting.valueOf((x as String?)!!) }
+                PersistentSerializer.Function { x: Any? ->
+                    EnvironmentSetting.valueOf((x as String?)!!)
+                }
             PersistentSerializer.serializers[RoleSetting::class.java] =
-                PersistentSerializer.Function { x: Any? -> (x as RoleSetting).name }
+                PersistentSerializer.Function { x: Any? ->
+                    (x as RoleSetting).name
+                }
             PersistentSerializer.deserializers[RoleSetting::class.java] =
-                PersistentSerializer.Function { x: Any? -> RoleSetting.valueOf((x as String?)!!) }
+                PersistentSerializer.Function { x: Any? ->
+                    RoleSetting.valueOf((x as String?)!!)
+                }
             PersistentSerializer.serializers[Role::class.java] =
-                PersistentSerializer.Function { obj: Any? -> Role.serialize(obj!!) }
+                PersistentSerializer.Function { obj: Any? ->
+                    Role.serialize(obj!!)
+                }
             PersistentSerializer.deserializers[Role::class.java] =
-                PersistentSerializer.Function { obj: Any? -> Role.deserialize(obj!!) }
+                PersistentSerializer.Function { obj: Any? ->
+                    Role.deserialize(obj!!)
+                }
             PersistentSerializer.serializers[RoleType::class.java] =
-                PersistentSerializer.Function { x: Any? -> (x as RoleType).name }
+                PersistentSerializer.Function { x: Any? ->
+                    (x as RoleType).name
+                }
             PersistentSerializer.deserializers[RoleType::class.java] =
-                PersistentSerializer.Function { x: Any? -> RoleType.valueOf((x as String?)!!) }
+                PersistentSerializer.Function { x: Any? ->
+                    RoleType.valueOf((x as String?)!!)
+                }
             PersistentSerializer.serializers[RegionGroup::class.java] =
-                PersistentSerializer.Function { obj: Any? -> RegionGroup.serialize(obj!!) }
+                PersistentSerializer.Function { obj: Any? ->
+                    RegionGroup.serialize(obj!!)
+                }
             PersistentSerializer.deserializers[RegionGroup::class.java] =
-                PersistentSerializer.Function { obj: Any? -> RegionGroup.deserialize(obj!!) }
+                PersistentSerializer.Function { obj: Any? ->
+                    RegionGroup.deserialize(obj!!)
+                }
             PersistentSerializer.serializers[Region::class.java] =
-                PersistentSerializer.Function { obj: Any? -> Region.serialize(obj!!) }
+                PersistentSerializer.Function { obj: Any? ->
+                    Region.serialize(obj!!)
+                }
             PersistentSerializer.deserializers[Region::class.java] =
-                PersistentSerializer.Function { obj: Any? -> Region.deserialize(obj!!) }
+                PersistentSerializer.Function { obj: Any? ->
+                    Region.deserialize(obj!!)
+                }
             PersistentSerializer.serializers[RegionExtent::class.java] =
-                PersistentSerializer.Function { obj: Any? -> RegionExtent.serialize(obj!!) }
+                PersistentSerializer.Function { obj: Any? ->
+                    RegionExtent.serialize(obj!!)
+                }
             PersistentSerializer.deserializers[RegionExtent::class.java] =
-                PersistentSerializer.Function { obj: Any? -> RegionExtent.deserialize(obj!!) }
+                PersistentSerializer.Function { obj: Any? ->
+                    RegionExtent.deserialize(obj!!)
+                }
         }
 
-        /**
-         * Global role-setting overrides applied across region checks.
-         */
+        /** Global role-setting overrides applied across region checks. */
         var roleOverrides: RegionGlobalRoleOverrides? = null
 
-        /**
-         * Global environment-setting overrides applied across region checks.
-         */
+        /** Global environment-setting overrides applied across region checks. */
         var environmentOverrides: RegionGlobalEnvironmentOverrides? = null
 
-        /**
-         * Hard cap for spawned visualization particles per rendered edge.
-         */
+        /** Hard cap for spawned visualization particles per rendered edge. */
         private const val VISUALIZE_MAX_PARTICLES = 20000
 
-        /**
-         * Particle density used when rendering selection edges.
-         */
+        /** Particle density used when rendering selection edges. */
         private const val VISUALIZE_PARTICLES_PER_BLOCK = 12
 
-        /**
-         * Gaussian spread compensation factor for edge visualization.
-         */
+        /** Gaussian spread compensation factor for edge visualization. */
         private const val VISUALIZE_STDDEV_COMPENSATION = 0.25
 
-        /**
-         * Dust color used for invalid selections.
-         */
+        /** Dust color used for invalid selections. */
         private val VISUALIZE_DUST_INVALID = DustOptions(Color.fromRGB(230, 60, 11), 1.0f)
 
-        /**
-         * Dust color used for valid selections.
-         */
+        /** Dust color used for valid selections. */
         private val VISUALIZE_DUST_VALID = DustOptions(Color.fromRGB(120, 220, 60), 1.0f)
 
-        /**
-         * Base key namespace for region persistent storage entries.
-         */
+        /** Base key namespace for region persistent storage entries. */
         val STORAGE_REGIONS: NamespacedKey = StorageUtil.namespacedKey("vane_regions", "regions")
     }
 }

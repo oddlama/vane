@@ -10,9 +10,12 @@ import org.oddlama.vane.portals.portal.Portal
  * @property player the player that triggered the deactivation, if any.
  * @property portal the portal being deactivated.
  */
-class PortalDeactivateEvent(@JvmField val player: Player?, @JvmField val portal: Portal?) : PortalEvent() {
-    // Java accessors from before v1.22.0. The public fields stay for plugins built against later releases.
+class PortalDeactivateEvent(@JvmField val player: Player?, @JvmField val portal: Portal?) :
+    PortalEvent() {
+    // Java accessors from before v1.22.0. The public fields stay for plugins built against later
+    // releases.
     fun getPlayer(): Player? = player
+
     fun getPortal(): Portal? = portal
 
     /** Returns Bukkit handlers for this event. */
@@ -21,7 +24,6 @@ class PortalDeactivateEvent(@JvmField val player: Player?, @JvmField val portal:
     /** Static Bukkit handler list for this event type. */
     companion object {
         /** Shared handler list used by Bukkit's event system. */
-        @JvmStatic
-        val handlerList: HandlerList = HandlerList()
+        @JvmStatic val handlerList: HandlerList = HandlerList()
     }
 }

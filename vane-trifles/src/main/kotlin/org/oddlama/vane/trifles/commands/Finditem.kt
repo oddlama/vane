@@ -16,9 +16,7 @@ import org.oddlama.vane.core.module.Context
 import org.oddlama.vane.trifles.Trifles
 
 @Name("finditem")
-/**
- * Command entry point for searching nearby inventories by material.
- */
+/** Command entry point for searching nearby inventories by material. */
 class Finditem(context: Context<Trifles?>) :
     org.oddlama.vane.core.command.Command<Trifles?>(context, PermissionDefault.TRUE) {
     /** Builds the `/finditem` command tree. */
@@ -26,17 +24,17 @@ class Finditem(context: Context<Trifles?>) :
         return super.getCommandBase()
             .then(help())
             .then(
-                Commands.argument("material", ArgumentTypes.resource(RegistryKey.ITEM))
-                    .executes { ctx: CommandContext<CommandSourceStack> ->
-                        val itemType = ctx.getArgument("material", ItemType::class.java)
-                        val material = Material.matchMaterial(itemType.key.key)
+                Commands.argument("material", ArgumentTypes.resource(RegistryKey.ITEM)).executes {
+                    ctx: CommandContext<CommandSourceStack> ->
+                    val itemType = ctx.getArgument("material", ItemType::class.java)
+                    val material = Material.matchMaterial(itemType.key.key)
 
-                        val module = module
-                        if (material != null && module != null) {
-                            module.itemFinder?.findItem(ctx.source.sender as Player, material)
-                        }
-                        Command.SINGLE_SUCCESS
+                    val module = module
+                    if (material != null && module != null) {
+                        module.itemFinder?.findItem(ctx.source.sender as Player, material)
                     }
+                    Command.SINGLE_SUCCESS
+                }
             )
     }
 }

@@ -5,6 +5,7 @@ module = "vane-core"
 ```
 
 ---
+
 Everything in vane is fully configurable, and every feature can be disabled independently. There are so many options
 that it would be far too much to list them here.
 

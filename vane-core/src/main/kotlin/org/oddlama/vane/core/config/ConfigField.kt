@@ -29,42 +29,28 @@ abstract class ConfigField<T>(
     protected var field: Field,
     mapName: (String?) -> String?,
     typeName: String?,
-    description: String?
+    description: String?,
 ) : Comparable<ConfigField<*>> {
-    /**
-     * Full YAML path for this field.
-     */
+    /** Full YAML path for this field. */
     protected var path: String = mapName(field.name.substring("config".length))!!
 
-    /**
-     * Human-readable type name used in generated comments.
-     */
+    /** Human-readable type name used in generated comments. */
     protected var typeName: String?
 
-    /**
-     * Sorting priority used when generating YAML output.
-     */
+    /** Sorting priority used when generating YAML output. */
     protected var sortPriority: Int = 0
 
-    /**
-     * Split YAML path components.
-     */
+    /** Split YAML path components. */
     private val yamlPathComponents: Array<String?> =
         path.split('.').dropLastWhile { it.isEmpty() }.toTypedArray()
 
-    /**
-     * Group path part (without leaf basename).
-     */
+    /** Group path part (without leaf basename). */
     private val yamlGroupPath: String?
 
-    /**
-     * Leaf field name at the end of the YAML path.
-     */
+    /** Leaf field name at the end of the YAML path. */
     private val basename: String?
 
-    /**
-     * Lazily resolved description, allowing dynamic overrides.
-     */
+    /** Lazily resolved description, allowing dynamic overrides. */
     private val description: () -> String?
 
     init {
@@ -90,20 +76,18 @@ abstract class ConfigField<T>(
             } catch (e: InvocationTargetException) {
                 throw RuntimeException(
                     "Could not call ${owner!!.javaClass.name}.${field.name}Desc() to override description value",
-                    e
+                    e,
                 )
             } catch (e: IllegalAccessException) {
                 throw RuntimeException(
                     "Could not call ${owner!!.javaClass.name}.${field.name}Desc() to override description value",
-                    e
+                    e,
                 )
             }
         }
     }
 
-    /**
-     * Returns an overridden default value from `${fieldName}Def()` when present.
-     */
+    /** Returns an overridden default value from `${fieldName}Def()` when present. */
     @Suppress("UNCHECKED_CAST")
     protected fun overriddenDef(): T? =
         try {
@@ -113,18 +97,16 @@ abstract class ConfigField<T>(
         } catch (e: InvocationTargetException) {
             throw RuntimeException(
                 "Could not call ${owner!!.javaClass.name}.${field.name}Def() to override default value",
-                e
+                e,
             )
         } catch (e: IllegalAccessException) {
             throw RuntimeException(
                 "Could not call ${owner!!.javaClass.name}.${field.name}Def() to override default value",
-                e
+                e,
             )
         }
 
-    /**
-     * Returns an overridden metrics opt-in from `${fieldName}Metrics()` when present.
-     */
+    /** Returns an overridden metrics opt-in from `${fieldName}Metrics()` when present. */
     @Suppress("UNCHECKED_CAST")
     protected fun overriddenMetrics(): Boolean? =
         try {
@@ -134,79 +116,62 @@ abstract class ConfigField<T>(
         } catch (e: InvocationTargetException) {
             throw RuntimeException(
                 "Could not call ${owner!!.javaClass.name}.${field.name}Metrics() to override metrics status",
-                e
+                e,
             )
         } catch (e: IllegalAccessException) {
             throw RuntimeException(
                 "Could not call ${owner!!.javaClass.name}.${field.name}Metrics() to override metrics status",
-                e
+                e,
             )
         }
 
-    /**
-     * Escapes a string for safe YAML double-quoted output.
-     */
+    /** Escapes a string for safe YAML double-quoted output. */
     protected fun escapeYaml(s: String?): String =
         (s ?: "").replace("\\", "\\\\").replace("\"", "\\\"")
 
-    /**
-     * Returns the YAML path.
-     */
+    /** Returns the YAML path. */
     fun getYamlGroupPath(): String = path
 
-    /**
-     * Returns the YAML path.
-     */
+    /** Returns the YAML path. */
     fun yamlPath(): String = path
 
-    /**
-     * Returns the YAML group path without basename.
-     */
+    /** Returns the YAML group path without basename. */
     fun yamlGroupPath(): String? = yamlGroupPath
 
-    /**
-     * Returns the YAML basename component.
-     */
+    /** Returns the YAML basename component. */
     fun basename(): String? = basename
 
-    /**
-     * Normalizes special suffixes for stable path ordering.
-     */
+    /** Normalizes special suffixes for stable path ordering. */
     private fun modifyYamlPathForSorting(path: String): String =
-        if (path.endsWith(".enabled")) path.substring(0, path.lastIndexOf(".enabled"))
-        else path
+        if (path.endsWith(".enabled")) path.substring(0, path.lastIndexOf(".enabled")) else path
 
-    /**
-     * Compares fields by explicit priority and hierarchical path ordering.
-     */
+    /** Compares fields by explicit priority and hierarchical path ordering. */
     override fun compareTo(other: ConfigField<*>): Int {
         if (sortPriority != other.sortPriority) return sortPriority - other.sortPriority
         for (i in 0..<min(yamlPathComponents.size, other.yamlPathComponents.size) - 1) {
             val c = yamlPathComponents[i]!!.compareTo(other.yamlPathComponents[i]!!)
             if (c != 0) return c
         }
-        return modifyYamlPathForSorting(yamlPath()).compareTo(modifyYamlPathForSorting(other.yamlPath()))
+        return modifyYamlPathForSorting(yamlPath())
+            .compareTo(modifyYamlPathForSorting(other.yamlPath()))
     }
 
-    /**
-     * Appends a wrapped description comment line.
-     */
+    /** Appends a wrapped description comment line. */
     protected fun appendDescription(builder: StringBuilder, indent: String) {
         // A `<field>Desc()` override may return null; `WordUtils.wrap` passed null straight
         // through, so the interpolation below keeps emitting the same "# null" line it always has.
-        val wrapped = description()?.let { TextUtil.wordWrap(it, max(60, 80 - indent.length), "\n$indent# ") }
+        val wrapped =
+            description()?.let { TextUtil.wordWrap(it, max(60, 80 - indent.length), "\n$indent# ") }
         builder.append("$indent# $wrapped\n")
     }
 
-    /**
-     * Appends a YAML list value definition.
-     */
+    /** Appends a YAML list value definition. */
     protected fun <U> appendListDefinition(
         builder: StringBuilder?,
         indent: String?,
         prefix: String?,
         list: MutableCollection<out U?>,
-        append: Consumer2<StringBuilder?, U?>
+        append: Consumer2<StringBuilder?, U?>,
     ) {
         if (builder == null) return
         list.forEach { i ->
@@ -218,16 +183,14 @@ abstract class ConfigField<T>(
         }
     }
 
-    /**
-     * Appends a valid value-range comment.
-     */
+    /** Appends a valid value-range comment. */
     protected fun <U> appendValueRange(
         builder: StringBuilder,
         indent: String?,
         min: U?,
         max: U?,
         invalidMin: U?,
-        invalidMax: U?
+        invalidMax: U?,
     ) {
         builder.append("$indent# Valid values: ")
         builder.append(
@@ -241,83 +204,83 @@ abstract class ConfigField<T>(
         builder.append("\n")
     }
 
-    /**
-     * Appends a default-value comment.
-     */
+    /** Appends a default-value comment. */
     protected fun appendDefaultValue(builder: StringBuilder, indent: String?, def: Any?) {
         builder.append("$indent# Default: $def\n")
     }
 
-    /**
-     * Appends the YAML field definition.
-     */
+    /** Appends the YAML field definition. */
     protected fun appendFieldDefinition(builder: StringBuilder, indent: String?, def: Any?) {
         builder.append("$indent$basename: $def\n")
     }
 
-    /**
-     * Verifies that the YAML path exists.
-     */
+    /** Verifies that the YAML path exists. */
     @Throws(YamlLoadException::class)
     protected fun checkYamlPath(yaml: YamlConfiguration) {
-        if (!yaml.contains(path, true)) throw YamlLoadException("yaml is missing entry with path '$path'")
+        if (!yaml.contains(path, true))
+            throw YamlLoadException("yaml is missing entry with path '$path'")
     }
 
-    /**
-     * Validates a floating-point value range.
-     */
+    /** Validates a floating-point value range. */
     protected fun validateDoubleRange(yamlPath: String, value: Double, min: Double, max: Double) {
-        if (!min.isNaN() && value < min) throw YamlLoadException("Configuration '$yamlPath' has an invalid value: Value must be >= $min")
-        if (!max.isNaN() && value > max) throw YamlLoadException("Configuration '$yamlPath' has an invalid value: Value must be <= $max")
+        if (!min.isNaN() && value < min)
+            throw YamlLoadException(
+                "Configuration '$yamlPath' has an invalid value: Value must be >= $min"
+            )
+        if (!max.isNaN() && value > max)
+            throw YamlLoadException(
+                "Configuration '$yamlPath' has an invalid value: Value must be <= $max"
+            )
     }
 
-    /**
-     * Validates an integer value range.
-     */
+    /** Validates an integer value range. */
     protected fun validateIntRange(yamlPath: String, value: Int, min: Int, max: Int) {
-        if (min != Int.MIN_VALUE && value < min) throw YamlLoadException("Configuration '$yamlPath' has an invalid value: Value must be >= $min")
-        if (max != Int.MAX_VALUE && value > max) throw YamlLoadException("Configuration '$yamlPath' has an invalid value: Value must be <= $max")
+        if (min != Int.MIN_VALUE && value < min)
+            throw YamlLoadException(
+                "Configuration '$yamlPath' has an invalid value: Value must be >= $min"
+            )
+        if (max != Int.MAX_VALUE && value > max)
+            throw YamlLoadException(
+                "Configuration '$yamlPath' has an invalid value: Value must be <= $max"
+            )
     }
 
-    /**
-     * Parses and validates namespaced key strings.
-     */
-    protected fun requireNamespacedKeyParts(yamlPath: String, str: String?, kind: String): Pair<String, String> {
-        if (str == null) throw YamlLoadException("Invalid type for yaml path '$yamlPath', expected string")
+    /** Parses and validates namespaced key strings. */
+    protected fun requireNamespacedKeyParts(
+        yamlPath: String,
+        str: String?,
+        kind: String,
+    ): Pair<String, String> {
+        if (str == null)
+            throw YamlLoadException("Invalid type for yaml path '$yamlPath', expected string")
         val parts = str.split(":").filter { it.isNotEmpty() }
-        if (parts.size != 2) throw YamlLoadException("Invalid $kind entry in list '$yamlPath': '$str' is not a valid namespaced key")
+        if (parts.size != 2)
+            throw YamlLoadException(
+                "Invalid $kind entry in list '$yamlPath': '$str' is not a valid namespaced key"
+            )
         return Pair(parts[0], parts[1])
     }
 
-    /**
-     * Returns the default value for this field.
-     */
+    /** Returns the default value for this field. */
     abstract fun def(): T?
 
-    /**
-     * Returns whether this field should emit a bStats metric.
-     */
+    /** Returns whether this field should emit a bStats metric. */
     open fun metrics(): Boolean = false
 
-    /**
-     * Writes YAML for this field.
-     */
-    abstract fun generateYaml(builder: StringBuilder, indent: String, existingCompatibleConfig: YamlConfiguration?)
+    /** Writes YAML for this field. */
+    abstract fun generateYaml(
+        builder: StringBuilder,
+        indent: String,
+        existingCompatibleConfig: YamlConfiguration?,
+    )
 
-    /**
-     * Validates that this field is loadable from YAML.
-     */
-    @Throws(YamlLoadException::class)
-    abstract fun checkLoadable(yaml: YamlConfiguration)
+    /** Validates that this field is loadable from YAML. */
+    @Throws(YamlLoadException::class) abstract fun checkLoadable(yaml: YamlConfiguration)
 
-    /**
-     * Loads this field from YAML into the owning object.
-     */
+    /** Loads this field from YAML into the owning object. */
     abstract fun load(yaml: YamlConfiguration)
 
-    /**
-     * Returns the current reflected value.
-     */
+    /** Returns the current reflected value. */
     fun get(): T? =
         try {
             field.get(owner) as T?
@@ -325,31 +288,21 @@ abstract class ConfigField<T>(
             throw RuntimeException("Invalid field access on '${field.name}'. This is a bug.", e)
         }
 
-    /**
-     * Registers this field as a simple pie metric when enabled.
-     */
+    /** Registers this field as a simple pie metric when enabled. */
     open fun registerMetrics(metrics: Metrics?) {
         if (metrics == null || !metrics()) return
         metrics.addCustomChart(SimplePie(yamlPath()) { get().toString() })
     }
 
-    /**
-     * Returns YAML path components.
-     */
+    /** Returns YAML path components. */
     fun components(): Array<String?> = yamlPathComponents
 
-    /**
-     * Returns the group depth (path components minus basename).
-     */
+    /** Returns the group depth (path components minus basename). */
     fun groupCount(): Int = yamlPathComponents.size - 1
 
-    /**
-     * Grouping and ordering helpers.
-     */
+    /** Grouping and ordering helpers. */
     companion object {
-        /**
-         * Returns whether two fields belong to the same YAML group.
-         */
+        /** Returns whether two fields belong to the same YAML group. */
         fun sameGroup(a: ConfigField<*>?, b: ConfigField<*>?): Boolean {
             if (a == null || b == null) return false
             if (a.yamlPathComponents.size != b.yamlPathComponents.size) return false
@@ -359,9 +312,7 @@ abstract class ConfigField<T>(
             return true
         }
 
-        /**
-         * Returns the number of common group components between two fields.
-         */
+        /** Returns the number of common group components between two fields. */
         fun commonGroupCount(a: ConfigField<*>?, b: ConfigField<*>?): Int {
             if (a == null || b == null) return 0
             var i = 0

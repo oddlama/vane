@@ -5,6 +5,7 @@ icon = "vane-trifles:items/slime_bucket.png"
 ```
 
 ---
+
 ![](assets/gifs/slime_bucket.gif)
 
 Right-clicking a tiny slime with a bucket puts it in there. It remains quiet, but will start jumping inside the bucket

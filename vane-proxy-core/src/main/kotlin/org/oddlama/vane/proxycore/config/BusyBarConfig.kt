@@ -29,7 +29,7 @@ data class BusyBarConfig(
     val allowedActions: List<String>,
     val linkBind: String,
     val linkPort: Int,
-    val linkSecret: String
+    val linkSecret: String,
 ) {
     companion object {
         /** Reads the table, using defaults for missing keys. Null when [config] is null. */
@@ -44,15 +44,22 @@ data class BusyBarConfig(
                 tls = config.getOrElse("Tls", "auto"),
                 tlsKeystore = config.getOrElse("TlsKeystore", ""),
                 tlsKeystorePassword = config.getOrElse("TlsKeystorePassword", ""),
-                allowedActions = config.getOrElse<List<Any?>>("AllowedActions", listOf("presence.set", "autostop.abort"))
-                    .mapNotNull { it?.toString() },
+                allowedActions =
+                    config
+                        .getOrElse<List<Any?>>(
+                            "AllowedActions",
+                            listOf("presence.set", "autostop.abort"),
+                        )
+                        .mapNotNull { it?.toString() },
                 linkBind = link?.getOrElse("Bind", "127.0.0.1") ?: "127.0.0.1",
                 linkPort = link?.let { port(it, "Port", 9124) } ?: 9124,
-                linkSecret = link?.getOrElse("Secret", "") ?: ""
+                linkSecret = link?.getOrElse("Secret", "") ?: "",
             )
         }
 
         private fun port(config: CommentedConfig, key: String, default: Int): Int =
-            config.getIntOrElse(key, default).also { require(it in 1..65535) { "BusyBar $key must be between 1 and 65535" } }
+            config.getIntOrElse(key, default).also {
+                require(it in 1..65535) { "BusyBar $key must be between 1 and 65535" }
+            }
     }
 }

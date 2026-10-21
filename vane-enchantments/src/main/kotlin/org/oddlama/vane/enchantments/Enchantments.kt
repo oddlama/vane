@@ -5,14 +5,16 @@ import org.oddlama.vane.core.module.Module
 import org.oddlama.vane.enchantments.enchantments.*
 import org.oddlama.vane.enchantments.items.Tomes
 
-/**
- * The main class for the Enchantments module.
- */
-@VaneModule(name = "enchantments", bstats = 8640, configVersion = 1, langVersion = 4, storageVersion = 1)
+/** The main class for the Enchantments module. */
+@VaneModule(
+    name = "enchantments",
+    bstats = 8640,
+    configVersion = 1,
+    langVersion = 4,
+    storageVersion = 1,
+)
 class Enchantments : Module<Enchantments?>() {
-    /**
-     * Initializes the Enchantments module, registering all enchantments and related items.
-     */
+    /** Initializes the Enchantments module, registering all enchantments and related items. */
     init {
         Tomes(this)
 

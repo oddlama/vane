@@ -1,5 +1,6 @@
 package org.oddlama.vane.bedtime
 
+import java.util.*
 import org.bukkit.OfflinePlayer
 import org.oddlama.vane.annotation.config.ConfigBoolean
 import org.oddlama.vane.annotation.config.ConfigInt
@@ -8,20 +9,20 @@ import org.oddlama.vane.annotation.lang.LangMessage
 import org.oddlama.vane.core.lang.TranslatedMessage
 import org.oddlama.vane.core.module.Context
 import org.oddlama.vane.core.module.ModuleComponent
-import java.util.*
 
 /**
  * Configurable Dynmap layer for bedtime spawn markers.
  *
- * @constructor Creates the Dynmap layer component.
  * @param context component context used to register config and lifecycle hooks.
+ * @constructor Creates the Dynmap layer component.
  */
-class BedtimeDynmapLayer(context: Context<Bedtime?>) : ModuleComponent<Bedtime?>(
-    context.group(
-        "Dynmap",
-        "Enable Dynmap integration. Player spawnpoints (beds) will then be shown on a separate dynmap layer."
-    )
-) {
+class BedtimeDynmapLayer(context: Context<Bedtime?>) :
+    ModuleComponent<Bedtime?>(
+        context.group(
+            "Dynmap",
+            "Enable Dynmap integration. Player spawnpoints (beds) will then be shown on a separate dynmap layer.",
+        )
+    ) {
     /** Z-order priority used when stacking Dynmap layers. */
     @ConfigInt(def = 25, min = 0, desc = "Layer ordering priority.")
     var configLayerPriority: Int = 0
@@ -35,12 +36,10 @@ class BedtimeDynmapLayer(context: Context<Bedtime?>) : ModuleComponent<Bedtime?>
     var configMarkerIcon: String? = null
 
     /** Display label shown for this layer in the Dynmap UI. */
-    @LangMessage
-    var langLayerLabel: TranslatedMessage? = null
+    @LangMessage var langLayerLabel: TranslatedMessage? = null
 
     /** Label rendered inside each individual bed marker popup. */
-    @LangMessage
-    var langMarkerLabel: TranslatedMessage? = null
+    @LangMessage var langMarkerLabel: TranslatedMessage? = null
 
     /** Active delegate; `null` when Dynmap is unavailable. */
     private var delegate: BedtimeDynmapLayerDelegate? = null

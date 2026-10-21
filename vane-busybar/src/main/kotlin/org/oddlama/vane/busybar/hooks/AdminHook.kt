@@ -1,12 +1,12 @@
 package org.oddlama.vane.busybar.hooks
 
+import kotlin.math.ceil
 import org.bukkit.plugin.Plugin
 import org.bukkit.scheduler.BukkitTask
 import org.json.JSONObject
 import org.oddlama.vane.admin.Admin
 import org.oddlama.vane.admin.AutostopGroup
 import org.oddlama.vane.busybar.BusyBar
-import kotlin.math.ceil
 
 /**
  * Streams vane-admin's autostop countdown and lets a bridge abort it.
@@ -16,7 +16,8 @@ import kotlin.math.ceil
  * @param busybar owning module.
  * @param autostop vane-admin's autostop group.
  */
-class AdminHook private constructor(private val busybar: BusyBar, private val autostop: AutostopGroup) {
+class AdminHook
+private constructor(private val busybar: BusyBar, private val autostop: AutostopGroup) {
     /** Repeating the poll task. */
     private var task: BukkitTask? = null
 
@@ -36,7 +37,8 @@ class AdminHook private constructor(private val busybar: BusyBar, private val au
     }
 
     /** Seconds until the scheduled stop, or null when none is scheduled. */
-    fun remainingSeconds(): Long? = autostop.remaining().takeIf { it >= 0 }?.let { ceil(it / 1000.0).toLong() }
+    fun remainingSeconds(): Long? =
+        autostop.remaining().takeIf { it >= 0 }?.let { ceil(it / 1000.0).toLong() }
 
     /** Aborts a scheduled stop on behalf of [by]. */
     fun abort(by: String) {
@@ -46,11 +48,14 @@ class AdminHook private constructor(private val busybar: BusyBar, private val au
         busybar.stream.emit(
             "autostop.aborted",
             JSONObject().put("reason", "manual").put("by", by),
-            permission = busybar.access.receiveAutostop
+            permission = busybar.access.receiveAutostop,
         )
     }
 
-    /** Emits `autostop.scheduled` for new or extended countdowns and `autostop.aborted` when one ends early (a player joined or an admin ran `/autostop abort`). */
+    /**
+     * Emits `autostop.scheduled` for new or extended countdowns and `autostop.aborted` when one
+     * ends early (a player joined or an admin ran `/autostop abort`).
+     */
     private fun poll() {
         val remaining = autostop.remaining()
         val scheduled = remaining >= 0
@@ -59,13 +64,13 @@ class AdminHook private constructor(private val busybar: BusyBar, private val au
             busybar.stream.emit(
                 "autostop.scheduled",
                 JSONObject().put("remaining_s", remainingSeconds()),
-                permission = busybar.access.receiveAutostop
+                permission = busybar.access.receiveAutostop,
             )
         } else if (!scheduled && wasScheduled) {
             busybar.stream.emit(
                 "autostop.aborted",
                 JSONObject().put("reason", "cancelled"),
-                permission = busybar.access.receiveAutostop
+                permission = busybar.access.receiveAutostop,
             )
         }
         lastRemaining = remaining

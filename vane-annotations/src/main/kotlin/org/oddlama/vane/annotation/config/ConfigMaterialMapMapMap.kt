@@ -12,5 +12,5 @@ package org.oddlama.vane.annotation.config
 annotation class ConfigMaterialMapMapMap(
     val def: Array<ConfigMaterialMapMapMapEntry>,
     val desc: String,
-    val metrics: Boolean = false
+    val metrics: Boolean = false,
 )

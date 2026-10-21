@@ -1,11 +1,11 @@
 package org.oddlama.vane.core.material
 
+import java.util.Base64
 import org.bukkit.NamespacedKey
 import org.bukkit.inventory.ItemStack
 import org.json.JSONObject
 import org.oddlama.vane.util.ItemUtil
 import org.oddlama.vane.util.StorageUtil.namespacedKey
-import java.util.Base64
 
 /**
  * Data model for a predefined custom player-head material entry.
@@ -25,7 +25,7 @@ class HeadMaterial(
     val category: String?,
     tags: List<String?>,
     /** Base64 texture payload. */
-    val texture: String?
+    val texture: String?,
 ) {
     /** Unique tag set for this head material. */
     val tags: Set<String?> = tags.toHashSet()
@@ -52,12 +52,14 @@ class HeadMaterial(
          * @return The base64 payload for that hash.
          */
         private fun textureFromHash(hash: String): String =
-            Base64.getEncoder().encodeToString(
-                """{"textures":{"SKIN":{"url":"$TEXTURE_URL_PREFIX$hash"}}}""".toByteArray(Charsets.UTF_8)
-            )
+            Base64.getEncoder()
+                .encodeToString(
+                    """{"textures":{"SKIN":{"url":"$TEXTURE_URL_PREFIX$hash"}}}"""
+                        .toByteArray(Charsets.UTF_8)
+                )
 
         @JvmStatic
-                /** Creates a [HeadMaterial] from a serialized JSON object. */
+        /** Creates a [HeadMaterial] from a serialized JSON object. */
         fun from(json: JSONObject): HeadMaterial {
             val id = json.getString("id")
             val name = json.getString("name")

@@ -1,8 +1,5 @@
 package org.oddlama.vane.busybar.link
 
-import org.json.JSONArray
-import org.json.JSONObject
-import org.oddlama.vane.busybar.common.LinkProtocol
 import java.io.BufferedInputStream
 import java.io.BufferedOutputStream
 import java.io.IOException
@@ -13,14 +10,17 @@ import java.util.*
 import java.util.concurrent.LinkedBlockingQueue
 import java.util.logging.Level
 import java.util.logging.Logger
+import org.json.JSONArray
+import org.json.JSONObject
+import org.oddlama.vane.busybar.common.LinkProtocol
 
 /**
- * Keeps one connection to the proxy's BUSY Bar backend link open, reconnecting with backoff.
- * Knows nothing about Bukkit; [ProxyLink] adapts it to the module.
+ * Keeps one connection to the proxy's BUSY Bar backend link open, reconnecting with backoff. Knows
+ * nothing about Bukkit; [ProxyLink] adapts it to the module.
  *
  * Outgoing frames go through a bounded queue drained by a writer thread, so [send] never blocks the
- * caller. While unlinked, frames are dropped: they describe the current state, and [Handler.onLinked]
- * is where a fresh link catches up.
+ * caller. While unlinked, frames are dropped: they describe the current state, and
+ * [Handler.onLinked] is where a fresh link catches up.
  *
  * @param address the proxy's link address, possibly unresolved.
  * @param server this backend's name as registered with the proxy.
@@ -37,16 +37,18 @@ class ProxyLinkClient(
     private val version: String,
     private val capabilities: Set<String>,
     private val handler: Handler,
-    private val log: Logger
+    private val log: Logger,
 ) {
     /** [address] as configured, without the `/<unresolved>` an unresolved address prints. */
     private val shown = "${address.hostString}:${address.port}"
 
-    /** What the proxy may ask of a backend. Called on the link's thread; must not block for long. */
+    /**
+     * What the proxy may ask of a backend. Called on the link's thread; must not block for long.
+     */
     interface Handler {
         /**
-         * The link was established. [busy] are the players in focus mode, [bridges] the players with
-         * a bridge connected to the proxy.
+         * The link was established. [busy] are the players in focus mode, [bridges] the players
+         * with a bridge connected to the proxy.
          */
         fun onLinked(busy: Set<UUID>, bridges: Set<UUID>)
 
@@ -59,7 +61,10 @@ class ProxyLinkClient(
         /** [player]'s focus mode changed. */
         fun onPresence(player: UUID, busy: Boolean)
 
-        /** Builds this backend's part of [player]'s snapshot and passes it to [reply], or null on failure. */
+        /**
+         * Builds this backend's part of [player]'s snapshot and passes it to [reply], or null on
+         * failure.
+         */
         fun snapshot(player: UUID, reply: (JSONObject?) -> Unit)
 
         /** Runs [action] for [player]; [by] names who asked. Passes whether it ran to [reply]. */
@@ -71,15 +76,15 @@ class ProxyLinkClient(
         val queue = LinkedBlockingQueue<JSONObject>(QUEUE_CAPACITY + 1)
     }
 
-    @Volatile
-    private var running = false
+    @Volatile private var running = false
 
-    @Volatile
-    private var session: Session? = null
+    @Volatile private var session: Session? = null
 
     private var thread: Thread? = null
 
-    /** The last problem logged, so a proxy that stays down is reported once rather than every retry. */
+    /**
+     * The last problem logged, so a proxy that stays down is reported once rather than every retry.
+     */
     private var lastProblem: String? = null
 
     /** Whether the link is established. */
@@ -92,12 +97,16 @@ class ProxyLinkClient(
         thread = Thread.ofVirtual().name("vane-busybar proxy link").start(::run)
     }
 
-    /** Says goodbye to the proxy and stops reconnecting. Waits briefly for the goodbye to be written. */
+    /**
+     * Says goodbye to the proxy and stops reconnecting. Waits briefly for the goodbye to be
+     * written.
+     */
     fun stop(reason: String) {
         running = false
         val current = session
         if (current != null) {
-            // The writer sends the goodbye and closes the socket, which ends the reader. Interrupting
+            // The writer sends the goodbye and closes the socket, which ends the reader.
+            // Interrupting
             // the reader instead would close the socket before the goodbye is out.
             current.queue.clear()
             current.queue.offer(JSONObject().put("t", "bye").put("reason", reason))
@@ -129,7 +138,9 @@ class ProxyLinkClient(
             try {
                 if (connect()) backoff = MIN_BACKOFF_MS
             } catch (e: IOException) {
-                problem("Cannot link to the proxy at $shown: ${e.message}. Retrying in the background.")
+                problem(
+                    "Cannot link to the proxy at $shown: ${e.message}. Retrying in the background."
+                )
             }
             if (!running) return
             try {
@@ -145,7 +156,10 @@ class ProxyLinkClient(
     private fun connect(): Boolean {
         Socket().use { socket ->
             // Resolved on every attempt, so a proxy that moves to another address is found again.
-            socket.connect(InetSocketAddress(address.hostString, address.port), LinkProtocol.HANDSHAKE_TIMEOUT_MS.toInt())
+            socket.connect(
+                InetSocketAddress(address.hostString, address.port),
+                LinkProtocol.HANDSHAKE_TIMEOUT_MS.toInt(),
+            )
             socket.tcpNoDelay = true
             socket.soTimeout = LinkProtocol.HANDSHAKE_TIMEOUT_MS.toInt()
             val input = BufferedInputStream(socket.getInputStream())
@@ -153,20 +167,30 @@ class ProxyLinkClient(
 
             val welcome = handshake(input, output)
             val current = Session(socket)
-            val writer = Thread.ofVirtual().name("vane-busybar proxy link writer").start { write(current, output) }
+            val writer =
+                Thread.ofVirtual().name("vane-busybar proxy link writer").start {
+                    write(current, output)
+                }
             session = current
             lastProblem = null
             log.info("Linked to the proxy at $shown as '$server'.")
             try {
-                handler.onLinked(uuids(welcome.optJSONArray("busy")), uuids(welcome.optJSONArray("bridges")))
+                handler.onLinked(
+                    uuids(welcome.optJSONArray("busy")),
+                    uuids(welcome.optJSONArray("bridges")),
+                )
                 socket.soTimeout = LinkProtocol.TIMEOUT_MS.toInt()
                 while (true) {
-                    val frame = LinkProtocol.read(input) ?: throw IOException("the proxy closed the link")
+                    val frame =
+                        LinkProtocol.read(input) ?: throw IOException("the proxy closed the link")
                     dispatch(frame)
                 }
             } catch (e: IOException) {
                 if (running) {
-                    val why = if (e is SocketTimeoutException) "no ping for ${LinkProtocol.TIMEOUT_MS / 1000} s" else e.message
+                    val why =
+                        if (e is SocketTimeoutException)
+                            "no ping for ${LinkProtocol.TIMEOUT_MS / 1000} s"
+                        else e.message
                     log.warning("Lost the link to the proxy ($why). Reconnecting.")
                 }
             } finally {
@@ -181,9 +205,12 @@ class ProxyLinkClient(
     /** Answers the challenge and checks the proxy's proof. Returns the `welcome` frame. */
     private fun handshake(input: BufferedInputStream, output: BufferedOutputStream): JSONObject {
         val challenge = LinkProtocol.read(input) ?: throw IOException("the proxy closed the link")
-        if (challenge.optString("t") != "challenge") throw IOException("expected a challenge, is $shown the BusyBar.Link port?")
+        if (challenge.optString("t") != "challenge")
+            throw IOException("expected a challenge, is $shown the BusyBar.Link port?")
         if (challenge.optInt("proto") != LinkProtocol.VERSION) {
-            throw IOException("the proxy speaks protocol ${challenge.optInt("proto")}, this plugin ${LinkProtocol.VERSION}; update both to the same vane version")
+            throw IOException(
+                "the proxy speaks protocol ${challenge.optInt("proto")}, this plugin ${LinkProtocol.VERSION}; update both to the same vane version"
+            )
         }
         val nonce = LinkProtocol.nonce()
         LinkProtocol.write(
@@ -195,13 +222,22 @@ class ProxyLinkClient(
                 .put("version", version)
                 .put("caps", JSONArray(capabilities.sorted()))
                 .put("nonce", nonce)
-                .put("mac", LinkProtocol.mac(secret, "backend", challenge.optString("nonce"), server))
+                .put(
+                    "mac",
+                    LinkProtocol.mac(secret, "backend", challenge.optString("nonce"), server),
+                ),
         )
 
         val welcome = LinkProtocol.read(input) ?: throw IOException("the proxy closed the link")
-        if (welcome.optString("t") == "error") throw IOException("the proxy refused: ${welcome.optString("reason")}")
+        if (welcome.optString("t") == "error")
+            throw IOException("the proxy refused: ${welcome.optString("reason")}")
         if (welcome.optString("t") != "welcome") throw IOException("expected welcome")
-        if (!LinkProtocol.macMatches(LinkProtocol.mac(secret, "proxy", nonce, server), welcome.optString("mac", null))) {
+        if (
+            !LinkProtocol.macMatches(
+                LinkProtocol.mac(secret, "proxy", nonce, server),
+                welcome.optString("mac", null),
+            )
+        ) {
             throw IOException("the proxy could not prove it knows ProxyLinkSecret")
         }
         return welcome
@@ -215,9 +251,7 @@ class ProxyLinkClient(
                 if (frame === CLOSE) break
                 LinkProtocol.write(output, frame)
             }
-        } catch (_: InterruptedException) {
-        } catch (_: IOException) {
-        }
+        } catch (_: InterruptedException) {} catch (_: IOException) {}
         current.socket.close()
     }
 
@@ -272,12 +306,17 @@ class ProxyLinkClient(
 
         /** The valid UUIDs in [array]. */
         private fun uuids(array: JSONArray?): Set<UUID> =
-            array?.let { a -> (0 until a.length()).mapNotNull { a.optString(it).toUuidOrNull() }.toSet() }.orEmpty()
+            array
+                ?.let { a ->
+                    (0 until a.length()).mapNotNull { a.optString(it).toUuidOrNull() }.toSet()
+                }
+                .orEmpty()
 
-        private fun String.toUuidOrNull(): UUID? = try {
-            UUID.fromString(this)
-        } catch (_: IllegalArgumentException) {
-            null
-        }
+        private fun String.toUuidOrNull(): UUID? =
+            try {
+                UUID.fromString(this)
+            } catch (_: IllegalArgumentException) {
+                null
+            }
     }
 }

@@ -10,16 +10,13 @@ import org.oddlama.vane.annotation.lang.LangMessage
 import org.oddlama.vane.core.lang.TranslatedMessage
 import org.oddlama.vane.core.module.Context
 
-/**
- * Command that reports whether the player's current chunk is a slime chunk.
- */
+/** Command that reports whether the player's current chunk is a slime chunk. */
 @Name("slimechunk")
-class SlimeChunk(context: Context<Admin?>) : org.oddlama.vane.core.command.Command<Admin?>(context) {
-    @LangMessage
-    private val langSlimeChunkYes: TranslatedMessage? = null
+class SlimeChunk(context: Context<Admin?>) :
+    org.oddlama.vane.core.command.Command<Admin?>(context) {
+    @LangMessage private val langSlimeChunkYes: TranslatedMessage? = null
 
-    @LangMessage
-    private val langSlimeChunkNo: TranslatedMessage? = null
+    @LangMessage private val langSlimeChunkNo: TranslatedMessage? = null
 
     /** Builds the command tree for querying slime chunk state. */
     override fun getCommandBase(): LiteralArgumentBuilder<CommandSourceStack> {
@@ -34,6 +31,8 @@ class SlimeChunk(context: Context<Admin?>) : org.oddlama.vane.core.command.Comma
 
     /** Sends the slime chunk status for the given player's current chunk. */
     private fun isSlimeChunk(player: Player) {
-        (if (player.location.chunk.isSlimeChunk) langSlimeChunkYes else langSlimeChunkNo)!!.send(player)
+        (if (player.location.chunk.isSlimeChunk) langSlimeChunkYes else langSlimeChunkNo)!!.send(
+            player
+        )
     }
 }

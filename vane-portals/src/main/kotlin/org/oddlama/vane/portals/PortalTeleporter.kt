@@ -2,6 +2,7 @@ package org.oddlama.vane.portals
 
 import com.destroystokyo.paper.event.entity.EntityTeleportEndGatewayEvent
 import com.destroystokyo.paper.event.player.PlayerTeleportEndGatewayEvent
+import java.util.*
 import org.bukkit.Location
 import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
@@ -16,14 +17,12 @@ import org.oddlama.vane.core.module.Context
 import org.oddlama.vane.portals.event.EntityMoveEvent
 import org.oddlama.vane.portals.portal.Portal
 import org.oddlama.vane.util.Nms
-import java.util.*
 
 /**
  * Handles teleportation of entities and players through connected portals.
  *
  * Manages entity transfer, velocity/orientation transformation and passenger handling.
  */
-
 class PortalTeleporter(context: Context<Portals?>?) : Listener<Portals?>(context) {
     /** Tracks entities currently in the custom teleport flow. */
     private val entitiesPortalling = HashMap<UUID, Location?>()
@@ -78,7 +77,7 @@ class PortalTeleporter(context: Context<Portals?>?) : Listener<Portals?>(context
     private fun teleportSingleEntity(
         entity: Entity,
         targetLocation: Location,
-        newVelocity: Vector
+        newVelocity: Vector,
     ) {
         val entityLocation = entity.location
         val nmsEntity = Nms.entityHandle(entity)
@@ -89,13 +88,15 @@ class PortalTeleporter(context: Context<Portals?>?) : Listener<Portals?>(context
             if (entity is Player) {
                 // For players traveling in the same world, we can use the NMS player's connection's
                 // teleport method, which only modifies player position without dismounting.
-                Nms.getPlayer(entity).connection.teleport(
-                    targetLocation.x,
-                    targetLocation.y,
-                    targetLocation.z,
-                    targetLocation.yaw,
-                    targetLocation.pitch
-                )
+                Nms.getPlayer(entity)
+                    .connection
+                    .teleport(
+                        targetLocation.x,
+                        targetLocation.y,
+                        targetLocation.z,
+                        targetLocation.yaw,
+                        targetLocation.pitch,
+                    )
             } else {
                 // Similarly, we can just move entities.
                 nmsEntity.absSnapTo(
@@ -103,7 +104,7 @@ class PortalTeleporter(context: Context<Portals?>?) : Listener<Portals?>(context
                     targetLocation.y,
                     targetLocation.z,
                     targetLocation.yaw,
-                    targetLocation.pitch
+                    targetLocation.pitch,
                 )
             }
 
@@ -134,7 +135,9 @@ class PortalTeleporter(context: Context<Portals?>?) : Listener<Portals?>(context
         entity.velocity = newVelocity
     }
 
-    /** Computes transformed orientation/velocity and teleports [entity] from [source] to [target]. */
+    /**
+     * Computes transformed orientation/velocity and teleports [entity] from [source] to [target].
+     */
     private fun teleportEntity(entity: Entity, source: Portal, target: Portal) {
         var targetLocation = target.spawn().clone()
         if (entity is LivingEntity) {
@@ -167,16 +170,18 @@ class PortalTeleporter(context: Context<Portals?>?) : Listener<Portals?>(context
         // Calculate new location (pitch, yaw) and velocity.
         val sourceOrientation = source.orientation() ?: return
         val targetOrientation = target.orientation() ?: return
-        targetLocation = sourceOrientation.apply(
-            targetOrientation,
-            targetLocation,
-            target.exitOrientationLocked()
-        )
-        val newVelocity = sourceOrientation.apply(
-            targetOrientation,
-            entity.velocity,
-            target.exitOrientationLocked()
-        )
+        targetLocation =
+            sourceOrientation.apply(
+                targetOrientation,
+                targetLocation,
+                target.exitOrientationLocked(),
+            )
+        val newVelocity =
+            sourceOrientation.apply(
+                targetOrientation,
+                entity.velocity,
+                target.exitOrientationLocked(),
+            )
 
         teleportSingleEntity(entity, targetLocation, newVelocity)
     }

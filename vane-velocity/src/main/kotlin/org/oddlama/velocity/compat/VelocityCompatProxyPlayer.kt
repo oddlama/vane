@@ -1,12 +1,12 @@
 package org.oddlama.velocity.compat
 
 import com.velocitypowered.api.proxy.Player
+import java.util.*
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.event.ClickEvent
 import net.kyori.adventure.text.event.HoverEvent
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 import org.oddlama.vane.proxycore.ProxyPlayer
-import java.util.*
 
 /**
  * Velocity implementation of the proxy-core player abstraction.
@@ -23,21 +23,15 @@ class VelocityCompatProxyPlayer(private val player: Player) : ProxyPlayer {
         player.disconnect(Component.text(message.orEmpty()))
     }
 
-    /**
-     * Name of the wrapped player.
-     */
+    /** Name of the wrapped player. */
     override val name: String?
         get() = player.username
 
-    /**
-     * Unique identifier of the wrapped player.
-     */
+    /** Unique identifier of the wrapped player. */
     override val uniqueId: UUID?
         get() = player.uniqueId
 
-    /**
-     * Current measured network latency in milliseconds.
-     */
+    /** Current measured network latency in milliseconds. */
     override val ping: Long
         get() = player.ping
 
@@ -60,7 +54,8 @@ class VelocityCompatProxyPlayer(private val player: Player) : ProxyPlayer {
     override fun sendCopyable(message: String, copy: String, hover: String) {
         val legacy = LegacyComponentSerializer.legacySection()
         player.sendMessage(
-            legacy.deserialize(message)
+            legacy
+                .deserialize(message)
                 .clickEvent(ClickEvent.copyToClipboard(copy))
                 .hoverEvent(HoverEvent.showText(legacy.deserialize(hover)))
         )

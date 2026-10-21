@@ -16,5 +16,5 @@ annotation class ConfigDoubleList(
     val min: Double = Double.NaN,
     val max: Double = Double.NaN,
     val desc: String,
-    val metrics: Boolean = true
+    val metrics: Boolean = true,
 )

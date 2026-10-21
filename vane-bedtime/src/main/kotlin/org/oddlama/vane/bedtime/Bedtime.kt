@@ -1,5 +1,7 @@
 package org.oddlama.vane.bedtime
 
+import java.util.*
+import kotlin.math.ceil
 import org.bukkit.GameMode
 import org.bukkit.World
 import org.bukkit.entity.Player
@@ -16,8 +18,6 @@ import org.oddlama.vane.core.lang.TranslatedMessage
 import org.oddlama.vane.core.module.Module
 import org.oddlama.vane.util.Nms
 import org.oddlama.vane.util.WorldUtil
-import java.util.*
-import kotlin.math.ceil
 
 @VaneModule(name = "bedtime", bstats = 8639, configVersion = 3, langVersion = 5, storageVersion = 1)
 /**
@@ -34,30 +34,36 @@ class Bedtime : Module<Bedtime?>() {
         def = 0.5,
         min = 0.0,
         max = 1.0,
-        desc = "The percentage of sleeping players required to advance time."
+        desc = "The percentage of sleeping players required to advance time.",
     )
     var configSleepThreshold: Double = 0.0
 
-    /** World time (in ticks) to advance to when the sleep threshold is met. 1000 is just after sunrise. */
+    /**
+     * World time (in ticks) to advance to when the sleep threshold is met. 1000 is just after
+     * sunrise.
+     */
     @ConfigLong(
         def = 1000,
         min = 0,
         max = 12000,
-        desc = "The target time in ticks to advance to. 1000 is just after sunrise."
+        desc = "The target time in ticks to advance to. 1000 is just after sunrise.",
     )
     var configTargetTime: Long = 0
 
     /** Number of ticks over which the time transition is smoothly interpolated. */
-    @ConfigLong(def = 100, min = 0, max = 1200, desc = "The interpolation time in ticks for a smooth change of time.")
+    @ConfigLong(
+        def = 100,
+        min = 0,
+        max = 1200,
+        desc = "The interpolation time in ticks for a smooth change of time.",
+    )
     var configInterpolationTicks: Long = 0
 
     /** Message broadcast to the world when a player enters a bed. */
-    @LangMessage
-    private val langPlayerBedEnter: TranslatedMessage? = null
+    @LangMessage private val langPlayerBedEnter: TranslatedMessage? = null
 
     /** Message broadcast to the world when a player leaves a bed. */
-    @LangMessage
-    private val langPlayerBedLeave: TranslatedMessage? = null
+    @LangMessage private val langPlayerBedLeave: TranslatedMessage? = null
 
     /** Dynmap integration component. */
     var dynmapLayer: BedtimeDynmapLayer = BedtimeDynmapLayer(this)
@@ -88,16 +94,13 @@ class Bedtime : Module<Bedtime?>() {
         resetSleepers(world)
 
         /* Wake players as if they had slept through the night. */
-        world.players
-            .asSequence()
-            .filter(Player::isSleeping)
-            .forEach {
-                /*
-                 * skipSleepTimer = false (sets sleepCounter to 100)
-                 * updateSleepingPlayers = false
-                 */
-                Nms.getPlayer(it).stopSleepInBed(false, false)
-            }
+        world.players.asSequence().filter(Player::isSleeping).forEach {
+            /*
+             * skipSleepTimer = false (sets sleepCounter to 100)
+             * updateSleepingPlayers = false
+             */
+            Nms.getPlayer(it).stopSleepInBed(false, false)
+        }
     }
 
     /** Registers a sleeping player, updates map markers, and schedules a sleep threshold check. */
@@ -148,8 +151,8 @@ class Bedtime : Module<Bedtime?>() {
     }
 
     /**
-     * Returns the ratio of sleeping players to potential sleepers in [world],
-     * or `0.0` if there are no potential sleepers.
+     * Returns the ratio of sleeping players to potential sleepers in [world], or `0.0` if there are
+     * no potential sleepers.
      */
     private fun getPercentageSleeping(world: World): Double {
         val countSleeping = getAmountSleeping(world)
@@ -177,12 +180,19 @@ class Bedtime : Module<Bedtime?>() {
         val percent = getPercentageSleeping(world)
         val amountSleeping = getAmountSleeping(world)
         val countRequired = ceil(getPotentialSleepersInWorld(world) * configSleepThreshold).toInt()
-        broadcastSleepingMessage(langPlayerBedEnter, world, player, percent, amountSleeping, countRequired)
+        broadcastSleepingMessage(
+            langPlayerBedEnter,
+            world,
+            player,
+            percent,
+            amountSleeping,
+            countRequired,
+        )
     }
 
     /**
-     * Removes [player] from the sleeping set and broadcasts the updated progress message,
-     * if the player was actually registered as sleeping.
+     * Removes [player] from the sleeping set and broadcasts the updated progress message, if the
+     * player was actually registered as sleeping.
      */
     private fun removeSleeping(player: Player) {
         val world = player.world
@@ -191,8 +201,16 @@ class Bedtime : Module<Bedtime?>() {
         if (sleepers.remove(player.uniqueId)) {
             val percent = getPercentageSleeping(world)
             val countSleeping = getAmountSleeping(world)
-            val countRequired = ceil(getPotentialSleepersInWorld(world) * configSleepThreshold).toInt()
-            broadcastSleepingMessage(langPlayerBedLeave, world, player, percent, countSleeping, countRequired)
+            val countRequired =
+                ceil(getPotentialSleepersInWorld(world) * configSleepThreshold).toInt()
+            broadcastSleepingMessage(
+                langPlayerBedLeave,
+                world,
+                player,
+                percent,
+                countSleeping,
+                countRequired,
+            )
         }
     }
 
@@ -206,7 +224,8 @@ class Bedtime : Module<Bedtime?>() {
     /** Utility functions for bedtime formatting. */
     companion object {
         /** Formats [percentage] (0.0–1.0) as a gold-coloured percentage string, e.g. `§650.00%`. */
-        private fun percentageStr(percentage: Double): String = String.format("§6%.2f", 100.0 * percentage) + "%"
+        private fun percentageStr(percentage: Double): String =
+            String.format("§6%.2f", 100.0 * percentage) + "%"
     }
 
     /** Broadcasts the shared action-bar sleep progress message for a world. */
@@ -216,15 +235,16 @@ class Bedtime : Module<Bedtime?>() {
         player: Player,
         percent: Double,
         amountSleeping: Long,
-        countRequired: Int
+        countRequired: Int,
     ) {
-        requireNotNull(message).broadcastWorldActionBar(
-            world,
-            "§6" + player.name,
-            "§6" + percentageStr(percent),
-            amountSleeping.toString(),
-            countRequired.toString(),
-            "§6" + world.name
-        )
+        requireNotNull(message)
+            .broadcastWorldActionBar(
+                world,
+                "§6" + player.name,
+                "§6" + percentageStr(percent),
+                amountSleeping.toString(),
+                countRequired.toString(),
+                "§6" + world.name,
+            )
     }
 }

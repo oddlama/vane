@@ -66,9 +66,12 @@ def parse_pin(value: str) -> bytes:
     """Decode `sha256=<base64url>` to the 32-byte digest."""
     if not value.startswith(PIN_PREFIX):
         raise ValueError(f"unknown key fingerprint {value!r}, expected {PIN_PREFIX}<base64url>")
-    encoded = value[len(PIN_PREFIX):]
+    encoded = value[len(PIN_PREFIX) :]
     try:
-        digest = base64.b64decode(encoded.replace("-", "+").replace("_", "/") + "=" * (-len(encoded) % 4), validate=True)
+        digest = base64.b64decode(
+            encoded.replace("-", "+").replace("_", "/") + "=" * (-len(encoded) % 4),
+            validate=True,
+        )
     except (binascii.Error, ValueError):
         raise ValueError("the key fingerprint is damaged; copy the whole line from /busybar link") from None
     if len(digest) != hashlib.sha256().digest_size:
@@ -134,7 +137,7 @@ def _element(der: bytes, pos: int) -> tuple[int, int, int]:
     pos += 2
     if length & 0x80:
         count = length & 0x7F
-        length = int.from_bytes(der[pos:pos + count], "big")
+        length = int.from_bytes(der[pos : pos + count], "big")
         pos += count
     if pos + length > len(der):
         raise ValueError("truncated certificate")

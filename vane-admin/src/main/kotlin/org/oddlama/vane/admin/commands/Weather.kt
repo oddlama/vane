@@ -11,14 +11,12 @@ import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.oddlama.vane.admin.Admin
 import org.oddlama.vane.annotation.command.Name
+import org.oddlama.vane.core.command.Command as VaneCommand
 import org.oddlama.vane.core.command.argumentType.WeatherArgumentType
 import org.oddlama.vane.core.command.enums.WeatherValue
 import org.oddlama.vane.core.module.Context
-import org.oddlama.vane.core.command.Command as VaneCommand
 
-/**
- * Command for changing weather in the current or a selected world.
- */
+/** Command for changing weather in the current or a selected world. */
 @Name("weather")
 class Weather(context: Context<Admin?>) : VaneCommand<Admin?>(context) {
     /** Builds the command tree for weather changes. */
@@ -32,15 +30,14 @@ class Weather(context: Context<Admin?>) : VaneCommand<Admin?>(context) {
                         Command.SINGLE_SUCCESS
                     }
                     .then(
-                        Commands.argument("world", ArgumentTypes.world())
-                            .executes { ctx ->
-                                setWeather(
-                                    ctx.source.sender,
-                                    weather(ctx),
-                                    ctx.getArgument("world", World::class.java)
-                                )
-                                Command.SINGLE_SUCCESS
-                            }
+                        Commands.argument("world", ArgumentTypes.world()).executes { ctx ->
+                            setWeather(
+                                ctx.source.sender,
+                                weather(ctx),
+                                ctx.getArgument("world", World::class.java),
+                            )
+                            Command.SINGLE_SUCCESS
+                        }
                     )
             )
 
@@ -53,7 +50,11 @@ class Weather(context: Context<Admin?>) : VaneCommand<Admin?>(context) {
         setWeather(player, weather, player.world)
 
     /** Applies weather in a specific world. */
-    private fun setWeather(@Suppress("UNUSED_PARAMETER") sender: CommandSender?, weather: WeatherValue, world: World) {
+    private fun setWeather(
+        @Suppress("UNUSED_PARAMETER") sender: CommandSender?,
+        weather: WeatherValue,
+        world: World,
+    ) {
         world.setStorm(weather.storm)
         world.isThundering = weather.thunder
     }

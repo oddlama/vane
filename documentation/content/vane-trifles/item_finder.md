@@ -5,6 +5,7 @@ module = "vane-trifles"
 ```
 
 ---
+
 ![](assets/gifs/find_item.gif)
 
 Have you ever wondered, where you put those pesky ender pearls which you need like _right now_? Don't worry, the item

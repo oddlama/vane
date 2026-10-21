@@ -4,8 +4,6 @@ import com.sun.net.httpserver.HttpExchange
 import com.sun.net.httpserver.HttpServer
 import com.sun.net.httpserver.HttpsConfigurator
 import com.sun.net.httpserver.HttpsServer
-import org.json.JSONException
-import org.json.JSONObject
 import java.io.IOException
 import java.net.InetSocketAddress
 import java.security.MessageDigest
@@ -18,6 +16,8 @@ import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicLong
 import javax.net.ssl.SSLContext
+import org.json.JSONException
+import org.json.JSONObject
 
 /**
  * HTTP server that BUSY Bar bridges connect to, serving HTTPS when given a TLS context.
@@ -42,7 +42,9 @@ class BridgeServer(private val host: Host, private val heads: Heads, private val
         /** The player owning [token], or null when it is unknown. */
         fun playerForToken(token: String): UUID?
 
-        /** The first event for a connecting bridge of [player]. May block briefly; null answers 503. */
+        /**
+         * The first event for a connecting bridge of [player]. May block briefly; null answers 503.
+         */
         fun snapshot(player: UUID): JSONObject?
 
         /**
@@ -54,13 +56,18 @@ class BridgeServer(private val host: Host, private val heads: Heads, private val
         /** [player] now has [count] bridges connected. */
         fun onBridgesChanged(player: UUID, count: Int) {}
 
-        /** Which icon set with [setIcon] [player]'s bridges get; null or an unknown key gets the default. */
+        /**
+         * Which icon set with [setIcon] [player]'s bridges get; null or an unknown key gets the
+         * default.
+         */
         fun iconKey(player: UUID): String? = null
     }
 
     /** One connected bridge. */
     private class Client(val player: UUID) {
-        /** Encoded frames waiting to be written, ended by [CLOSE]. One extra slot keeps room for it. */
+        /**
+         * Encoded frames waiting to be written, ended by [CLOSE]. One extra slot keeps room for it.
+         */
         val queue = LinkedBlockingQueue<String>(QUEUE_CAPACITY + 1)
     }
 
@@ -79,13 +86,18 @@ class BridgeServer(private val host: Host, private val heads: Heads, private val
     /** Icons served by `/icon`, by key; [DEFAULT_ICON] is the default. */
     private val icons = ConcurrentHashMap<String, Icon>()
 
-    /** ETag of the default server icon, or null when there is none. Bridges compare it to their cached copy. */
+    /**
+     * ETag of the default server icon, or null when there is none. Bridges compare it to their
+     * cached copy.
+     */
     fun iconTag(): String? = icons[DEFAULT_ICON]?.etag
 
     /** ETag of the icon [player]'s bridges get, or null when there is none. */
     fun iconTag(player: UUID): String? = iconFor(player)?.etag
 
-    /** Sets the default icon served by `/icon` from a PNG, or removes it with null or empty data. */
+    /**
+     * Sets the default icon served by `/icon` from a PNG, or removes it with null or empty data.
+     */
     fun setIcon(png: ByteArray?) = setIcon(DEFAULT_ICON, png)
 
     /** Sets the icon under [key] from a PNG, or removes it with null or empty data. */
@@ -94,11 +106,15 @@ class BridgeServer(private val host: Host, private val heads: Heads, private val
             icons.remove(key)
             return
         }
-        val hash = MessageDigest.getInstance("SHA-256").digest(png).take(ETAG_BYTES).joinToString("") { "%02x".format(it) }
+        val hash =
+            MessageDigest.getInstance("SHA-256").digest(png).take(ETAG_BYTES).joinToString("") {
+                "%02x".format(it)
+            }
         icons[key] = Icon(png, "\"$hash\"")
     }
 
-    private fun iconFor(player: UUID): Icon? = host.iconKey(player)?.let(icons::get) ?: icons[DEFAULT_ICON]
+    private fun iconFor(player: UUID): Icon? =
+        host.iconKey(player)?.let(icons::get) ?: icons[DEFAULT_ICON]
 
     /**
      * Binds the server to [address], with TLS when [ssl] is given.
@@ -108,11 +124,14 @@ class BridgeServer(private val host: Host, private val heads: Heads, private val
     fun start(address: InetSocketAddress, ssl: SSLContext?) {
         val exec = Executors.newVirtualThreadPerTaskExecutor()
         try {
-            val server = if (ssl == null) {
-                HttpServer.create(address, 0)
-            } else {
-                HttpsServer.create(address, 0).apply { httpsConfigurator = HttpsConfigurator(ssl) }
-            }
+            val server =
+                if (ssl == null) {
+                    HttpServer.create(address, 0)
+                } else {
+                    HttpsServer.create(address, 0).apply {
+                        httpsConfigurator = HttpsConfigurator(ssl)
+                    }
+                }
             httpServer = server.apply {
                 createContext("/events", ::handleEvents)
                 createContext("/action", ::handleAction)
@@ -147,7 +166,9 @@ class BridgeServer(private val host: Host, private val heads: Heads, private val
         for (client in clients) {
             if (!receives(client.player)) continue
             if (client.queue.size >= QUEUE_CAPACITY || !client.queue.offer(frame)) {
-                log.warning("Dropping BUSY Bar bridge of ${client.player}: it is not keeping up with events.")
+                log.warning(
+                    "Dropping BUSY Bar bridge of ${client.player}: it is not keeping up with events."
+                )
                 close(client, discardPending = true)
             }
         }
@@ -163,8 +184,8 @@ class BridgeServer(private val host: Host, private val heads: Heads, private val
     fun connectedPlayers(): Set<UUID> = clients.mapTo(mutableSetOf()) { it.player }
 
     /**
-     * Asks the handler of [client] to finish once it has written what is queued. A bridge that
-     * fell behind ([discardPending]) loses its backlog instead, so the close marker fits.
+     * Asks the handler of [client] to finish once it has written what is queued. A bridge that fell
+     * behind ([discardPending]) loses its backlog instead, so the close marker fits.
      */
     private fun close(client: Client, discardPending: Boolean = false) {
         if (discardPending) client.queue.clear()
@@ -205,7 +226,8 @@ class BridgeServer(private val host: Host, private val heads: Heads, private val
                 val out = exchange.responseBody
                 out.write(frame("snapshot", snapshot).toByteArray())
                 out.flush()
-                // Runs until the close marker, so frames queued before it (such as server.stop) are sent.
+                // Runs until the close marker, so frames queued before it (such as server.stop) are
+                // sent.
                 while (true) {
                     val next = client.queue.poll(HEARTBEAT_SECONDS, TimeUnit.SECONDS)
                     if (next === CLOSE) break
@@ -233,11 +255,12 @@ class BridgeServer(private val host: Host, private val heads: Heads, private val
 
             val body = exchange.requestBody.readNBytes(MAX_REQUEST_BYTES + 1)
             if (body.size > MAX_REQUEST_BYTES) return exchange.sendResponseHeaders(413, -1)
-            val request = try {
-                JSONObject(String(body))
-            } catch (_: JSONException) {
-                return exchange.sendResponseHeaders(400, -1)
-            }
+            val request =
+                try {
+                    JSONObject(String(body))
+                } catch (_: JSONException) {
+                    return exchange.sendResponseHeaders(400, -1)
+                }
             exchange.sendResponseHeaders(host.request(player, request), -1)
         } catch (_: IOException) {
             // Bridge went away.
@@ -273,12 +296,13 @@ class BridgeServer(private val host: Host, private val heads: Heads, private val
             if (exchange.requestMethod != "GET") return exchange.sendResponseHeaders(405, -1)
             if (authenticate(exchange) == null) return exchange.sendResponseHeaders(401, -1)
             val id = exchange.requestURI.path.removePrefix("/head/")
-            val png = try {
-                heads.face(id)
-            } catch (e: IOException) {
-                log.warning("Could not render the face for skin $id: ${e.message}")
-                return exchange.sendResponseHeaders(502, -1)
-            } ?: return exchange.sendResponseHeaders(404, -1)
+            val png =
+                try {
+                    heads.face(id)
+                } catch (e: IOException) {
+                    log.warning("Could not render the face for skin $id: ${e.message}")
+                    return exchange.sendResponseHeaders(502, -1)
+                } ?: return exchange.sendResponseHeaders(404, -1)
 
             exchange.responseHeaders.apply {
                 add("Content-Type", "image/png")
@@ -301,8 +325,10 @@ class BridgeServer(private val host: Host, private val heads: Heads, private val
         /** Key of the default icon, served when [Host.iconKey] names none. */
         const val DEFAULT_ICON = ""
 
-        /** Frames buffered per bridge before it is considered stuck. Bursts such as a proxy restart are
-         * emptying a large server queue one frame per player, so leave plenty of room. */
+        /**
+         * Frames buffered per bridge before it is considered stuck. Bursts such as a proxy restart
+         * are emptying a large server queue one frame per player, so leave plenty of room.
+         */
         private const val QUEUE_CAPACITY = 1024
 
         /** Seconds between keep-alive comments on an idle stream. */

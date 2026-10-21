@@ -46,27 +46,39 @@ class SelfSignedCertificateTest {
     @Test
     fun `completes a TLS handshake presenting the certificate`() {
         val (keys, certificate) = SelfSignedCertificate.generate("vane-busybar")
-        val keyStore = KeyStore.getInstance("PKCS12").apply {
-            load(null, null)
-            setKeyEntry("busybar", keys.private, CharArray(0), arrayOf(certificate))
-        }
-        val keyManagers = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm())
-            .apply { init(keyStore, CharArray(0)) }
-            .keyManagers
-        val server = SSLContext.getInstance("TLS").apply { init(keyManagers, null, null) }
-            .createSSLEngine().apply { useClientMode = false }
+        val keyStore =
+            KeyStore.getInstance("PKCS12").apply {
+                load(null, null)
+                setKeyEntry("busybar", keys.private, CharArray(0), arrayOf(certificate))
+            }
+        val keyManagers =
+            KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm())
+                .apply { init(keyStore, CharArray(0)) }
+                .keyManagers
+        val server =
+            SSLContext.getInstance("TLS")
+                .apply { init(keyManagers, null, null) }
+                .createSSLEngine()
+                .apply { useClientMode = false }
 
         // Like a pinning bridge: accept any chain, then compare the key afterwards.
         var presented: X509Certificate? = null
-        val recorder = object : X509TrustManager {
-            override fun checkClientTrusted(chain: Array<X509Certificate>, authType: String) = Unit
-            override fun checkServerTrusted(chain: Array<X509Certificate>, authType: String) {
-                presented = chain[0]
+        val recorder =
+            object : X509TrustManager {
+                override fun checkClientTrusted(chain: Array<X509Certificate>, authType: String) =
+                    Unit
+
+                override fun checkServerTrusted(chain: Array<X509Certificate>, authType: String) {
+                    presented = chain[0]
+                }
+
+                override fun getAcceptedIssuers(): Array<X509Certificate> = emptyArray()
             }
-            override fun getAcceptedIssuers(): Array<X509Certificate> = emptyArray()
-        }
-        val client = SSLContext.getInstance("TLS").apply { init(null, arrayOf<TrustManager>(recorder), null) }
-            .createSSLEngine("localhost", 9123).apply { useClientMode = true }
+        val client =
+            SSLContext.getInstance("TLS")
+                .apply { init(null, arrayOf<TrustManager>(recorder), null) }
+                .createSSLEngine("localhost", 9123)
+                .apply { useClientMode = true }
 
         handshake(client, server)
         assertEquals("TLSv1.3", client.session.protocol)
@@ -78,7 +90,10 @@ class SelfSignedCertificateTest {
         val size = maxOf(client.session.packetBufferSize, server.session.packetBufferSize)
         val toServer = ByteBuffer.allocate(size)
         val toClient = ByteBuffer.allocate(size)
-        val sink = ByteBuffer.allocate(maxOf(client.session.applicationBufferSize, server.session.applicationBufferSize))
+        val sink =
+            ByteBuffer.allocate(
+                maxOf(client.session.applicationBufferSize, server.session.applicationBufferSize)
+            )
         val empty = ByteBuffer.allocate(0)
         client.beginHandshake()
         server.beginHandshake()
@@ -86,21 +101,25 @@ class SelfSignedCertificateTest {
         fun step(engine: SSLEngine, inbound: ByteBuffer, outbound: ByteBuffer) {
             when (engine.handshakeStatus) {
                 HandshakeStatus.NEED_WRAP -> engine.wrap(empty, outbound)
-                HandshakeStatus.NEED_UNWRAP, HandshakeStatus.NEED_UNWRAP_AGAIN -> {
+                HandshakeStatus.NEED_UNWRAP,
+                HandshakeStatus.NEED_UNWRAP_AGAIN -> {
                     inbound.flip()
                     engine.unwrap(inbound, sink)
                     inbound.compact()
                     sink.clear()
                 }
-                HandshakeStatus.NEED_TASK -> generateSequence { engine.delegatedTask }.forEach(Runnable::run)
+                HandshakeStatus.NEED_TASK ->
+                    generateSequence { engine.delegatedTask }.forEach(Runnable::run)
                 else -> Unit
             }
         }
 
         repeat(MAX_STEPS) {
-            if (client.handshakeStatus == HandshakeStatus.NOT_HANDSHAKING &&
-                server.handshakeStatus == HandshakeStatus.NOT_HANDSHAKING
-            ) return
+            if (
+                client.handshakeStatus == HandshakeStatus.NOT_HANDSHAKING &&
+                    server.handshakeStatus == HandshakeStatus.NOT_HANDSHAKING
+            )
+                return
             step(client, toClient, toServer)
             step(server, toServer, toClient)
         }

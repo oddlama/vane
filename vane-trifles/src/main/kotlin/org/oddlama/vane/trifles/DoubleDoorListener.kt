@@ -11,15 +11,14 @@ import org.oddlama.vane.core.Listener
 import org.oddlama.vane.core.module.Context
 import org.oddlama.vane.trifles.SingleDoor.Companion.createDoorFromBlock
 
-/**
- * Keeps neighboring doors synchronized so double doors open and close together.
- */
-class DoubleDoorListener(context: Context<Trifles?>) : Listener<Trifles?>(
-    context.group(
-        "DoubleDoor",
-        "Enable updating of double doors automatically when one of the doors is changed."
-    )
-) {
+/** Keeps neighboring doors synchronized so double doors open and close together. */
+class DoubleDoorListener(context: Context<Trifles?>) :
+    Listener<Trifles?>(
+        context.group(
+            "DoubleDoor",
+            "Enable updating of double doors automatically when one of the doors is changed.",
+        )
+    ) {
     /** Synchronizes doors after a player right-click interaction. */
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     fun onPlayerInteract(event: PlayerInteractEvent) {
@@ -49,9 +48,7 @@ class DoubleDoorListener(context: Context<Trifles?>) : Listener<Trifles?>(
         }
     }
 
-    /**
-     * Finds the partner door and mirrors the primary door open state on the next tick.
-     */
+    /** Finds the partner door and mirrors the primary door open state on the next tick. */
     fun handleDoubleDoor(block: Block) {
         val first = createDoorFromBlock(block) ?: return
         val second = first.secondDoor ?: return

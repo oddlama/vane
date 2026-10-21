@@ -1,17 +1,18 @@
 package org.oddlama.vane.proxycore.commands
 
+import java.util.*
 import org.oddlama.vane.proxycore.Maintenance
 import org.oddlama.vane.proxycore.ProxyPlayer
 import org.oddlama.vane.proxycore.VaneProxyPlugin
 import org.oddlama.vane.proxycore.util.parseTime
-import java.util.*
 
 /**
  * Command handler for querying and controlling maintenance mode.
  *
  * @constructor Creates the maintenance command.
  */
-class ProxyMaintenanceCommand(permission: String?, plugin: VaneProxyPlugin) : ProxyCommand(permission, plugin) {
+class ProxyMaintenanceCommand(permission: String?, plugin: VaneProxyPlugin) :
+    ProxyCommand(permission, plugin) {
     /**
      * Executes maintenance subcommands (`status`, `on`, `off`, `cancel`, `schedule`).
      *
@@ -32,9 +33,7 @@ class ProxyMaintenanceCommand(permission: String?, plugin: VaneProxyPlugin) : Pr
             when (safeArgs.firstOrNull()?.lowercase(Locale.getDefault())) {
                 "status" -> {
                     if (maintenance.start() != 0L) {
-                        sender?.sendMessage(
-                            maintenance.formatMessage(Maintenance.MESSAGE_INFO)
-                        )
+                        sender?.sendMessage(maintenance.formatMessage(Maintenance.MESSAGE_INFO))
                     }
 
                     return
@@ -45,7 +44,8 @@ class ProxyMaintenanceCommand(permission: String?, plugin: VaneProxyPlugin) : Pr
                     return
                 }
 
-                "cancel", "off" -> {
+                "cancel",
+                "off" -> {
                     maintenance.abort()
                     return
                 }
@@ -87,7 +87,8 @@ class ProxyMaintenanceCommand(permission: String?, plugin: VaneProxyPlugin) : Pr
             §7> §3/maintenance §3[ §7on §3] §f- Enable maintenance for an indefinite amount of time
             §7> §3/maintenance §3[ §7schedule §3] §7<§bin§7> <§bduration§7> §f- Schedule maintenance in <in> for <duration>
             §7> §3|§7 time format§7 §f- Examples: §b§o3h5m§r§f or §b§o1y2w3d4h5m6s§r
-            """.trimIndent()
+            """
+                .trimIndent()
         )
     }
 

@@ -23,125 +23,155 @@ import org.oddlama.vane.util.TextUtil
  * @param module the module whose config is managed.
  */
 class ConfigManager(var module: Module<*>) {
-    /**
-     * Compiled config field handlers.
-     */
+    /** Compiled config field handlers. */
     private val configFields: MutableList<ConfigField<*>> = mutableListOf()
 
-    /**
-     * Optional section descriptions keyed by YAML path.
-     */
+    /** Optional section descriptions keyed by YAML path. */
     private val sectionDescriptions: MutableMap<String?, String?> = mutableMapOf()
 
-    /**
-     * The compiled `@ConfigVersion` field, if present.
-     */
+    /** The compiled `@ConfigVersion` field, if present. */
     var fieldVersion: ConfigVersionField? = null
 
     init {
         compile(module) { it }
     }
 
-    /**
-     * Returns the expected config version from module metadata.
-     */
+    /** Returns the expected config version from module metadata. */
     fun expectedVersion(): Long = module.annotation.configVersion
 
-    /**
-     * Returns whether a reflected field has a config annotation.
-     */
+    /** Returns whether a reflected field has a config annotation. */
     private fun hasConfigAnnotation(field: Field): Boolean =
-        field.annotations.any { it.annotationClass.java.name.startsWith("org.oddlama.vane.annotation.config.Config") }
+        field.annotations.any {
+            it.annotationClass.java.name.startsWith("org.oddlama.vane.annotation.config.Config")
+        }
 
-    /**
-     * Verifies config fields use the required `config` prefix.
-     */
+    /** Verifies config fields use the required `config` prefix. */
     private fun assertFieldPrefix(field: Field) {
         if (!field.name.startsWith("config")) {
             throw RuntimeException("Configuration fields must be prefixed config. This is a bug.")
         }
     }
 
-    /**
-     * Compiles a reflected config field into a concrete [ConfigField] implementation.
-     */
-    private fun compileField(owner: Any?, field: Field, mapName: (String?) -> String?): ConfigField<*> {
+    /** Compiles a reflected config field into a concrete [ConfigField] implementation. */
+    private fun compileField(
+        owner: Any?,
+        field: Field,
+        mapName: (String?) -> String?,
+    ): ConfigField<*> {
         assertFieldPrefix(field)
 
-        val annotation = field.annotations
-            .filter { it.annotationClass.java.name.startsWith("org.oddlama.vane.annotation.config.Config") }
-            .also { require(it.size <= 1) { "Configuration fields must have exactly one @Config annotation." } }
-            .firstOrNull() ?: error("No @Config annotation found on field ${field.name}")
+        val annotation =
+            field.annotations
+                .filter {
+                    it.annotationClass.java.name.startsWith(
+                        "org.oddlama.vane.annotation.config.Config"
+                    )
+                }
+                .also {
+                    require(it.size <= 1) {
+                        "Configuration fields must have exactly one @Config annotation."
+                    }
+                }
+                .firstOrNull() ?: error("No @Config annotation found on field ${field.name}")
 
         return when (val atype = annotation.annotationClass.java) {
-            ConfigBoolean::class.java -> ConfigBooleanField(owner, field, mapName, annotation as ConfigBoolean)
-            ConfigDict::class.java -> ConfigDictField(owner, field, mapName, annotation as ConfigDict)
-            ConfigDouble::class.java -> ConfigDoubleField(owner, field, mapName, annotation as ConfigDouble)
-            ConfigDoubleList::class.java -> ConfigDoubleListField(owner, field, mapName, annotation as ConfigDoubleList)
-            ConfigExtendedMaterial::class.java -> ConfigExtendedMaterialField(
-                owner,
-                field,
-                mapName,
-                annotation as ConfigExtendedMaterial
-            )
+            ConfigBoolean::class.java ->
+                ConfigBooleanField(owner, field, mapName, annotation as ConfigBoolean)
+            ConfigDict::class.java ->
+                ConfigDictField(owner, field, mapName, annotation as ConfigDict)
+            ConfigDouble::class.java ->
+                ConfigDoubleField(owner, field, mapName, annotation as ConfigDouble)
+            ConfigDoubleList::class.java ->
+                ConfigDoubleListField(owner, field, mapName, annotation as ConfigDoubleList)
+            ConfigExtendedMaterial::class.java ->
+                ConfigExtendedMaterialField(
+                    owner,
+                    field,
+                    mapName,
+                    annotation as ConfigExtendedMaterial,
+                )
 
             ConfigInt::class.java -> ConfigIntField(owner, field, mapName, annotation as ConfigInt)
-            ConfigIntList::class.java -> ConfigIntListField(owner, field, mapName, annotation as ConfigIntList)
-            ConfigItemStack::class.java -> ConfigItemStackField(owner, field, mapName, annotation as ConfigItemStack)
-            ConfigLong::class.java -> ConfigLongField(owner, field, mapName, annotation as ConfigLong)
-            ConfigMaterial::class.java -> ConfigMaterialField(owner, field, mapName, annotation as ConfigMaterial)
-            ConfigMaterialMapMapMap::class.java -> ConfigMaterialMapMapMapField(
-                owner,
-                field,
-                mapName,
-                annotation as ConfigMaterialMapMapMap
-            )
+            ConfigIntList::class.java ->
+                ConfigIntListField(owner, field, mapName, annotation as ConfigIntList)
+            ConfigItemStack::class.java ->
+                ConfigItemStackField(owner, field, mapName, annotation as ConfigItemStack)
+            ConfigLong::class.java ->
+                ConfigLongField(owner, field, mapName, annotation as ConfigLong)
+            ConfigMaterial::class.java ->
+                ConfigMaterialField(owner, field, mapName, annotation as ConfigMaterial)
+            ConfigMaterialMapMapMap::class.java ->
+                ConfigMaterialMapMapMapField(
+                    owner,
+                    field,
+                    mapName,
+                    annotation as ConfigMaterialMapMapMap,
+                )
 
-            ConfigMaterialSet::class.java -> ConfigMaterialSetField(
-                owner,
-                field,
-                mapName,
-                annotation as ConfigMaterialSet
-            )
+            ConfigMaterialSet::class.java ->
+                ConfigMaterialSetField(
+                    owner,
+                    field,
+                    mapName,
+                    annotation as ConfigMaterialSet,
+                )
 
-            ConfigString::class.java -> ConfigStringField(owner, field, mapName, annotation as ConfigString)
-            ConfigStringList::class.java -> ConfigStringListField(owner, field, mapName, annotation as ConfigStringList)
-            ConfigStringListMap::class.java -> ConfigStringListMapField(
-                owner,
-                field,
-                mapName,
-                annotation as ConfigStringListMap
-            )
+            ConfigString::class.java ->
+                ConfigStringField(owner, field, mapName, annotation as ConfigString)
+            ConfigStringList::class.java ->
+                ConfigStringListField(owner, field, mapName, annotation as ConfigStringList)
+            ConfigStringListMap::class.java ->
+                ConfigStringListMapField(
+                    owner,
+                    field,
+                    mapName,
+                    annotation as ConfigStringListMap,
+                )
 
             ConfigVersion::class.java -> {
-                require(owner === module) { "@ConfigVersion can only be used inside the main module. This is a bug." }
-                require(fieldVersion == null) { "There must be exactly one @ConfigVersion field! (found multiple). This is a bug." }
-                ConfigVersionField(owner, field, mapName, annotation as ConfigVersion).also { fieldVersion = it }
+                require(owner === module) {
+                    "@ConfigVersion can only be used inside the main module. This is a bug."
+                }
+                require(fieldVersion == null) {
+                    "There must be exactly one @ConfigVersion field! (found multiple). This is a bug."
+                }
+                ConfigVersionField(owner, field, mapName, annotation as ConfigVersion).also {
+                    fieldVersion = it
+                }
             }
 
-            else -> throw RuntimeException("Missing ConfigField handler for @${atype.name}. This is a bug.")
+            else ->
+                throw RuntimeException(
+                    "Missing ConfigField handler for @${atype.name}. This is a bug."
+                )
         }
     }
 
-    /**
-     * Verifies a config version and logs actionable upgrade/downgrade guidance.
-     */
+    /** Verifies a config version and logs actionable upgrade/downgrade guidance. */
     private fun verifyVersion(file: File, version: Long): Boolean {
         if (version == expectedVersion()) return true
 
         module.log.severe("${file.name}: expected version ${expectedVersion()}, but got $version")
         when {
             version == 0L -> {
-                module.log.severe("Something went wrong while generating or loading the configuration.")
-                module.log.severe("If you are sure your configuration is correct and this isn't a file")
-                module.log.severe("system permission issue, please report this to https://github.com/oddlama/vane/issues")
+                module.log.severe(
+                    "Something went wrong while generating or loading the configuration."
+                )
+                module.log.severe(
+                    "If you are sure your configuration is correct and this isn't a file"
+                )
+                module.log.severe(
+                    "system permission issue, please report this to https://github.com/oddlama/vane/issues"
+                )
             }
 
             version < expectedVersion() -> {
                 module.log.severe("This config is for an older version of ${module.name}.")
                 module.log.severe("Please update your configuration. A new default configuration")
                 module.log.severe("has been generated as 'config.yml.new'. Alternatively you can")
-                module.log.severe("delete your configuration to have a new one generated next time.")
+                module.log.severe(
+                    "delete your configuration to have a new one generated next time."
+                )
                 generateFile(File(module.dataFolder, "config.yml.new"), null)
             }
 
@@ -154,9 +184,7 @@ class ConfigManager(var module: Module<*>) {
         return false
     }
 
-    /**
-     * Registers a YAML section description.
-     */
+    /** Registers a YAML section description. */
     fun addSectionDescription(yamlPath: String?, description: String?) {
         sectionDescriptions[yamlPath] = description
     }
@@ -176,13 +204,13 @@ class ConfigManager(var module: Module<*>) {
         configFields.sort()
 
         if (owner === module && fieldVersion == null) {
-            throw RuntimeException("There must be exactly one @ConfigVersion field! (found none). This is a bug.")
+            throw RuntimeException(
+                "There must be exactly one @ConfigVersion field! (found none). This is a bug."
+            )
         }
     }
 
-    /**
-     * Returns indentation spaces for a YAML depth level.
-     */
+    /** Returns indentation spaces for a YAML depth level. */
     private fun indentStr(level: Int): String = "  ".repeat(level)
 
     /**
@@ -217,7 +245,12 @@ class ConfigManager(var module: Module<*>) {
                     sectionPath = Context.appendYamlPath(sectionPath!!, f.components()[i], ".")
 
                     sectionDescriptions[sectionPath]?.let { sectionDesc ->
-                        val wrapped = TextUtil.wordWrap(sectionDesc, max(60, 80 - indent.length), "\n$indent# ")
+                        val wrapped =
+                            TextUtil.wordWrap(
+                                sectionDesc,
+                                max(60, 80 - indent.length),
+                                "\n$indent# ",
+                            )
                         builder.append("$indent# $wrapped\n")
                     }
 
@@ -231,9 +264,7 @@ class ConfigManager(var module: Module<*>) {
         }
     }
 
-    /**
-     * Returns the module's canonical `config.yml` path.
-     */
+    /** Returns the module's canonical `config.yml` path. */
     fun standardFile(): File = File(module.dataFolder, "config.yml")
 
     /**
@@ -257,13 +288,13 @@ class ConfigManager(var module: Module<*>) {
                 tmpFile.toPath(),
                 file.toPath(),
                 StandardCopyOption.REPLACE_EXISTING,
-                StandardCopyOption.ATOMIC_MOVE
+                StandardCopyOption.ATOMIC_MOVE,
             )
         } catch (e: IOException) {
             module.log.log(
                 Level.SEVERE,
                 "error while atomically replacing '$file' with temporary file (very recent changes might be lost)!",
-                e
+                e,
             )
             return false
         }
@@ -271,8 +302,8 @@ class ConfigManager(var module: Module<*>) {
     }
 
     /**
-     * Converts a config written before v1.22.0 (snake_case keys such as `resource_pack.force`)
-     * to the current paths (`ResourcePack.Force`), after backing up [file]. The caller then
+     * Converts a config written before v1.22.0 (snake_case keys such as `resource_pack.force`) to
+     * the current paths (`ResourcePack.Force`), after backing up [file]. The caller then
      * regenerates the file from the result.
      *
      * @return the converted config, or `null` if the backup could not be written.
@@ -319,13 +350,14 @@ class ConfigManager(var module: Module<*>) {
                 tmpFile.toPath(),
                 standardFile().toPath(),
                 StandardCopyOption.REPLACE_EXISTING,
-                StandardCopyOption.ATOMIC_MOVE
+                StandardCopyOption.ATOMIC_MOVE,
             )
         } catch (e: IOException) {
             module.log.log(
                 Level.SEVERE,
                 "error while atomically replacing '${standardFile()}' with updated version. " +
-                        "Please manually resolve the conflict (new file is named '$tmpFile')", e
+                    "Please manually resolve the conflict (new file is named '$tmpFile')",
+                e,
             )
             return false
         }
@@ -343,9 +375,7 @@ class ConfigManager(var module: Module<*>) {
         return true
     }
 
-    /**
-     * Registers metrics charts for opted-in config fields.
-     */
+    /** Registers metrics charts for opted-in config fields. */
     fun registerMetrics(metrics: Metrics?) {
         configFields.forEach { it.registerMetrics(metrics) }
     }

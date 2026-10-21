@@ -10,9 +10,7 @@ import org.oddlama.vane.core.command.Command
  * @param message localized or formatted error message.
  */
 open class ErrorCheckResult(private val depth: Int, private val message: String) : CheckResult {
-    /**
-     * Rendered chain of argument types matched before this error.
-     */
+    /** Rendered chain of argument types matched before this error. */
     private var argChain = ""
 
     /** Returns the parse depth for this result. */

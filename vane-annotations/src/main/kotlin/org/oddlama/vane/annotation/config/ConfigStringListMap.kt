@@ -12,5 +12,5 @@ package org.oddlama.vane.annotation.config
 annotation class ConfigStringListMap(
     val def: Array<ConfigStringListMapEntry>,
     val desc: String,
-    val metrics: Boolean = false
+    val metrics: Boolean = false,
 )

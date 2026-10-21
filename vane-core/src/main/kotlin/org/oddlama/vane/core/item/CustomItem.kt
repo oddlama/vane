@@ -1,5 +1,6 @@
 package org.oddlama.vane.core.item
 
+import java.util.*
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.Material
@@ -20,7 +21,6 @@ import org.oddlama.vane.core.module.Context
 import org.oddlama.vane.core.module.Module
 import org.oddlama.vane.util.StorageUtil.namespacedKey
 import org.oddlama.vane.util.snakeCaseToPascalCase
-import java.util.*
 
 /**
  * Base implementation for vane custom items.
@@ -30,56 +30,42 @@ import java.util.*
  * @param nameOverride optional runtime name override.
  * @param customModelDataOverride optional runtime custom model data override.
  */
-open class CustomItem<T : Module<T?>?> @JvmOverloads constructor(
+open class CustomItem<T : Module<T?>?>
+@JvmOverloads
+constructor(
     context: Context<T?>,
     nameOverride: String? = null,
-    customModelDataOverride: Int? = null
+    customModelDataOverride: Int? = null,
 ) : Listener<T?>(null), CustomItem {
-    /**
-     * Resolved `@VaneItem` annotation.
-     */
+    /** Resolved `@VaneItem` annotation. */
     private var annotation: VaneItem? = null
 
-    /**
-     * Namespaced key of this custom item.
-     */
+    /** Namespaced key of this custom item. */
     var key: NamespacedKey
 
-    /**
-     * Recipe configuration container for this item.
-     */
+    /** Recipe configuration container for this item. */
     var recipes: Recipes<T?>?
 
-    /**
-     * Loot table configuration container for this item.
-     */
+    /** Loot table configuration container for this item. */
     var lootTables: LootTables<T?>?
 
-    /**
-     * Localized item display name.
-     */
-    @LangMessage
-    var langName: TranslatedMessage? = null
+    /** Localized item display name. */
+    @LangMessage var langName: TranslatedMessage? = null
 
-    /**
-     * Configured durability override for this item.
-     */
+    /** Configured durability override for this item. */
     @ConfigInt(
         def = 0,
         min = 0,
-        desc = "The durability of this item. Set to 0 to use the durability properties of whatever base material the item is made of."
+        desc =
+            "The durability of this item. Set to 0 to use the durability properties of whatever base material the item is made of.",
     )
     /** Effective configured durability value. */
     private var configDurability = 0
 
-    /**
-     * Optional runtime item name override.
-     */
+    /** Optional runtime item name override. */
     private val nameOverride: String?
 
-    /**
-     * Optional runtime model data override.
-     */
+    /** Optional runtime model data override. */
     private val customModelDataOverride: Int?
 
     init {
@@ -104,76 +90,50 @@ open class CustomItem<T : Module<T?>?> @JvmOverloads constructor(
         module!!.core?.itemRegistry()?.register(this)
     }
 
-    /**
-     * Returns the item key.
-     */
+    /** Returns the item key. */
     override fun key(): NamespacedKey = key
 
-    /**
-     * Returns the configured item name.
-     */
+    /** Returns the configured item name. */
     fun name(): String = nameOverride ?: annotation!!.name
 
-    /**
-     * Returns whether this item is enabled.
-     */
+    /** Returns whether this item is enabled. */
     override fun enabled(): Boolean {
         return annotation!!.enabled && super.enabled()
     }
 
-    /**
-     * Returns the item definition version.
-     */
+    /** Returns the item definition version. */
     override fun version(): Int = annotation!!.version
 
-    /**
-     * Returns the base material for newly created stacks.
-     */
+    /** Returns the base material for newly created stacks. */
     override fun baseMaterial(): Material = annotation!!.base
 
-    /**
-     * Returns the custom model data id.
-     */
+    /** Returns the custom model data id. */
     override fun customModelData(): Int = customModelDataOverride ?: annotation!!.modelData
 
-    /**
-     * Returns the translated display name component.
-     */
+    /** Returns the translated display name component. */
     override fun displayName(): Component? =
         langName!!.format().decoration(TextDecoration.ITALIC, false)
 
-    /**
-     * Returns the default durability used by config override hooks.
-     */
+    /** Returns the default durability used by config override hooks. */
     fun configDurabilityDef(): Int = annotation!!.durability
 
-    /**
-     * Returns the active durability value.
-     */
+    /** Returns the active durability value. */
     override fun durability(): Int = configDurability
 
-    /**
-     * Applies item-specific stack updates.
-     */
+    /** Applies item-specific stack updates. */
     override fun updateItemStack(itemStack: ItemStack): ItemStack = itemStack
 
-    /**
-     * Returns behaviors that should be inhibited for this item.
-     */
+    /** Returns behaviors that should be inhibited for this item. */
     override fun inhibitedBehaviors(): EnumSet<InhibitBehavior> {
         return EnumSet.of(InhibitBehavior.USE_IN_VANILLA_RECIPE)
     }
 
-    /**
-     * Returns default recipe definitions.
-     */
+    /** Returns default recipe definitions. */
     open fun defaultRecipes(): RecipeList? {
         return RecipeList.of()
     }
 
-    /**
-     * Returns default loot table definitions.
-     */
+    /** Returns default loot table definitions. */
     open fun defaultLootTables(): LootTableList? {
         return LootTableList.of()
     }

@@ -3,9 +3,7 @@ package org.oddlama.vane.proxycore
 import java.net.SocketAddress
 import java.util.*
 
-/**
- * Represents a login connection before the player is fully connected.
- */
+/** Represents a login connection before the player is fully connected. */
 interface ProxyPendingConnection {
     /** Name provided during login. */
     val name: String?
@@ -35,10 +33,11 @@ interface ProxyPendingConnection {
      * @param serverName managed server identifier.
      * @return `true` when startup is permitted.
      */
-    fun canStartServer(server: ProxyServer?, serverName: String?): Boolean = hasPermission(
-        server,
-        "vane_proxy.start_server",
-        "vane_proxy.start_server.*",
-        "vane_proxy.start_server.$serverName"
-    )
+    fun canStartServer(server: ProxyServer?, serverName: String?): Boolean =
+        hasPermission(
+            server,
+            "vane_proxy.start_server",
+            "vane_proxy.start_server.*",
+            "vane_proxy.start_server.$serverName",
+        )
 }

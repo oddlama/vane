@@ -1,5 +1,6 @@
 package org.oddlama.vane.core.misc
 
+import java.util.*
 import org.bukkit.block.Block
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
@@ -11,7 +12,6 @@ import org.oddlama.vane.core.Core
 import org.oddlama.vane.core.Listener
 import org.oddlama.vane.core.lang.TranslatedMessage
 import org.oddlama.vane.core.module.Context
-import java.util.*
 
 /**
  * Adds a two-step confirmation window before breaking loot-table blocks.
@@ -25,14 +25,14 @@ class LootChestProtector(context: Context<Core?>?) : Listener<Core?>(context) {
     /** Whether loot-table block break confirmation is enabled. */
     @ConfigBoolean(
         def = true,
-        desc = "Prevent players from breaking blocks with loot-tables (like treasure chests) when they first attempt to destroy it. They still can break it, but must do so within a short timeframe."
+        desc =
+            "Prevent players from breaking blocks with loot-tables (like treasure chests) when they first attempt to destroy it. They still can break it, but must do so within a short timeframe.",
     )
-            /** Whether loot-table block break protection warning is enabled. */
+    /** Whether loot-table block break protection warning is enabled. */
     var configWarnBreakingLootBlocks: Boolean = false
 
     /** Message sent when initial break attempt is blocked. */
-    @LangMessage
-    var langBreakLootBlockPrevented: TranslatedMessage? = null
+    @LangMessage var langBreakLootBlockPrevented: TranslatedMessage? = null
 
     /** Handles loot-table block break confirmation timing logic. */
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)

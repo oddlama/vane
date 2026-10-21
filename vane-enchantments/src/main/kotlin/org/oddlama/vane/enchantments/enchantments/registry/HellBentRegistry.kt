@@ -9,11 +9,12 @@ import org.oddlama.vane.enchantments.CustomEnchantmentRegistry
 /**
  * Registry for the Hell Bent enchantment, which is applicable to head armor.
  *
- * @constructor Creates a new HellBentRegistry instance.
  * @param composeEvent The registry compose event to register the enchantment.
+ * @constructor Creates a new HellBentRegistry instance.
  */
-class HellBentRegistry(composeEvent: RegistryComposeEvent<Enchantment, EnchantmentRegistryEntry.Builder>) :
-    CustomEnchantmentRegistry("hell_bent", ItemTypeTagKeys.ENCHANTABLE_HEAD_ARMOR, 1) {
+class HellBentRegistry(
+    composeEvent: RegistryComposeEvent<Enchantment, EnchantmentRegistryEntry.Builder>
+) : CustomEnchantmentRegistry("hell_bent", ItemTypeTagKeys.ENCHANTABLE_HEAD_ARMOR, 1) {
     init {
         register(composeEvent)
     }

@@ -25,14 +25,16 @@ class ProxyPingListener(private val velocity: Velocity) {
 
         val virtualHost = event.connection.virtualHost.orElse(null)
 
-        val server = if (virtualHost != null) {
-            getServerForHost(proxy, virtualHost)
-        } else {
-            val defaultTarget = proxy.configuration.attemptConnectionOrder.firstOrNull() ?: return
-            proxy.getServer(defaultTarget).orElseThrow {
-                IllegalStateException("No registered server found for default '$defaultTarget'")
+        val server =
+            if (virtualHost != null) {
+                getServerForHost(proxy, virtualHost)
+            } else {
+                val defaultTarget =
+                    proxy.configuration.attemptConnectionOrder.firstOrNull() ?: return
+                proxy.getServer(defaultTarget).orElseThrow {
+                    IllegalStateException("No registered server found for default '$defaultTarget'")
+                }
             }
-        }
 
         val serverInfo = VelocityCompatServerInfo(server)
         val proxyEvent: PingEvent = VelocityCompatPingEvent(velocity, event, serverInfo)

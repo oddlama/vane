@@ -16,5 +16,5 @@ annotation class ConfigIntList(
     val min: Int = Int.MIN_VALUE,
     val max: Int = Int.MAX_VALUE,
     val desc: String,
-    val metrics: Boolean = true
+    val metrics: Boolean = true,
 )

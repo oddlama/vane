@@ -13,7 +13,8 @@ import org.bukkit.persistence.PersistentDataType
 class CooldownData(private val key: NamespacedKey, private val cooldownTime: Long) {
     /** Returns elapsed milliseconds since last recorded usage. */
     private fun PersistentDataHolder.elapsedSinceLast(): Long =
-        System.currentTimeMillis() - persistentDataContainer.getOrDefault(key, PersistentDataType.LONG, 0L)
+        System.currentTimeMillis() -
+            persistentDataContainer.getOrDefault(key, PersistentDataType.LONG, 0L)
 
     /**
      * Updates the cooldown data if and only if the cooldown has been exceeded.
@@ -26,10 +27,9 @@ class CooldownData(private val key: NamespacedKey, private val cooldownTime: Lon
         return true
     }
 
-    /**
-     * @return the status of the cooldown without updating.
-     */
-    fun peekCooldown(holder: PersistentDataHolder): Boolean = holder.elapsedSinceLast() >= cooldownTime
+    /** @return the status of the cooldown without updating. */
+    fun peekCooldown(holder: PersistentDataHolder): Boolean =
+        holder.elapsedSinceLast() >= cooldownTime
 
     /** Clears stored cooldown timestamp. */
     fun clear(holder: PersistentDataHolder) = holder.persistentDataContainer.remove(key)

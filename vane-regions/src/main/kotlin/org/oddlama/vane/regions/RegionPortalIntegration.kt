@@ -7,9 +7,7 @@ import org.oddlama.vane.portals.portal.Portal
 import org.oddlama.vane.regions.event.RegionPortalRoleSettingEnforcer
 import org.oddlama.vane.regions.region.RoleSetting
 
-/**
- * Wires regions permissions into vane-portals callbacks.
- */
+/** Wires regions permissions into vane-portals callbacks. */
 class RegionPortalIntegration(context: Regions, portalsPlugin: Plugin?) {
     /** Registers portal-region callbacks and portal-related setting enforcers. */
     init {
@@ -36,7 +34,9 @@ class RegionPortalIntegration(context: Regions, portalsPlugin: Plugin?) {
                 regA.regionGroupId() == regB.regionGroupId()
             }
 
-            portalsPlugin.setPlayerCanUsePortalsInRegionGroupOfCallback { player: Player?, portal: Portal? ->
+            portalsPlugin.setPlayerCanUsePortalsInRegionGroupOfCallback {
+                player: Player?,
+                portal: Portal? ->
                 /** Player attempting to use the portal. */
                 val user = player ?: return@setPlayerCanUsePortalsInRegionGroupOfCallback false
 
@@ -44,11 +44,15 @@ class RegionPortalIntegration(context: Regions, portalsPlugin: Plugin?) {
                 val portalRef = portal ?: return@setPlayerCanUsePortalsInRegionGroupOfCallback false
 
                 /** Region containing the portal destination, if one exists. */
-                val region = context.regionAt(portalRef.spawn()) ?: // No region -> no restriction.
-                return@setPlayerCanUsePortalsInRegionGroupOfCallback true
+                val region =
+                    context.regionAt(portalRef.spawn())
+                        ?: // No region -> no restriction.
+                        return@setPlayerCanUsePortalsInRegionGroupOfCallback true
 
                 /** Region group owning the portal region. */
-                val group = region.regionGroup(context) ?: return@setPlayerCanUsePortalsInRegionGroupOfCallback true
+                val group =
+                    region.regionGroup(context)
+                        ?: return@setPlayerCanUsePortalsInRegionGroupOfCallback true
                 group.getRole(user.uniqueId)?.getSetting(RoleSetting.PORTAL) ?: true
             }
         }

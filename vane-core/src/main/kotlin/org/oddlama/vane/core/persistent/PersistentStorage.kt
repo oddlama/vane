@@ -9,10 +9,10 @@ import java.nio.file.Path
 import java.nio.file.StandardCopyOption
 import java.util.function.Consumer
 import java.util.logging.Level
+import java.util.logging.Logger
 import org.json.JSONException
 import org.json.JSONObject
 import org.oddlama.vane.annotation.persistent.Persistent
-import java.util.logging.Logger
 import org.oddlama.vane.core.persistent.PersistentStorageManager.Migration
 import org.oddlama.vane.util.LegacyKeys
 import org.oddlama.vane.util.ReflectionUtil
@@ -26,10 +26,16 @@ internal class PersistentStorage(
     private val versionPath: () -> String?,
     private val logger: () -> Logger,
     private val replaceFile: (Path, Path) -> Unit = { source, target ->
-        Files.move(source, target, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE)
+        Files.move(
+            source,
+            target,
+            StandardCopyOption.REPLACE_EXISTING,
+            StandardCopyOption.ATOMIC_MOVE,
+        )
     },
 ) {
-    private val log: Logger get() = logger()
+    private val log: Logger
+        get() = logger()
 
     /** Compiled persistent fields discovered through reflection. */
     private val persistentFields: MutableList<PersistentField> = mutableListOf()
@@ -45,7 +51,9 @@ internal class PersistentStorage(
     /** Returns whether a field has a persistent annotation. */
     private fun hasPersistentAnnotation(field: Field): Boolean =
         field.annotations.any {
-            it.annotationClass.java.name.startsWith("org.oddlama.vane.annotation.persistent.Persistent")
+            it.annotationClass.java.name.startsWith(
+                "org.oddlama.vane.annotation.persistent.Persistent"
+            )
         }
 
     /** Verifies that persistent fields use the required `storage` prefix. */
@@ -55,17 +63,33 @@ internal class PersistentStorage(
     }
 
     /** Compiles a reflected field into a [PersistentField] handler. */
-    private fun compileField(owner: Any?, field: Field, mapName: (String?) -> String?): PersistentField {
+    private fun compileField(
+        owner: Any?,
+        field: Field,
+        mapName: (String?) -> String?,
+    ): PersistentField {
         assertFieldPrefix(field)
 
-        val annotation = field.annotations
-            .filter { it.annotationClass.java.name.startsWith("org.oddlama.vane.annotation.persistent.Persistent") }
-            .also { require(it.size <= 1) { "Persistent fields must have exactly one @Persistent annotation." } }
-            .firstOrNull() ?: error("No @Persistent annotation found on field ${field.name}")
+        val annotation =
+            field.annotations
+                .filter {
+                    it.annotationClass.java.name.startsWith(
+                        "org.oddlama.vane.annotation.persistent.Persistent"
+                    )
+                }
+                .also {
+                    require(it.size <= 1) {
+                        "Persistent fields must have exactly one @Persistent annotation."
+                    }
+                }
+                .firstOrNull() ?: error("No @Persistent annotation found on field ${field.name}")
 
         return when (val atype = annotation.annotationClass.java) {
             Persistent::class.java -> PersistentField(owner, field, mapName)
-            else -> throw RuntimeException("Missing PersistentField handler for @${atype.name}. This is a bug.")
+            else ->
+                throw RuntimeException(
+                    "Missing PersistentField handler for @${atype.name}. This is a bug."
+                )
         }
     }
 
@@ -95,29 +119,35 @@ internal class PersistentStorage(
             return false
         }
 
-        val json: JSONObject = if (file.exists()) {
-            try {
-                JSONObject(Files.readString(file.toPath(), StandardCharsets.UTF_8))
-            } catch (e: IOException) {
-                log.log(Level.SEVERE, "error while loading persistent data from '${file.name}'", e)
-                return false
-            } catch (e: JSONException) {
-                log.log(Level.SEVERE, "persistent data in '${file.name}' is not valid JSON", e)
-                return false
+        val json: JSONObject =
+            if (file.exists()) {
+                try {
+                    JSONObject(Files.readString(file.toPath(), StandardCharsets.UTF_8))
+                } catch (e: IOException) {
+                    log.log(
+                        Level.SEVERE,
+                        "error while loading persistent data from '${file.name}'",
+                        e,
+                    )
+                    return false
+                } catch (e: JSONException) {
+                    log.log(Level.SEVERE, "persistent data in '${file.name}' is not valid JSON", e)
+                    return false
+                }
+            } else {
+                JSONObject()
             }
-        } else {
-            JSONObject()
-        }
 
         val versionPath = requireNotNull(versionPath())
         val neededVersion = currentVersion()
         // Inspect every spelling before backups, alias migration, migrations or field assignment.
-        val version = try {
-            checkedVersion(json, versionPath, neededVersion)
-        } catch (e: IOException) {
-            log.log(Level.SEVERE, "Refusing persistent storage '${file.name}': ${e.message}", e)
-            return false
-        }
+        val version =
+            try {
+                checkedVersion(json, versionPath, neededVersion)
+            } catch (e: IOException) {
+                log.log(Level.SEVERE, "Refusing persistent storage '${file.name}': ${e.message}", e)
+                return false
+            }
         if (!json.has(versionPath) && !migrateLegacyKeys(file, json, versionPath)) return false
         try {
             if (version != neededVersion && migrations.isNotEmpty()) {
@@ -151,15 +181,22 @@ internal class PersistentStorage(
     }
 
     private fun checkedVersion(json: JSONObject, path: String, supported: Long): Long {
-        val versions = json.keySet().filter { LegacyKeys.matches(it, path) }.map { key ->
-            val version = json.get(key).toString().toLongOrNull()
-                ?: throw IOException("Invalid storage version in '$key'")
-            if (version < 0) throw IOException("Negative storage version in '$key'")
-            if (version > supported) {
-                throw IOException("Storage version $version is newer than supported version $supported")
-            }
-            version
-        }
+        val versions =
+            json
+                .keySet()
+                .filter { LegacyKeys.matches(it, path) }
+                .map { key ->
+                    val version =
+                        json.get(key).toString().toLongOrNull()
+                            ?: throw IOException("Invalid storage version in '$key'")
+                    if (version < 0) throw IOException("Negative storage version in '$key'")
+                    if (version > supported) {
+                        throw IOException(
+                            "Storage version $version is newer than supported version $supported"
+                        )
+                    }
+                    version
+                }
         if (versions.distinct().size > 1) throw IOException("Conflicting storage version aliases")
         return versions.firstOrNull() ?: 0L
     }
@@ -173,9 +210,12 @@ internal class PersistentStorage(
      */
     private fun migrateLegacyKeys(file: File, json: JSONObject, versionPath: String?): Boolean {
         val paths = listOfNotNull(versionPath) + persistentFields.mapNotNull { it.path() }
-        val renames = paths
-            .filter { !json.has(it) }
-            .mapNotNull { path -> LegacyKeys.findLegacyKey(json.keySet(), path)?.let { it to path } }
+        val renames =
+            paths
+                .filter { !json.has(it) }
+                .mapNotNull { path ->
+                    LegacyKeys.findLegacyKey(json.keySet(), path)?.let { it to path }
+                }
         if (renames.isEmpty()) return true
 
         try {
@@ -202,11 +242,16 @@ internal class PersistentStorage(
         val versionPath = requireNotNull(versionPath())
         json.put(versionPath, currentVersion().toString())
 
-        // Skip the whole save if any field fails: writing the rest would drop that field's data from disk.
+        // Skip the whole save if any field fails: writing the rest would drop that field's data
+        // from disk.
         try {
             persistentFields.forEach { it.save(json) }
         } catch (e: Exception) {
-            log.log(Level.SEVERE, "error while serializing persistent data, keeping the previous '${file.name}'", e)
+            log.log(
+                Level.SEVERE,
+                "error while serializing persistent data, keeping the previous '${file.name}'",
+                e,
+            )
             return false
         }
 
@@ -224,7 +269,8 @@ internal class PersistentStorage(
         } catch (e: IOException) {
             log.log(
                 Level.SEVERE,
-                "error while atomically replacing '$file' with temporary file (very recent changes might be lost)!", e
+                "error while atomically replacing '$file' with temporary file (very recent changes might be lost)!",
+                e,
             )
             false
         }

@@ -5,6 +5,7 @@ module = "vane-core"
 ```
 
 ---
+
 Several core commands are available to ops and players in the `admin` permission group.
 
 `/customitem`: Allows you to create custom items, as they require special NBT tags and are therefore a hassle to get

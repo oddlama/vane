@@ -16,5 +16,5 @@ annotation class VaneModule(
     val bstats: Int = -1,
     val configVersion: Long,
     val langVersion: Long,
-    val storageVersion: Long
+    val storageVersion: Long,
 )

@@ -1,5 +1,7 @@
 package org.oddlama.vane.admin
 
+import kotlin.math.exp
+import kotlin.math.max
 import org.bukkit.Material
 import org.bukkit.SoundCategory
 import org.bukkit.block.Block
@@ -12,43 +14,44 @@ import org.oddlama.vane.core.Listener
 import org.oddlama.vane.core.module.Context
 import org.oddlama.vane.util.Nms
 import org.oddlama.vane.util.msToTicks
-import kotlin.math.exp
-import kotlin.math.max
 
-/**
- * Rebuilds exploded blocks over time instead of fully cancelling explosions.
- */
-class WorldRebuild(context: Context<Admin?>) : Listener<Admin?>(
-    context.group(
-        "WorldRebuild",
-        "Instead of cancelling explosions, the world will regenerate after a short amount of time."
-    )
-) {
+/** Rebuilds exploded blocks over time instead of fully cancelling explosions. */
+class WorldRebuild(context: Context<Admin?>) :
+    Listener<Admin?>(
+        context.group(
+            "WorldRebuild",
+            "Instead of cancelling explosions, the world will regenerate after a short amount of time.",
+        )
+    ) {
     private val admin: Admin
         get() = requireNotNull(module)
 
-    @ConfigLong(def = 2000, min = 0, desc = "Delay in milliseconds until the world will be rebuilt.")
+    @ConfigLong(
+        def = 2000,
+        min = 0,
+        desc = "Delay in milliseconds until the world will be rebuilt.",
+    )
     private val configDelay: Long = 0
 
     @ConfigDouble(
         def = 0.175,
         min = 0.0,
-        desc = "Determines rebuild speed. Higher falloff means faster transition to quicker rebuild. After n blocks, the delay until the next block will be d_n = delay * exp(-x * delay_falloff). For example 0.0 will result in same delay for every block."
+        desc =
+            "Determines rebuild speed. Higher falloff means faster transition to quicker rebuild. After n blocks, the delay until the next block will be d_n = delay * exp(-x * delay_falloff). For example 0.0 will result in same delay for every block.",
     )
     private val configDelayFalloff = 0.0
 
     @ConfigLong(
         def = 50,
         min = 50,
-        desc = "Minimum delay in milliseconds between rebuilding two blocks. Anything <= 50 milliseconds will be one tick."
+        desc =
+            "Minimum delay in milliseconds between rebuilding two blocks. Anything <= 50 milliseconds will be one tick.",
     )
     private val configMinDelay: Long = 0
 
     private val rebuilders = mutableListOf<Rebuilder>()
 
-    /**
-     * Replaces exploded blocks with air and schedules asynchronous rebuild.
-     */
+    /** Replaces exploded blocks with air and schedules asynchronous rebuild. */
     fun rebuild(blocks: MutableList<Block>) {
         val states = blocks.mapTo(mutableListOf()) { it.state }
 
@@ -67,9 +70,7 @@ class WorldRebuild(context: Context<Admin?>) : Listener<Admin?>(
         rebuilders.clear()
     }
 
-    /**
-     * Rebuild task that restores captured block states one by one.
-     */
+    /** Rebuild task that restores captured block states one by one. */
     inner class Rebuilder(private var states: MutableList<BlockState>) : Runnable {
         private var task: BukkitTask? = null
         private var amountRebuild: Long = 0
@@ -114,15 +115,13 @@ class WorldRebuild(context: Context<Admin?>) : Listener<Admin?>(
             state.update(true, false)
             state.update(true, false)
 
-            block
-                .world
-                .playSound(
-                    block.location,
-                    block.blockSoundGroup.placeSound,
-                    SoundCategory.BLOCKS,
-                    1.0f,
-                    0.8f
-                )
+            block.world.playSound(
+                block.location,
+                block.blockSoundGroup.placeSound,
+                SoundCategory.BLOCKS,
+                1.0f,
+                0.8f,
+            )
         }
 
         /** Restores all remaining states immediately and completes this rebuilder. */
@@ -143,17 +142,21 @@ class WorldRebuild(context: Context<Admin?>) : Listener<Admin?>(
             } else {
                 rebuildNextBlock()
 
-                val delay = msToTicks(
-                    max(configMinDelay, (configDelay * exp(-amountRebuild * configDelayFalloff)).toInt().toLong())
-                )
+                val delay =
+                    msToTicks(
+                        max(
+                            configMinDelay,
+                            (configDelay * exp(-amountRebuild * configDelayFalloff))
+                                .toInt()
+                                .toLong(),
+                        )
+                    )
                 task = admin.scheduleTask(this, delay)
             }
         }
     }
 
-    /**
-     * Orders blocks by distance to a top-center reference point.
-     */
+    /** Orders blocks by distance to a top-center reference point. */
     class RebuildComparator(private val referencePoint: Vector) : Comparator<BlockState> {
         /** Compares two block states by squared distance to the reference point. */
         override fun compare(a: BlockState, b: BlockState): Int {

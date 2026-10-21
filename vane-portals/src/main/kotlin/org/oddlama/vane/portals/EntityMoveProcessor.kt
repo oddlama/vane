@@ -1,5 +1,6 @@
 package org.oddlama.vane.portals
 
+import java.util.*
 import org.bukkit.Location
 import org.bukkit.World
 import org.bukkit.entity.Entity
@@ -8,7 +9,6 @@ import org.bukkit.scheduler.BukkitTask
 import org.oddlama.vane.core.module.Context
 import org.oddlama.vane.core.module.ModuleComponent
 import org.oddlama.vane.portals.event.EntityMoveEvent
-import java.util.*
 
 /**
  * Tracks entity movement near active portals and emits [EntityMoveEvent] events.
@@ -59,11 +59,13 @@ class EntityMoveProcessor(context: Context<Portals?>?) : ModuleComponent<Portals
         // Phase 1 - Movement detection
         // --------------------------------------------
 
-        val activePortalWorlds = module.allAvailablePortals()
-            .filterNotNull()
-            .filter(module::isActivated)
-            .mapNotNull { portal -> portal.spawnWorld() }
-            .toHashSet()
+        val activePortalWorlds =
+            module
+                .allAvailablePortals()
+                .filterNotNull()
+                .filter(module::isActivated)
+                .mapNotNull { portal -> portal.spawnWorld() }
+                .toHashSet()
 
         // Store current positions for each entity
         for (worldId in activePortalWorlds) {
@@ -80,18 +82,24 @@ class EntityMoveProcessor(context: Context<Portals?>?) : ModuleComponent<Portals
         // has changed. If so, we add the entity to the processing queue.
         // If the processing queue already contained the entity, we remove it before iterating
         // as there is nothing to do - we simply lose information about the intermediate position.
-        for (eid in (moveEventOldPositions.keys intersect moveEventCurrentPositions.keys) - moveEventProcessingQueue.keys) {
+        for (eid in
+            (moveEventOldPositions.keys intersect moveEventCurrentPositions.keys) -
+                moveEventProcessingQueue.keys) {
             val oldEntityAndLoc = moveEventOldPositions[eid]
             val newEntityAndLoc = moveEventCurrentPositions[eid]
-            if (oldEntityAndLoc == null || newEntityAndLoc == null || !isMovement(
-                    oldEntityAndLoc.second!!,
-                    newEntityAndLoc.second!!
-                )
+            if (
+                oldEntityAndLoc == null ||
+                    newEntityAndLoc == null ||
+                    !isMovement(
+                        oldEntityAndLoc.second!!,
+                        newEntityAndLoc.second!!,
+                    )
             ) {
                 continue
             }
 
-            // oldEntityAndLoc contains nullable entity/location; the processing queue requires a non-null entity
+            // oldEntityAndLoc contains nullable entity/location; the processing queue requires a
+            // non-null entity
             moveEventProcessingQueue[eid] = Pair(oldEntityAndLoc.first!!, oldEntityAndLoc.second)
         }
 
@@ -151,8 +159,11 @@ class EntityMoveProcessor(context: Context<Portals?>?) : ModuleComponent<Portals
         private fun isMovement(l1: Location, l2: Location): Boolean {
             // Different worlds = not a movement event.
             return (l1.world === l2.world &&
-                    (l1.x != l2.x || l1.y != l2.y || l1.z != l2.z || l1.pitch != l2.pitch || l1.yaw != l2.yaw)
-                    )
+                (l1.x != l2.x ||
+                    l1.y != l2.y ||
+                    l1.z != l2.z ||
+                    l1.pitch != l2.pitch ||
+                    l1.yaw != l2.yaw))
         }
     }
 }

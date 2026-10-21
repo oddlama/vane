@@ -1,13 +1,11 @@
 package org.oddlama.vane.core
 
+import java.util.*
 import org.bukkit.NamespacedKey
 import org.bukkit.inventory.ItemStack
 import org.oddlama.vane.core.functional.Consumer2
-import java.util.*
 
-/**
- * Runtime loot table extension container for additional generated drops.
- */
+/** Runtime loot table extension container for additional generated drops. */
 class LootTable {
     /** Additional loot entries grouped by source key. */
     private val possibleLoot = mutableMapOf<NamespacedKey, MutableList<LootTableEntry>>()
@@ -60,26 +58,41 @@ class LootTable {
      * @param chance selection chance.
      * @param generator sample generator callback.
      */
-    class LootTableEntry(val chance: Double, val generator: Consumer2<MutableList<ItemStack?>?, Random?>) {
+    class LootTableEntry(
+        val chance: Double,
+        val generator: Consumer2<MutableList<ItemStack?>?, Random?>,
+    ) {
         /** Creates an entry from expected chest rarity with fixed amount 1. */
-        constructor(rarityExpectedChests: Int, item: ItemStack) :
-                this(1.0 / rarityExpectedChests, item.clone(), 1, 1)
+        constructor(
+            rarityExpectedChests: Int,
+            item: ItemStack,
+        ) : this(1.0 / rarityExpectedChests, item.clone(), 1, 1)
 
         /** Creates an entry from expected chest rarity and amount range. */
-        constructor(rarityExpectedChests: Int, item: ItemStack, amountMin: Int, amountMax: Int) :
-                this(1.0 / rarityExpectedChests, item.clone(), amountMin, amountMax)
+        constructor(
+            rarityExpectedChests: Int,
+            item: ItemStack,
+            amountMin: Int,
+            amountMax: Int,
+        ) : this(1.0 / rarityExpectedChests, item.clone(), amountMin, amountMax)
 
         /** Creates an entry with explicit chance and amount range. */
-        constructor(chance: Double, item: ItemStack, amountMin: Int, amountMax: Int) : this(
+        constructor(
+            chance: Double,
+            item: ItemStack,
+            amountMin: Int,
+            amountMax: Int,
+        ) : this(
             chance,
             Consumer2 { list, random ->
                 val amount = random!!.nextInt(amountMax - amountMin + 1) + amountMin
                 if (amount >= 1) list!!.add(item.clone().also { it.amount = amount })
-            }
+            },
         )
 
         /** Adds a sampled item to the output list. */
-        fun addSample(items: MutableList<ItemStack?>?, random: Random?) = generator.apply(items, random)
+        fun addSample(items: MutableList<ItemStack?>?, random: Random?) =
+            generator.apply(items, random)
 
         /** Evaluates this entry's random chance. */
         fun evaluateChance(random: Random): Boolean = random.nextDouble() < chance

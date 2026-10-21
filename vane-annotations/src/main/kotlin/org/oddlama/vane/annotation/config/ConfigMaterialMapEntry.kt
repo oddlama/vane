@@ -9,7 +9,8 @@ import org.bukkit.Material
  * @property value Material mapped to [key].
  */
 @Retention(AnnotationRetention.RUNTIME)
-// Nested value only: this annotation is written inside [ConfigMaterialMapMapEntry]'s `def`, never on a
+// Nested value only: this annotation is written inside [ConfigMaterialMapMapEntry]'s `def`, never
+// on a
 // field. An empty target list is what says so, and it also keeps `ConfigManager`'s
 // `Config*` field scan from ever picking it up as a config field of its own.
 @Target()

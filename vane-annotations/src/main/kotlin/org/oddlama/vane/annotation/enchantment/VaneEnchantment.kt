@@ -22,5 +22,5 @@ annotation class VaneEnchantment(
     val tradeable: Boolean = false,
     val treasure: Boolean = false,
     val generateInTreasure: Boolean = false,
-    val allowCustom: Boolean = false
+    val allowCustom: Boolean = false,
 )

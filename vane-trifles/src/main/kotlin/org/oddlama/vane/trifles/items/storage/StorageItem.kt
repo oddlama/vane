@@ -19,14 +19,18 @@ import org.oddlama.vane.util.PlayerUtil
  *
  * @param context module context used to register the custom item.
  */
-abstract class StorageItem(context: Context<Trifles?>) : org.oddlama.vane.core.item.CustomItem<Trifles?>(context) {
+abstract class StorageItem(context: Context<Trifles?>) :
+    org.oddlama.vane.core.item.CustomItem<Trifles?>(context) {
 
     /** Initializes item metadata so new storage items start in a closed state. */
     override fun updateItemStack(itemStack: ItemStack): ItemStack {
         // Tag every created storage item as closed by default.
         itemStack.editMeta { meta: ItemMeta ->
-            meta.persistentDataContainer
-                .set(StorageGroup.STORAGE_IS_OPEN, PersistentDataType.BOOLEAN, false)
+            meta.persistentDataContainer.set(
+                StorageGroup.STORAGE_IS_OPEN,
+                PersistentDataType.BOOLEAN,
+                false,
+            )
         }
         return itemStack
     }
@@ -57,8 +61,11 @@ abstract class StorageItem(context: Context<Trifles?>) : org.oddlama.vane.core.i
             if (invItem != null && invItem.hasItemMeta()) {
                 invItem.editMeta { meta: ItemMeta ->
                     if (meta.persistentDataContainer.has(StorageGroup.STORAGE_IS_OPEN)) {
-                        meta.persistentDataContainer
-                            .set(StorageGroup.STORAGE_IS_OPEN, PersistentDataType.BOOLEAN, false)
+                        meta.persistentDataContainer.set(
+                            StorageGroup.STORAGE_IS_OPEN,
+                            PersistentDataType.BOOLEAN,
+                            false,
+                        )
                     }
                 }
             }
@@ -66,8 +73,11 @@ abstract class StorageItem(context: Context<Trifles?>) : org.oddlama.vane.core.i
 
         // Mark the currently opened storage item.
         item.editMeta { meta: ItemMeta ->
-            meta.persistentDataContainer
-                .set(StorageGroup.STORAGE_IS_OPEN, PersistentDataType.BOOLEAN, true)
+            meta.persistentDataContainer.set(
+                StorageGroup.STORAGE_IS_OPEN,
+                PersistentDataType.BOOLEAN,
+                true,
+            )
         }
 
         // Prevent follow-up vanilla interaction processing.

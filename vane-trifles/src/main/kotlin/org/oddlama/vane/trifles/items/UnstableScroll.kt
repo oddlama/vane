@@ -22,15 +22,12 @@ import org.oddlama.vane.util.StorageUtil
     base = Material.WARPED_FUNGUS_ON_A_STICK,
     durability = 25,
     modelData = 0x760001,
-    version = 1
+    version = 1,
 )
-/**
- * Teleports players back to their previous scroll-teleport origin.
- */
+/** Teleports players back to their previous scroll-teleport origin. */
 class UnstableScroll(context: Context<Trifles?>) : Scroll(context, 6000) {
     /** Action-bar message shown when no previous scroll teleport is recorded. */
-    @LangMessage
-    var langTeleportNoPreviousTeleport: TranslatedMessage? = null
+    @LangMessage var langTeleportNoPreviousTeleport: TranslatedMessage? = null
 
     /** Defines the unstable scroll crafting recipe. */
     override fun defaultRecipes(): RecipeList {
@@ -46,13 +43,18 @@ class UnstableScroll(context: Context<Trifles?>) : Scroll(context, 6000) {
     }
 
     /** Returns the previously stored scroll teleport origin. */
-    override fun teleportLocation(scroll: ItemStack?, player: Player?, imminentTeleport: Boolean): Location? {
+    override fun teleportLocation(
+        scroll: ItemStack?,
+        player: Player?,
+        imminentTeleport: Boolean,
+    ): Location? {
         val p = player ?: return null
-        val loc = StorageUtil.storageGetLocation(
-            p.persistentDataContainer,
-            LAST_SCROLL_TELEPORT_LOCATION,
-            null
-        )
+        val loc =
+            StorageUtil.storageGetLocation(
+                p.persistentDataContainer,
+                LAST_SCROLL_TELEPORT_LOCATION,
+                null,
+            )
         if (imminentTeleport && loc == null) {
             langTeleportNoPreviousTeleport?.sendActionBar(p)
         }
@@ -65,15 +67,16 @@ class UnstableScroll(context: Context<Trifles?>) : Scroll(context, 6000) {
         StorageUtil.storageSetLocation(
             event.player.persistentDataContainer,
             LAST_SCROLL_TELEPORT_LOCATION,
-            event.from
+            event.from,
         )
     }
 
     companion object {
         /** Persistent key storing the last scroll teleport origin location. */
-        val LAST_SCROLL_TELEPORT_LOCATION: NamespacedKey = StorageUtil.namespacedKey(
-            "vane",
-            "last_scroll_teleport_location"
-        )
+        val LAST_SCROLL_TELEPORT_LOCATION: NamespacedKey =
+            StorageUtil.namespacedKey(
+                "vane",
+                "last_scroll_teleport_location",
+            )
     }
 }

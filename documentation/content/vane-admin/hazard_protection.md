@@ -5,6 +5,7 @@ module = "vane-admin"
 ```
 
 ---
+
 Vane protects your world against some annoying hazards by default. Disable any of these protections if they don't fit
 your play style.
 

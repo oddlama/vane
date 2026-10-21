@@ -12,8 +12,8 @@ import org.oddlama.vane.util.TextUtil
 /**
  * Handles BlueMap API integration and bedtime marker synchronization.
  *
- * @constructor Creates a BlueMap integration delegate bound to its parent layer.
  * @param parent owning BlueMap layer component.
+ * @constructor Creates a BlueMap integration delegate bound to its parent layer.
  */
 class BedtimeBlueMapLayerDelegate(private val parent: BedtimeBlueMapLayer) {
     /** Whether BlueMap integration is currently active. */
@@ -57,11 +57,12 @@ class BedtimeBlueMapLayerDelegate(private val parent: BedtimeBlueMapLayer) {
     private fun createMarkerSet(api: BlueMapAPI, world: World) {
         if (world.uid in markerSets) return
 
-        val markerSet = MarkerSet.builder()
-            .label(requireNotNull(parent.langLayerLabel).str())
-            .toggleable(true)
-            .defaultHidden(parent.configHideByDefault)
-            .build()
+        val markerSet =
+            MarkerSet.builder()
+                .label(requireNotNull(parent.langLayerLabel).str())
+                .toggleable(true)
+                .defaultHidden(parent.configHideByDefault)
+                .build()
 
         api.getWorld(world).ifPresent { bmWorld: BlueMapWorld ->
             for (map in bmWorld.maps) {
@@ -78,11 +79,12 @@ class BedtimeBlueMapLayerDelegate(private val parent: BedtimeBlueMapLayer) {
         val loc = player.respawnLocation ?: return
         val world = loc.world ?: return
 
-        val marker = HtmlMarker.builder()
-            .position(loc.x, loc.y, loc.z)
-            .label("Bed for ${player.name}")
-            .html(requireNotNull(parent.langMarkerLabel).str(TextUtil.escapeHtml(player.name)))
-            .build()
+        val marker =
+            HtmlMarker.builder()
+                .position(loc.x, loc.y, loc.z)
+                .label("Bed for ${player.name}")
+                .html(requireNotNull(parent.langMarkerLabel).str(TextUtil.escapeHtml(player.name)))
+                .build()
 
         /* Existing markers are overwritten. */
         markerSets[world.uid]?.markers?.set(player.uniqueId.toString(), marker)

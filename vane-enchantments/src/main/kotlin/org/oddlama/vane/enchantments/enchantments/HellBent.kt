@@ -18,14 +18,13 @@ import org.oddlama.vane.core.module.Context
 import org.oddlama.vane.enchantments.Enchantments
 
 /**
- * Prevents damage from the FLY_INTO_WALL cause when a player is gliding with
- * an Elytra and is wearing a helmet enchanted with HellBent. When the
- * conditions are met (player is a gliding player, struck a wall, and the
- * helmet has this enchantment), the damaging event is cancelled so the player
- * does not take collision damage.
+ * Prevents damage from the FLY_INTO_WALL cause when a player is gliding with an Elytra and is
+ * wearing a helmet enchanted with HellBent. When the conditions are met (player is a gliding
+ * player, struck a wall, and the helmet has this enchantment), the damaging event is cancelled so
+ * the player does not take collision damage.
  *
- * @constructor Creates a new instance of the HellBent enchantment.
  * @param context The context for the enchantment.
+ * @constructor Creates a new instance of the HellBent enchantment.
  */
 @VaneEnchantment(name = "hell_bent", rarity = Rarity.COMMON, treasure = true)
 class HellBent(context: Context<Enchantments?>) : CustomEnchantment<Enchantments?>(context) {
@@ -62,10 +61,10 @@ class HellBent(context: Context<Enchantments?>) : CustomEnchantment<Enchantments
     }
 
     /**
-     * Cancels damage events caused by flying into a wall while gliding with
-     * an Elytra when the player is wearing a helmet that has the HellBent
-     * enchantment. Listens for [EntityDamageEvent] and cancels it when the
-     * attack matches [DamageCause.FLY_INTO_WALL] and the helmet enchants are present.
+     * Cancels damage events caused by flying into a wall while gliding with an Elytra when the
+     * player is wearing a helmet that has the HellBent enchantment. Listens for [EntityDamageEvent]
+     * and cancels it when the attack matches [DamageCause.FLY_INTO_WALL] and the helmet enchants
+     * are present.
      *
      * @param event The [EntityDamageEvent] to inspect and possibly cancel.
      */

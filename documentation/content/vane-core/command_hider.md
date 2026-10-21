@@ -5,6 +5,7 @@ module = "vane-core"
 ```
 
 ---
+
 Do you hate it that players can infer the commands and plugins installed on your server? This is possible because they
 get a different error message for unknown commands as opposed to just lacking the required permission.
 

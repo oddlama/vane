@@ -1,11 +1,5 @@
 package org.oddlama.vane.busybar.link
 
-import org.json.JSONArray
-import org.json.JSONObject
-import org.oddlama.vane.proxycore.busybar.BackendLink
-import org.oddlama.vane.proxycore.busybar.BackendLinkHandler
-import org.oddlama.vane.proxycore.busybar.BackendLinkServer
-import org.oddlama.vane.proxycore.log.JavaCompatLogger
 import java.net.InetSocketAddress
 import java.net.ServerSocket
 import java.util.*
@@ -19,6 +13,12 @@ import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
+import org.json.JSONArray
+import org.json.JSONObject
+import org.oddlama.vane.proxycore.busybar.BackendLink
+import org.oddlama.vane.proxycore.busybar.BackendLinkHandler
+import org.oddlama.vane.proxycore.busybar.BackendLinkServer
+import org.oddlama.vane.proxycore.log.JavaCompatLogger
 
 /** Runs the backend's [ProxyLinkClient] against the proxy's [BackendLinkServer]. */
 class ProxyLinkTest {
@@ -32,26 +32,60 @@ class ProxyLinkTest {
     /** What the backend side observed, in order. */
     private val backendSeen = LinkedBlockingQueue<Any>()
 
-    private val proxyHandler = object : BackendLinkHandler {
-        override fun busyPlayers() = listOf(player)
-        override fun playersWithBridges() = listOf(player)
-        override fun onConnect(link: BackendLink) { proxySeen += "connect ${link.server} ${link.capabilities.sorted()}" }
-        override fun onEvent(link: BackendLink, event: BackendLinkHandler.Event) { proxySeen += event }
-        override fun onGrants(link: BackendLink, grants: List<BackendLink.Grants>) { proxySeen.add(grants) }
-        override fun onDisconnect(link: BackendLink, reason: String) { proxySeen += "disconnect $reason" }
-    }
+    private val proxyHandler =
+        object : BackendLinkHandler {
+            override fun busyPlayers() = listOf(player)
 
-    private val backendHandler = object : ProxyLinkClient.Handler {
-        override fun onLinked(busy: Set<UUID>, bridges: Set<UUID>) { backendSeen += "linked $busy $bridges" }
-        override fun onBridge(player: UUID, connected: Boolean) { backendSeen += "bridge $player $connected" }
-        override fun onUnlinked() { backendSeen += "unlinked" }
-        override fun onPresence(player: UUID, busy: Boolean) { backendSeen += "presence $player $busy" }
-        override fun snapshot(player: UUID, reply: (JSONObject?) -> Unit) = reply(JSONObject().put("world", "world").put("ticks", 6000))
-        override fun action(player: UUID, action: String, by: String, reply: (Boolean) -> Unit) {
-            backendSeen += "action $action by $by"
-            reply(action == "autostop.abort")
+            override fun playersWithBridges() = listOf(player)
+
+            override fun onConnect(link: BackendLink) {
+                proxySeen += "connect ${link.server} ${link.capabilities.sorted()}"
+            }
+
+            override fun onEvent(link: BackendLink, event: BackendLinkHandler.Event) {
+                proxySeen += event
+            }
+
+            override fun onGrants(link: BackendLink, grants: List<BackendLink.Grants>) {
+                proxySeen.add(grants)
+            }
+
+            override fun onDisconnect(link: BackendLink, reason: String) {
+                proxySeen += "disconnect $reason"
+            }
         }
-    }
+
+    private val backendHandler =
+        object : ProxyLinkClient.Handler {
+            override fun onLinked(busy: Set<UUID>, bridges: Set<UUID>) {
+                backendSeen += "linked $busy $bridges"
+            }
+
+            override fun onBridge(player: UUID, connected: Boolean) {
+                backendSeen += "bridge $player $connected"
+            }
+
+            override fun onUnlinked() {
+                backendSeen += "unlinked"
+            }
+
+            override fun onPresence(player: UUID, busy: Boolean) {
+                backendSeen += "presence $player $busy"
+            }
+
+            override fun snapshot(player: UUID, reply: (JSONObject?) -> Unit) =
+                reply(JSONObject().put("world", "world").put("ticks", 6000))
+
+            override fun action(
+                player: UUID,
+                action: String,
+                by: String,
+                reply: (Boolean) -> Unit,
+            ) {
+                backendSeen += "action $action by $by"
+                reply(action == "autostop.abort")
+            }
+        }
 
     private val servers = mutableListOf<BackendLinkServer>()
     private val clients = mutableListOf<ProxyLinkClient>()
@@ -72,12 +106,18 @@ class ProxyLinkTest {
 
     private fun backend(port: Int, server: String = "survival", secret: String = this.secret) =
         ProxyLinkClient(
-            InetSocketAddress.createUnresolved("127.0.0.1", port), server, secret, "test", setOf("regions"),
-            backendHandler, log
-        ).also {
-            it.start()
-            clients += it
-        }
+                InetSocketAddress.createUnresolved("127.0.0.1", port),
+                server,
+                secret,
+                "test",
+                setOf("regions"),
+                backendHandler,
+                log,
+            )
+            .also {
+                it.start()
+                clients += it
+            }
 
     private fun LinkedBlockingQueue<Any>.next(): Any? = poll(5, TimeUnit.SECONDS)
 
@@ -95,11 +135,17 @@ class ProxyLinkTest {
     fun `forwards events with their audience and the backend name`() {
         val (_, backend) = linked()
         backend.send(
-            JSONObject().put("t", "event").put("type", "bedtime.enter").put("to", JSONObject().put("scope", "server"))
-                .put("perm", "receive.bedtime").put("data", JSONObject().put("player", "Alex"))
+            JSONObject()
+                .put("t", "event")
+                .put("type", "bedtime.enter")
+                .put("to", JSONObject().put("scope", "server"))
+                .put("perm", "receive.bedtime")
+                .put("data", JSONObject().put("player", "Alex"))
         )
         backend.send(
-            JSONObject().put("t", "event").put("type", "region.enter")
+            JSONObject()
+                .put("t", "event")
+                .put("type", "region.enter")
                 .put("to", JSONObject().put("scope", "player").put("player", player.toString()))
                 .put("data", JSONObject())
         )
@@ -122,16 +168,28 @@ class ProxyLinkTest {
         val (_, backend) = linked()
         val other = UUID.randomUUID()
         backend.send(
-            JSONObject().put("t", "grants").put("player", player.toString()).put("granted", JSONArray(listOf("receive.players")))
+            JSONObject()
+                .put("t", "grants")
+                .put("player", player.toString())
+                .put("granted", JSONArray(listOf("receive.players")))
                 .put("online", true)
         )
         backend.send(
-            JSONObject().put("t", "grants.bulk").put(
-                "grants",
-                JSONArray(listOf(JSONObject().put("player", other.toString()).put("granted", JSONArray())))
-            )
+            JSONObject()
+                .put("t", "grants.bulk")
+                .put(
+                    "grants",
+                    JSONArray(
+                        listOf(
+                            JSONObject().put("player", other.toString()).put("granted", JSONArray())
+                        )
+                    ),
+                )
         )
-        assertEquals(listOf(BackendLink.Grants(player, listOf("receive.players"), true)), proxySeen.next())
+        assertEquals(
+            listOf(BackendLink.Grants(player, listOf("receive.players"), true)),
+            proxySeen.next(),
+        )
         assertEquals(listOf(BackendLink.Grants(other, emptyList(), false)), proxySeen.next())
     }
 
@@ -143,7 +201,9 @@ class ProxyLinkTest {
         val snapshot = link.requestSnapshot(player).get(5, TimeUnit.SECONDS)
         assertEquals(6000, snapshot.getInt("ticks"))
 
-        assertTrue(link.invokeAction(player, "autostop.abort", "busybar:Alex").get(5, TimeUnit.SECONDS))
+        assertTrue(
+            link.invokeAction(player, "autostop.abort", "busybar:Alex").get(5, TimeUnit.SECONDS)
+        )
         assertEquals("action autostop.abort by busybar:Alex", backendSeen.next())
         assertFalse(link.invokeAction(player, "unknown", "x").get(5, TimeUnit.SECONDS))
         backendSeen.next()
@@ -207,8 +267,14 @@ class ProxyLinkTest {
 
         val second = backend(port)
         // The old link's reader reports its end on its own thread, so the order varies.
-        assertEquals(setOf("connect survival [regions]", "disconnect replaced"), setOf(proxySeen.next(), proxySeen.next()))
-        assertEquals(setOf("linked [$player] [$player]", "unlinked"), setOf(backendSeen.next(), backendSeen.next()))
+        assertEquals(
+            setOf("connect survival [regions]", "disconnect replaced"),
+            setOf(proxySeen.next(), proxySeen.next()),
+        )
+        assertEquals(
+            setOf("linked [$player] [$player]", "unlinked"),
+            setOf(backendSeen.next(), backendSeen.next()),
+        )
         assertTrue(second.linked)
         assertNotNull(proxy.link("survival"))
         // Otherwise the first one reconnects and replaces the second in turn.

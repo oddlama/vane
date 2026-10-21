@@ -16,5 +16,5 @@ annotation class ConfigLong(
     val min: Long = Long.MIN_VALUE,
     val max: Long = Long.MAX_VALUE,
     val desc: String,
-    val metrics: Boolean = true
+    val metrics: Boolean = true,
 )

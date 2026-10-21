@@ -1,5 +1,6 @@
 package org.oddlama.vane.trifles.items
 
+import java.util.*
 import org.bukkit.Material
 import org.bukkit.attribute.Attribute
 import org.bukkit.attribute.AttributeModifier
@@ -14,12 +15,15 @@ import org.oddlama.vane.core.item.CustomItem
 import org.oddlama.vane.core.item.api.InhibitBehavior
 import org.oddlama.vane.core.module.Context
 import org.oddlama.vane.trifles.Trifles
-import java.util.*
 
-@VaneItem(name = "reinforced_elytra", base = Material.ELYTRA, durability = 864, modelData = 0x760002, version = 1)
-/**
- * Elytra upgrade that adds configurable armor points.
- */
+@VaneItem(
+    name = "reinforced_elytra",
+    base = Material.ELYTRA,
+    durability = 864,
+    modelData = 0x760002,
+    version = 1,
+)
+/** Elytra upgrade that adds configurable armor points. */
 class ReinforcedElytra(context: Context<Trifles?>) : CustomItem<Trifles?>(context) {
     /** Extra armor points applied while the item is worn in chest slot. */
     @ConfigDouble(def = 6.0, min = 0.0, desc = "Amount of defense points.")
@@ -39,12 +43,13 @@ class ReinforcedElytra(context: Context<Trifles?>) : CustomItem<Trifles?>(contex
     /** Applies armor attribute modifiers to the item stack metadata. */
     override fun updateItemStack(itemStack: ItemStack): ItemStack {
         itemStack.editMeta { meta: ItemMeta ->
-            val modifierDefense = AttributeModifier(
-                namespacedKey("armor"),
-                configDefensePoints,
-                AttributeModifier.Operation.ADD_NUMBER,
-                EquipmentSlotGroup.CHEST
-            )
+            val modifierDefense =
+                AttributeModifier(
+                    namespacedKey("armor"),
+                    configDefensePoints,
+                    AttributeModifier.Operation.ADD_NUMBER,
+                    EquipmentSlotGroup.CHEST,
+                )
             meta.removeAttributeModifier(Attribute.ARMOR, modifierDefense)
             meta.addAttributeModifier(Attribute.ARMOR, modifierDefense)
         }

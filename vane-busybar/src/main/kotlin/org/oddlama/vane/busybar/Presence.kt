@@ -1,5 +1,6 @@
 package org.oddlama.vane.busybar
 
+import java.util.*
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
@@ -11,13 +12,12 @@ import org.oddlama.vane.annotation.persistent.Persistent
 import org.oddlama.vane.core.Listener
 import org.oddlama.vane.core.lang.TranslatedMessage
 import org.oddlama.vane.core.module.Context
-import java.util.*
 
 /**
  * Tracks which players have their BUSY Bar in focus mode and tags them in the tab list.
  *
- * The state survives restarts and players going offline, so a bar left in focus mode keeps its
- * tag when its owner rejoins.
+ * The state survives restarts and players going offline, so a bar left in focus mode keeps its tag
+ * when its owner rejoins.
  *
  * @param context owning context.
  */
@@ -26,12 +26,10 @@ class Presence(context: Context<BusyBar?>) : Listener<BusyBar?>(context) {
         get() = requireNotNull(module)
 
     /** Appended to the tab list name of busy players. */
-    @LangMessage
-    var langTabTag: TranslatedMessage? = null
+    @LangMessage var langTabTag: TranslatedMessage? = null
 
     /** Players whose bar is in focus mode. */
-    @Persistent
-    var storageBusy: MutableSet<UUID?> = mutableSetOf()
+    @Persistent var storageBusy: MutableSet<UUID?> = mutableSetOf()
 
     /** Players in focus mode, online or not. */
     fun busyPlayers(): List<UUID> = storageBusy.filterNotNull()
@@ -55,8 +53,8 @@ class Presence(context: Context<BusyBar?>) : Listener<BusyBar?>(context) {
     }
 
     /**
-     * Drops the tag before anything builds a leave message: vane-admin's quit and kick messages
-     * use the tab list name. Focus mode stays stored, so the tag returns on the next join.
+     * Drops the tag before anything builds a leave message: vane-admin's quit and kick messages use
+     * the tab list name. Focus mode stays stored, so the tag returns on the next join.
      */
     @EventHandler(priority = EventPriority.LOWEST)
     fun onPlayerQuit(event: PlayerQuitEvent) {
@@ -65,6 +63,9 @@ class Presence(context: Context<BusyBar?>) : Listener<BusyBar?>(context) {
 
     /** Sets or clears the tab list tag of [player]. */
     private fun applyTag(player: Player) {
-        player.playerListName(if (isBusy(player.uniqueId)) player.displayName().append(langTabTag!!.format()) else null)
+        player.playerListName(
+            if (isBusy(player.uniqueId)) player.displayName().append(langTabTag!!.format())
+            else null
+        )
     }
 }

@@ -5,6 +5,7 @@ import com.mojang.brigadier.StringReader
 import com.mojang.brigadier.exceptions.CommandSyntaxException
 import io.papermc.paper.registry.RegistryAccess
 import io.papermc.paper.registry.RegistryKey
+import java.util.*
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.TextComponent
 import net.kyori.adventure.text.event.HoverEvent
@@ -30,11 +31,8 @@ import org.oddlama.vane.util.Nms.creativeTabId
 import org.oddlama.vane.util.Nms.itemHandle
 import org.oddlama.vane.util.Nms.playerHandle
 import org.oddlama.vane.util.Nms.worldHandle
-import java.util.*
 
-/**
- * Utility helpers for item creation, naming, parsing, and comparison.
- */
+/** Utility helpers for item creation, naming, parsing, and comparison. */
 object ItemUtil {
     /** Stable synthetic owner UUID used for generated skull textures. */
     private val SKULL_OWNER: UUID = UUID.fromString("00000000-0000-0000-0000-000000000000")
@@ -81,11 +79,13 @@ object ItemUtil {
     fun nameItem(
         item: ItemStack,
         name: Component,
-        lore: MutableList<Component?>? = null as MutableList<Component?>?
+        lore: MutableList<Component?>? = null as MutableList<Component?>?,
     ): ItemStack {
         var name = name
-        val meta = item.itemMeta ?: // Cannot name item without meta (probably air)
-        return item
+        val meta =
+            item.itemMeta
+                ?: // Cannot name item without meta (probably air)
+                return item
 
         name = name.decoration(TextDecoration.ITALIC, false)
         meta.displayName(name)
@@ -162,7 +162,9 @@ object ItemUtil {
         return 0
     }
 
-    /** Creates a player-head stack for an offline player, optionally skipping menu-head rendering. */
+    /**
+     * Creates a player-head stack for an offline player, optionally skipping menu-head rendering.
+     */
     @JvmStatic
     fun skullForPlayer(player: OfflinePlayer?, isForMenu: Boolean): ItemStack {
         val item = ItemStack(Material.PLAYER_HEAD)
@@ -179,9 +181,10 @@ object ItemUtil {
 
         val item = ItemStack(Material.PLAYER_HEAD)
         val meta = item.itemMeta as SkullMeta
-        val nameComponent = Component.text(name)
-            .decoration(TextDecoration.ITALIC, false)
-            .color(NamedTextColor.YELLOW)
+        val nameComponent =
+            Component.text(name)
+                .decoration(TextDecoration.ITALIC, false)
+                .color(NamedTextColor.YELLOW)
         meta.displayName(nameComponent)
         meta.playerProfile = profile
         item.itemMeta = meta
@@ -198,7 +201,9 @@ object ItemUtil {
         val hover = component.hoverEvent() ?: return false
 
         val hoverText = hover.value()
-        return hoverText is TextComponent && hover.action() == HoverEvent.Action.SHOW_TEXT && sentinel.toString() == hoverText.content()
+        return hoverText is TextComponent &&
+            hover.action() == HoverEvent.Action.SHOW_TEXT &&
+            sentinel.toString() == hoverText.content()
     }
 
     /** Adds a hover sentinel marker to a component. */
@@ -207,16 +212,17 @@ object ItemUtil {
         return component.hoverEvent(HoverEvent.showText(Component.text(sentinel.toString())))
     }
 
-    /**
-     * Applies enchantments to an item from a compact definition string.
-     */
+    /** Applies enchantments to an item from a compact definition string. */
     private fun applyEnchants(itemStack: ItemStack, enchants: String?): ItemStack {
         var enchants = enchants ?: return itemStack
 
         enchants = enchants.trim { it <= ' ' }
-        require(!(!enchants.startsWith("{") || !enchants.endsWith("}"))) { "enchantments must be of form {<namespace:enchant>[*<level>][,<namespace:enchant>[*<level>]]...}" }
+        require(!(!enchants.startsWith("{") || !enchants.endsWith("}"))) {
+            "enchantments must be of form {<namespace:enchant>[*<level>][,<namespace:enchant>[*<level>]]...}"
+        }
 
-        val parts = enchants.substring(1, enchants.length - 1).split(',').dropLastWhile { it.isEmpty() }
+        val parts =
+            enchants.substring(1, enchants.length - 1).split(',').dropLastWhile { it.isEmpty() }
         for (rawPart in parts) {
             val part: String = rawPart.trim { it <= ' ' }
 
@@ -228,10 +234,13 @@ object ItemUtil {
                 key = key.substring(0, levelDelim)
             }
 
-            val enchKey = NamespacedKey.fromString(key)
-                ?: throw IllegalArgumentException("Invalid enchantment key '$key' for item '$itemStack'")
-            val ench: Enchantment? = RegistryAccess.registryAccess()
-                .getRegistry(RegistryKey.ENCHANTMENT)[enchKey]
+            val enchKey =
+                NamespacedKey.fromString(key)
+                    ?: throw IllegalArgumentException(
+                        "Invalid enchantment key '$key' for item '$itemStack'"
+                    )
+            val ench: Enchantment? =
+                RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT)[enchKey]
             requireNotNull(ench) { "Cannot apply unknown enchantment '$key' to item '$itemStack'" }
 
             if (itemStack.type == Material.ENCHANTED_BOOK) {
@@ -240,7 +249,7 @@ object ItemUtil {
                     meta.addStoredEnchant(
                         ench,
                         flevel,
-                        false
+                        false,
                     )
                 }
             } else {
@@ -254,9 +263,7 @@ object ItemUtil {
         return itemStack
     }
 
-    /**
-     * Parses an item definition string into an [ItemStack] and simple-material flag.
-     */
+    /** Parses an item definition string into an [ItemStack] and simple-material flag. */
     fun itemstackFromString(definition: String): Pair<ItemStack?, Boolean?> {
         // NOTE: Override to allow seamless migration from pre 1.21.9 to 1.21.9+
         var definition = definition
@@ -274,11 +281,12 @@ object ItemUtil {
         }
 
         val nbtDelim = definition.indexOf('[')
-        val key: NamespacedKey? = if (nbtDelim == -1) {
-            NamespacedKey.fromString(definition)
-        } else {
-            NamespacedKey.fromString(definition.substring(0, nbtDelim))
-        }
+        val key: NamespacedKey? =
+            if (nbtDelim == -1) {
+                NamespacedKey.fromString(definition)
+            } else {
+                NamespacedKey.fromString(definition.substring(0, nbtDelim))
+            }
 
         val emat = ExtendedMaterial.from(key!!)
         requireNotNull(emat) { "Invalid extended material definition: $definition" }
@@ -290,7 +298,7 @@ object ItemUtil {
         if (nbtDelim == -1) {
             return Pair(
                 applyEnchants(itemStack!!, enchants),
-                emat.isSimpleMaterial && enchants == null
+                emat.isSimpleMaterial && enchants == null,
             )
         }
 
@@ -298,9 +306,10 @@ object ItemUtil {
         // of whatever the extended material gave us.
         val vanillaDefinition = itemStack!!.type.key().toString() + definition.substring(nbtDelim)
         try {
-            val parsedNbt = ItemParser(Commands.createValidationContext(VanillaRegistries.createWorldLookup()))
-                .parse(StringReader(vanillaDefinition))
-                .components()
+            val parsedNbt =
+                ItemParser(Commands.createValidationContext(VanillaRegistries.createWorldLookup()))
+                    .parse(StringReader(vanillaDefinition))
+                    .components()
 
             // Now apply the NBT be parsed by minecraft's internal parser to the itemstack.
             val nmsItem = itemHandle(itemStack)!!.copy()
@@ -312,9 +321,7 @@ object ItemUtil {
         }
     }
 
-    /**
-     * Comparator for stable ordering of item stacks in selectors.
-     */
+    /** Comparator for stable ordering of item stacks in selectors. */
     class ItemStackComparator : Comparator<ItemStack?> {
         /** Compares two item stacks by creative tab, id, damage, count, and enchantments. */
         override fun compare(a: ItemStack?, b: ItemStack?): Int {

@@ -11,11 +11,10 @@ import org.oddlama.vane.enchantments.CustomEnchantmentRegistry
  *
  * @param composeEvent compose callback used to register custom enchantment entries.
  */
-class GrapplingHookRegistry(composeEvent: RegistryComposeEvent<Enchantment, EnchantmentRegistryEntry.Builder>) :
-    CustomEnchantmentRegistry("grappling_hook", ItemTypeTagKeys.ENCHANTABLE_FISHING, 3) {
-    /**
-     * Initializes and performs the registration for this enchantment.
-     */
+class GrapplingHookRegistry(
+    composeEvent: RegistryComposeEvent<Enchantment, EnchantmentRegistryEntry.Builder>
+) : CustomEnchantmentRegistry("grappling_hook", ItemTypeTagKeys.ENCHANTABLE_FISHING, 3) {
+    /** Initializes and performs the registration for this enchantment. */
     init {
         register(composeEvent)
     }

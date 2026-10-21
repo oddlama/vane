@@ -1,12 +1,12 @@
 package org.oddlama.vane.busybar
 
+import java.util.*
 import org.bukkit.NamespacedKey
 import org.bukkit.entity.Player
 import org.bukkit.scheduler.BukkitTask
 import org.json.JSONObject
 import org.oddlama.vane.core.module.Context
 import org.oddlama.vane.core.module.ModuleComponent
-import java.util.*
 
 /**
  * Tells a player's bridge when they stand in a slime chunk, but only while they carry a slime
@@ -53,15 +53,21 @@ class SlimeChunks(context: Context<BusyBar?>) : ModuleComponent<BusyBar?>(contex
             if (now) inside += id else inside -= id
             busybar.stream.emit(
                 if (now) "slimechunk.enter" else "slimechunk.leave",
-                JSONObject().put("world", player.world.name).put("chunk_x", player.chunk.x).put("chunk_z", player.chunk.z),
+                JSONObject()
+                    .put("world", player.world.name)
+                    .put("chunk_x", player.chunk.x)
+                    .put("chunk_z", player.chunk.z),
                 id,
-                busybar.access.receiveSlimeChunk
+                busybar.access.receiveSlimeChunk,
             )
         }
         inside.retainAll(online)
     }
 
-    /** Looks the bucket up in vane-core's item registry, so vane-trifles is not a compiler dependency. */
+    /**
+     * Looks the bucket up in vane-core's item registry, so vane-trifles is not a compiler
+     * dependency.
+     */
     private fun carriesSlimeBucket(player: Player): Boolean {
         val registry = busybar.core?.itemRegistry() ?: return false
         val bucket = registry.get(SLIME_BUCKET)?.takeIf { it.enabled() } ?: return false

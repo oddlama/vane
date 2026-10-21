@@ -30,7 +30,7 @@ class EnchantmentManager(context: Context<Core?>?) : Listener<Core?>(context) {
     fun updateEnchantedItem(
         itemStack: ItemStack,
         additionalEnchantments: MutableMap<Enchantment?, Int?>? = HashMap(),
-        onlyIfEnchanted: Boolean = false
+        onlyIfEnchanted: Boolean = false,
     ): ItemStack {
         removeOldLore(itemStack)
         return itemStack
@@ -45,8 +45,9 @@ class EnchantmentManager(context: Context<Core?>?) : Listener<Core?>(context) {
 
     /** Returns whether a component line is recognized as enchantment lore. */
     private fun isEnchantmentLore(component: Component?): Boolean {
-        return component is TranslatableComponent && component.key()
-            .startsWith("vane_enchantments.") || ItemUtil.hasSentinel(component, SENTINEL)
+        return component is TranslatableComponent &&
+            component.key().startsWith("vane_enchantments.") ||
+            ItemUtil.hasSentinel(component, SENTINEL)
     }
 
     /** Normalizes result item lore after result-producing inventory edits. */
@@ -65,12 +66,14 @@ class EnchantmentManager(context: Context<Core?>?) : Listener<Core?>(context) {
     /** Builds a merchant recipe with normalized enchanted result metadata. */
     private fun processRecipe(recipe: MerchantRecipe): MerchantRecipe =
         MerchantRecipe(
-            updateEnchantedItem(recipe.result.clone(), true),
-            recipe.uses, recipe.maxUses,
-            recipe.hasExperienceReward(),
-            recipe.villagerExperience,
-            recipe.priceMultiplier
-        ).also { newRecipe -> recipe.ingredients.forEach { newRecipe.addIngredient(it) } }
+                updateEnchantedItem(recipe.result.clone(), true),
+                recipe.uses,
+                recipe.maxUses,
+                recipe.hasExperienceReward(),
+                recipe.villagerExperience,
+                recipe.priceMultiplier,
+            )
+            .also { newRecipe -> recipe.ingredients.forEach { newRecipe.addIngredient(it) } }
 
     /** Static constants for enchantment lore sentinel tagging. */
     companion object {

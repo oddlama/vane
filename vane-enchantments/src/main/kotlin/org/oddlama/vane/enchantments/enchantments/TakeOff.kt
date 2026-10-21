@@ -20,27 +20,35 @@ import org.oddlama.vane.util.ItemUtil
 import org.oddlama.vane.util.PlayerUtil
 
 /**
- * TakeOff is a custom enchantment that provides a boost to players when they use
- * an Elytra, based on the enchantment level. The boost strength increases with
- * each level of the enchantment. This enchantment can be applied to items
- * through crafting or found in loot chests.
+ * TakeOff is a custom enchantment that provides a boost to players when they use an Elytra, based
+ * on the enchantment level. The boost strength increases with each level of the enchantment. This
+ * enchantment can be applied to items through crafting or found in loot chests.
  *
- * @constructor Creates a new TakeOff enchantment instance.
  * @param context The context in which this enchantment is used.
+ * @constructor Creates a new TakeOff enchantment instance.
  */
-@VaneEnchantment(name = "take_off", maxLevel = 3, rarity = Rarity.UNCOMMON, treasure = true, allowCustom = true)
+@VaneEnchantment(
+    name = "take_off",
+    maxLevel = 3,
+    rarity = Rarity.UNCOMMON,
+    treasure = true,
+    allowCustom = true,
+)
 class TakeOff(context: Context<Enchantments?>) : CustomEnchantment<Enchantments?>(context) {
     /**
-     * Configurable boost strengths for each level of the enchantment.
-     * The values are percentages that determine how much the player's
-     * speed is boosted when using an Elytra.
+     * Configurable boost strengths for each level of the enchantment. The values are percentages
+     * that determine how much the player's speed is boosted when using an Elytra.
      */
-    @ConfigDoubleList(def = [0.2, 0.4, 0.6], min = 0.0, desc = "Boost strength for each enchantment level.")
+    @ConfigDoubleList(
+        def = [0.2, 0.4, 0.6],
+        min = 0.0,
+        desc = "Boost strength for each enchantment level.",
+    )
     private val configBoostStrengths: MutableList<Double?>? = null
 
     /**
-     * Defines the default recipes for this enchantment, allowing players
-     * to craft the enchanted items.
+     * Defines the default recipes for this enchantment, allowing players to craft the enchanted
+     * items.
      *
      * @return A RecipeList containing the default recipes for this enchantment.
      */
@@ -57,8 +65,8 @@ class TakeOff(context: Context<Enchantments?>) : CustomEnchantment<Enchantments?
     }
 
     /**
-     * Defines the default loot tables for this enchantment, determining
-     * where players can find the enchanted items as loot.
+     * Defines the default loot tables for this enchantment, determining where players can find the
+     * enchanted items as loot.
      *
      * @return A LootTableList containing the default loot tables for this enchantment.
      */
@@ -91,10 +99,11 @@ class TakeOff(context: Context<Enchantments?>) : CustomEnchantment<Enchantments?
     }
 
     /**
-     * Event handler that is called when a player toggles glide.
-     * Applies the Elytra boost to the player if they have the enchantment.
+     * Event handler that is called when a player toggles glide. Applies the Elytra boost to the
+     * player if they have the enchantment.
      *
-     * @param event The EntityToggleGlideEvent that contains information about the toggle glide action.
+     * @param event The EntityToggleGlideEvent that contains information about the toggle glide
+     *   action.
      */
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     fun onPlayerToggleGlide(event: EntityToggleGlideEvent) {

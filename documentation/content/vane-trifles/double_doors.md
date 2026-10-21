@@ -5,6 +5,7 @@ module = "vane-trifles"
 ```
 
 ---
+
 ![](assets/gifs/double-doors.gif)
 
 Double doors will now automatically synchronize their sides, so both doors open and close simultaneously. No matter

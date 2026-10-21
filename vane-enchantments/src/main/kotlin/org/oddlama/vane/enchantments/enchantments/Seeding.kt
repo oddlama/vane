@@ -18,11 +18,11 @@ import org.oddlama.vane.util.MaterialUtil
 import org.oddlama.vane.util.PlayerUtil
 
 /**
- * Right-click a seed with a hoe to sow nearby blocks with the same plant.
- * Repeated right-clicks on the same field will expand the sown area outward in a circle.
+ * Right-click a seed with a hoe to sow nearby blocks with the same plant. Repeated right-clicks on
+ * the same field will expand the sown area outward in a circle.
  *
- * @constructor Creates a new Seeding enchantment instance.
  * @param context The context for the enchantment.
+ * @constructor Creates a new Seeding enchantment instance.
  */
 @VaneEnchantment(name = "seeding", maxLevel = 4, rarity = Rarity.COMMON, treasure = true)
 class Seeding(context: Context<Enchantments?>) : CustomEnchantment<Enchantments?>(context) {

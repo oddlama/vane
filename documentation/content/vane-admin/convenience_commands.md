@@ -5,6 +5,7 @@ module = "vane-admin"
 ```
 
 ---
+
 Several commands were introduced for your convenience. If not noted otherwise, these commands are only available to ops
 and players in the `admin` permission group.
 

@@ -4,6 +4,13 @@ import com.destroystokyo.paper.event.player.PlayerConnectionCloseEvent
 import io.papermc.paper.connection.PlayerConfigurationConnection
 import io.papermc.paper.event.connection.configuration.AsyncPlayerConnectionConfigureEvent
 import io.papermc.paper.event.connection.configuration.PlayerConnectionReconfigureEvent
+import java.io.File
+import java.io.IOException
+import java.security.MessageDigest
+import java.util.*
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.CountDownLatch
+import java.util.logging.Level
 import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.resource.ResourcePackInfo
 import net.kyori.adventure.resource.ResourcePackRequest
@@ -18,13 +25,6 @@ import org.oddlama.vane.core.lang.TranslatedMessage
 import org.oddlama.vane.core.module.Context
 import org.oddlama.vane.core.module.ModuleGroup
 import org.oddlama.vane.util.Nms.serverHandle
-import java.io.File
-import java.io.IOException
-import java.security.MessageDigest
-import java.util.*
-import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.CountDownLatch
-import java.util.logging.Level
 
 /**
  * Distributes the configured resource pack to connecting players.
@@ -34,81 +34,63 @@ import java.util.logging.Level
 class ResourcePackDistributor(context: Context<Core?>) :
     Listener<Core?>(context.group("ResourcePack", "Enable resource pack distribution.")) {
 
-    /**
-     * If enabled, players must accept the resource pack.
-     */
-    @ConfigBoolean(def = true, desc = "Kick players if they deny to use the specified resource pack (if set).")
+    /** If enabled, players must accept the resource pack. */
+    @ConfigBoolean(
+        def = true,
+        desc = "Kick players if they deny to use the specified resource pack (if set).",
+    )
     var configForce: Boolean = false
 
-    /**
-     * Prompt message used when the pack is required.
-     */
-    @LangMessage
-    var langPackRequired: TranslatedMessage? = null
+    /** Prompt message used when the pack is required. */
+    @LangMessage var langPackRequired: TranslatedMessage? = null
 
-    /**
-     * Prompt message used when the pack is optional.
-     */
-    @LangMessage
-    var langPackSuggested: TranslatedMessage? = null
+    /** Prompt message used when the pack is optional. */
+    @LangMessage var langPackSuggested: TranslatedMessage? = null
 
-    /**
-     * URL of the resource pack to distribute.
-     */
+    /** URL of the resource pack to distribute. */
     var packUrl: String? = null
 
-    /**
-     * SHA-1 checksum of the resource pack.
-     */
+    /** SHA-1 checksum of the resource pack. */
     var packSha1: String? = null
 
-    /**
-     * UUID used for the distributed resource pack.
-     */
+    /** UUID used for the distributed resource pack. */
     var packUuid: UUID = UUID.fromString("fbba121a-8f87-4e97-922d-2059777311bf")
 
-    /**
-     * Cache-busting counter used in local development mode.
-     */
-    @JvmField
-    var counter: Int = 0
+    /** Cache-busting counter used in local development mode. */
+    @JvmField var counter: Int = 0
 
-    /**
-     * Optional custom resource pack configuration.
-     */
-    var customResourcePackConfig: CustomResourcePackConfig = CustomResourcePackConfig(requireNotNull(getContext()))
+    /** Optional custom resource pack configuration. */
+    var customResourcePackConfig: CustomResourcePackConfig =
+        CustomResourcePackConfig(requireNotNull(getContext()))
 
-    /**
-     * Watches the pack file and triggers refreshes in local development mode.
-     */
+    /** Watches the pack file and triggers refreshes in local development mode. */
     private var fileWatcher: ResourcePackFileWatcher? = null
 
-    /**
-     * Local HTTP server used in local development mode.
-     */
+    /** Local HTTP server used in local development mode. */
     private var devServer: ResourcePackDevServer? = null
 
-    /**
-     * Synchronization latches used to block player configuration until pack status is known.
-     */
+    /** Synchronization latches used to block player configuration until pack status is known. */
     private val latches = ConcurrentHashMap<UUID, CountDownLatch>()
 
-    /**
-     * Initializes the active resource pack source and enables distribution listeners.
-     */
+    /** Initializes the active resource pack source and enables distribution listeners. */
     public override fun onEnable() {
         val mod = requireNotNull(module)
         when {
             localDev -> {
                 try {
-                    val packOutput: File? = File("VaneResourcePack.zip").takeIf { it.exists() }
-                        ?: mod.generateResourcePack().also {
-                            if (it == null) {
-                                mod.log.severe("Failed to generate resource pack; dev server and file watcher will not be started")
-                            } else {
-                                mod.log.info("Resource Pack Missing, first run? Generating resource pack.")
+                    val packOutput: File? =
+                        File("VaneResourcePack.zip").takeIf { it.exists() }
+                            ?: mod.generateResourcePack().also {
+                                if (it == null) {
+                                    mod.log.severe(
+                                        "Failed to generate resource pack; dev server and file watcher will not be started"
+                                    )
+                                } else {
+                                    mod.log.info(
+                                        "Resource Pack Missing, first run? Generating resource pack."
+                                    )
+                                }
                             }
-                        }
 
                     packOutput?.let { file ->
                         fileWatcher = ResourcePackFileWatcher(this, file)
@@ -117,7 +99,11 @@ class ResourcePackDistributor(context: Context<Core?>) :
                     }
                 } catch (e: Exception) {
                     if (e is IOException || e is InterruptedException) {
-                        mod.log.log(Level.SEVERE, "Failed to initialize resource pack dev server or file watcher", e)
+                        mod.log.log(
+                            Level.SEVERE,
+                            "Failed to initialize resource pack dev server or file watcher",
+                            e,
+                        )
                     } else throw e
                 }
                 mod.log.info("Setting up dev lazy server")
@@ -129,25 +115,33 @@ class ResourcePackDistributor(context: Context<Core?>) :
                 packSha1 = customResourcePackConfig.configSha1
                 // The UUID defaults to empty, so a missing or malformed one must not fail enabling.
                 val configUuid = customResourcePackConfig.configUuid
-                packUuid = ResourcePackUuid.parse(configUuid)
-                    ?: ResourcePackUuid.fromUrl(customResourcePackConfig.configUrl).also {
-                        if (configUuid.isNotBlank()) {
-                            mod.log.warning("Invalid resource pack UUID '$configUuid', using $it derived from the URL")
+                packUuid =
+                    ResourcePackUuid.parse(configUuid)
+                        ?: ResourcePackUuid.fromUrl(customResourcePackConfig.configUrl).also {
+                            if (configUuid.isNotBlank()) {
+                                mod.log.warning(
+                                    "Invalid resource pack UUID '$configUuid', using $it derived from the URL"
+                                )
+                            }
                         }
-                    }
             }
 
             else -> {
                 mod.log.info("Serving official vane resource pack")
                 try {
-                    val properties = Properties().also { props ->
-                        Core::class.java.getResourceAsStream("/vane-core.properties")!!.use { props.load(it) }
-                    }
+                    val properties =
+                        Properties().also { props ->
+                            Core::class.java.getResourceAsStream("/vane-core.properties")!!.use {
+                                props.load(it)
+                            }
+                        }
                     packUrl = properties.getProperty("resourcePackUrl")
                     packSha1 = properties.getProperty("resourcePackSha1")
                     packUuid = UUID.fromString(properties.getProperty("resourcePackUuid"))
                 } catch (_: IOException) {
-                    mod.log.severe("Could not load official resource pack sha1 from included properties file")
+                    mod.log.severe(
+                        "Could not load official resource pack sha1 from included properties file"
+                    )
                     packUrl = ""
                     packSha1 = ""
                     packUuid = UUID.randomUUID()
@@ -158,7 +152,9 @@ class ResourcePackDistributor(context: Context<Core?>) :
         val sha1 = requireNotNull(packSha1)
         // Validate SHA-1 format before enabling distribution.
         if (sha1.length != 40) {
-            mod.log.warning("Invalid resource pack SHA-1 sum '$sha1', should be 40 characters long but has ${sha1.length} characters")
+            mod.log.warning(
+                "Invalid resource pack SHA-1 sum '$sha1', should be 40 characters long but has ${sha1.length} characters"
+            )
             mod.log.warning("Disabling resource pack serving and message delaying")
             packUrl = ""
         }
@@ -166,7 +162,9 @@ class ResourcePackDistributor(context: Context<Core?>) :
         // Clients can only download from an absolute http(s) URL; refuse anything else up front.
         val url = requireNotNull(packUrl)
         if (url.isNotEmpty() && ResourcePackUrl.parse(url) == null) {
-            mod.log.warning("Invalid resource pack URL '$url', must be an absolute http or https URL")
+            mod.log.warning(
+                "Invalid resource pack URL '$url', must be an absolute http or https URL"
+            )
             mod.log.warning("Disabling resource pack serving and message delaying")
             packUrl = ""
         }
@@ -180,7 +178,7 @@ class ResourcePackDistributor(context: Context<Core?>) :
                 if (rpInfo.url().trim().isNotEmpty()) {
                     mod.log.warning(
                         "You have manually configured a resource pack in your server.properties. " +
-                                "This cannot be used together with vane, as servers only allow serving a single resource pack."
+                            "This cannot be used together with vane, as servers only allow serving a single resource pack."
                     )
                 }
             }
@@ -188,9 +186,7 @@ class ResourcePackDistributor(context: Context<Core?>) :
         }
     }
 
-    /**
-     * Stops all pending waits and shuts down local development helpers.
-     */
+    /** Stops all pending waits and shuts down local development helpers. */
     public override fun onDisable() {
         latches.values.forEach { it.countDown() }
         latches.clear()
@@ -255,10 +251,12 @@ class ResourcePackDistributor(context: Context<Core?>) :
      */
     private fun packInfo(url: String?): ResourcePackInfo? {
         if (url.isNullOrEmpty()) return null
-        val uri = ResourcePackUrl.parse(url) ?: run {
-            module?.log?.warning("The provided resource pack URL is incorrect: $url")
-            return null
-        }
+        val uri =
+            ResourcePackUrl.parse(url)
+                ?: run {
+                    module?.log?.warning("The provided resource pack URL is incorrect: $url")
+                    return null
+                }
         return ResourcePackInfo.resourcePackInfo(packUuid, uri, requireNotNull(packSha1))
     }
 
@@ -272,16 +270,18 @@ class ResourcePackDistributor(context: Context<Core?>) :
         val info = packInfo(packUrl) ?: return false
         val promptLang = requireNotNull(if (configForce) langPackRequired else langPackSuggested)
         val prompt: Component? = if (promptLang.str().isEmpty()) null else promptLang.strComponent()
-        val request = ResourcePackRequest.resourcePackRequest()
-            .required(configForce).replace(true)
-            .packs(info)
-            .callback { _: UUID?, status: ResourcePackStatus?, _: Audience? ->
-                if (status?.intermediate() == false) {
-                    latches.remove(connection.profile.id)?.countDown()
+        val request =
+            ResourcePackRequest.resourcePackRequest()
+                .required(configForce)
+                .replace(true)
+                .packs(info)
+                .callback { _: UUID?, status: ResourcePackStatus?, _: Audience? ->
+                    if (status?.intermediate() == false) {
+                        latches.remove(connection.profile.id)?.countDown()
+                    }
                 }
-            }
-            .prompt(prompt)
-            .build()
+                .prompt(prompt)
+                .build()
 
         connection.audience.sendResourcePacks(request)
         return true
@@ -299,7 +299,9 @@ class ResourcePackDistributor(context: Context<Core?>) :
             audience.sendMessage(Component.text("$url $packSha1"))
         }
         val info = packInfo(url) ?: return
-        audience.sendResourcePacks(ResourcePackRequest.resourcePackRequest().packs(info).asResourcePackRequest())
+        audience.sendResourcePacks(
+            ResourcePackRequest.resourcePackRequest().packs(info).asResourcePackRequest()
+        )
     }
 
     /**
@@ -312,13 +314,10 @@ class ResourcePackDistributor(context: Context<Core?>) :
         try {
             val hashBytes = MessageDigest.getInstance("SHA-1").digest(file.readBytes())
             packSha1 = hashBytes.joinToString("") { "%02x".format(it) }
-        } catch (_: IOException) {
-        }
+        } catch (_: IOException) {}
     }
 
-    /**
-     * Holds static helpers for development-mode detection.
-     */
+    /** Holds static helpers for development-mode detection. */
     companion object {
         /**
          * Whether the server appears to run in a local development environment.
@@ -327,6 +326,7 @@ class ResourcePackDistributor(context: Context<Core?>) :
          * https://github.com/jpenilla/run-paper/issues/14
          */
         private val localDev =
-            serverHandle().options.hasArgument("add-plugin") && System.getProperty("disable.watchdog") != null
+            serverHandle().options.hasArgument("add-plugin") &&
+                System.getProperty("disable.watchdog") != null
     }
 }

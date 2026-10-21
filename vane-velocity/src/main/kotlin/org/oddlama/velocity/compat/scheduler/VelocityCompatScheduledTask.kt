@@ -9,8 +9,6 @@ import org.oddlama.vane.proxycore.scheduler.ProxyScheduledTask
  * @property task wrapped Velocity task handle.
  */
 class VelocityCompatScheduledTask(val task: ScheduledTask) : ProxyScheduledTask {
-    /**
-     * Cancels the underlying Velocity task.
-     */
+    /** Cancels the underlying Velocity task. */
     override fun cancel() = task.cancel()
 }

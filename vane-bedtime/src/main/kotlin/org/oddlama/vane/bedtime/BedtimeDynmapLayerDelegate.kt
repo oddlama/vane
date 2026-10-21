@@ -1,5 +1,6 @@
 package org.oddlama.vane.bedtime
 
+import java.util.*
 import org.bukkit.OfflinePlayer
 import org.dynmap.DynmapCommonAPI
 import org.dynmap.markers.Marker
@@ -7,13 +8,12 @@ import org.dynmap.markers.MarkerAPI
 import org.dynmap.markers.MarkerIcon
 import org.dynmap.markers.MarkerSet
 import org.oddlama.vane.core.dynmap.DynmapIntegration
-import java.util.*
 
 /**
  * Handles Dynmap API integration and bedtime marker synchronization.
  *
- * @constructor Creates a Dynmap integration delegate bound to its parent layer.
  * @param parent owning Dynmap layer component.
+ * @constructor Creates a Dynmap integration delegate bound to its parent layer.
  */
 class BedtimeDynmapLayerDelegate(private val parent: BedtimeDynmapLayer) {
     /** Live reference to the Dynmap common API; `null` until `apiEnabled` fires. */
@@ -38,14 +38,19 @@ class BedtimeDynmapLayerDelegate(private val parent: BedtimeDynmapLayer) {
     /** Registers Dynmap listeners and creates the bedtime marker layer when available. */
     fun onEnable() {
         val m = module ?: return
-        if (!DynmapIntegration.initialize(m.log, { d, m ->
-                dynmapApi = d
-                markerApi = m
-            }) {
+        if (
+            !DynmapIntegration.initialize(
+                m.log,
+                { d, m ->
+                    dynmapApi = d
+                    markerApi = m
+                },
+            ) {
                 dynmapEnabled = true
                 createOrLoadLayer()
             }
-        ) return
+        )
+            return
     }
 
     /** Disables Dynmap integration state. */
@@ -67,12 +72,13 @@ class BedtimeDynmapLayerDelegate(private val parent: BedtimeDynmapLayer) {
 
         markerSet = markerApi.getMarkerSet(BedtimeDynmapLayer.LAYER_ID)
         if (markerSet == null) {
-            markerSet = markerApi.createMarkerSet(
-                BedtimeDynmapLayer.LAYER_ID,
-                requireNotNull(parent.langLayerLabel).str(),
-                null,
-                false
-            )
+            markerSet =
+                markerApi.createMarkerSet(
+                    BedtimeDynmapLayer.LAYER_ID,
+                    requireNotNull(parent.langLayerLabel).str(),
+                    null,
+                    false,
+                )
         }
 
         if (markerSet == null) {
@@ -126,7 +132,7 @@ class BedtimeDynmapLayerDelegate(private val parent: BedtimeDynmapLayer) {
             loc.y,
             loc.z,
             markerIcon,
-            false
+            false,
         )
         return true
     }

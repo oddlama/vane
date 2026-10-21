@@ -1,12 +1,12 @@
 package org.oddlama.vane.portals.portal
 
+import java.io.IOException
+import java.util.*
 import org.bukkit.block.Block
 import org.json.JSONObject
 import org.oddlama.vane.core.persistent.PersistentSerializer
 import org.oddlama.vane.util.LazyBlock
 import org.oddlama.vane.util.LegacyKeys
-import java.io.IOException
-import java.util.*
 
 /**
  * Represents a typed block belonging to a portal structure.
@@ -46,8 +46,7 @@ class PortalBlock(private val block: LazyBlock, private val type: Type?) {
         BOUNDARY3,
         BOUNDARY4,
         BOUNDARY5,
-        PORTAL,
-        ;
+        PORTAL;
 
         companion object {
             /**
@@ -81,9 +80,11 @@ class PortalBlock(private val block: LazyBlock, private val type: Type?) {
         @Throws(IOException::class)
         fun deserialize(o: Any): PortalBlock {
             val json = o as JSONObject
-            // `PersistentSerializer.fromJson` signature: `fun <U> fromJson(cls: Class<U>?, value: Any?): U?`.
+            // `PersistentSerializer.fromJson` signature: `fun <U> fromJson(cls: Class<U>?, value:
+            // Any?): U?`.
             // Do not include `?` in the generic parameter; the return type is already nullable.
-            val block: LazyBlock? = PersistentSerializer.fromJson(LazyBlock::class.java, json.get("block"))
+            val block: LazyBlock? =
+                PersistentSerializer.fromJson(LazyBlock::class.java, json.get("block"))
             val type: Type? = PersistentSerializer.fromJson(Type::class.java, json.get("type"))
             return PortalBlock(block!!, type)
         }

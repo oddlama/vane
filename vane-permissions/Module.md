@@ -8,7 +8,7 @@ inheritance into a concrete permission set per group, and applies the result to 
 runtime Bukkit permission attachments. Because attachments are rebuilt rather than mutated, group
 changes take effect without restarting.
 
-The module can optionally strip *all* default permissions from every source — including other
+The module can optionally strip _all_ default permissions from every source — including other
 plugins and vanilla Minecraft — so that the configured groups become the only thing granting
 access. This is deliberately opt-in: enabling it causes OPed players to lose commands unless the
 permissions are granted back explicitly.

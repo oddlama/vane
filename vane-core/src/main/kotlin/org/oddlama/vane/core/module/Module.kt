@@ -2,6 +2,17 @@ package org.oddlama.vane.core.module
 
 import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents
+import java.io.BufferedReader
+import java.io.File
+import java.io.IOException
+import java.io.InputStreamReader
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
+import java.util.*
+import java.util.logging.Level
+import java.util.logging.Logger
+import java.util.regex.Pattern
+import kotlin.math.max
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger
 import org.bstats.bukkit.Metrics
 import org.bukkit.NamespacedKey
@@ -38,17 +49,6 @@ import org.oddlama.vane.core.persistent.PersistentStorageDirtyState
 import org.oddlama.vane.core.persistent.PersistentStorageManager
 import org.oddlama.vane.core.resourcepack.ResourcePackGenerator
 import org.oddlama.vane.util.ResourceList
-import java.io.BufferedReader
-import java.io.File
-import java.io.IOException
-import java.io.InputStreamReader
-import java.nio.file.Files
-import java.nio.file.StandardCopyOption
-import java.util.*
-import java.util.logging.Level
-import java.util.logging.Logger
-import java.util.regex.Pattern
-import kotlin.math.max
 
 /** Matches the per-language files a module ships and regenerates: `lang-<code>.yml`. */
 private val LANG_FILE_PATTERN: Pattern = Pattern.compile("lang-.*\\.yml")
@@ -99,41 +99,41 @@ abstract class Module<T : Module<T?>?> : JavaPlugin(), Context<T?>, Listener {
     var consoleAttachment: PermissionAttachment? = null
 
     /** Config file version. */
-    @ConfigVersion
-    var configVersion: Long = 0
+    @ConfigVersion var configVersion: Long = 0
 
     /** Localization file version. */
-    @LangVersion
-    var langVersion: Long = 0
+    @LangVersion var langVersion: Long = 0
 
     /** Persistent storage version. */
-    @Persistent
-    var storageVersion: Long = 0
+    @Persistent var storageVersion: Long = 0
 
     /** Active language code for this module. */
     @ConfigString(
         def = "inherit",
-        desc = "The language for this module. The corresponding language file must be named lang-{lang}.yml. Specifying 'inherit' will load the value set for vane-core.",
-        metrics = true
+        desc =
+            "The language for this module. The corresponding language file must be named lang-{lang}.yml. Specifying 'inherit' will load the value set for vane-core.",
+        metrics = true,
     )
-            /** Configured language code for this module. */
+    /** Configured language code for this module. */
     var configLang: String? = null
 
     /** Whether bStats metrics are enabled for this module. */
     @ConfigBoolean(
         def = true,
-        desc = "Enable plugin metrics via bStats. You can opt-out here or via the global bStats configuration. All collected information is completely anonymous and publicly available."
+        desc =
+            "Enable plugin metrics via bStats. You can opt-out here or via the global bStats configuration. All collected information is completely anonymous and publicly available.",
     )
-            /** Whether bStats metrics are enabled. */
+    /** Whether bStats metrics are enabled. */
     var configMetricsEnabled: Boolean = false
 
     /** Root context group for this module. */
-    private val contextGroup: ModuleGroup<T?> = ModuleGroup(
-        this,
-        "",
-        "The module will only add functionality if this is set to true.",
-        false
-    )
+    private val contextGroup: ModuleGroup<T?> =
+        ModuleGroup(
+            this,
+            "",
+            "The module will only add functionality if this is set to true.",
+            false,
+        )
 
     /** Compiles a component into the root context. */
     override fun compile(component: ModuleComponent<T?>?) {
@@ -149,11 +149,13 @@ abstract class Module<T : Module<T?>?> : JavaPlugin(), Context<T?>, Listener {
     }
 
     /** Parent context of the module root context. */
-    override val context: Context<T?>? get() = this
+    override val context: Context<T?>?
+        get() = this
 
     /** Module instance as generic type. */
     @Suppress("UNCHECKED_CAST")
-    override val module: T? get() = this as T
+    override val module: T?
+        get() = this as T
 
     /** Root YAML path of this module context. */
     override fun yamlPath(): String? = ""
@@ -177,9 +179,7 @@ abstract class Module<T : Module<T?>?> : JavaPlugin(), Context<T?>, Listener {
     override fun onConfigChange() {}
 
     /** Hook called during resource-pack generation. */
-    @Throws(IOException::class)
-    fun onGenerateResourcePack() {
-    }
+    @Throws(IOException::class) fun onGenerateResourcePack() {}
 
     /** Iterates over all compiled module components. */
     override fun forEachModuleComponent(f: Consumer1<ModuleComponent<*>?>?) {
@@ -193,14 +193,17 @@ abstract class Module<T : Module<T?>?> : JavaPlugin(), Context<T?>, Listener {
     var metrics: Metrics? = null
 
     init {
-        core = if (this.name == "vane-core") this as Core
-        else server.pluginManager.getPlugin("vane-core") as Core?
+        core =
+            if (this.name == "vane-core") this as Core
+            else server.pluginManager.getPlugin("vane-core") as Core?
 
-        permissionCommandCatchallModule = Permission(
-            "vane.${annotationName}.commands.*",
-            "Allow access to all vane-$annotationName commands",
-            PermissionDefault.FALSE
-        ).also { registerPermission(it) }
+        permissionCommandCatchallModule =
+            Permission(
+                    "vane.${annotationName}.commands.*",
+                    "Allow access to all vane-$annotationName commands",
+                    PermissionDefault.FALSE,
+                )
+                .also { registerPermission(it) }
 
         contextGroup.compileSelf()
     }
@@ -216,10 +219,11 @@ abstract class Module<T : Module<T?>?> : JavaPlugin(), Context<T?>, Listener {
 
     /** Bukkit plugin enable entrypoint. */
     override fun onEnable() {
-        consoleAttachment = server.consoleSender.addAttachment(this).also { attachment ->
-            pendingConsolePermissions.forEach { attachment.setPermission(it, true) }
-            pendingConsolePermissions.clear()
-        }
+        consoleAttachment =
+            server.consoleSender.addAttachment(this).also { attachment ->
+                pendingConsolePermissions.forEach { attachment.setPermission(it, true) }
+                pendingConsolePermissions.clear()
+            }
 
         core!!.registerModule(this)
         loadPersistentStorage()
@@ -232,7 +236,7 @@ abstract class Module<T : Module<T?>?> : JavaPlugin(), Context<T?>, Listener {
                 if (persistentStorageState.isDirty) savePersistentStorage()
             },
             (60 * 20).toLong(),
-            (60 * 20).toLong()
+            (60 * 20).toLong(),
         )
     }
 
@@ -281,15 +285,18 @@ abstract class Module<T : Module<T?>?> : JavaPlugin(), Context<T?>, Listener {
         if (pack == null) return
 
         // Generate language files
-        val langFiles = dataFolder.listFiles { _, name -> name != null && LANG_FILE_PATTERN.matcher(name).matches() }
-            ?: emptyArray()
+        val langFiles =
+            dataFolder.listFiles { _, name ->
+                name != null && LANG_FILE_PATTERN.matcher(name).matches()
+            } ?: emptyArray()
         langFiles.sorted().forEach { langFile ->
             val yaml = YamlConfiguration.loadConfiguration(langFile)
             try {
                 langManager.generateResourcePack(pack, yaml, langFile)
             } catch (e: Exception) {
                 throw RuntimeException(
-                    "Error while generating language for '$langFile' of module $annotationName", e
+                    "Error while generating language for '$langFile' of module $annotationName",
+                    e,
                 )
             }
         }
@@ -301,14 +308,19 @@ abstract class Module<T : Module<T?>?> : JavaPlugin(), Context<T?>, Listener {
                     reader.lineSequence().forEach { filePath ->
                         getResource("resource_pack/$filePath")?.let { content ->
                             pack.addFile(filePath, content)
-                        } ?: log.log(
-                            Level.WARNING,
-                            "Missing resource 'resource_pack/$filePath' in module $annotationName"
-                        )
+                        }
+                            ?: log.log(
+                                Level.WARNING,
+                                "Missing resource 'resource_pack/$filePath' in module $annotationName",
+                            )
                     }
                 }
             } catch (e: IOException) {
-                log.log(Level.SEVERE, "Could not load resource pack index file of module $annotationName", e)
+                log.log(
+                    Level.SEVERE,
+                    "Could not load resource pack index file of module $annotationName",
+                    e,
+                )
             }
         }
 
@@ -319,7 +331,8 @@ abstract class Module<T : Module<T?>?> : JavaPlugin(), Context<T?>, Listener {
     /** Tries to reload module configuration from disk. */
     private fun tryReloadConfiguration(): Boolean {
         val file = configManager.standardFile()
-        return !(!file.exists() && !configManager.generateFile(file, null)) && configManager.reload(file)
+        return !(!file.exists() && !configManager.generateFile(file, null)) &&
+            configManager.reload(file)
     }
 
     /** Updates a localized language file from embedded resources when newer. */
@@ -331,10 +344,15 @@ abstract class Module<T : Module<T?>?> : JavaPlugin(), Context<T?>, Listener {
         getResource(langFile)?.let { res ->
             try {
                 InputStreamReader(res).use { reader ->
-                    resourceVersion = YamlConfiguration.loadConfiguration(reader).getLong("Version", -1)
+                    resourceVersion =
+                        YamlConfiguration.loadConfiguration(reader).getLong("Version", -1)
                 }
             } catch (e: IOException) {
-                log.log(Level.SEVERE, "Error while updating lang file '$file' of module $annotationName", e)
+                log.log(
+                    Level.SEVERE,
+                    "Error while updating lang file '$file' of module $annotationName",
+                    e,
+                )
             }
         }
 
@@ -342,17 +360,24 @@ abstract class Module<T : Module<T?>?> : JavaPlugin(), Context<T?>, Listener {
             try {
                 getResource(langFile)?.let { res ->
                     Files.copy(res, file.toPath(), StandardCopyOption.REPLACE_EXISTING)
-                } ?: log.log(Level.WARNING, "Embedded lang resource '$langFile' missing for module $annotationName")
+                }
+                    ?: log.log(
+                        Level.WARNING,
+                        "Embedded lang resource '$langFile' missing for module $annotationName",
+                    )
             } catch (e: IOException) {
-                log.log(Level.SEVERE, "Error while copying lang file '$file' of module $annotationName", e)
+                log.log(
+                    Level.SEVERE,
+                    "Error while copying lang file '$file' of module $annotationName",
+                    e,
+                )
             }
         }
     }
 
     /** Tries to reload localization files for this module. */
     private fun tryReloadLocalization(): Boolean {
-        ResourceList.getResources(javaClass, LANG_FILE_PATTERN)
-            .forEach { updateLangFile(it) }
+        ResourceList.getResources(javaClass, LANG_FILE_PATTERN).forEach { updateLangFile(it) }
 
         var langCode = configLang
         if (langCode == "inherit") {
@@ -427,7 +452,8 @@ abstract class Module<T : Module<T?>?> : JavaPlugin(), Context<T?>, Listener {
     fun unregisterListener(listener: Listener) = HandlerList.unregisterAll(listener)
 
     /** Returns module annotation short name. */
-    val annotationName: String get() = annotation.name
+    val annotationName: String
+        get() = annotation.name
 
     /** Command names whose lifecycle handlers have already been installed. */
     private val registeredCommands = mutableSetOf<String>()
@@ -440,7 +466,9 @@ abstract class Module<T : Module<T?>?> : JavaPlugin(), Context<T?>, Listener {
         if (!registeredCommands.add(command.name)) return
         val manager: LifecycleEventManager<Plugin> = lifecycleManager
         manager.registerEventHandler(LifecycleEvents.COMMANDS) { event ->
-            event.registrar().register(command.command, command.langDescription.str(), command.getAliases())
+            event
+                .registrar()
+                .register(command.command, command.langDescription.str(), command.getAliases())
         }
     }
 
@@ -456,7 +484,8 @@ abstract class Module<T : Module<T?>?> : JavaPlugin(), Context<T?>, Listener {
 
     /** Grants a permission node to console, deferred until attachment exists if needed. */
     fun addConsolePermission(permission: String) {
-        consoleAttachment?.setPermission(permission, true) ?: pendingConsolePermissions.add(permission)
+        consoleAttachment?.setPermission(permission, true)
+            ?: pendingConsolePermissions.add(permission)
     }
 
     /** Registers a permission with Bukkit's plugin manager. */
@@ -469,7 +498,8 @@ abstract class Module<T : Module<T?>?> : JavaPlugin(), Context<T?>, Listener {
     }
 
     /** Unregisters a permission from Bukkit's plugin manager. */
-    fun unregisterPermission(permission: Permission) = server.pluginManager.removePermission(permission)
+    fun unregisterPermission(permission: Permission) =
+        server.pluginManager.removePermission(permission)
 
     /** Returns loot-table injector for a Bukkit [LootTables] enum value. */
     fun lootTable(table: LootTables): LootTable = lootTable(table.key)
@@ -487,12 +517,14 @@ abstract class Module<T : Module<T?>?> : JavaPlugin(), Context<T?>, Listener {
     fun onModuleLootGenerate(event: LootGenerateEvent) {
         val additionalLootTable = additionalLootTables[event.lootTable.key] ?: return
         val loc = event.lootContext.location
-        val localRandom = Random(
-            (random.nextInt() +
-                    (loc.blockX and (0xffff shl 16)) +
-                    (loc.blockY and (0xffff shl 32)) +
-                    (loc.blockZ and (0xffff shl 48))).toLong()
-        )
+        val localRandom =
+            Random(
+                (random.nextInt() +
+                        (loc.blockX and (0xffff shl 16)) +
+                        (loc.blockY and (0xffff shl 32)) +
+                        (loc.blockZ and (0xffff shl 48)))
+                    .toLong()
+            )
         additionalLootTable.generateLoot(event.loot, localRandom)
     }
 
@@ -504,7 +536,11 @@ abstract class Module<T : Module<T?>?> : JavaPlugin(), Context<T?>, Listener {
 
         val player = event.player
         val playerLuck = player.getAttribute(Attribute.LUCK)!!.value
-        val rodLuck = player.inventory.getItem(event.hand!!).getEnchantmentLevel(Enchantment.LUCK_OF_THE_SEA).toDouble()
+        val rodLuck =
+            player.inventory
+                .getItem(event.hand!!)
+                .getEnchantmentLevel(Enchantment.LUCK_OF_THE_SEA)
+                .toDouble()
         val totalLuck = playerLuck + rodLuck
 
         val weightFish = max(0.0, 85 + totalLuck * -1)
@@ -512,14 +548,16 @@ abstract class Module<T : Module<T?>?> : JavaPlugin(), Context<T?>, Listener {
         val weightTreasure = if (event.hook.isInOpenWater) max(0.0, 5 + totalLuck * 2) else 0.0
 
         val roll = random.nextDouble() * (weightFish + weightJunk + weightTreasure)
-        val key = when {
-            roll < weightFish -> LootTables.FISHING_FISH.key
-            roll < weightFish + weightJunk -> LootTables.FISHING_JUNK.key
-            else -> LootTables.FISHING_TREASURE.key
-        }
+        val key =
+            when {
+                roll < weightFish -> LootTables.FISHING_FISH.key
+                roll < weightFish + weightJunk -> LootTables.FISHING_JUNK.key
+                else -> LootTables.FISHING_TREASURE.key
+            }
 
         val additionalLootTable = additionalLootTables[key] ?: return
-        val newItem = additionalLootTable.generateOverride(Random(random.nextInt().toLong())) ?: return
+        val newItem =
+            additionalLootTable.generateOverride(Random(random.nextInt().toLong())) ?: return
         caughtItem.itemStack = newItem
     }
 }

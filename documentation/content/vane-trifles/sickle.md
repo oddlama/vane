@@ -5,6 +5,7 @@ itemlike = "vane-trifles:sickles.item_golden_sickle"
 ```
 
 ---
+
 ![](assets/gifs/sickle.gif)
 
 Do you have a big field? Craft a sickle to easily harvest larger parts of a field. And while the sickle comes in all

@@ -18,18 +18,12 @@ import org.oddlama.vane.core.functional.*
 import org.oddlama.vane.core.module.Module
 import org.oddlama.vane.util.StorageUtil.namespacedKey
 
-/**
- * Command parameter node interface used for parsing, execution dispatch, and completion.
- */
+/** Command parameter node interface used for parsing, execution dispatch, and completion. */
 interface Param {
-    /**
-     * Child parameters for this node.
-     */
+    /** Child parameters for this node. */
     val params: MutableList<Param?>
 
-    /**
-     * Verifies that the sender is a player and emits a localized error otherwise.
-     */
+    /** Verifies that the sender is a player and emits a localized error otherwise. */
     fun requirePlayer(sender: CommandSender?): Boolean {
         if (sender !is Player) {
             this.command!!.module!!.core?.langCommandNotAPlayer?.send(sender)
@@ -39,40 +33,61 @@ interface Param {
         return true
     }
 
-    /**
-     * Returns whether this node is an executor sentinel.
-     */
+    /** Returns whether this node is an executor sentinel. */
     val isExecutor: Boolean
         get() = false
 
-    /**
-     * Adds a child parameter node.
-     */
+    /** Adds a child parameter node. */
     fun addParam(param: Param) {
         if (param.isExecutor && params.any { it?.isExecutor == true }) {
-            throw RuntimeException("Cannot define multiple executors for the same parameter! This is a bug.")
+            throw RuntimeException(
+                "Cannot define multiple executors for the same parameter! This is a bug."
+            )
         }
         params.add(param)
     }
 
     /** Adds a player-only executor with one argument. */
     fun <T1> execPlayer(f: Consumer1<T1?>?) {
-        addParam(SentinelExecutorParam<Consumer1<T1?>?>(command, f, { requirePlayer(it) }, { it == 0 }))
+        addParam(
+            SentinelExecutorParam<Consumer1<T1?>?>(command, f, { requirePlayer(it) }, { it == 0 })
+        )
     }
 
     /** Adds a player-only executor with two arguments. */
     fun <T1, T2> execPlayer(f: Consumer2<T1?, T2?>?) {
-        addParam(SentinelExecutorParam<Consumer2<T1?, T2?>?>(command, f, { requirePlayer(it) }, { it == 0 }))
+        addParam(
+            SentinelExecutorParam<Consumer2<T1?, T2?>?>(
+                command,
+                f,
+                { requirePlayer(it) },
+                { it == 0 },
+            )
+        )
     }
 
     /** Adds a player-only executor with three arguments. */
     fun <T1, T2, T3> execPlayer(f: Consumer3<T1?, T2?, T3?>?) {
-        addParam(SentinelExecutorParam<Consumer3<T1?, T2?, T3?>?>(command, f, { requirePlayer(it) }, { it == 0 }))
+        addParam(
+            SentinelExecutorParam<Consumer3<T1?, T2?, T3?>?>(
+                command,
+                f,
+                { requirePlayer(it) },
+                { it == 0 },
+            )
+        )
     }
 
     /** Adds a player-only executor with four arguments. */
     fun <T1, T2, T3, T4> execPlayer(f: Consumer4<T1?, T2?, T3?, T4?>?) {
-        addParam(SentinelExecutorParam<Consumer4<T1?, T2?, T3?, T4?>?>(command, f, { requirePlayer(it) }, { it == 0 }))
+        addParam(
+            SentinelExecutorParam<Consumer4<T1?, T2?, T3?, T4?>?>(
+                command,
+                f,
+                { requirePlayer(it) },
+                { it == 0 },
+            )
+        )
     }
 
     /** Adds a player-only executor with five arguments. */
@@ -82,7 +97,8 @@ interface Param {
                 command,
                 f,
                 { requirePlayer(it) },
-                { it == 0 })
+                { it == 0 },
+            )
         )
     }
 
@@ -93,7 +109,8 @@ interface Param {
                 command,
                 f,
                 { requirePlayer(it) },
-                { it == 0 })
+                { it == 0 },
+            )
         )
     }
 
@@ -104,7 +121,8 @@ interface Param {
                 command,
                 f,
                 { requirePlayer(it) },
-                { it == 0 })
+                { it == 0 },
+            )
         )
     }
 
@@ -115,7 +133,8 @@ interface Param {
                 command,
                 f,
                 { requirePlayer(it) },
-                { it == 0 })
+                { it == 0 },
+            )
         )
     }
 
@@ -126,7 +145,8 @@ interface Param {
                 command,
                 f,
                 { requirePlayer(it) },
-                { it == 0 })
+                { it == 0 },
+            )
         )
     }
 
@@ -137,7 +157,8 @@ interface Param {
                 command,
                 f,
                 { requirePlayer(it) },
-                { it == 0 })
+                { it == 0 },
+            )
         )
     }
 
@@ -148,7 +169,8 @@ interface Param {
                 command,
                 f,
                 { requirePlayer(it) },
-                { it == 0 })
+                { it == 0 },
+            )
         )
     }
 
@@ -159,7 +181,8 @@ interface Param {
                 command,
                 f,
                 { requirePlayer(it) },
-                { it == 0 })
+                { it == 0 },
+            )
         )
     }
 
@@ -220,7 +243,9 @@ interface Param {
 
     /** Adds an executor function with six arguments. */
     fun <T1, T2, T3, T4, T5, T6> exec(f: Function6<T1?, T2?, T3?, T4?, T5?, T6?, Boolean?>?) {
-        addParam(SentinelExecutorParam<Function6<T1?, T2?, T3?, T4?, T5?, T6?, Boolean?>?>(command, f))
+        addParam(
+            SentinelExecutorParam<Function6<T1?, T2?, T3?, T4?, T5?, T6?, Boolean?>?>(command, f)
+        )
     }
 
     /** Adds an unconstrained string argument parameter. */
@@ -244,13 +269,14 @@ interface Param {
     }
 
     /** Adds a static choice parameter of strings. */
-    fun choice(choices: Collection<String?>): Param = choice<String?>("choice", choices) { str -> str }
+    fun choice(choices: Collection<String?>): Param =
+        choice<String?>("choice", choices) { str -> str }
 
     /** Adds a static choice parameter. */
     fun <T> choice(
         argumentType: String,
         choices: Collection<T?>,
-        toString: Function1<T?, String?>
+        toString: Function1<T?, String?>,
     ): ChoiceParam<T> {
         val p = ChoiceParam(this.command, argumentType, choices, toString)
         addParam(p)
@@ -262,7 +288,7 @@ interface Param {
         argumentType: String,
         choices: Function1<CommandSender?, Collection<T?>?>,
         toString: Function2<CommandSender?, T?, String?>,
-        fromString: Function2<CommandSender?, String?, out T?>
+        fromString: Function2<CommandSender?, String?, out T?>,
     ): DynamicChoiceParam<T?> {
         val p = DynamicChoiceParam(this.command, argumentType, choices, toString, fromString)
         addParam(p)
@@ -278,7 +304,7 @@ interface Param {
             Function2 { _, str ->
                 val core = this.command!!.module!!.core ?: return@Function2 null
                 core.modules.firstOrNull { it?.annotationName.equals(str, ignoreCase = true) }
-            }
+            },
         )
     }
 
@@ -289,9 +315,10 @@ interface Param {
             { _ -> this.command!!.module!!.server.worlds },
             { _, w -> w!!.name.lowercase() },
             Function2 { _, str ->
-                this.command!!.module!!.server.worlds
-                    .firstOrNull { it.name.equals(str, ignoreCase = true) }
-            }
+                this.command!!.module!!.server.worlds.firstOrNull {
+                    it.name.equals(str, ignoreCase = true)
+                }
+            },
         )
     }
 
@@ -302,9 +329,10 @@ interface Param {
             { _ -> this.command!!.module!!.offlinePlayersWithValidName.toMutableList() },
             { _, p -> p!!.name },
             Function2 { _, str ->
-                this.command!!.module!!.offlinePlayersWithValidName
-                    .firstOrNull { it.name.equals(str, ignoreCase = true) }
-            }
+                this.command!!.module!!.offlinePlayersWithValidName.firstOrNull {
+                    it.name.equals(str, ignoreCase = true)
+                }
+            },
         )
     }
 
@@ -315,9 +343,10 @@ interface Param {
             { _ -> this.command!!.module!!.server.onlinePlayers.toMutableList() },
             { _, p -> p!!.name },
             Function2 { _, str ->
-                this.command!!.module!!.server.onlinePlayers
-                    .firstOrNull { it.name.equals(str, ignoreCase = true) }
-            }
+                this.command!!.module!!.server.onlinePlayers.firstOrNull {
+                    it.name.equals(str, ignoreCase = true)
+                }
+            },
         )
     }
 
@@ -331,7 +360,9 @@ interface Param {
             "permission",
             { _ -> this.command!!.module!!.server.pluginManager.permissions },
             { _, p -> p!!.name },
-            Function2 { _, str -> this.command!!.module!!.server.pluginManager.getPermission(str!!) }
+            Function2 { _, str ->
+                this.command!!.module!!.server.pluginManager.getPermission(str!!)
+            },
         )
     }
 
@@ -339,9 +370,7 @@ interface Param {
     fun chooseGamemode(): ChoiceParam<GameMode?> =
         choice<GameMode?>("gamemode", GameMode.entries) { m -> m!!.name.lowercase() }.ignoreCase()
 
-    /**
-     * Adds a dynamic choice parameter for enchantments.
-     */
+    /** Adds a dynamic choice parameter for enchantments. */
     fun chooseEnchantment(
         filter: Function2<CommandSender?, Enchantment?, Boolean?> = Function2 { _, _ -> true }
     ): DynamicChoiceParam<Enchantment?> {
@@ -357,35 +386,38 @@ interface Param {
             Function2 { _, str ->
                 val parts = str?.split(":") ?: return@Function2 null
                 if (parts.size != 2) return@Function2 null
-                val e = RegistryAccess.registryAccess()
-                    .getRegistry(RegistryKey.ENCHANTMENT)
-                    .get(namespacedKey(parts[0], parts[1]))
+                val e =
+                    RegistryAccess.registryAccess()
+                        .getRegistry(RegistryKey.ENCHANTMENT)
+                        .get(namespacedKey(parts[0], parts[1]))
                 e.takeIf { filter.apply(null, it) == true }
-            }
+            },
         )
     }
 
-    /**
-     * Delegates acceptance checking to child parameters.
-     */
-    fun checkAcceptDelegate(sender: CommandSender?, args: Array<String?>?, offset: Int): CheckResult? {
+    /** Delegates acceptance checking to child parameters. */
+    fun checkAcceptDelegate(
+        sender: CommandSender?,
+        args: Array<String?>?,
+        offset: Int,
+    ): CheckResult? {
         require(params.isNotEmpty()) { "Encountered parameter without sentinel! This is a bug." }
 
         val results = params.mapNotNull { it!!.checkAccept(sender, args, offset + 1) }
 
-        results.firstOrNull { it.good() }?.let { return it }
+        results
+            .firstOrNull { it.good() }
+            ?.let {
+                return it
+            }
 
         val maxDepth = results.maxOf { it.depth() }
-        val errors = results
-            .filter { it.depth() == maxDepth }
-            .filterIsInstance<ErrorCheckResult>()
+        val errors = results.filter { it.depth() == maxDepth }.filterIsInstance<ErrorCheckResult>()
 
         return if (errors.size == 1) errors[0] else CombinedErrorCheckResult(errors)
     }
 
-    /**
-     * Parses this parameter and then delegates acceptance checking to children.
-     */
+    /** Parses this parameter and then delegates acceptance checking to children. */
     fun checkAccept(sender: CommandSender?, args: Array<String?>?, offset: Int): CheckResult? {
         val result = checkParse(sender, args, offset)
         if (result !is ParseCheckResult) {
@@ -394,14 +426,17 @@ interface Param {
 
         return checkAcceptDelegate(sender, args, offset)!!.prepend(
             result.argumentType,
-            result.parsed, result.includeParam
+            result.parsed,
+            result.includeParam,
         )
     }
 
-    /**
-     * Delegates completions to child parameters.
-     */
-    fun buildCompletionsDelegate(sender: CommandSender?, args: Array<String?>, offset: Int): MutableList<String?> {
+    /** Delegates completions to child parameters. */
+    fun buildCompletionsDelegate(
+        sender: CommandSender?,
+        args: Array<String?>,
+        offset: Int,
+    ): MutableList<String?> {
         require(params.isNotEmpty()) { "Encountered parameter without sentinel! This is a bug." }
 
         return params
@@ -409,10 +444,12 @@ interface Param {
             .toMutableList()
     }
 
-    /**
-     * Builds completions for this parameter node and its children.
-     */
-    fun buildCompletions(sender: CommandSender?, args: Array<String?>, offset: Int): MutableList<String?>? {
+    /** Builds completions for this parameter node and its children. */
+    fun buildCompletions(
+        sender: CommandSender?,
+        args: Array<String?>,
+        offset: Int,
+    ): MutableList<String?>? {
         return if (offset < args.size - 1) {
             if (checkParse(sender, args, offset) is ParseCheckResult) {
                 buildCompletionsDelegate(sender, args, offset)
@@ -424,18 +461,16 @@ interface Param {
         }
     }
 
-    /**
-     * Returns completions for this specific parameter.
-     */
-    fun completionsFor(sender: CommandSender?, args: Array<String?>?, offset: Int): MutableList<String?>?
+    /** Returns completions for this specific parameter. */
+    fun completionsFor(
+        sender: CommandSender?,
+        args: Array<String?>?,
+        offset: Int,
+    ): MutableList<String?>?
 
-    /**
-     * Parses this parameter at the given argument offset.
-     */
+    /** Parses this parameter at the given argument offset. */
     fun checkParse(sender: CommandSender?, args: Array<String?>?, offset: Int): CheckResult?
 
-    /**
-     * Returns the owning command.
-     */
+    /** Returns the owning command. */
     val command: Command<*>?
 }

@@ -8,8 +8,8 @@ module = "vane-admin"
 
 ## Graylist
 
-Vane provides a feature similar to a graylist. This allows anyone to connect to your server but in a *no touch, only
-look!* kind of way. To modify anything about the world, a player must either be oped, or have the
+Vane provides a feature similar to a graylist. This allows anyone to connect to your server but in a _no touch, only
+look!_ kind of way. To modify anything about the world, a player must either be oped, or have the
 `vane.admin.modify_world` permission.
 
 If you are using the included lightweight permissions plugin `vane-permissions`, you can assign a new player to the

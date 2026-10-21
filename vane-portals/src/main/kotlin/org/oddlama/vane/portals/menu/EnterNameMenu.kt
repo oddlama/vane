@@ -19,10 +19,10 @@ import org.oddlama.vane.portals.Portals
  * @property langTitle localized title shown on the anvil menu.
  * @property configMaterial preview item used in the input slot.
  */
-class EnterNameMenu(context: Context<Portals?>) : ModuleComponent<Portals?>(context.namespace("EnterName")) {
+class EnterNameMenu(context: Context<Portals?>) :
+    ModuleComponent<Portals?>(context.namespace("EnterName")) {
     /** Localized title shown on the name input menu. */
-    @LangMessage
-    var langTitle: TranslatedMessage? = null
+    @LangMessage var langTitle: TranslatedMessage? = null
 
     /** Preview item used in the anvil input slot. */
     @ConfigMaterial(def = Material.ENDER_PEARL, desc = "The item used to name portals.")
@@ -36,14 +36,14 @@ class EnterNameMenu(context: Context<Portals?>) : ModuleComponent<Portals?>(cont
     fun create(
         player: Player,
         defaultName: String,
-        onClick: Function2<Player?, String?, Menu.ClickResult?>
+        onClick: Function2<Player?, String?, Menu.ClickResult?>,
     ): Menu {
         return MenuFactory.anvilStringInput(
             getContext()!!,
             player,
             langTitle!!.str(),
             ItemStack(configMaterial!!),
-            defaultName
+            defaultName,
         ) { p: Player?, menu: Menu?, name: String? ->
             menu!!.close(p!!)
             onClick.apply(p, name)

@@ -6,9 +6,7 @@ import java.net.URISyntaxException
 import java.util.regex.Pattern
 import java.util.zip.ZipFile
 
-/**
- * Lists resources available from the code source of a given class.
- */
+/** Lists resources available from the code source of a given class. */
 object ResourceList {
     /**
      * For all elements of java.class.path get a Collection of resources matching [pattern].
@@ -39,7 +37,8 @@ object ResourceList {
     private fun getResourcesFromJarFile(file: java.io.File, pattern: Pattern): List<String> {
         return try {
             ZipFile(file).use { zf ->
-                zf.entries().asSequence()
+                zf.entries()
+                    .asSequence()
                     .map { it.name }
                     .filter { pattern.matcher(it).matches() }
                     .toList()
@@ -55,12 +54,13 @@ object ResourceList {
             directory.listFiles()?.forEach { file ->
                 when {
                     file.isDirectory -> addAll(getResourcesFromDirectory(file, pattern))
-                    else -> try {
-                        val fileName = file.canonicalPath
-                        if (pattern.matcher(fileName).matches()) add(fileName)
-                    } catch (e: IOException) {
-                        throw Error(e)
-                    }
+                    else ->
+                        try {
+                            val fileName = file.canonicalPath
+                            if (pattern.matcher(fileName).matches()) add(fileName)
+                        } catch (e: IOException) {
+                            throw Error(e)
+                        }
                 }
             }
         }

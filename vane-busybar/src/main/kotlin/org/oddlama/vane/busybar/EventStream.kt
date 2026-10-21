@@ -1,16 +1,16 @@
 package org.oddlama.vane.busybar
 
-import org.bukkit.permissions.Permission
-import org.json.JSONObject
-import org.oddlama.vane.busybar.common.BridgeServer
-import org.oddlama.vane.core.module.Context
-import org.oddlama.vane.core.module.ModuleComponent
 import java.io.IOException
 import java.net.InetSocketAddress
 import java.security.GeneralSecurityException
 import java.util.*
 import java.util.concurrent.TimeUnit
 import java.util.logging.Level
+import org.bukkit.permissions.Permission
+import org.json.JSONObject
+import org.oddlama.vane.busybar.common.BridgeServer
+import org.oddlama.vane.core.module.Context
+import org.oddlama.vane.core.module.ModuleComponent
 
 /**
  * The [BridgeServer] that bridges connect to, serving HTTPS unless [Tls] is off. See the module
@@ -21,7 +21,8 @@ import java.util.logging.Level
  *
  * @param context owning context.
  */
-class EventStream(context: Context<BusyBar?>) : ModuleComponent<BusyBar?>(context), BridgeServer.Host {
+class EventStream(context: Context<BusyBar?>) :
+    ModuleComponent<BusyBar?>(context), BridgeServer.Host {
     private val busybar: BusyBar
         get() = requireNotNull(module)
 
@@ -31,14 +32,19 @@ class EventStream(context: Context<BusyBar?>) : ModuleComponent<BusyBar?>(contex
     /** Whether `server.stop` was already sent during this shutdown. */
     private var stopAnnounced = false
 
-    /** ETag of the server icon, or null when the server has none. Bridges compare it to their cached copy. */
+    /**
+     * ETag of the server icon, or null when the server has none. Bridges compare it to their cached
+     * copy.
+     */
     fun iconTag(): String? = server?.iconTag()
 
     /** Starts the server, unless the proxy serves the bridges. */
     override fun onEnable() {
         stopAnnounced = false
         if (busybar.proxied()) {
-            busybar.log.info("BUSY Bar bridges are served by the proxy, so this server's event stream stays off.")
+            busybar.log.info(
+                "BUSY Bar bridges are served by the proxy, so this server's event stream stays off."
+            )
             return
         }
         server = BridgeServer(this, busybar.heads, busybar.bridgeLog).apply { setIcon(loadIcon()) }
@@ -52,7 +58,10 @@ class EventStream(context: Context<BusyBar?>) : ModuleComponent<BusyBar?>(contex
         server = null
     }
 
-    /** Restarts the server with freshly loaded TLS settings, disconnecting every bridge. Call from the main thread. */
+    /**
+     * Restarts the server with freshly loaded TLS settings, disconnecting every bridge. Call from
+     * the main thread.
+     */
     fun restart() {
         server?.stop()
         startServer()
@@ -66,16 +75,22 @@ class EventStream(context: Context<BusyBar?>) : ModuleComponent<BusyBar?>(contex
             val ssl = busybar.tls.load()
             current.start(address, ssl)
             val protocol = if (ssl == null) "HTTP" else "HTTPS"
-            busybar.log.info("BUSY Bar event stream listening on $address ($protocol, Tls ${busybar.tls.mode.name.lowercase()})")
+            busybar.log.info(
+                "BUSY Bar event stream listening on $address ($protocol, Tls ${busybar.tls.mode.name.lowercase()})"
+            )
         } catch (e: IOException) {
-            busybar.log.log(Level.SEVERE, "Failed to start the BUSY Bar event stream on $address", e)
+            busybar.log.log(
+                Level.SEVERE,
+                "Failed to start the BUSY Bar event stream on $address",
+                e,
+            )
         } catch (e: GeneralSecurityException) {
             busybar.log.log(
                 Level.SEVERE,
                 "Failed to set up TLS for the BUSY Bar event stream. With Tls auto, delete tls-auto.key and " +
                     "tls-auto.crt from the plugin folder to generate a new certificate; with Tls keystore, check " +
                     "TlsKeystore and TlsKeystorePassword.",
-                e
+                e,
             )
         }
     }
@@ -87,16 +102,21 @@ class EventStream(context: Context<BusyBar?>) : ModuleComponent<BusyBar?>(contex
      * @param type event name, for example `player.join`.
      * @param data event payload.
      * @param target only deliver to this player's bridges, or to everyone when null.
-     * @param permission only deliver to bridges whose owner holds this permission, or to everyone when null.
+     * @param permission only deliver to bridges whose owner holds this permission, or to everyone
+     *   when null.
      */
     fun emit(type: String, data: JSONObject, target: UUID? = null, permission: Permission? = null) {
         busybar.proxyLink.forward(type, data, target, permission)
         server?.emit(type, data) { player ->
-            (target == null || player == target) && (permission == null || busybar.access.has(player, permission))
+            (target == null || player == target) &&
+                (permission == null || busybar.access.has(player, permission))
         }
     }
 
-    /** Sends `server.stop` once per shutdown, from whichever comes first: the shutdown kicks or disabling. */
+    /**
+     * Sends `server.stop` once per shutdown, from whichever comes first: the shutdown kicks or
+     * disabling.
+     */
     fun announceStop() {
         if (stopAnnounced) return
         stopAnnounced = true
@@ -114,20 +134,25 @@ class EventStream(context: Context<BusyBar?>) : ModuleComponent<BusyBar?>(contex
     override fun playerForToken(token: String): UUID? = busybar.playerForToken(token)
 
     /** Builds the snapshot on the main thread, waiting up to [SYNC_TIMEOUT_SECONDS]. */
-    override fun snapshot(player: UUID): JSONObject? = try {
-        busybar.server.scheduler.callSyncMethod(busybar) { busybar.snapshot(player) }
-            .get(SYNC_TIMEOUT_SECONDS, TimeUnit.SECONDS)
-    } catch (_: Exception) {
-        null
-    }
-
-    /** Checks the request against the configuration and permissions, then runs it on the next tick. */
-    override fun request(player: UUID, request: JSONObject): Int {
-        val action = when (request.optString("type")) {
-            "presence.set" -> "presence.set"
-            "action.invoke" -> request.optString("action")
-            else -> return 400
+    override fun snapshot(player: UUID): JSONObject? =
+        try {
+            busybar.server.scheduler
+                .callSyncMethod(busybar) { busybar.snapshot(player) }
+                .get(SYNC_TIMEOUT_SECONDS, TimeUnit.SECONDS)
+        } catch (_: Exception) {
+            null
         }
+
+    /**
+     * Checks the request against the configuration and permissions, then runs it on the next tick.
+     */
+    override fun request(player: UUID, request: JSONObject): Int {
+        val action =
+            when (request.optString("type")) {
+                "presence.set" -> "presence.set"
+                "action.invoke" -> request.optString("action")
+                else -> return 400
+            }
         val permission = busybar.permissionForAction(action) ?: return 400
         if (!busybar.actionAllowed(action) || !busybar.access.has(player, permission)) return 403
         busybar.scheduleNextTick { busybar.handleRequest(player, request) }

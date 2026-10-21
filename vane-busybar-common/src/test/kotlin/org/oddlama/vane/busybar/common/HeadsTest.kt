@@ -11,7 +11,10 @@ class HeadsTest {
     private val face = 0xFF_C0_80_40.toInt()
     private val hat = 0xFF_20_40_E0.toInt()
 
-    /** A skin whose face is [face] and whose hat layer is [hat] in one corner, transparent elsewhere. */
+    /**
+     * A skin whose face is [face] and whose hat layer is [hat] in one corner, transparent
+     * elsewhere.
+     */
     private fun skin(height: Int, fullHat: Boolean): ByteArray {
         val image = BufferedImage(64, height, BufferedImage.TYPE_INT_ARGB)
         for (x in 0 until 8) for (y in 0 until 8) {
@@ -45,9 +48,11 @@ class HeadsTest {
     @Test
     fun `reads the skin URL from a game profile's textures`() {
         val url = "http://textures.minecraft.net/texture/1a2b3c4d5e6f7a8b9c0d"
-        val textures = java.util.Base64.getEncoder().encodeToString(
-            """{"profileName":"Alex","textures":{"SKIN":{"url":"$url"}}}""".toByteArray()
-        )
+        val textures =
+            java.util.Base64.getEncoder()
+                .encodeToString(
+                    """{"profileName":"Alex","textures":{"SKIN":{"url":"$url"}}}""".toByteArray()
+                )
         assertEquals(url, Heads.skinUrl(textures).toString())
         assertEquals("1a2b3c4d5e6f7a8b9c0d", Heads().remember(Heads.skinUrl(textures)))
     }
@@ -56,6 +61,8 @@ class HeadsTest {
     fun `ignores missing or malformed textures`() {
         kotlin.test.assertNull(Heads.skinUrl(null))
         kotlin.test.assertNull(Heads.skinUrl("not base64!"))
-        kotlin.test.assertNull(Heads.skinUrl(java.util.Base64.getEncoder().encodeToString("{}".toByteArray())))
+        kotlin.test.assertNull(
+            Heads.skinUrl(java.util.Base64.getEncoder().encodeToString("{}".toByteArray()))
+        )
     }
 }

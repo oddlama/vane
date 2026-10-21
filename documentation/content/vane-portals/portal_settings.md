@@ -31,6 +31,7 @@ styles you've created on our [discord](https://discord.gg/RueJ6A59x2)!
 > Remember to press **Apply** at the end to make your changes visible.
 
 <!---->
+
 > You can hide your portal by changing the inactive portal area block.
 
 **Orientation lock:** Activate this to ensure that entities always exit the portal on the front-side. Usually portals

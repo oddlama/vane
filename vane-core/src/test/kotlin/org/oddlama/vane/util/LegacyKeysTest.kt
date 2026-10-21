@@ -1,8 +1,5 @@
 package org.oddlama.vane.util
 
-import org.bukkit.configuration.file.YamlConfiguration
-import org.json.JSONObject
-import org.oddlama.vane.core.persistent.PersistentSerializer
 import java.io.File
 import java.nio.file.Files
 import java.util.*
@@ -11,6 +8,9 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
+import org.bukkit.configuration.file.YamlConfiguration
+import org.json.JSONObject
+import org.oddlama.vane.core.persistent.PersistentSerializer
 
 class LegacyKeysTest {
     @Test
@@ -26,55 +26,64 @@ class LegacyKeysTest {
         assertEquals("motd", LegacyKeys.findLegacyKey(listOf("motd"), "MOTD"))
         assertEquals(
             "auth_multiplexer.auth_multiplex",
-            LegacyKeys.findLegacyKey(listOf("auth_multiplexer.auth_multiplex"), "AuthMultiplexer.AuthMultiplex"),
+            LegacyKeys.findLegacyKey(
+                listOf("auth_multiplexer.auth_multiplex"),
+                "AuthMultiplexer.AuthMultiplex",
+            ),
         )
     }
 
     @Test
     fun `migrates a pre-1_22 config to the current paths`() {
-        val legacy = YamlConfiguration().apply {
-            loadFromString(
-                """
-                version: 6
-                lang: de
-                resource_pack:
-                  enabled: true
-                  force: false
-                  custom_resource_pack:
-                    enabled: true
-                    url: https://example.org/pack.zip
-                command_vane:
-                  enabled: false
-                enchantment_take_off:
-                  enabled: true
-                  level_cost:
-                    diamond_pickaxe: 3
-                    netherite_pickaxe: 5
-                unrelated_old_key: 1
-                """.trimIndent()
-            )
-        }
+        val legacy =
+            YamlConfiguration().apply {
+                loadFromString(
+                    """
+                    version: 6
+                    lang: de
+                    resource_pack:
+                      enabled: true
+                      force: false
+                      custom_resource_pack:
+                        enabled: true
+                        url: https://example.org/pack.zip
+                    command_vane:
+                      enabled: false
+                    enchantment_take_off:
+                      enabled: true
+                      level_cost:
+                        diamond_pickaxe: 3
+                        netherite_pickaxe: 5
+                    unrelated_old_key: 1
+                    """
+                        .trimIndent()
+                )
+            }
 
-        val migrated = LegacyKeys.migrateYaml(
-            legacy,
-            listOf(
-                "Version",
-                "Lang",
-                "ResourcePack.Enabled",
-                "ResourcePack.Force",
-                "ResourcePack.CustomResourcePack.Enabled",
-                "ResourcePack.CustomResourcePack.Url",
-                "CommandVane.Enabled",
-                "EnchantmentTakeOff.LevelCost",
-                "Metrics.Enabled",
-            ),
-        )
+        val migrated =
+            LegacyKeys.migrateYaml(
+                legacy,
+                listOf(
+                    "Version",
+                    "Lang",
+                    "ResourcePack.Enabled",
+                    "ResourcePack.Force",
+                    "ResourcePack.CustomResourcePack.Enabled",
+                    "ResourcePack.CustomResourcePack.Url",
+                    "CommandVane.Enabled",
+                    "EnchantmentTakeOff.LevelCost",
+                    "Metrics.Enabled",
+                ),
+            )
 
         assertEquals(6L, migrated.getLong("Version"))
         assertEquals("de", migrated.getString("Lang"))
         assertTrue(migrated.getBoolean("ResourcePack.Enabled"))
         assertFalse(migrated.getBoolean("ResourcePack.Force", true))
-        assertEquals("https://example.org/pack.zip", migrated.getString("ResourcePack.CustomResourcePack.Url"))
+        assertEquals(
+            "https://example.org/pack.zip",
+            migrated.getString("ResourcePack.CustomResourcePack.Url"),
+        )
         assertFalse(migrated.getBoolean("CommandVane.Enabled", true))
         // A map value becomes a section again, and its user-defined keys are not renamed.
         val levelCost = migrated.getConfigurationSection("EnchantmentTakeOff.LevelCost")!!

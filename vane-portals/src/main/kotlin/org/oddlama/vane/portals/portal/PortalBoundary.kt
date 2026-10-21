@@ -2,36 +2,36 @@
 
 package org.oddlama.vane.portals.portal
 
-import org.bukkit.Location
-import org.bukkit.Material
-import org.bukkit.block.Block
-import org.oddlama.vane.portals.PortalConstructor
 import java.util.*
 import kotlin.math.abs
 import kotlin.math.floor
 import kotlin.math.max
 import kotlin.math.min
+import org.bukkit.Location
+import org.bukkit.Material
+import org.bukkit.block.Block
+import org.oddlama.vane.portals.PortalConstructor
 
 /**
  * Represents a discovered portal boundary including its outline (boundary blocks), portal area
  * blocks and the origin block. The class encapsulates validation state determined during the
  * detection/search process.
  *
- * The instance is created by the companion object search routines and may contain an
- * {@link ErrorState} indicating why a valid portal could not be created.
+ * The instance is created by the companion object search routines and may contain an {@link
+ * ErrorState} indicating why a valid portal could not be created.
  *
- * @constructor Private constructor used by the search routines. The [plane] parameter denotes
- * the plane in which the portal was identified (XY, YZ or XZ). Use the companion object's
- * search functions to create instances.
  * @param plane The plane of the portal, or null if not applicable.
+ * @constructor Private constructor used by the search routines. The [plane] parameter denotes the
+ *   plane in which the portal was identified (XY, YZ or XZ). Use the companion object's search
+ *   functions to create instances.
  */
 @Suppress("unused")
 class PortalBoundary private constructor(private val plane: Plane?) {
     /**
      * Enumeration of possible error states encountered while detecting or validating a portal.
      *
-     * NONE indicates a valid detection. All other values indicate reasons why the portal is
-     * invalid or does not meet constraints (size limits, missing origin, obstructions, etc.).
+     * NONE indicates a valid detection. All other values indicate reasons why the portal is invalid
+     * or does not meet constraints (size limits, missing origin, obstructions, etc.).
      */
     enum class ErrorState {
         NONE,
@@ -56,8 +56,8 @@ class PortalBoundary private constructor(private val plane: Plane?) {
     private var portalAreaBlocks: MutableSet<Block>? = null
 
     /**
-     * Origin block is the root block of the portal. It determines the search point for the
-     * spawn location for XY and YZ types, and the region the portal belongs to.
+     * Origin block is the root block of the portal. It determines the search point for the spawn
+     * location for XY and YZ types, and the region the portal belongs to.
      */
     private var originBlock: Block? = null
 
@@ -78,19 +78,22 @@ class PortalBoundary private constructor(private val plane: Plane?) {
 
     /**
      * Returns all boundary blocks (excluding the origin block).
+     *
      * @return A mutable set of boundary blocks or null if not computed.
      */
     fun boundaryBlocks() = boundaryBlocks
 
     /**
      * Returns all portal area blocks (the interior of the portal).
+     *
      * @return A mutable set of portal area blocks or null if not computed.
      */
     fun portalAreaBlocks() = portalAreaBlocks
 
     /**
-     * Returns the origin block which is part of the portal outline but not included in
-     * the set returned by `boundaryBlocks()`.
+     * Returns the origin block which is part of the portal outline but not included in the set
+     * returned by `boundaryBlocks()`.
+     *
      * @return The origin [Block], or null if no origin was found.
      */
     fun originBlock() = originBlock
@@ -116,8 +119,8 @@ class PortalBoundary private constructor(private val plane: Plane?) {
     /**
      * Collect and return all blocks that belong to this portal (boundary, area and origin).
      *
-     * Note: this assumes the internal collections and origin are non-null and will throw if
-     * they are not properly initialized.
+     * Note: this assumes the internal collections and origin are non-null and will throw if they
+     * are not properly initialized.
      *
      * @return MutableList containing boundary blocks, portal area blocks and the origin block.
      */
@@ -139,9 +142,7 @@ class PortalBoundary private constructor(private val plane: Plane?) {
         return allBlocks().any { b -> portalConstructor.module!!.isPortalBlock(b) }
     }
 
-    /**
-     * Return a concise string representation useful for debugging.
-     */
+    /** Return a concise string representation useful for debugging. */
     override fun toString(): String {
         return "PortalBoundary{originBlock = $originBlock, plane = $plane}"
     }
@@ -155,7 +156,7 @@ class PortalBoundary private constructor(private val plane: Plane?) {
             block: Block?,
             stack: Stack<Block>,
             outBoundary: MutableSet<Block>,
-            outPortalArea: MutableSet<Block>
+            outPortalArea: MutableSet<Block>,
         ) {
             if (block == null || block in outBoundary || block in outPortalArea) return
 
@@ -163,36 +164,96 @@ class PortalBoundary private constructor(private val plane: Plane?) {
         }
 
         /**
-         * Push all adjacent blocks (4-connected) relative to [block] onto [stack] taking the
-         * portal [plane] into account. Uses `pushBlockIfNotContained` to avoid duplicates.
+         * Push all adjacent blocks (4-connected) relative to [block] onto [stack] taking the portal
+         * [plane] into account. Uses `pushBlockIfNotContained` to avoid duplicates.
          */
         private fun pushAdjacentBlocksToStack(
             block: Block,
             stack: Stack<Block>,
             outBoundary: MutableSet<Block>,
             outPortalArea: MutableSet<Block>,
-            plane: Plane
+            plane: Plane,
         ) {
             when (plane) {
                 Plane.XY -> {
-                    pushBlockIfNotContained(block.getRelative(1, 0, 0), stack, outBoundary, outPortalArea)
-                    pushBlockIfNotContained(block.getRelative(-1, 0, 0), stack, outBoundary, outPortalArea)
-                    pushBlockIfNotContained(block.getRelative(0, 1, 0), stack, outBoundary, outPortalArea)
-                    pushBlockIfNotContained(block.getRelative(0, -1, 0), stack, outBoundary, outPortalArea)
+                    pushBlockIfNotContained(
+                        block.getRelative(1, 0, 0),
+                        stack,
+                        outBoundary,
+                        outPortalArea,
+                    )
+                    pushBlockIfNotContained(
+                        block.getRelative(-1, 0, 0),
+                        stack,
+                        outBoundary,
+                        outPortalArea,
+                    )
+                    pushBlockIfNotContained(
+                        block.getRelative(0, 1, 0),
+                        stack,
+                        outBoundary,
+                        outPortalArea,
+                    )
+                    pushBlockIfNotContained(
+                        block.getRelative(0, -1, 0),
+                        stack,
+                        outBoundary,
+                        outPortalArea,
+                    )
                 }
 
                 Plane.YZ -> {
-                    pushBlockIfNotContained(block.getRelative(0, 0, 1), stack, outBoundary, outPortalArea)
-                    pushBlockIfNotContained(block.getRelative(0, 0, -1), stack, outBoundary, outPortalArea)
-                    pushBlockIfNotContained(block.getRelative(0, 1, 0), stack, outBoundary, outPortalArea)
-                    pushBlockIfNotContained(block.getRelative(0, -1, 0), stack, outBoundary, outPortalArea)
+                    pushBlockIfNotContained(
+                        block.getRelative(0, 0, 1),
+                        stack,
+                        outBoundary,
+                        outPortalArea,
+                    )
+                    pushBlockIfNotContained(
+                        block.getRelative(0, 0, -1),
+                        stack,
+                        outBoundary,
+                        outPortalArea,
+                    )
+                    pushBlockIfNotContained(
+                        block.getRelative(0, 1, 0),
+                        stack,
+                        outBoundary,
+                        outPortalArea,
+                    )
+                    pushBlockIfNotContained(
+                        block.getRelative(0, -1, 0),
+                        stack,
+                        outBoundary,
+                        outPortalArea,
+                    )
                 }
 
                 Plane.XZ -> {
-                    pushBlockIfNotContained(block.getRelative(1, 0, 0), stack, outBoundary, outPortalArea)
-                    pushBlockIfNotContained(block.getRelative(-1, 0, 0), stack, outBoundary, outPortalArea)
-                    pushBlockIfNotContained(block.getRelative(0, 0, 1), stack, outBoundary, outPortalArea)
-                    pushBlockIfNotContained(block.getRelative(0, 0, -1), stack, outBoundary, outPortalArea)
+                    pushBlockIfNotContained(
+                        block.getRelative(1, 0, 0),
+                        stack,
+                        outBoundary,
+                        outPortalArea,
+                    )
+                    pushBlockIfNotContained(
+                        block.getRelative(-1, 0, 0),
+                        stack,
+                        outBoundary,
+                        outPortalArea,
+                    )
+                    pushBlockIfNotContained(
+                        block.getRelative(0, 0, 1),
+                        stack,
+                        outBoundary,
+                        outPortalArea,
+                    )
+                    pushBlockIfNotContained(
+                        block.getRelative(0, 0, -1),
+                        stack,
+                        outBoundary,
+                        outPortalArea,
+                    )
                 }
             }
         }
@@ -207,7 +268,7 @@ class PortalBoundary private constructor(private val plane: Plane?) {
             stack: Stack<Block>,
             outBoundary: MutableSet<Block>,
             outPortalArea: MutableSet<Block>,
-            plane: Plane
+            plane: Plane,
         ) {
             val block = stack.pop()
             if (portalConstructor.isTypePartOfBoundaryOrOrigin(block.type)) {
@@ -219,20 +280,20 @@ class PortalBoundary private constructor(private val plane: Plane?) {
         }
 
         /**
-         * Simultaneously fill two areas. Return as soon as a valid area is found or the maximum depth
-         * is exceeded. Returns a pair of { boundary, portal_area }
+         * Simultaneously fill two areas. Return as soon as a valid area is found or the maximum
+         * depth is exceeded. Returns a pair of { boundary, portal_area }
          */
         /**
          * Simultaneously flood-fill two candidate areas starting from the given [areas]. The
-         * function returns as soon as one of the areas finishes (i.e., the flood fill cannot
-         * expand further) and yields the corresponding pair of `{ boundary, portal_area }`.
+         * function returns as soon as one of the areas finishes (i.e., the flood fill cannot expand
+         * further) and yields the corresponding pair of `{ boundary, portal_area }`.
          *
          * If both areas exceed configured maximum depth or are otherwise invalid, returns null.
          */
         private fun simultaneousFloodFill4(
             portalConstructor: PortalConstructor,
             areas: Array<Block?>,
-            plane: Plane
+            plane: Plane,
         ): Pair<MutableSet<Block>?, MutableSet<Block>?>? {
             val boundary0: MutableSet<Block> = HashSet()
             val boundary1: MutableSet<Block> = HashSet()
@@ -247,7 +308,9 @@ class PortalBoundary private constructor(private val plane: Plane?) {
             // Keep going as long as all stacks of enabled areas are not empty and max depth is not
             // reached
             var depth = 0
-            while ((areas[0] == null || !floodFillStack0.isEmpty()) && (areas[1] == null || !floodFillStack1.isEmpty())
+            while (
+                (areas[0] == null || !floodFillStack0.isEmpty()) &&
+                    (areas[1] == null || !floodFillStack1.isEmpty())
             ) {
                 ++depth
 
@@ -257,10 +320,22 @@ class PortalBoundary private constructor(private val plane: Plane?) {
                 }
 
                 if (areas[0] != null) {
-                    doFloodFill4Step(portalConstructor, floodFillStack0, boundary0, portalArea0, plane)
+                    doFloodFill4Step(
+                        portalConstructor,
+                        floodFillStack0,
+                        boundary0,
+                        portalArea0,
+                        plane,
+                    )
                 }
                 if (areas[1] != null) {
-                    doFloodFill4Step(portalConstructor, floodFillStack1, boundary1, portalArea1, plane)
+                    doFloodFill4Step(
+                        portalConstructor,
+                        floodFillStack1,
+                        boundary1,
+                        portalArea1,
+                        plane,
+                    )
                 }
             }
 
@@ -276,8 +351,8 @@ class PortalBoundary private constructor(private val plane: Plane?) {
 
         /**
          * Return the 8 surrounding blocks around [block] in counter-clockwise order for the
-         * specified [plane]. The ordering is useful for area detection algorithms that
-         * rely on consistent traversal order.
+         * specified [plane]. The ordering is useful for area detection algorithms that rely on
+         * consistent traversal order.
          */
         private fun getSurroundingBlocksCcw(block: Block, plane: Plane): MutableList<Block> {
             val surroundingBlocks = ArrayList<Block>()
@@ -321,26 +396,26 @@ class PortalBoundary private constructor(private val plane: Plane?) {
         }
 
         /**
-         * Analyze the immediate 3x3 neighborhood around [block] (relative to [plane]) and
-         * identify up to two starting blocks representing potential portal interior areas.
+         * Analyze the immediate 3x3 neighborhood around [block] (relative to [plane]) and identify
+         * up to two starting blocks representing potential portal interior areas.
          *
-         * Returns an array of length two containing starting block candidates for each area.
-         * If the shape is invalid, null is returned.
+         * Returns an array of length two containing starting block candidates for each area. If the
+         * shape is invalid, null is returned.
          */
         private fun getPotentialAreaBlocks(
             portalConstructor: PortalConstructor,
             block: Block,
-            plane: Plane
+            plane: Plane,
         ): Array<Block?>? {
             /* Step 1: Assert that the 8 surrounding blocks must include two or more boundary blocks
-         * Step 2: Set area index to first area
-         * Step 3: Start at any surrounding block.
-         * Step 4: Check if the block is a boundary block
-         *  - false: Set this as the start block for the current area.
-         *           If both areas are assigned, stop here.
-         *  - true: Set the area index to the other area (area + 1) % 2 if it is the first boundary block after a non boundary block
-         * Step 5: Select next block CW/CCW. If it is the start block return the areas, else to step 4
-         */
+             * Step 2: Set area index to first area
+             * Step 3: Start at any surrounding block.
+             * Step 4: Check if the block is a boundary block
+             *  - false: Set this as the start block for the current area.
+             *           If both areas are assigned, stop here.
+             *  - true: Set the area index to the other area (area + 1) % 2 if it is the first boundary block after a non boundary block
+             * Step 5: Select next block CW/CCW. If it is the start block return the areas, else to step 4
+             */
 
             val surroundingBlocks: MutableList<Block> = getSurroundingBlocksCcw(block, plane)
 
@@ -381,10 +456,10 @@ class PortalBoundary private constructor(private val plane: Plane?) {
         }
 
         /**
-         * Collect sequences of vertically-aligned air blocks (3-block stacks) starting from
-         * the provided [startAir] and walking along the axis specified by [modX],[modZ]. The
-         * discovered matching air blocks are added to [lowestAirBlocks] either at the front
-         * or back depending on [insertFront].
+         * Collect sequences of vertically-aligned air blocks (3-block stacks) starting from the
+         * provided [startAir] and walking along the axis specified by [modX],[modZ]. The discovered
+         * matching air blocks are added to [lowestAirBlocks] either at the front or back depending
+         * on [insertFront].
          */
         private fun add3AirStacks(
             portalConstructor: PortalConstructor,
@@ -392,7 +467,7 @@ class PortalBoundary private constructor(private val plane: Plane?) {
             lowestAirBlocks: MutableList<Block>,
             insertFront: Boolean,
             modX: Int,
-            modZ: Int
+            modZ: Int,
         ) {
             var air = startAir
             while (true) {
@@ -426,39 +501,43 @@ class PortalBoundary private constructor(private val plane: Plane?) {
 
         /**
          * Attempt to detect a portal at [searchBlock] within the given [plane]. Performs
-         * neighborhood analysis and flood-fill validation. If a valid portal is found a
-         * configured [PortalBoundary] instance is returned; otherwise returns a boundary
-         * instance with an appropriate error state or null when completely invalid.
+         * neighborhood analysis and flood-fill validation. If a valid portal is found a configured
+         * [PortalBoundary] instance is returned; otherwise returns a boundary instance with an
+         * appropriate error state or null when completely invalid.
          */
         private fun searchAt(
             portalConstructor: PortalConstructor,
             searchBlock: Block,
-            plane: Plane
+            plane: Plane,
         ): PortalBoundary? {
             /* A 3x3 field of blocks around the start block is always split into 2 areas:
-         *
-         * []''''
-         * ..##[]
-         * ......
-         *
-         * [] = boundary
-         * ## = start boundary block
-         * .. = area 1
-         * '' = area 2
-         *
-         * Anything else is invalid.
-         *
-         * Step 1: Determine one block each, for area 1 and area 2
-         * Step 2: Do a flood fill algorithm at the same time on both areas
-         *  - The one that finishes first wins
-         *  - If both exceed (two times) the max block count, it is invalid
-         * Result: The flood fill algorithm returns the boundary and portal area for the valid area or null if both are invalid.
-         */
+             *
+             * []''''
+             * ..##[]
+             * ......
+             *
+             * [] = boundary
+             * ## = start boundary block
+             * .. = area 1
+             * '' = area 2
+             *
+             * Anything else is invalid.
+             *
+             * Step 1: Determine one block each, for area 1 and area 2
+             * Step 2: Do a flood fill algorithm at the same time on both areas
+             *  - The one that finishes first wins
+             *  - If both exceed (two times) the max block count, it is invalid
+             * Result: The flood fill algorithm returns the boundary and portal area for the valid area or null if both are invalid.
+             */
 
-            val potentialAreaBlocks: Array<Block?>? = getPotentialAreaBlocks(portalConstructor, searchBlock, plane)
+            val potentialAreaBlocks: Array<Block?>? =
+                getPotentialAreaBlocks(portalConstructor, searchBlock, plane)
 
             // If potentialAreaBlocks is null, the shape is invalid
-            if (potentialAreaBlocks == null || (potentialAreaBlocks[0] == null && potentialAreaBlocks[1] == null)) {
+            if (
+                potentialAreaBlocks == null ||
+                    (potentialAreaBlocks[0] == null && potentialAreaBlocks[1] == null)
+            ) {
                 return null
             }
 
@@ -529,7 +608,8 @@ class PortalBoundary private constructor(private val plane: Plane?) {
                 return boundary
             }
 
-            val airOverrides: Set<Material> = setOf(Material.CAVE_AIR, Material.AIR, Material.VOID_AIR)
+            val airOverrides: Set<Material> =
+                setOf(Material.CAVE_AIR, Material.AIR, Material.VOID_AIR)
 
             // Check area obstruction
             for (block in boundary.portalAreaBlocks!!) {
@@ -544,24 +624,28 @@ class PortalBoundary private constructor(private val plane: Plane?) {
                 }
             }
 
-            // Determine spawn point and check minimum size constraints (these are only important at the
+            // Determine spawn point and check minimum size constraints (these are only important at
+            // the
             // portal's spawn point)
             if (boundary.plane == Plane.XZ) {
-                // Find middle of portal, then find first (2,3x2,3) (even,uneven) area in the direction
+                // Find middle of portal, then find first (2,3x2,3) (even,uneven) area in the
+                // direction
                 // of origin block (the greater x/z distance is chosen)
-                val middleSmallCoords = boundary
-                    .originBlock()!!
-                    .world
-                    .getBlockAt(
-                        floor(minX / 2.0 + maxX / 2.0).toInt(),
-                        boundary.originBlock()!!.y,
-                        floor(minZ / 2.0 + maxZ / 2.0).toInt()
-                    )
+                val middleSmallCoords =
+                    boundary
+                        .originBlock()!!
+                        .world
+                        .getBlockAt(
+                            floor(minX / 2.0 + maxX / 2.0).toInt(),
+                            boundary.originBlock()!!.y,
+                            floor(minZ / 2.0 + maxZ / 2.0).toInt(),
+                        )
 
                 val diffX = middleSmallCoords.x - boundary.originBlock()!!.x
                 val diffZ = middleSmallCoords.z - boundary.originBlock()!!.z
 
-                // Calculate mod to add to middle block to get more into the direction of origin block
+                // Calculate mod to add to middle block to get more into the direction of origin
+                // block
                 val modX: Int
                 val modZ: Int
                 if (abs(diffX) > abs(diffZ)) {
@@ -600,7 +684,8 @@ class PortalBoundary private constructor(private val plane: Plane?) {
                 // Find "backwards" last block inside
                 var next = firstInside
                 var backLastInside: Block?
-                var totalBlocksInside = -1 // -1 because both forward and backward search includes firstInside
+                var totalBlocksInside =
+                    -1 // -1 because both forward and backward search includes firstInside
                 do {
                     backLastInside = next
                     next = backLastInside.getRelative(-modX, 0, -modZ)
@@ -617,7 +702,9 @@ class PortalBoundary private constructor(private val plane: Plane?) {
                 } while (boundary.portalAreaBlocks()!!.contains(next))
 
                 if (totalBlocksInside < 2) {
-                    boundary.errorState = if (modZ == 0) ErrorState.TOO_SMALL_SPAWN_X else ErrorState.TOO_SMALL_SPAWN_Z
+                    boundary.errorState =
+                        if (modZ == 0) ErrorState.TOO_SMALL_SPAWN_X
+                        else ErrorState.TOO_SMALL_SPAWN_Z
                     return boundary
                 }
 
@@ -643,24 +730,39 @@ class PortalBoundary private constructor(private val plane: Plane?) {
                 val spawnOffsetAlongSideAxis: Double
                 if (evenAlongOriginAxis) {
                     // Include coords of a middle plus one along origin direction
-                    if (!boundary.portalAreaBlocks()!!.contains(middleInside.getRelative(absModX, 0, absModZ))) {
+                    if (
+                        !boundary
+                            .portalAreaBlocks()!!
+                            .contains(middleInside.getRelative(absModX, 0, absModZ))
+                    ) {
                         boundary.errorState =
-                            if (modX == 0) ErrorState.TOO_SMALL_SPAWN_Z else ErrorState.TOO_SMALL_SPAWN_X
+                            if (modX == 0) ErrorState.TOO_SMALL_SPAWN_Z
+                            else ErrorState.TOO_SMALL_SPAWN_X
                         return boundary
                     }
 
                     spawnOffsetAlongOriginAxis = 1.0
                 } else {
                     // Include coords of middle plus one and minus one along origin direction
-                    if (!boundary.portalAreaBlocks()!!.contains(middleInside.getRelative(absModX, 0, absModZ))) {
+                    if (
+                        !boundary
+                            .portalAreaBlocks()!!
+                            .contains(middleInside.getRelative(absModX, 0, absModZ))
+                    ) {
                         boundary.errorState =
-                            if (modX == 0) ErrorState.TOO_SMALL_SPAWN_Z else ErrorState.TOO_SMALL_SPAWN_X
+                            if (modX == 0) ErrorState.TOO_SMALL_SPAWN_Z
+                            else ErrorState.TOO_SMALL_SPAWN_X
                         return boundary
                     }
 
-                    if (!boundary.portalAreaBlocks()!!.contains(middleInside.getRelative(-absModX, 0, -absModZ))) {
+                    if (
+                        !boundary
+                            .portalAreaBlocks()!!
+                            .contains(middleInside.getRelative(-absModX, 0, -absModZ))
+                    ) {
                         boundary.errorState =
-                            if (modX == 0) ErrorState.TOO_SMALL_SPAWN_Z else ErrorState.TOO_SMALL_SPAWN_X
+                            if (modX == 0) ErrorState.TOO_SMALL_SPAWN_Z
+                            else ErrorState.TOO_SMALL_SPAWN_X
                         return boundary
                     }
 
@@ -669,24 +771,39 @@ class PortalBoundary private constructor(private val plane: Plane?) {
 
                 if (evenAlongSideAxis) {
                     // Include coords of a middle plus one along a side direction
-                    if (!boundary.portalAreaBlocks()!!.contains(middleInside.getRelative(absModZ, 0, absModX))) {
+                    if (
+                        !boundary
+                            .portalAreaBlocks()!!
+                            .contains(middleInside.getRelative(absModZ, 0, absModX))
+                    ) {
                         boundary.errorState =
-                            if (modX == 0) ErrorState.TOO_SMALL_SPAWN_X else ErrorState.TOO_SMALL_SPAWN_Z
+                            if (modX == 0) ErrorState.TOO_SMALL_SPAWN_X
+                            else ErrorState.TOO_SMALL_SPAWN_Z
                         return boundary
                     }
 
                     spawnOffsetAlongSideAxis = 1.0
                 } else {
                     // Include coords of middle plus and minus one along a side direction
-                    if (!boundary.portalAreaBlocks()!!.contains(middleInside.getRelative(absModZ, 0, absModX))) {
+                    if (
+                        !boundary
+                            .portalAreaBlocks()!!
+                            .contains(middleInside.getRelative(absModZ, 0, absModX))
+                    ) {
                         boundary.errorState =
-                            if (modX == 0) ErrorState.TOO_SMALL_SPAWN_X else ErrorState.TOO_SMALL_SPAWN_Z
+                            if (modX == 0) ErrorState.TOO_SMALL_SPAWN_X
+                            else ErrorState.TOO_SMALL_SPAWN_Z
                         return boundary
                     }
 
-                    if (!boundary.portalAreaBlocks()!!.contains(middleInside.getRelative(-absModZ, 0, -absModX))) {
+                    if (
+                        !boundary
+                            .portalAreaBlocks()!!
+                            .contains(middleInside.getRelative(-absModZ, 0, -absModX))
+                    ) {
                         boundary.errorState =
-                            if (modX == 0) ErrorState.TOO_SMALL_SPAWN_X else ErrorState.TOO_SMALL_SPAWN_Z
+                            if (modX == 0) ErrorState.TOO_SMALL_SPAWN_X
+                            else ErrorState.TOO_SMALL_SPAWN_Z
                         return boundary
                     }
 
@@ -705,7 +822,8 @@ class PortalBoundary private constructor(private val plane: Plane?) {
 
                 boundary.spawn = Location(middleInside.world, spawnX, middleInside.y + 0.5, spawnZ)
             } else {
-                // Find the air (above) boundary (below) combinations at origin block, determine middle,
+                // Find the air (above) boundary (below) combinations at origin block, determine
+                // middle,
                 // check if minimum size rectangle is part of the blocklist
 
                 // The block above the origin block must be part of the portal
@@ -722,8 +840,9 @@ class PortalBoundary private constructor(private val plane: Plane?) {
                 // Check for at least 1x3 air blocks above the origin
                 val airAboveOrigin2 = boundary.originBlock()!!.getRelative(0, 2, 0)
                 val airAboveOrigin3 = boundary.originBlock()!!.getRelative(0, 3, 0)
-                if (!boundary.portalAreaBlocks()!!.contains(airAboveOrigin2) ||
-                    !boundary.portalAreaBlocks()!!.contains(airAboveOrigin3)
+                if (
+                    !boundary.portalAreaBlocks()!!.contains(airAboveOrigin2) ||
+                        !boundary.portalAreaBlocks()!!.contains(airAboveOrigin3)
                 ) {
                     boundary.errorState = ErrorState.NOT_ENOUGH_PORTAL_BLOCKS_ABOVE_ORIGIN
                     return boundary
@@ -733,17 +852,30 @@ class PortalBoundary private constructor(private val plane: Plane?) {
                 val modZ = if (boundary.plane()!!.z()) 1 else 0
 
                 // Find matching air stacks to negative axis side
-                add3AirStacks(portalConstructor, airAboveOrigin, airAboveWithBoundaryBelow, false, -modX, -modZ)
+                add3AirStacks(
+                    portalConstructor,
+                    airAboveOrigin,
+                    airAboveWithBoundaryBelow,
+                    false,
+                    -modX,
+                    -modZ,
+                )
 
                 // Find matching pairs to positive axis side
-                add3AirStacks(portalConstructor, airAboveOrigin, airAboveWithBoundaryBelow, true, modX, modZ)
+                add3AirStacks(
+                    portalConstructor,
+                    airAboveOrigin,
+                    airAboveWithBoundaryBelow,
+                    true,
+                    modX,
+                    modZ,
+                )
 
                 // Must be at least 1x3 area of portal blocks to be valid
                 if (airAboveWithBoundaryBelow.isEmpty()) {
-                    boundary.errorState = if (boundary.plane()!!.x())
-                        ErrorState.TOO_SMALL_SPAWN_X
-                    else
-                        ErrorState.TOO_SMALL_SPAWN_Z
+                    boundary.errorState =
+                        if (boundary.plane()!!.x()) ErrorState.TOO_SMALL_SPAWN_X
+                        else ErrorState.TOO_SMALL_SPAWN_Z
                     return boundary
                 }
 
@@ -752,20 +884,21 @@ class PortalBoundary private constructor(private val plane: Plane?) {
                 val largeCoordEnd = airAboveWithBoundaryBelow[airAboveWithBoundaryBelow.size - 1]
                 val middleX = 0.5 + (smallCoordEnd.x + largeCoordEnd.x) / 2.0
                 val middleZ = 0.5 + (smallCoordEnd.z + largeCoordEnd.z) / 2.0
-                boundary.spawn = Location(
-                    airAboveOrigin.world,
-                    middleX,
-                    airAboveOrigin.y + 0.05,
-                    middleZ
-                )
+                boundary.spawn =
+                    Location(
+                        airAboveOrigin.world,
+                        middleX,
+                        airAboveOrigin.y + 0.05,
+                        middleZ,
+                    )
             }
 
             return boundary
         }
 
         /**
-         * Public entry point to search for a portal boundary at [block]. The function will
-         * try all three planes (XY, YZ, XZ) and return the first successful detection.
+         * Public entry point to search for a portal boundary at [block]. The function will try all
+         * three planes (XY, YZ, XZ) and return the first successful detection.
          *
          * @param portalConstructor PortalConstructor instance providing configuration and helpers.
          * @param block Block to start detection at.

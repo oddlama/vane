@@ -1,9 +1,9 @@
 package org.oddlama.velocity.compat
 
 import com.velocitypowered.api.proxy.server.RegisteredServer
+import java.net.SocketAddress
 import org.oddlama.vane.proxycore.config.IVaneProxyServerInfo
 import org.oddlama.velocity.Velocity
-import java.net.SocketAddress
 
 /**
  * Velocity implementation of proxy-core server info abstraction.
@@ -11,15 +11,11 @@ import java.net.SocketAddress
  * @property server wrapped Velocity registered server.
  */
 class VelocityCompatServerInfo(private val server: RegisteredServer) : IVaneProxyServerInfo {
-    /**
-     * Backend server name.
-     */
+    /** Backend server name. */
     override val name: String?
         get() = server.serverInfo.name
 
-    /**
-     * Backend network address.
-     */
+    /** Backend network address. */
     override val socketAddress: SocketAddress?
         get() = server.serverInfo.address
 

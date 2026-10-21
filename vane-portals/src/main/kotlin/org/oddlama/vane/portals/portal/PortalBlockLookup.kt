@@ -1,9 +1,9 @@
 package org.oddlama.vane.portals.portal
 
-import org.json.JSONObject
-import org.oddlama.vane.core.persistent.PersistentSerializer
 import java.io.IOException
 import java.util.*
+import org.json.JSONObject
+import org.oddlama.vane.core.persistent.PersistentSerializer
 
 /**
  * Lightweight lookup payload that maps a block to a portal id and block type.
@@ -36,7 +36,8 @@ class PortalBlockLookup(private val portalId: UUID?, private val type: PortalBlo
         @Throws(IOException::class)
         fun deserialize(o: Any): PortalBlockLookup {
             val json = o as JSONObject
-            val portalId: UUID? = PersistentSerializer.fromJson(UUID::class.java, json.get("portalId"))
+            val portalId: UUID? =
+                PersistentSerializer.fromJson(UUID::class.java, json.get("portalId"))
             val type: PortalBlock.Type? =
                 PersistentSerializer.fromJson(PortalBlock.Type::class.java, json.get("type"))
             return PortalBlockLookup(portalId, type)

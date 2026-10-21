@@ -17,15 +17,21 @@ import org.oddlama.vane.util.Nms
  * @param entitytypes underlying NMS entity type.
  * @param world NMS world handle.
  */
-class FloatingItem(entitytypes: EntityType<out ItemEntity>, world: Level) : ItemEntity(
-    entitytypes,
-    world
-) {
+class FloatingItem(entitytypes: EntityType<out ItemEntity>, world: Level) :
+    ItemEntity(
+        entitytypes,
+        world,
+    ) {
     /** Creates a floating item at the given Bukkit [location]. */
     constructor(location: Location) : this(location.world, location.x, location.y, location.z)
 
     /** Creates a floating item in [world] at exact coordinates. */
-    constructor(world: World, x: Double, y: Double, z: Double) : this(EntityTypes.ITEM, Nms.worldHandle(world)) {
+    constructor(
+        world: World,
+        x: Double,
+        y: Double,
+        z: Double,
+    ) : this(EntityTypes.ITEM, Nms.worldHandle(world)) {
         setPos(x, y, z)
     }
 

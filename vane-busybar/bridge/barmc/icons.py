@@ -31,12 +31,14 @@ def shrink_server_icon(png: bytes) -> Grid:
 
 def greyed(grid: Grid) -> Grid:
     """A dimmed greyscale copy, used while the server is stopped."""
+
     def grey(color: str | None) -> str | None:
         if color is None:
             return None
-        r, g, b = (int(color[i:i + 2], 16) for i in (1, 3, 5))
+        r, g, b = (int(color[i : i + 2], 16) for i in (1, 3, 5))
         level = round((0.3 * r + 0.59 * g + 0.11 * b) * 0.45)
         return f"#{level:02x}{level:02x}{level:02x}"
+
     return [[grey(c) for c in row] for row in grid]
 
 
@@ -109,7 +111,15 @@ def to_png(grid: Grid) -> bytes:
     for y, row in enumerate(grid):
         for x, color in enumerate(row):
             if color is not None:
-                image.putpixel((x, y), (int(color[1:3], 16), int(color[3:5], 16), int(color[5:7], 16), 255))
+                image.putpixel(
+                    (x, y),
+                    (
+                        int(color[1:3], 16),
+                        int(color[3:5], 16),
+                        int(color[5:7], 16),
+                        255,
+                    ),
+                )
     out = io.BytesIO()
     image.save(out, format="PNG")
     return out.getvalue()

@@ -9,11 +9,11 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder
 import io.papermc.paper.command.brigadier.MessageComponentSerializer
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes
 import io.papermc.paper.command.brigadier.argument.CustomArgumentType
+import java.util.concurrent.CompletableFuture
 import net.kyori.adventure.text.Component
 import org.bukkit.NamespacedKey
 import org.oddlama.vane.core.Core
 import org.oddlama.vane.core.item.api.CustomItem
-import java.util.concurrent.CompletableFuture
 
 /**
  * Brigadier argument type that resolves vane custom items by namespaced key.
@@ -29,27 +29,29 @@ class CustomItemArgumentType private constructor(private val module: Core) :
     /** Converts a namespaced key into a registered custom item. */
     @Throws(CommandSyntaxException::class)
     override fun convert(nativeType: NamespacedKey): CustomItem =
-        module.itemRegistry()?.all()
-            ?.firstOrNull { it.key() == nativeType }
+        module.itemRegistry()?.all()?.firstOrNull { it.key() == nativeType }
             ?: throw SimpleCommandExceptionType(
-                MessageComponentSerializer.message().serialize(
-                    Component.text("Unknown custom item: $nativeType")
+                    MessageComponentSerializer.message()
+                        .serialize(Component.text("Unknown custom item: $nativeType"))
                 )
-            ).create()
+                .create()
 
     /** Builds completion suggestions for registered custom items. */
     override fun <S : Any> listSuggestions(
         context: CommandContext<S>,
-        builder: SuggestionsBuilder
+        builder: SuggestionsBuilder,
     ): CompletableFuture<Suggestions> {
         val remaining = builder.remainingLowerCase
-        module.itemRegistry()?.all()
+        module
+            .itemRegistry()
+            ?.all()
             ?.asSequence()
             ?.filter { remaining.isBlank() || it.key().toString().lowercase().contains(remaining) }
             ?.forEach { item ->
                 val key = item.key().toString()
                 val name = item.displayName()
-                if (name != null) builder.suggest(key, MessageComponentSerializer.message().serialize(name))
+                if (name != null)
+                    builder.suggest(key, MessageComponentSerializer.message().serialize(name))
                 else builder.suggest(key)
             }
         return builder.buildFuture()

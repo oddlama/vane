@@ -17,11 +17,14 @@ class PortalUnlinkConsoleEvent(
     @JvmField val player: Player,
     @JvmField val console: Block?,
     @JvmField val portal: Portal,
-    private val checkOnly: Boolean
+    private val checkOnly: Boolean,
 ) : PortalEvent() {
-    // Java accessors from before v1.22.0. The public fields stay for plugins built against later releases.
+    // Java accessors from before v1.22.0. The public fields stay for plugins built against later
+    // releases.
     fun getPlayer(): Player = player
+
     fun getConsole(): Block? = console
+
     fun getPortal(): Portal = portal
 
     /** Controls whether non-owners are automatically denied. */
@@ -39,12 +42,12 @@ class PortalUnlinkConsoleEvent(
     override fun getHandlers() = handlerList
 
     /** Returns true when explicitly cancelled or blocked by ownership checks. */
-    override fun isCancelled() = super.isCancelled() || (cancelIfNotOwner && player.uniqueId != portal.owner())
+    override fun isCancelled() =
+        super.isCancelled() || (cancelIfNotOwner && player.uniqueId != portal.owner())
 
     /** Static Bukkit handler list for this event type. */
     companion object {
         /** Shared handler list used by Bukkit's event system. */
-        @JvmStatic
-        val handlerList: HandlerList = HandlerList()
+        @JvmStatic val handlerList: HandlerList = HandlerList()
     }
 }

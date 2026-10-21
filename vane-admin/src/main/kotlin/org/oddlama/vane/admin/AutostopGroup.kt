@@ -10,14 +10,13 @@ import org.oddlama.vane.core.module.ModuleGroup
 import org.oddlama.vane.util.formatTime
 import org.oddlama.vane.util.msToTicks
 
-/**
- * Handles automatic server shutdown scheduling when no players are online.
- */
-class AutostopGroup(context: Context<Admin?>) : ModuleGroup<Admin?>(
-    context,
-    "Autostop",
-    "Enable automatic server stop after certain time without online players."
-) {
+/** Handles automatic server shutdown scheduling when no players are online. */
+class AutostopGroup(context: Context<Admin?>) :
+    ModuleGroup<Admin?>(
+        context,
+        "Autostop",
+        "Enable automatic server stop after certain time without online players.",
+    ) {
     private val admin: Admin
         get() = requireNotNull(module)
 
@@ -26,24 +25,21 @@ class AutostopGroup(context: Context<Admin?>) : ModuleGroup<Admin?>(
     var configDelay: Long = 0
 
     /** Sent and logged when a pending shutdown is cancelled by [abort]. */
-    @LangMessage
-    var langAborted: TranslatedMessage? = null
+    @LangMessage var langAborted: TranslatedMessage? = null
 
     /** Sent and logged when a shutdown is scheduled. Takes the formatted delay as its argument. */
-    @LangMessage
-    var langScheduled: TranslatedMessage? = null
+    @LangMessage var langScheduled: TranslatedMessage? = null
 
-    /** Status reply while a shutdown is pending. Takes the formatted remaining time as its argument. */
-    @LangMessage
-    var langStatus: TranslatedMessage? = null
+    /**
+     * Status reply while a shutdown is pending. Takes the formatted remaining time as its argument.
+     */
+    @LangMessage var langStatus: TranslatedMessage? = null
 
     /** Status reply when no shutdown is pending, also used when [abort] finds nothing to cancel. */
-    @LangMessage
-    var langStatusNotScheduled: TranslatedMessage? = null
+    @LangMessage var langStatusNotScheduled: TranslatedMessage? = null
 
     /** Broadcast and logged immediately before the server is actually shut down. */
-    @LangMessage
-    var langShutdown: TranslatedMessage? = null
+    @LangMessage var langShutdown: TranslatedMessage? = null
 
     /** Currently scheduled shutdown task, if any. */
     var task: BukkitTask? = null
@@ -83,13 +79,14 @@ class AutostopGroup(context: Context<Admin?>) : ModuleGroup<Admin?>(
 
         startTime = System.currentTimeMillis()
         stopTime = startTime + delay
-        task = scheduleTask(
-            {
-                langShutdown!!.sendAndLog(null)
-                admin.server.shutdown()
-            },
-            msToTicks(delay)
-        )
+        task =
+            scheduleTask(
+                {
+                    langShutdown!!.sendAndLog(null)
+                    admin.server.shutdown()
+                },
+                msToTicks(delay),
+            )
 
         langScheduled!!.sendAndLog(sender, "§b${formatTime(delay)}")
     }

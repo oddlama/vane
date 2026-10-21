@@ -1,5 +1,6 @@
 package org.oddlama.vane.trifles.items
 
+import java.util.*
 import net.kyori.adventure.text.Component
 import net.minecraft.advancements.triggers.CriteriaTriggers
 import net.minecraft.core.BlockPos
@@ -40,21 +41,21 @@ import org.oddlama.vane.util.ItemUtil
 import org.oddlama.vane.util.Nms
 import org.oddlama.vane.util.PlayerUtil
 import org.oddlama.vane.util.StorageUtil
-import java.util.*
 
 @VaneItem(
     name = "trowel",
     base = Material.WARPED_FUNGUS_ON_A_STICK,
     durability = 800,
     modelData = 0x76000e,
-    version = 1
+    version = 1,
 )
 /**
  * Places random block items from a selected inventory feed range.
  *
  * @param context module context used for registration.
  */
-class Trowel(context: Context<Trifles?>) : org.oddlama.vane.core.item.CustomItem<Trifles?>(context) {
+class Trowel(context: Context<Trifles?>) :
+    org.oddlama.vane.core.item.CustomItem<Trifles?>(context) {
     /**
      * Selectable inventory ranges used as block feed sources.
      *
@@ -79,8 +80,7 @@ class Trowel(context: Context<Trifles?>) : org.oddlama.vane.core.item.CustomItem
     }
 
     /** Lore template displayed with the currently selected feed source. */
-    @LangMessageArray
-    var langLore: TranslatedMessageArray? = null
+    @LangMessageArray var langLore: TranslatedMessageArray? = null
 
     /** Defines the trowel crafting recipe. */
     override fun defaultRecipes(): RecipeList {
@@ -96,7 +96,8 @@ class Trowel(context: Context<Trifles?>) : org.oddlama.vane.core.item.CustomItem
     /** Reads persisted feed source selection from item metadata. */
     private fun feedSource(itemStack: ItemStack): FeedSource {
         val meta = itemStack.itemMeta ?: return FeedSource.HOTBAR
-        val ord = meta.persistentDataContainer.getOrDefault(FEED_SOURCE, PersistentDataType.INTEGER, 0)
+        val ord =
+            meta.persistentDataContainer.getOrDefault(FEED_SOURCE, PersistentDataType.INTEGER, 0)
         if (ord < 0 || ord >= FeedSource.entries.size) {
             return FeedSource.HOTBAR
         }
@@ -106,7 +107,11 @@ class Trowel(context: Context<Trifles?>) : org.oddlama.vane.core.item.CustomItem
     /** Writes feed source selection to item metadata. */
     private fun feedSource(itemStack: ItemStack, feedSource: FeedSource) {
         itemStack.editMeta { meta: ItemMeta ->
-            meta.persistentDataContainer.set(FEED_SOURCE, PersistentDataType.INTEGER, feedSource.ordinal)
+            meta.persistentDataContainer.set(
+                FEED_SOURCE,
+                PersistentDataType.INTEGER,
+                feedSource.ordinal,
+            )
         }
     }
 
@@ -119,9 +124,10 @@ class Trowel(context: Context<Trifles?>) : org.oddlama.vane.core.item.CustomItem
 
         val feedSource = feedSource(itemStack)
         val langLore = langLore ?: return
-        lore += langLore.format("§a$feedSource").mapNotNull { line ->
-            line?.let { ItemUtil.addSentinel(it, SENTINEL) }
-        }
+        lore +=
+            langLore.format("§a$feedSource").mapNotNull { line ->
+                line?.let { ItemUtil.addSentinel(it, SENTINEL) }
+            }
 
         itemStack.lore(lore)
     }
@@ -134,9 +140,7 @@ class Trowel(context: Context<Trifles?>) : org.oddlama.vane.core.item.CustomItem
         }
 
         // Only handle right-click pickup-half with empty cursor.
-        if (event.action != InventoryAction.PICKUP_HALF ||
-            (event.cursor.type != Material.AIR)
-        ) {
+        if (event.action != InventoryAction.PICKUP_HALF || (event.cursor.type != Material.AIR)) {
             return
         }
 
@@ -160,7 +164,10 @@ class Trowel(context: Context<Trifles?>) : org.oddlama.vane.core.item.CustomItem
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     fun onPlayerInteractBlock(event: PlayerInteractEvent) {
         // Require right-click block with main hand.
-        if (!event.hasBlock() || event.action != Action.RIGHT_CLICK_BLOCK || event.hand != EquipmentSlot.HAND
+        if (
+            !event.hasBlock() ||
+                event.action != Action.RIGHT_CLICK_BLOCK ||
+                event.hand != EquipmentSlot.HAND
         ) {
             return
         }
@@ -189,8 +196,10 @@ class Trowel(context: Context<Trifles?>) : org.oddlama.vane.core.item.CustomItem
             val index: Int = random.nextInt(count)
             val itemStack = inventory.getItem(possibleSlots[index])
             // Skip empty/non-block/shulker slots.
-            if (itemStack == null || !itemStack.type.isBlock ||
-                Tag.SHULKER_BOXES.isTagged(itemStack.type)
+            if (
+                itemStack == null ||
+                    !itemStack.type.isBlock ||
+                    Tag.SHULKER_BOXES.isTagged(itemStack.type)
             ) {
                 // Remove rejected slot from random pool by swapping with active tail.
                 possibleSlots[index] = possibleSlots[--count]
@@ -216,21 +225,21 @@ class Trowel(context: Context<Trifles?>) : org.oddlama.vane.core.item.CustomItem
             val blockHitResult = BlockHitResult(hitPos, direction, blockPos, false)
             val itemHandle = nmsItem ?: return
             val amountPre = itemHandle.count
-            val actionContext = UseOnContext(
-                nmsWorld,
-                nmsPlayer,
-                InteractionHand.MAIN_HAND,
-                itemHandle,
-                blockHitResult
-            )
+            val actionContext =
+                UseOnContext(
+                    nmsWorld,
+                    nmsPlayer,
+                    InteractionHand.MAIN_HAND,
+                    itemHandle,
+                    blockHitResult,
+                )
 
             // Resolve placement sound before possible item consumption.
             var soundType: SoundType? = null
             if (itemHandle.item is BlockItem) {
                 val blockItem = itemHandle.item as BlockItem
-                val placeState: BlockState? = blockItem
-                    .block
-                    .getStateForPlacement(BlockPlaceContext(actionContext))
+                val placeState: BlockState? =
+                    blockItem.block.getStateForPlacement(BlockPlaceContext(actionContext))
                 soundType = placeState?.soundType
             }
 
@@ -252,19 +261,27 @@ class Trowel(context: Context<Trifles?>) : org.oddlama.vane.core.item.CustomItem
                         soundType.placeSound,
                         SoundSource.BLOCKS,
                         (soundType.getVolume() + 1.0f) / 2.0f,
-                        soundType.getPitch() * 0.8f
+                        soundType.getPitch() * 0.8f,
                     )
                 }
                 CriteriaTriggers.ITEM_USED_ON_BLOCK.trigger(nmsPlayer, blockPos, itemHandle)
             }
 
             nmsPlayer.connection.send(ClientboundBlockUpdatePacket(nmsWorld, blockPos))
-            nmsPlayer.connection.send(ClientboundBlockUpdatePacket(nmsWorld, blockPos.relative(direction)))
+            nmsPlayer.connection.send(
+                ClientboundBlockUpdatePacket(nmsWorld, blockPos.relative(direction))
+            )
             return
         }
 
         // No eligible block item found in the selected feed source.
-        player.playSound(player, Sound.UI_STONECUTTER_SELECT_RECIPE, SoundCategory.MASTER, 1.0f, 2.0f)
+        player.playSound(
+            player,
+            Sound.UI_STONECUTTER_SELECT_RECIPE,
+            SoundCategory.MASTER,
+            1.0f,
+            2.0f,
+        )
     }
 
     /** Updates lore whenever the trowel stack is rebuilt. */

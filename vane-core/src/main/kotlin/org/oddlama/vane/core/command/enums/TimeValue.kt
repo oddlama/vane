@@ -14,8 +14,7 @@ enum class TimeValue(val ticks: Int) {
     Night(14000),
     Midnight(18000);
 
-    /**
-     * Lowercase identifier used for command parsing and completions.
-     */
-    val displayName: String get() = name.lowercase()
+    /** Lowercase identifier used for command parsing and completions. */
+    val displayName: String
+        get() = name.lowercase()
 }

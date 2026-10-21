@@ -1,8 +1,6 @@
 package org.oddlama.vane.proxycore.listeners
 
-/**
- * Contract for events that can be cancelled.
- */
+/** Contract for events that can be cancelled. */
 interface ProxyCancellableEvent {
     /** Cancels the event with an implementation-defined default reason. */
     fun cancel()

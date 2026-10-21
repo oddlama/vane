@@ -22,11 +22,13 @@ import org.oddlama.vane.util.PlayerUtil
 /** Handles player and redstone interactions that activate portal behavior. */
 class PortalActivator(context: Context<Portals?>?) : Listener<Portals?>(context) {
     /**
-     * Helper that validates a PlayerInteractEvent is a right-click on a block the module
-     * should handle and returns a pair of the resolved module and clicked block.
-     * Returns null if any precondition fails.
+     * Helper that validates a PlayerInteractEvent is a right-click on a block the module should
+     * handle and returns a pair of the resolved module and clicked block. Returns null if any
+     * precondition fails.
      */
-    private fun requireModuleAndClickedBlock(event: PlayerInteractEvent): Pair<Portals, org.bukkit.block.Block>? {
+    private fun requireModuleAndClickedBlock(
+        event: PlayerInteractEvent
+    ): Pair<Portals, org.bukkit.block.Block>? {
         val module = module ?: return null
 
         if (!event.hasBlock() || event.action != Action.RIGHT_CLICK_BLOCK) {
@@ -65,19 +67,21 @@ class PortalActivator(context: Context<Portals?>?) : Listener<Portals?>(context)
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     fun onPlayerInteractSwitch(event: PlayerInteractEvent) {
         val (module, block) = requireModuleAndClickedBlock(event) ?: return
-        val allowDisable = when {
-            block.type == Material.LEVER -> true
-            Tag.BUTTONS.isTagged(block.type) -> false
-            else -> return
-        }
+        val allowDisable =
+            when {
+                block.type == Material.LEVER -> true
+                Tag.BUTTONS.isTagged(block.type) -> false
+                else -> return
+            }
 
         // Get base block the switch is attached to
         val bswitch = block.blockData as Switch
-        val attachedFace: BlockFace = when (bswitch.attachedFace) {
-            AttachedFace.WALL -> bswitch.facing.oppositeFace
-            AttachedFace.CEILING -> BlockFace.UP
-            AttachedFace.FLOOR -> BlockFace.DOWN
-        }
+        val attachedFace: BlockFace =
+            when (bswitch.attachedFace) {
+                AttachedFace.WALL -> bswitch.facing.oppositeFace
+                AttachedFace.CEILING -> BlockFace.UP
+                AttachedFace.FLOOR -> BlockFace.DOWN
+            }
 
         // Find controlled portal
         val base = block.getRelative(attachedFace)

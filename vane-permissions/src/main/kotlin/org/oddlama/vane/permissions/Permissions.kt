@@ -1,5 +1,6 @@
 package org.oddlama.vane.permissions
 
+import java.util.*
 import org.bukkit.OfflinePlayer
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
@@ -21,55 +22,79 @@ import org.oddlama.vane.annotation.persistent.Persistent
 import org.oddlama.vane.core.module.Module
 import org.oddlama.vane.permissions.commands.Permission
 import org.oddlama.vane.permissions.commands.Vouch
-import java.util.*
 
-@VaneModule(name = "permissions", bstats = 8641, configVersion = 1, langVersion = 1, storageVersion = 1)
-/**
- * Manages permission groups, inheritance flattening, and runtime player attachments.
- */
+@VaneModule(
+    name = "permissions",
+    bstats = 8641,
+    configVersion = 1,
+    langVersion = 1,
+    storageVersion = 1,
+)
+/** Manages permission groups, inheritance flattening, and runtime player attachments. */
 class Permissions : Module<Permissions?>() {
     /** Non-null typed accessor for this module instance. */
     private val permissionsModule: Permissions
         get() = requireNotNull(module)
 
-    /** If true, resets all default permissions to false and relies entirely on configured groups. */
+    /**
+     * If true, resets all default permissions to false and relies entirely on configured groups.
+     */
     @ConfigBoolean(
         def = false,
-        desc = "Remove all default permissions from ANY SOURCE (including other plugins and minecraft permissions) to start with a clean preset. This will allow you to exactly set which player have which permissions instead of having to resort to volatile stateful changes like negative permissions. This will result in OPed players to lose access to commands, if not explicitly added back via permissions. The wildcard permissions can be viewed using `perms list permissions`. The wildcard permissions `minecraft` and `craftbukkit` may be especially useful."
+        desc =
+            "Remove all default permissions from ANY SOURCE (including other plugins and minecraft permissions) to start with a clean preset. This will allow you to exactly set which player have which permissions instead of having to resort to volatile stateful changes like negative permissions. This will result in OPed players to lose access to commands, if not explicitly added back via permissions. The wildcard permissions can be viewed using `perms list permissions`. The wildcard permissions `minecraft` and `craftbukkit` may be especially useful.",
     )
     var configRemoveDefaults: Boolean = false
 
     /** Name of the fallback group applied when a player has no stored assignments. */
     @ConfigString(
         def = "default",
-        desc = "The permission group that will be given to players that have no other permission group."
+        desc =
+            "The permission group that will be given to players that have no other permission group.",
     )
     var configDefaultGroup: String? = null
 
     /** Raw configured group definitions before inheritance flattening. */
     @ConfigStringListMap(
-        def = [ConfigStringListMapEntry(
-            key = "default",
-            list = ["bukkit.command.help", "bukkit.broadcast", "bukkit.broadcast.user"]
-        ), ConfigStringListMapEntry(
-            key = "user",
-            list = ["vane.permissions.groups.default", "vane.admin.modify_world", "vane.regions.commands.region", "vane.trifles.commands.heads"
-            ]
-        ), ConfigStringListMapEntry(
-            key = "verified",
-            list = ["vane.permissions.groups.user", "vane.permissions.commands.vouch"]
-        ), ConfigStringListMapEntry(
-            key = "admin",
-            list = ["vane.permissions.groups.verified", "vane.admin.bypass_spawn_protection", "vane.portals.admin", "vane.regions.admin", "vane.*.commands.*"
-            ]
-        )],
-        desc = "The permission groups. A player can have multiple permission groups assigned. Permission groups can inherit other permission groups by specifying vane.permissions.groups.<groupname> as a permission."
+        def =
+            [
+                ConfigStringListMapEntry(
+                    key = "default",
+                    list = ["bukkit.command.help", "bukkit.broadcast", "bukkit.broadcast.user"],
+                ),
+                ConfigStringListMapEntry(
+                    key = "user",
+                    list =
+                        [
+                            "vane.permissions.groups.default",
+                            "vane.admin.modify_world",
+                            "vane.regions.commands.region",
+                            "vane.trifles.commands.heads",
+                        ],
+                ),
+                ConfigStringListMapEntry(
+                    key = "verified",
+                    list = ["vane.permissions.groups.user", "vane.permissions.commands.vouch"],
+                ),
+                ConfigStringListMapEntry(
+                    key = "admin",
+                    list =
+                        [
+                            "vane.permissions.groups.verified",
+                            "vane.admin.bypass_spawn_protection",
+                            "vane.portals.admin",
+                            "vane.regions.admin",
+                            "vane.*.commands.*",
+                        ],
+                ),
+            ],
+        desc =
+            "The permission groups. A player can have multiple permission groups assigned. Permission groups can inherit other permission groups by specifying vane.permissions.groups.<groupname> as a permission.",
     )
     var configGroups: MutableMap<String, MutableList<String>>? = null
 
     /** Persistent mapping from player UUID to assigned permission groups. */
-    @Persistent
-    var storagePlayerGroups: MutableMap<UUID, MutableSet<String>> = HashMap()
+    @Persistent var storagePlayerGroups: MutableMap<UUID, MutableSet<String>> = HashMap()
 
     /** Flattened permissions per group after inheritance resolution. */
     val permissionGroups: MutableMap<String, MutableSet<String>> = HashMap()
@@ -129,7 +154,9 @@ class Permissions : Module<Permissions?>() {
             senderAttachments[sender] = attachment
 
             val attachedPerms = permissionsModule.consoleAttachment?.permissions.orEmpty()
-            attachedPerms.forEach { (permission, value) -> attachment.setPermission(permission, value) }
+            attachedPerms.forEach { (permission, value) ->
+                attachment.setPermission(permission, value)
+            }
         }
     }
 
@@ -151,14 +178,13 @@ class Permissions : Module<Permissions?>() {
         }
     }
 
-    /** Resolve references to other permission groups in the hierarchy.  */
+    /** Resolve references to other permission groups in the hierarchy. */
     private fun flattenGroups() {
         val inheritancePrefix = "vane.permissions.groups."
         permissionGroups.clear()
         configGroups?.forEach { (groupName, permissions) ->
-            permissionGroups[groupName] = permissions
-                .filterNot { it.startsWith(inheritancePrefix) }
-                .toMutableSet()
+            permissionGroups[groupName] =
+                permissions.filterNot { it.startsWith(inheritancePrefix) }.toMutableSet()
         }
 
         var modified = true
@@ -209,7 +235,9 @@ class Permissions : Module<Permissions?>() {
             for (permission in permissionGroups[group].orEmpty()) {
                 val perm = permissionsModule.server.pluginManager.getPermission(permission)
                 if (perm == null) {
-                    log.warning("Use of unregistered permission '$permission' might have unintended effects.")
+                    log.warning(
+                        "Use of unregistered permission '$permission' might have unintended effects."
+                    )
                 }
                 attachment.setPermission(permission, true)
             }

@@ -7,12 +7,10 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException
 import com.mojang.brigadier.suggestion.Suggestions
 import com.mojang.brigadier.suggestion.SuggestionsBuilder
 import io.papermc.paper.command.brigadier.argument.CustomArgumentType
-import org.oddlama.vane.core.command.enums.TimeValue
 import java.util.concurrent.CompletableFuture
+import org.oddlama.vane.core.command.enums.TimeValue
 
-/**
- * Brigadier argument type for [TimeValue] presets.
- */
+/** Brigadier argument type for [TimeValue] presets. */
 class TimeValueArgumentType : CustomArgumentType.Converted<TimeValue, String> {
     /** Returns the native brigadier argument type. */
     override fun getNativeType(): ArgumentType<String> = StringArgumentType.word()
@@ -25,7 +23,7 @@ class TimeValueArgumentType : CustomArgumentType.Converted<TimeValue, String> {
     /** Builds completion suggestions from [TimeValue] display names. */
     override fun <S : Any> listSuggestions(
         context: CommandContext<S>,
-        builder: SuggestionsBuilder
+        builder: SuggestionsBuilder,
     ): CompletableFuture<Suggestions> {
         val remaining = builder.remaining.lowercase()
         TimeValue.entries

@@ -23,25 +23,31 @@ import org.oddlama.vane.util.msToTicks
 /**
  * Wings enchantment class that provides elytra flying boosts.
  *
- * @constructor Creates a new Wings enchantment instance.
  * @param context The context for the enchantment.
+ * @constructor Creates a new Wings enchantment instance.
  */
-@VaneEnchantment(name = "wings", maxLevel = 4, rarity = Rarity.RARE, treasure = true, allowCustom = true)
+@VaneEnchantment(
+    name = "wings",
+    maxLevel = 4,
+    rarity = Rarity.RARE,
+    treasure = true,
+    allowCustom = true,
+)
 class Wings(context: Context<Enchantments?>) : CustomEnchantment<Enchantments?>(context) {
-    /**
-     * Cooldown boost configuration in milliseconds for each enchantment level.
-     */
+    /** Cooldown boost configuration in milliseconds for each enchantment level. */
     @ConfigIntList(
         def = [7000, 5000, 3500, 2800],
         min = 0,
-        desc = "Boost cooldown in milliseconds for each enchantment level."
+        desc = "Boost cooldown in milliseconds for each enchantment level.",
     )
     private val configBoostCooldowns: MutableList<Int?>? = null
 
-    /**
-     * Strength boost configuration for each enchantment level.
-     */
-    @ConfigDoubleList(def = [0.4, 0.47, 0.54, 0.6], min = 0.0, desc = "Boost strength for each enchantment level.")
+    /** Strength boost configuration for each enchantment level. */
+    @ConfigDoubleList(
+        def = [0.4, 0.47, 0.54, 0.6],
+        min = 0.0,
+        desc = "Boost strength for each enchantment level.",
+    )
     private val configBoostStrengths: MutableList<Double?>? = null
 
     /**
@@ -81,7 +87,7 @@ class Wings(context: Context<Enchantments?>) : CustomEnchantment<Enchantments?>(
                 .add(1.0 / 110, 1, 1, on("vane_enchantments:enchanted_ancient_tome_of_knowledge")),
             LootDefinition("bastion")
                 .`in`(LootTables.BASTION_TREASURE)
-                .add(1.0 / 10, 1, 1, on("vane_enchantments:enchanted_ancient_tome_of_knowledge"))
+                .add(1.0 / 10, 1, 1, on("vane_enchantments:enchanted_ancient_tome_of_knowledge")),
         )
     }
 

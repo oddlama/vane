@@ -6,13 +6,14 @@ package org.oddlama.vane.util
  */
 object TextUtil {
     /** The five characters that must not appear raw in HTML text or attribute content. */
-    private val HTML_ESCAPES = mapOf(
-        '&' to "&amp;",
-        '<' to "&lt;",
-        '>' to "&gt;",
-        '"' to "&quot;",
-        '\'' to "&#39;"
-    )
+    private val HTML_ESCAPES =
+        mapOf(
+            '&' to "&amp;",
+            '<' to "&lt;",
+            '>' to "&gt;",
+            '"' to "&quot;",
+            '\'' to "&#39;",
+        )
 
     /**
      * Escapes the characters that could otherwise break out of HTML text or an attribute value.
@@ -41,11 +42,11 @@ object TextUtil {
      * [newLineStr]. Words longer than [wrapLength] are never split; they overflow their line.
      *
      * This replaces `WordUtils.wrap(str, wrapLength, newLineStr, false)` and was verified to
-     * produce byte-identical output for every configuration description in the project and for
-     * 200k randomly generated single-spaced strings. The two differ only on runs of consecutive
-     * spaces, where this version collapses the run at the wrap point instead of reproducing
-     * commons-text's off-by-one handling — descriptions are single-spaced prose, so that case
-     * does not arise, and collapsing is the better rendering if it ever does.
+     * produce byte-identical output for every configuration description in the project and for 200k
+     * randomly generated single-spaced strings. The two differ only on runs of consecutive spaces,
+     * where this version collapses the run at the wrap point instead of reproducing commons-text's
+     * off-by-one handling — descriptions are single-spaced prose, so that case does not arise, and
+     * collapsing is the better rendering if it ever does.
      *
      * @param str Text to wrap.
      * @param wrapLength Maximum line length, in characters.
@@ -59,7 +60,8 @@ object TextUtil {
         var offset = 0
 
         while (len - offset > wrapLength) {
-            // A space sitting exactly at the line start would otherwise be emitted as an empty line.
+            // A space sitting exactly at the line start would otherwise be emitted as an empty
+            // line.
             if (str[offset] == ' ') {
                 offset++
                 continue

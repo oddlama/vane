@@ -16,24 +16,26 @@ import org.oddlama.vane.core.Listener
 import org.oddlama.vane.core.lang.TranslatedMessage
 import org.oddlama.vane.core.module.Context
 
-/**
- * Prevents specific world hazards such as explosions, door breaking, and enderman griefing.
- */
-class HazardProtection(context: Context<Admin?>) : Listener<Admin?>(
-    context.group(
-        "HazardProtection",
-        "Enable hazard protection. The options below allow more fine-grained control over the hazards to protect from."
-    )
-) {
+/** Prevents specific world hazards such as explosions, door breaking, and enderman griefing. */
+class HazardProtection(context: Context<Admin?>) :
+    Listener<Admin?>(
+        context.group(
+            "HazardProtection",
+            "Enable hazard protection. The options below allow more fine-grained control over the hazards to protect from.",
+        )
+    ) {
     // Nested in this group (HazardProtection.WorldRebuild), as it was before the Kotlin rewrite.
     private val worldRebuild = WorldRebuild(requireNotNull(getContext()))
 
-    @ConfigBoolean(def = true, desc = "Restrict wither spawning to a list of worlds defined by wither_world_whitelist.")
+    @ConfigBoolean(
+        def = true,
+        desc = "Restrict wither spawning to a list of worlds defined by wither_world_whitelist.",
+    )
     private val configEnableWitherWorldWhitelist = false
 
     @ConfigStringList(
         def = ["world_nether", "world_the_end"],
-        desc = "A list of worlds in which the wither may be spawned."
+        desc = "A list of worlds in which the wither may be spawned.",
     )
     private val configWitherWorldWhitelist: MutableList<String?>? = null
 
@@ -52,26 +54,22 @@ class HazardProtection(context: Context<Admin?>) : Listener<Admin?>(
     @ConfigBoolean(def = true, desc = "Disables fire from lightning.")
     private val configDisableLightningFire = false
 
-    @LangMessage
-    private val langWitherSpawnProhibited: TranslatedMessage? = null
+    @LangMessage private val langWitherSpawnProhibited: TranslatedMessage? = null
 
     private val witherSpawnProhibited: TranslatedMessage
         get() = requireNotNull(langWitherSpawnProhibited)
 
-    /**
-     * Returns whether explosions for a given entity type should be blocked.
-     */
+    /** Returns whether explosions for a given entity type should be blocked. */
     private fun disableExplosion(type: EntityType): Boolean {
         return when (type) {
-            EntityType.WITHER, EntityType.WITHER_SKULL -> configDisableWitherExplosions
+            EntityType.WITHER,
+            EntityType.WITHER_SKULL -> configDisableWitherExplosions
             EntityType.CREEPER -> configDisableCreeperExplosions
             else -> false
         }
     }
 
-    /**
-     * Cancels configured explosions or routes affected blocks to the rebuild system.
-     */
+    /** Cancels configured explosions or routes affected blocks to the rebuild system. */
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     fun onEntityExplode(event: EntityExplodeEvent) {
         if (disableExplosion(event.entityType)) {

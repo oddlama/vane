@@ -1,5 +1,10 @@
 package org.oddlama.vane.busybar
 
+import java.util.*
+import kotlin.math.abs
+import kotlin.math.ceil
+import kotlin.math.max
+import kotlin.math.roundToLong
 import org.bukkit.GameMode
 import org.bukkit.World
 import org.bukkit.entity.Player
@@ -13,11 +18,6 @@ import org.bukkit.scheduler.BukkitTask
 import org.json.JSONObject
 import org.oddlama.vane.core.Listener
 import org.oddlama.vane.core.module.Context
-import java.util.*
-import kotlin.math.abs
-import kotlin.math.ceil
-import kotlin.math.max
-import kotlin.math.roundToLong
 
 /**
  * Forwards vanilla server state: players joining and leaving, sleeping, time of day and tick rate.
@@ -66,7 +66,7 @@ class ServerEvents(context: Context<BusyBar?>) : Listener<BusyBar?>(context) {
         busybar.stream.emit(
             "player.join",
             playerCount(event.player, busybar.server.onlinePlayers.size),
-            permission = busybar.access.receivePlayers
+            permission = busybar.access.receivePlayers,
         )
     }
 
@@ -81,7 +81,7 @@ class ServerEvents(context: Context<BusyBar?>) : Listener<BusyBar?>(context) {
         busybar.stream.emit(
             "player.quit",
             playerCount(event.player, busybar.server.onlinePlayers.size - 1),
-            permission = busybar.access.receivePlayers
+            permission = busybar.access.receivePlayers,
         )
     }
 
@@ -103,9 +103,11 @@ class ServerEvents(context: Context<BusyBar?>) : Listener<BusyBar?>(context) {
     /** Adds the vanilla part of the connection snapshot for [player]. */
     fun contributeSnapshot(json: JSONObject, player: UUID) {
         val server = busybar.server
-        val world = server.getPlayer(player)?.world?.takeIf { it.environment == World.Environment.NORMAL }
-            ?: server.worlds.first()
-        json.put("online", true)
+        val world =
+            server.getPlayer(player)?.world?.takeIf { it.environment == World.Environment.NORMAL }
+                ?: server.worlds.first()
+        json
+            .put("online", true)
             .put("players", server.onlinePlayers.size)
             .put("max", server.maxPlayers)
             .put("tps", tps())
@@ -123,7 +125,7 @@ class ServerEvents(context: Context<BusyBar?>) : Listener<BusyBar?>(context) {
             busybar.stream.emit(
                 "server.tps",
                 JSONObject().put("tps", tps()).put("mspt", mspt()),
-                permission = busybar.access.receiveServer
+                permission = busybar.access.receiveServer,
             )
         }
 
@@ -142,14 +144,14 @@ class ServerEvents(context: Context<BusyBar?>) : Listener<BusyBar?>(context) {
                 busybar.stream.emit(
                     "world.time",
                     JSONObject().put("world", world.name).put("ticks", world.time),
-                    permission = busybar.access.receiveBedtime
+                    permission = busybar.access.receiveBedtime,
                 )
             }
             if (before.night && !now.night && before.sleeping > 0) {
                 busybar.stream.emit(
                     "bedtime.skip",
                     JSONObject().put("world", world.name).put("ticks", world.time),
-                    permission = busybar.access.receiveBedtime
+                    permission = busybar.access.receiveBedtime,
                 )
             }
         }
@@ -165,11 +167,14 @@ class ServerEvents(context: Context<BusyBar?>) : Listener<BusyBar?>(context) {
                 .put("player", player.name)
                 .put("sleeping", sleeping(world))
                 .put("needed", sleepNeeded(world)),
-            permission = busybar.access.receiveBedtime
+            permission = busybar.access.receiveBedtime,
         )
     }
 
-    /** Payload for join and quit events. `head` is the skin id for `/head/<id>`, or null without a skin. */
+    /**
+     * Payload for join and quit events. `head` is the skin id for `/head/<id>`, or null without a
+     * skin.
+     */
     private fun playerCount(player: Player, online: Int): JSONObject =
         JSONObject()
             .put("player", player.name)
@@ -193,7 +198,10 @@ class ServerEvents(context: Context<BusyBar?>) : Listener<BusyBar?>(context) {
     /** Average tick duration in milliseconds, rounded to one decimal. */
     private fun mspt(): Double = roundTenths(busybar.server.averageTickTime)
 
-    /** Rounds [value] to one decimal, mapping NaN and infinities to 0 so they never reach the JSON payload. */
+    /**
+     * Rounds [value] to one decimal, mapping NaN and infinities to 0 so they never reach the JSON
+     * payload.
+     */
     private fun roundTenths(value: Double): Double =
         if (value.isFinite()) (value * 10).roundToLong() / 10.0 else 0.0
 

@@ -1,5 +1,6 @@
 package org.oddlama.vane.trifles
 
+import java.util.*
 import net.kyori.adventure.text.Component
 import org.bukkit.Nameable
 import org.bukkit.NamespacedKey
@@ -24,26 +25,20 @@ import org.oddlama.vane.core.module.Context
 import org.oddlama.vane.trifles.items.storage.Backpack
 import org.oddlama.vane.trifles.items.storage.Pouch
 import org.oddlama.vane.util.StorageUtil
-import java.util.*
 
-/**
- * Coordinates storage-item inventory opening, safety checks, and persistence.
- */
+/** Coordinates storage-item inventory opening, safety checks, and persistence. */
 class StorageGroup(context: Context<Trifles?>) :
-    Listener<Trifles?>(context.group("Storage", "Extensions to storage related stuff will be grouped under here.")) {
-    /**
-     * Open transient inventories mapped to owner UUID and backing item stack reference.
-     */
+    Listener<Trifles?>(
+        context.group("Storage", "Extensions to storage related stuff will be grouped under here.")
+    ) {
+    /** Open transient inventories mapped to owner UUID and backing item stack reference. */
     private val openBlockStateInventories: MutableMap<Inventory, Pair<UUID, ItemStack>> =
         Collections.synchronizedMap(HashMap())
 
     /** Action-bar message shown when trying to open stacked storage items. */
-    @LangMessage
-    var langOpenStackedItem: TranslatedMessage? = null
+    @LangMessage var langOpenStackedItem: TranslatedMessage? = null
 
-    /**
-     * Supports right-click swap insertion of non-storage items into storage item inventories.
-     */
+    /** Supports right-click swap insertion of non-storage items into storage item inventories. */
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     fun onPlaceItemInStorageInventory(event: InventoryClickEvent) {
         if (event.whoClicked !is Player) {
@@ -58,8 +53,11 @@ class StorageGroup(context: Context<Trifles?>) :
 
         // Allow right-click cursor insertion into single, non-stacked storage items.
         val currentItem = event.currentItem
-        if (event.click == ClickType.RIGHT && event.action == InventoryAction.SWAP_WITH_CURSOR &&
-            isStorageItem(currentItem) && currentItem?.amount == 1
+        if (
+            event.click == ClickType.RIGHT &&
+                event.action == InventoryAction.SWAP_WITH_CURSOR &&
+                isStorageItem(currentItem) &&
+                currentItem?.amount == 1
         ) {
             // Never nest storage items within other storage items.
             if (!isStorageItem(event.cursor)) {
@@ -96,11 +94,17 @@ class StorageGroup(context: Context<Trifles?>) :
 
         var cancel: Boolean
         when (event.action) {
-            InventoryAction.DROP_ALL_CURSOR, InventoryAction.DROP_ALL_SLOT, InventoryAction.DROP_ONE_CURSOR, InventoryAction.DROP_ONE_SLOT ->
+            InventoryAction.DROP_ALL_CURSOR,
+            InventoryAction.DROP_ALL_SLOT,
+            InventoryAction.DROP_ONE_CURSOR,
+            InventoryAction.DROP_ONE_SLOT ->
                 // Allow dropping storage item because we handle this elsewhere
                 cancel = false
 
-            InventoryAction.PLACE_ALL, InventoryAction.PLACE_ONE, InventoryAction.PLACE_SOME, InventoryAction.SWAP_WITH_CURSOR ->
+            InventoryAction.PLACE_ALL,
+            InventoryAction.PLACE_ONE,
+            InventoryAction.PLACE_SOME,
+            InventoryAction.SWAP_WITH_CURSOR ->
                 // Only deny placing storage items in storage inventory
                 cancel = cursorItemIsStorage && !clickedInventoryIsPlayerInventory
 
@@ -108,7 +112,10 @@ class StorageGroup(context: Context<Trifles?>) :
                 // Only deny moving storage item from player inventory to storage inventory
                 cancel = clickedItemIsStorage && clickedInventoryIsPlayerInventory
 
-            InventoryAction.PICKUP_ALL, InventoryAction.PICKUP_HALF, InventoryAction.PICKUP_ONE, InventoryAction.PICKUP_SOME ->
+            InventoryAction.PICKUP_ALL,
+            InventoryAction.PICKUP_HALF,
+            InventoryAction.PICKUP_ONE,
+            InventoryAction.PICKUP_SOME ->
                 // Always allow pickup
                 cancel = false
 
@@ -119,12 +126,17 @@ class StorageGroup(context: Context<Trifles?>) :
 
         when (event.click) {
             ClickType.NUMBER_KEY -> {
-                // Deny swapping storage items with number keys into storage inventory, but allow in player inventory
-                val swappedItemIsStorage = isStorageItem(player.inventory.getItem(event.hotbarButton))
-                cancel = (swappedItemIsStorage || clickedItemIsStorage) && !clickedInventoryIsPlayerInventory
+                // Deny swapping storage items with number keys into storage inventory, but allow in
+                // player inventory
+                val swappedItemIsStorage =
+                    isStorageItem(player.inventory.getItem(event.hotbarButton))
+                cancel =
+                    (swappedItemIsStorage || clickedItemIsStorage) &&
+                        !clickedInventoryIsPlayerInventory
             }
 
-            else -> { /* no-op */
+            else -> {
+                /* no-op */
             }
         }
 
@@ -153,7 +165,9 @@ class StorageGroup(context: Context<Trifles?>) :
                 // Repair stale open tag on legacy/bugged items.
                 event.itemDrop.itemStack.editMeta { meta: ItemMeta ->
                     meta.persistentDataContainer.set(
-                        STORAGE_IS_OPEN, PersistentDataType.BOOLEAN, false
+                        STORAGE_IS_OPEN,
+                        PersistentDataType.BOOLEAN,
+                        false,
                     )
                 }
             }
@@ -174,7 +188,9 @@ class StorageGroup(context: Context<Trifles?>) :
         // Normalize stale metadata on pickup.
         event.item.itemStack.editMeta { meta: ItemMeta ->
             meta.persistentDataContainer.set(
-                STORAGE_IS_OPEN, PersistentDataType.BOOLEAN, false
+                STORAGE_IS_OPEN,
+                PersistentDataType.BOOLEAN,
+                false,
             )
         }
     }
@@ -207,7 +223,10 @@ class StorageGroup(context: Context<Trifles?>) :
     }
 
     /** Writes current transient inventory content back into the backing storage item. */
-    private fun saveInventoryChanges(whoClicked: org.bukkit.entity.HumanEntity, inventory: Inventory) {
+    private fun saveInventoryChanges(
+        whoClicked: org.bukkit.entity.HumanEntity,
+        inventory: Inventory,
+    ) {
         if (whoClicked !is Player) {
             return
         }
@@ -231,7 +250,9 @@ class StorageGroup(context: Context<Trifles?>) :
         // Mark backing item as closed before writing inventory content.
         ownerAndItem.second.editMeta { meta: ItemMeta ->
             meta.persistentDataContainer.set(
-                STORAGE_IS_OPEN, PersistentDataType.BOOLEAN, false
+                STORAGE_IS_OPEN,
+                PersistentDataType.BOOLEAN,
+                false,
             )
         }
         updateStorageItem(ownerAndItem.second, event.inventory, event.player as Player)
@@ -239,7 +260,10 @@ class StorageGroup(context: Context<Trifles?>) :
     }
 
     /** Returns owner/item mapping only when the player owns the tracked inventory session. */
-    private fun getOwnerAndItemIfValid(inventory: Inventory, player: Player): Pair<UUID, ItemStack>? {
+    private fun getOwnerAndItemIfValid(
+        inventory: Inventory,
+        player: Player,
+    ): Pair<UUID, ItemStack>? {
         val ownerAndItem = openBlockStateInventories[inventory] ?: return null
         return if (ownerAndItem.first == player.uniqueId) ownerAndItem else null
     }
@@ -265,8 +289,11 @@ class StorageGroup(context: Context<Trifles?>) :
         if (item == null || !item.hasItemMeta()) {
             return false
         }
-        return item.persistentDataContainer
-            .getOrDefault(STORAGE_IS_OPEN, PersistentDataType.BOOLEAN, false)
+        return item.persistentDataContainer.getOrDefault(
+            STORAGE_IS_OPEN,
+            PersistentDataType.BOOLEAN,
+            false,
+        )
     }
 
     /**
@@ -328,7 +355,8 @@ class StorageGroup(context: Context<Trifles?>) :
         // Reuse item naming for the opened transient inventory title.
         var name: Component?
         name =
-            if (blockStateMeta.hasDisplayName()) blockStateMeta.displayName() else if (blockStateMeta.hasItemName()) blockStateMeta.itemName() else null
+            if (blockStateMeta.hasDisplayName()) blockStateMeta.displayName()
+            else if (blockStateMeta.hasItemName()) blockStateMeta.itemName() else null
 
         // Fallback to registered custom item display name for unnamed legacy items.
         if (name == null) {
@@ -351,6 +379,7 @@ class StorageGroup(context: Context<Trifles?>) :
 
     companion object {
         /** Boolean metadata key indicating whether a storage item is currently open. */
-        val STORAGE_IS_OPEN: NamespacedKey = StorageUtil.namespacedKey("vane_trifles", "currently_opened_storage")
+        val STORAGE_IS_OPEN: NamespacedKey =
+            StorageUtil.namespacedKey("vane_trifles", "currently_opened_storage")
     }
 }

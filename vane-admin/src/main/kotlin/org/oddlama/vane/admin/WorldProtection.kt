@@ -21,34 +21,32 @@ import org.bukkit.permissions.PermissionDefault
 import org.oddlama.vane.core.Listener
 import org.oddlama.vane.core.module.Context
 
-/**
- * Prevents world modifications for players without the bypass permission.
- */
-class WorldProtection(context: Context<Admin?>) : Listener<Admin?>(
-    context.group(
-        "WorldProtection",
-        "Enable world protection. This will prevent anyone from modifying the world if they don't have the permission '" +
+/** Prevents world modifications for players without the bypass permission. */
+class WorldProtection(context: Context<Admin?>) :
+    Listener<Admin?>(
+        context.group(
+            "WorldProtection",
+            "Enable world protection. This will prevent anyone from modifying the world if they don't have the permission '" +
                 PERMISSION_NAME +
                 "'.",
-        false
-    )
-) {
+            false,
+        )
+    ) {
     private val admin: Admin
         get() = requireNotNull(module)
 
-    private val permission = Permission(
-        PERMISSION_NAME,
-        "Allow player to modify world",
-        PermissionDefault.OP
-    )
+    private val permission =
+        Permission(
+            PERMISSION_NAME,
+            "Allow player to modify world",
+            PermissionDefault.OP,
+        )
 
     init {
         admin.registerPermission(permission)
     }
 
-    /**
-     * Returns true when the given entity is a player without world-modification permission.
-     */
+    /** Returns true when the given entity is a player without world-modification permission. */
     fun denyModifyWorld(entity: Entity?): Boolean =
         (entity as? Player)?.hasPermission(permission) == false
 
@@ -95,10 +93,12 @@ class WorldProtection(context: Context<Admin?>) : Listener<Admin?>(
     /** Handles entity damage interactions in protected worlds. */
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     fun onEntityDamage(event: EntityDamageEvent) {
-        val denied = when (event) {
-            is EntityDamageByEntityEvent -> denyModifyWorld(event.damager) || denyModifyWorld(event.entity)
-            else -> denyModifyWorld(event.entity)
-        }
+        val denied =
+            when (event) {
+                is EntityDamageByEntityEvent ->
+                    denyModifyWorld(event.damager) || denyModifyWorld(event.entity)
+                else -> denyModifyWorld(event.entity)
+            }
 
         if (denied) {
             event.isCancelled = true

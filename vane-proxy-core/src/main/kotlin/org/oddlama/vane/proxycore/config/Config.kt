@@ -12,26 +12,20 @@ import java.io.File
 class Config(file: File) {
     // multiplexerId, { Integer port, List<UUID> AllowedUuids }
     /** Auth multiplexers by configured numeric identifier. */
-    @JvmField
-    var authMultiplex: LinkedHashMap<Int?, AuthMultiplex?>?
+    @JvmField var authMultiplex: LinkedHashMap<Int?, AuthMultiplex?>?
 
     /** Managed backend server configurations by server id. */
-    @JvmField
-    var managedServers: LinkedHashMap<String?, ManagedServer?>?
+    @JvmField var managedServers: LinkedHashMap<String?, ManagedServer?>?
 
     /** BUSY Bar settings, or `null` when the table is missing. */
-    @JvmField
-    var busyBar: BusyBarConfig?
+    @JvmField var busyBar: BusyBarConfig?
 
     /** Backup of the file taken before legacy keys were migrated, or `null` if none were found. */
     var legacyBackup: File? = null
 
     init {
-        val config = CommentedFileConfig.builder(file)
-            .autosave()
-            .preserveInsertionOrder()
-            .sync()
-            .build()
+        val config =
+            CommentedFileConfig.builder(file).autosave().preserveInsertionOrder().sync().build()
 
         config.load()
 
@@ -46,14 +40,19 @@ class Config(file: File) {
         val multiplexersConfig = config.get<CommentedConfig>("AuthMultiplex")
         for (multiplexerConf in multiplexersConfig.entrySet()) {
             val keyString = multiplexerConf.key
-            val key = keyString.toIntOrNull()
-                ?: throw IllegalArgumentException("Multiplexer ID '$keyString' is not an integer!")
+            val key =
+                keyString.toIntOrNull()
+                    ?: throw IllegalArgumentException(
+                        "Multiplexer ID '$keyString' is not an integer!"
+                    )
 
             val value = multiplexerConf.getValue<Any?>()
             require(value is CommentedConfig) { "Multiplexer '$key' has an invalid configuration!" }
 
             val port = value.getInt("Port")
-            require(port !in registeredPorts) { "Multiplexer ID '$keyString' uses an already registered port!" }
+            require(port !in registeredPorts) {
+                "Multiplexer ID '$keyString' uses an already registered port!"
+            }
 
             val multiplexer = AuthMultiplex(port, value.get("AllowedUuids"))
 
@@ -69,18 +68,21 @@ class Config(file: File) {
                 val key = serverConf.key
 
                 val value = serverConf.getValue<Any?>()
-                require(value is CommentedConfig) { "Managed server '$key' has an invalid configuration!" }
+                require(value is CommentedConfig) {
+                    "Managed server '$key' has an invalid configuration!"
+                }
 
                 val displayNameAny = value.get<Any?>("DisplayName")
                 val displayName = displayNameAny as? String ?: key
 
-                val managedServer = ManagedServer(
-                    key,
-                    displayName,
-                    value.get("Online") as? CommentedConfig,
-                    value.get("Offline") as? CommentedConfig,
-                    value.get("Start") as? CommentedConfig
-                )
+                val managedServer =
+                    ManagedServer(
+                        key,
+                        displayName,
+                        value.get("Online") as? CommentedConfig,
+                        value.get("Offline") as? CommentedConfig,
+                        value.get("Start") as? CommentedConfig,
+                    )
 
                 managedServers[key] = managedServer
             }

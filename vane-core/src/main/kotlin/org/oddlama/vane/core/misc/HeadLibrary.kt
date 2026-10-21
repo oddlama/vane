@@ -1,5 +1,7 @@
 package org.oddlama.vane.core.misc
 
+import java.io.IOException
+import java.util.logging.Level
 import org.bukkit.Material
 import org.bukkit.block.Skull
 import org.bukkit.event.EventHandler
@@ -13,8 +15,6 @@ import org.oddlama.vane.core.material.HeadMaterialLibrary.load
 import org.oddlama.vane.core.module.Context
 import org.oddlama.vane.util.BlockUtil.dropNaturally
 import org.oddlama.vane.util.BlockUtil.textureFromSkull
-import java.io.IOException
-import java.util.logging.Level
 
 /**
  * Loads the bundled head library and optionally normalizes dropped player heads.
@@ -25,21 +25,23 @@ class HeadLibrary(context: Context<Core?>?) : Listener<Core?>(context) {
     /** Whether matching player-head block drops should be replaced with library items. */
     @ConfigBoolean(
         def = true,
-        desc = "When a player head is broken by a player that exists in /heads, drop the correctly named item as seen in /heads. You can disable this if it interferes with similarly textured heads from other plugins."
+        desc =
+            "When a player head is broken by a player that exists in /heads, drop the correctly named item as seen in /heads. You can disable this if it interferes with similarly textured heads from other plugins.",
     )
-            /** Whether matching player-head drops should be replaced with head-library entries. */
+    /** Whether matching player-head drops should be replaced with head-library entries. */
     var configPlayerHeadDrops: Boolean = false
 
     init {
         module!!.log.info("Loading head library...")
         try {
-            val json = module!!.getResource("head_library.json")
-                ?.bufferedReader()
-                ?.readText()
-                ?: throw IOException("Failed to get contents of resource head_library.json")
+            val json =
+                module!!.getResource("head_library.json")?.bufferedReader()?.readText()
+                    ?: throw IOException("Failed to get contents of resource head_library.json")
             load(json)
         } catch (e: IOException) {
-            module!!.log.log(Level.SEVERE, "Error while loading head_library.json! Shutting down.", e)
+            module!!
+                .log
+                .log(Level.SEVERE, "Error while loading head_library.json! Shutting down.", e)
             module!!.server.shutdown()
         }
     }

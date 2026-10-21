@@ -11,10 +11,15 @@ import org.oddlama.vane.portals.portal.Portal
  * @property portal the source portal.
  * @property target the connected target portal.
  */
-class PortalActivateEvent(@JvmField val player: Player?, @JvmField val portal: Portal?, val target: Portal?) :
-    PortalEvent() {
-    // Java accessors from before v1.22.0. The public fields stay for plugins built against later releases.
+class PortalActivateEvent(
+    @JvmField val player: Player?,
+    @JvmField val portal: Portal?,
+    val target: Portal?,
+) : PortalEvent() {
+    // Java accessors from before v1.22.0. The public fields stay for plugins built against later
+    // releases.
     fun getPlayer(): Player? = player
+
     fun getPortal(): Portal? = portal
 
     /** Returns Bukkit handlers for this event. */
@@ -23,7 +28,6 @@ class PortalActivateEvent(@JvmField val player: Player?, @JvmField val portal: P
     /** Static Bukkit handler list for this event type. */
     companion object {
         /** Shared handler list used by Bukkit's event system. */
-        @JvmStatic
-        val handlerList: HandlerList = HandlerList()
+        @JvmStatic val handlerList: HandlerList = HandlerList()
     }
 }

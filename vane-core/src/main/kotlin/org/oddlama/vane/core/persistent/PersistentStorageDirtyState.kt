@@ -5,7 +5,8 @@ internal class PersistentStorageDirtyState {
     private var revision = 0L
     private var dirty = false
 
-    val isDirty: Boolean get() = synchronized(this) { dirty }
+    val isDirty: Boolean
+        get() = synchronized(this) { dirty }
 
     @Synchronized
     fun markDirty() {
@@ -14,11 +15,12 @@ internal class PersistentStorageDirtyState {
     }
 
     fun save(publish: () -> Boolean): Boolean {
-        val savingRevision = synchronized(this) {
-            // An explicit save also becomes pending if publication fails.
-            dirty = true
-            revision
-        }
+        val savingRevision =
+            synchronized(this) {
+                // An explicit save also becomes pending if publication fails.
+                dirty = true
+                revision
+            }
         if (!publish()) return false
         synchronized(this) {
             if (revision == savingRevision) dirty = false

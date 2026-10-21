@@ -2,9 +2,7 @@ package org.oddlama.vane.proxycore
 
 import java.util.*
 
-/**
- * Utility helpers used by proxy-core.
- */
+/** Utility helpers used by proxy-core. */
 object Util {
     /**
      * Adds [i] to [uuid] by incrementing the least-significant bits with carry handling.

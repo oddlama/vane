@@ -7,9 +7,9 @@ import java.util.*
  * for every player walking in.
  *
  * - The first visitor of a quiet region is reported right away.
- * - Visitors after that are collected for [windowMillis] and reported together, at most
- *   [MAX_NAMES] by name, with the total in [Alert.count]. A window that collected anyone is
- *   followed by another one, so a steady stream of visitors yields one summary per window.
+ * - Visitors after that are collected for [windowMillis] and reported together, at most [MAX_NAMES]
+ *   by name, with the total in [Alert.count]. A window that collected anyone is followed by another
+ *   one, so a steady stream of visitors yields one summary per window.
  * - Each visitor counts at most once per region per [cooldownMillis], so someone pacing along a
  *   border is reported once.
  *
@@ -52,7 +52,15 @@ class VisitorAlerts(
      *
      * @param head skin id of the visitor, for the face on the Bar.
      */
-    fun visit(now: Long, region: UUID, regionName: String, owner: UUID, visitor: UUID, visitorName: String, head: String?) {
+    fun visit(
+        now: Long,
+        region: UUID,
+        regionName: String,
+        owner: UUID,
+        visitor: UUID,
+        visitorName: String,
+        head: String?,
+    ) {
         flush(now)
         val key = visitor to region
         counted[key]?.let { if (now - it < cooldownMillis) return }
@@ -76,7 +84,16 @@ class VisitorAlerts(
         for ((region, window) in ended) {
             windows.remove(region)
             if (window.count == 0) continue
-            emit(Alert(window.owner, region, window.regionName, window.names.toList(), window.head, window.count))
+            emit(
+                Alert(
+                    window.owner,
+                    region,
+                    window.regionName,
+                    window.names.toList(),
+                    window.head,
+                    window.count,
+                )
+            )
             windows[region] = Window(window.owner, window.regionName, now + windowMillis)
         }
         counted.values.removeIf { now - it >= cooldownMillis }

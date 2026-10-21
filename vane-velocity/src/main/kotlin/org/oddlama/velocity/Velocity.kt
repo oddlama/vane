@@ -10,6 +10,10 @@ import com.velocitypowered.api.proxy.ProxyServer
 import com.velocitypowered.api.proxy.messages.MinecraftChannelIdentifier
 import com.velocitypowered.proxy.VelocityServer
 import com.velocitypowered.proxy.network.ConnectionManager
+import java.net.InetSocketAddress
+import java.nio.file.Path
+import java.util.function.BiConsumer
+import java.util.logging.Level
 import org.bstats.velocity.Metrics
 import org.oddlama.vane.proxycore.VaneProxyPlugin
 import org.oddlama.vane.proxycore.log.Slf4jCompatLogger
@@ -20,10 +24,6 @@ import org.oddlama.velocity.commands.Ping
 import org.oddlama.velocity.compat.VelocityCompatProxyServer
 import org.oddlama.velocity.listeners.*
 import org.slf4j.Logger
-import java.net.InetSocketAddress
-import java.nio.file.Path
-import java.util.function.BiConsumer
-import java.util.logging.Level
 
 @Plugin(
     id = "vane-velocity",
@@ -31,7 +31,7 @@ import java.util.logging.Level
     version = VERSION,
     description = "TODO",
     authors = ["oddlama", "Serial-ATA"],
-    url = "https://github.com/oddlama/vane"
+    url = "https://github.com/oddlama/vane",
 )
 /**
  * Velocity platform entrypoint for the Vane proxy plugin.
@@ -41,11 +41,13 @@ import java.util.logging.Level
  * @param metricsFactory bStats factory used to initialize metrics reporting.
  * @param dataDir plugin data directory provided by Velocity.
  */
-class Velocity @Inject constructor(
+class Velocity
+@Inject
+constructor(
     server: ProxyServer,
     logger: Logger,
     metricsFactory: Metrics.Factory,
-    @DataDirectory dataDir: Path
+    @DataDirectory dataDir: Path,
 ) : VaneProxyPlugin() {
     /**
      * Raw Velocity proxy server used for API integrations that are not abstracted by proxy-core.
@@ -54,9 +56,7 @@ class Velocity @Inject constructor(
 
     // bStats
     @Suppress("unused")
-    /**
-     * bStats factory retained so metrics can be initialized during plugin startup.
-     */
+    /** bStats factory retained so metrics can be initialized during plugin startup. */
     private val metricsFactory: Metrics.Factory
 
     init {
@@ -119,7 +119,7 @@ class Velocity @Inject constructor(
                 // So we have to take matters into our own hands :)
                 handleListeners(
                     "Registering",
-                    BiConsumer { connectionManager, address -> connectionManager.bind(address) }
+                    BiConsumer { connectionManager, address -> connectionManager.bind(address) },
                 )
             } catch (e: Exception) {
                 getLogger().log(Level.SEVERE, "Failed to inject into VelocityServer!", e)
@@ -138,9 +138,7 @@ class Velocity @Inject constructor(
         disable()
     }
 
-    /**
-     * Cleans up listeners, channels, and injected multiplexer listeners.
-     */
+    /** Cleans up listeners, channels, and injected multiplexer listeners. */
     private fun disable() {
         rawProxy.eventManager.unregisterListeners(this)
         busyBar.stop()
@@ -153,11 +151,15 @@ class Velocity @Inject constructor(
 
             handleListeners(
                 "Closing",
-                BiConsumer { connectionManager, oldBind -> connectionManager.close(oldBind) }
+                BiConsumer { connectionManager, oldBind -> connectionManager.close(oldBind) },
             )
         } catch (e: Exception) {
             getLogger().log(Level.SEVERE, "Failed to stop listeners!", e)
-            getLogger().log(Level.SEVERE, "Shutting down the server to prevent lingering unmanaged listeners!")
+            getLogger()
+                .log(
+                    Level.SEVERE,
+                    "Shutting down the server to prevent lingering unmanaged listeners!",
+                )
             rawProxy.shutdown()
         }
 
@@ -174,13 +176,18 @@ class Velocity @Inject constructor(
      * @throws NoSuchFieldException when the internal connection manager field changes.
      * @throws IllegalAccessException when reflective access to Velocity internals fails.
      */
-    @Throws(ClassNotFoundException::class, NoSuchFieldException::class, IllegalAccessException::class)
+    @Throws(
+        ClassNotFoundException::class,
+        NoSuchFieldException::class,
+        IllegalAccessException::class,
+    )
     private fun handleListeners(
         action: String,
-        method: BiConsumer<in ConnectionManager, in InetSocketAddress>
+        method: BiConsumer<in ConnectionManager, in InetSocketAddress>,
     ) {
-        val server = rawProxy as? VelocityServer
-            ?: throw IllegalStateException("ProxyServer is not a VelocityServer implementation")
+        val server =
+            rawProxy as? VelocityServer
+                ?: throw IllegalStateException("ProxyServer is not a VelocityServer implementation")
 
         // We steal the VelocityServer's `ConnectionManager`, which (currently) has no
         // issue binding to however many addresses we give it.
@@ -200,17 +207,14 @@ class Velocity @Inject constructor(
         }
     }
 
-    /**
-     * Static plugin constants.
-     */
+    /** Static plugin constants. */
     companion object {
         @JvmField
-                /**
-                 * Plugin messaging channel used by auth multiplexing.
-                 */
-        val CHANNEL: MinecraftChannelIdentifier = MinecraftChannelIdentifier.create(
-            CHANNEL_AUTH_MULTIPLEX_NAMESPACE,
-            CHANNEL_AUTH_MULTIPLEX_NAME
-        )
+        /** Plugin messaging channel used by auth multiplexing. */
+        val CHANNEL: MinecraftChannelIdentifier =
+            MinecraftChannelIdentifier.create(
+                CHANNEL_AUTH_MULTIPLEX_NAMESPACE,
+                CHANNEL_AUTH_MULTIPLEX_NAME,
+            )
     }
 }

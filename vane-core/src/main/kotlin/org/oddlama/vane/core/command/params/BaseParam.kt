@@ -9,8 +9,6 @@ import org.oddlama.vane.core.command.Param
  * @param command the owning command.
  */
 abstract class BaseParam(override val command: Command<*>?) : Param {
-    /**
-     * Child parameter nodes.
-     */
+    /** Child parameter nodes. */
     override val params: MutableList<Param?> = mutableListOf()
 }

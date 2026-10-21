@@ -13,9 +13,8 @@ import org.oddlama.vane.proxycore.config.IVaneProxyServerInfo
 abstract class PingEvent(
     var plugin: VaneProxyPlugin,
     @JvmField var ping: ProxyServerPing,
-    var server: IVaneProxyServerInfo
-) :
-    ProxyEvent {
+    var server: IVaneProxyServerInfo,
+) : ProxyEvent {
     /** Applies presentation values and sends the ping response. */
     override fun fire() {
         ping.setDescription(plugin.getMotd(server))

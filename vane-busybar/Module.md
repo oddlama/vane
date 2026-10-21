@@ -20,7 +20,7 @@ Players create a token with `/busybar link`, which shows it once inside a pairin
 receives a `: ping` comment every 15 seconds.
 
 | Event                                            | Sent to                                   | Source                                                                         |
-|--------------------------------------------------|-------------------------------------------|--------------------------------------------------------------------------------|
+| ------------------------------------------------ | ----------------------------------------- | ------------------------------------------------------------------------------ |
 | `snapshot`                                       | the connecting bridge                     | on connect                                                                     |
 | `player.join`, `player.quit`                     | everyone                                  | Paper                                                                          |
 | `bedtime.enter`, `bedtime.leave`, `bedtime.skip` | everyone                                  | Paper, threshold from vane-bedtime                                             |
@@ -68,11 +68,11 @@ for everyone with `RegionVisitorAlerts`.
 The stream serves HTTPS by default, without a domain, a certificate authority, or renewals. The
 `Tls` option picks one of three modes:
 
-| `Tls`            | Certificate                                                                          | Bridges verify it by                   |
-|------------------|--------------------------------------------------------------------------------------|----------------------------------------|
-| `auto` (default) | Self-signed P-256, generated on first start as `tls-auto.key` and `tls-auto.crt`     | pinning the key fingerprint            |
-| `keystore`       | PKCS#12 file in `TlsKeystore`, for example converted from Let's Encrypt              | the usual certificate authority checks |
-| `off`            | None, plain HTTP: for a TLS reverse proxy in front of the port or a trusted LAN      | the proxy's certificate                |
+| `Tls`            | Certificate                                                                      | Bridges verify it by                   |
+| ---------------- | -------------------------------------------------------------------------------- | -------------------------------------- |
+| `auto` (default) | Self-signed P-256, generated on first start as `tls-auto.key` and `tls-auto.crt` | pinning the key fingerprint            |
+| `keystore`       | PKCS#12 file in `TlsKeystore`, for example converted from Let's Encrypt          | the usual certificate authority checks |
+| `off`            | None, plain HTTP: for a TLS reverse proxy in front of the port or a trusted LAN  | the proxy's certificate                |
 
 `/busybar link` shows a pairing string with everything a bridge needs:
 
@@ -111,7 +111,7 @@ A bridge only receives what its owner may see and only sends what its owner may 
 per player or group.
 
 | Permission                             | Default  | Grants                                             |
-|----------------------------------------|----------|----------------------------------------------------|
+| -------------------------------------- | -------- | -------------------------------------------------- |
 | `vane.busybar.receive.players`         | everyone | `player.join`, `player.quit`                       |
 | `vane.busybar.receive.bedtime`         | everyone | `bedtime.*` , `world.time`                         |
 | `vane.busybar.receive.portals`         | everyone | `portal.*` for your own portals                    |
@@ -139,7 +139,7 @@ bridge receives `permissions.updated` with the new list.
 ## Commands
 
 | Command                         | Who                  | Does                                                                |
-|---------------------------------|----------------------|---------------------------------------------------------------------|
+| ------------------------------- | -------------------- | ------------------------------------------------------------------- |
 | `/busybar` or `/busybar status` | players              | Shows whether a bridge is linked and connected, and focus mode.     |
 | `/busybar link`                 | players              | Issues a new token, shown once, replacing any previous one.         |
 | `/busybar unlink`               | players              | Revokes the token, disconnects the bridge and turns focus mode off. |

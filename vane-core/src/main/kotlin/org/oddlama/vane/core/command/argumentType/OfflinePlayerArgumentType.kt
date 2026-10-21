@@ -7,13 +7,11 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException
 import com.mojang.brigadier.suggestion.Suggestions
 import com.mojang.brigadier.suggestion.SuggestionsBuilder
 import io.papermc.paper.command.brigadier.argument.CustomArgumentType
+import java.util.concurrent.CompletableFuture
 import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
-import java.util.concurrent.CompletableFuture
 
-/**
- * Brigadier argument type that resolves offline players by name.
- */
+/** Brigadier argument type that resolves offline players by name. */
 class OfflinePlayerArgumentType : CustomArgumentType.Converted<OfflinePlayer, String> {
 
     /** Returns the native brigadier argument type. */
@@ -28,7 +26,7 @@ class OfflinePlayerArgumentType : CustomArgumentType.Converted<OfflinePlayer, St
     /** Builds completion suggestions from known offline player names. */
     override fun <S : Any> listSuggestions(
         context: CommandContext<S>,
-        builder: SuggestionsBuilder
+        builder: SuggestionsBuilder,
     ): CompletableFuture<Suggestions> {
         val remaining = builder.remaining
         Bukkit.getOfflinePlayers()
@@ -42,7 +40,7 @@ class OfflinePlayerArgumentType : CustomArgumentType.Converted<OfflinePlayer, St
     /** Factory methods for [OfflinePlayerArgumentType]. */
     companion object {
         @JvmStatic
-                /** Creates a new offline-player argument type. */
+        /** Creates a new offline-player argument type. */
         fun offlinePlayer(): OfflinePlayerArgumentType = OfflinePlayerArgumentType()
     }
 }

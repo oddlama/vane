@@ -1,9 +1,9 @@
 package org.oddlama.vane.core.config
 
+import java.lang.reflect.Field
 import org.bukkit.configuration.file.YamlConfiguration
 import org.oddlama.vane.annotation.config.ConfigBoolean
 import org.oddlama.vane.core.YamlLoadException
-import java.lang.reflect.Field
 
 /**
  * Config field handler for boolean values.
@@ -18,7 +18,7 @@ class ConfigBooleanField(
     field: Field,
     mapName: (String?) -> String?,
     /** Annotation metadata for this field. */
-    private val annotation: ConfigBoolean
+    private val annotation: ConfigBoolean,
 ) : ConfigField<Boolean?>(owner, field, mapName, "boolean", annotation.desc) {
 
     /** Returns the default value for this config field. */
@@ -28,13 +28,17 @@ class ConfigBooleanField(
     override fun metrics(): Boolean = overriddenMetrics() ?: annotation.metrics
 
     /** Generates YAML for this field. */
-    override fun generateYaml(builder: StringBuilder, indent: String, existingCompatibleConfig: YamlConfiguration?) {
+    override fun generateYaml(
+        builder: StringBuilder,
+        indent: String,
+        existingCompatibleConfig: YamlConfiguration?,
+    ) {
         appendDescription(builder, indent)
         appendDefaultValue(builder, indent, def())
-        val def = if (existingCompatibleConfig != null && existingCompatibleConfig.contains(yamlPath()))
-            loadFromYaml(existingCompatibleConfig)
-        else
-            def()
+        val def =
+            if (existingCompatibleConfig != null && existingCompatibleConfig.contains(yamlPath()))
+                loadFromYaml(existingCompatibleConfig)
+            else def()
         appendFieldDefinition(builder, indent, def)
     }
 
