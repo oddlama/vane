@@ -1,6 +1,24 @@
-@import "tailwindcss";
-@import "tailwindcss/preflight";
-@tailwind utilities;
+@import "tailwindcss" source(none);
+@source "../../docs/index.html";
+@plugin "@tailwindcss/typography";
+
+/* The theme toggle sets the dark class on <html> */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Keep the Tailwind v3 defaults the templates were written against */
+@layer base {
+    *, ::after, ::before, ::backdrop, ::file-selector-button {
+        border-color: var(--color-gray-200, currentcolor);
+    }
+
+    button:not(:disabled), [role="button"]:not(:disabled) {
+        cursor: pointer;
+    }
+}
+
+@theme {
+    --font-sans: "Inter var", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
 
 @font-face {
     font-family: 'Minecraftia';

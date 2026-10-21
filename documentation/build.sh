@@ -8,5 +8,8 @@ function die() { echo "[1;31merror:[m $*" >&2; exit 1; }
 echo "Generating content..."
 ./generate.py --client-jar minecraft-client.jar --plugins-dir plugins -o ../docs
 
+npx=npx; command -v bunx >/dev/null && npx=bunx
+
 echo "Generating css..."
-npx tailwindcss -i templates/style.css -o ../docs/css/style.css --minify
+$npx @tailwindcss/cli -i templates/style.css -o ../docs/css/style.css --minify
+cp -f templates/Minecraftia.woff ../docs/css/

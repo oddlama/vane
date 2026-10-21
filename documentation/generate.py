@@ -49,7 +49,8 @@ def load_templates() -> dict[str, str]:
     return templates
 
 def item_to_inline_icon(resource_key: str) -> str:
-    html = context.templates["inline-icon"].strip()
+    # Keep it on one line, so it can be used inside markdown tables
+    html = " ".join(context.templates["inline-icon"].split())
     html = html.replace("{{ icon }}", item_to_icon(resource_key))
     html = html.replace("{{ name }}", resource_key)
     return html
@@ -57,7 +58,8 @@ def item_to_inline_icon(resource_key: str) -> str:
 def load_feature_markdown(markdown_file: Path, default_slug: str) -> Feature:
     with open(markdown_file, "r") as f:
         try:
-            metadata, content = f.read().split("```\n---\n", maxsplit=1)
+            # Formatters may put blank lines between the closing fence and the separator
+            metadata, content = re.split(r"^```\s*\n\s*---\s*\n", f.read(), maxsplit=1, flags=re.MULTILINE)
             metadata = metadata.removeprefix("```toml")
             content = content.strip()
         except ValueError:
@@ -87,7 +89,7 @@ def load_feature_markdown(markdown_file: Path, default_slug: str) -> Feature:
     content = markdown_item_pattern.sub(lambda match: item_to_inline_icon(match.group(1)), content)
     return Feature(loaded_from=str(markdown_file),
                    metadata=metadata,
-                   html_content=markdown.markdown(content, extensions=['tables']))
+                   html_content=markdown.markdown(content, extensions=['tables'], output_format='html'))
 
 def replace_category_variables(s: str, category: dict[str, Any]):
     s = s.replace("{{ category.id }}", category["id"])
@@ -97,11 +99,20 @@ def replace_category_variables(s: str, category: dict[str, Any]):
 def deep_get(dictionary, keys):
     return reduce(lambda d, key: d[key], keys.split("."), dictionary)
 
+def snake_case_keys(value):
+    # Configs use PascalCase keys (ItemGoldenSickle, AmountMin); recipe ingredient keys are single letters and kept as-is
+    if isinstance(value, dict):
+        return {(re.sub(r"(?<!^)(?=[A-Z])", "_", k).lower() if isinstance(k, str) and len(k) > 1 else k): snake_case_keys(v)
+                for k, v in value.items()}
+    if isinstance(value, list):
+        return [snake_case_keys(v) for v in value]
+    return value
+
 def get_from_config(resource_key: str) -> dict[str, Any]:
     try:
         namespace, key = resource_key.split(":", maxsplit=1)
         with open(context.plugins_dir / namespace / "config.yml") as f:
-            config = yaml.safe_load(f)
+            config = snake_case_keys(yaml.safe_load(f))
         return deep_get(config, key)
     except:
         print(f"Error while trying to get {resource_key} from config")
@@ -179,6 +190,27 @@ def render_orientable(key: str, model: dict[str, Any]) -> str:
 
     return icon
 
+def item_definition_model(key: str) -> str | None:
+    """Returns the first plain model referenced by assets/minecraft/items/<key>.json, e.g. 'block/gold_block'."""
+    def first_model(node):
+        if isinstance(node, dict):
+            if node.get("type") == "minecraft:model":
+                return node["model"].removeprefix("minecraft:")
+            nodes = node.values()
+        elif isinstance(node, list):
+            nodes = node
+        else:
+            return None
+        for n in nodes:
+            if (model := first_model(n)) is not None:
+                return model
+        return None
+
+    try:
+        return first_model(json.loads(context.client_jar.read(f"assets/minecraft/items/{key}.json")))
+    except KeyError:
+        return None
+
 def minecraft_asset_icon(key: str) -> str:
     # Don't load again if already known
     if key in context.loaded_minecraft_asset_icons:
@@ -190,7 +222,14 @@ def minecraft_asset_icon(key: str) -> str:
     try:
         item_model = json.loads(context.client_jar.read(f"assets/minecraft/models/item/{key}.json"))
     except KeyError:
-        msg = f"unknown item minecraft:{key}"
+        # Since 1.21.4, block items have no item model; their item definition references the model instead
+        model = item_definition_model(key)
+        if model is not None and model.startswith("block/"):
+            item_model = {"parent": model}
+        elif model is not None and model.startswith("item/"):
+            item_model = json.loads(context.client_jar.read(f"assets/minecraft/models/{model}.json"))
+        else:
+            msg = f"unknown item minecraft:{key}"
 
     if item_model is not None:
         item_parent = item_model["parent"].removeprefix("minecraft:")
@@ -252,8 +291,12 @@ def item_to_icon(item: str) -> str:
         print(f"[1;33mwarning:[m unknown icon for item: {item}")
     return f"assets/minecraft/textures/item/barrier.png"
 
-def remove_lines_containing(where: str, what: str):
-    return "".join(line for line in where.splitlines(keepends=True) if what not in line)
+def remove_element_containing(where: str, what: str):
+    # Removes the whole <img> carrying the placeholder, or the <div> holding nothing else,
+    # since templates may spread either over several lines
+    what = re.escape(what)
+    pattern = r"[ \t]*(?:<img\b[^>]*" + what + r"[^>]*>|<div\b[^>]*>\s*" + what + r"\s*</div>)[ \t]*\n?"
+    return re.sub(pattern, "", where)
 
 def render_recipe(feature: Feature, recipe: dict[str, Any]) -> str:
     if recipe["type"] == "shaped":
@@ -265,7 +308,7 @@ def render_recipe(feature: Feature, recipe: dict[str, Any]) -> str:
         for i,c in enumerate(shape):
             tag = f"{{{{ recipe.ingredients.{i} }}}}"
             if c == " ":
-                html = remove_lines_containing(html, tag)
+                html = remove_element_containing(html, tag)
             else:
                 ingredient = ingredients[c]
                 html = html.replace(tag, item_to_icon(ingredient))
@@ -276,7 +319,7 @@ def render_recipe(feature: Feature, recipe: dict[str, Any]) -> str:
         for i,ingredient in enumerate(recipe["ingredients"] + (9 - len(recipe["ingredients"])) * [None]):
             tag = f"{{{{ recipe.ingredients.{i} }}}}"
             if ingredient is None:
-                html = remove_lines_containing(html, tag)
+                html = remove_element_containing(html, tag)
             else:
                 html = html.replace(tag, item_to_icon(ingredient))
                 html = html.replace(f"{{{{ recipe.ingredients.{i}.name }}}}", ingredient)
@@ -345,16 +388,16 @@ def render_feature(feature: Feature, index: int, count: int) -> str:
         if len(recipes) > 0:
             html = html.replace("{{ feature.recipes }}", "\n".join(recipes))
         else:
-            html = remove_lines_containing(html, "{{ feature.recipes }}")
+            html = remove_element_containing(html, "{{ feature.recipes }}")
 
         loot = get_from_config(feature.metadata["itemlike"] + ".loot")
         if len(loot) > 0:
             html = html.replace("{{ feature.loot }}", render_loot_table(loot))
         else:
-            html = remove_lines_containing(html, "{{ feature.loot }}")
+            html = remove_element_containing(html, "{{ feature.loot }}")
     else:
-        html = remove_lines_containing(html, "{{ feature.recipes }}")
-        html = remove_lines_containing(html, "{{ feature.loot }}")
+        html = remove_element_containing(html, "{{ feature.recipes }}")
+        html = remove_element_containing(html, "{{ feature.loot }}")
 
     if "icon" not in feature.metadata:
         print(f"[1;33mwarning:[m could not infer icon")
@@ -362,7 +405,7 @@ def render_feature(feature: Feature, index: int, count: int) -> str:
     if "icon_overlay" in feature.metadata:
         feature.metadata["icon_overlay"] = item_to_icon(feature.metadata["icon_overlay"])
     else:
-        html = remove_lines_containing(html, "{{ feature.metadata.icon_overlay }}")
+        html = remove_element_containing(html, "{{ feature.metadata.icon_overlay }}")
 
     for k,v in feature.metadata.items():
         html = html.replace(f"{{{{ feature.metadata.{k} }}}}", v)
