@@ -2,7 +2,7 @@ name: Pages
 
 on:
   push:
-    branches: [ Kotlin ]
+    branches: [ main ]
     paths: [ 'docs/**' ]
   workflow_dispatch:
 

@@ -17,16 +17,16 @@ any [PaperMC](https://papermc.io) based minecraft server.
 
 [**For a comprehensive feature overview, visit the official website.**](https://oddlama.github.io/vane/)
 
-- <img width="auto" height="20px" src="https://github.com/oddlama/vane/blob/Kotlin/docs/assets/minecraft/textures/item/firework_rocket.png" alt="Firework rocket icon"> Lore friendly and properly integrated immersive features.
+- <img width="auto" height="20px" src="https://raw.githubusercontent.com/oddlama/vane/main/docs/assets/minecraft/textures/item/firework_rocket.png" alt="Firework rocket icon"> Lore friendly and properly integrated immersive features.
   Vane augments the classic vanilla experience, and doesn't try to replace it.
   Generally, players are not supposed to notice which features were introduced by vane.
-- <img width="auto" height="20px" src="https://github.com/oddlama/vane/blob/Kotlin/docs/assets/minecraft/textures/item/wheat.png" alt="Wheat icon"> Countless quality-of-life, gameplay and system improvements
-- <img width="auto" height="20px" src="https://github.com/oddlama/vane/blob/Kotlin/docs/assets/minecraft/textures/item/end_crystal.png" alt="End crystal icon"> Fully-configurable. Disable or configure anything you dislike
-- <img width="auto" height="20px" src="https://github.com/oddlama/vane/blob/Kotlin/docs/assets/vane-trifles/items/golden_sickle.png" alt="Golden sickle icon"> Several carefully designed custom items
-- <img width="auto" height="20px" src="https://github.com/oddlama/vane/blob/Kotlin/docs/assets/vane-enchantments/items/ancient_tome_of_the_gods.png" alt="Ancient tome icon"> Many custom enchantments for a selection of tools, including the elytra
-- <img width="auto" height="20px" src="https://github.com/oddlama/vane/blob/Kotlin/docs/assets/minecraft/textures/item/ender_pearl.png" alt="Ender pearl icon"> The best portals you can imagine. Expensive but worthwhile for long distance travel. Supports all entities including minecarts!
-- <img width="auto" height="20px" src="https://github.com/oddlama/vane/blob/Kotlin/docs/assets/minecraft/textures/item/writable_book.png" alt="Writable book icon"> A simple but powerful region system for grief protection
-- <img width="auto" height="20px" src="https://github.com/oddlama/vane/blob/Kotlin/docs/assets/minecraft/textures/item/map.png" alt="Map icon"> [BlueMap](https://bluemap.bluecolored.de/), [Dynmap](https://www.spigotmc.org/resources/dynmap%C2%AE.274/) and [Pl3xMap](https://github.com/BillyGalbreath/Pl3xMap) integration
+- <img width="auto" height="20px" src="https://raw.githubusercontent.com/oddlama/vane/main/docs/assets/minecraft/textures/item/wheat.png" alt="Wheat icon"> Countless quality-of-life, gameplay and system improvements
+- <img width="auto" height="20px" src="https://raw.githubusercontent.com/oddlama/vane/main/docs/assets/minecraft/textures/item/end_crystal.png" alt="End crystal icon"> Fully-configurable. Disable or configure anything you dislike
+- <img width="auto" height="20px" src="https://raw.githubusercontent.com/oddlama/vane/main/docs/assets/vane-trifles/items/golden_sickle.png" alt="Golden sickle icon"> Several carefully designed custom items
+- <img width="auto" height="20px" src="https://raw.githubusercontent.com/oddlama/vane/main/docs/assets/vane-enchantments/items/ancient_tome_of_the_gods.png" alt="Ancient tome icon"> Many custom enchantments for a selection of tools, including the elytra
+- <img width="auto" height="20px" src="https://raw.githubusercontent.com/oddlama/vane/main/docs/assets/minecraft/textures/item/ender_pearl.png" alt="Ender pearl icon"> The best portals you can imagine. Expensive but worthwhile for long distance travel. Supports all entities including minecarts!
+- <img width="auto" height="20px" src="https://raw.githubusercontent.com/oddlama/vane/main/docs/assets/minecraft/textures/item/writable_book.png" alt="Writable book icon"> A simple but powerful region system for grief protection
+- <img width="auto" height="20px" src="https://raw.githubusercontent.com/oddlama/vane/main/docs/assets/minecraft/textures/item/map.png" alt="Map icon"> [BlueMap](https://bluemap.bluecolored.de/), [Dynmap](https://www.spigotmc.org/resources/dynmap%C2%AE.274/) and [Pl3xMap](https://github.com/BillyGalbreath/Pl3xMap) integration
 - [And a lot more!](https://oddlama.github.io/vane/)
 
 ## 📷 Gallery
