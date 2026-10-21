@@ -10,18 +10,26 @@ import java.util.UUID
 class WorldStorageGuard {
     private val loaded = mutableSetOf<UUID>()
     private val loading = mutableMapOf<UUID, Any>()
+    private val failed = mutableSetOf<UUID>()
 
     fun canSave(worldId: UUID): Boolean = worldId in loaded
+
+    /** False after a successful load, and after a failed one: retrying would only repeat the refusal. */
+    fun shouldLoad(worldId: UUID): Boolean = worldId !in loaded && worldId !in failed
 
     /** A failed reload revokes a previous successful load as well. Exceptions reach the caller. */
     fun load(worldId: UUID, readAndIndex: () -> Unit) {
         loaded.remove(worldId)
+        failed.remove(worldId)
         val attempt = Any()
         check(loading.putIfAbsent(worldId, attempt) == null) { "World storage is already loading: $worldId" }
         try {
             readAndIndex()
             // An unload/disable during the callback must not be undone by a late completion.
             if (loading[worldId] === attempt) loaded.add(worldId)
+        } catch (e: Throwable) {
+            if (loading[worldId] === attempt) failed.add(worldId)
+            throw e
         } finally {
             loading.remove(worldId, attempt)
         }
@@ -37,10 +45,12 @@ class WorldStorageGuard {
     fun forget(worldId: UUID) {
         loaded.remove(worldId)
         loading.remove(worldId)
+        failed.remove(worldId)
     }
 
     fun clear() {
         loaded.clear()
         loading.clear()
+        failed.clear()
     }
 }
