@@ -58,7 +58,7 @@ To change that, right-click the console to open the menu and change the visibili
 ![](assets/gifs/portal-activate-use.gif)
 
 Activate the portal by first selecting a destination in the console, and then activate the lever. If the destination
-portal is private, the destination selection will be reset afterwards. If you selected a public portal, it will stay
+portal is private, the destination selection will be reset afterward. If you selected a public portal, it will stay
 selected after the portal deactivates.
 
 Portals can also be activated by a redstone repeater facing directly into a portal block. The portal is activated on a

@@ -21,12 +21,12 @@
     </script>
 </head>
 <body class="bg-white dark:bg-gray-900">
-<nav class="px-2 sm:px-4 py-2.5 rounded">
+<nav class="px-2 sm:px-4 py-2.5 rounded-sm">
     <div class="container flex flex-wrap justify-between items-center mx-auto">
         <div class="flex items-center"></div>
         <div class="flex md:order-2">
             <button id="theme-toggle" type="button"
-                    class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5">
+                    class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-hidden focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5">
                 <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
                      xmlns="http://www.w3.org/2000/svg">
                     <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
@@ -55,27 +55,32 @@
                         class="text-sky-600 hover:text-gray-800 dark:text-sky-300 dark:hover:text-gray-300"
                         href="https://oddlama.github.io/minecraft-server">Server Installer</a> for an easy way to set up
                 vane together with auto-start, 3D online map, and more awesome features.</p>
+            <p class="mb-8 text-sm font-normal text-gray-500 dark:text-gray-400">This site is hosted by a community fork.
+                Vane was created by <a class="text-sky-600 hover:text-gray-800 dark:text-sky-300 dark:hover:text-gray-300"
+                                       href="https://github.com/oddlama">oddlama</a>; all credit for the original project
+                goes to oddlama and the <a class="text-sky-600 hover:text-gray-800 dark:text-sky-300 dark:hover:text-gray-300"
+                                           href="https://github.com/oddlama/vane">upstream contributors</a>.</p>
             <div class="flex flex-col mb-4 space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4">
-                <div class="inline-flex justify-center rounded-lr shadow-sm" role="group">
+                <div class="inline-flex justify-center rounded-lr shadow-xs" role="group">
                     <a href="https://github.com/oddlama/vane"
                        class="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-gray-900 rounded-l-lg border-l border-t border-b border-gray-300 hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 dark:text-white dark:border-gray-700 dark:hover:bg-gray-700 dark:focus:ring-gray-800">
-                        <div class="-ml-1 mr-2 w-5 h-5 fa-brands fa-github text-lg"></div>
+                        <span class="-ml-1 mr-2 w-5 h-5 fa-brands fa-github text-lg" aria-hidden="true"></span>
                         GitHub
                     </a>
                     <button disabled
                             class="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-gray-900 rounded-r-lg border border-gray-300 bg-gray-50 focus:ring-4 focus:ring-gray-100 dark:text-white dark:border-gray-700 dark:bg-gray-800 dark:focus:ring-gray-800">
                         <span id="starcount">?</span>
-                        <div class="ml-2 w-5 h-5 fa-regular fa-star text-lg text-yellow-400 dark:text-yellow-400"></div>
+                        <span class="ml-2 w-5 h-5 fa-regular fa-star text-lg text-yellow-400 dark:text-yellow-400" aria-hidden="true"></span>
                     </button>
                 </div>
                 <a href="https://github.com/oddlama/vane/releases/latest"
                    class="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900">
-                    <div class="-ml-1 mr-2 w-5 h-5 fa-solid fa-download text-lg"></div>
+                    <span class="-ml-1 mr-2 w-5 h-5 fa-solid fa-download text-lg" aria-hidden="true"></span>
                     Download
                 </a>
                 <a href="https://discord.gg/RueJ6A59x2"
                    class="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-indigo-500 hover:bg-indigo-600 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900">
-                    <div class="-ml-1 mr-2 w-5 h-5 fa-brands fa-discord text-lg"></div>
+                    <span class="-ml-1 mr-2 w-5 h-5 fa-brands fa-discord text-lg" aria-hidden="true"></span>
                     Discord
                 </a>
             </div>
@@ -98,7 +103,6 @@
     <div class="my-16"></div>
 </div>
 <div id="the-mctooltip"></div>
-</body>
 <script>
     const themeToggleDarkIcon = document.getElementById("theme-toggle-dark-icon");
     const themeToggleLightIcon = document.getElementById("theme-toggle-light-icon");
@@ -218,4 +222,5 @@
 
     minecraft_tooltip.style.display = "none";
 </script>
+</body>
 </html>

@@ -1,6 +1,6 @@
 ```toml
 title = "Graylist (optional)"
-icon = "minecraft:chain"
+icon = "minecraft:iron_chain"
 module = "vane-admin"
 ```
 

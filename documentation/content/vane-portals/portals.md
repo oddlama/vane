@@ -14,7 +14,7 @@ Portals are structures that let you travel to specific other portals—as many t
 almost any shape, and style them to externally match your building style. It is the best way to travel great distances
 quickly. But beware, portals are expensive!
 
-Right-clicking the portal console will open a menu where you can select any visible destination portal. Afterwards,
+Right-clicking the portal console will open a menu where you can select any visible destination portal. Afterward,
 activate the portal lever and step through.
 
 ### Trivia

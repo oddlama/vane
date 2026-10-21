@@ -1,7 +1,7 @@
 ## Updating vane to a new minecraft release
 
 There are some things that need to be done to make vane compatible with a new minecraft release. All work happens on
-the `Kotlin` branch, which is the default branch of this fork.
+the `main` branch.
 
 1. First, we need to compile against the newest Paper dev bundle. All Paper plugin modules get it from the version
    catalog, so there is exactly one place to change: bump `paper` in `gradle/libs.versions.toml`, e.g.
