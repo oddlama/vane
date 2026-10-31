@@ -1,3 +1,4 @@
+
 package org.oddlama.vane.portals.portal
 
 import org.bukkit.block.Block
@@ -84,7 +85,17 @@ class PortalBlock(private val block: LazyBlock, private val type: Type?) {
             // `PersistentSerializer.fromJson` signature: `fun <U> fromJson(cls: Class<U>?, value: Any?): U?`.
             // Do not include `?` in the generic parameter; the return type is already nullable.
             val block: LazyBlock? = PersistentSerializer.fromJson(LazyBlock::class.java, json.get("block"))
-            val type: Type? = PersistentSerializer.fromJson(Type::class.java, json.get("type"))
+
+            // Use fromSerialized() instead of direct enum deserialization.
+            // This accepts both the new names (BOUNDARY1) and legacy names
+            // (BOUNDARY_1) from older portal records.
+            val type: Type? =
+            if (json.isNull("type")) {
+                null
+            } else {
+                Type.fromSerialized(json.getString("type"))
+            }
+            
             return PortalBlock(block!!, type)
         }
     }
