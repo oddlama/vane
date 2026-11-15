@@ -3,8 +3,10 @@ package org.oddlama.vane.core
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.event.ClickEvent
 import net.kyori.adventure.text.format.NamedTextColor
+import net.minecraft.core.DefaultedRegistry
 import net.minecraft.core.Holder
 import net.minecraft.core.MappedRegistry
+import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.entity.EntityType
 import org.bukkit.event.EventHandler
@@ -37,6 +39,7 @@ import org.oddlama.vane.util.VersionUtil
 import org.oddlama.vane.util.msToTicks
 import java.io.File
 import java.io.IOException
+import java.lang.reflect.InvocationTargetException
 import java.net.URISyntaxException
 import java.util.*
 import java.util.logging.Level
@@ -133,9 +136,6 @@ class Core : Module<Core?>() {
         // Create global command catch-all permission
         registerPermission(permissionCommandCatchall)
 
-        // Allow registration of new enchantments and entities
-        unfreezeRegistries()
-
         // Components
         enchantmentManager = EnchantmentManager(this)
         HeadLibrary(this)
@@ -163,7 +163,13 @@ class Core : Module<Core?>() {
     }
 
     /** Unfreezes relevant registries to allow custom enchantment/entity registration. */
+    @Deprecated("Use more specific modifyRegistry() instead; kept for backwards compat")
     fun unfreezeRegistries() {
+        unfreezeRegistry(BuiltInRegistries.ENTITY_TYPE)
+    }
+
+    @Suppress("SameParameterValue")
+    private fun <T : Any> unfreezeRegistry(registry: Registry<T>) {
         try {
             val frozen = MappedRegistry::class.java.getDeclaredField("frozen" /* frozen */)
                 .also { it.isAccessible = true }
@@ -171,18 +177,69 @@ class Core : Module<Core?>() {
                 "unregisteredIntrusiveHolders" /* unregisteredIntrusiveHolders (1.19.3+), intrusiveHolderCache (until 1.19.2) */
             ).also { it.isAccessible = true }
 
-            frozen.set(BuiltInRegistries.ENTITY_TYPE, false)
+            frozen.set(registry, false)
             intrusiveHolderCache.set(
-                BuiltInRegistries.ENTITY_TYPE,
-                IdentityHashMap<EntityType<*>, Holder.Reference<EntityType<*>>>()
+                registry,
+                IdentityHashMap<T, Holder.Reference<T>>()
             )
         } catch (e: Exception) {
             when (e) {
                 is NoSuchFieldException, is SecurityException, is IllegalArgumentException, is IllegalAccessException ->
-                    log.log(Level.SEVERE, "Failed to unfreeze registries", e)
+                    log.log(Level.SEVERE, "Failed to unfreeze registry " + registry.key(), e)
 
                 else -> throw e
             }
+        }
+    }
+
+    /** Re-freezes relevant registries to ensure things work properly. */
+    @Deprecated("Use more specific modifyRegistry() instead; kept for backwards compat")
+    fun freezeRegistries() {
+        freezeRegistry(BuiltInRegistries.ENTITY_TYPE)
+    }
+
+    @Suppress("SameParameterValue")
+    private fun <T : Any> freezeRegistry(registry: Registry<T>) {
+        try {
+            val allTags = MappedRegistry::class.java.getDeclaredField(
+                "allTags"
+            ).also { it.isAccessible = true }
+
+            val refreshTagsInHolders = MappedRegistry::class.java.getDeclaredMethod(
+                "refreshTagsInHolders"
+            ).also { it.isAccessible = true }
+
+            val unboundTagSet = allTags.type.getDeclaredMethod("unbound").also { it.isAccessible = true }.invoke(null)
+            val boundTagSet = allTags.get(registry)
+
+            try {
+                allTags.set(registry, unboundTagSet)
+                registry.freeze()
+            } finally {
+                allTags.set(registry, boundTagSet)
+                refreshTagsInHolders.invoke(registry)
+            }
+        } catch (e: Exception) {
+            when (e) {
+                is NoSuchFieldException, is SecurityException, is IllegalArgumentException, is IllegalAccessException, is NoSuchMethodException, is IllegalStateException, is InvocationTargetException ->
+                    log.log(Level.SEVERE, "Failed to freeze registry " + registry.key(), e)
+
+                else -> throw e
+            }
+        }
+    }
+
+    /**
+     * Unfreezes the passed [registry], invokes [fn], then re-freezes the
+     * [registry] to (hopefully) prevent bugs.
+     */
+    fun <T : Any> modifyRegistry(registry: Registry<T>, fn: () -> Unit) {
+        unfreezeRegistry(registry)
+
+        try {
+            fn()
+        } finally {
+            freezeRegistry(registry)
         }
     }
 

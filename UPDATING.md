@@ -67,13 +67,15 @@ the `main` branch.
    the compiler cannot check. Find them with `rg -n "getDeclaredField"`. Most hits are vane's own classes (portals,
    regions serialization) and are safe; the ones that matter are:
 
-   - `Core.unfreezeRegistries()` in `vane-core/src/main/kotlin/org/oddlama/vane/core/Core.kt`, which accesses
+   - `Core.unfreezeRegistry()` in `vane-core/src/main/kotlin/org/oddlama/vane/core/Core.kt`, which accesses
      `MappedRegistry.frozen` and `MappedRegistry.unregisteredIntrusiveHolders`.
+   - `Core.freezeRegistry()` in `vane-core/src/main/kotlin/org/oddlama/vane/core/Core.kt`, which accesses
+     `MappedRegistry.allTags`, `MappedRegistry.refreshTagsInHolders` and `TagSet.unbound`.
    - `vane-velocity/src/main/kotlin/org/oddlama/velocity/Velocity.kt` (field `cm` of the Velocity server; only relevant
      on Velocity updates).
 
    Open the class in the dev bundle sources and make sure the fields still exist under that name and type. A wrong name
-   compiles fine but fails at startup with `Failed to unfreeze registries` in the log.
+   compiles fine but fails at startup with `Failed to unfreeze registry` in the log.
 
 8. Update the resource pack format. Vane generates its own resource pack, and its `pack.mcmeta` declares which pack
    formats it supports. Read the changelog to see whether anything crucial (file layout, item model definitions) has
