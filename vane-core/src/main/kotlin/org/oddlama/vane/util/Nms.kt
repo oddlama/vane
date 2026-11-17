@@ -76,6 +76,13 @@ object Nms {
         builder: EntityType.Builder<*>
     ) {
         val id = "${pseudoNamespace}_$key"
+
+        // Registries survive a plugin /reload, so the entry from the previous load is still present.
+        // Registering it again would throw on the duplicate key.
+        if(BuiltInRegistries.ENTITY_TYPE.containsKey(Identifier.withDefaultNamespace(id))) {
+            return
+        }
+
         val worldVersion = SharedConstants.getCurrentVersion().dataVersion().version()
         val worldVersionKey = DataFixUtils.makeKey(worldVersion)
 

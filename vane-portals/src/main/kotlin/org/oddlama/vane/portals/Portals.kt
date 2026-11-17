@@ -2,6 +2,7 @@ package org.oddlama.vane.portals
 
 import com.google.common.collect.Sets
 import net.kyori.adventure.text.Component
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.MobCategory
 import org.bukkit.*
@@ -263,15 +264,16 @@ class Portals : Module<Portals?>() {
     /** Registers custom entities used by this module. */
 
     private fun registerEntities() {
-        core!!.unfreezeRegistries()
-        Nms.registerEntity(
-            NamespacedKey.minecraft("item"),
-            namespace(),
-            "floating_item",
-            EntityType.Builder.of({ entitytypes, world ->
-                FloatingItem(entitytypes, world)
-            }, MobCategory.MISC).noSave().sized(0.0f, 0.0f)
-        )
+        core!!.modifyRegistry(BuiltInRegistries.ENTITY_TYPE) {
+            Nms.registerEntity(
+                NamespacedKey.minecraft("item"),
+                namespace(),
+                "floating_item",
+                EntityType.Builder.of({ entitytypes, world ->
+                    FloatingItem(entitytypes, world)
+                }, MobCategory.MISC).noSave().sized(0.0f, 0.0f)
+            )
+        }
     }
 
     /** Rebuilds style maps and derived caches after configuration changes. */
