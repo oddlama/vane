@@ -3,12 +3,10 @@ package org.oddlama.vane.core
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.event.ClickEvent
 import net.kyori.adventure.text.format.NamedTextColor
-import net.minecraft.core.DefaultedRegistry
 import net.minecraft.core.Holder
 import net.minecraft.core.MappedRegistry
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
-import net.minecraft.world.entity.EntityType
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.player.PlayerJoinEvent
@@ -162,14 +160,21 @@ class Core : Module<Core?>() {
         }
     }
 
-    /** Unfreezes relevant registries to allow custom enchantment/entity registration. */
-    @Deprecated("Use more specific modifyRegistry() instead; kept for backwards compat")
+    /**
+     * Unfreezes the entity type registry without re-freezing it afterwards.
+     *
+     * Leaving a registry unfrozen breaks `/minecraft:reload`, so use [modifyRegistry] instead.
+     */
+    @Deprecated(
+        "Leaves the registry unfrozen, which breaks /minecraft:reload. Use modifyRegistry() instead.",
+        ReplaceWith("modifyRegistry(BuiltInRegistries.ENTITY_TYPE) { }")
+    )
     fun unfreezeRegistries() {
         unfreezeRegistry(BuiltInRegistries.ENTITY_TYPE)
     }
 
-    @Suppress("SameParameterValue")
-    private fun <T : Any> unfreezeRegistry(registry: Registry<T>) {
+    /** Unfreezes [registry] so new entries can be registered. Returns false if that failed. */
+    private fun <T : Any> unfreezeRegistry(registry: Registry<T>): Boolean {
         try {
             val frozen = MappedRegistry::class.java.getDeclaredField("frozen" /* frozen */)
                 .also { it.isAccessible = true }
@@ -178,38 +183,36 @@ class Core : Module<Core?>() {
             ).also { it.isAccessible = true }
 
             frozen.set(registry, false)
-            intrusiveHolderCache.set(
-                registry,
-                IdentityHashMap<T, Holder.Reference<T>>()
-            )
+            intrusiveHolderCache.set(registry, IdentityHashMap<T, Holder.Reference<T>>())
+            return true
         } catch (e: Exception) {
             when (e) {
-                is NoSuchFieldException, is SecurityException, is IllegalArgumentException, is IllegalAccessException ->
-                    log.log(Level.SEVERE, "Failed to unfreeze registry " + registry.key(), e)
+                is NoSuchFieldException, is SecurityException, is IllegalArgumentException, is IllegalAccessException -> {
+                    log.log(Level.SEVERE, "Failed to unfreeze registry ${registry.key()}", e)
+                    return false
+                }
 
                 else -> throw e
             }
         }
     }
 
-    /** Re-freezes relevant registries to ensure things work properly. */
-    @Deprecated("Use more specific modifyRegistry() instead; kept for backwards compat")
-    fun freezeRegistries() {
-        freezeRegistry(BuiltInRegistries.ENTITY_TYPE)
-    }
-
-    @Suppress("SameParameterValue")
+    /**
+     * Re-freezes [registry] while keeping its currently bound tags.
+     *
+     * [Registry.freeze] refuses to run while tags are bound, so the tag set is temporarily swapped for an
+     * unbound one and restored afterwards.
+     */
     private fun <T : Any> freezeRegistry(registry: Registry<T>) {
         try {
-            val allTags = MappedRegistry::class.java.getDeclaredField(
-                "allTags"
-            ).also { it.isAccessible = true }
+            val allTags = MappedRegistry::class.java.getDeclaredField("allTags")
+                .also { it.isAccessible = true }
+            val refreshTagsInHolders = MappedRegistry::class.java.getDeclaredMethod("refreshTagsInHolders")
+                .also { it.isAccessible = true }
 
-            val refreshTagsInHolders = MappedRegistry::class.java.getDeclaredMethod(
-                "refreshTagsInHolders"
-            ).also { it.isAccessible = true }
-
-            val unboundTagSet = allTags.type.getDeclaredMethod("unbound").also { it.isAccessible = true }.invoke(null)
+            val unboundTagSet = allTags.type.getDeclaredMethod("unbound")
+                .also { it.isAccessible = true }
+                .invoke(null)
             val boundTagSet = allTags.get(registry)
 
             try {
@@ -221,8 +224,10 @@ class Core : Module<Core?>() {
             }
         } catch (e: Exception) {
             when (e) {
-                is NoSuchFieldException, is SecurityException, is IllegalArgumentException, is IllegalAccessException, is NoSuchMethodException, is IllegalStateException, is InvocationTargetException ->
-                    log.log(Level.SEVERE, "Failed to freeze registry " + registry.key(), e)
+                is NoSuchFieldException, is NoSuchMethodException, is SecurityException,
+                is IllegalArgumentException, is IllegalAccessException, is IllegalStateException,
+                is InvocationTargetException ->
+                    log.log(Level.SEVERE, "Failed to freeze registry ${registry.key()}", e)
 
                 else -> throw e
             }
@@ -230,11 +235,14 @@ class Core : Module<Core?>() {
     }
 
     /**
-     * Unfreezes the passed [registry], invokes [fn], then re-freezes the
-     * [registry] to (hopefully) prevent bugs.
+     * Unfreezes [registry], runs [fn] to register new entries, then re-freezes [registry].
+     *
+     * If the registry cannot be unfrozen, [fn] is not run.
      */
     fun <T : Any> modifyRegistry(registry: Registry<T>, fn: () -> Unit) {
-        unfreezeRegistry(registry)
+        if (!unfreezeRegistry(registry)) {
+            return
+        }
 
         try {
             fn()

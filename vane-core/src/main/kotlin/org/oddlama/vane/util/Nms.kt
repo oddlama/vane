@@ -79,7 +79,7 @@ object Nms {
 
         // Registries survive a plugin /reload, so the entry from the previous load is still present.
         // Registering it again would throw on the duplicate key.
-        if(BuiltInRegistries.ENTITY_TYPE.containsKey(Identifier.withDefaultNamespace(id))) {
+        if (BuiltInRegistries.ENTITY_TYPE.containsKey(Identifier.withDefaultNamespace(id))) {
             return
         }
 
