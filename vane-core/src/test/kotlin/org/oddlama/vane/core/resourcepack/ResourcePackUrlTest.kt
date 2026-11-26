@@ -1,3 +1,5 @@
+@file:Suppress("KotlinMisorderedAssertEqualsArguments")
+
 package org.oddlama.vane.core.resourcepack
 
 import java.net.URI
