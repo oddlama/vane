@@ -190,7 +190,7 @@ abstract class Module<T : Module<T?>?> : JavaPlugin(), Context<T?>, Listener {
     private val additionalLootTables: MutableMap<NamespacedKey?, LootTable?> = mutableMapOf()
 
     /** bStats metrics handle, if enabled. */
-    var metrics: Metrics? = null
+    private var metrics: Metrics? = null
 
     init {
         core = if (this.name == "vane-core") this as Core

@@ -274,6 +274,20 @@ configure(subprojects.filter {
         // But also depend on core itself.
         implementation(project(path = ":vane-core"))
     }
+
+    // vane-core keeps bStats as an `implementation` dependency, so it is not on this module's
+    // classpath. Dokka still reads vane-core's compiled `Module`, whose (private) `metrics` field is
+    // typed `org.bstats.bukkit.Metrics`, and warns that it cannot resolve the type. Give only
+    // Dokka's analysis the jar; it must stay off the compile classpath, since vane-core relocates
+    // bStats and an unrelocated reference from another plugin would fail at runtime.
+    val dokkaBstats = configurations.detachedConfiguration(
+        dependencies.create(rootProject.libs.bstatsBukkit.get()),
+    )
+    configure<org.jetbrains.dokka.gradle.DokkaExtension> {
+        dokkaSourceSets.configureEach {
+            classpath.from(dokkaBstats)
+        }
+    }
 }
 
 // Shipped Paper plugins other than vane-core.
