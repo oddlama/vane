@@ -23,7 +23,7 @@ import org.oddlama.vane.util.ReflectionUtil
  */
 internal class PersistentStorage(
     private val currentVersion: () -> Long,
-    private val versionPath: () -> String?,
+    private val versionPath: () -> String,
     private val logger: () -> Logger,
     private val replaceFile: (Path, Path) -> Unit = { source, target ->
         Files.move(source, target, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE)
@@ -109,7 +109,7 @@ internal class PersistentStorage(
             JSONObject()
         }
 
-        val versionPath = requireNotNull(versionPath())
+        val versionPath = versionPath()
         val neededVersion = currentVersion()
         // Inspect every spelling before backups, alias migration, migrations or field assignment.
         val version = try {
@@ -126,7 +126,7 @@ internal class PersistentStorage(
 
                 // A migration to version N has already run for storage at version N.
                 migrations
-                    .filter { it.to > version && it.to <= neededVersion }
+                    .filter { it.to in (version + 1)..neededVersion }
                     .sortedBy { it.to }
                     .forEach { m ->
                         log.info("  → §b${m.to}§r : Applying migration '§a${m.name}§r'")
@@ -171,8 +171,8 @@ internal class PersistentStorage(
      *
      * @return `false` if legacy keys were found but the backup could not be written.
      */
-    private fun migrateLegacyKeys(file: File, json: JSONObject, versionPath: String?): Boolean {
-        val paths = listOfNotNull(versionPath) + persistentFields.mapNotNull { it.path() }
+    private fun migrateLegacyKeys(file: File, json: JSONObject, versionPath: String): Boolean {
+        val paths = listOf(versionPath) + persistentFields.mapNotNull { it.path() }
         val renames = paths
             .filter { !json.has(it) }
             .mapNotNull { path -> LegacyKeys.findLegacyKey(json.keySet(), path)?.let { it to path } }
@@ -199,7 +199,7 @@ internal class PersistentStorage(
         if (!isLoaded) return false
 
         val json = JSONObject()
-        val versionPath = requireNotNull(versionPath())
+        val versionPath = versionPath()
         json.put(versionPath, currentVersion().toString())
 
         // Skip the whole save if any field fails: writing the rest would drop that field's data from disk.

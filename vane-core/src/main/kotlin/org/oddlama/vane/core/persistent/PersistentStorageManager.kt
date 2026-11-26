@@ -12,7 +12,7 @@ class PersistentStorageManager(var module: Module<*>) {
 
     private val storage = PersistentStorage(
         { module.annotation.storageVersion },
-        { module.storagePathOf("storageVersion") },
+        { requireNotNull(module.storagePathOf("storageVersion")) },
         { module.log },
     ).also { it.compile(module) { name -> name } }
 
