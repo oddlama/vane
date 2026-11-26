@@ -70,18 +70,15 @@ class WorldRebuild(context: Context<Admin?>) : Listener<Admin?>(
     /**
      * Rebuild task that restores captured block states one by one.
      */
-    inner class Rebuilder(private var states: MutableList<BlockState>) : Runnable {
+    inner class Rebuilder(private val states: MutableList<BlockState>) : Runnable {
         private var task: BukkitTask? = null
         private var amountRebuild: Long = 0
 
         init {
             if (this.states.isNotEmpty()) {
                 val center = Vector(0, 0, 0)
-                var maxY = 0
-                for (state in this.states) {
-                    maxY = max(maxY, state.y)
-                    center.add(state.location.toVector())
-                }
+                val maxY = this.states.maxOf { it.y }.coerceAtLeast(0)
+                this.states.forEach { center.add(it.location.toVector()) }
                 center.multiply(1.0 / this.states.size)
                 center.setY(maxY + 1)
 

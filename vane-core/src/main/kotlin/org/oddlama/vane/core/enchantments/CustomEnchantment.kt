@@ -37,7 +37,8 @@ open class CustomEnchantment<T : Module<T?>?> @JvmOverloads constructor(
     private val annotation: VaneEnchantment = javaClass.getAnnotation(VaneEnchantment::class.java)
 
     /** Internal enchantment name from annotation metadata. */
-    val name: String
+    // Make namespace
+    val name: String = annotation.name
 
     /** Namespaced key used to register and resolve this enchantment. */
     private val key: NamespacedKey
@@ -53,11 +54,7 @@ open class CustomEnchantment<T : Module<T?>?> @JvmOverloads constructor(
     var langName: TranslatedMessage? = null
 
     init {
-        var context = context
-        // Make namespace
-        name = annotation.name
-        context = context.group("Enchantment${snakeCaseToPascalCase(name)}", "Enable enchantment $name", defaultEnabled)
-        setContext(context)
+        setContext(context.group("Enchantment${snakeCaseToPascalCase(name)}", "Enable enchantment $name", defaultEnabled))
 
         // Create a namespaced key
         key = namespacedKey(module!!.namespace(), name)

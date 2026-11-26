@@ -32,13 +32,15 @@ import java.util.*
  */
 open class CustomItem<T : Module<T?>?> @JvmOverloads constructor(
     context: Context<T?>,
-    nameOverride: String? = null,
-    customModelDataOverride: Int? = null
+    private val nameOverride: String? = null,
+    private val customModelDataOverride: Int? = null
 ) : Listener<T?>(null), CustomItem {
     /**
      * Resolved `@VaneItem` annotation.
      */
-    private var annotation: VaneItem? = null
+    private val annotation: VaneItem = generateSequence<Class<*>>(javaClass) { it.superclass }
+        .firstNotNullOfOrNull { it.getAnnotation(VaneItem::class.java) }
+        ?: error("Could not find @VaneItem annotation on $javaClass")
 
     /**
      * Namespaced key of this custom item.
@@ -72,30 +74,8 @@ open class CustomItem<T : Module<T?>?> @JvmOverloads constructor(
     )
     private var configDurability = 0
 
-    /**
-     * Optional runtime item name override.
-     */
-    private val nameOverride: String?
-
-    /**
-     * Optional runtime model data override.
-     */
-    private val customModelDataOverride: Int?
-
     init {
-        var context = context
-        var cls: Class<*>? = javaClass
-        while (this.annotation == null && cls != null) {
-            this.annotation = cls.getAnnotation(VaneItem::class.java)
-            cls = cls.getSuperclass()
-        }
-        checkNotNull(this.annotation) { "Could not find @VaneItem annotation on $javaClass" }
-
-        this.nameOverride = nameOverride
-        this.customModelDataOverride = customModelDataOverride
-
-        context = context.group("Item" + snakeCaseToPascalCase(name()), "Enable item " + name())
-        setContext(context)
+        setContext(context.group("Item" + snakeCaseToPascalCase(name()), "Enable item " + name()))
 
         this.key = namespacedKey(module!!.namespace(), name())
         recipes = Recipes(getContext(), this.key, { this.defaultRecipes() })
@@ -112,29 +92,29 @@ open class CustomItem<T : Module<T?>?> @JvmOverloads constructor(
     /**
      * Returns the configured item name.
      */
-    fun name(): String = nameOverride ?: annotation!!.name
+    fun name(): String = nameOverride ?: annotation.name
 
     /**
      * Returns whether this item is enabled.
      */
     override fun enabled(): Boolean {
-        return annotation!!.enabled && super.enabled()
+        return annotation.enabled && super.enabled()
     }
 
     /**
      * Returns the item definition version.
      */
-    override fun version(): Int = annotation!!.version
+    override fun version(): Int = annotation.version
 
     /**
      * Returns the base material for newly created stacks.
      */
-    override fun baseMaterial(): Material = annotation!!.base
+    override fun baseMaterial(): Material = annotation.base
 
     /**
      * Returns the custom model data id.
      */
-    override fun customModelData(): Int = customModelDataOverride ?: annotation!!.modelData
+    override fun customModelData(): Int = customModelDataOverride ?: annotation.modelData
 
     /**
      * Returns the translated display name component.
@@ -145,7 +125,7 @@ open class CustomItem<T : Module<T?>?> @JvmOverloads constructor(
     /**
      * Returns the default durability used by config override hooks.
      */
-    fun configDurabilityDef(): Int = annotation!!.durability
+    fun configDurabilityDef(): Int = annotation.durability
 
     /**
      * Returns the active durability value.

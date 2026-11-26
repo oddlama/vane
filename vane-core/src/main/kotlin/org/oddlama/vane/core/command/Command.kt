@@ -158,11 +158,9 @@ abstract class Command<T : Module<T?>?> @JvmOverloads constructor(
     open fun getCommandBase(): LiteralArgumentBuilder<CommandSourceStack> = commandBaseField!!
 
     init {
-        var context = context
         name = javaClass.getAnnotation(Name::class.java).value
         val groupName = "Command${name.replaceFirstChar { it.uppercase() }}"
-        context = context.group(groupName, "Enable command $name")
-        setContext(context)
+        setContext(context.group(groupName, "Enable command $name"))
 
         permission = Permission(
             "vane.${module!!.annotationName}.commands.$name",
