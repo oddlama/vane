@@ -162,11 +162,11 @@ class RegionExtent {
     }
 
     companion object {
+        /**
+         * Serializes a region extent to JSON-compatible data.
+         */
         @JvmStatic
         @Throws(IOException::class)
-                /**
-                 * Serializes a region extent to JSON-compatible data.
-                 */
         fun serialize(o: Any): Any {
             val regionExtent = o as RegionExtent
             val json = JSONObject()
@@ -175,11 +175,11 @@ class RegionExtent {
             return json
         }
 
+        /**
+         * Deserializes a region extent from JSON-compatible data.
+         */
         @JvmStatic
         @Throws(IOException::class)
-                /**
-                 * Deserializes a region extent from JSON-compatible data.
-                 */
         fun deserialize(o: Any): RegionExtent {
             val json = o as JSONObject
             val min: LazyBlock? = PersistentSerializer.fromJson(LazyBlock::class.java, json.get("min"))

@@ -10,10 +10,10 @@ import org.oddlama.vane.core.module.Context
 import org.oddlama.vane.trifles.Trifles
 import java.util.*
 
-@VaneItem(name = "papyrus_scroll", base = Material.PAPER, modelData = 0x76000f, version = 1)
 /**
  * Crafting base item used by teleport scroll recipes.
  */
+@VaneItem(name = "papyrus_scroll", base = Material.PAPER, modelData = 0x76000f, version = 1)
 class PapyrusScroll(context: Context<Trifles?>) : CustomItem<Trifles?>(context) {
     /** Defines the papyrus scroll crafting recipe. */
     override fun defaultRecipes(): RecipeList = RecipeList.of(

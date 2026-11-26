@@ -28,10 +28,10 @@ import org.oddlama.vane.util.ItemUtil
 import org.oddlama.vane.util.PlayerUtil
 import java.util.*
 
-@VaneItem(name = "file", base = Material.WARPED_FUNGUS_ON_A_STICK, durability = 4000, modelData = 0x760003, version = 1)
 /**
  * Utility tool that cycles block-state variants for stairs, walls, and multi-facing blocks.
  */
+@VaneItem(name = "file", base = Material.WARPED_FUNGUS_ON_A_STICK, durability = 4000, modelData = 0x760003, version = 1)
 class File(context: Context<Trifles?>) : CustomItem<Trifles?>(context) {
     /** Defines the file crafting recipe. */
     override fun defaultRecipes(): RecipeList {

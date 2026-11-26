@@ -20,6 +20,9 @@ import org.oddlama.vane.trifles.Trifles
 import org.oddlama.vane.util.StorageUtil
 import java.util.*
 
+/**
+ * Teleports a player to their most recent death location within a time window.
+ */
 @VaneItem(
     name = "death_scroll",
     base = Material.WARPED_FUNGUS_ON_A_STICK,
@@ -27,9 +30,6 @@ import java.util.*
     modelData = 0x760012,
     version = 1
 )
-/**
- * Teleports a player to their most recent death location within a time window.
- */
 class DeathScroll(context: Context<Trifles?>) : Scroll(context, 6000) {
     /** Action-bar message shown when no valid recent death location is available. */
     @LangMessage

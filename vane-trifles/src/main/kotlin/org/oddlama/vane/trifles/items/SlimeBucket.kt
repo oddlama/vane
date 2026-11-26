@@ -23,10 +23,10 @@ import org.oddlama.vane.trifles.Trifles
 import org.oddlama.vane.util.PlayerUtil
 import java.util.*
 
-@VaneItem(name = "slime_bucket", base = Material.SLIME_BALL, modelData = 0x760014, version = 1)
 /**
  * Captures tiny slimes into an item and updates model state based on slime chunk presence.
  */
+@VaneItem(name = "slime_bucket", base = Material.SLIME_BALL, modelData = 0x760014, version = 1)
 class SlimeBucket(context: Context<Trifles?>) : org.oddlama.vane.core.item.CustomItem<Trifles?>(context) {
     /** Tracks players currently standing in slime chunks to detect transitions. */
     private val playersInSlimeChunks = HashSet<UUID>()

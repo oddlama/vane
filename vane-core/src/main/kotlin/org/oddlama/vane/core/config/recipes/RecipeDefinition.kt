@@ -35,8 +35,8 @@ abstract class RecipeDefinition(val name: String?) {
      * Static factory and parsing helpers.
      */
     companion object {
+        /** Creates a concrete recipe definition from dictionary data. */
         @JvmStatic
-                /** Creates a concrete recipe definition from dictionary data. */
         fun fromDict(name: String?, dict: Any): RecipeDefinition {
             require(dict is Map<*, *>) {
                 "Invalid recipe dictionary: Argument must be a Map<String, Object>, but is ${dict.javaClass}!"
@@ -54,8 +54,8 @@ abstract class RecipeDefinition(val name: String?) {
             }
         }
 
+        /** Parses a recipe ingredient definition into a Bukkit [RecipeChoice]. */
         @JvmStatic
-                /** Parses a recipe ingredient definition into a Bukkit [RecipeChoice]. */
         fun recipeChoice(definition: String): RecipeChoice {
             val trimmed = definition.trim()
 

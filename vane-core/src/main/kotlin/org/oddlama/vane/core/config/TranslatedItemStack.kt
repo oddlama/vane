@@ -42,11 +42,11 @@ class TranslatedItemStack<T : Module<T?>?>(
     var configAmount: Int = 0
 
     /** Configured base material for this translated item stack. */
+    /** Configured material for generated stacks. */
     @ConfigExtendedMaterial(
         def = "minecraft:barrier",
         desc = "The item stack material. Also accepts heads from the head library or from defined custom items."
     )
-            /** Configured material for generated stacks. */
     var configMaterial: ExtendedMaterial? = null
 
     /** Localized item display name. */

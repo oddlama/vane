@@ -17,6 +17,9 @@ import org.oddlama.vane.trifles.Trifles
 import org.oddlama.vane.trifles.event.PlayerTeleportScrollEvent
 import org.oddlama.vane.util.StorageUtil
 
+/**
+ * Teleports players back to their previous scroll-teleport origin.
+ */
 @VaneItem(
     name = "unstable_scroll",
     base = Material.WARPED_FUNGUS_ON_A_STICK,
@@ -24,9 +27,6 @@ import org.oddlama.vane.util.StorageUtil
     modelData = 0x760001,
     version = 1
 )
-/**
- * Teleports players back to their previous scroll-teleport origin.
- */
 class UnstableScroll(context: Context<Trifles?>) : Scroll(context, 6000) {
     /** Action-bar message shown when no previous scroll teleport is recorded. */
     @LangMessage

@@ -187,11 +187,11 @@ class RegionGroup {
     fun isOrphan(regions: Regions): Boolean = regions.allRegions().none { it?.regionGroupId() == id }
 
     companion object {
+        /**
+         * Serializes a region group to JSON-compatible data.
+         */
         @JvmStatic
         @Throws(IOException::class)
-                /**
-                 * Serializes a region group to JSON-compatible data.
-                 */
         fun serialize(o: Any): Any {
             val regionGroup = o as RegionGroup
             val json = JSONObject()
@@ -224,11 +224,11 @@ class RegionGroup {
             return json
         }
 
+        /**
+         * Deserializes a region group from JSON-compatible data.
+         */
         @JvmStatic
         @Throws(IOException::class)
-                /**
-                 * Deserializes a region group from JSON-compatible data.
-                 */
         fun deserialize(o: Any): RegionGroup {
             val json = o as JSONObject
             val regionGroup = RegionGroup()

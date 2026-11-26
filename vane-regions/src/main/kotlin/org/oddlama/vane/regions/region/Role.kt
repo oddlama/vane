@@ -106,11 +106,11 @@ class Role {
     }
 
     companion object {
+        /**
+         * Serializes a role to JSON-compatible data.
+         */
         @JvmStatic
         @Throws(IOException::class)
-                /**
-                 * Serializes a role to JSON-compatible data.
-                 */
         fun serialize(o: Any): Any {
             val role = o as Role
             val json = JSONObject()
@@ -127,11 +127,11 @@ class Role {
             return json
         }
 
+        /**
+         * Deserializes a role from JSON-compatible data.
+         */
         @JvmStatic
         @Throws(IOException::class)
-                /**
-                 * Deserializes a role from JSON-compatible data.
-                 */
         fun deserialize(o: Any): Role {
             val json = o as JSONObject
             val role = Role()

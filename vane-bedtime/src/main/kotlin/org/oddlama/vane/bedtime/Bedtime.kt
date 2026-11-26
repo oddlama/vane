@@ -19,12 +19,12 @@ import org.oddlama.vane.util.WorldUtil
 import java.util.*
 import kotlin.math.ceil
 
-@VaneModule(name = "bedtime", bstats = 8639, configVersion = 3, langVersion = 5, storageVersion = 1)
 /**
  * Advances the night once enough players are sleeping and updates map integrations.
  *
  * @constructor Creates the bedtime module and registers its map integration components.
  */
+@VaneModule(name = "bedtime", bstats = 8639, configVersion = 3, langVersion = 5, storageVersion = 1)
 class Bedtime : Module<Bedtime?>() {
     /** Tracks currently sleeping player UUIDs per world UUID. */
     private val worldSleepers = mutableMapOf<UUID, MutableSet<UUID>>()

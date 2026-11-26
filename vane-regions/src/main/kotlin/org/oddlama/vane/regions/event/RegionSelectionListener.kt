@@ -18,16 +18,16 @@ import org.oddlama.vane.regions.region.RegionSelection
  * Handles block selection interactions while players are in region-selection mode.
  */
 class RegionSelectionListener(context: Context<Regions?>?) : Listener<Regions?>(context) {
+    /**
+     * Message sent after setting the primary selection block.
+     */
     @LangMessage
-            /**
-             * Message sent after setting the primary selection block.
-             */
     var langSelectPrimaryBlock: TranslatedMessage? = null
 
+    /**
+     * Message sent after setting the secondary selection block.
+     */
     @LangMessage
-            /**
-             * Message sent after setting the secondary selection block.
-             */
     var langSelectSecondaryBlock: TranslatedMessage? = null
 
     /**
@@ -36,10 +36,10 @@ class RegionSelectionListener(context: Context<Regions?>?) : Listener<Regions?>(
     private val regions: Regions
         get() = requireNotNull(module)
 
+    /**
+     * Captures left/right clicks with empty hands to set region selection corners.
+     */
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = false)
-            /**
-             * Captures left/right clicks with empty hands to set region selection corners.
-             */
     fun onPlayerInteract(event: PlayerInteractEvent) {
         // Require the main hand event
         if (event.hand != EquipmentSlot.HAND) {

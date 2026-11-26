@@ -23,34 +23,34 @@ import kotlin.math.abs
  * Root regions menu for selection, creation, and navigation to region/group views.
  */
 class MainMenu(context: Context<Regions?>) : ModuleComponent<Regions?>(context.namespace("Main")) {
+    /**
+     * Localized main menu title.
+     */
     @LangMessage
-            /**
-             * Localized main menu title.
-             */
     var langTitle: TranslatedMessage? = null
 
+    /**
+     * Localized title for the region selector menu.
+     */
     @LangMessage
-            /**
-             * Localized title for the region selector menu.
-             */
     var langSelectRegionTitle: TranslatedMessage? = null
 
+    /**
+     * Localized title for region filter input.
+     */
     @LangMessage
-            /**
-             * Localized title for region filter input.
-             */
     var langFilterRegionsTitle: TranslatedMessage? = null
 
+    /**
+     * Localized title for the region-group selector menu.
+     */
     @LangMessage
-            /**
-             * Localized title for the region-group selector menu.
-             */
     var langSelectRegionGroupTitle: TranslatedMessage? = null
 
+    /**
+     * Localized title for region-group filter input.
+     */
     @LangMessage
-            /**
-             * Localized title for region-group filter input.
-             */
     var langFilterRegionGroupsTitle: TranslatedMessage? = null
 
     /**

@@ -23,11 +23,11 @@ import java.util.logging.Level
  */
 class HeadLibrary(context: Context<Core?>?) : Listener<Core?>(context) {
     /** Whether matching player-head block drops should be replaced with library items. */
+    /** Whether matching player-head drops should be replaced with head-library entries. */
     @ConfigBoolean(
         def = true,
         desc = "When a player head is broken by a player that exists in /heads, drop the correctly named item as seen in /heads. You can disable this if it interferes with similarly textured heads from other plugins."
     )
-            /** Whether matching player-head drops should be replaced with head-library entries. */
     var configPlayerHeadDrops: Boolean = false
 
     init {

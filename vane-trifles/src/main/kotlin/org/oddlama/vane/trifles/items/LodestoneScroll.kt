@@ -22,6 +22,9 @@ import org.oddlama.vane.trifles.Trifles
 import org.oddlama.vane.util.PlayerUtil
 import org.oddlama.vane.util.StorageUtil
 
+/**
+ * Scroll variant that can be bound to a lodestone and teleport to that anchor.
+ */
 @VaneItem(
     name = "lodestone_scroll",
     base = Material.WARPED_FUNGUS_ON_A_STICK,
@@ -29,9 +32,6 @@ import org.oddlama.vane.util.StorageUtil
     modelData = 0x760011,
     version = 1
 )
-/**
- * Scroll variant that can be bound to a lodestone and teleport to that anchor.
- */
 class LodestoneScroll(context: Context<Trifles?>) : Scroll(context, 6000) {
     /** Action-bar message shown when the scroll has no lodestone binding. */
     @LangMessage

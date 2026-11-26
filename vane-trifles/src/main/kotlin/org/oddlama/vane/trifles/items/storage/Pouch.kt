@@ -9,10 +9,10 @@ import org.oddlama.vane.core.module.Context
 import org.oddlama.vane.trifles.Trifles
 import java.util.*
 
-@VaneItem(name = "pouch", base = Material.DROPPER, modelData = 0x760016, version = 1)
 /**
  * Compact storage item variant with dropper base material.
  */
+@VaneItem(name = "pouch", base = Material.DROPPER, modelData = 0x760016, version = 1)
 class Pouch(context: Context<Trifles?>) : StorageItem(context) {
     /** Defines the pouch crafting recipe. */
     override fun defaultRecipes(): RecipeList = RecipeList.of(

@@ -40,8 +40,8 @@ class RecipeList(private var recipes: MutableList<RecipeDefinition?> = mutableLi
             )
         )
 
+        /** Creates a [RecipeList] from vararg definitions. */
         @JvmStatic
-                /** Creates a [RecipeList] from vararg definitions. */
         fun of(vararg defs: RecipeDefinition?): RecipeList = RecipeList(defs.toMutableList())
     }
 }

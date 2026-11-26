@@ -44,8 +44,8 @@ class XpBottles(context: Context<Trifles?>) :
         }
     }
 
-    @VaneItem(name = "small_xp_bottle", base = Material.HONEY_BOTTLE, modelData = 0x76000b, version = 1)
     /** Small XP bottle variant. */
+    @VaneItem(name = "small_xp_bottle", base = Material.HONEY_BOTTLE, modelData = 0x76000b, version = 1)
     class SmallXpBottle(context: Context<Trifles?>) : XpBottle(context) {
         /** Default level capacity for small bottles. */
         fun configCapacityDef(): Int {
@@ -53,8 +53,8 @@ class XpBottles(context: Context<Trifles?>) :
         }
     }
 
-    @VaneItem(name = "medium_xp_bottle", base = Material.HONEY_BOTTLE, modelData = 0x76000c, version = 1)
     /** Medium XP bottle variant. */
+    @VaneItem(name = "medium_xp_bottle", base = Material.HONEY_BOTTLE, modelData = 0x76000c, version = 1)
     class MediumXpBottle(context: Context<Trifles?>) : XpBottle(context) {
         /** Default level capacity for medium bottles. */
         fun configCapacityDef(): Int {
@@ -62,8 +62,8 @@ class XpBottles(context: Context<Trifles?>) :
         }
     }
 
-    @VaneItem(name = "large_xp_bottle", base = Material.HONEY_BOTTLE, modelData = 0x76000d, version = 1)
     /** Large XP bottle variant. */
+    @VaneItem(name = "large_xp_bottle", base = Material.HONEY_BOTTLE, modelData = 0x76000d, version = 1)
     class LargeXpBottle(context: Context<Trifles?>) : XpBottle(context) {
         /** Default level capacity for large bottles. */
         fun configCapacityDef(): Int {
@@ -71,8 +71,8 @@ class XpBottles(context: Context<Trifles?>) :
         }
     }
 
+    /** All XP bottle variants managed by this listener. */
     @JvmField
-            /** All XP bottle variants managed by this listener. */
     var bottles: MutableList<XpBottle> = ArrayList()
 
     /** Instantiates all XP bottle variants. */

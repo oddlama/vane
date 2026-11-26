@@ -6,12 +6,12 @@ import java.io.*
 import java.util.concurrent.TimeUnit
 import java.util.logging.Level
 
-@Suppress("unused")
 /**
  * Coordinates maintenance mode scheduling, persistence, and player notifications.
  *
  * @property plugin owning proxy plugin.
  */
+@Suppress("unused")
 class Maintenance(private val plugin: VaneProxyPlugin) {
     /** Persistence file for maintenance state across restarts. */
     private val file = File("./.maintenance")

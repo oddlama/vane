@@ -16,16 +16,16 @@ import kotlin.math.pow
  * Mutable two-corner selection used while creating new regions.
  */
 class RegionSelection(private val regions: Regions) {
+    /**
+     * Primary selected corner block.
+     */
     @JvmField
-            /**
-             * Primary selected corner block.
-             */
     var primary: Block? = null
 
+    /**
+     * Secondary selected corner block.
+     */
     @JvmField
-            /**
-             * Secondary selected corner block.
-             */
     var secondary: Block? = null
 
     /**

@@ -37,20 +37,20 @@ class ExtendedMaterial private constructor(val key: NamespacedKey) {
      * Resolution helpers.
      */
     companion object {
+        /** Resolves an [ExtendedMaterial] from a key. */
         @JvmStatic
-                /** Resolves an [ExtendedMaterial] from a key. */
         fun from(key: NamespacedKey): ExtendedMaterial? {
             val mat = ExtendedMaterial(key)
             return if (mat.material == null && mat.headMaterial == null && key.namespace() == "minecraft") null
             else mat
         }
 
+        /** Resolves an [ExtendedMaterial] from a Bukkit material. */
         @JvmStatic
-                /** Resolves an [ExtendedMaterial] from a Bukkit material. */
         fun from(material: Material): ExtendedMaterial? = from(material.key)
 
+        /** Resolves an [ExtendedMaterial] from a custom item key. */
         @JvmStatic
-                /** Resolves an [ExtendedMaterial] from a custom item key. */
         fun from(customItem: CustomItem): ExtendedMaterial? = from(customItem.key())
     }
 }

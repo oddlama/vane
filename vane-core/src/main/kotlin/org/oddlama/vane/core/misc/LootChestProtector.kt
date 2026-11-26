@@ -23,11 +23,11 @@ class LootChestProtector(context: Context<Core?>?) : Listener<Core?>(context) {
     private val lootBreakAttempts: MutableMap<Block, MutableMap<UUID, Long>> = mutableMapOf()
 
     /** Whether loot-table block break confirmation is enabled. */
+    /** Whether loot-table block break protection warning is enabled. */
     @ConfigBoolean(
         def = true,
         desc = "Prevent players from breaking blocks with loot-tables (like treasure chests) when they first attempt to destroy it. They still can break it, but must do so within a short timeframe."
     )
-            /** Whether loot-table block break protection warning is enabled. */
     var configWarnBreakingLootBlocks: Boolean = false
 
     /** Message sent when initial break attempt is blocked. */

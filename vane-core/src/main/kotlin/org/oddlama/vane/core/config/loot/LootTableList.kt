@@ -39,8 +39,8 @@ class LootTableList : ConfigDictSerializable {
             )
         )
 
+        /** Creates a [LootTableList] from vararg definitions. */
         @JvmStatic
-                /** Creates a [LootTableList] from vararg definitions. */
         fun of(vararg defs: LootDefinition?): LootTableList =
             LootTableList().also { it.tables = defs.toMutableList() }
 

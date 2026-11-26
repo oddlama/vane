@@ -57,11 +57,11 @@ class Core : Module<Core?>() {
     private val itemRegistry: CustomItemRegistry?
 
     /** Whether player heads should render full skins in menus. */
+    /** Whether player heads should load profile textures in menus. */
     @ConfigBoolean(
         def = true,
         desc = "Allow loading of player heads in relevant menus. Disabling this will show all player heads using the Steve skin, which may perform better on low-performance servers and clients."
     )
-            /** Whether player heads should load profile textures in menus. */
     var configPlayerHeadsInMenus: Boolean = false
 
     /** Message used when a command requires a player sender. */
@@ -108,11 +108,11 @@ class Core : Module<Core?>() {
     var menuManager: MenuManager?
 
     /** Whether client-side translation via resource pack is enabled. */
+    /** Whether client-side translation keys should be used in outgoing messages. */
     @ConfigBoolean(
         def = true,
         desc = "Let the client translate messages using the generated resource pack. This allows every player to select their preferred language, and all plugin messages will also be translated. Disabling this won't allow you to skip generating the resource pack, as it will be needed for custom item textures."
     )
-            /** Whether client-side translation keys should be used in outgoing messages. */
     var configClientSideTranslations: Boolean = false
 
     /** Whether update notices are sent to operators. */

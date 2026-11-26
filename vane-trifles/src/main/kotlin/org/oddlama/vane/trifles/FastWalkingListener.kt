@@ -24,11 +24,11 @@ class FastWalkingListener(private val fastWalking: FastWalkingGroup) : Listener<
     var configVillagerSpeedwalk: Boolean = false
 
     /** Whether non-player entities should always be excluded from speedwalking. */
+    /** Whether non-player entities should always be excluded from speedwalking. */
     @ConfigBoolean(
         def = false,
         desc = "Whether players should be the only entities allowed to fast walk on paths (will override other path walk settings)."
     )
-            /** Whether non-player entities should always be excluded from speedwalking. */
     var configPlayersOnlySpeedwalk: Boolean = false
 
     /** Applies the fast-walk effect to players (or their ridden living entity). */

@@ -15,10 +15,10 @@ import org.oddlama.vane.annotation.command.Name
 import org.oddlama.vane.core.module.Context
 import org.oddlama.vane.trifles.Trifles
 
-@Name("finditem")
 /**
  * Command entry point for searching nearby inventories by material.
  */
+@Name("finditem")
 class Finditem(context: Context<Trifles?>) :
     org.oddlama.vane.core.command.Command<Trifles?>(context, PermissionDefault.TRUE) {
     /** Builds the `/finditem` command tree. */

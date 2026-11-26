@@ -18,16 +18,16 @@ import org.oddlama.vane.regions.Regions
  */
 class EnterRegionNameMenu(context: Context<Regions?>) :
     ModuleComponent<Regions?>(context.namespace("EnterRegionName")) {
+    /**
+     * Localized title shown in the anvil input UI.
+     */
     @LangMessage
-            /**
-             * Localized title shown in the anvil input UI.
-             */
     var langTitle: TranslatedMessage? = null
 
+    /**
+     * Icon material used in the anvil input UI.
+     */
     @ConfigMaterial(def = Material.MAP, desc = "The item used to name regions.")
-            /**
-             * Icon material used in the anvil input UI.
-             */
     var configMaterial: Material? = null
 
     /**

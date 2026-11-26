@@ -61,10 +61,10 @@ class RegionPortalRoleSettingEnforcer(context: Context<Regions?>?) : Listener<Re
         return role.getSetting(setting) == checkAgainst
     }
 
+    /**
+     * Cancels portal activation when `PORTAL` usage is denied.
+     */
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-            /**
-             * Cancels portal activation when `PORTAL` usage is denied.
-             */
     fun onPortalActivate(event: PortalActivateEvent) {
         val player = event.player ?: run {
             // Activated by redstone -> Always allow. It's the job of the region
@@ -78,10 +78,10 @@ class RegionPortalRoleSettingEnforcer(context: Context<Regions?>?) : Listener<Re
         }
     }
 
+    /**
+     * Cancels portal deactivation when `PORTAL` usage is denied.
+     */
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-            /**
-             * Cancels portal deactivation when `PORTAL` usage is denied.
-             */
     fun onPortalDeactivate(event: PortalDeactivateEvent) {
         val portal = event.portal ?: return
         val player = event.player ?: return
@@ -90,10 +90,10 @@ class RegionPortalRoleSettingEnforcer(context: Context<Regions?>?) : Listener<Re
         }
     }
 
+    /**
+     * Restricts portal construction to region admins for all boundary blocks.
+     */
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-            /**
-             * Restricts portal construction to region admins for all boundary blocks.
-             */
     fun onPortalConstruct(event: PortalConstructEvent) {
         val boundary = event.boundary ?: return
         val player = event.player ?: return
@@ -108,10 +108,10 @@ class RegionPortalRoleSettingEnforcer(context: Context<Regions?>?) : Listener<Re
         }
     }
 
+    /**
+     * Restricts portal destruction to owners or region admins.
+     */
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-            /**
-             * Restricts portal destruction to owners or region admins.
-             */
     fun onPortalDestroy(event: PortalDestroyEvent) {
         if (event.portal.owner() == event.player.uniqueId) {
             // Owner may always use their portals
@@ -127,10 +127,10 @@ class RegionPortalRoleSettingEnforcer(context: Context<Regions?>?) : Listener<Re
         }
     }
 
+    /**
+     * Restricts linking consoles to portals based on region admin permissions.
+     */
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = false)
-            /**
-             * Restricts linking consoles to portals based on region admin permissions.
-             */
     fun onPortalLinkConsole(event: PortalLinkConsoleEvent) {
         val player = event.player
         val portal = event.portal
@@ -159,10 +159,10 @@ class RegionPortalRoleSettingEnforcer(context: Context<Regions?>?) : Listener<Re
         }
     }
 
+    /**
+     * Restricts unlinking consoles from portals based on region admin permissions.
+     */
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = false)
-            /**
-             * Restricts unlinking consoles from portals based on region admin permissions.
-             */
     fun onPortalUnlinkConsole(event: PortalUnlinkConsoleEvent) {
         val player = event.player
         val portal = event.portal
@@ -191,10 +191,10 @@ class RegionPortalRoleSettingEnforcer(context: Context<Regions?>?) : Listener<Re
         }
     }
 
+    /**
+     * Restricts opening portal consoles based on `PORTAL` permissions.
+     */
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-            /**
-             * Restricts opening portal consoles based on `PORTAL` permissions.
-             */
     fun onPortalOpenConsole(event: PortalOpenConsoleEvent) {
         val portal = event.portal ?: return
         val player = event.player ?: return
@@ -216,10 +216,10 @@ class RegionPortalRoleSettingEnforcer(context: Context<Regions?>?) : Listener<Re
         }
     }
 
+    /**
+     * Restricts selecting portal targets based on `PORTAL` permissions.
+     */
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-            /**
-             * Restricts selecting portal targets based on `PORTAL` permissions.
-             */
     fun onPortalSelectTarget(event: PortalSelectTargetEvent) {
         val portal = event.portal ?: return
         val player = event.player ?: return
@@ -241,10 +241,10 @@ class RegionPortalRoleSettingEnforcer(context: Context<Regions?>?) : Listener<Re
         }
     }
 
+    /**
+     * Restricts portal settings changes to owners or region admins.
+     */
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = false)
-            /**
-             * Restricts portal settings changes to owners or region admins.
-             */
     fun onPortalChangeSettings(event: PortalChangeSettingsEvent) {
         if (event.portal.owner() == event.player.uniqueId) {
             // Owner may always use their portals

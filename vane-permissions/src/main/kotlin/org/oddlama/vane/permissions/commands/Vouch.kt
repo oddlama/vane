@@ -16,12 +16,12 @@ import org.oddlama.vane.core.module.Context
 import org.oddlama.vane.permissions.Permissions
 import java.util.*
 
-@Name("vouch")
 /**
  * Lets players vouch for other players and assigns a configured group to the target when they are vouched for the first time.
  *
  * @param context command context bound to the permissions module.
  */
+@Name("vouch")
 class Vouch(context: Context<Permissions?>) : org.oddlama.vane.core.command.Command<Permissions?>(context) {
     /** Non-null typed accessor for the backing permissions module. */
     private val permissionsModule: Permissions

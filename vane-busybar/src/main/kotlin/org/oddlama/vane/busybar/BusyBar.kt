@@ -26,7 +26,6 @@ import org.oddlama.vane.core.module.Module
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
-@VaneModule(name = "busybar", configVersion = 1, langVersion = 7, storageVersion = 1)
 /**
  * Streams server and vane events to BUSY Bar devices through a small bridge running next to each device.
  *
@@ -36,6 +35,7 @@ import java.util.concurrent.ConcurrentHashMap
  *
  * @constructor Creates the module and registers its components.
  */
+@VaneModule(name = "busybar", configVersion = 1, langVersion = 7, storageVersion = 1)
 class BusyBar : Module<BusyBar?>() {
     /** Address the event stream binds to. */
     @ConfigString(

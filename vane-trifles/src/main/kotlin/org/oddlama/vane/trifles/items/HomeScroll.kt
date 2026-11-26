@@ -12,6 +12,9 @@ import org.oddlama.vane.core.config.recipes.ShapedRecipeDefinition
 import org.oddlama.vane.core.module.Context
 import org.oddlama.vane.trifles.Trifles
 
+/**
+ * Teleports players to their personal respawn location.
+ */
 @VaneItem(
     name = "home_scroll",
     base = Material.WARPED_FUNGUS_ON_A_STICK,
@@ -19,9 +22,6 @@ import org.oddlama.vane.trifles.Trifles
     modelData = 0x760000,
     version = 1
 )
-/**
- * Teleports players to their personal respawn location.
- */
 class HomeScroll(context: Context<Trifles?>) : Scroll(context, 10000) {
     /** Defines the home scroll crafting recipe. */
     override fun defaultRecipes(): RecipeList = RecipeList.of(

@@ -18,13 +18,13 @@ import org.oddlama.vane.permissions.Permissions
 import org.oddlama.vane.permissions.argumentTypes.PermissionGroupArgumentType
 import java.util.*
 
-@Name("permission")
-@Aliases("perm")
 /**
  * Command suite for listing permission data and assigning/removing permission groups.
  *
  * @param context command context bound to the permissions module.
  */
+@Name("permission")
+@Aliases("perm")
 class Permission(context: Context<Permissions?>) : org.oddlama.vane.core.command.Command<Permissions?>(context) {
     /** Non-null typed accessor for the backing permissions module. */
     private val permissionsModule: Permissions

@@ -30,13 +30,13 @@ class ItemFinder(context: Context<Trifles?>) : Listener<Trifles?>(
     private val moduleRef = requireNotNull(module)
 
     /** Radius in chunks around the player to scan for matching inventories. */
+    /** Radius in chunks around the player to scan for matching inventories. */
     @ConfigInt(
         def = 2,
         min = 1,
         max = 10,
         desc = "The radius of chunks in which containers (and possibly entities) are checked for matching items."
     )
-            /** Radius in chunks around the player to scan for matching inventories. */
     var configRadius: Int = 0
 
     /** Whether inventory-bearing entities are included in the search. */
@@ -44,11 +44,11 @@ class ItemFinder(context: Context<Trifles?>) : Listener<Trifles?>(
     var configSearchEntities: Boolean = false
 
     /** Whether shift-right-click shortcut usage requires an explicit permission. */
+    /** Whether shift-right-click shortcut usage requires an explicit permission. */
     @ConfigBoolean(
         def = false,
         desc = "Only allow players to use the shift+rightclick shortcut when they have the shortcut permission `vane.trifles.use_item_find_shortcut`."
     )
-            /** Whether shift-right-click shortcut usage requires an explicit permission. */
     var configRequirePermission: Boolean = false
 
     /** Permission checked when shortcut usage is configured to require it. */

@@ -10,10 +10,10 @@ import org.oddlama.vane.core.module.Context
 import org.oddlama.vane.trifles.Trifles
 import java.util.*
 
-@VaneItem(name = "backpack", base = Material.SHULKER_BOX, modelData = 0x760017, version = 1)
 /**
  * Wearable-style storage item based on a shulker box.
  */
+@VaneItem(name = "backpack", base = Material.SHULKER_BOX, modelData = 0x760017, version = 1)
 class Backpack(context: Context<Trifles?>) : StorageItem(context) {
     /** Defines the backpack smithing recipe. */
     override fun defaultRecipes(): RecipeList = RecipeList.of(

@@ -23,11 +23,12 @@ import org.oddlama.vane.util.expForLevel
 import java.util.*
 import kotlin.math.roundToInt
 
-@VaneItem(name = "empty_xp_bottle", base = Material.GLASS_BOTTLE, modelData = 0x76000a, version = 1)
 /**
  * Consumes player experience to create the largest possible filled XP bottle variant.
  */
+@VaneItem(name = "empty_xp_bottle", base = Material.GLASS_BOTTLE, modelData = 0x76000a, version = 1)
 class EmptyXpBottle(context: Context<Trifles?>) : CustomItem<Trifles?>(context) {
+    /** Percentage of XP lost while converting to a filled bottle. */
     /** Percentage of XP lost while converting to a filled bottle. */
     @ConfigDouble(
         def = 0.3,
@@ -35,7 +36,6 @@ class EmptyXpBottle(context: Context<Trifles?>) : CustomItem<Trifles?>(context) 
         max = 0.999,
         desc = "Percentage of experience lost when bottling. For 10% loss, bottling 30 levels will require 30 * (1 / (1 - 0.1)) = 33.33 levels"
     )
-            /** Percentage of XP lost while converting to a filled bottle. */
     var configLossPercentage: Double = 0.0
 
     /** Defines the empty XP bottle crafting recipe. */
@@ -58,11 +58,11 @@ class EmptyXpBottle(context: Context<Trifles?>) : CustomItem<Trifles?>(context) 
         )
     }
 
+    /** Converts player experience into a matching filled XP bottle item. */
     @EventHandler(
         priority = EventPriority.NORMAL,
         ignoreCancelled = false
     ) // Keep disabled-cancel filtering to include right-click-air usage.
-            /** Converts player experience into a matching filled XP bottle item. */
     fun onPlayerRightClick(event: PlayerInteractEvent) {
         if (event.action != Action.RIGHT_CLICK_BLOCK && event.action != Action.RIGHT_CLICK_AIR) {
             return

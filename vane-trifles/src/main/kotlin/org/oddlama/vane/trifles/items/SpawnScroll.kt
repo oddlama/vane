@@ -13,6 +13,9 @@ import org.oddlama.vane.core.module.Context
 import org.oddlama.vane.trifles.Trifles
 import org.oddlama.vane.trifles.commands.Setspawn
 
+/**
+ * Teleports players to the configured global spawn world.
+ */
 @VaneItem(
     name = "spawn_scroll",
     base = Material.WARPED_FUNGUS_ON_A_STICK,
@@ -20,9 +23,6 @@ import org.oddlama.vane.trifles.commands.Setspawn
     modelData = 0x760010,
     version = 1
 )
-/**
- * Teleports players to the configured global spawn world.
- */
 class SpawnScroll(context: Context<Trifles?>) : Scroll(context, 6000) {
     /** Defines the spawn scroll crafting recipe. */
     override fun defaultRecipes(): RecipeList {

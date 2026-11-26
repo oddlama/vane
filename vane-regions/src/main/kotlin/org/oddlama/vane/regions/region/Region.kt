@@ -47,10 +47,10 @@ class Region {
      */
     private var regionGroup: UUID? = null
 
+    /**
+     * Indicates whether this region needs to be written back to persistence.
+     */
     @JvmField
-            /**
-             * Indicates whether this region needs to be written back to persistence.
-             */
     var invalidated: Boolean = true
 
     /**
@@ -107,11 +107,11 @@ class Region {
         cachedRegionGroup ?: regions.getRegionGroup(regionGroup).also { cachedRegionGroup = it }
 
     companion object {
+        /**
+         * Serializes a region to JSON-compatible structure.
+         */
         @JvmStatic
         @Throws(IOException::class)
-                /**
-                 * Serializes a region to JSON-compatible structure.
-                 */
         fun serialize(o: Any): Any {
             val region = o as Region
             val json = JSONObject()
@@ -121,11 +121,11 @@ class Region {
             return json
         }
 
+        /**
+         * Deserializes a region from JSON-compatible structure.
+         */
         @JvmStatic
         @Throws(IOException::class)
-                /**
-                 * Deserializes a region from JSON-compatible structure.
-                 */
         fun deserialize(o: Any): Region {
             val json = o as JSONObject
             val region = Region()

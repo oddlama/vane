@@ -16,10 +16,10 @@ import org.oddlama.vane.core.module.Context
 import org.oddlama.vane.trifles.Trifles
 import java.util.*
 
-@VaneItem(name = "reinforced_elytra", base = Material.ELYTRA, durability = 864, modelData = 0x760002, version = 1)
 /**
  * Elytra upgrade that adds configurable armor points.
  */
+@VaneItem(name = "reinforced_elytra", base = Material.ELYTRA, durability = 864, modelData = 0x760002, version = 1)
 class ReinforcedElytra(context: Context<Trifles?>) : CustomItem<Trifles?>(context) {
     /** Extra armor points applied while the item is worn in chest slot. */
     @ConfigDouble(def = 6.0, min = 0.0, desc = "Amount of defense points.")

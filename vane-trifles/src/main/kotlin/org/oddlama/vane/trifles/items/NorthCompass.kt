@@ -17,10 +17,10 @@ import org.oddlama.vane.core.module.Context
 import org.oddlama.vane.trifles.Trifles
 import java.util.*
 
-@VaneItem(name = "north_compass", base = Material.COMPASS, modelData = 0x760013, version = 1)
 /**
  * Compass variant that consistently points north through a synthetic lodestone target.
  */
+@VaneItem(name = "north_compass", base = Material.COMPASS, modelData = 0x760013, version = 1)
 class NorthCompass(context: Context<Trifles?>) : org.oddlama.vane.core.item.CustomItem<Trifles?>(context) {
     /** Defines the north compass crafting recipe. */
     override fun defaultRecipes(): RecipeList {

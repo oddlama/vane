@@ -29,8 +29,8 @@ import org.oddlama.vane.util.PlayerUtil
  */
 class Sickles(context: Context<Trifles?>) :
     Listener<Trifles?>(context.group("Sickles", "Several sickles that allow players to harvest crops in a radius.")) {
-    @VaneItem(name = "wooden_sickle", base = Material.WOODEN_HOE, modelData = 0x760004, version = 1)
     /** Wooden sickle tier. */
+    @VaneItem(name = "wooden_sickle", base = Material.WOODEN_HOE, modelData = 0x760004, version = 1)
     class WoodenSickle(context: Context<Trifles?>) : Sickle(context) {
         /** Default attack damage for the wooden sickle. */
         fun configAttackDamageDef(): Double {
@@ -59,8 +59,8 @@ class Sickles(context: Context<Trifles?>) :
         }
     }
 
-    @VaneItem(name = "stone_sickle", base = Material.STONE_HOE, modelData = 0x760005, version = 1)
     /** Stone sickle tier. */
+    @VaneItem(name = "stone_sickle", base = Material.STONE_HOE, modelData = 0x760005, version = 1)
     class StoneSickle(context: Context<Trifles?>) : Sickle(context) {
         /** Default attack damage for the stone sickle. */
         fun configAttackDamageDef(): Double {
@@ -89,8 +89,8 @@ class Sickles(context: Context<Trifles?>) :
         }
     }
 
-    @VaneItem(name = "iron_sickle", base = Material.IRON_HOE, modelData = 0x760006, version = 1)
     /** Iron sickle tier. */
+    @VaneItem(name = "iron_sickle", base = Material.IRON_HOE, modelData = 0x760006, version = 1)
     class IronSickle(context: Context<Trifles?>) : Sickle(context) {
         /** Default attack damage for the iron sickle. */
         fun configAttackDamageDef(): Double {
@@ -119,8 +119,8 @@ class Sickles(context: Context<Trifles?>) :
         }
     }
 
-    @VaneItem(name = "golden_sickle", base = Material.GOLDEN_HOE, modelData = 0x760007, version = 1)
     /** Golden sickle tier. */
+    @VaneItem(name = "golden_sickle", base = Material.GOLDEN_HOE, modelData = 0x760007, version = 1)
     class GoldenSickle(context: Context<Trifles?>) : Sickle(context) {
         /** Default attack damage for the golden sickle. */
         fun configAttackDamageDef(): Double {
@@ -149,8 +149,8 @@ class Sickles(context: Context<Trifles?>) :
         }
     }
 
-    @VaneItem(name = "diamond_sickle", base = Material.DIAMOND_HOE, modelData = 0x760008, version = 1)
     /** Diamond sickle tier. */
+    @VaneItem(name = "diamond_sickle", base = Material.DIAMOND_HOE, modelData = 0x760008, version = 1)
     class DiamondSickle(context: Context<Trifles?>) : Sickle(context) {
         /** Default attack damage for the diamond sickle. */
         fun configAttackDamageDef(): Double {
@@ -179,8 +179,8 @@ class Sickles(context: Context<Trifles?>) :
         }
     }
 
-    @VaneItem(name = "netherite_sickle", base = Material.NETHERITE_HOE, modelData = 0x760009, version = 1)
     /** Netherite sickle tier. */
+    @VaneItem(name = "netherite_sickle", base = Material.NETHERITE_HOE, modelData = 0x760009, version = 1)
     class NetheriteSickle(context: Context<Trifles?>) : Sickle(context) {
         /** Default attack damage for the netherite sickle. */
         fun configAttackDamageDef(): Double {

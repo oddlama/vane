@@ -219,15 +219,15 @@ open class Menu {
      * Static click utility helpers.
      */
     companion object {
+        /** Returns whether the event is a left or right click. */
         @JvmStatic
-                /** Returns whether the event is a left or right click. */
         fun isLeftOrRightClick(event: InventoryClickEvent?): Boolean {
             val type = event?.click ?: return false
             return type == ClickType.LEFT || type == ClickType.RIGHT
         }
 
+        /** Returns whether the event is a left click. */
         @JvmStatic
-                /** Returns whether the event is a left click. */
         fun isLeftClick(event: InventoryClickEvent?): Boolean =
             event?.click == ClickType.LEFT
 

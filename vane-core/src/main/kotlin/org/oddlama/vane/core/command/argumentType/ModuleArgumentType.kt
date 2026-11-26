@@ -55,8 +55,8 @@ class ModuleArgumentType private constructor(private val core: Core) :
 
     /** Factory methods for [ModuleArgumentType]. */
     companion object {
+        /** Creates a module argument type for the given core module. */
         @JvmStatic
-                /** Creates a module argument type for the given core module. */
         fun module(core: Core): ModuleArgumentType = ModuleArgumentType(core)
     }
 }

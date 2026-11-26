@@ -17,12 +17,12 @@ class RepairCostLimiter(context: Context<Trifles?>) : Listener<Trifles?>(
     )
 ) {
     /** Maximum repair cost shown/applied by anvil views. */
+    /** Maximum repair cost shown/applied by anvil views. */
     @ConfigInt(
         def = 39,
         min = 0,
         desc = "Limit anvil crafting cost. Set < 40 to remove 'Too Expensive' altogether. (Costs greater than 40 will still be craftable, even if it shows 'Too Expensive')"
     )
-            /** Maximum repair cost shown/applied by anvil views. */
     var configMaxRepairCost: Int = 0
 
     /** Applies the configured repair cap to the anvil result view. */

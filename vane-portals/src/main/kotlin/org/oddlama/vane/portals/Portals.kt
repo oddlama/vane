@@ -40,8 +40,8 @@ import org.oddlama.vane.util.*
 import java.io.IOException
 import java.util.*
 
-@VaneModule(name = "portals", bstats = 8642, configVersion = 3, langVersion = 6, storageVersion = 2)
 /** Main module managing portal lifecycle, storage, indexing, UI, and integrations. */
+@VaneModule(name = "portals", bstats = 8642, configVersion = 3, langVersion = 6, storageVersion = 2)
 class Portals : Module<Portals?>() {
     /** Set of materials disallowed for decorative portal usage. */
     @ConfigMaterialSet(
@@ -51,6 +51,7 @@ class Portals : Module<Portals?>() {
     var configBlacklistedMaterials: MutableSet<Material?>? = null
 
     // TODO better and more default styles
+    /** Raw style config map loaded from module configuration. */
     @ConfigMaterialMapMapMap(
         def = [ConfigMaterialMapMapMapEntry(
             key = "vane_portals:portal_style_default",
@@ -139,41 +140,40 @@ class Portals : Module<Portals?>() {
         )],
         desc = "Portal style definitions. Must provide a material for each portal block type and activation state. The default style may be overridden."
     )
-            /** Raw style config map loaded from module configuration. */
     var configStyles: MutableMap<String?, MutableMap<String?, MutableMap<String?, Material?>?>?>? = null
 
+    /** Delay before connected portals auto-deactivate. */
     @ConfigLong(
         def = 10000,
         min = 1000,
         max = 110000,
         desc = "Delay in milliseconds after which two connected portals will automatically be disabled. Purple end-gateway beams do not show up until the maximum value of 110 seconds."
     )
-            /** Delay before connected portals auto-deactivate. */
     var configDeactivationDelay: Long = 0
 
+    /** Default icon used when portals do not define a custom icon. */
     @ConfigExtendedMaterial(
         def = "vane:decoration_end_portal_orb",
         desc = "The default portal icon. Also accepts heads from the head library."
     )
-            /** Default icon used when portals do not define a custom icon. */
     var configDefaultIcon: ExtendedMaterial? = null
 
+    /** Activation sound volume. */
     @ConfigDouble(
         def = 0.9,
         min = 0.0,
         max = 1.0,
         desc = "Volume for the portal activation sound effect. 0 to disable."
     )
-            /** Activation sound volume. */
     var configVolumeActivation: Double = 0.0
 
+    /** Deactivation sound volume. */
     @ConfigDouble(
         def = 1.0,
         min = 0.0,
         max = 1.0,
         desc = "Volume for the portal deactivation sound effect. 0 to disable."
     )
-            /** Deactivation sound volume. */
     var configVolumeDeactivation: Double = 0.0
 
     /** Console display format for active portals. */
@@ -210,8 +210,8 @@ class Portals : Module<Portals?>() {
     val adminPermission: Permission
 
     // Primary storage for all portals (portalId → portal)
-    @Persistent
     /** Persisted portal map loaded/saved to world data. */
+    @Persistent
     private val storagePortals: MutableMap<UUID?, Portal> = HashMap<UUID?, Portal>()
 
     /** Runtime portal map containing all currently indexed portals. */

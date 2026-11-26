@@ -56,8 +56,8 @@ class HeadMaterial(
                 """{"textures":{"SKIN":{"url":"$TEXTURE_URL_PREFIX$hash"}}}""".toByteArray(Charsets.UTF_8)
             )
 
+        /** Creates a [HeadMaterial] from a serialized JSON object. */
         @JvmStatic
-                /** Creates a [HeadMaterial] from a serialized JSON object. */
         fun from(json: JSONObject): HeadMaterial {
             val id = json.getString("id")
             val name = json.getString("name")

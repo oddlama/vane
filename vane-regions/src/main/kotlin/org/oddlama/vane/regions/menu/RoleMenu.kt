@@ -17,39 +17,39 @@ import org.oddlama.vane.regions.region.RoleSetting
 import org.oddlama.vane.util.ItemUtil
 import org.oddlama.vane.util.StorageUtil
 
-@Suppress("UNUSED_PARAMETER")
 /**
  * Menu for managing one role, its members, and role-level permission settings.
  */
+@Suppress("UNUSED_PARAMETER")
 class RoleMenu(context: Context<Regions?>) : ModuleComponent<Regions?>(context.namespace("Role")) {
+    /**
+     * Localized role menu title.
+     */
     @LangMessage
-            /**
-             * Localized role menu title.
-             */
     var langTitle: TranslatedMessage? = null
 
+    /**
+     * Localized confirmation title for role deletion.
+     */
     @LangMessage
-            /**
-             * Localized confirmation title for role deletion.
-             */
     var langDeleteConfirmTitle: TranslatedMessage? = null
 
+    /**
+     * Localized title for assign-player selector.
+     */
     @LangMessage
-            /**
-             * Localized title for assign-player selector.
-             */
     var langSelectAssignPlayerTitle: TranslatedMessage? = null
 
+    /**
+     * Localized title for remove-player selector.
+     */
     @LangMessage
-            /**
-             * Localized title for remove-player selector.
-             */
     var langSelectRemovePlayerTitle: TranslatedMessage? = null
 
+    /**
+     * Localized title for player filter input.
+     */
     @LangMessage
-            /**
-             * Localized title for player filter input.
-             */
     var langFilterPlayersTitle: TranslatedMessage? = null
 
     /**

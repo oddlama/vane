@@ -36,12 +36,12 @@ class LootTables<T : Module<T?>?> @JvmOverloads constructor(
     @ConfigDict(cls = LootTableList::class, desc = "")
     private var configLoot: LootTableList? = null
 
+    /** Returns default loot definitions for config generation. */
     @Suppress("unused")
-            /** Returns default loot definitions for config generation. */
     fun configLootDef(): LootTableList? = defLoot()
 
+    /** Returns config description text for the loot dictionary. */
     @Suppress("unused")
-            /** Returns config description text for the loot dictionary. */
     fun configLootDesc(): String? = desc
 
     /** Re-registers loot hooks according to current config state. */

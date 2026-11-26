@@ -42,6 +42,11 @@ import org.oddlama.vane.util.PlayerUtil
 import org.oddlama.vane.util.StorageUtil
 import java.util.*
 
+/**
+ * Places random block items from a selected inventory feed range.
+ *
+ * @param context module context used for registration.
+ */
 @VaneItem(
     name = "trowel",
     base = Material.WARPED_FUNGUS_ON_A_STICK,
@@ -49,11 +54,6 @@ import java.util.*
     modelData = 0x76000e,
     version = 1
 )
-/**
- * Places random block items from a selected inventory feed range.
- *
- * @param context module context used for registration.
- */
 class Trowel(context: Context<Trifles?>) : org.oddlama.vane.core.item.CustomItem<Trifles?>(context) {
     /**
      * Selectable inventory ranges used as block feed sources.

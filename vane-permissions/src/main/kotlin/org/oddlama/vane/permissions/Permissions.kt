@@ -23,10 +23,10 @@ import org.oddlama.vane.permissions.commands.Permission
 import org.oddlama.vane.permissions.commands.Vouch
 import java.util.*
 
-@VaneModule(name = "permissions", bstats = 8641, configVersion = 1, langVersion = 1, storageVersion = 1)
 /**
  * Manages permission groups, inheritance flattening, and runtime player attachments.
  */
+@VaneModule(name = "permissions", bstats = 8641, configVersion = 1, langVersion = 1, storageVersion = 1)
 class Permissions : Module<Permissions?>() {
     /** Non-null typed accessor for this module instance. */
     private val permissionsModule: Permissions

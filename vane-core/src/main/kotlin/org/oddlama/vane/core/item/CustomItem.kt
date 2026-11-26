@@ -64,12 +64,12 @@ open class CustomItem<T : Module<T?>?> @JvmOverloads constructor(
     /**
      * Configured durability override for this item.
      */
+    /** Effective configured durability value. */
     @ConfigInt(
         def = 0,
         min = 0,
         desc = "The durability of this item. Set to 0 to use the durability properties of whatever base material the item is made of."
     )
-    /** Effective configured durability value. */
     private var configDurability = 0
 
     /**

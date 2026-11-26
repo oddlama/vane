@@ -20,11 +20,11 @@ class CustomResourcePackConfig(context: Context<Core?>) : ModuleComponent<Core?>
     /**
      * URL from which clients should download the custom resource pack.
      */
+    /** Configured URL used for resource-pack download. */
     @ConfigString(
         def = "https://your-server.tld/path/to/pack.zip",
         desc = "URL to an resource pack. Will request players to use the specified resource pack. [as of 1.16.2] Beware that the minecraft client currently has issues with webservers that serve resource packs via https and don't allow ssl3. This protocol is considered insecure and therefore should NOT be used. To workaround this issue, you should host the file in a http context. Using http is not a security issue, as the file will be verified via its sha1 sum by the client."
     )
-    /** Configured URL used for resource-pack download. */
     lateinit var configUrl: String
 
     /**

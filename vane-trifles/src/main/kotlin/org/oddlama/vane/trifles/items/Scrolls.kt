@@ -36,12 +36,12 @@ class Scrolls(context: Context<Trifles?>) : Listener<Trifles?>(
     private val baseMaterials: MutableSet<Material> = HashSet()
 
     /** Cooldown applied after taking damage to discourage combat logging. */
+    /** Cooldown applied after taking damage to discourage combat logging. */
     @ConfigInt(
         def = 15000,
         min = 0,
         desc = "A cooldown in milliseconds that is applied when the player takes damage (prevents combat logging). Set to 0 to allow combat logging."
     )
-    /** Cooldown applied after taking damage to discourage combat logging. */
     private val configDamageCooldown = 0
 
     /** Creates all scroll variants and records their base materials. */
@@ -57,11 +57,11 @@ class Scrolls(context: Context<Trifles?>) : Listener<Trifles?>(
         baseMaterials += scrolls.map { it.baseMaterial() }
     }
 
+    /** Handles right-click scroll usage and executes teleport flow when valid. */
     @EventHandler(
         priority = EventPriority.LOW,
         ignoreCancelled = false
     ) // Keep disabled-cancel filtering to include right-click-air handling.
-            /** Handles right-click scroll usage and executes teleport flow when valid. */
     fun onPlayerRightClick(event: PlayerInteractEvent) {
         if (event.action != Action.RIGHT_CLICK_BLOCK && event.action != Action.RIGHT_CLICK_AIR) {
             return

@@ -10,11 +10,11 @@ import org.oddlama.vane.annotation.command.Name
 import org.oddlama.vane.core.module.Context
 import org.oddlama.vane.regions.Regions
 
-@Name("region")
-@Aliases("regions", "rg")
 /**
  * Root command opening the regions management menu.
  */
+@Name("region")
+@Aliases("regions", "rg")
 class Region(context: Context<Regions?>) : org.oddlama.vane.core.command.Command<Regions?>(context) {
     /**
      * Builds the `/region` command tree.

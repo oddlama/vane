@@ -25,14 +25,6 @@ import java.nio.file.Path
 import java.util.function.BiConsumer
 import java.util.logging.Level
 
-@Plugin(
-    id = "vane-velocity",
-    name = "Vane Velocity",
-    version = VERSION,
-    description = "TODO",
-    authors = ["oddlama", "Serial-ATA"],
-    url = "https://github.com/oddlama/vane"
-)
 /**
  * Velocity platform entrypoint for the Vane proxy plugin.
  *
@@ -41,6 +33,14 @@ import java.util.logging.Level
  * @param metricsFactory bStats factory used to initialize metrics reporting.
  * @param dataDir plugin data directory provided by Velocity.
  */
+@Plugin(
+    id = "vane-velocity",
+    name = "Vane Velocity",
+    version = VERSION,
+    description = "TODO",
+    authors = ["oddlama", "Serial-ATA"],
+    url = "https://github.com/oddlama/vane"
+)
 class Velocity @Inject constructor(
     server: ProxyServer,
     logger: Logger,
@@ -53,10 +53,10 @@ class Velocity @Inject constructor(
     val rawProxy: ProxyServer
 
     // bStats
-    @Suppress("unused")
     /**
      * bStats factory retained so metrics can be initialized during plugin startup.
      */
+    @Suppress("unused")
     private val metricsFactory: Metrics.Factory
 
     init {
@@ -204,10 +204,10 @@ class Velocity @Inject constructor(
      * Static plugin constants.
      */
     companion object {
+        /**
+         * Plugin messaging channel used by auth multiplexing.
+         */
         @JvmField
-                /**
-                 * Plugin messaging channel used by auth multiplexing.
-                 */
         val CHANNEL: MinecraftChannelIdentifier = MinecraftChannelIdentifier.create(
             CHANNEL_AUTH_MULTIPLEX_NAMESPACE,
             CHANNEL_AUTH_MULTIPLEX_NAME

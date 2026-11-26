@@ -33,12 +33,12 @@ import org.oddlama.vane.util.StorageUtil
  * @param context Module context used to resolve translations, configuration and subcomponents.
  */
 class SettingsMenu(context: Context<Portals?>) : ModuleComponent<Portals?>(context.namespace("Settings")) {
+    /** Translation for the settings menu title. */
     @LangMessage
-            /** Translation for the settings menu title. */
     var langTitle: TranslatedMessage? = null
 
+    /** Translation for the icon selection dialog title. */
     @LangMessage
-            /** Translation for the icon selection dialog title. */
     var langSelectIconTitle: TranslatedMessage? = null
 
     /** Item representing the rename action. */
@@ -182,18 +182,18 @@ class SettingsMenu(context: Context<Portals?>) : ModuleComponent<Portals?>(conte
 
     // HINT: We don't capture the previous menu and open a new one on exit,
     // to correctly reflect changes done in here. (e.g., menu title due to portal name)
+    /**
+     * Build and return the settings [Menu] for the given portal and player.
+     *
+     * The returned menu is tagged with the portal id and contains items to rename the portal,
+     * select an icon, choose a style, toggle orientation/target locks and change visibility.
+     *
+     * @param portal Portal to edit.
+     * @param player The player opening the menu (may be null when opened programmatically).
+     * @param console Optional console block associated with the portal (may be null).
+     * @return A configured [Menu] instance for editing the provided portal.
+     */
     @Suppress("UNUSED_PARAMETER")
-            /**
-             * Build and return the settings [Menu] for the given portal and player.
-             *
-             * The returned menu is tagged with the portal id and contains items to rename the portal,
-             * select an icon, choose a style, toggle orientation/target locks and change visibility.
-             *
-             * @param portal Portal to edit.
-             * @param player The player opening the menu (may be null when opened programmatically).
-             * @param console Optional console block associated with the portal (may be null).
-             * @return A configured [Menu] instance for editing the provided portal.
-             */
     fun create(portal: Portal, player: Player?, console: Block?): Menu {
         val columns = 9
         val title = langTitle!!.strComponent("§5§l${portal.name()}")

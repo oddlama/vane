@@ -33,12 +33,12 @@ class PlayerTeleportScrollEvent(
     override fun getHandlers(): HandlerList = HANDLER_LIST
 
     companion object {
+        /** Shared Bukkit handler list for this event type. */
         @JvmField
-                /** Shared Bukkit handler list for this event type. */
         val HANDLER_LIST: HandlerList = HandlerList()
 
+        /** Static accessor required by Bukkit's event registration API. */
         @JvmStatic
-                /** Static accessor required by Bukkit's event registration API. */
         fun getHandlerList(): HandlerList = HANDLER_LIST
     }
 }

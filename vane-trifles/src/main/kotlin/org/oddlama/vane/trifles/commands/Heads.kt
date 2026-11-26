@@ -20,10 +20,10 @@ import org.oddlama.vane.core.module.Context
 import org.oddlama.vane.trifles.Trifles
 import org.oddlama.vane.util.PlayerUtil
 
-@Name("heads")
 /**
  * Command that opens the player head library and handles optional currency payment.
  */
+@Name("heads")
 class Heads(context: Context<Trifles?>) :
     org.oddlama.vane.core.command.Command<Trifles?>(context, PermissionDefault.TRUE) {
     /** Material used as payment when buying heads from the selector menu. */

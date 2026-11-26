@@ -11,10 +11,10 @@ import org.oddlama.vane.trifles.items.storage.Backpack
 import org.oddlama.vane.trifles.items.storage.Pouch
 import java.util.*
 
-@VaneModule(name = "trifles", bstats = 8644, configVersion = 4, langVersion = 4, storageVersion = 1)
 /**
  * Main entry point for the `vane-trifles` module.
  */
+@VaneModule(name = "trifles", bstats = 8644, configVersion = 4, langVersion = 4, storageVersion = 1)
 class Trifles : Module<Trifles?>() {
     /** Tracks the latest XP bottle consume timestamp per player UUID. */
     val lastXpBottleConsumeTime: MutableMap<UUID, Long> = mutableMapOf()

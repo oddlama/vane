@@ -111,20 +111,20 @@ abstract class Module<T : Module<T?>?> : JavaPlugin(), Context<T?>, Listener {
     var storageVersion: Long = 0
 
     /** Active language code for this module. */
+    /** Configured language code for this module. */
     @ConfigString(
         def = "inherit",
         desc = "The language for this module. The corresponding language file must be named lang-{lang}.yml. Specifying 'inherit' will load the value set for vane-core.",
         metrics = true
     )
-            /** Configured language code for this module. */
     var configLang: String? = null
 
     /** Whether bStats metrics are enabled for this module. */
+    /** Whether bStats metrics are enabled. */
     @ConfigBoolean(
         def = true,
         desc = "Enable plugin metrics via bStats. You can opt-out here or via the global bStats configuration. All collected information is completely anonymous and publicly available."
     )
-            /** Whether bStats metrics are enabled. */
     var configMetricsEnabled: Boolean = false
 
     /** Root context group for this module. */

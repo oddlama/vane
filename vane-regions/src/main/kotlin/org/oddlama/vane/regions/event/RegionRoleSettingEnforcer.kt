@@ -75,10 +75,10 @@ class RegionRoleSettingEnforcer(context: Context<Regions?>?) : Listener<Regions?
         return role.getSetting(setting) == checkAgainst
     }
 
+    /**
+     * Cancels block breaking when `BUILD` is denied.
+     */
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-            /**
-             * Cancels block breaking when `BUILD` is denied.
-             */
     fun onBlockBreak(event: BlockBreakEvent) {
         // Prevent breaking of region blocks
         if (checkSettingAt(event.block, event.player, RoleSetting.BUILD, false)) {
@@ -86,10 +86,10 @@ class RegionRoleSettingEnforcer(context: Context<Regions?>?) : Listener<Regions?
         }
     }
 
+    /**
+     * Cancels block placement when `BUILD` is denied.
+     */
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-            /**
-             * Cancels block placement when `BUILD` is denied.
-             */
     fun onBlockPlace(event: BlockPlaceEvent) {
         // Prevent (re-)placing of region blocks
         if (checkSettingAt(event.block, event.player, RoleSetting.BUILD, false)) {
@@ -97,10 +97,10 @@ class RegionRoleSettingEnforcer(context: Context<Regions?>?) : Listener<Regions?
         }
     }
 
+    /**
+     * Restricts armor-stand and item-frame manipulation by role settings.
+     */
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-            /**
-             * Restricts armor-stand and item-frame manipulation by role settings.
-             */
     fun onEntityDamageByEntity(event: EntityDamageByEntityEvent) {
         val damaged = event.entity
         val damager = event.damager
@@ -137,10 +137,10 @@ class RegionRoleSettingEnforcer(context: Context<Regions?>?) : Listener<Regions?
         }
     }
 
+    /**
+     * Cancels hanging-entity removal when `BUILD` is denied.
+     */
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-            /**
-             * Cancels hanging-entity removal when `BUILD` is denied.
-             */
     fun onHangingBreakByEntity(event: HangingBreakByEntityEvent) {
         val remover = event.remover
         var player: Player? = null
@@ -159,10 +159,10 @@ class RegionRoleSettingEnforcer(context: Context<Regions?>?) : Listener<Regions?
         }
     }
 
+    /**
+     * Cancels hanging placement when `BUILD` is denied.
+     */
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-            /**
-             * Cancels hanging placement when `BUILD` is denied.
-             */
     fun onHangingPlace(event: HangingPlaceEvent) {
         val player = event.player ?: return
         if (checkSettingAt(event.entity.location, player, RoleSetting.BUILD, false)) {
@@ -170,40 +170,40 @@ class RegionRoleSettingEnforcer(context: Context<Regions?>?) : Listener<Regions?
         }
     }
 
+    /**
+     * Cancels armor-stand interactions when `BUILD` is denied.
+     */
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-            /**
-             * Cancels armor-stand interactions when `BUILD` is denied.
-             */
     fun onPlayerArmorStandManipulate(event: PlayerArmorStandManipulateEvent) {
         if (checkSettingAt(event.rightClicked.location, event.player, RoleSetting.BUILD, false)) {
             event.isCancelled = true
         }
     }
 
+    /**
+     * Cancels bucket-empty actions when `BUILD` is denied.
+     */
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-            /**
-             * Cancels bucket-empty actions when `BUILD` is denied.
-             */
     fun onPlayerBucketEmpty(event: PlayerBucketEmptyEvent) {
         if (checkSettingAt(event.blockClicked, event.player, RoleSetting.BUILD, false)) {
             event.isCancelled = true
         }
     }
 
+    /**
+     * Cancels bucket-fill actions when `BUILD` is denied.
+     */
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-            /**
-             * Cancels bucket-fill actions when `BUILD` is denied.
-             */
     fun onPlayerBucketFill(event: PlayerBucketFillEvent) {
         if (checkSettingAt(event.blockClicked, event.player, RoleSetting.BUILD, false)) {
             event.isCancelled = true
         }
     }
 
+    /**
+     * Cancels item-frame interaction when `CONTAINER` is denied.
+     */
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-            /**
-             * Cancels item-frame interaction when `CONTAINER` is denied.
-             */
     fun onPlayerInteractEntity(event: PlayerInteractEntityEvent) {
         val entity = event.rightClicked
         if (entity.type != EntityType.ITEM_FRAME) {
@@ -218,10 +218,10 @@ class RegionRoleSettingEnforcer(context: Context<Regions?>?) : Listener<Regions?
 
     // The EventPriority is HIGH, so this is executed AFTER the portals try
     // to activate, which is a seperate permission.
+    /**
+     * Restricts pressure-plate, tripwire, and right-click use when `USE` is denied.
+     */
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-            /**
-             * Restricts pressure-plate, tripwire, and right-click use when `USE` is denied.
-             */
     fun onPlayerInteract(event: PlayerInteractEvent) {
         val player = event.player
         val block = event.clickedBlock ?: return
@@ -250,10 +250,10 @@ class RegionRoleSettingEnforcer(context: Context<Regions?>?) : Listener<Regions?
         }
     }
 
+    /**
+     * Cancels container opening when `CONTAINER` is denied.
+     */
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-            /**
-             * Cancels container opening when `CONTAINER` is denied.
-             */
     fun onPlayerInventoryOpen(event: InventoryOpenEvent) {
         // Only relevant if viewing should be prohibited, too.
         if (!regions.configProhibitViewingContainers) {
@@ -299,18 +299,18 @@ class RegionRoleSettingEnforcer(context: Context<Regions?>?) : Listener<Regions?
         }
     }
 
+    /**
+     * Delegates inventory click checks to shared container enforcement.
+     */
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-            /**
-             * Delegates inventory click checks to shared container enforcement.
-             */
     fun onPlayerInventoryClick(event: InventoryClickEvent) {
         onPlayerInventoryInteract(event)
     }
 
+    /**
+     * Delegates inventory drag checks to shared container enforcement.
+     */
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-            /**
-             * Delegates inventory drag checks to shared container enforcement.
-             */
     fun onPlayerInventoryDrag(event: InventoryDragEvent) {
         onPlayerInventoryInteract(event)
     }

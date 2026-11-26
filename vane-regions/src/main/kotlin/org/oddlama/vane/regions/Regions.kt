@@ -48,106 +48,106 @@ import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 
-@VaneModule(name = "regions", bstats = 8643, configVersion = 4, langVersion = 3, storageVersion = 1)
 /**
  * Main module entry point for region ownership, permissions, pricing, and visualization.
  */
+@VaneModule(name = "regions", bstats = 8643, configVersion = 4, langVersion = 3, storageVersion = 1)
 class Regions : Module<Regions?>() {
+    /**
+     * Minimum allowed region size on the X axis.
+     */
     @ConfigInt(def = 4, min = 1, desc = "Minimum region extent in x direction.")
-            /**
-             * Minimum allowed region size on the X axis.
-             */
     var configMinRegionExtentX: Int = 0
 
+    /**
+     * Minimum allowed region size on the Y axis.
+     */
     @ConfigInt(def = 4, min = 1, desc = "Minimum region extent in y direction.")
-            /**
-             * Minimum allowed region size on the Y axis.
-             */
     var configMinRegionExtentY: Int = 0
 
+    /**
+     * Minimum allowed region size on the Z axis.
+     */
     @ConfigInt(def = 4, min = 1, desc = "Minimum region extent in z direction.")
-            /**
-             * Minimum allowed region size on the Z axis.
-             */
     var configMinRegionExtentZ: Int = 0
 
+    /**
+     * Maximum allowed region size on the X axis.
+     */
     @ConfigInt(def = 2048, min = 1, desc = "Maximum region extent in x direction.")
-            /**
-             * Maximum allowed region size on the X axis.
-             */
     var configMaxRegionExtentX: Int = 0
 
+    /**
+     * Maximum allowed region size on the Y axis.
+     */
     @ConfigInt(def = 2048, min = 1, desc = "Maximum region extent in y direction.")
-            /**
-             * Maximum allowed region size on the Y axis.
-             */
     var configMaxRegionExtentY: Int = 0
 
+    /**
+     * Maximum allowed region size on the Z axis.
+     */
     @ConfigInt(def = 2048, min = 1, desc = "Maximum region extent in z direction.")
-            /**
-             * Maximum allowed region size on the Z axis.
-             */
     var configMaxRegionExtentZ: Int = 0
 
+    /**
+     * Uses Vault-backed economy instead of material currency when enabled.
+     */
     @ConfigBoolean(def = false, desc = "Use economy via VaultAPI as currency provider.")
-            /**
-             * Uses Vault-backed economy instead of material currency when enabled.
-             */
     var configEconomyAsCurrency: Boolean = false
 
+    /**
+     * Blocks chest/container viewing for players lacking container permissions.
+     */
     @ConfigBoolean(
         def = false,
         desc = "Enable this to prevent players without the container permission from being able to view chests."
     )
-            /**
-             * Blocks chest/container viewing for players lacking container permissions.
-             */
     var configProhibitViewingContainers: Boolean = false
 
+    /**
+     * Decimal precision used when formatting and rounding economy costs.
+     */
     @ConfigInt(
         def = 0,
         min = -1,
         desc = "The amount of decimal places the costs will be rounded to. If set to -1, it will round to the amount of decimal places specified by your economy plugin. If set to 0, costs will simply be rounded up to the nearest integer."
     )
-            /**
-             * Decimal precision used when formatting and rounding economy costs.
-             */
     var configEconomyDecimalPlaces: Int = 0
 
+    /**
+     * Material used as fallback currency when economy integration is disabled.
+     */
     @ConfigMaterial(
         def = Material.DIAMOND,
         desc = "The currency material for regions. The alternative option to an economy plugin."
     )
-            /**
-             * Material used as fallback currency when economy integration is disabled.
-             */
     var configCurrency: Material? = null
 
+    /**
+     * Base horizontal purchase cost for one chunk-sized area.
+     */
     @ConfigDouble(
         def = 2.0,
         min = 0.0,
         desc = "The base amount of currency required to buy an area equal to one chunk (256 blocks)."
     )
-            /**
-             * Base horizontal purchase cost for one chunk-sized area.
-             */
     var configCostXzBase: Double = 0.0
 
+    /**
+     * Vertical cost multiplier applied per 16 blocks of selected height.
+     */
     @ConfigDouble(
         def = 1.15,
         min = 1.0,
         desc = "The multiplicator determines how much the cost increases for each additional 16 blocks of height. A region of height h will cost multiplicator^(h / 16.0) * base_amount. Rounding is applied at the end."
     )
-            /**
-             * Vertical cost multiplier applied per 16 blocks of selected height.
-             */
     var configCostYMultiplicator: Double = 0.0
 
     // Primary persistent storage for all regions (`region.id -> region`).
-    @Persistent
     /**
      * Legacy/global region storage used during migration and persistence updates.
      */
+    @Persistent
     private val storageRegions: MutableMap<UUID?, Region> = HashMap<UUID?, Region>()
 
     /**
@@ -158,17 +158,17 @@ class Regions : Module<Regions?>() {
     private val worldStorage = WorldStorageGuard()
 
     // Primary persistent storage for all region groups (`regionGroup.id -> regionGroup`).
-    @Persistent
     /**
      * Persistent storage for region groups.
      */
+    @Persistent
     private val storageRegionGroups: MutableMap<UUID?, RegionGroup> = HashMap<UUID?, RegionGroup>()
 
     // Maps player uuid to default region group id used for newly created regions.
-    @Persistent
     /**
      * Persistent default region-group mapping per player.
      */
+    @Persistent
     private val storageDefaultRegionGroup: MutableMap<UUID?, UUID?> = HashMap()
 
     // Per-chunk lookup cache (`worldId -> chunkKey -> possible regions`).
@@ -184,10 +184,10 @@ class Regions : Module<Regions?>() {
      */
     private val regionSelections: MutableMap<UUID, RegionSelection> = HashMap<UUID, RegionSelection>()
 
+    /**
+     * Message shown when region-selection mode starts.
+     */
     @LangMessage
-            /**
-             * Message shown when region-selection mode starts.
-             */
     var langStartRegionSelection: TranslatedMessage? = null
 
     // Permission that bypasses normal region administration restrictions.
@@ -715,27 +715,27 @@ class Regions : Module<Regions?>() {
         return regionGroup
     }
 
+    /**
+     * Clears pending selection state when a player disconnects.
+     */
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-            /**
-             * Clears pending selection state when a player disconnects.
-             */
     fun onPlayerQuit(event: PlayerQuitEvent) {
         // Remove pending selection
         cancelRegionSelection(event.getPlayer())
     }
 
+    /**
+     * Persists region data for the world being saved.
+     */
     @EventHandler
-            /**
-             * Persists region data for the world being saved.
-             */
     fun onSaveWorld(event: WorldSaveEvent) {
         updatePersistentData(event.getWorld())
     }
 
+    /**
+     * Loads region data when a world is loaded.
+     */
     @EventHandler
-            /**
-             * Loads region data when a world is loaded.
-             */
     fun onLoadWorld(event: WorldLoadEvent) {
         loadPersistentData(event.getWorld())
     }

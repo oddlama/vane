@@ -17,16 +17,16 @@ import org.oddlama.vane.regions.Regions
  * Anvil-based prompt menu for entering a role name.
  */
 class EnterRoleNameMenu(context: Context<Regions?>) : ModuleComponent<Regions?>(context.namespace("EnterRoleName")) {
+    /**
+     * Localized title shown in the anvil input UI.
+     */
     @LangMessage
-            /**
-             * Localized title shown in the anvil input UI.
-             */
     var langTitle: TranslatedMessage? = null
 
+    /**
+     * Icon material used in the anvil input UI.
+     */
     @ConfigMaterial(def = Material.BOOK, desc = "The item used to name roles.")
-            /**
-             * Icon material used in the anvil input UI.
-             */
     var configMaterial: Material? = null
 
     /**

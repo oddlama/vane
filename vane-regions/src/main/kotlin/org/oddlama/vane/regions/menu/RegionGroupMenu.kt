@@ -17,33 +17,33 @@ import org.oddlama.vane.regions.region.Role
 import org.oddlama.vane.util.StorageUtil
 import java.util.stream.Collectors
 
-@Suppress("UNUSED_PARAMETER")
 /**
  * Menu for managing one region group, its roles, and environment settings.
  */
+@Suppress("UNUSED_PARAMETER")
 class RegionGroupMenu(context: Context<Regions?>) : ModuleComponent<Regions?>(context.namespace("RegionGroup")) {
+    /**
+     * Localized region-group menu title.
+     */
     @LangMessage
-            /**
-             * Localized region-group menu title.
-             */
     var langTitle: TranslatedMessage? = null
 
+    /**
+     * Localized confirmation title for region-group deletion.
+     */
     @LangMessage
-            /**
-             * Localized confirmation title for region-group deletion.
-             */
     var langDeleteConfirmTitle: TranslatedMessage? = null
 
+    /**
+     * Localized title for role selector menu.
+     */
     @LangMessage
-            /**
-             * Localized title for role selector menu.
-             */
     var langSelectRoleTitle: TranslatedMessage? = null
 
+    /**
+     * Localized title for role filter input.
+     */
     @LangMessage
-            /**
-             * Localized title for role filter input.
-             */
     var langFilterRolesTitle: TranslatedMessage? = null
 
     /**
