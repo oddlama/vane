@@ -105,7 +105,7 @@ I would like to thank the following projects and people maintaining them:
 
 The following projects will be included in the compilation step:
 
-- [org.json](https://github.com/stleary/JSON-java) (MIT), Java json implementation
+- [org.json](https://github.com/stleary/JSON-java) (MIT), Java JSON implementation
 - [night-config](https://github.com/TheElectronWill/night-config) (LGPL3), Java configuration library, TOML
   implementation used
 - [ronmamo reflections](https://github.com/ronmamo/reflections) (WTFPL), Java reflection helper
